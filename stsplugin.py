@@ -1,196 +1,16 @@
+import asyncio
 import datetime
-import socket
 import untangle
 from xml.sax import SAXParseException
+from xml.parsers.expat import ExpatError
 
-socket.setdefaulttimeout(10)
-
-
-class AnlagenInfo:
-    def __init__(self):
-        self.aid = ""
-        self.name = ""
-        self.build = 0
-        self.region = ""
-        self.online = False
-
-    def update(self, item):
-        self.aid = item['aid']
-        self.name = item['name']
-        self.build = item['simbuild']
-        self.region = item['region']
-        self.online = bool(item['online'])
-        return self
-
-
-class BahnsteigInfo:
-    def __init__(self):
-        self.name = ""
-        self.haltepunkt = False
-        self.nachbarn = set()
-        self.zuege = []
-
-    def __str__(self):
-        if self.haltepunkt:
-            return f"Bahnsteig {self.name} (Haltepunkt)"
-        else:
-            return f"Bahnsteig {self.name}"
-
-    def __repr__(self):
-        return f"BahnsteigInfo {self.name}: haltepunkt={self.haltepunkt}"
-
-    def update(self, item):
-        self.name = item['name']
-        self.haltepunkt = bool(item['haltepunkt'])
-        try:
-            self.nachbarn = {n['name'] for n in item.n}
-        except AttributeError:
-            self.nachbarn = set()
-        return self
-
-
-class Knoten:
-    typen = {2: "Signal",
-             3: "Weiche unten",
-             4: "Weiche oben",
-             5: "Bahnsteig",
-             6: "Einfahrt",
-             7: "Ausfahrt",
-             12: "Haltepunkt"}
-
-    def __init__(self):
-        self.key = ""
-        self.enr = 0
-        self.name = ""
-        self.typ = 0
-        self.nachbarn = set()
-        self.zuege = []
-
-    def __eq__(self, other):
-        return self.key.__eq__(other.key)
-
-    def __hash__(self):
-        return self.key.__hash__()
-
-    def __str__(self):
-        return f"Knoten {self.key}: {self.typen[self.typ]} {self.name}"
-
-    def __repr__(self):
-        return f"Knoten('{self.key}': enr={self.enr}, typ={self.typ}, name='{self.name}')"
-
-    def update(self, shape):
-        try:
-            self.enr = int(shape['enr'])
-        except TypeError:
-            self.enr = None
-        self.name = shape['name']
-        if self.enr:
-            self.key = str(self.enr)
-        else:
-            self.key = self.name
-        try:
-            self.typ = int(shape['type'])
-        except TypeError:
-            self.typ = 0
-        return self
-
-
-class ZugDetails:
-    def __init__(self):
-        self.zid = 0
-        self.name = ""
-        self.von = ""
-        self.nach = ""
-        self.verspaetung = 0
-        self.sichtbar = False
-        self.gleis = ""
-        self.plangleis = ""
-        self.amgleis = False
-        self.hinweistext = ""
-        self.usertext = ""
-        self.usertextsender = ""
-        self.fahrplan = []
-
-    def __eq__(self, other):
-        return self.zid.__eq__(other.zid)
-
-    def __hash__(self):
-        return self.zid.__hash__()
-
-    def __str__(self):
-        return f"Zug {self.name} von {self.von} nach {self.nach}"
-
-    def __repr__(self):
-        return f"ZugDetails({self.zid}, '{self.name}', '{self.von}', '{self.nach}')"
-
-    def update(self, zugdetails):
-        self.zid = zugdetails['zid']
-        self.name = zugdetails['name']
-        try:
-            self.verspaetung = int(zugdetails['verspaetung'])
-        except TypeError:
-            pass
-        self.gleis = zugdetails['gleis']
-        self.plangleis = zugdetails['plangleis']
-        self.von = zugdetails['von']
-        self.nach = zugdetails['nach']
-        self.sichtbar = bool(zugdetails['sichtbar'])
-        self.amgleis = bool(zugdetails['amgleis'])
-        self.usertext = zugdetails['usertextsender']
-        self.usertextsender = zugdetails['usertextsender']
-        self.hinweistext = zugdetails['hinweistext']
-        return self
-
-    def find_fahrplanzeile(self, gleis):
-        """
-        finde erste fahrplanzeile, in der gleis als aktuelles gleis vorkommt.
-        :param gleis:
-        :return:
-        """
-        for zeile in self.fahrplan:
-            if gleis == zeile.gleis:
-                return zeile
-        return None
-
-
-class ZugFahrplanZeile():
-    def __init__(self, zug):
-        self.zug = zug
-        self.gleis = ""
-        self.plan = ""
-        self.an = datetime.time(hour=0, minute=0)
-        self.ab = datetime.time(hour=0, minute=0)
-        self.flags = ""
-        self.hinweistext = ""
-
-    def __str__(self):
-        if self.gleis == self.plan:
-            return f"Gleis {self.gleis} an {self.an} ab {self.ab} {self.flags}"
-        else:
-            return f"Gleis {self.gleis} (statt {self.plan}) an {self.an} ab {self.ab} {self.flags}"
-
-    def __repr__(self):
-        return f"ZugFahrplanZeile('{self.gleis}', '{self.plan}', {self.an}, {self.ab}, '{self.flags}')"
-
-    def update(self, item):
-        self.gleis = item['name']
-        self.plan = item['plan']
-        try:
-            self.an = datetime.time.fromisoformat(item['an'])
-        except ValueError:
-            self.an = None
-        try:
-            self.ab = datetime.time.fromisoformat(item['ab'])
-        except ValueError:
-            self.ab = None
-        self.flags = item['flags']
-        self.hinweistext = item['hinweistext']
-        return self
+from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, ZugFahrplanZeile
 
 
 class PluginClient:
     def __init__(self, name, autor, version, text):
-        self._socket = None
+        self._reader = None
+        self._writer = None
         self.name = name
         self.autor = autor
         self.version = version
@@ -215,64 +35,75 @@ class PluginClient:
             raise ValueError(f"error {self.status.status['code']}: {self.status.status.cdata}")
 
     def close(self):
-        self._socket.close()
-        self._socket = None
+        self._writer.close()
+        self._writer = None
+        self._reader = None
         self.closed()
 
     def closed(self):
         pass
 
-    def connect(self):
-        self._socket = socket.create_connection(('localhost', 3691))
-        xml = self._socket.recv(4096).decode('utf-8')
+    async def connect(self):
+        self._reader, self._writer = await asyncio.open_connection('127.0.0.1', 3691)
+        data = await self._reader.readuntil(separator=b'>')
+        data += await self._reader.readuntil(separator=b'>')
+        xml = data.decode()
         self.status = untangle.parse(xml)
         if int(self.status.status['code']) >= 400:
             raise ValueError(f"error {self.status.status['code']}: {self.status.status.cdata}")
-        self.register()
-        self.request_simzeit()
+        await self.register()
+        await self.request_simzeit()
         self.connected()
 
     def connected(self):
         pass
 
-    def _send_request(self, tag, **kwargs):
+    async def _send_request(self, tag, **kwargs):
         args = [f"{k}='{v}'" for k, v in kwargs.items()]
         args = " ".join(args)
         req = f"<{tag} {args} />\n"
-        self._socket.sendall(req.encode('utf-8'))
+        data = req.encode()
+        self._writer.write(data)
+        await self._writer.drain()
+
         rec = b""
+        obj = None
         while True:
-            rec = rec + self._socket.recv(4096)
+            rec = rec + await self._reader.readuntil(separator=b'>')
             try:
-                obj = untangle.parse(rec.decode('utf-8'))
+                obj = untangle.parse(rec.decode())
                 break
-            except (SAXParseException, UnicodeDecodeError):
+            except ExpatError:
                 pass
+            except SAXParseException:
+                pass
+            except UnicodeDecodeError:
+                break
         return obj
 
     def get_sim_clock(self):
         return datetime.datetime.now() + self.time_offset
 
-    def register(self):
-        self.status = self._send_request("register", name=self.name, autor=self.autor, version=self.version,
+    async def register(self):
+        self.status = await self._send_request("register", name=self.name, autor=self.autor, version=self.version,
                                          protokoll='1', text=self.text)
         self.check_status()
 
-    def request_anlageninfo(self):
-        response = self._send_request("anlageninfo")
+    async def request_anlageninfo(self):
+        response = await self._send_request("anlageninfo")
         self.anlageninfo = AnlagenInfo()
         self.anlageninfo.update(response.anlageninfo)
 
-    def request_bahnsteigliste(self):
+    async def request_bahnsteigliste(self):
         self.bahnsteigliste = {}
-        response = self._send_request("bahnsteigliste")
+        response = await self._send_request("bahnsteigliste")
         for bahnsteig in response.bahnsteigliste.bahnsteig:
             bi = BahnsteigInfo().update(bahnsteig)
             self.bahnsteigliste[bi.name] = bi
 
-    def request_simzeit(self):
+    async def request_simzeit(self):
         self.client_datetime = datetime.datetime.now()
-        simzeit = self._send_request("simzeit", sender=0)
+        simzeit = await self._send_request("simzeit", sender=0)
         secs, msecs = divmod(int(simzeit.simzeit['zeit']), 1000)
         mins, secs = divmod(secs, 60)
         hrs, mins = divmod(mins, 60)
@@ -280,8 +111,8 @@ class PluginClient:
         self.server_datetime = datetime.datetime.combine(self.client_datetime, t)
         self.time_offset = self.server_datetime - self.client_datetime
 
-    def request_wege(self):
-        response = self._send_request("wege")
+    async def request_wege(self):
+        response = await self._send_request("wege")
         self.wege = {}
         self.wege_nach_namen = {}
         self.wege_nach_typ = {}
@@ -323,22 +154,22 @@ class PluginClient:
                 knoten1.nachbarn.add(knoten2)
                 knoten2.nachbarn.add(knoten1)
 
-    def request_zugdetails(self, zid=None):
+    async def request_zugdetails(self, zid=None):
         if zid is not None:
             zids = [zid]
         else:
             zids = self.zugliste.keys()
         for zid in zids:
-            response = self._send_request("zugdetails", zid=zid)
+            response = await self._send_request("zugdetails", zid=zid)
             self.zugliste[zid].update(response.zugdetails)
 
-    def request_zugfahrplan(self, zid=None):
+    async def request_zugfahrplan(self, zid=None):
         if zid is not None:
             zids = [zid]
         else:
             zids = self.zugliste.keys()
         for zid in zids:
-            response = self._send_request("zugfahrplan", zid=zid)
+            response = await self._send_request("zugfahrplan", zid=zid)
             zug = self.zugliste[zid]
             zug.fahrplan = []
             try:
@@ -350,8 +181,8 @@ class PluginClient:
                 pass
             zug.fahrplan.sort(key=lambda zfz: zfz.an)
 
-    def request_zugliste(self):
-        response = self._send_request("zugliste")
+    async def request_zugliste(self):
+        response = await self._send_request("zugliste")
         try:
             self.zugliste = {zug['zid']: ZugDetails().update(zug) for zug in response.zugliste.zug}
         except AttributeError:
@@ -403,7 +234,12 @@ class PluginClient:
                         gleis.zuege.append(zug)
 
         for knoten in self.wege.values():
-            knoten.zuege.sort(key=zugsortierschluessel(knoten.name, 'an', datetime.time()))
+            if knoten.typ == 5 or knoten.typ == 12:
+                knoten.zuege.sort(key=zugsortierschluessel(knoten.name, 'an', datetime.time()))
+            elif knoten.typ == 6:
+                knoten.zuege.sort(key=einfahrt_sortierschluessel('an', datetime.time()))
+            elif knoten.typ == 7:
+                knoten.zuege.sort(key=ausfahrt_sortierschluessel('an', datetime.time()))
 
 
 def zugsortierschluessel(gleis, attr, default):
@@ -415,20 +251,52 @@ def zugsortierschluessel(gleis, attr, default):
     return caller
 
 
-def test():
+def einfahrt_sortierschluessel(attr, default):
+    def caller(zugdetails):
+        try:
+            return getattr(zugdetails.fahrplan[0], attr)
+        except (AttributeError, IndexError):
+            return default
+    return caller
+
+
+def ausfahrt_sortierschluessel(attr, default):
+    def caller(zugdetails):
+        try:
+            return getattr(zugdetails.fahrplan[-1], attr)
+        except (AttributeError, IndexError):
+            return default
+
+    return caller
+
+
+async def test():
     client = PluginClient(name='test', autor='tester', version='0.0', text='testing the plugin client')
-    client.connect()
-    client.request_anlageninfo()
-    client.request_bahnsteigliste()
-    client.request_wege()
-    client.request_zugliste()
-    client.request_zugdetails()
-    client.request_zugfahrplan()
+    await client.connect()
+    await client.request_anlageninfo()
+    await client.request_bahnsteigliste()
+    await client.request_wege()
+    await client.request_zugliste()
+    await client.request_zugdetails()
+    await client.request_zugfahrplan()
     client.close()
     client.update_bahnsteig_zuege()
     client.update_wege_zuege()
+
+    # for zid, zug in client.zugliste.items():
+    #     print(zid, zug)
+
+    for knoten in client.wege_nach_typ[6]:
+        print(knoten)
+        for zug in knoten.zuege:
+            try:
+                print(zug.name, zug.fahrplan[0].an, zug.verspaetung)
+            except (AttributeError, IndexError):
+                pass
+        print()
+
     return client
 
 
 if __name__ == '__main__':
-    test()
+    asyncio.run(test())
