@@ -59,6 +59,13 @@ class PluginClient:
         pass
 
     async def _send_request(self, tag, **kwargs):
+        """
+
+        :param tag:
+        :param kwargs:
+        :return:
+        :raise: asyncio.TimeoutError
+        """
         args = [f"{k}='{v}'" for k, v in kwargs.items()]
         args = " ".join(args)
         req = f"<{tag} {args} />\n"
@@ -69,7 +76,7 @@ class PluginClient:
         rec = b""
         obj = None
         while True:
-            rec = rec + await self._reader.readuntil(separator=b'>')
+            rec = rec + await asyncio.wait_for(self._reader.readuntil(separator=b'>'), timeout=10)
             try:
                 obj = untangle.parse(rec.decode())
                 break
