@@ -91,6 +91,7 @@ class Knoten:
 
 
 class ZugDetails:
+    # todo : name in zuggattung und -nummer aufspalten
     def __init__(self):
         self.zid = 0
         self.name = ""

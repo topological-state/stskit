@@ -1,10 +1,13 @@
 import asyncio
+import functools
 import matplotlib as mpl
 import numpy as np
 import sys
 import time
 
 from PyQt5 import QtCore, QtWidgets, uic
+import qasync
+
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
@@ -23,8 +26,10 @@ def minutes(dt):
 
 class MainWindow(QtWidgets.QMainWindow):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         super().__init__()
+        self.client = sts_client
+
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)
         layout = QtWidgets.QVBoxLayout(self._main)
@@ -32,24 +37,37 @@ class MainWindow(QtWidgets.QMainWindow):
         einfahrten_canvas = FigureCanvas(Figure(figsize=(5, 3)))
         layout.addWidget(einfahrten_canvas)
         self._einfahrten_ax = einfahrten_canvas.figure.subplots()
+        self._bars_ein = None
+        self._labels_ein = []
 
         ausfahrten_canvas = FigureCanvas(Figure(figsize=(5, 3)))
         layout.addWidget(ausfahrten_canvas)
         self._ausfahrten_ax = ausfahrten_canvas.figure.subplots()
+        self._bars_aus = None
+        self._labels_aus = []
 
-        # self._timer = ausfahrten_canvas.new_timer(10000)
-        # self._timer.add_callback(self._update_plots)
-        # self._timer.start()
+        self.startTimer(15000)
 
-        self._bars_ein = None
-        self.client = PluginClient(name='test', autor='tester', version='0.0', text='einfahrtstabelle')
-        self.query_sts()
-        self._update_plots()
+    def timerEvent(self, *args):
+        self.on_update_clicked()
 
-    def _update_plots(self):
+    @qasync.asyncSlot()
+    async def on_update_clicked(self):
+        await self.update()
+
+    async def update(self):
+        # todo : einfahrten filtern und gruppieren
+        # todo : ueberlappende zuege stapeln
+        # todo : eingefahrene zuege ausblenden
+        # todo : farben nach zug-gattungen
+        if not self.client.is_connected():
+            await self.client.connect()
+        await self.get_sts_data()
 
         if self._bars_ein is not None:
             self._bars_ein.remove()
+        for label in self._labels_ein:
+            label.remove()
 
         kwargs = dict()
         kwargs['align'] = 'center'
@@ -58,7 +76,10 @@ class MainWindow(QtWidgets.QMainWindow):
         kwargs['edgecolor'] = 'black'
         kwargs['linewidth'] = 1
 
-        x_labels_pos, x_labels, x_pos, y_bot, y_hgt, bar_labels = self.build_bars(self.client.wege_nach_typ[6])
+        try:
+            x_labels_pos, x_labels, x_pos, y_bot, y_hgt, bar_labels = self.build_bars(self.client.wege_nach_typ[6])
+        except KeyError:
+            return None
 
         self._einfahrten_ax.set_title('ankuenfte')
         self._einfahrten_ax.set_xticks(x_labels_pos, x_labels)
@@ -68,11 +89,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self._einfahrten_ax.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(1))
         self._einfahrten_ax.yaxis.set_major_locator(mpl.ticker.MultipleLocator(10))
         self._einfahrten_ax.yaxis.grid(True, which='major')
-        ymin = min(y_bot)
-        self._einfahrten_ax.set_ylim(bottom=ymin+60, top=ymin, auto=False)
+        # ymin = min(y_bot)
+        ymin = minutes(self.client.get_sim_clock())
+        self._einfahrten_ax.set_ylim(bottom=ymin+30, top=ymin, auto=False)
 
         self._bars_ein = self._einfahrten_ax.bar(x_pos, y_hgt, width=0.8, bottom=y_bot, data=None, **kwargs)
-        self._einfahrten_ax.bar_label(self._bars_ein, labels=bar_labels, label_type='center')
+        self._labels_ein = self._einfahrten_ax.bar_label(self._bars_ein, labels=bar_labels, label_type='center')
 
         # Trigger the canvas to update and redraw.
         self._einfahrten_ax.figure.canvas.draw()
@@ -89,7 +111,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 try:
                     zeile = zug.fahrplan[0]
                     ankunft = minutes(zeile.an) + zug.verspaetung
-                    aufenthalt = 1 # minutes(zeile.ab) - minutes(zeile.an)
+                    aufenthalt = 1
                     bar = (zug.name, i_knoten, ankunft, aufenthalt)
                     bars.append(bar)
                 except (AttributeError, IndexError):
@@ -102,40 +124,29 @@ class MainWindow(QtWidgets.QMainWindow):
 
         return x_labels_pos, x_labels, x_pos, y_bot, y_hgt, bar_labels
 
-    async def get_sts_data(self):
-        await self.client.connect()
-        await self.client.request_anlageninfo()
-        await self.client.request_bahnsteigliste()
-        await self.client.request_wege()
+    async def get_sts_data(self, alles=False):
+        if alles or not self.client.anlageninfo:
+            await self.client.request_anlageninfo()
+        if alles or not self.client.bahnsteigliste:
+            await self.client.request_bahnsteigliste()
+        if alles or not self.client.wege:
+            await self.client.request_wege()
+
         await self.client.request_zugliste()
         await self.client.request_zugdetails()
         await self.client.request_zugfahrplan()
-        self.client.close()
+
         self.client.update_bahnsteig_zuege()
         self.client.update_wege_zuege()
 
-        for knoten in self.client.wege_nach_typ[6]:
-            print(knoten)
-            for zug in knoten.zuege:
-                try:
-                    print(zug.name, zug.fahrplan[0].an, zug.verspaetung)
-                except (AttributeError, IndexError):
-                    pass
-            print()
-        for zug in self.client.zugliste:
-            print(zug)
-        print()
 
-    def query_sts(self):
-        asyncio.run(self.get_sts_data())
-
-
-def main():
+if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    app.exec()
-
-
-if __name__ == '__main__':
-    main()
+    loop = qasync.QEventLoop(app)
+    asyncio.set_event_loop(loop)
+    with loop:
+        sts_client = PluginClient(name='zugtabelle', autor='bummler', version='0.1', text='zugtabellen')
+        window = MainWindow()
+        window.show()
+        loop.run_forever()
+        sts_client.close()

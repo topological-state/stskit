@@ -35,13 +35,10 @@ class PluginClient:
             raise ValueError(f"error {self.status.status['code']}: {self.status.status.cdata}")
 
     def close(self):
-        self._writer.close()
-        self._writer = None
-        self._reader = None
-        self.closed()
-
-    def closed(self):
-        pass
+        if self._writer is not None:
+            self._writer.close()
+            self._writer = None
+            self._reader = None
 
     async def connect(self):
         self._reader, self._writer = await asyncio.open_connection('127.0.0.1', 3691)
@@ -53,10 +50,9 @@ class PluginClient:
             raise ValueError(f"error {self.status.status['code']}: {self.status.status.cdata}")
         await self.register()
         await self.request_simzeit()
-        self.connected()
 
-    def connected(self):
-        pass
+    def is_connected(self):
+        return self._writer is not None
 
     async def _send_request(self, tag, **kwargs):
         """
