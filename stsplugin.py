@@ -4,7 +4,7 @@ import untangle
 from xml.sax import SAXParseException
 from xml.parsers.expat import ExpatError
 
-from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, ZugFahrplanZeile
+from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, ZugFahrplanZeile, Ereignis
 
 
 class PluginClient:
@@ -26,6 +26,8 @@ class PluginClient:
         # dict {Knoten.typ: set of Knoten}
         self.wege_nach_typ = {}
         self.zugliste = {}
+        self.ereignisse = asyncio.Queue()
+        self.registrierte_ereignisse = {art: set() for art in Ereignis.arten}
         self.client_datetime = datetime.datetime.now()
         self.server_datetime = datetime.datetime.now()
         self.time_offset = self.server_datetime - self.client_datetime
@@ -56,11 +58,11 @@ class PluginClient:
 
     async def _send_request(self, tag, **kwargs):
         """
+        anfrage senden
 
-        :param tag:
-        :param kwargs:
-        :return:
-        :raise: asyncio.TimeoutError
+        :param tag: name des xml-tags
+        :param kwargs: (dict) attribute des xml-tags
+        :return: None
         """
         args = [f"{k}='{v}'" for k, v in kwargs.items()]
         args = " ".join(args)
@@ -69,53 +71,80 @@ class PluginClient:
         self._writer.write(data)
         await self._writer.drain()
 
+    async def _receive_data(self, tag, timeout=10):
+        """
+        antwort abwarten und interpretieren
+
+        die funktion wartet, bis das angegebene tag empfangen wird oder die zeit abgelaufen ist.
+        vor der erwarteten antwort empfangene ereignisse werden an die ereignisse-queue angehaengt.
+
+        die funktion kann mit tag='' und kleinem timeout auch zum pollen von ereignissen verwendet werden.
+
+        :param tag: name des erwarteten xml-tags
+        :param timeout: timeout in sekunden
+        :return: resultat von untangle.parse()
+        :raise: asyncio.TimeoutError
+        """
         rec = b""
-        obj = None
         while True:
-            rec = rec + await asyncio.wait_for(self._reader.readuntil(separator=b'>'), timeout=10)
+            obj = None
+            rec = rec + await asyncio.wait_for(self._reader.readuntil(separator=b'>'), timeout=timeout)
             try:
                 obj = untangle.parse(rec.decode())
-                break
             except ExpatError:
                 pass
             except SAXParseException:
                 pass
             except UnicodeDecodeError:
                 break
+            else:
+                if hasattr(obj, tag):
+                    break
+                elif hasattr(obj, 'ereignis'):
+                    ereignis = Ereignis().update(obj)
+                    self.ereignisse.put_nowait(ereignis)
+                else:
+                    raise ValueError("unexpected response: " + str(obj))
+
         return obj
 
     def get_sim_clock(self):
         return datetime.datetime.now() + self.time_offset
 
     async def register(self):
-        self.status = await self._send_request("register", name=self.name, autor=self.autor, version=self.version,
-                                         protokoll='1', text=self.text)
+        await self._send_request("register", name=self.name, autor=self.autor, version=self.version,
+                                 protokoll='1', text=self.text)
+        self.status = await self._receive_data("status")
         self.check_status()
 
     async def request_anlageninfo(self):
-        response = await self._send_request("anlageninfo")
+        await self._send_request(AnlagenInfo.tag)
+        response = await self._receive_data(AnlagenInfo.tag)
         self.anlageninfo = AnlagenInfo()
         self.anlageninfo.update(response.anlageninfo)
 
     async def request_bahnsteigliste(self):
         self.bahnsteigliste = {}
-        response = await self._send_request("bahnsteigliste")
+        await self._send_request("bahnsteigliste")
+        response = await self._receive_data("bahnsteigliste")
         for bahnsteig in response.bahnsteigliste.bahnsteig:
             bi = BahnsteigInfo().update(bahnsteig)
             self.bahnsteigliste[bi.name] = bi
 
     async def request_simzeit(self):
         self.client_datetime = datetime.datetime.now()
-        simzeit = await self._send_request("simzeit", sender=0)
+        await self._send_request("simzeit", sender=0)
+        simzeit = await self._receive_data("simzeit")
         secs, msecs = divmod(int(simzeit.simzeit['zeit']), 1000)
         mins, secs = divmod(secs, 60)
         hrs, mins = divmod(mins, 60)
         t = datetime.time(hour=hrs, minute=mins, second=secs, microsecond=msecs * 1000)
         self.server_datetime = datetime.datetime.combine(self.client_datetime, t)
-        self.time_offset = self.server_datetime - self.client_datetime
+        self.time_offset = (self.server_datetime - self.client_datetime)
 
     async def request_wege(self):
-        response = await self._send_request("wege")
+        await self._send_request("wege")
+        response = await self._receive_data("wege")
         self.wege = {}
         self.wege_nach_namen = {}
         self.wege_nach_typ = {}
@@ -163,8 +192,22 @@ class PluginClient:
         else:
             zids = self.zugliste.keys()
         for zid in zids:
-            response = await self._send_request("zugdetails", zid=zid)
+            await self._send_request("zugdetails", zid=zid)
+            response = await self._receive_data("zugdetails")
             self.zugliste[zid].update(response.zugdetails)
+
+    async def request_ereignis(self, art, zids):
+        """
+        ereignismeldung anfordern
+
+        :param art: art des ereignisses, cf. model.Ereignis.arten
+        :param zids: menge oder sequenz von zug-id-nummern
+        :return: None
+        """
+        zids = set(zids).difference(self.registrierte_ereignisse[art])
+        for zid in zids:
+            await self._send_request("ereignis", art=art, zid=zid)
+            self.registrierte_ereignisse[art].update(zids)
 
     async def request_zugfahrplan(self, zid=None):
         if zid is not None:
@@ -172,7 +215,8 @@ class PluginClient:
         else:
             zids = self.zugliste.keys()
         for zid in zids:
-            response = await self._send_request("zugfahrplan", zid=zid)
+            await self._send_request("zugfahrplan", zid=zid)
+            response = await self._receive_data("zugfahrplan")
             zug = self.zugliste[zid]
             zug.fahrplan = []
             try:
@@ -185,7 +229,8 @@ class PluginClient:
             zug.fahrplan.sort(key=lambda zfz: zfz.an)
 
     async def request_zugliste(self):
-        response = await self._send_request("zugliste")
+        await self._send_request("zugliste")
+        response = await self._receive_data("zugliste")
         try:
             self.zugliste = {zug['zid']: ZugDetails().update(zug) for zug in response.zugliste.zug}
         except AttributeError:

@@ -2,6 +2,8 @@ import datetime
 
 
 class AnlagenInfo:
+    tag = 'anlageninfo'
+
     def __init__(self):
         self.aid = ""
         self.name = ""
@@ -19,6 +21,8 @@ class AnlagenInfo:
 
 
 class BahnsteigInfo:
+    tag = 'bahnsteiginfo'
+
     def __init__(self):
         self.name = ""
         self.haltepunkt = False
@@ -45,6 +49,8 @@ class BahnsteigInfo:
 
 
 class Knoten:
+    tag = 'shape'
+
     typen = {2: "Signal",
              3: "Weiche unten",
              4: "Weiche oben",
@@ -91,6 +97,8 @@ class Knoten:
 
 
 class ZugDetails:
+    tag = 'zugdetails'
+
     # todo : name in zuggattung und -nummer aufspalten
     def __init__(self):
         self.zid = 0
@@ -149,7 +157,33 @@ class ZugDetails:
         return None
 
 
-class ZugFahrplanZeile():
+class Ereignis(ZugDetails):
+    """
+    <ereignis zid='1' art='einfahrt' name='RE 10' verspaetung='+2' gleis='1' plangleis='1' von='A-Stadt' nach='B-Hausen' sichtbar='true' amgleis='true' />
+    """
+    tag = 'ereignis'
+
+    arten = {'einfahrt', 'ankunft', 'abfahrt', 'ausfahrt', 'rothalt', 'wurdegruen', 'kuppeln', 'fluegeln'}
+
+    def __init__(self):
+        super().__init__()
+        self.art = ""
+
+    def __str__(self):
+        return f"Ereignis {self.art} {self.name} von {self.von} nach {self.nach} ({self.verspaetung})"
+
+    def __repr__(self):
+        return f"Ereignis({self.zid}, '{self.art}', '{self.name}', '{self.von}', '{self.nach}')"
+
+    def update(self, ereignis):
+        super().update(ereignis)
+        self.art = ereignis['art']
+        return self
+
+
+class ZugFahrplanZeile:
+    tag = 'gleis'
+
     def __init__(self, zug):
         self.zug = zug
         self.gleis = ""
