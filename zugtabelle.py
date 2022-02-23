@@ -46,6 +46,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._bars_aus = None
         self._labels_aus = []
 
+        self.on_update_clicked()
         self.startTimer(15000)
 
     def timerEvent(self, *args):

@@ -1,8 +1,8 @@
 import asyncio
 import datetime
 import untangle
-from xml.sax import SAXParseException
-from xml.parsers.expat import ExpatError
+
+from xml.sax import SAXParseException, make_parser
 
 from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, ZugFahrplanZeile, Ereignis
 
@@ -11,6 +11,9 @@ class PluginClient:
     def __init__(self, name, autor, version, text):
         self._reader = None
         self._writer = None
+        self._parser = None
+        self._handler = None
+        self.debug = False
         self.name = name
         self.autor = autor
         self.version = version
@@ -44,6 +47,10 @@ class PluginClient:
 
     async def connect(self):
         self._reader, self._writer = await asyncio.open_connection('127.0.0.1', 3691)
+        self._parser = make_parser()
+        self._handler = untangle.Handler()
+        self._parser.setContentHandler(self._handler)
+
         data = await self._reader.readuntil(separator=b'>')
         data += await self._reader.readuntil(separator=b'>')
         xml = data.decode()
@@ -85,26 +92,29 @@ class PluginClient:
         :return: resultat von untangle.parse()
         :raise: asyncio.TimeoutError
         """
-        rec = b""
         while True:
-            obj = None
-            rec = rec + await asyncio.wait_for(self._reader.readuntil(separator=b'>'), timeout=timeout)
-            try:
-                obj = untangle.parse(rec.decode())
-            except ExpatError:
-                pass
-            except SAXParseException:
-                pass
-            except UnicodeDecodeError:
-                break
-            else:
+            bs = await asyncio.wait_for(self._reader.readline(), timeout=timeout)
+            s = bs.decode().replace('\n', '')
+            if self.debug:
+                print(s)
+            if s:
+                self._parser.feed(s)
+
+            # data object complete?
+            if len(self._handler.elements) == 0:
+                obj = self._handler.root
+                self._parser.close()
+                self._handler.root = untangle.Element(None, None)
+                self._handler.root.is_root = True
+
                 if hasattr(obj, tag):
                     break
                 elif hasattr(obj, 'ereignis'):
                     ereignis = Ereignis().update(obj)
                     self.ereignisse.put_nowait(ereignis)
                 else:
-                    raise ValueError("unexpected response: " + str(obj))
+                    print("unrecognized response:", obj)
+                    pass
 
         return obj
 
