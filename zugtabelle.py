@@ -46,15 +46,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self._bars_aus = None
         self._labels_aus = []
 
-        self.on_update_clicked()
-        self.startTimer(15000)
+        self.enable_update = True
+        self.update_task = asyncio.create_task(self.update_loop())
 
-    def timerEvent(self, *args):
-        self.on_update_clicked()
-
-    @qasync.asyncSlot()
-    async def on_update_clicked(self):
-        await self.update()
+    async def update_loop(self):
+        while self.enable_update:
+            await self.update()
+            await asyncio.sleep(15)
 
     async def update(self):
         # todo : einfahrten filtern und gruppieren
@@ -73,12 +71,12 @@ class MainWindow(QtWidgets.QMainWindow):
         kwargs = dict()
         kwargs['align'] = 'center'
         kwargs['alpha'] = 0.5
-        kwargs['color'] = 'red'
+        # kwargs['color'] = 'red'
         kwargs['edgecolor'] = 'black'
         kwargs['linewidth'] = 1
 
         try:
-            x_labels_pos, x_labels, x_pos, y_bot, y_hgt, bar_labels = self.build_bars(self.client.wege_nach_typ[6])
+            x_labels_pos, x_labels, x_pos, y_bot, y_hgt, bar_labels, colors = self.build_bars(self.client.wege_nach_typ[6])
         except KeyError:
             return None
 
@@ -94,7 +92,7 @@ class MainWindow(QtWidgets.QMainWindow):
         ymin = minutes(self.client.get_sim_clock())
         self._einfahrten_ax.set_ylim(bottom=ymin+30, top=ymin, auto=False)
 
-        self._bars_ein = self._einfahrten_ax.bar(x_pos, y_hgt, width=0.8, bottom=y_bot, data=None, **kwargs)
+        self._bars_ein = self._einfahrten_ax.bar(x_pos, y_hgt, width=0.8, bottom=y_bot, data=None, color=colors, **kwargs)
         self._labels_ein = self._einfahrten_ax.bar_label(self._bars_ein, labels=bar_labels, label_type='center')
 
         # Trigger the canvas to update and redraw.
@@ -113,7 +111,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     zeile = zug.fahrplan[0]
                     ankunft = minutes(zeile.an) + zug.verspaetung
                     aufenthalt = 1
-                    bar = (zug.name, i_knoten, ankunft, aufenthalt)
+                    bar = (zug.name, i_knoten, ankunft, aufenthalt, zug.sichtbar)
                     bars.append(bar)
                 except (AttributeError, IndexError):
                     pass
@@ -122,8 +120,10 @@ class MainWindow(QtWidgets.QMainWindow):
         y_bot = np.asarray([b[2] for b in bars])
         y_hgt = np.asarray([b[3] for b in bars])
         bar_labels = [b[0] for b in bars]
+        cd = {True: 'green', False: 'red'}
+        colors = [cd[b[4]] for b in bars]
 
-        return x_labels_pos, x_labels, x_pos, y_bot, y_hgt, bar_labels
+        return x_labels_pos, x_labels, x_pos, y_bot, y_hgt, bar_labels, colors
 
     async def get_sts_data(self, alles=False):
         if alles or not self.client.anlageninfo:
