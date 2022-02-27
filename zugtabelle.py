@@ -5,7 +5,7 @@ import numpy as np
 import sys
 import time
 
-from PyQt5 import QtCore, QtWidgets, uic
+from PyQt5 import QtCore, QtWidgets, uic, QtGui
 import qasync
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -13,6 +13,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 
 from stsplugin import PluginClient
+from database import StsConfig
 
 mpl.use('Qt5Agg')
 
@@ -29,6 +30,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.client = sts_client
+        self.config = None
+        self.config_path = "zugtabelle.json"
 
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)
@@ -49,19 +52,34 @@ class MainWindow(QtWidgets.QMainWindow):
         self.enable_update = True
         self.update_task = asyncio.create_task(self.update_loop())
 
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        try:
+            self.config.save(self.config_path)
+        except (AttributeError, OSError):
+            pass
+        super().closeEvent(a0)
+
     async def update_loop(self):
         while self.enable_update:
             await self.update()
             await asyncio.sleep(15)
 
     async def update(self):
-        # todo : einfahrten filtern und gruppieren
         # todo : ueberlappende zuege stapeln
         # todo : eingefahrene zuege ausblenden
         # todo : farben nach zug-gattungen
         if not self.client.is_connected():
             await self.client.connect()
         await self.get_sts_data()
+
+        if not self.config:
+            self.config = StsConfig(self.client.anlageninfo.aid)
+            try:
+                self.config.load(self.config_path)
+            except (OSError, ValueError):
+                pass
+        if self.config.auto:
+            self.config.auto_config(self.client)
 
         if self._bars_ein is not None:
             self._bars_ein.remove()
@@ -99,19 +117,22 @@ class MainWindow(QtWidgets.QMainWindow):
         self._einfahrten_ax.figure.canvas.draw()
 
     def build_bars(self, knoten_liste):
-        x_labels = list()
-        x_labels_pos = list()
+        x_labels = list(self.config.einfahrtsgruppen.keys())
+        x_labels_pos = list(range(len(x_labels)))
         bars = list()
 
-        for i_knoten, knoten in enumerate(knoten_liste):
-            x_labels.append(knoten.name)
-            x_labels_pos.append(i_knoten)
+        for knoten in knoten_liste:
+            if gruppenname := self.config.suche_gleisgruppe(knoten.name, self.config.einfahrtsgruppen):
+                x_pos = x_labels.index(gruppenname)
+            else:
+                continue
+
             for zug in knoten.zuege:
                 try:
                     zeile = zug.fahrplan[0]
                     ankunft = minutes(zeile.an) + zug.verspaetung
                     aufenthalt = 1
-                    bar = (zug.name, i_knoten, ankunft, aufenthalt, zug.sichtbar)
+                    bar = (zug, x_pos, ankunft, aufenthalt)
                     bars.append(bar)
                 except (AttributeError, IndexError):
                     pass
@@ -119,9 +140,14 @@ class MainWindow(QtWidgets.QMainWindow):
         x_pos = np.asarray([b[1] for b in bars])
         y_bot = np.asarray([b[2] for b in bars])
         y_hgt = np.asarray([b[3] for b in bars])
-        bar_labels = [b[0] for b in bars]
-        cd = {True: 'green', False: 'red'}
-        colors = [cd[b[4]] for b in bars]
+        bar_labels = [b[0].name for b in bars]
+
+        # farben = {g: mpl.colors.TABLEAU_COLORS[i % len(mpl.colors.TABLEAU_COLORS)]
+        #           for i, g in enumerate(self.client.zuggattungen)}
+        # colors = [farben[b[5]] for b in bars]
+        farben = [k for k in mpl.colors.TABLEAU_COLORS]
+        # colors = [farben[i % len(farben)] for i in range(len(bars))]
+        colors = [farben[b[0].nummer // 10000] for b in bars]
 
         return x_labels_pos, x_labels, x_pos, y_bot, y_hgt, bar_labels, colors
 

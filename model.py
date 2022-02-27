@@ -51,13 +51,21 @@ class BahnsteigInfo:
 class Knoten:
     tag = 'shape'
 
-    typen = {2: "Signal",
-             3: "Weiche unten",
-             4: "Weiche oben",
-             5: "Bahnsteig",
-             6: "Einfahrt",
-             7: "Ausfahrt",
-             12: "Haltepunkt"}
+    TYP_NAME = {2: "Signal",
+                3: "Weiche unten",
+                4: "Weiche oben",
+                5: "Bahnsteig",
+                6: "Einfahrt",
+                7: "Ausfahrt",
+                12: "Haltepunkt"}
+
+    TYP_NUMMER = {"Signal": 2,
+                  "Weiche unten": 3,
+                  "Weiche oben": 4,
+                  "Bahnsteig": 5,
+                  "Einfahrt": 6,
+                  "Ausfahrt": 7,
+                  "Haltepunkt": 12}
 
     def __init__(self):
         self.key = ""
@@ -74,7 +82,7 @@ class Knoten:
         return self.key.__hash__()
 
     def __str__(self):
-        return f"Knoten {self.key}: {self.typen[self.typ]} {self.name}"
+        return f"Knoten {self.key}: {self.TYP_NAME[self.typ]} {self.name}"
 
     def __repr__(self):
         return f"Knoten('{self.key}': enr={self.enr}, typ={self.typ}, name='{self.name}')"
@@ -99,7 +107,6 @@ class Knoten:
 class ZugDetails:
     tag = 'zugdetails'
 
-    # todo : name in zuggattung und -nummer aufspalten
     def __init__(self):
         self.zid = 0
         self.name = ""
@@ -144,6 +151,24 @@ class ZugDetails:
         self.usertextsender = zugdetails['usertextsender']
         self.hinweistext = zugdetails['hinweistext']
         return self
+
+    @property
+    def gattung(self):
+        try:
+            l = self.name.split(" ")
+            if len(l) > 1:
+                return l[0]
+            else:
+                return ""
+        except ValueError:
+            return ""
+
+    @property
+    def nummer(self):
+        try:
+            return int(self.name.split(' ')[-1])
+        except ValueError:
+            return 0
 
     def find_fahrplanzeile(self, gleis):
         """

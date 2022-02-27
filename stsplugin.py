@@ -29,6 +29,7 @@ class PluginClient:
         # dict {Knoten.typ: set of Knoten}
         self.wege_nach_typ = {}
         self.zugliste = {}
+        self.zuggattungen = set()
         self.ereignisse = asyncio.Queue()
         self.registrierte_ereignisse = {art: set() for art in Ereignis.arten}
         self.client_datetime = datetime.datetime.now()
@@ -205,6 +206,7 @@ class PluginClient:
             await self._send_request("zugdetails", zid=zid)
             response = await self._receive_data("zugdetails")
             self.zugliste[zid].update(response.zugdetails)
+            self.zuggattungen.add(self.zugliste[zid].gattung)
 
     async def request_ereignis(self, art, zids):
         """
