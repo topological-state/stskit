@@ -28,6 +28,7 @@ class PluginClient:
         self.wege_nach_namen = {}
         # dict {Knoten.typ: set of Knoten}
         self.wege_nach_typ = {}
+        # dict {zid: ZugDetails}
         self.zugliste = {}
         self.zuggattungen = set()
         self.ereignisse = asyncio.Queue()
@@ -111,7 +112,7 @@ class PluginClient:
                 if hasattr(obj, tag):
                     break
                 elif hasattr(obj, 'ereignis'):
-                    ereignis = Ereignis().update(obj)
+                    ereignis = Ereignis().update(obj.ereignis)
                     self.ereignisse.put_nowait(ereignis)
                 else:
                     print("unrecognized response:", obj)

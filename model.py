@@ -195,7 +195,10 @@ class Ereignis(ZugDetails):
         self.art = ""
 
     def __str__(self):
-        return f"Ereignis {self.art} {self.name} von {self.von} nach {self.nach} ({self.verspaetung})"
+        if self.amgleis:
+            return f"{self.art} gleis {self.gleis}: {self.name} von {self.von} nach {self.nach} ({self.verspaetung})"
+        else:
+            return f"{self.art}: {self.name} von {self.von} nach {self.nach} ({self.verspaetung})"
 
     def __repr__(self):
         return f"Ereignis({self.zid}, '{self.art}', '{self.name}', '{self.von}', '{self.nach}')"
