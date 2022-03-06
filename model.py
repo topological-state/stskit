@@ -145,8 +145,8 @@ class ZugDetails:
         self.plangleis = zugdetails['plangleis']
         self.von = zugdetails['von']
         self.nach = zugdetails['nach']
-        self.sichtbar = bool(zugdetails['sichtbar'])
-        self.amgleis = bool(zugdetails['amgleis'])
+        self.sichtbar = str(zugdetails['sichtbar']).lower() == 'true'
+        self.amgleis = str(zugdetails['amgleis']).lower() == 'true'
         self.usertext = zugdetails['usertextsender']
         self.usertextsender = zugdetails['usertextsender']
         self.hinweistext = zugdetails['hinweistext']
@@ -195,7 +195,16 @@ class Ereignis(ZugDetails):
         self.art = ""
 
     def __str__(self):
-        return f"{self.art} {self.name}: {self.von} - {self.gleis} - {self.nach} ({self.verspaetung:+})"
+        if self.gleis:
+            gleis = self.gleis
+            if self.gleis != self.plangleis:
+                gleis = gleis + '*'
+            if self.amgleis:
+                gleis = '[' + gleis + ']'
+        else:
+            gleis = '-'
+
+        return f"{self.art} {self.name}: {self.von} - {gleis} - {self.nach} ({self.verspaetung:+})"
 
     def __repr__(self):
         return f"Ereignis({self.zid}, '{self.art}', '{self.name}', '{self.von}', '{self.nach}')"
