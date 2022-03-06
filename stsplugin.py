@@ -114,9 +114,8 @@ class PluginClient:
                 elif hasattr(obj, 'ereignis'):
                     ereignis = Ereignis().update(obj.ereignis)
                     self.ereignisse.put_nowait(ereignis)
-                else:
+                elif self.debug:
                     print("unrecognized response:", obj)
-                    pass
 
         return obj
 
