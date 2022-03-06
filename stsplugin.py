@@ -90,12 +90,16 @@ class PluginClient:
         die funktion kann mit tag='' und kleinem timeout auch zum pollen von ereignissen verwendet werden.
 
         :param tag: name des erwarteten xml-tags
-        :param timeout: timeout in sekunden
+        :param timeout: timeout in sekunden, 0 oder None: warte unbestimmte zeit
         :return: resultat von untangle.parse()
         :raise: asyncio.TimeoutError
         """
         while True:
-            bs = await asyncio.wait_for(self._reader.readline(), timeout=timeout)
+            if timeout:
+                bs = await asyncio.wait_for(self._reader.readline(), timeout=timeout)
+            else:
+                bs = await self._reader.readline()
+
             s = bs.decode().replace('\n', '')
             if self.debug:
                 print(s)

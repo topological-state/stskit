@@ -18,11 +18,7 @@ COLORCODES = {
 }
 
 
-async def main():
-    client = PluginClient(name='ticker', autor='bummler', version='0.1', text='stellwerksim ereignisticker')
-    await client.connect()
-    await client.request_anlageninfo()
-
+async def query(client):
     sendezeit = datetime.datetime.now() - datetime.timedelta(minutes=1)
     while True:
         if datetime.datetime.now() - sendezeit >= datetime.timedelta(minutes=1):
@@ -33,23 +29,39 @@ async def main():
             sendezeit = datetime.datetime.now()
 
         try:
-            await client._receive_data('dummy', timeout=0.1)
+            await client._receive_data('dummy', timeout=1)
         except asyncio.TimeoutError:
             pass
 
-        while True:
-            try:
-                ereignis = client.ereignisse.get_nowait()
-                try:
-                    c1 = COLORCODES[ereignis.art]
-                    c2 = COLORCODES['default']
-                except KeyError:
-                    c1 = ""
-                    c2 = ""
-                print(c1 + str(ereignis) + c2)
-            except asyncio.QueueEmpty:
-                break
 
+async def report(client):
+    while True:
+        try:
+            ereignis = await client.ereignisse.get()
+            try:
+                c1 = COLORCODES[ereignis.art]
+                c2 = COLORCODES['default']
+            except KeyError:
+                c1 = ""
+                c2 = ""
+            print(c1 + str(ereignis) + c2)
+        except KeyboardInterrupt:
+            break
+
+
+async def main():
+    client = PluginClient(name='ticker', autor='bummler', version='0.1', text='stellwerksim ereignisticker')
+    await client.connect()
+    await client.request_anlageninfo()
+
+    query_task = asyncio.create_task(query(client))
+    report_task = asyncio.create_task(report(client))
+    done, pending = await asyncio.wait({query_task, report_task}, return_when=asyncio.FIRST_COMPLETED)
+    for task in pending:
+        task.cancel()
+    await asyncio.wait(pending)
+
+    client.close()
 
 if __name__ == '__main__':
     asyncio.run(main())
