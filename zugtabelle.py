@@ -48,12 +48,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self._bars_ein = None
         self._labels_ein = []
 
-        ausfahrten_canvas = FigureCanvas(Figure(figsize=(5, 3)))
-        layout.addWidget(ausfahrten_canvas)
-        self._ausfahrten_ax = ausfahrten_canvas.figure.subplots()
-        self._bars_aus = None
-        self._labels_aus = []
-
         self.enable_update = True
         self.update_task = asyncio.create_task(self.update_loop())
 
@@ -112,7 +106,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._einfahrten_ax.yaxis.set_major_locator(mpl.ticker.MultipleLocator(10))
         self._einfahrten_ax.yaxis.grid(True, which='major')
         # ymin = min(y_bot)
-        ymin = minutes(self.client.get_sim_clock())
+        ymin = minutes(self.client.calc_simzeit())
         self._einfahrten_ax.set_ylim(bottom=ymin + 30, top=ymin, auto=False)
 
         self._bars_ein = self._einfahrten_ax.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, **kwargs)

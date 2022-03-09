@@ -334,6 +334,7 @@ class Ereignis(ZugDetails):
     def __init__(self):
         super().__init__()
         self.art = ""
+        self.zeit = datetime.datetime.fromordinal(1)
 
     def __str__(self) -> str:
         return self.art + " " + super().__str__()

@@ -1,8 +1,32 @@
+"""
+stellwerksim plugin-client
+
+dieses modul stellt eine PluginClient-klasse zur verfügung, die die kommunikation mit dem simulator übernimmt.
+der client speichert auch alle anlagen- und fahrplandaten zwischen und verarbeitet ereignisse.
+
+asynchrone kommunikation:
+
+die kommunikationsmethoden des PluginClient sind als async-methoden deklariert,
+die in await statements verwendet werden können.
+diese architektur bedingt, dass die applikation eine ereignisschleife unterhält.
+in textbasierten programmen, wird diese implizit vom asyncio-modul bereitgestellt
+(siehe test-routine unten oder das ticker-programm).
+bei GUI-programmen muss eine kompatible ereignisschleife wie z.b. von qasync für Qt verwendet werden.
+
+vorsicht ist bei der verwendung von parallelen tasks geboten:
+es dürfen nie zwei serveranfragen gleichzeitig laufen!
+dies kann die kommunikation mit dem simulator durcheinanderbringen.
+
+problemlos möglich ist es hingegen, die abfrage der ereignis-queue in einen separaten asyncio-task zu verlegen,
+siehe ticker-programm.
+"""
+
 import asyncio
 import datetime
+from typing import Dict, List, Optional, Union
 import untangle
 
-from xml.sax import SAXParseException, make_parser
+from xml.sax import make_parser
 
 from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis
 
@@ -63,12 +87,19 @@ class PluginClient:
             await self.register()
             await self.request_simzeit()
 
-    def is_connected(self):
+    def is_connected(self) -> bool:
+        """
+        ist der klient mit dem server verbunden?
+
+        :return: (bool)
+        """
         return self._writer is not None
 
     async def _send_request(self, tag, **kwargs):
         """
-        anfrage senden
+        anfrage senden.
+
+        diese coroutine wartet ggf., bis der sendepuffer wieder bereit ist.
 
         :param tag: name des xml-tags
         :param kwargs: (dict) attribute des xml-tags
@@ -81,17 +112,36 @@ class PluginClient:
         self._writer.write(data)
         await self._writer.drain()
 
-    async def _receive_data(self, tag, timeout=10):
+    async def _receive_data(self, tag: str, timeout: Optional[float] = 10) -> untangle.Element:
         """
         antwort abwarten und interpretieren
 
-        die funktion wartet, bis das angegebene tag empfangen wird oder die zeit abgelaufen ist.
-        vor der erwarteten antwort empfangene ereignisse werden an die ereignisse-queue angehaengt.
+        diese coroutine wartet, bis das angegebene tag empfangen wird oder die zeit abgelaufen ist.
+        in ersterem fall werden die empfangenen daten in einem untangle.Element zurückgegeben.
+        in letzterem fall wird eine exception ausgelöst.
 
-        die funktion kann mit tag='' und kleinem timeout auch zum pollen von ereignissen verwendet werden.
+        der empfangspuffer kann vor der erwarteten antwort asynchrone ereignismeldungen enthalten.
+        diese werden an die ereignisse-queue angehängt und können dieser separat entnommen werden,
+        z.b. in einem separaten asyncio-task.
+
+        die methode kann auch benutzt werden, um ereignisse im empfangspuffer zu verarbeiten,
+        ohne dass eine anfrage an den server gestellt wurde.
+        dabei gibt es zwei varianten:
+
+        1. tag=''.
+           alle bereits empfangenen ereignise im puffer werden verarbeitet und
+           als model.Ereignis-objekt in die ereignisse-queue gestellt.
+           die methode löst einen asyncio.TimeoutError aus, sobald der empfangspuffer leer ist.
+           es gibt keinen normalen ausgang aus der routine!
+
+        2. tag='ereignis'.
+           die methode wartet maximal auf ein ereignis.
+           die xml-daten werden im untangle.Element-objekt zurückgeliefert.
+           wenn innerhalb der wartezeit kein ereignis ankommt,
+           wird ein asyncio.TimeoutError ausgelöst.
 
         :param tag: name des erwarteten xml-tags
-        :param timeout: timeout in sekunden, 0 oder None: warte unbestimmte zeit
+        :param timeout: timeout in sekunden, 0 oder None: warte unbestimmte zeit.
         :return: resultat von untangle.parse()
         :raise: asyncio.TimeoutError
         """
@@ -118,13 +168,27 @@ class PluginClient:
                     break
                 elif hasattr(obj, 'ereignis'):
                     ereignis = Ereignis().update(obj.ereignis)
+                    ereignis.zeit = self.calc_simzeit()
                     self.ereignisse.put_nowait(ereignis)
                 elif self.debug:
                     print("unrecognized response:", obj)
 
         return obj
 
-    def get_sim_clock(self):
+    def calc_simzeit(self) -> datetime.datetime:
+        """
+        simulatorzeit ohne serverabfrage abschätzen.
+
+        der time_offset muss vorher einmal mittels request_simzeit kalibriert worden sein.
+
+        der rückgabewert enthält das aktuelle (client-)datum.
+        das ist nötig, damit mit der uhrzeit gerechnet werden kann.
+        da der simulator kein datum kennt, sollten die datumsfelder nach der rechnung nicht beachtet werden.
+        der fahrplan (in FahrplanZeile) enthält lediglich datetime.time objekte.
+        ein datetime.time-objekt kann einfach über die time-methode extrahiert werden.
+
+        :return: (datetime.datetime)
+        """
         return datetime.datetime.now() + self.time_offset
 
     async def register(self):
@@ -147,7 +211,23 @@ class PluginClient:
             bi = BahnsteigInfo().update(bahnsteig)
             self.bahnsteigliste[bi.name] = bi
 
-    async def request_simzeit(self):
+    async def request_simzeit(self) -> datetime.datetime:
+        """
+        simulatorzeit anfragen.
+
+        die funktion fragt die aktuelle simulatorzeit an und liefert sie in einem datetime.time objekt.
+
+        basierend auf der antwort setzt sie ausserdem client_datetime, server_datetime und time_offset.
+        diese attribute können benutzt werden, um die simulatorzeit zu berechnen (calc_simzeit funktion),
+        ohne dass eine erneute anfrage geschickt werden muss.
+
+        bemerkung: client_datetime und server_datetime enthalten das aktuelle datum.
+        das ist nötig, um den time_offset als timedelta zu berechnen.
+        da der simulator kein datum kennt, sollten die datumsfelder nicht beachtet werden.
+        die datetime.datetime.time-methode ist ein schneller weg, ein datetime.time-objekt zu erhalten.
+
+        :return: (datetime.datetime)
+        """
         self.client_datetime = datetime.datetime.now()
         await self._send_request("simzeit", sender=0)
         simzeit = await self._receive_data("simzeit")
@@ -157,6 +237,7 @@ class PluginClient:
         t = datetime.time(hour=hrs, minute=mins, second=secs, microsecond=msecs * 1000)
         self.server_datetime = datetime.datetime.combine(self.client_datetime, t)
         self.time_offset = (self.server_datetime - self.client_datetime)
+        return self.server_datetime
 
     async def request_wege(self):
         await self._send_request("wege")

@@ -29,7 +29,18 @@ COLORCODES = {
 }
 
 
-async def query(client: PluginClient) -> None:
+async def query(client: PluginClient, args: argparse.Namespace) -> None:
+    """
+    ereignisse anfragen.
+
+    diese coroutine fordert periodisch (einmal pro minute) die zugliste an,
+    registriert neue züge für ereignismeldungen und hält die empfangsschleife am laufen.
+    die ereignissmeldungen selber werden aber nicht hier bearbeitet.
+
+    :param client: plugin-client
+    :param args: parsed arguments
+    :return: None
+    """
     try:
         sendezeit = datetime.datetime.now() - datetime.timedelta(minutes=1)
         while True:
@@ -48,11 +59,14 @@ async def query(client: PluginClient) -> None:
         pass
 
 
-async def report(client: PluginClient) -> None:
+async def report(client: PluginClient, args: argparse.Namespace) -> None:
     """
     ereignisse an stdout senden.
 
+    diese coroutine liest ereignisobjekte aus dem empfangspuffer des klienten aus und verarbeitet sie.
+
     :param client: plugin-client
+    :param args: parsed arguments
     :return: None
     """
     try:
@@ -75,21 +89,33 @@ async def report(client: PluginClient) -> None:
             else:
                 gleis = ''
 
-            meldung = f"{ereignis.art} {ereignis.name}: {ereignis.von} - {gleis} - {ereignis.nach} " \
-                      f"({ereignis.verspaetung:+})"
+            zeit = ereignis.zeit.time().isoformat(timespec='seconds')
+
+            variablen = {**vars(ereignis), 'gleis': gleis, 'zeit': zeit}
+            fmt = "{zeit} {art} {name}: {von} - {gleis} - {nach} ({verspaetung:+})"
+            meldung = fmt.format(**variablen)
 
             print(c1 + meldung + c2)
     except KeyboardInterrupt:
         pass
 
 
-async def main(args):
+async def main(args: argparse.Namespace) -> None:
+    """
+    ticker-hauptroutine
+
+    die hauptroutine richtet einen PluginClient ein, verbindet ihn zum simulator
+    und startet die query und report coroutinen, die das polling und die verarbeitung der ereignisse übernehmen.
+
+    :param args: parsed command line arguments
+    :return: None
+    """
     client = PluginClient(name='ticker', autor='bummler', version='0.1', text='ereignisticker')
     await client.connect(host=args.host, port=args.port)
     await client.request_anlageninfo()
 
-    query_task = asyncio.create_task(query(client))
-    report_task = asyncio.create_task(report(client))
+    query_task = asyncio.create_task(query(client, args))
+    report_task = asyncio.create_task(report(client, args))
     try:
         done, pending = await asyncio.wait({query_task, report_task}, return_when=asyncio.FIRST_COMPLETED)
         for task in pending:
