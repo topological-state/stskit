@@ -25,6 +25,11 @@ def minutes(dt):
         return dt.seconds % 60
 
 
+def hour_minutes_formatter(x, pos):
+    # return "{0:02}:{1:02}".format(int(x) // 60, int(x) % 60)
+    return f"{int(x) // 60:02}:{int(x) % 60:02}"
+
+
 class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
@@ -66,7 +71,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
     async def update(self):
         # todo : ueberlappende zuege stapeln
-        # todo : eingefahrene zuege ausblenden
         # todo : farben nach zug-gattungen
         if not self.client.is_connected():
             await self.client.connect()
@@ -92,25 +96,26 @@ class MainWindow(QtWidgets.QMainWindow):
         # kwargs['color'] = 'red'
         kwargs['edgecolor'] = 'black'
         kwargs['linewidth'] = 1
+        kwargs['width'] = 1.0
 
         try:
-            x_labels_pos, x_labels, x_pos, y_bot, y_hgt, bar_labels, colors = self.build_bars(self.client.wege_nach_typ[6])
+            x_labels_pos, x_labels, x_pos, y_bot, y_hgt, bar_labels, colors = self.build_bars(
+                self.client.wege_nach_typ[6])
         except KeyError:
             return None
 
         self._einfahrten_ax.set_title('ankuenfte')
         self._einfahrten_ax.set_xticks(x_labels_pos, x_labels)
 
-        yfmt = lambda x, pos: "{0:02}:{1:02}".format(int(x) // 60, int(x) % 60)
-        self._einfahrten_ax.yaxis.set_major_formatter(yfmt)
+        self._einfahrten_ax.yaxis.set_major_formatter(hour_minutes_formatter)
         self._einfahrten_ax.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(1))
         self._einfahrten_ax.yaxis.set_major_locator(mpl.ticker.MultipleLocator(10))
         self._einfahrten_ax.yaxis.grid(True, which='major')
         # ymin = min(y_bot)
         ymin = minutes(self.client.get_sim_clock())
-        self._einfahrten_ax.set_ylim(bottom=ymin+30, top=ymin, auto=False)
+        self._einfahrten_ax.set_ylim(bottom=ymin + 30, top=ymin, auto=False)
 
-        self._bars_ein = self._einfahrten_ax.bar(x_pos, y_hgt, width=0.8, bottom=y_bot, data=None, color=colors, **kwargs)
+        self._bars_ein = self._einfahrten_ax.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, **kwargs)
         self._labels_ein = self._einfahrten_ax.bar_label(self._bars_ein, labels=bar_labels, label_type='center')
 
         # Trigger the canvas to update and redraw.
@@ -128,14 +133,15 @@ class MainWindow(QtWidgets.QMainWindow):
                 continue
 
             for zug in knoten.zuege:
-                try:
-                    zeile = zug.fahrplan[0]
-                    ankunft = minutes(zeile.an) + zug.verspaetung
-                    aufenthalt = 1
-                    bar = (zug, x_pos, ankunft, aufenthalt)
-                    bars.append(bar)
-                except (AttributeError, IndexError):
-                    pass
+                if not zug.sichtbar:
+                    try:
+                        zeile = zug.fahrplan[0]
+                        ankunft = minutes(zeile.an) + zug.verspaetung
+                        aufenthalt = 1
+                        bar = (zug, x_pos, ankunft, aufenthalt)
+                        bars.append(bar)
+                    except (AttributeError, IndexError):
+                        pass
 
         x_pos = np.asarray([b[1] for b in bars])
         y_bot = np.asarray([b[2] for b in bars])

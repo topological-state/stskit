@@ -4,7 +4,7 @@ import untangle
 
 from xml.sax import SAXParseException, make_parser
 
-from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, ZugFahrplanZeile, Ereignis
+from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis
 
 
 class PluginClient:
@@ -47,20 +47,21 @@ class PluginClient:
             self._writer = None
             self._reader = None
 
-    async def connect(self):
-        self._reader, self._writer = await asyncio.open_connection('127.0.0.1', 3691)
-        self._parser = make_parser()
-        self._handler = untangle.Handler()
-        self._parser.setContentHandler(self._handler)
+    async def connect(self, host='localhost', port=3691):
+        if self._writer is None:
+            self._reader, self._writer = await asyncio.open_connection(host, port)
+            self._parser = make_parser()
+            self._handler = untangle.Handler()
+            self._parser.setContentHandler(self._handler)
 
-        data = await self._reader.readuntil(separator=b'>')
-        data += await self._reader.readuntil(separator=b'>')
-        xml = data.decode()
-        self.status = untangle.parse(xml)
-        if int(self.status.status['code']) >= 400:
-            raise ValueError(f"error {self.status.status['code']}: {self.status.status.cdata}")
-        await self.register()
-        await self.request_simzeit()
+            data = await self._reader.readuntil(separator=b'>')
+            data += await self._reader.readuntil(separator=b'>')
+            xml = data.decode()
+            self.status = untangle.parse(xml)
+            if int(self.status.status['code']) >= 400:
+                raise ValueError(f"error {self.status.status['code']}: {self.status.status.cdata}")
+            await self.register()
+            await self.request_simzeit()
 
     def is_connected(self):
         return self._writer is not None
@@ -237,7 +238,7 @@ class PluginClient:
             zug.fahrplan = []
             try:
                 for gleis in response.zugfahrplan.gleis:
-                    zeile = ZugFahrplanZeile(zug)
+                    zeile = FahrplanZeile(zug)
                     zeile.update(gleis)
                     zug.fahrplan.append(zeile)
             except AttributeError:
