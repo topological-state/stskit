@@ -23,7 +23,7 @@ siehe ticker-programm.
 
 import asyncio
 import datetime
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 import untangle
 
 from xml.sax import make_parser
@@ -429,17 +429,27 @@ async def test():
     client.update_bahnsteig_zuege()
     client.update_wege_zuege()
 
-    # for zid, zug in client.zugliste.items():
-    #     print(zid, zug)
+    print("\nanlageninfo\n")
+    print(client.anlageninfo)
 
+    print("\nbahnsteige\n")
+    for bi in client.bahnsteigliste.values():
+        print(bi)
+        print("  nachbarn: ", ", ".join(sorted(bi.nachbarn)))
+
+    print("\neinfahrten\n")
     for knoten in client.wege_nach_typ[6]:
         print(knoten)
-        for zug in knoten.zuege:
-            try:
-                print(zug.name, zug.fahrplan[0].an, zug.verspaetung)
-            except (AttributeError, IndexError):
-                pass
-        print()
+        print("  nachbarn: ", ", ".join(sorted((n.key for n in knoten.nachbarn))))
+
+    print("\nausfahrten\n")
+    for knoten in client.wege_nach_typ[7]:
+        print(knoten)
+        print("  nachbarn: ", ", ".join(sorted((n.key for n in knoten.nachbarn))))
+
+    print("\nzüge\n")
+    for zid, zug in client.zugliste.items():
+        print(zid, zug)
 
     return client
 

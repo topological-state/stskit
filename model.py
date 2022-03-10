@@ -11,7 +11,7 @@ einige der klassen haben noch zusätzliche attribute, die vom klienten ausgefül
 """
 
 import datetime
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Set, Union
 
 
 class AnlagenInfo:
@@ -30,6 +30,10 @@ class AnlagenInfo:
         self.build = 0
         self.region = ""
         self.online = False
+
+    def __str__(self) -> str:
+        network = "online" if self.online else "offline"
+        return f"{self.region} - {self.name} ({self.aid}, {self.build}, {network})"
 
     def update(self, item: Dict) -> 'AnlagenInfo':
         """

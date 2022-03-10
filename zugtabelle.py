@@ -1,9 +1,9 @@
 import asyncio
-import functools
+import datetime
 import matplotlib as mpl
 import numpy as np
 import sys
-import time
+from typing import Any, Dict, List, Optional, Union
 
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 import qasync
@@ -18,14 +18,14 @@ from database import StsConfig
 mpl.use('Qt5Agg')
 
 
-def minutes(dt):
+def minutes(dt: Union[datetime.datetime, datetime.time, datetime.timedelta]) -> int:
     try:
         return dt.hour * 60 + dt.minute
     except AttributeError:
         return dt.seconds % 60
 
 
-def hour_minutes_formatter(x, pos):
+def hour_minutes_formatter(x: Union[int, float], pos: Any) -> str:
     # return "{0:02}:{1:02}".format(int(x) // 60, int(x) % 60)
     return f"{int(x) // 60:02}:{int(x) % 60:02}"
 
@@ -98,7 +98,7 @@ class MainWindow(QtWidgets.QMainWindow):
         except KeyError:
             return None
 
-        self._einfahrten_ax.set_title('ankuenfte')
+        self._einfahrten_ax.set_title('einfahrten')
         self._einfahrten_ax.set_xticks(x_labels_pos, x_labels)
 
         self._einfahrten_ax.yaxis.set_major_formatter(hour_minutes_formatter)

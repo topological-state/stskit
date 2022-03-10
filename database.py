@@ -1,5 +1,7 @@
 from collections.abc import Set
 import json
+from typing import Any, Dict, List, Optional, Set, Union
+
 from model import AnlagenInfo, BahnsteigInfo, Knoten
 
 
@@ -65,7 +67,7 @@ class StsConfig:
         """
         return self._data['bahnsteigsgruppen']
 
-    def suche_gleisgruppe(self, gleis, gruppen):
+    def suche_gleisgruppe(self, gleis: str, gruppen: Dict) -> Optional[str]:
         for name, gruppe in gruppen.items():
             if gleis in gruppe:
                 return name
@@ -76,10 +78,11 @@ class StsConfig:
         bestimmt die gruppen basierend auf anlageninfo und ueblicher schreibweise der gleisnamen.
 
         einfahrten und ausfahrten werden nach dem ersten namensteil gruppiert.
-        der erste namensteil wird zum gruppennanen.
+        der erste namensteil wird zum gruppennamen.
 
-        bahnsteige werden nach nachbarn gemaess anlageninfo gruppiert.
-        da es keine einheitlichen regeln gibt, werden die gruppennamen durchnummeriert.
+        bahnsteige werden nach nachbarn gemäss anlageninfo gruppiert.
+        da es keine einheitlichen muster für gleis- und gruppennamen gibt,
+        erhalten die gruppen den namen eines ihrer gleise.
 
         :param sts_client:
         :return: None
@@ -116,15 +119,22 @@ class StsConfig:
                 except KeyError:
                     self._data['ausfahrtsgruppen'][gr] = {k.name}
 
-        d = dict()
-        for _, bs in sts_client.bahnsteigliste.items():
-            key = ",".join(sorted(bs.nachbarn))
-            try:
-                d[key].add(bs.name)
-            except KeyError:
-                d[key] = {bs.name}
-        for i, gr in enumerate(d.values()):
-            self._data['bahnsteigsgruppen'][f'Gruppe {i}'] = gr
+        def add_nachbarn(gruppe: Set, bahnsteig: BahnsteigInfo, bahnsteigliste: Dict) -> Set:
+            gruppe.add(bahnsteig.name)
+            del bahnsteigliste[bahnsteig.name]
+            for n in bahnsteig.nachbarn:
+                try:
+                    gruppe = add_nachbarn(gruppe, bahnsteigliste[n], bahnsteigliste)
+                except KeyError:
+                    gruppe.add(n)
+
+            return gruppe
+
+        bsl = dict(sts_client.bahnsteigliste)
+        while bsl:
+            bs = bsl[next(iter(bsl))]
+            gr = add_nachbarn(set(), bs, bsl)
+            self._data['bahnsteigsgruppen'][bs.name] = gr
 
     def load(self, path):
         """
