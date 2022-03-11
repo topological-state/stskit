@@ -3,7 +3,7 @@ import datetime
 import matplotlib as mpl
 import numpy as np
 import sys
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Set, Union
 
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 import qasync
@@ -14,15 +14,9 @@ from matplotlib.figure import Figure
 
 from stsplugin import PluginClient
 from database import StsConfig
+from model import time_to_minutes
 
 mpl.use('Qt5Agg')
-
-
-def minutes(dt: Union[datetime.datetime, datetime.time, datetime.timedelta]) -> int:
-    try:
-        return dt.hour * 60 + dt.minute
-    except AttributeError:
-        return dt.seconds % 60
 
 
 def hour_minutes_formatter(x: Union[int, float], pos: Any) -> str:
@@ -106,7 +100,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._einfahrten_ax.yaxis.set_major_locator(mpl.ticker.MultipleLocator(10))
         self._einfahrten_ax.yaxis.grid(True, which='major')
         # ymin = min(y_bot)
-        ymin = minutes(self.client.calc_simzeit())
+        ymin = time_to_minutes(self.client.calc_simzeit())
         self._einfahrten_ax.set_ylim(bottom=ymin + 30, top=ymin, auto=False)
 
         self._bars_ein = self._einfahrten_ax.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, **kwargs)
@@ -130,7 +124,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 if not zug.sichtbar:
                     try:
                         zeile = zug.fahrplan[0]
-                        ankunft = minutes(zeile.an) + zug.verspaetung
+                        ankunft = time_to_minutes(zeile.an) + zug.verspaetung
                         aufenthalt = 1
                         bar = (zug, x_pos, ankunft, aufenthalt)
                         bars.append(bar)

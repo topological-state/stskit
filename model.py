@@ -14,6 +14,24 @@ import datetime
 from typing import Any, Dict, List, Optional, Set, Union
 
 
+def time_to_minutes(dt: Union[datetime.datetime, datetime.time, datetime.timedelta]) -> int:
+    try:
+        # datetime, time
+        return dt.hour * 60 + dt.minute
+    except AttributeError:
+        # timedelta
+        return dt.seconds % 60
+
+
+def time_to_seconds(dt: Union[datetime.datetime, datetime.time, datetime.timedelta]) -> int:
+    try:
+        # datetime, time
+        return dt.hour * 3600 + dt.minute * 60 + dt.second
+    except AttributeError:
+        # timedelta
+        return dt.seconds
+
+
 class AnlagenInfo:
     """
     objektklasse für anlageninformationen.
@@ -25,11 +43,11 @@ class AnlagenInfo:
     tag = 'anlageninfo'
 
     def __init__(self):
-        self.aid = ""
-        self.name = ""
-        self.build = 0
-        self.region = ""
-        self.online = False
+        self.aid: int = 0
+        self.name: str = ""
+        self.build: int = 0
+        self.region: str = ""
+        self.online: bool = False
 
     def __str__(self) -> str:
         network = "online" if self.online else "offline"
@@ -43,9 +61,9 @@ class AnlagenInfo:
 
         :return: self
         """
-        self.aid = item['aid']
+        self.aid = int(item['aid'])
         self.name = item['name']
-        self.build = item['simbuild']
+        self.build = int(item['simbuild'])
         self.region = item['region']
         self.online = str(item['online']).lower() == 'true'
         return self
@@ -67,10 +85,10 @@ class BahnsteigInfo:
     tag = 'bahnsteiginfo'
 
     def __init__(self):
-        self.name = ""
-        self.haltepunkt = False
-        self.nachbarn = set()
-        self.zuege = []
+        self.name: str = ""
+        self.haltepunkt: bool = False
+        self.nachbarn: Set[str] = set()
+        self.zuege: List['ZugDetails'] = []
 
     def __str__(self) -> str:
         if self.haltepunkt:
@@ -135,12 +153,12 @@ class Knoten:
                   "Haltepunkt": 12}
 
     def __init__(self):
-        self.key = ""
-        self.enr = 0
-        self.name = ""
-        self.typ = 0
-        self.nachbarn = set()
-        self.zuege = []
+        self.key: str = ""
+        self.enr: int = 0
+        self.name: str = ""
+        self.typ: int = 0
+        self.nachbarn: Set['Knoten'] = set()
+        self.zuege: List['ZugDetails'] = []
 
     def __eq__(self, other: 'Knoten') -> bool:
         return self.key.__eq__(other.key)
@@ -189,19 +207,19 @@ class ZugDetails:
     tag = 'zugdetails'
 
     def __init__(self):
-        self.zid = 0
-        self.name = ""
-        self.von = ""
-        self.nach = ""
-        self.verspaetung = 0
-        self.sichtbar = False
-        self.gleis = ""
-        self.plangleis = ""
-        self.amgleis = False
-        self.hinweistext = ""
-        self.usertext = ""
-        self.usertextsender = ""
-        self.fahrplan = []
+        self.zid: int = 0
+        self.name: str = ""
+        self.von: str = ""
+        self.nach: str = ""
+        self.verspaetung: int = 0
+        self.sichtbar: bool = False
+        self.gleis: str = ""
+        self.plangleis: str = ""
+        self.amgleis: bool = False
+        self.hinweistext: str = ""
+        self.usertext: str = ""
+        self.usertextsender: str = ""
+        self.fahrplan: List['FahrplanZeile'] = []
 
     def __eq__(self, other: 'ZugDetails') -> bool:
         return self.zid.__eq__(other.zid)
@@ -337,8 +355,8 @@ class Ereignis(ZugDetails):
 
     def __init__(self):
         super().__init__()
-        self.art = ""
-        self.zeit = datetime.datetime.fromordinal(1)
+        self.art: str = ""
+        self.zeit: datetime.datetime = datetime.datetime.fromordinal(1)
 
     def __str__(self) -> str:
         return self.art + " " + super().__str__()
@@ -361,16 +379,31 @@ class Ereignis(ZugDetails):
 
 
 class FahrplanZeile:
+    """
+    fahrplanzeile
+
+    flags:
+    - A: vorzeitige abfahrt
+    - Bn: themenflag
+    - D: durchfahrt
+    - E(zid): ersatzzug
+    - F(zid): flügeln
+    - K(zid): kuppeln
+    - L: lokumlauf
+    - P: anfangsaufstellungsplatz
+    - R: richtungsänderung
+    - W[enr][enr]: lokwechsel
+    """
     tag = 'gleis'
 
     def __init__(self, zug):
-        self.zug = zug
-        self.gleis = ""
-        self.plan = ""
-        self.an = datetime.time(hour=0, minute=0)
-        self.ab = datetime.time(hour=0, minute=0)
-        self.flags = ""
-        self.hinweistext = ""
+        self.zug: ZugDetails = zug
+        self.gleis: str = ""
+        self.plan: str = ""
+        self.an: datetime.time = datetime.time(hour=0, minute=0)
+        self.ab: datetime.time = datetime.time(hour=0, minute=0)
+        self.flags: str = ""
+        self.hinweistext: str = ""
 
     def __str__(self):
         if self.gleis == self.plan:

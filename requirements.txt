@@ -1,0 +1,7 @@
+matplotlib
+numpy
+pandas
+pyqt
+PyQt5
+qasync
+untangle

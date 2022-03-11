@@ -36,8 +36,8 @@ def json_object_hook(d):
 
 
 class StsConfig:
-    def __init__(self, aid):
-        self.aid = aid
+    def __init__(self, anlage: AnlagenInfo):
+        self.anlage = anlage
         self.auto = True
         self._data = {'einfahrtsgruppen': dict(),
                       'ausfahrtsgruppen': dict(),
@@ -87,7 +87,7 @@ class StsConfig:
         :param sts_client:
         :return: None
         """
-        self.aid = sts_client.anlageninfo.aid
+        self.anlage = sts_client.anlageninfo
 
         for k in sts_client.wege_nach_typ[Knoten.TYP_NUMMER['Einfahrt']]:
             try:
@@ -146,7 +146,7 @@ class StsConfig:
         with open(path) as fp:
             d = json.load(fp, object_hook=json_object_hook)
         try:
-            self._data = d[self.aid]
+            self._data = d[self.anlage.aid]
         except KeyError:
             pass
         else:
@@ -160,12 +160,10 @@ class StsConfig:
             d = dict()
 
         if self._data:
-            d[self.aid] = self._data
+            d[self.anlage.aid] = self._data
+            d[self.anlage.aid]['region'] = self.anlage.region
+            d[self.anlage.aid]['name'] = self.anlage.name
+            d[self.anlage.aid]['build'] = self.anlage.build
+
             with open(path, "w") as fp:
                 json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
-
-
-class StsDatenbank:
-    def __init__(self, aid):
-        self.aid = aid
-        self.daten = None

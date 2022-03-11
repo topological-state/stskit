@@ -22,8 +22,9 @@ siehe ticker-programm.
 """
 
 import asyncio
+from contextlib import asynccontextmanager
 import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Set, Union
 import untangle
 
 from xml.sax import make_parser
@@ -32,34 +33,29 @@ from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile,
 
 
 class PluginClient:
-    def __init__(self, name, autor, version, text):
+    def __init__(self, name: str, autor: str, version: str, text: str):
         self._reader = None
         self._writer = None
         self._parser = None
         self._handler = None
-        self.debug = False
-        self.name = name
-        self.autor = autor
-        self.version = version
-        self.text = text
-        self.status = None
-        self.anlageninfo = None
-        # dict {BahnsteigInfo.name: Bahnsteiginfo}
-        self.bahnsteigliste = {}
-        # dict {Knoten.key: Knoten}
-        self.wege = {}
-        # dict {Knoten.name: set of Knoten}
-        self.wege_nach_namen = {}
-        # dict {Knoten.typ: set of Knoten}
-        self.wege_nach_typ = {}
-        # dict {zid: ZugDetails}
-        self.zugliste = {}
-        self.zuggattungen = set()
+        self.debug: bool = False
+        self.name: str = name
+        self.autor: str = autor
+        self.version: str = version
+        self.text: str = text
+        self.status: Optional[untangle.Element] = None
+        self.anlageninfo: Optional[AnlagenInfo] = None
+        self.bahnsteigliste: Dict[str, BahnsteigInfo] = {}
+        self.wege: Dict[str, Knoten] = {}
+        self.wege_nach_namen: Dict[str, Set[Knoten]] = {}
+        self.wege_nach_typ: Dict[int, Set[Knoten]] = {}
+        self.zugliste: Dict[int, ZugDetails] = {}
+        self.zuggattungen: Set[str] = set()
         self.ereignisse = asyncio.Queue()
-        self.registrierte_ereignisse = {art: set() for art in Ereignis.arten}
-        self.client_datetime = datetime.datetime.now()
-        self.server_datetime = datetime.datetime.now()
-        self.time_offset = self.server_datetime - self.client_datetime
+        self.registrierte_ereignisse: Dict[str, Set[int]] = {art: set() for art in Ereignis.arten}
+        self.client_datetime: datetime.datetime = datetime.datetime.now()
+        self.server_datetime: datetime.datetime = datetime.datetime.now()
+        self.time_offset: datetime.timedelta = self.server_datetime - self.client_datetime
 
     def check_status(self):
         if int(self.status.status['code']) >= 300:
