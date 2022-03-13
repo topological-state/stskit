@@ -54,9 +54,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_task.cancel()
         self.ereignis_task.cancel()
 
-        print(self.auswertung.fahrzeiten.maximum)
-        print(self.auswertung.fahrzeiten.fahrten)
-
         try:
             self.config.save(self.config_path)
         except (AttributeError, OSError):
