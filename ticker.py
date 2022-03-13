@@ -51,10 +51,8 @@ async def query(client: PluginClient, args: argparse.Namespace) -> None:
                     await client.request_ereignis(art, client.zugliste.keys())
                 sendezeit = datetime.datetime.now()
 
-            try:
-                await client._receive_data('dummy', timeout=1)
-            except asyncio.TimeoutError:
-                pass
+            await asyncio.sleep(60)
+
     except KeyboardInterrupt:
         pass
 

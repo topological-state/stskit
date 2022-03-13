@@ -13,12 +13,10 @@ in textbasierten programmen, wird diese implizit vom asyncio-modul bereitgestell
 (siehe test-routine unten oder das ticker-programm).
 bei GUI-programmen muss eine kompatible ereignisschleife wie z.b. von qasync für Qt verwendet werden.
 
-vorsicht ist bei der verwendung von parallelen tasks geboten:
-es dürfen nie zwei serveranfragen gleichzeitig laufen!
-dies kann die kommunikation mit dem simulator durcheinanderbringen.
-
-problemlos möglich ist es hingegen, die abfrage der ereignis-queue in einen separaten asyncio-task zu verlegen,
-siehe ticker-programm.
+vorsicht ist bei der verwendung von parallelen tasks geboten,
+damit sich zwei serveranfragen nicht überschneiden können.
+am besten werden alle anfragen im gleichen asyncio-task gestellt.
+parallel dazu kann ein einem eigenen task, die ereignis-queue abgefragt werden, siehe ticker-programm.
 """
 
 import asyncio
@@ -38,12 +36,15 @@ class PluginClient:
         self._writer = None
         self._parser = None
         self._handler = None
+        self._rec_task = None
+
         self.debug: bool = False
         self.name: str = name
         self.autor: str = autor
         self.version: str = version
         self.text: str = text
         self.status: Optional[untangle.Element] = None
+
         self.anlageninfo: Optional[AnlagenInfo] = None
         self.bahnsteigliste: Dict[str, BahnsteigInfo] = {}
         self.wege: Dict[str, Knoten] = {}
@@ -51,8 +52,11 @@ class PluginClient:
         self.wege_nach_typ: Dict[int, Set[Knoten]] = {}
         self.zugliste: Dict[int, ZugDetails] = {}
         self.zuggattungen: Set[str] = set()
+
+        self.antworten = asyncio.Queue()
         self.ereignisse = asyncio.Queue()
         self.registrierte_ereignisse: Dict[str, Set[int]] = {art: set() for art in Ereignis.arten}
+
         self.client_datetime: datetime.datetime = datetime.datetime.now()
         self.server_datetime: datetime.datetime = datetime.datetime.now()
         self.time_offset: datetime.timedelta = self.server_datetime - self.client_datetime
@@ -66,6 +70,9 @@ class PluginClient:
             self._writer.close()
             self._writer = None
             self._reader = None
+        if self._rec_task is not None:
+            self._rec_task.cancel()
+            self._rec_task = None
 
     async def connect(self, host='localhost', port=3691):
         if self._writer is None:
@@ -80,8 +87,24 @@ class PluginClient:
             self.status = untangle.parse(xml)
             if int(self.status.status['code']) >= 400:
                 raise ValueError(f"error {self.status.status['code']}: {self.status.status.cdata}")
+
+            self._rec_task = asyncio.create_task(self._receive_data())
+
             await self.register()
             await self.request_simzeit()
+
+    @asynccontextmanager
+    async def get_connection(self):
+        """
+        experimental
+
+        :return:
+        """
+        await self.connect()
+        try:
+            yield self
+        finally:
+            self.close()
 
     def is_connected(self) -> bool:
         """
@@ -108,68 +131,43 @@ class PluginClient:
         self._writer.write(data)
         await self._writer.drain()
 
-    async def _receive_data(self, tag: str, timeout: Optional[float] = 10) -> untangle.Element:
+    async def _receive_data(self):
         """
-        antwort abwarten und interpretieren
+        empfangsschleife: antworten empfangen und verteilen
 
-        diese coroutine wartet, bis das angegebene tag empfangen wird oder die zeit abgelaufen ist.
-        in ersterem fall werden die empfangenen daten in einem untangle.Element zurückgegeben.
-        in letzterem fall wird eine exception ausgelöst.
+        alle antworten ausser ereignisse werden in untangle.Element objekte gepackt und
+        an die self.antworten-queue übergeben.
+        ereignisse werden als model.Ereignis-objekte an die self.ereignisse-queue übergeben.
 
-        der empfangspuffer kann vor der erwarteten antwort asynchrone ereignismeldungen enthalten.
-        diese werden an die ereignisse-queue angehängt und können dieser separat entnommen werden,
-        z.b. in einem separaten asyncio-task.
-
-        die methode kann auch benutzt werden, um ereignisse im empfangspuffer zu verarbeiten,
-        ohne dass eine anfrage an den server gestellt wurde.
-        dabei gibt es zwei varianten:
-
-        1. tag=''.
-           alle bereits empfangenen ereignise im puffer werden verarbeitet und
-           als model.Ereignis-objekt in die ereignisse-queue gestellt.
-           die methode löst einen asyncio.TimeoutError aus, sobald der empfangspuffer leer ist.
-           es gibt keinen normalen ausgang aus der routine!
-
-        2. tag='ereignis'.
-           die methode wartet maximal auf ein ereignis.
-           die xml-daten werden im untangle.Element-objekt zurückgeliefert.
-           wenn innerhalb der wartezeit kein ereignis ankommt,
-           wird ein asyncio.TimeoutError ausgelöst.
-
-        :param tag: name des erwarteten xml-tags
-        :param timeout: timeout in sekunden, 0 oder None: warte unbestimmte zeit.
-        :return: resultat von untangle.parse()
-        :raise: asyncio.TimeoutError
+        diese coroutine läuft im self._rec_task, solange die verbindung offen ist.
         """
         while True:
-            if timeout:
-                bs = await asyncio.wait_for(self._reader.readline(), timeout=timeout)
-            else:
-                bs = await self._reader.readline()
-
+            bs = await self._reader.readline()
             s = bs.decode().replace('\n', '')
             if self.debug:
                 print(s)
             if s:
                 self._parser.feed(s)
 
-            # data object complete?
+            # xml tag complete?
             if len(self._handler.elements) == 0:
-                obj = self._handler.root
+                element = self._handler.root
                 self._parser.close()
                 self._handler.root = untangle.Element(None, None)
                 self._handler.root.is_root = True
 
-                if hasattr(obj, tag):
-                    break
-                elif hasattr(obj, 'ereignis'):
-                    ereignis = Ereignis().update(obj.ereignis)
-                    ereignis.zeit = self.calc_simzeit()
-                    self.ereignisse.put_nowait(ereignis)
-                elif self.debug:
-                    print("unrecognized response:", obj)
-
-        return obj
+                try:
+                    tag = dir(element)[0]
+                except IndexError:
+                    # leeres element
+                    continue
+                else:
+                    if tag == "ereignis":
+                        obj = Ereignis().update(getattr(element, tag))
+                        obj.zeit = self.calc_simzeit()
+                        self.ereignisse.put_nowait(obj)
+                    else:
+                        self.antworten.put_nowait(element)
 
     def calc_simzeit(self) -> datetime.datetime:
         """
@@ -187,22 +185,40 @@ class PluginClient:
         """
         return datetime.datetime.now() + self.time_offset
 
-    async def register(self):
+    async def register(self) -> None:
+        """
+        klient beim simulator registrieren.
+
+        :return: None
+        """
         await self._send_request("register", name=self.name, autor=self.autor, version=self.version,
                                  protokoll='1', text=self.text)
-        self.status = await self._receive_data("status")
+        self.status = await self.antworten.get()
         self.check_status()
 
     async def request_anlageninfo(self):
+        """
+        anlageninfo anfordern.
+
+        die antwort wird im anlageninfo attribut gespeichert.
+
+        :return: None
+        """
         await self._send_request(AnlagenInfo.tag)
-        response = await self._receive_data(AnlagenInfo.tag)
-        self.anlageninfo = AnlagenInfo()
-        self.anlageninfo.update(response.anlageninfo)
+        response = await self.antworten.get()
+        self.anlageninfo = AnlagenInfo().update(response.anlageninfo)
 
     async def request_bahnsteigliste(self):
+        """
+        bahnsteigliste anfordern.
+
+        die liste wird im bahnsteigliste-attribut gespeichert.
+
+        :return: None
+        """
         self.bahnsteigliste = {}
         await self._send_request("bahnsteigliste")
-        response = await self._receive_data("bahnsteigliste")
+        response = await self.antworten.get()
         for bahnsteig in response.bahnsteigliste.bahnsteig:
             bi = BahnsteigInfo().update(bahnsteig)
             self.bahnsteigliste[bi.name] = bi
@@ -226,7 +242,7 @@ class PluginClient:
         """
         self.client_datetime = datetime.datetime.now()
         await self._send_request("simzeit", sender=0)
-        simzeit = await self._receive_data("simzeit")
+        simzeit = await self.antworten.get()
         secs, msecs = divmod(int(simzeit.simzeit['zeit']), 1000)
         mins, secs = divmod(secs, 60)
         hrs, mins = divmod(mins, 60)
@@ -237,7 +253,7 @@ class PluginClient:
 
     async def request_wege(self):
         await self._send_request("wege")
-        response = await self._receive_data("wege")
+        response = await self.antworten.get()
         self.wege = {}
         self.wege_nach_namen = {}
         self.wege_nach_typ = {}
@@ -286,7 +302,7 @@ class PluginClient:
             zids = self.zugliste.keys()
         for zid in zids:
             await self._send_request("zugdetails", zid=zid)
-            response = await self._receive_data("zugdetails")
+            response = await self.antworten.get()
             self.zugliste[zid].update(response.zugdetails)
             self.zuggattungen.add(self.zugliste[zid].gattung)
 
@@ -310,7 +326,7 @@ class PluginClient:
             zids = self.zugliste.keys()
         for zid in zids:
             await self._send_request("zugfahrplan", zid=zid)
-            response = await self._receive_data("zugfahrplan")
+            response = await self.antworten.get()
             zug = self.zugliste[zid]
             zug.fahrplan = []
             try:
@@ -324,7 +340,7 @@ class PluginClient:
 
     async def request_zugliste(self):
         await self._send_request("zugliste")
-        response = await self._receive_data("zugliste")
+        response = await self.antworten.get()
         try:
             self.zugliste = {zug['zid']: ZugDetails().update(zug) for zug in response.zugliste.zug}
         except AttributeError:

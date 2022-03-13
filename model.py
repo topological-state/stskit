@@ -44,6 +44,7 @@ class AnlagenInfo:
     tag = 'anlageninfo'
 
     def __init__(self):
+        super().__init__()
         self.aid: int = 0
         self.name: str = ""
         self.build: int = 0
@@ -86,6 +87,7 @@ class BahnsteigInfo:
     tag = 'bahnsteiginfo'
 
     def __init__(self):
+        super().__init__()
         self.name: str = ""
         self.haltepunkt: bool = False
         self.nachbarn: Set[str] = set()
@@ -154,6 +156,7 @@ class Knoten:
                   "Haltepunkt": 12}
 
     def __init__(self):
+        super().__init__()
         self.key: str = ""
         self.enr: int = 0
         self.name: str = ""
@@ -208,6 +211,7 @@ class ZugDetails:
     tag = 'zugdetails'
 
     def __init__(self):
+        super().__init__()
         self.zid: int = 0
         self.name: str = ""
         self.von: str = ""
@@ -398,6 +402,7 @@ class FahrplanZeile:
     tag = 'gleis'
 
     def __init__(self, zug):
+        super().__init__()
         self.zug: ZugDetails = zug
         self.gleis: str = ""
         self.plan: str = ""

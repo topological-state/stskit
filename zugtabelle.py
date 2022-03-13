@@ -47,18 +47,36 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.enable_update = True
         self.update_task = asyncio.create_task(self.update_loop())
+        self.ereignis_task = asyncio.create_task(self.ereignis_loop())
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        self.enable_update = False
+        self.update_task.cancel()
+        self.ereignis_task.cancel()
+
+        print(self.auswertung.fahrzeiten.maximum)
+        print(self.auswertung.fahrzeiten.fahrten)
+
         try:
             self.config.save(self.config_path)
         except (AttributeError, OSError):
             pass
+
         super().closeEvent(a0)
 
     async def update_loop(self):
         while self.enable_update:
             await self.update()
             await asyncio.sleep(15)
+
+    async def ereignis_loop(self):
+        while not self.client.is_connected():
+            await asyncio.sleep(1)
+        while self.enable_update:
+            ereignis = await self.client.ereignisse.get()
+            print(ereignis)
+            if self.auswertung:
+                self.auswertung.ereignis_uebernehmen(ereignis)
 
     async def update(self):
         # todo : ueberlappende zuege stapeln
@@ -180,4 +198,5 @@ if __name__ == "__main__":
         window = MainWindow()
         window.show()
         loop.run_forever()
+        asyncio.wait([window.update_task, window.ereignis_task])
         sts_client.close()
