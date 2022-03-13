@@ -2,7 +2,7 @@ import datetime
 
 import numpy as np
 import pandas as pd
-from typing import Any, Dict, List, Optional, Set, Union
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
 
 from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis, time_to_seconds
 from database import StsConfig
@@ -62,10 +62,30 @@ class FahrzeitAuswertung:
 
 
 class ZugAuswertung:
+    """
+    zugdaten für die auswertung.
+
+    das objekt verwaltet den aktuellen status der züge
+    anhand einer periodischen abfrage und von ereignismeldungen.
+
+    die attribute verspaetung, sichtbar, amgleis entsprechen dem letzten bekannten zustand.
+    die attribute gleis und plangleis zeigen das nächste ziel oder sind leer,
+    wenn der zug auf die ausfahrt zufährt.
+
+    im "fahrplan" der züge wird nicht der plan,
+    sondern die effektiv gefahrene strecke mit den ankunfts- und abfahrtszeiten,
+    den effektiven ein- und ausfahrten,
+    sowie von signalhalten geführt.
+    der grund (ereignisart) für einen fahrplaneintrag steht im hinweistext-feld.
+
+    bemerkungen:
+    - züge, die den namen wechseln haben entweder keine einfahrt oder keine ausfahrt.
+      der namenswechsel wird durch das "E"-flag angezeigt.
+    """
     def __init__(self):
         self.zugliste: Dict[int, ZugDetails] = dict()
 
-    def zuege_uebernehmen(self, zuege: List[ZugDetails]):
+    def zuege_uebernehmen(self, zuege: Iterable[ZugDetails]):
         """
         züge in interne liste kopieren.
 
@@ -83,16 +103,28 @@ class ZugAuswertung:
                 mein_zug = ZugDetails()
                 mein_zug.zid = zug.zid
                 mein_zug.name = zug.name
-                mein_zug.von = zug.von
-                mein_zug.nach = zug.nach
+                mein_zug.von = zug.von.replace("Gleis ", "")
+                mein_zug.nach = zug.nach.replace("Gleis ", "")
                 self.zugliste[mein_zug.zid] = mein_zug
-            else:
-                mein_zug.gleis = zug.gleis
-                mein_zug.verspaetung = zug.verspaetung
-                mein_zug.amgleis = zug.amgleis
-                mein_zug.sichtbar = zug.sichtbar
+
+            mein_zug.gleis = zug.gleis
+            mein_zug.plangleis = zug.plangleis
+            mein_zug.verspaetung = zug.verspaetung
+            mein_zug.amgleis = zug.amgleis
+            mein_zug.sichtbar = zug.sichtbar
 
     def ereignis_uebernehmen(self, ereignis: Ereignis) -> None:
+        """
+        ereignis verarbeiten.
+
+        wenn der zug in der zugliste steht,
+        wird das ereignis zuerst an eine der speziellen ereignismethoden übergeben
+        und dann der zug-status (verspaetung, sichtbar, gleis, plangleis, amgleis)
+        anhand der ereignisdaten aktualisiert.
+
+        :param ereignis:
+        :return:
+        """
         try:
             zug = self.zugliste[ereignis.zid]
         except KeyError:
@@ -100,54 +132,139 @@ class ZugAuswertung:
         else:
             zug.verspaetung = ereignis.verspaetung
             zug.sichtbar = ereignis.sichtbar
+            getattr(self, ereignis.art)(zug, ereignis)
             zug.gleis = ereignis.gleis
             zug.plangleis = ereignis.plangleis
             zug.amgleis = ereignis.amgleis
-            getattr(self, ereignis.art)(zug, ereignis)
 
     def einfahrt(self, zug: ZugDetails, ereignis: Ereignis):
+        """
+        einfahrt verarbeiten.
+
+        fügt eine neue zeile mit dem einfahrtsgleis (zug.von) und der ereigniszeit in den fahrplan.
+
+        :param zug:
+        :param ereignis:
+        :return:
+        """
         fpz = FahrplanZeile(zug)
         fpz.gleis = zug.von
         fpz.plan = zug.von
-        fpz.flags = ""
+        fpz.flags = "D"
         fpz.hinweistext = "einfahrt"
         fpz.an = fpz.ab = ereignis.zeit.time()
         zug.fahrplan.append(fpz)
 
     def ausfahrt(self, zug: ZugDetails, ereignis: Ereignis):
+        """
+        ausfahrt verarbeiten.
+
+        fügt eine neue zeile mit dem ausfahrtsgleis (zug.nach) und der ereigniszeit in den fahrplan.
+
+        :param zug:
+        :param ereignis:
+        :return:
+        """
         fpz = FahrplanZeile(zug)
         fpz.gleis = zug.nach
         fpz.plan = zug.nach
-        fpz.flags = ""
+        fpz.flags = "D"
         fpz.hinweistext = "ausfahrt"
         fpz.an = fpz.ab = ereignis.zeit.time()
         zug.fahrplan.append(fpz)
+        zug.sichtbar = False
 
     def ankunft(self, zug: ZugDetails, ereignis: Ereignis):
+        """
+        ankunft verarbeiten.
+
+        fügt eine neue zeile mit dem letzten zugziel und der ereigniszeit in den fahrplan.
+
+        bemerkungen:
+
+        - durchfahrten erzeugen nur ein ankunftsereignis. das ereignis.gleis zeigt dann schon das nächste ziel.
+          wir müssen das gleis deshalb aus dem zug-objekt auslesen.
+        - züge, die den namen wechseln werden daran erkannt, dass das zielgleis gleich heisst wie das "nach".
+          das "E"-flag wird gesetzt, und "sichtbar" wird falsch.
+
+        :param zug:
+        :param ereignis:
+        :return:
+        """
         fpz = FahrplanZeile(zug)
-        fpz.gleis = ereignis.gleis
-        fpz.plan = ereignis.gleis
-        fpz.flags = ""
+        fpz.gleis = zug.gleis
+        fpz.plan = zug.gleis
+        if zug.gleis == zug.nach:
+            fpz.flags = "E"
+            zug.sichtbar = False
+        else:
+            fpz.flags = ""
         fpz.hinweistext = "ankunft"
         fpz.an = fpz.ab = ereignis.zeit.time()
         zug.fahrplan.append(fpz)
 
     def abfahrt(self, zug: ZugDetails, ereignis: Ereignis):
-        fpz = zug.find_fahrplanzeile(ereignis.gleis)
-        if fpz:
-            fpz.hinweistext = "abfahrt"
-            fpz.ab = ereignis.zeit.time()
+        """
+        abfahrt verarbeiten.
+
+        aktualisiert die abfahrtszeit der letzten fahrplanzeile.
+
+        bemerkungen:
+
+        - abfahrtsereignisse entstehen, sobald der zug abfahrbereit (amgleis) ist.
+          bei abfahrt ist amgleis falsch, und gleis zeigt das nächste ziel an.
+        - durchfahrten erzeugen nur ein ankunfts- aber kein abfahrtsereignis!
+        - züge, die den namen gewechselt haben, haben ein leeres "von".
+          diese koennen im moment nicht verarbeitet werden.
+
+        :param zug:
+        :param ereignis:
+        :return:
+        """
+        try:
+            fpz = zug.fahrplan[-1]
+        except IndexError:
+            # todo: zug hat namen gewechselt
+            # problem: die ereignismeldung zeigt das "von"-gleis nicht an.
+            pass
+        else:
+            if fpz.gleis == zug.gleis:
+                fpz.hinweistext = "abfahrt"
+                fpz.ab = ereignis.zeit.time()
 
     def rothalt(self, zug: ZugDetails, ereignis: Ereignis):
+        """
+        rothalt verarbeiten.
+
+        fügt eine neue zeile ohne zugziel in den fahrplan.
+
+        bemerkungen:
+
+        - wir können nicht wissen, wo der zug genau steht.
+        - das ereignis.gleis zeigt das nächste ziel.
+
+        :param zug:
+        :param ereignis:
+        :return:
+        """
         fpz = FahrplanZeile(zug)
         fpz.gleis = ""
-        fpz.plan = ereignis.gleis
+        fpz.plan = ""
         fpz.flags = ""
         fpz.hinweistext = "rothalt"
         fpz.an = fpz.ab = ereignis.zeit.time()
         zug.fahrplan.append(fpz)
 
     def wurdegruen(self, zug: ZugDetails, ereignis: Ereignis):
+        """
+        wurdegruen verarbeiten.
+
+        trägt die abfahrtszeit in die letzte fahrplanzeile ein (wenn diese ein rothalt ist).
+
+        :param zug:
+        :param ereignis:
+        :return:
+        """
         try:
             fpz = zug.fahrplan[-1]
             if fpz.hinweistext == 'rothalt':
@@ -170,7 +287,7 @@ class StsAuswertung:
                      **self.config.ausfahrtsgruppen}
         self.fahrzeiten.set_koordinaten(wegpunkte)
 
-    def zuege_uebernehmen(self, zuege: List[ZugDetails]):
+    def zuege_uebernehmen(self, zuege: Iterable[ZugDetails]):
         """
         neue zugdaten und fahrpläne übernehmen.
 
@@ -223,9 +340,9 @@ class StsAuswertung:
         gesamt = 0
         an = 0
         for fpz in reversed(zug.fahrplan):
-            if fpz.hinweistext == "rothalt" or fpz.hinweistext == "ankunft":
-                # abfahrt oder wurdegruen fehlt - messung unbrauchbar
-                break
+            if fpz.hinweistext == "rothalt":
+                # wurdegruen fehlt - messung unbrauchbar
+                continue
             if ziel:
                 start = fpz.gleis
                 ab = time_to_seconds(fpz.ab)
@@ -252,6 +369,17 @@ class StsAuswertung:
         return self.fahrzeiten.get_fahrzeit(start, ziel)
 
     def rotzeit_auswerten(self, zug: ZugDetails):
+        """
+        rotzeit berechnen.
+
+        berechnet die gesamte zeit, die der zug vor einem roten signal gestanden ist.
+
+        das resultat wird als timedelta in das extra hinzugefügte attribut 'rotzeit' des ZugDetails geschrieben.
+        ausserdem wird die zeit in sekunden als funktionsergebnis zurückgegeben.
+
+        :param zug:
+        :return: rotzeit in sekunden
+        """
         gesamt = 0
         for fpz in zug.fahrplan:
             if fpz.hinweistext == "wurdegruen":
@@ -261,3 +389,4 @@ class StsAuswertung:
                 gesamt += zeit
 
         setattr(zug, 'rotzeit', datetime.timedelta(seconds=gesamt))
+        return gesamt

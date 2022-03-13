@@ -156,7 +156,7 @@ class StsConfig:
         try:
             with open(path) as fp:
                 d = json.load(fp, object_hook=json_object_hook)
-        except OSError:
+        except (OSError, json.decoder.JSONDecodeError):
             d = dict()
 
         if self._data:

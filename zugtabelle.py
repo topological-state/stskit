@@ -14,7 +14,8 @@ from matplotlib.figure import Figure
 
 from stsplugin import PluginClient
 from database import StsConfig
-from model import time_to_minutes
+from auswertung import StsAuswertung
+from model import time_to_minutes, Ereignis
 
 mpl.use('Qt5Agg')
 
@@ -29,7 +30,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.client = sts_client
-        self.config = None
+        self.config: Optional[StsConfig] = None
         self.config_path = "zugtabelle.json"
 
         self._main = QtWidgets.QWidget()
@@ -41,6 +42,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self._einfahrten_ax = einfahrten_canvas.figure.subplots()
         self._bars_ein = None
         self._labels_ein = []
+
+        self.auswertung: Optional[StsAuswertung] = None
 
         self.enable_update = True
         self.update_task = asyncio.create_task(self.update_loop())
@@ -63,15 +66,22 @@ class MainWindow(QtWidgets.QMainWindow):
         if not self.client.is_connected():
             await self.client.connect()
         await self.get_sts_data()
+        for art in Ereignis.arten:
+            await self.client.request_ereignis(art, self.client.zugliste.keys())
 
         if not self.config:
-            self.config = StsConfig(self.client.anlageninfo.aid)
+            self.config = StsConfig(self.client.anlageninfo)
             try:
                 self.config.load(self.config_path)
             except (OSError, ValueError):
                 pass
-        if self.config.auto:
-            self.config.auto_config(self.client)
+            if self.config.auto:
+                self.config.auto_config(self.client)
+
+        if self.auswertung:
+            self.auswertung.zuege_uebernehmen(self.client.zugliste.values())
+        else:
+            self.auswertung = StsAuswertung(self.config)
 
         if self._bars_ein is not None:
             self._bars_ein.remove()

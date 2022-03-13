@@ -12,6 +12,7 @@ einige der klassen haben noch zusätzliche attribute, die vom klienten ausgefül
 
 import datetime
 from typing import Any, Dict, List, Optional, Set, Union
+import untangle
 
 
 def time_to_minutes(dt: Union[datetime.datetime, datetime.time, datetime.timedelta]) -> int:
@@ -53,7 +54,7 @@ class AnlagenInfo:
         network = "online" if self.online else "offline"
         return f"{self.region} - {self.name} ({self.aid}, {self.build}, {network})"
 
-    def update(self, item: Dict) -> 'AnlagenInfo':
+    def update(self, item: untangle.Element) -> 'AnlagenInfo':
         """
         attributwerte vom xml-dokument übernehmen.
 
@@ -99,7 +100,7 @@ class BahnsteigInfo:
     def __repr__(self):
         return f"BahnsteigInfo {self.name}: haltepunkt={self.haltepunkt}"
 
-    def update(self, item: Dict) -> 'BahnsteigInfo':
+    def update(self, item: untangle.Element) -> 'BahnsteigInfo':
         """
         attributwerte vom xml-dokument übernehmen.
 
@@ -172,7 +173,7 @@ class Knoten:
     def __repr__(self) -> str:
         return f"Knoten('{self.key}': enr={self.enr}, typ={self.typ}, name='{self.name}')"
 
-    def update(self, shape: Dict) -> 'Knoten':
+    def update(self, shape: untangle.Element) -> 'Knoten':
         """
         attributwerte vom xml-dokument übernehmen.
 
@@ -252,7 +253,7 @@ class ZugDetails:
         return f"ZugDetails({self.zid}, {self.name}, {self.von}, {self.nach}, {self.verspaetung:+}," \
                f"{self.sichtbar}, {self.gleis}/{self.plangleis}, {self.amgleis})"
 
-    def update(self, zugdetails: Dict) -> 'ZugDetails':
+    def update(self, zugdetails: untangle.Element) -> 'ZugDetails':
         """
         attributwerte vom xml-dokument übernehmen.
 
@@ -262,7 +263,7 @@ class ZugDetails:
 
         :return: self
         """
-        self.zid = zugdetails['zid']
+        self.zid = int(zugdetails['zid'])
         self.name = zugdetails['name']
         try:
             self.verspaetung = int(zugdetails['verspaetung'])
@@ -365,7 +366,7 @@ class Ereignis(ZugDetails):
         return f"Ereignis({self.zid}, {self.art}, {self.name}, {self.von}, {self.nach}, {self.verspaetung:+}," \
                f"{self.sichtbar}, {self.gleis}/{self.plangleis}, {self.amgleis})"
 
-    def update(self, ereignis: Dict) -> 'Ereignis':
+    def update(self, ereignis: untangle.Element) -> 'Ereignis':
         """
         attributwerte vom xml-dokument übernehmen.
 
@@ -414,7 +415,7 @@ class FahrplanZeile:
     def __repr__(self):
         return f"FahrplanZeile({self.gleis}, {self.plan}, {self.an}, {self.ab}, {self.flags})"
 
-    def update(self, item):
+    def update(self, item: untangle.Element) -> 'FahrplanZeile':
         self.gleis = item['name']
         self.plan = item['plan']
         try:
