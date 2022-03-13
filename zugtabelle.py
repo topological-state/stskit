@@ -118,7 +118,7 @@ class MainWindow(QtWidgets.QMainWindow):
             return None
 
         self._einfahrten_ax.set_title('einfahrten')
-        self._einfahrten_ax.set_xticks(x_labels_pos, x_labels)
+        self._einfahrten_ax.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
 
         self._einfahrten_ax.yaxis.set_major_formatter(hour_minutes_formatter)
         self._einfahrten_ax.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(1))
