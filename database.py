@@ -146,7 +146,7 @@ class StsConfig:
         with open(path) as fp:
             d = json.load(fp, object_hook=json_object_hook)
         try:
-            self._data = d[self.anlage.aid]
+            self._data = d[str(self.anlage.aid)]
         except KeyError:
             pass
         else:
@@ -160,10 +160,11 @@ class StsConfig:
             d = dict()
 
         if self._data:
-            d[self.anlage.aid] = self._data
-            d[self.anlage.aid]['region'] = self.anlage.region
-            d[self.anlage.aid]['name'] = self.anlage.name
-            d[self.anlage.aid]['build'] = self.anlage.build
+            aid = str(self.anlage.aid)
+            d[aid] = self._data
+            d[aid]['_region'] = self.anlage.region
+            d[aid]['_name'] = self.anlage.name
+            d[aid]['_build'] = self.anlage.build
 
             with open(path, "w") as fp:
                 json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
