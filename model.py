@@ -324,6 +324,16 @@ class ZugDetails:
                 pass
         return None
 
+    @property
+    def ist_rangierfahrt(self) -> bool:
+        """
+        zug ist eine rangierfahrt (Lok, Ersatzlok oder RF)
+
+        :return:
+        """
+
+        return self.name.startswith('Lok') or self.name.startswith('Ersatzlok') or self.name.endswith('RF')
+
     def find_fahrplanzeile(self, gleis: str) -> Optional['FahrplanZeile']:
         """
         finde erste fahrplanzeile, in der gleis als aktuelles gleis vorkommt.

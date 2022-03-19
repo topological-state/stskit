@@ -2,7 +2,7 @@ import datetime
 
 import numpy as np
 import pandas as pd
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis, time_to_seconds
 from database import StsConfig
@@ -132,7 +132,10 @@ class ZugAuswertung:
         else:
             zug.verspaetung = ereignis.verspaetung
             zug.sichtbar = ereignis.sichtbar
-            getattr(self, ereignis.art)(zug, ereignis)
+            try:
+                getattr(self, ereignis.art)(zug, ereignis)
+            except AttributeError:
+                pass
             zug.gleis = ereignis.gleis
             zug.plangleis = ereignis.plangleis
             zug.amgleis = ereignis.amgleis
@@ -268,7 +271,6 @@ class ZugAuswertung:
         try:
             fpz = zug.fahrplan[-1]
             if fpz.hinweistext == 'rothalt':
-                fpz.hinweistext = "wurdegruen"
                 fpz.ab = ereignis.zeit.time()
         except IndexError:
             pass
@@ -340,9 +342,6 @@ class StsAuswertung:
         gesamt = 0
         an = 0
         for fpz in reversed(zug.fahrplan):
-            if fpz.hinweistext == "rothalt":
-                # wurdegruen fehlt - messung unbrauchbar
-                continue
             if ziel:
                 start = fpz.gleis
                 ab = time_to_seconds(fpz.ab)
@@ -350,7 +349,7 @@ class StsAuswertung:
                 if strecke < 0:
                     strecke += 24 * 60 * 60
                 gesamt = gesamt + strecke
-                if start:
+                if start and not zug.ist_rangierfahrt:
                     self.fahrzeiten.add_fahrzeit(start, ziel, gesamt)
             else:
                 ziel = fpz.gleis
@@ -382,7 +381,7 @@ class StsAuswertung:
         """
         gesamt = 0
         for fpz in zug.fahrplan:
-            if fpz.hinweistext == "wurdegruen":
+            if fpz.hinweistext == "rothalt":
                 zeit = time_to_seconds(fpz.ab) - time_to_seconds(fpz.an)
                 if zeit < 0:
                     zeit += 24 * 60 * 60
