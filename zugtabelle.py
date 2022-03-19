@@ -150,6 +150,16 @@ class MainWindow(QtWidgets.QMainWindow):
                     try:
                         zeile = zug.fahrplan[0]
                         ankunft = time_to_minutes(zeile.an) + zug.verspaetung
+                        try:
+                            korrektur = self.auswertung.fahrzeiten.get_fahrzeit(zug.von, zeile.gleis) / 60
+                            # todo : nur zum testen:
+                            print(korrektur)
+                            if not np.isnan(korrektur):
+                                ankunft -= round(korrektur)
+                                # todo : nur zum testen:
+                                zug.name = '!' + zug.name
+                        except (AttributeError, KeyError, ValueError):
+                            pass
                         aufenthalt = 1
                         bar = (zug, x_pos, ankunft, aufenthalt)
                         bars.append(bar)

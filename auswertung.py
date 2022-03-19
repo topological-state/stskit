@@ -23,42 +23,51 @@ class FahrzeitAuswertung:
     df.loc[start]
     """
     def __init__(self):
-        self.summe: Optional[pd.DataFrame] = None
-        self.fahrten: Optional[pd.DataFrame] = None
-        self.maximum: Optional[pd.DataFrame] = None
-        self.minimum: Optional[pd.DataFrame] = None
+        self.fahrten = pd.DataFrame(columns=['von', 'nach', 'zeit'])
+        self.zeiten: Optional[pd.DataFrame] = None
+        self.gruppen: Dict[str, str] = {}
 
-    def set_koordinaten(self, koordinaten: Dict) -> None:
-        tuples = []
+    def set_koordinaten(self, koordinaten: Mapping[str, Iterable[str]]) -> None:
+        self.gruppen = {}
         for gruppe, gleise in koordinaten.items():
             for gleis in gleise:
-                tuples.append((gleis, gruppe))
-        index = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
+                self.gruppen[gleis] = gruppe
 
-        self.summe = pd.DataFrame(data=0., index=index, columns=index, dtype=float)
-        self.fahrten = pd.DataFrame(data=0, index=index, columns=index, dtype=int)
-        self.maximum = pd.DataFrame(data=0, index=index, columns=index, dtype=float)
-        self.minimum = pd.DataFrame(data=24*60, index=index, columns=index, dtype=float)
+        # self.index = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
 
-    def add_fahrzeit(self, start: str, ziel: str, fahrzeit: int) -> None:
+    def add_fahrzeit(self, start: str, ziel: str, fahrzeit: float) -> None:
         """
         fahrzeit-messpunkt zur statistik hinzufügen.
 
         :param start: name eines bahnsteig- oder einfahrtsgleises
         :param ziel: name eines bahnsteig- oder ausfahrtsgleises
-        :param fahrzeit: minuten
+        :param fahrzeit in sekunden
         :return: None
-        :raise KeyError wenn die relation nicht existiert.
         """
-        self.summe.loc[start, ziel] += fahrzeit
-        self.fahrten.loc[start, ziel] += 1
-        if fahrzeit > self.maximum.loc[start, ziel]:
-            self.maximum.loc[start, ziel] = fahrzeit
-        if fahrzeit < self.minimum.loc[start, ziel]:
-            self.minimum.loc[start, ziel] = fahrzeit
+        print(f"add_fahrzeit({start}, {ziel}, {fahrzeit})")
+        self.fahrten.loc[-1] = {'von': start, 'nach': ziel, 'zeit': fahrzeit}
+        self.fahrten.index = pd.RangeIndex(self.fahrten.shape[0])
+        self.zeiten = pd.pivot_table(self.fahrten, columns='von', index='nach', values='zeit', aggfunc=np.min)
 
-    def get_fahrzeit(self, start: str, ziel: str) -> Optional[int]:
-        return round(self.summe.loc[start, ziel] / self.fahrten.loc[start, ziel])
+        tuples = [(gleis, self.gruppen[gleis]) for gleis in self.zeiten.columns]
+        self.zeiten.columns = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
+        tuples = [(gleis, self.gruppen[gleis]) for gleis in self.zeiten.index]
+        self.zeiten.index = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
+
+    def report(self):
+        # self.fahrten.to_csv("fahrten.csv")
+        mw = pd.pivot_table(self.fahrten, columns='von', index='nach', values='zeit', aggfunc=np.mean)
+        mn = pd.pivot_table(self.fahrten, columns='von', index='nach', values='zeit', aggfunc=np.min)
+        mx = pd.pivot_table(self.fahrten, columns='von', index='nach', values='zeit', aggfunc=np.max)
+        print("\nmittelwerte\n")
+        print(mw)
+        print("\nminima\n")
+        print(mn)
+        print("\nmaxima\n")
+        print(mx)
+
+    def get_fahrzeit(self, start: str, ziel: str) -> Union[int, float]:
+        return self.zeiten.at[ziel, start]
 
 
 class ZugAuswertung:
