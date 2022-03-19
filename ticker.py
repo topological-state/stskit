@@ -9,8 +9,8 @@ die ausgabe erfolgt auf stdout.
 """
 
 import argparse
-import asyncio
 import datetime
+import trio
 
 from stsplugin import PluginClient
 from model import Ereignis
@@ -41,20 +41,12 @@ async def query(client: PluginClient, args: argparse.Namespace) -> None:
     :param args: parsed arguments
     :return: None
     """
-    try:
-        sendezeit = datetime.datetime.now() - datetime.timedelta(minutes=1)
-        while True:
-            if datetime.datetime.now() - sendezeit >= datetime.timedelta(minutes=1):
-                await client.request_zugliste()
-                await client.request_zugdetails()
-                for art in Ereignis.arten:
-                    await client.request_ereignis(art, client.zugliste.keys())
-                sendezeit = datetime.datetime.now()
-
-            await asyncio.sleep(60)
-
-    except KeyboardInterrupt:
-        pass
+    while True:
+        await client.request_zugliste()
+        await client.request_zugdetails()
+        for art in Ereignis.arten:
+            await client.request_ereignis(art, client.zugliste.keys())
+        await trio.sleep(60)
 
 
 async def report(client: PluginClient, args: argparse.Namespace) -> None:
@@ -67,35 +59,30 @@ async def report(client: PluginClient, args: argparse.Namespace) -> None:
     :param args: parsed arguments
     :return: None
     """
-    try:
-        while True:
-            ereignis = await client.ereignisse.get()
+    async for ereignis in client._ereignis_channel_out:
+        try:
+            c1 = COLORCODES[ereignis.art]
+            c2 = COLORCODES['default']
+        except KeyError:
+            c1 = ""
+            c2 = ""
 
-            try:
-                c1 = COLORCODES[ereignis.art]
-                c2 = COLORCODES['default']
-            except KeyError:
-                c1 = ""
-                c2 = ""
+        if ereignis.gleis:
+            gleis = ereignis.gleis
+            if ereignis.gleis != ereignis.plangleis:
+                gleis = gleis + '*'
+            if ereignis.amgleis:
+                gleis = '[' + gleis + ']'
+        else:
+            gleis = ''
 
-            if ereignis.gleis:
-                gleis = ereignis.gleis
-                if ereignis.gleis != ereignis.plangleis:
-                    gleis = gleis + '*'
-                if ereignis.amgleis:
-                    gleis = '[' + gleis + ']'
-            else:
-                gleis = ''
+        zeit = ereignis.zeit.time().isoformat(timespec='seconds')
 
-            zeit = ereignis.zeit.time().isoformat(timespec='seconds')
+        variablen = {**vars(ereignis), 'gleis': gleis, 'zeit': zeit}
+        fmt = "{zeit} {art} {name}: {von} - {gleis} - {nach} ({verspaetung:+})"
+        meldung = fmt.format(**variablen)
 
-            variablen = {**vars(ereignis), 'gleis': gleis, 'zeit': zeit}
-            fmt = "{zeit} {art} {name}: {von} - {gleis} - {nach} ({verspaetung:+})"
-            meldung = fmt.format(**variablen)
-
-            print(c1 + meldung + c2)
-    except KeyboardInterrupt:
-        pass
+        print(c1 + meldung + c2)
 
 
 async def main(args: argparse.Namespace) -> None:
@@ -110,19 +97,19 @@ async def main(args: argparse.Namespace) -> None:
     """
     client = PluginClient(name='ticker', autor='bummler', version='0.1', text='ereignisticker')
     await client.connect(host=args.host, port=args.port)
-    await client.request_anlageninfo()
 
-    query_task = asyncio.create_task(query(client, args))
-    report_task = asyncio.create_task(report(client, args))
     try:
-        done, pending = await asyncio.wait({query_task, report_task}, return_when=asyncio.FIRST_COMPLETED)
-        for task in pending:
-            task.cancel()
-        await asyncio.wait(pending)
+        async with client._stream:
+            async with trio.open_nursery() as nursery:
+                await nursery.start(client._receiver)
+                await client.register()
+                await client.request_simzeit()
+                await client.request_anlageninfo()
+                nursery.start_soon(query, client, args)
+                nursery.start_soon(report, client, args)
     except KeyboardInterrupt:
         pass
 
-    client.close()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -151,4 +138,4 @@ if __name__ == '__main__':
     parser.add_argument('--host', default='localhost')
     parser.add_argument('--port', default=3691)
     args = parser.parse_args()
-    asyncio.run(main(args))
+    trio.run(main, args)

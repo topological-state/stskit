@@ -6,21 +6,15 @@ der client speichert auch alle anlagen- und fahrplandaten zwischen und verarbeit
 
 asynchrone kommunikation:
 
-die kommunikationsmethoden des PluginClient sind als async-methoden deklariert,
-die in await statements verwendet werden können.
-diese architektur bedingt, dass die applikation eine ereignisschleife unterhält.
-in textbasierten programmen, wird diese implizit vom asyncio-modul bereitgestellt
-(siehe test-routine unten oder das ticker-programm).
-bei GUI-programmen muss eine kompatible ereignisschleife wie z.b. von qasync für Qt verwendet werden.
+die kommunikationsmethoden des PluginClient sind als asynchron und werden von der trio-bibliothek verwaltet.
 
 vorsicht ist bei der verwendung von parallelen tasks geboten,
 damit sich zwei serveranfragen nicht überschneiden können.
 am besten werden alle anfragen im gleichen asyncio-task gestellt.
-parallel dazu kann ein einem eigenen task, die ereignis-queue abgefragt werden, siehe ticker-programm.
+parallel dazu kann in einem eigenen task, die ereignis-queue abgefragt werden, siehe ticker-programm.
 """
 
-import asyncio
-from contextlib import asynccontextmanager
+import trio
 import datetime
 from typing import Any, Dict, List, Optional, Set, Union
 import untangle
@@ -30,20 +24,21 @@ from xml.sax import make_parser
 from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis
 
 
+def check_status(status: untangle.Element):
+    if int(status.status['code']) >= 400:
+        raise ValueError(f"error {status.status['code']}: {status.status.cdata}")
+
+
 class PluginClient:
     def __init__(self, name: str, autor: str, version: str, text: str):
-        self._reader = None
-        self._writer = None
-        self._parser = None
-        self._handler = None
-        self._rec_task = None
+        self._stream: Optional[trio.abc.Stream] = None
+        self.connected = trio.Event()
 
         self.debug: bool = False
         self.name: str = name
         self.autor: str = autor
         self.version: str = version
         self.text: str = text
-        self.status: Optional[untangle.Element] = None
 
         self.anlageninfo: Optional[AnlagenInfo] = None
         self.bahnsteigliste: Dict[str, BahnsteigInfo] = {}
@@ -53,66 +48,18 @@ class PluginClient:
         self.zugliste: Dict[int, ZugDetails] = {}
         self.zuggattungen: Set[str] = set()
 
-        self.antworten = asyncio.Queue()
-        self.ereignisse = asyncio.Queue()
         self.registrierte_ereignisse: Dict[str, Set[int]] = {art: set() for art in Ereignis.arten}
 
         self.client_datetime: datetime.datetime = datetime.datetime.now()
         self.server_datetime: datetime.datetime = datetime.datetime.now()
         self.time_offset: datetime.timedelta = self.server_datetime - self.client_datetime
 
-    def check_status(self):
-        if int(self.status.status['code']) >= 300:
-            raise ValueError(f"error {self.status.status['code']}: {self.status.status.cdata}")
-
-    def close(self):
-        if self._writer is not None:
-            self._writer.close()
-            self._writer = None
-            self._reader = None
-        if self._rec_task is not None:
-            self._rec_task.cancel()
-            self._rec_task = None
-
     async def connect(self, host='localhost', port=3691):
-        if self._writer is None:
-            self._reader, self._writer = await asyncio.open_connection(host, port)
-            self._parser = make_parser()
-            self._handler = untangle.Handler()
-            self._parser.setContentHandler(self._handler)
+        self._stream = await trio.open_tcp_stream(host, port)
+        self.connected.set()
 
-            data = await self._reader.readuntil(separator=b'>')
-            data += await self._reader.readuntil(separator=b'>')
-            xml = data.decode()
-            self.status = untangle.parse(xml)
-            if int(self.status.status['code']) >= 400:
-                raise ValueError(f"error {self.status.status['code']}: {self.status.status.cdata}")
-
-            self._rec_task = asyncio.create_task(self._receive_data())
-
-            await self.register()
-            await self.request_simzeit()
-
-    @asynccontextmanager
-    async def get_connection(self):
-        """
-        experimental
-
-        :return:
-        """
-        await self.connect()
-        try:
-            yield self
-        finally:
-            self.close()
-
-    def is_connected(self) -> bool:
-        """
-        ist der klient mit dem server verbunden?
-
-        :return: (bool)
-        """
-        return self._writer is not None
+    async def close(self):
+        await self._stream.aclose()
 
     async def _send_request(self, tag, **kwargs):
         """
@@ -128,73 +75,73 @@ class PluginClient:
         args = " ".join(args)
         req = f"<{tag} {args} />\n"
         data = req.encode()
-        self._writer.write(data)
-        await self._writer.drain()
+        await self._stream.send_all(data)
 
-    async def _receive_data(self):
+    async def _receiver(self, *, task_status=trio.TASK_STATUS_IGNORED):
         """
         empfangsschleife: antworten empfangen und verteilen
 
-        alle antworten ausser ereignisse werden in untangle.Element objekte gepackt und
-        an die self.antworten-queue übergeben.
-        ereignisse werden als model.Ereignis-objekte an die self.ereignisse-queue übergeben.
+        alle antworten ausser ereignisse werden in untangle.Element objekte gepackt
+        und and den antworten-channel übergeben.
+        ereignisse werden als model.Ereignis-objekte an den ereignisse-channel übergeben.
 
-        diese coroutine läuft im self._rec_task, solange die verbindung offen ist.
+        diese coroutine muss explizit in einer trio.nursery gestartet werden
+        und läuft, bis die verbindung unterbrochen wird.
         """
-        while True:
-            bs = await self._reader.readline()
-            s = bs.decode().replace('\n', '')
-            if self.debug:
-                print(s)
-            if s:
-                self._parser.feed(s)
 
-            # xml tag complete?
-            if len(self._handler.elements) == 0:
-                element = self._handler.root
-                self._parser.close()
-                self._handler.root = untangle.Element(None, None)
-                self._handler.root.is_root = True
+        parser: Any = make_parser()
+        handler = untangle.Handler()
+        parser.setContentHandler(handler)
 
-                try:
-                    tag = dir(element)[0]
-                except IndexError:
-                    # leeres element
-                    continue
-                else:
-                    if tag == "ereignis":
-                        obj = Ereignis().update(getattr(element, tag))
-                        obj.zeit = self.calc_simzeit()
-                        self.ereignisse.put_nowait(obj)
-                    else:
-                        self.antworten.put_nowait(element)
+        self._antwort_channel_in, self._antwort_channel_out = trio.open_memory_channel(0)
+        self._ereignis_channel_in, self._ereignis_channel_out = trio.open_memory_channel(0)
+        task_status.started()
 
-    def calc_simzeit(self) -> datetime.datetime:
-        """
-        simulatorzeit ohne serverabfrage abschätzen.
+        async with self._antwort_channel_in:
+            async with self._ereignis_channel_in:
+                async for bs in self._stream:
+                    for s in bs.decode().split('\n'):
+                        if self.debug:
+                            print(s)
+                        if s:
+                            parser.feed(s)
 
-        der time_offset muss vorher einmal mittels request_simzeit kalibriert worden sein.
+                        # xml tag complete?
+                        if len(handler.elements) == 0:
+                            element = handler.root
+                            parser.close()
+                            handler.root = untangle.Element(None, None)
+                            handler.root.is_root = True
 
-        der rückgabewert enthält das aktuelle (client-)datum.
-        das ist nötig, damit mit der uhrzeit gerechnet werden kann.
-        da der simulator kein datum kennt, sollten die datumsfelder nach der rechnung nicht beachtet werden.
-        der fahrplan (in FahrplanZeile) enthält lediglich datetime.time objekte.
-        ein datetime.time-objekt kann einfach über die time-methode extrahiert werden.
-
-        :return: (datetime.datetime)
-        """
-        return datetime.datetime.now() + self.time_offset
+                            try:
+                                tag = dir(element)[0]
+                            except IndexError:
+                                # leeres element
+                                continue
+                            else:
+                                if tag == "ereignis":
+                                    ereignis = Ereignis().update(getattr(element, tag))
+                                    ereignis.zeit = self.calc_simzeit()
+                                    await self._ereignis_channel_in.send(ereignis)
+                                else:
+                                    await self._antwort_channel_in.send(element)
 
     async def register(self) -> None:
         """
         klient beim simulator registrieren.
 
+        die funktion muss als erste nach dem connect aufgerufen werden,
+        da sie auch die statusantwort nach der verbindungsaufnahme auswertet.
+
         :return: None
         """
+        status = await self._antwort_channel_out.receive()
+        check_status(status)
+
         await self._send_request("register", name=self.name, autor=self.autor, version=self.version,
                                  protokoll='1', text=self.text)
-        self.status = await self.antworten.get()
-        self.check_status()
+        status = await self._antwort_channel_out.receive()
+        check_status(status)
 
     async def request_anlageninfo(self):
         """
@@ -205,7 +152,7 @@ class PluginClient:
         :return: None
         """
         await self._send_request(AnlagenInfo.tag)
-        response = await self.antworten.get()
+        response = await self._antwort_channel_out.receive()
         self.anlageninfo = AnlagenInfo().update(response.anlageninfo)
 
     async def request_bahnsteigliste(self):
@@ -218,7 +165,7 @@ class PluginClient:
         """
         self.bahnsteigliste = {}
         await self._send_request("bahnsteigliste")
-        response = await self.antworten.get()
+        response = await self._antwort_channel_out.receive()
         for bahnsteig in response.bahnsteigliste.bahnsteig:
             bi = BahnsteigInfo().update(bahnsteig)
             self.bahnsteigliste[bi.name] = bi
@@ -242,7 +189,7 @@ class PluginClient:
         """
         self.client_datetime = datetime.datetime.now()
         await self._send_request("simzeit", sender=0)
-        simzeit = await self.antworten.get()
+        simzeit = await self._antwort_channel_out.receive()
         secs, msecs = divmod(int(simzeit.simzeit['zeit']), 1000)
         mins, secs = divmod(secs, 60)
         hrs, mins = divmod(mins, 60)
@@ -251,9 +198,25 @@ class PluginClient:
         self.time_offset = (self.server_datetime - self.client_datetime)
         return self.server_datetime
 
+    def calc_simzeit(self) -> datetime.datetime:
+        """
+        simulatorzeit ohne serverabfrage abschätzen.
+
+        der time_offset muss vorher einmal mittels request_simzeit kalibriert worden sein.
+
+        der rückgabewert enthält das aktuelle (client-)datum.
+        das ist nötig, damit mit der uhrzeit gerechnet werden kann.
+        da der simulator kein datum kennt, sollten die datumsfelder nach der rechnung nicht beachtet werden.
+        der fahrplan (in FahrplanZeile) enthält lediglich datetime.time objekte.
+        ein datetime.time-objekt kann einfach über die time-methode extrahiert werden.
+
+        :return: (datetime.datetime)
+        """
+        return datetime.datetime.now() + self.time_offset
+
     async def request_wege(self):
         await self._send_request("wege")
-        response = await self.antworten.get()
+        response = await self._antwort_channel_out.receive()
         self.wege = {}
         self.wege_nach_namen = {}
         self.wege_nach_typ = {}
@@ -302,7 +265,7 @@ class PluginClient:
             zids = self.zugliste.keys()
         for zid in zids:
             await self._send_request("zugdetails", zid=zid)
-            response = await self.antworten.get()
+            response = await self._antwort_channel_out.receive()
             self.zugliste[zid].update(response.zugdetails)
             self.zuggattungen.add(self.zugliste[zid].gattung)
 
@@ -326,7 +289,7 @@ class PluginClient:
             zids = self.zugliste.keys()
         for zid in zids:
             await self._send_request("zugfahrplan", zid=zid)
-            response = await self.antworten.get()
+            response = await self._antwort_channel_out.receive()
             zug = self.zugliste[zid]
             zug.fahrplan = []
             try:
@@ -340,7 +303,7 @@ class PluginClient:
 
     async def request_zugliste(self):
         await self._send_request("zugliste")
-        response = await self.antworten.get()
+        response = await self._antwort_channel_out.receive()
         try:
             self.zugliste = {zug['zid']: ZugDetails().update(zug) for zug in response.zugliste.zug}
         except AttributeError:
@@ -428,18 +391,31 @@ def ausfahrt_sortierschluessel(attr, default):
     return caller
 
 
+class TaskDone(Exception):
+    pass
+
+
 async def test():
     client = PluginClient(name='test', autor='tester', version='0.0', text='testing the plugin client')
     await client.connect()
-    await client.request_anlageninfo()
-    await client.request_bahnsteigliste()
-    await client.request_wege()
-    await client.request_zugliste()
-    await client.request_zugdetails()
-    await client.request_zugfahrplan()
-    client.close()
-    client.update_bahnsteig_zuege()
-    client.update_wege_zuege()
+
+    try:
+        async with client._stream:
+            async with trio.open_nursery() as nursery:
+                await nursery.start(client._receiver)
+                await client.register()
+                await client.request_simzeit()
+                await client.request_anlageninfo()
+                await client.request_bahnsteigliste()
+                await client.request_wege()
+                await client.request_zugliste()
+                await client.request_zugdetails()
+                await client.request_zugfahrplan()
+                client.update_bahnsteig_zuege()
+                client.update_wege_zuege()
+                raise TaskDone()
+    except TaskDone:
+        pass
 
     print("\nanlageninfo\n")
     print(client.anlageninfo)
@@ -467,4 +443,4 @@ async def test():
 
 
 if __name__ == '__main__':
-    asyncio.run(test())
+    trio.run(test)
