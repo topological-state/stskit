@@ -1,18 +1,17 @@
-import asyncio
-import datetime
 import matplotlib as mpl
 import numpy as np
 import sys
+import trio
+import qtrio
 from typing import Any, Dict, List, Optional, Set, Union
 
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
-import qasync
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 
-from stsplugin import PluginClient
+from stsplugin import PluginClient, TaskDone
 from database import StsConfig
 from auswertung import StsAuswertung
 from model import time_to_minutes, Ereignis
@@ -29,9 +28,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.client = sts_client
+        self.debug: bool = True
+        self.closed = trio.Event()
+        self.client: Optional[PluginClient] = None
         self.config: Optional[StsConfig] = None
         self.config_path = "zugtabelle.json"
+        self.auswertung: Optional[StsAuswertung] = None
 
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)
@@ -43,43 +45,40 @@ class MainWindow(QtWidgets.QMainWindow):
         self._bars_ein = None
         self._labels_ein = []
 
-        self.auswertung: Optional[StsAuswertung] = None
-
         self.enable_update = True
-        self.update_task = asyncio.create_task(self.update_loop())
-        self.ereignis_task = asyncio.create_task(self.ereignis_loop())
 
-    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
-        self.enable_update = False
-        self.update_task.cancel()
-        self.ereignis_task.cancel()
+    def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        """Detect close events and emit the ``closed`` signal."""
 
-        try:
-            self.config.save(self.config_path)
-        except (AttributeError, OSError):
-            pass
+        super().closeEvent(event)
 
-        super().closeEvent(a0)
+        if event.isAccepted():
+            try:
+                self.config.save(self.config_path)
+            except (AttributeError, OSError):
+                pass
+
+            self.enable_update = False
+            self.closed.set()
 
     async def update_loop(self):
+        await self.client.registered.wait()
         while self.enable_update:
             await self.update()
-            await asyncio.sleep(15)
+            await trio.sleep(60)
 
     async def ereignis_loop(self):
-        while not self.client.is_connected():
-            await asyncio.sleep(1)
-        while self.enable_update:
-            ereignis = await self.client.ereignisse.get()
-            print(ereignis)
+        await self.client.registered.wait()
+        async for ereignis in self.client._ereignis_channel_out:
+            if self.debug:
+                print(ereignis)
             if self.auswertung:
                 self.auswertung.ereignis_uebernehmen(ereignis)
 
     async def update(self):
         # todo : ueberlappende zuege stapeln
         # todo : farben nach zug-gattungen
-        if not self.client.is_connected():
-            await self.client.connect()
+
         await self.get_sts_data()
         for art in Ereignis.arten:
             await self.client.request_ereignis(art, self.client.zugliste.keys())
@@ -158,7 +157,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                 ankunft -= round(korrektur)
                                 # todo : nur zum testen:
                                 zug.name = '!' + zug.name
-                        except (AttributeError, KeyError, ValueError):
+                        except (AttributeError, KeyError, TypeError, ValueError):
                             pass
                         aufenthalt = 1
                         bar = (zug, x_pos, ankunft, aufenthalt)
@@ -196,14 +195,31 @@ class MainWindow(QtWidgets.QMainWindow):
         self.client.update_wege_zuege()
 
 
+async def main():
+    window = MainWindow()
+
+    client = PluginClient(name='zugtabelle', autor='bummler', version='0.1', text='zugtabellen')
+    await client.connect()
+    window.client = client
+
+    try:
+        async with client._stream:
+            async with trio.open_nursery() as nursery:
+                await nursery.start(client._receiver)
+                await client.register()
+                await client.request_simzeit()
+                await client.request_anlageninfo()
+                nursery.start_soon(window.update_loop)
+                nursery.start_soon(window.ereignis_loop)
+                window.show()
+                await window.closed.wait()
+                raise TaskDone()
+
+    except KeyboardInterrupt:
+        pass
+    except TaskDone:
+        pass
+
+
 if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    loop = qasync.QEventLoop(app)
-    asyncio.set_event_loop(loop)
-    with loop:
-        sts_client = PluginClient(name='zugtabelle', autor='bummler', version='0.1', text='zugtabellen')
-        window = MainWindow()
-        window.show()
-        loop.run_forever()
-        asyncio.wait([window.update_task, window.ereignis_task])
-        sts_client.close()
+    qtrio.run(main)

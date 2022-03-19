@@ -67,6 +67,7 @@ class FahrzeitAuswertung:
         print(mx)
 
     def get_fahrzeit(self, start: str, ziel: str) -> Union[int, float]:
+        # TypeError: only integer scalar arrays can be converted to a scalar index
         return self.zeiten.at[ziel, start]
 
 

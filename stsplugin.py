@@ -33,6 +33,7 @@ class PluginClient:
     def __init__(self, name: str, autor: str, version: str, text: str):
         self._stream: Optional[trio.abc.Stream] = None
         self.connected = trio.Event()
+        self.registered = trio.Event()
 
         self.debug: bool = False
         self.name: str = name
@@ -60,6 +61,8 @@ class PluginClient:
 
     async def close(self):
         await self._stream.aclose()
+        self.connected = trio.Event()
+        self.registered = trio.Event()
 
     async def _send_request(self, tag, **kwargs):
         """
@@ -142,6 +145,7 @@ class PluginClient:
                                  protokoll='1', text=self.text)
         status = await self._antwort_channel_out.receive()
         check_status(status)
+        self.registered.set()
 
     async def request_anlageninfo(self):
         """
