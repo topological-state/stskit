@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
-from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis, time_to_seconds
+from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis, time_to_seconds
 from database import StsConfig
 
 

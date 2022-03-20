@@ -14,7 +14,7 @@ from matplotlib.figure import Figure
 from stsplugin import PluginClient, TaskDone
 from database import StsConfig
 from auswertung import StsAuswertung
-from model import time_to_minutes, Ereignis
+from stsobj import time_to_minutes, Ereignis
 
 mpl.use('Qt5Agg')
 

@@ -1,13 +1,15 @@
 """
-datenmodell für plugin-client
+objektklassen für die stellwerksim plugin-schnittstelle
 
-dieses modul deklariert das datenmodell des plugin-klienten.
-die gliederung entspricht dabei weitgehend der struktur der xml-daten von der schnittstelle.
-für jedes tag gibt es eine klasse.
-die attribute der klassen haben die gleichen namen wie die das entsprechende tag.
+dieses modul deklariert das datenmodell des plugin-klienten (stsplugin-modul).
+die gliederung entspricht weitgehend der struktur der xml-daten von der schnittstelle.
+für jedes tag gibt es eine klasse mit den tag-attributen.
+die tag- und attributnamen sind ähnlich wie im xml-protokoll, es gibt aber abweichungen.
 die daten werden in python-typen übersetzt.
-
 einige der klassen haben noch zusätzliche attribute, die vom klienten ausgefüllt werden.
+
+alle objekte werden leer konstruiert und über die update-methode mit daten gefüllt.
+die update-methoden erwarten geparste xml-daten in untangle.Element objekten.
 """
 
 import datetime

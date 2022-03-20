@@ -2,7 +2,7 @@ from collections.abc import Set
 import json
 from typing import Any, Dict, List, Optional, Set, Union
 
-from model import AnlagenInfo, BahnsteigInfo, Knoten
+from stsobj import AnlagenInfo, BahnsteigInfo, Knoten
 
 
 beispiel = {'Othmarsingen': {'Othmarsingen 502', 'Othmarsingen 602'},

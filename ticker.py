@@ -9,11 +9,10 @@ die ausgabe erfolgt auf stdout.
 """
 
 import argparse
-import datetime
 import trio
 
 from stsplugin import PluginClient
-from model import Ereignis
+from stsobj import Ereignis
 
 
 COLORCODES = {

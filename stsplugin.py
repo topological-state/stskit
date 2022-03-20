@@ -21,7 +21,7 @@ import untangle
 
 from xml.sax import make_parser
 
-from model import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis
+from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis
 
 
 def check_status(status: untangle.Element):
