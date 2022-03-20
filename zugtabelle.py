@@ -134,14 +134,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self._einfahrten_ax.figure.canvas.draw()
 
     def build_bars(self, knoten_liste):
-        x_labels = list(self.config.einfahrtsgruppen.keys())
-        x_labels_pos = list(range(len(x_labels)))
+        x_labels = set()
         bars = list()
 
         for knoten in knoten_liste:
-            if gruppenname := self.config.suche_gleisgruppe(knoten.name, self.config.einfahrtsgruppen):
-                x_pos = x_labels.index(gruppenname)
-            else:
+
+            gruppenname = self.config.suche_gleisgruppe(knoten.name, self.config.einfahrtsgruppen)
+            if not gruppenname:
                 continue
 
             for zug in knoten.zuege:
@@ -160,12 +159,17 @@ class MainWindow(QtWidgets.QMainWindow):
                         except (AttributeError, KeyError, TypeError, ValueError):
                             pass
                         aufenthalt = 1
-                        bar = (zug, x_pos, ankunft, aufenthalt)
-                        bars.append(bar)
+                        bar = (zug, gruppenname, ankunft, aufenthalt)
                     except (AttributeError, IndexError):
                         pass
+                    else:
+                        x_labels.add(gruppenname)
+                        bars.append(bar)
 
-        x_pos = np.asarray([b[1] for b in bars])
+        x_labels = sorted(x_labels)
+        x_labels_pos = list(range(len(x_labels)))
+
+        x_pos = np.asarray([x_labels.index(b[1]) for b in bars])
         y_bot = np.asarray([b[2] for b in bars])
         y_hgt = np.asarray([b[3] for b in bars])
         bar_labels = [b[0].name for b in bars]
