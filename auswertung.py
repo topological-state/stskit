@@ -23,7 +23,7 @@ class FahrzeitAuswertung:
     df.loc[start]
     """
     def __init__(self):
-        self.fahrten = pd.DataFrame(columns=['von', 'nach', 'zeit'])
+        self.fahrten = pd.DataFrame(columns=['zug', 'gattung', 'von', 'nach', 'zeit'])
         self.zeiten: Optional[pd.DataFrame] = None
         self.gruppen: Dict[str, str] = {}
 
@@ -35,40 +35,60 @@ class FahrzeitAuswertung:
 
         # self.index = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
 
-    def add_fahrzeit(self, start: str, ziel: str, fahrzeit: float) -> None:
+    def add_fahrzeit(self, zug: ZugDetails, start: str, ziel: str, fahrzeit: float) -> None:
         """
         fahrzeit-messpunkt zur statistik hinzufügen.
 
+        :param zug: ZugDetails objekt
         :param start: name eines bahnsteig- oder einfahrtsgleises
         :param ziel: name eines bahnsteig- oder ausfahrtsgleises
         :param fahrzeit in sekunden
         :return: None
         """
-        print(f"add_fahrzeit({start}, {ziel}, {fahrzeit})")
-        self.fahrten.loc[-1] = {'von': start, 'nach': ziel, 'zeit': fahrzeit}
+        print(f"add_fahrzeit({zug.name}, {start}, {ziel}, {fahrzeit})")
+        self.fahrten.loc[-1] = {'zug': zug.nummer, 'gattung': zug.gattung, 'von': start, 'nach': ziel, 'zeit': fahrzeit}
         self.fahrten.index = pd.RangeIndex(self.fahrten.shape[0])
         self.zeiten = pd.pivot_table(self.fahrten, columns='von', index='nach', values='zeit', aggfunc=np.min)
 
-        tuples = [(gleis, self.gruppen[gleis]) for gleis in self.zeiten.columns]
-        self.zeiten.columns = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
-        tuples = [(gleis, self.gruppen[gleis]) for gleis in self.zeiten.index]
-        self.zeiten.index = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
+        # tuples = [(gleis, self.gruppen[gleis]) for gleis in self.zeiten.columns]
+        # self.zeiten.columns = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
+        # tuples = [(gleis, self.gruppen[gleis]) for gleis in self.zeiten.index]
+        # self.zeiten.index = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
 
     def report(self):
-        # self.fahrten.to_csv("fahrten.csv")
-        mw = pd.pivot_table(self.fahrten, columns='von', index='nach', values='zeit', aggfunc=np.mean)
-        mn = pd.pivot_table(self.fahrten, columns='von', index='nach', values='zeit', aggfunc=np.min)
-        mx = pd.pivot_table(self.fahrten, columns='von', index='nach', values='zeit', aggfunc=np.max)
-        print("\nmittelwerte\n")
-        print(mw)
-        print("\nminima\n")
-        print(mn)
-        print("\nmaxima\n")
-        print(mx)
+        self.fahrten.to_csv("fahrten.csv")
+        self.zeiten.to_csv("zeiten.csv")
 
     def get_fahrzeit(self, start: str, ziel: str) -> Union[int, float]:
-        # TypeError: only integer scalar arrays can be converted to a scalar index
-        return self.zeiten.at[ziel, start]
+        """
+        fahrzeit auslesen
+
+        bemerkungen:
+
+        ~~~~~~{.py}
+        self.zeiten.at[ziel, start]
+        return self.zeiten[start][ziel]
+        ~~~~~~
+
+        fuer scalar index geben diese statements den gewuenschten wert oder ein KeyError.
+        fuer multiindex gibt das erste einen TypeError, das zweite einen KeyError.
+
+        ~~~~~~{.py}
+        self.zeiten[gleis]
+        ~~~~~~
+
+        dieses statement gibt einen frame mit der entsprechenden 'von'-spalte zurueck.
+        die gruppe kann so nicht angesprochen werden.
+
+
+        :param start:
+        :param ziel:
+        :return:
+        """
+        try:
+            return self.zeiten.at[ziel, start]
+        except (AttributeError, KeyError, TypeError, ValueError):
+            return np.nan
 
 
 class ZugAuswertung:
@@ -360,7 +380,7 @@ class StsAuswertung:
                     strecke += 24 * 60 * 60
                 gesamt = gesamt + strecke
                 if start and not zug.ist_rangierfahrt:
-                    self.fahrzeiten.add_fahrzeit(start, ziel, gesamt)
+                    self.fahrzeiten.add_fahrzeit(zug, start, ziel, gesamt)
             else:
                 ziel = fpz.gleis
             an = time_to_seconds(fpz.an)

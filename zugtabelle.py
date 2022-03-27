@@ -58,6 +58,8 @@ class MainWindow(QtWidgets.QMainWindow):
             except (AttributeError, OSError):
                 pass
 
+            self.auswertung.fahrzeiten.report()
+
             self.enable_update = False
             self.closed.set()
 
@@ -75,10 +77,20 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.auswertung:
                 self.auswertung.ereignis_uebernehmen(ereignis)
 
-    async def update(self):
-        # todo : ueberlappende zuege stapeln
-        # todo : farben nach zug-gattungen
+    @staticmethod
+    def zugtitel(zug) -> str:
+        """
+        "zugname (verspätung)"
 
+        :return: (str)
+        """
+
+        if zug.verspaetung:
+            return f"{zug.nummer} ({zug.verspaetung:+})"
+        else:
+            return f"{zug.nummer}"
+
+    async def update(self):
         await self.get_sts_data()
         for art in Ereignis.arten:
             await self.client.request_ereignis(art, self.client.zugliste.keys())
@@ -128,14 +140,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self._einfahrten_ax.set_ylim(bottom=ymin + 30, top=ymin, auto=False)
 
         self._bars_ein = self._einfahrten_ax.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, **kwargs)
-        self._labels_ein = self._einfahrten_ax.bar_label(self._bars_ein, labels=bar_labels, label_type='center')
+        # fontsize: float or {'xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'}
+        # fontstretch: {'ultra-condensed', 'extra-condensed', 'condensed', 'semi-condensed', 'normal'}
+        # fontstyle: {'normal', 'italic', 'oblique'}
+        # fontweight: {'normal', 'semibold', 'bold', 'heavy', 'extra bold', 'black'}
+        self._labels_ein = self._einfahrten_ax.bar_label(self._bars_ein, labels=bar_labels, label_type='center',
+                                                         fontstretch='condensed')
 
         # Trigger the canvas to update and redraw.
         self._einfahrten_ax.figure.canvas.draw()
 
     def build_bars(self, knoten_liste):
         x_labels = set()
-        bars = list()
+        slots = list()
 
         for knoten in knoten_liste:
 
@@ -148,40 +165,52 @@ class MainWindow(QtWidgets.QMainWindow):
                     try:
                         zeile = zug.fahrplan[0]
                         ankunft = time_to_minutes(zeile.an) + zug.verspaetung
-                        try:
-                            korrektur = self.auswertung.fahrzeiten.get_fahrzeit(zug.von, zeile.gleis) / 60
-                            # todo : nur zum testen:
-                            print(korrektur)
-                            if not np.isnan(korrektur):
-                                ankunft -= round(korrektur)
-                                # todo : nur zum testen:
-                                zug.name = '!' + zug.name
-                        except (AttributeError, KeyError, TypeError, ValueError):
-                            pass
+                        korrektur = self.auswertung.fahrzeiten.get_fahrzeit(zug.von, zeile.gleis) / 60
+                        if not np.isnan(korrektur):
+                            ankunft -= round(korrektur)
                         aufenthalt = 1
-                        bar = (zug, gruppenname, ankunft, aufenthalt)
+                        slot = {'zug': zug, 'gruppe': gruppenname, 'zeit': ankunft, 'dauer': aufenthalt}
                     except (AttributeError, IndexError):
                         pass
                     else:
                         x_labels.add(gruppenname)
-                        bars.append(bar)
+                        slots.append(slot)
 
         x_labels = sorted(x_labels)
         x_labels_pos = list(range(len(x_labels)))
 
-        x_pos = np.asarray([x_labels.index(b[1]) for b in bars])
-        y_bot = np.asarray([b[2] for b in bars])
-        y_hgt = np.asarray([b[3] for b in bars])
-        bar_labels = [b[0].name for b in bars]
+        # konfliktbehandlung
+        slots.sort(key=lambda s: s['zeit'])
+        frei = {gruppe: 0 for gruppe in x_labels}
+        letzter_slot = {gruppe: None for gruppe in x_labels}
+        for slot in slots:
+            slot['konflikt'] = frei[slot['gruppe']] > slot['zeit']
+            if slot['konflikt'] and letzter_slot[slot['gruppe']] is not None:
+                letzter_slot[slot['gruppe']]['konflikt'] = True
+            slot['zeit'] = max(frei[slot['gruppe']], slot['zeit'])
+            frei[slot['gruppe']] = slot['zeit'] + slot['dauer']
+            letzter_slot[slot['gruppe']] = slot
+
+        x_pos = np.asarray([x_labels.index(slot['gruppe']) for slot in slots])
+        y_bot = np.asarray([slot['zeit'] for slot in slots])
+        y_hgt = np.asarray([slot['dauer'] for slot in slots])
+        labels = [f"{self.zugtitel(slot['zug'])}" for slot in slots]
 
         # farben = {g: mpl.colors.TABLEAU_COLORS[i % len(mpl.colors.TABLEAU_COLORS)]
         #           for i, g in enumerate(self.client.zuggattungen)}
         # colors = [farben[b[5]] for b in bars]
         farben = [k for k in mpl.colors.TABLEAU_COLORS]
         # colors = [farben[i % len(farben)] for i in range(len(bars))]
-        colors = [farben[b[0].nummer // 10000] for b in bars]
 
-        return x_labels_pos, x_labels, x_pos, y_bot, y_hgt, bar_labels, colors
+        # colors = [farben[slot['zug'].nummer // 10000] for slot in slots]
+        def farbe(sl):
+            if sl['konflikt']:
+                return 'r'
+            else:
+                return farben[sl['zug'].nummer // 10000]
+        colors = [farbe(slot) for slot in slots]
+
+        return x_labels_pos, x_labels, x_pos, y_bot, y_hgt, labels, colors
 
     async def get_sts_data(self, alles=False):
         if alles or not self.client.anlageninfo:

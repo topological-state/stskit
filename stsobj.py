@@ -307,7 +307,7 @@ class ZugDetails:
             return None
 
     @property
-    def nummer(self) -> Optional[int]:
+    def nummer(self) -> int:
         """
         zugnummer aus dem zugnamen.
 
@@ -315,16 +315,14 @@ class ZugDetails:
 
         diese hat nichts mit der zug-id zu tun.
 
-        :return: (int) zugnummer. None
+        :return: (int) zugnummer. 0 falls der name keine ziffer enthält.
         """
-        for s in reversed(self.name.split(' ')):
-            try:
-                # falls es noetig ist, buchstaben zu entfernen:
-                # s = "".join((c for c in s if c.isnumeric()))
-                return int(s)
-            except ValueError:
-                pass
-        return None
+
+        s = "".join((c for c in self.name if c.isnumeric() or c == " "))
+        try:
+            return int(s.rsplit(maxsplit=1)[0])
+        except ValueError:
+            return 0
 
     @property
     def ist_rangierfahrt(self) -> bool:
@@ -334,7 +332,8 @@ class ZugDetails:
         :return:
         """
 
-        return self.name.startswith('Lok') or self.name.startswith('Ersatzlok') or self.name.endswith('RF')
+        return self.name.startswith('Lok') or self.name.startswith('Ersatzlok') or \
+               self.name.startswith('RF') or self.name.endswith('RF')
 
     def find_fahrplanzeile(self, gleis: str) -> Optional['FahrplanZeile']:
         """
