@@ -368,6 +368,9 @@ class Ereignis(ZugDetails):
 
     # ereginisarten, wie im xml-verwendet
     arten = {'einfahrt', 'ankunft', 'abfahrt', 'ausfahrt', 'rothalt', 'wurdegruen', 'kuppeln', 'fluegeln'}
+    # attribute, wie im xml-verwendet
+    attribute = ['zeit', 'zid', 'art', 'name', 'verspaetung', 'gleis', 'plangleis', 'von', 'nach', 'sichtbar',
+                 'amgleis']
 
     def __init__(self):
         super().__init__()
@@ -381,6 +384,32 @@ class Ereignis(ZugDetails):
         return f"Ereignis({self.zid}, {self.art}, {self.name}, {self.von}, {self.nach}, {self.verspaetung:+}," \
                f"{self.sichtbar}, {self.gleis}/{self.plangleis}, {self.amgleis})"
 
+    def __eq__(self, other: 'Ereignis') -> bool:
+        """
+        sind zwei ereignisse gleich?
+
+        ereignisse werden als gleich erachtet, wenn art, zid und gleis gleich sind.
+        dies kann dazu benutzt werden, wiederholte ereignismeldungen zu filtern.
+        (die plugin-schnittstelle schickt gewisse ereignismeldungen wie rothalt und abfahrt wiederholt.)
+
+        :param other:
+        :return: bool
+        """
+        return self.art == other.art and self.zid == other.zid and self.gleis == other.gleis
+
+    def __hash__(self) -> int:
+        """
+        hash-funktion basierend auf gleichheitsklasse.
+
+        ereignisse werden als gleich erachtet, wenn art, zid und gleis gleich sind.
+        für solchermassen "gleiche" ereignisse generiert diese funktion den gleichen hash-wert.
+        dies kann dazu benutzt werden, wiederholte ereignismeldungen zu filtern.
+        (die plugin-schnittstelle schickt gewisse ereignismeldungen wie rothalt und abfahrt wiederholt.)
+
+        :return: int
+        """
+        return (self.art, self.zid, self.gleis).__hash__()
+
     def update(self, ereignis: untangle.Element) -> 'Ereignis':
         """
         attributwerte vom xml-dokument übernehmen.
@@ -392,6 +421,9 @@ class Ereignis(ZugDetails):
         super().update(ereignis)
         self.art = ereignis['art']
         return self
+
+    def to_dict(self) -> Dict:
+        return {attr: getattr(self, attr) for attr in self.attribute}
 
 
 class FahrplanZeile:
