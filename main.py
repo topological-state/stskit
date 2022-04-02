@@ -19,6 +19,7 @@ from auswertung import StsAuswertung
 from stsobj import Ereignis
 from einfahrplan import EinfahrtenWindow
 from qticker import TickerWindow
+from gleisnetz import GleisnetzWindow
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -69,13 +70,22 @@ class MainWindow(QtWidgets.QMainWindow):
             self.einfahrten_window.config = self.config
         if self.einfahrten_window.auswertung is None:
             self.einfahrten_window.auswertung = self.auswertung
+
+        self.einfahrten_window.update()
         self.einfahrten_window.show()
 
     def netz_clicked(self):
-        with open("netz.txt", "wt") as f:
-            for name, knoten1 in self.client.wege.items():
-                for knoten2 in knoten1.nachbarn:
-                    f.write(f"{knoten1.name}, {knoten2.name}, {knoten1.typ}, {knoten2.typ}\n")
+        if not self.netz_window:
+            self.netz_window = GleisnetzWindow()
+        if self.netz_window.client is None:
+            self.netz_window.client = self.client
+        if self.netz_window.config is None:
+            self.netz_window.config = self.config
+        if self.netz_window.auswertung is None:
+            self.netz_window.auswertung = self.auswertung
+
+        self.netz_window.update()
+        self.netz_window.show()
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         """Detect close events and emit the ``closed`` signal."""
@@ -99,6 +109,8 @@ class MainWindow(QtWidgets.QMainWindow):
             await self.update()
             if self.einfahrten_window is not None:
                 self.einfahrten_window.update()
+            if self.netz_window is not None:
+                self.netz_window.update()
             await trio.sleep(60)
 
     async def ereignis_loop(self):

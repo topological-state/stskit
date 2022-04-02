@@ -15,13 +15,26 @@ EREIGNISART_QCOLOR = {
     "einfahrt": QtGui.QColor("darkYellow"),
     "ausfahrt": QtGui.QColor("darkBlue"),
     "rothalt": QtGui.QColor("darkRed"),
-    "grün": QtGui.QColor("darkGreen"),
+    "fahrt": QtGui.QColor("darkGreen"),
     "ankunft": QtGui.QColor("darkCyan"),
     "bereit": QtGui.QColor("darkRed"),
     "abfahrt": QtGui.QColor("darkMagenta"),
     "kuppeln": QtGui.QColor("black"),
     "flügeln": QtGui.QColor("darkGrey"),
     "default": QtGui.QColor("black")
+}
+
+EREIGNISART_QCOLOR_SVG = {
+    "einfahrt": QtGui.QColor("darkMagenta"),
+    "ausfahrt": QtGui.QColor("darkBlue"),
+    "rothalt": QtGui.QColor("red"),
+    "fahrt": QtGui.QColor("darkGreen"),
+    "ankunft": QtGui.QColor("darkCyan"),
+    "bereit": QtGui.QColor("darkorange"),
+    "abfahrt": QtGui.QColor("darkGreen"),
+    "kuppeln": QtGui.QColor("steelblue"),
+    "flügeln": QtGui.QColor("darkviolet"),
+    "default": QtGui.QColor("darkGrey")
 }
 
 
@@ -68,7 +81,7 @@ class EreignisTabelle(QtCore.QAbstractTableModel):
 
         elif role == QtCore.Qt.ForegroundRole:
             try:
-                return EREIGNISART_QCOLOR[ereignis.art]
+                return EREIGNISART_QCOLOR_SVG[ereignis.art]
             except KeyError:
                 return QtGui.QColor("red")
 
@@ -95,7 +108,7 @@ class EreignisTabelle(QtCore.QAbstractTableModel):
             ereignis.art = "bereit"
         elif ereignis.art == "wurdegruen":
             ereignis = copy.copy(ereignis)
-            ereignis.art = "grün"
+            ereignis.art = "fahrt"
         elif ereignis.art == "fluegeln":
             ereignis = copy.copy(ereignis)
             ereignis.art = "flügeln"
