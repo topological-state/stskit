@@ -15,9 +15,56 @@ from auswertung import StsAuswertung
 from stsobj import Knoten
 
 
-def hour_minutes_formatter(x: Union[int, float], pos: Any) -> str:
-    # return "{0:02}:{1:02}".format(int(x) // 60, int(x) % 60)
-    return f"{int(x) // 60:02}:{int(x) % 60:02}"
+def strip_signals(g: nx.Graph) -> nx.Graph:
+    # h = nx.subgraph_view(g, lambda n: g.nodes[n]['typ'] in {5, 6, 7, 12})
+    h = g
+    n2 = len(g)
+    n1 = n2 + 1
+    while n2 < n1:
+        n1 = n2
+        h = g.copy(as_view=False)
+        for edge in g.edges:
+            if g.nodes[edge[0]]['typ'] != 2 and g.nodes[edge[1]]['typ'] == 2:
+                try:
+                    nx.contracted_edge(h, edge, self_loops=False, copy=False)
+                except ValueError:
+                    pass
+
+        n2 = len(nx.subgraph_view(h, lambda n: h.nodes[n]['typ'] == 2))
+        g = h
+
+    return h
+
+
+def gruppieren(g: nx.Graph, gruppen: Dict[str, Set[str]]) -> nx.Graph:
+    for gr_name, gr_set in gruppen.items():
+        lst = sorted(list(gr_set))
+        print(gr_name, lst)
+
+        if gr_name not in g.nodes:
+            g.add_node(gr_name, typ=Knoten.TYP_NUMMER["Bahnsteig"])
+            g.add_edge(gr_name, lst[0])
+
+        lst = [gr_name, *lst]
+        for name1, name2 in itertools.permutations(lst, r=2):
+            print(name1, name2)
+            try:
+                g = nx.contracted_edge(g, (name1, name2), self_loops=False, copy=False)
+            except (KeyError, ValueError):
+                print("Error")
+
+    return g
+
+
+def gruppen_union(*gr: Dict[str, Set[str]]):
+    d = dict()
+    for g in gr:
+        for k, v in g.items():
+            if k in d:
+                d[k] = d[k].union(v)
+            else:
+                d[k] = v
+    return d
 
 
 class GleisnetzWindow(QtWidgets.QMainWindow):
@@ -38,7 +85,7 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
         self._axes = canvas.figure.subplots()
         self._graph: nx.Graph = nx.Graph()
 
-    def update(self):
+    def update1(self):
         try:
             self._graph.clear()
 
@@ -59,44 +106,48 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
         except AttributeError:
             pass
 
-            # self._graph = nx.Graph()
-            # for name, knoten1 in self.client.wege.items():
-            #     if knoten1.typ in {Knoten.TYP_NUMMER["Bahnsteig"],
-            #                        Knoten.TYP_NUMMER["Einfahrt"],
-            #                        Knoten.TYP_NUMMER["Ausfahrt"],
-            #                        Knoten.TYP_NUMMER["Haltepunkt"]}:
-            #         self._graph.add_node(name)
-            #         self._graph.nodes[name]['typ'] = knoten1.typ
-            #         # for knoten2 in knoten1.nachbarn:
-            #         #    g.add_edge(knoten1.name, knoten2.name)
+    def update(self):
+        knoten_auswahl = {Knoten.TYP_NUMMER["Signal"],
+                          Knoten.TYP_NUMMER["Bahnsteig"],
+                          Knoten.TYP_NUMMER["Einfahrt"],
+                          Knoten.TYP_NUMMER["Ausfahrt"],
+                          Knoten.TYP_NUMMER["Haltepunkt"]}
 
-        # if self.auswertung.fahrzeiten is not None:
-        #     df = self.auswertung.fahrzeiten.fahrten
-        #     self._graph.add_edges_from(zip(df['von'], df['nach']))
-        #     nx.draw_networkx(self._graph, ax=self._axes)
-        #     self._axes.figure.canvas.draw()
+        try:
+            self._graph.clear()
+            for knoten1 in self.client.wege.values():
+                if knoten1.name and knoten1.typ in knoten_auswahl:
+                    self._graph.add_node(knoten1.name)
+                    self._graph.nodes[knoten1.name]['typ'] = knoten1.typ
+                    for knoten2 in knoten1.nachbarn:
+                        if knoten2.name and knoten2.typ in knoten_auswahl:
+                            self._graph.add_edge(knoten1.name, knoten2.name)
+
+            self._graph = strip_signals(self._graph)
+            # gruppen = gruppen_union(self.config.bahnsteigsgruppen, self.config.einfahrtsgruppen,
+            #                         self.config.ausfahrtsgruppen)
+            # self._graph = nx.quotient_graph(self._graph, gruppen)
+            self._axes.clear()
+            nx.draw_networkx(self._graph, ax=self._axes, node_size=100)
+            self._axes.figure.canvas.draw()
+        except AttributeError:
+            pass
+
+    def update3(self):
+        if self.auswertung.fahrzeiten is not None:
+            df = self.auswertung.fahrzeiten.fahrten
+            self._graph.add_edges_from(zip(df['von'], df['nach']))
+            nx.draw_networkx(self._graph, ax=self._axes)
+            self._axes.figure.canvas.draw()
 
         #    h.add_nodes_from((n for n in g.nodes if 'typ' in g.nodes[n] and g.nodes[n]['typ'] in {2, 5, 6, 7, 12}))
         #    h.add_edges_from(((n1, n2) for n1, n2 in itertools.product(h.nodes, h.nodes) if n1 < n2))
 
-    def debug(self):
-        # with open("netz.txt", "wt") as f:
-        #     for name, knoten1 in self.client.wege.items():
-        #         for knoten2 in knoten1.nachbarn:
-        #             f.write(f"{knoten1.name}, {knoten2.name}, {knoten1.typ}, {knoten2.typ}\n")
-
-        g = nx.Graph()
-        for name, knoten1 in self.client.wege.items():
-            g.add_node(name)
-            g.nodes[name]['typ'] = knoten1.typ
-            for knoten2 in knoten1.nachbarn:
-                g.add_edge(knoten1.name, knoten2.name)
-
-        data1 = nx.readwrite.json_graph.node_link_data(g)
+    def dump(self):
+        data1 = nx.readwrite.json_graph.node_link_data(self._graph)
         path = f"{self.client.anlageninfo.name}.netz.json"
         with open(path, "w") as fp:
             json.dump(data1, fp, sort_keys=True, indent=4)
-
 
 doc = """
     pos : dictionary, optional
