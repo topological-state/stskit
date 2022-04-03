@@ -1,8 +1,5 @@
 import matplotlib as mpl
 import numpy as np
-import sys
-import trio
-import qtrio
 from typing import Any, Dict, List, Optional, Set, Union
 
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
@@ -88,14 +85,10 @@ class EinfahrtenWindow(QtWidgets.QMainWindow):
         self._axes.set_ylim(bottom=ymin + 30, top=ymin, auto=False)
 
         self._balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, **kwargs)
-        # fontsize: float or {'xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'}
-        # fontstretch: {'ultra-condensed', 'extra-condensed', 'condensed', 'semi-condensed', 'normal'}
-        # fontstyle: {'normal', 'italic', 'oblique'}
-        # fontweight: {'normal', 'semibold', 'bold', 'heavy', 'extra bold', 'black'}
         self._labels = self._axes.bar_label(self._balken, labels=bar_labels, label_type='center',
-                                            fontstretch='condensed')
+                                            fontsize='small', fontstretch='condensed')
 
-        # Trigger the canvas to update and redraw.
+        self._axes.figure.tight_layout()
         self._axes.figure.canvas.draw()
 
     def build_bars(self, knoten_liste):

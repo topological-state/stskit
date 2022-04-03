@@ -18,8 +18,9 @@ from database import StsConfig
 from auswertung import StsAuswertung
 from stsobj import Ereignis
 from einfahrplan import EinfahrtenWindow
-from qticker import TickerWindow
+from gleisbelegung import GleisbelegungWindow
 from gleisnetz import GleisnetzWindow
+from qticker import TickerWindow
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -54,6 +55,11 @@ class MainWindow(QtWidgets.QMainWindow):
         layout.addWidget(self.einfahrten_button)
         self.einfahrten_window: Optional[EinfahrtenWindow] = None
 
+        self.gleisbelegung_button = QtWidgets.QPushButton("gleisbelegung", self)
+        self.gleisbelegung_button.clicked.connect(self.gleisbelegung_clicked)
+        layout.addWidget(self.gleisbelegung_button)
+        self.gleisbelegung_window: Optional[GleisbelegungWindow] = None
+
         self.enable_update = True
 
     def ticker_clicked(self):
@@ -73,6 +79,19 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.einfahrten_window.update()
         self.einfahrten_window.show()
+
+    def gleisbelegung_clicked(self):
+        if self.gleisbelegung_window is None:
+            self.gleisbelegung_window = GleisbelegungWindow()
+        if self.gleisbelegung_window.client is None:
+            self.gleisbelegung_window.client = self.client
+        if self.gleisbelegung_window.config is None:
+            self.gleisbelegung_window.config = self.config
+        if self.gleisbelegung_window.auswertung is None:
+            self.gleisbelegung_window.auswertung = self.auswertung
+
+        self.gleisbelegung_window.update()
+        self.gleisbelegung_window.show()
 
     def netz_clicked(self):
         if not self.netz_window:
@@ -109,6 +128,8 @@ class MainWindow(QtWidgets.QMainWindow):
             await self.update()
             if self.einfahrten_window is not None:
                 self.einfahrten_window.update()
+            if self.gleisbelegung_window is not None:
+                self.gleisbelegung_window.update()
             if self.netz_window is not None:
                 self.netz_window.update()
             await trio.sleep(60)
@@ -162,7 +183,7 @@ class MainWindow(QtWidgets.QMainWindow):
 async def main():
     window = MainWindow()
 
-    client = PluginClient(name='sts-charts', autor='bummler', version='0.3',
+    client = PluginClient(name='sts-charts', autor='bummler', version='0.4',
                           text='sts-charts: grafische fahrpläne und gleisbelegungen')
     await client.connect()
     window.client = client
