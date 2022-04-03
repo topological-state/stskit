@@ -16,7 +16,7 @@ parallel dazu kann in einem eigenen task, die ereignis-queue abgefragt werden, s
 
 import trio
 import datetime
-from typing import Any, Dict, List, Optional, Set, Union
+from typing import Any, Dict, List, Iterable, Mapping, Optional, Set, Union
 import untangle
 
 from xml.sax import make_parser
@@ -313,6 +313,59 @@ class PluginClient:
         except AttributeError:
             self.zugliste = {}
 
+    async def request_zug(self, zid: int) -> ZugDetails:
+        """
+        einzelnen zug und fahrplan anfragen.
+
+        der zug wird in die zugliste eingetragen bzw. aktualisiert und als ZugDetails-objekt zurückgegeben.
+
+        :param zid: einzelne zug-id
+        :return: ZugDetails inkl. fahrplan
+        """
+        zug = ZugDetails()
+        self.zugliste[zid] = zug
+        await self.request_zugdetails(zid)
+        await self.request_zugfahrplan(zid)
+        return zug
+
+    async def resolve_zugflags(self, zid: Optional[Union[int, Iterable[int]]] = None):
+        """
+        folgezüge aus den zugflags auflösen.
+
+        da request_zugliste die folgezüge (ersatz-, flügel- und kuppelzüge) nicht automatisch erhält,
+        lesen wir diese aus den zugflags aus und fragen ihre details und fahrpläne an.
+        die funtion arbeitet iterativ, bis alle folgezüge aufgelöst sind.
+        die züge werden in die zugliste eingetragen und im stammzug referenziert.
+
+        :param zid: einzelne zug-id, liste von zug-ids, oder None (alle in der liste).
+        :return: None
+        """
+        if zid is not None:
+            zids = {zid}
+        else:
+            zids = set(self.zugliste.keys())
+
+        while zids:
+            zid = zids.pop()
+            try:
+                zug = self.zugliste[zid]
+            except KeyError:
+                continue
+
+            for planzeile in zug.fahrplan:
+                if zid2 := planzeile.ersatz_zid():
+                    zids.add(zid2)
+                    zug2 = await self.request_zug(zid2)
+                    planzeile.ersatzzug = zug2
+                if zid2 := planzeile.fluegel_zid():
+                    zids.add(zid2)
+                    zug2 = await self.request_zug(zid2)
+                    planzeile.fluegelzug = zug2
+                if zid2 := planzeile.kuppel_zid():
+                    zids.add(zid2)
+                    zug2 = await self.request_zug(zid2)
+                    planzeile.kuppelzug = zug2
+
     def update_bahnsteig_zuege(self):
         for bahnsteig in self.bahnsteigliste.values():
             bahnsteig.zuege = []
@@ -415,6 +468,7 @@ async def test():
                 await client.request_zugliste()
                 await client.request_zugdetails()
                 await client.request_zugfahrplan()
+                await client.resolve_zugflags()
                 client.update_bahnsteig_zuege()
                 client.update_wege_zuege()
                 raise TaskDone()

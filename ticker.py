@@ -43,6 +43,7 @@ async def query(client: PluginClient, args: argparse.Namespace) -> None:
     while True:
         await client.request_zugliste()
         await client.request_zugdetails()
+        await client.resolve_zugflags()
         for art in Ereignis.arten:
             await client.request_ereignis(art, client.zugliste.keys())
         await trio.sleep(60)

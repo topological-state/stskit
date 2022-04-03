@@ -153,6 +153,7 @@ class MainWindow(QtWidgets.QMainWindow):
         await self.client.request_zugliste()
         await self.client.request_zugdetails()
         await self.client.request_zugfahrplan()
+        await self.client.resolve_zugflags()
 
         self.client.update_bahnsteig_zuege()
         self.client.update_wege_zuege()
@@ -161,7 +162,7 @@ class MainWindow(QtWidgets.QMainWindow):
 async def main():
     window = MainWindow()
 
-    client = PluginClient(name='sts-charts', autor='bummler', version='0.2',
+    client = PluginClient(name='sts-charts', autor='bummler', version='0.3',
                           text='sts-charts: grafische fahrpläne und gleisbelegungen')
     await client.connect()
     window.client = client

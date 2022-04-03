@@ -13,7 +13,8 @@ die update-methoden erwarten geparste xml-daten in untangle.Element objekten.
 """
 
 import datetime
-from typing import Any, Dict, List, Optional, Set, Union
+import re
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 import untangle
 
 
@@ -454,6 +455,10 @@ class FahrplanZeile:
         self.flags: str = ""
         self.hinweistext: str = ""
 
+        self.ersatzzug: Optional[ZugDetails] = None
+        self.fluegelzug: Optional[ZugDetails] = None
+        self.kuppelzug: Optional[ZugDetails] = None
+
     def __str__(self):
         if self.gleis == self.plan:
             return f"Gleis {self.gleis} an {self.an} ab {self.ab} {self.flags}"
@@ -477,3 +482,83 @@ class FahrplanZeile:
         self.flags = item['flags']
         self.hinweistext = item['hinweistext']
         return self
+
+    def durchfahrt(self) -> bool:
+        """
+        zeigt das durchfahrt-flag an.
+
+        :return: bool
+        """
+        return 'D' in self.flags
+
+    def ersatz_zid(self) -> Optional[int]:
+        """
+        liest die zid aus dem ersatzzug-flag.
+
+        die zid kann vom plugin-client zum ersatzzug-attribut aufgelöst werden.
+        """
+        mo = re.search(r"E\(([0-9]+)\)", self.flags)
+        if mo:
+            return int(mo.group(1))
+        else:
+            return None
+
+    def fluegel_zid(self) -> Optional[int]:
+        """
+        liest die zid aus dem fluegel-flag.
+
+        die zid kann vom plugin-client zum fluegelzug-attribut aufgelöst werden.
+        """
+        mo = re.search(r"F\(([0-9]+)\)", self.flags)
+        if mo:
+            return int(mo.group(1))
+        else:
+            return None
+
+    def kuppel_zid(self) -> Optional[int]:
+        """
+        liest die zid aus dem kuppel-flag.
+
+        die zid kann vom plugin-client zum kuppelzug-attribut aufgelöst werden.
+        """
+        mo = re.search(r"K\(([0-9]+)\)", self.flags)
+        if mo:
+            return int(mo.group(1))
+        else:
+            return None
+
+    def lokumlauf(self) -> bool:
+        """
+        zeigt das durchfahrt-flag an.
+
+        :return: bool
+        """
+        return 'L' in self.flags
+
+    def lokwechsel(self) -> Optional[Tuple[int, int]]:
+        """
+        zeigt das durchfahrt-flag an.
+
+        :return: zweier-tuple mit element-nummern der ein- und ausfahrten (beliebige reihenfolge) oder None.
+        """
+        mo = re.search(r"W\[([0-9]+)]\[([0-9]+)]", self.flags)
+        if mo:
+            return int(mo.group(1)), int(mo.group(2))
+        else:
+            return None
+
+    def richtungswechsel(self) -> bool:
+        """
+        zeigt das richtungswechsel-flag an.
+
+        :return: bool
+        """
+        return 'R' in self.flags
+
+    def vorzeitige_abfahrt(self) -> bool:
+        """
+        zeigt das vorzeitige-abfahrt-flag an.
+
+        :return: bool
+        """
+        return 'A' in self.flags

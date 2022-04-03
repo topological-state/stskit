@@ -56,8 +56,15 @@ class FahrzeitAuswertung:
         # self.zeiten.index = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
 
     def report(self):
-        self.fahrten.to_csv("fahrten.csv")
-        self.zeiten.to_csv("zeiten.csv")
+        try:
+            self.fahrten.to_csv("fahrten.csv")
+        except AttributeError:
+            pass
+
+        try:
+            self.zeiten.to_csv("zeiten.csv")
+        except AttributeError:
+            pass
 
     def get_fahrzeit(self, start: str, ziel: str) -> Union[int, float]:
         """
