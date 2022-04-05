@@ -262,7 +262,13 @@ class PluginClient:
                 knoten1.nachbarn.add(knoten2)
                 knoten2.nachbarn.add(knoten1)
 
-    async def request_zugdetails(self, zid=None):
+    async def request_zugdetails(self, zid: Optional[Union[int, Iterable[int]]] = None):
+        """
+        fahrplan eines zuges, mehrerer oder aller züge anfragen.
+
+        :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
+        :return: None
+        """
         if zid is not None:
             zids = [zid]
         else:
@@ -270,10 +276,11 @@ class PluginClient:
         for zid in zids:
             await self._send_request("zugdetails", zid=zid)
             response = await self._antwort_channel_out.receive()
-            self.zugliste[zid].update(response.zugdetails)
-            self.zuggattungen.add(self.zugliste[zid].gattung)
+            zug = self.zugliste[int(zid)]
+            zug.update(response.zugdetails)
+            self.zuggattungen.add(zug.gattung)
 
-    async def request_ereignis(self, art, zids):
+    async def request_ereignis(self, art, zids: Iterable[int]):
         """
         ereignismeldung anfordern
 
@@ -286,7 +293,13 @@ class PluginClient:
             await self._send_request("ereignis", art=art, zid=zid)
             self.registrierte_ereignisse[art].update(zids)
 
-    async def request_zugfahrplan(self, zid=None):
+    async def request_zugfahrplan(self, zid: Optional[Union[int, Iterable[int]]] = None):
+        """
+        fahrplan eines zuges, mehrerer oder aller züge anfragen.
+
+        :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
+        :return: None
+        """
         if zid is not None:
             zids = [zid]
         else:
@@ -294,7 +307,7 @@ class PluginClient:
         for zid in zids:
             await self._send_request("zugfahrplan", zid=zid)
             response = await self._antwort_channel_out.receive()
-            zug = self.zugliste[zid]
+            zug = self.zugliste[int(zid)]
             zug.fahrplan = []
             try:
                 for gleis in response.zugfahrplan.gleis:
@@ -306,10 +319,21 @@ class PluginClient:
             zug.fahrplan.sort(key=lambda zfz: zfz.an)
 
     async def request_zugliste(self):
+        """
+        zugliste anfragen.
+
+        die zugliste wird angefragt und komplett neu aufgebaut.
+
+        bemerkung: folgezüge sind möglicherweise nicht enthalten.
+
+        :return: None
+        """
         await self._send_request("zugliste")
         response = await self._antwort_channel_out.receive()
         try:
-            self.zugliste = {zug['zid']: ZugDetails().update(zug) for zug in response.zugliste.zug}
+            self.zugliste = {int(zug['zid']): ZugDetails().update(zug)
+                             for zug in response.zugliste.zug
+                             if int(zug['zid']) > 0}
         except AttributeError:
             self.zugliste = {}
 
@@ -322,7 +346,9 @@ class PluginClient:
         :param zid: einzelne zug-id
         :return: ZugDetails inkl. fahrplan
         """
+        zid = int(zid)
         zug = ZugDetails()
+        zug.zid = zid
         self.zugliste[zid] = zug
         await self.request_zugdetails(zid)
         await self.request_zugfahrplan(zid)
@@ -337,11 +363,11 @@ class PluginClient:
         die funtion arbeitet iterativ, bis alle folgezüge aufgelöst sind.
         die züge werden in die zugliste eingetragen und im stammzug referenziert.
 
-        :param zid: einzelne zug-id, liste von zug-ids, oder None (alle in der liste).
+        :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
         :return: None
         """
         if zid is not None:
-            zids = {zid}
+            zids = {int(zid)}
         else:
             zids = set(self.zugliste.keys())
 
@@ -357,10 +383,12 @@ class PluginClient:
                     zids.add(zid2)
                     zug2 = await self.request_zug(zid2)
                     planzeile.ersatzzug = zug2
+                    zug2.verspaetung = zug.verspaetung
                 if zid2 := planzeile.fluegel_zid():
                     zids.add(zid2)
                     zug2 = await self.request_zug(zid2)
                     planzeile.fluegelzug = zug2
+                    zug2.verspaetung = zug.verspaetung
                 if zid2 := planzeile.kuppel_zid():
                     zids.add(zid2)
                     zug2 = await self.request_zug(zid2)
@@ -381,7 +409,8 @@ class PluginClient:
                     bahnsteig.zuege.append(zug)
 
         for bahnsteig in self.bahnsteigliste.values():
-            bahnsteig.zuege.sort(key=zugsortierschluessel(bahnsteig.name, 'an', datetime.time()))
+            bahnsteig.zuege = sorted(set(bahnsteig.zuege),
+                                     key=zugsortierschluessel(bahnsteig.name, 'an', datetime.time()))
 
     def update_wege_zuege(self):
         for knoten in self.wege.values():
@@ -413,11 +442,11 @@ class PluginClient:
 
         for knoten in self.wege.values():
             if knoten.typ == 5 or knoten.typ == 12:
-                knoten.zuege.sort(key=zugsortierschluessel(knoten.name, 'an', datetime.time()))
+                knoten.zuege = sorted(set(knoten.zuege), key=zugsortierschluessel(knoten.name, 'an', datetime.time()))
             elif knoten.typ == 6:
-                knoten.zuege.sort(key=einfahrt_sortierschluessel('an', datetime.time()))
+                knoten.zuege = sorted(set(knoten.zuege), key=einfahrt_sortierschluessel('an', datetime.time()))
             elif knoten.typ == 7:
-                knoten.zuege.sort(key=ausfahrt_sortierschluessel('an', datetime.time()))
+                knoten.zuege = sorted(set(knoten.zuege), key=ausfahrt_sortierschluessel('an', datetime.time()))
 
 
 def zugsortierschluessel(gleis, attr, default):

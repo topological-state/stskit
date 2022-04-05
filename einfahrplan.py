@@ -96,8 +96,8 @@ class EinfahrtenWindow(QtWidgets.QMainWindow):
         slots = list()
 
         for knoten in knoten_liste:
-
-            gruppenname = self.config.suche_gleisgruppe(knoten.name, self.config.einfahrtsgruppen)
+            gruppenname = knoten.name
+            # gruppenname = self.config.suche_gleisgruppe(knoten.name, self.config.einfahrtsgruppen)
             if not gruppenname:
                 continue
 

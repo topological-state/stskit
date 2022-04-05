@@ -50,6 +50,7 @@ class Slot:
     gruppe: str = ""
     zeit: int = 0
     dauer: int = 0
+    partner: Optional[ZugDetails] = None
     konflikte: List['Slot'] = field(default_factory=list)
 
     def __eq__(self, other):
@@ -58,9 +59,25 @@ class Slot:
     @property
     def farbe(self) -> str:
         if self.konflikte:
-            return 'r'
+            return 'tab:red'
+        elif self.partner:
+            return 'tab:orange'
+        elif self.zug.gattung in {'ICE', 'TGV'}:
+            return 'tab:purple'
+        elif self.zug.gattung in {'IC', 'EC', 'IR', 'IRE'}:
+            return 'tab:green'
+        elif self.zug.gattung in {'RE', 'RB'}:
+            return 'tab:blue'
+        elif self.zug.gattung.startswith('S'):
+            return 'tab:cyan'
+        elif self.zug.nummer < 2000:
+            return 'tab:green'
+        elif self.zug.nummer < 10000:
+            return 'tab:blue'
+        elif self.zug.nummer < 30000:
+            return 'tab:cyan'
         else:
-            return farben[self.zug.nummer // 10000]
+            return 'tab:brown'
 
     @property
     def titel(self) -> str:
@@ -68,9 +85,9 @@ class Slot:
         "zugname (verspätung)"
         """
         if self.zug.verspaetung:
-            return f"{self.zug.nummer} ({self.zug.verspaetung:+})"
+            return f"{self.zug.name} ({self.zug.verspaetung:+})"
         else:
-            return f"{self.zug.nummer}"
+            return f"{self.zug.name}"
 
     @property
     def style(self) -> str:
@@ -163,8 +180,13 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
                 # ersatzzug anhängen
                 if ersatzzug := planzeile.ersatzzug:
+                    slot.partner = ersatzzug
                     slot.dauer = max(1, time_to_minutes(ersatzzug.fahrplan[0].an) + zug.verspaetung - slot.zeit)
-                    ersatzzug.verspaetung = zug.verspaetung
+                elif kuppelzug := planzeile.kuppelzug:
+                    slot.partner = kuppelzug
+                    slot.dauer = max(1, time_to_minutes(kuppelzug.fahrplan[0].an) + kuppelzug.verspaetung - slot.zeit)
+                elif fluegelzug := planzeile.fluegelzug:
+                    slot.partner = fluegelzug
 
                 if slot not in slots:
                     slots.append(slot)
@@ -174,8 +196,9 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         # konflikte erkennen
         for s1, s2 in itertools.permutations(slots, r=2):
             if s1.zug.gleis == s2.zug.gleis and s1.zeit <= s2.zeit < s1.zeit + s1.dauer:
-                s1.konflikte.append(s2)
-                s2.konflikte.append(s1)
+                if (s1.partner is None or s1.partner != s2.zug) and (s2.partner is None or s2.partner != s1.zug):
+                    s1.konflikte.append(s2)
+                    s2.konflikte.append(s1)
 
         self._slots = slots
         self._belegte_gruppen = gruppen
