@@ -116,12 +116,16 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self._axes = canvas.figure.subplots()
         self._balken = None
         self._labels = []
+        self._zugdetails: mpl.text.Text = None
 
-        self._belegte_gleise: List[str] = []
+        self._gleise: List[str] = []
         self._slots: List[Slot] = []
+        self._gleis_slots: Dict[str, List[Slot]] = {}
 
         self.zeitfenster_voraus = 55
         self.zeitfenster_zurueck = 5
+
+        canvas.mpl_connect("pick_event", self.on_pick)
 
     def update(self):
         self._axes.clear()
@@ -132,9 +136,9 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         kwargs['width'] = 1.0
 
         self.belegung_berechnen()
-        x_labels = self._belegte_gleise
+        x_labels = self._gleise
         x_labels_pos = list(range(len(x_labels)))
-        x_pos = np.asarray([self._belegte_gleise.index(slot.gleis) for slot in self._slots])
+        x_pos = np.asarray([self._gleise.index(slot.gleis) for slot in self._slots])
         y_bot = np.asarray([slot.zeit for slot in self._slots])
         y_hgt = np.asarray([slot.dauer for slot in self._slots])
         labels = [slot.titel for slot in self._slots]
@@ -154,17 +158,23 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self._axes.set_ylim(bottom=zeit + self.zeitfenster_voraus, top=zeit - self.zeitfenster_zurueck, auto=False)
 
         self._balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, edgecolor=edgecolors,
-                                      linewidth=linewidth, **kwargs)
+                                      linewidth=linewidth, picker=True, **kwargs)
         self._labels = self._axes.bar_label(self._balken, labels=labels, label_type='center',
                                             fontsize='small', fontstretch='condensed')
         self._axes.axhline(y=0)
 
         self._axes.figure.tight_layout()
+
+        self._zugdetails = self._axes.text(1, zeit, 'leerfahrt', bbox={'facecolor': 'yellow', 'alpha': 0.5},
+                                           fontsize='small', fontstretch='condensed', visible=False)
+
         self._axes.figure.canvas.draw()
 
     def belegung_berechnen(self):
         gleise = set()
-        slots = list()
+        self._slots = []
+        self._gleis_slots = {}
+        self._gleise = []
 
         for zug in self.client.zugliste.values():
             for planzeile in zug.fahrplan:
@@ -177,35 +187,70 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
                 slot.zeit = time_to_minutes(slot.plan.an) + zug.verspaetung
                 try:
                     slot.dauer = max(1, time_to_minutes(slot.plan.ab) - time_to_minutes(slot.plan.an))
+                    if zug.verspaetung < 0 and not slot.plan.durchfahrt():
+                        slot.dauer -= zug.verspaetung
                 except AttributeError:
                     slot.dauer = 1
 
                 # ersatzzug anhängen
                 if ersatzzug := planzeile.ersatzzug:
-                    slot.dauer = max(1, time_to_minutes(ersatzzug.fahrplan[0].an) + zug.verspaetung - slot.zeit)
+                    try:
+                        slot.dauer = max(1, time_to_minutes(ersatzzug.fahrplan[0].an) + zug.verspaetung - slot.zeit)
+                    except IndexError:
+                        slot.dauer = 1
                 elif kuppelzug := planzeile.kuppelzug:
                     slot.kuppelzug = kuppelzug
-                    slot.dauer = max(1, time_to_minutes(kuppelzug.fahrplan[0].an) + kuppelzug.verspaetung - slot.zeit)
+                    try:
+                        slot.dauer = max(1, time_to_minutes(kuppelzug.fahrplan[0].an) + kuppelzug.verspaetung - slot.zeit)
+                    except IndexError:
+                        slot.dauer = 1
                 elif fluegelzug := planzeile.fluegelzug:
                     slot.kuppelzug = fluegelzug
 
+                try:
+                    slots = self._gleis_slots[slot.gleis]
+                except KeyError:
+                    slots = self._gleis_slots[slot.gleis] = []
                 if slot not in slots:
                     slots.append(slot)
 
-        gleise = sorted(gleise, key=gleisname_sortkey)
+        self._gleise = sorted(gleise, key=gleisname_sortkey)
 
         # konflikte erkennen
-        for s1, s2 in itertools.permutations(slots, r=2):
-            if s1.dauer >= 5:
-                s1.dauer = max(5, s1.dauer - s1.zug.verspaetung)
-            if s1.gleis == s2.gleis and s1.zeit <= s2.zeit < s1.zeit + s1.dauer:
-                if s1.kuppelzug is not None and s1.kuppelzug == s2.zug:
-                    s2.kuppelzug = s1.zug
-                elif s2.kuppelzug is not None and s2.kuppelzug == s1.zug:
-                    s1.kuppelzug = s2.zug
-                else:
-                    s1.konflikte.append(s2)
-                    s2.konflikte.append(s1)
+        for slots in self._gleis_slots.values():
+            for s1, s2 in itertools.permutations(slots, r=2):
+                if s1.dauer >= 5:
+                    s1.dauer = max(5, s1.dauer - s1.zug.verspaetung)
+                if s1.zeit <= s2.zeit < s1.zeit + s1.dauer:
+                    if s1.kuppelzug is not None and s1.kuppelzug == s2.zug:
+                        s2.kuppelzug = s1.zug
+                    elif s2.kuppelzug is not None and s2.kuppelzug == s1.zug:
+                        s1.kuppelzug = s2.zug
+                    else:
+                        s1.konflikte.append(s2)
+                        s2.konflikte.append(s1)
 
-        self._slots = slots
-        self._belegte_gleise = gleise
+        self._slots = []
+        for slots in self._gleis_slots.values():
+            self._slots.extend(slots)
+
+    def on_pick(self, event):
+        if event.mouseevent.inaxes == self._axes:
+            gleis = self._gleise[round(event.mouseevent.xdata)]
+            zeit = event.mouseevent.ydata
+            text = []
+            ymin = 24 * 60
+            ymax = 0
+            if isinstance(event.artist, mpl.patches.Rectangle):
+                for slot in self._gleis_slots[gleis]:
+                    if slot.zeit <= zeit <= slot.zeit + slot.dauer:
+                        ymin = min(ymin, slot.zeit)
+                        ymax = max(ymax, slot.zeit + slot.dauer)
+                        text.append(slot.titel)
+                        text.append(f"{slot.zug.von} - {slot.zug.nach}")
+                self._zugdetails.set(text="\n".join(text), visible=True, x=self._gleise.index(gleis), y=(ymin + ymax) / 2)
+                self._axes.figure.canvas.draw()
+        else:
+            # im mouseclick event behandeln
+            self._zugdetails.set_visible(False)
+            self._axes.figure.canvas.draw()
