@@ -273,11 +273,14 @@ class PluginClient:
             zids = [zid]
         else:
             zids = self.zugliste.keys()
-        for zid in zids:
+        for zid in map(int, zids):
             await self._send_request("zugdetails", zid=zid)
             response = await self._antwort_channel_out.receive()
-            zug = self.zugliste[int(zid)]
-            zug.update(response.zugdetails)
+            zug = self.zugliste[zid]
+            try:
+                zug.update(response.zugdetails)
+            except AttributeError:
+                del self.zugliste[zid]
             self.zuggattungen.add(zug.gattung)
 
     async def request_ereignis(self, art, zids: Iterable[int]):
@@ -304,11 +307,16 @@ class PluginClient:
             zids = [zid]
         else:
             zids = self.zugliste.keys()
-        for zid in zids:
+        for zid in map(int, zids):
+            try:
+                zug = self.zugliste[zid]
+                zug.fahrplan = []
+            except KeyError:
+                continue
+
             await self._send_request("zugfahrplan", zid=zid)
             response = await self._antwort_channel_out.receive()
-            zug = self.zugliste[int(zid)]
-            zug.fahrplan = []
+
             try:
                 for gleis in response.zugfahrplan.gleis:
                     zeile = FahrplanZeile(zug)
@@ -316,6 +324,7 @@ class PluginClient:
                     zug.fahrplan.append(zeile)
             except AttributeError:
                 pass
+
             zug.fahrplan.sort(key=lambda zfz: zfz.an)
 
     async def request_zugliste(self):
@@ -337,7 +346,7 @@ class PluginClient:
         except AttributeError:
             self.zugliste = {}
 
-    async def request_zug(self, zid: int) -> ZugDetails:
+    async def request_zug(self, zid: int) -> Optional[ZugDetails]:
         """
         einzelnen zug und fahrplan anfragen.
 
@@ -352,7 +361,10 @@ class PluginClient:
         self.zugliste[zid] = zug
         await self.request_zugdetails(zid)
         await self.request_zugfahrplan(zid)
-        return zug
+        if zug.zid in self.zugliste:
+            return zug
+        else:
+            return None
 
     async def resolve_zugflags(self, zid: Optional[Union[int, Iterable[int]]] = None):
         """
@@ -360,7 +372,7 @@ class PluginClient:
 
         da request_zugliste die folgezüge (ersatz-, flügel- und kuppelzüge) nicht automatisch erhält,
         lesen wir diese aus den zugflags aus und fragen ihre details und fahrpläne an.
-        die funtion arbeitet iterativ, bis alle folgezüge aufgelöst sind.
+        die funktion arbeitet iterativ, bis alle folgezüge aufgelöst sind.
         die züge werden in die zugliste eingetragen und im stammzug referenziert.
 
         :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
@@ -380,19 +392,22 @@ class PluginClient:
 
             for planzeile in zug.fahrplan:
                 if zid2 := planzeile.ersatz_zid():
-                    zids.add(zid2)
                     zug2 = await self.request_zug(zid2)
-                    planzeile.ersatzzug = zug2
-                    zug2.verspaetung = zug.verspaetung
+                    if zug2 is not None:
+                        planzeile.ersatzzug = zug2
+                        zug2.verspaetung = zug.verspaetung
+                        zids.add(zid2)
                 if zid2 := planzeile.fluegel_zid():
-                    zids.add(zid2)
                     zug2 = await self.request_zug(zid2)
-                    planzeile.fluegelzug = zug2
-                    zug2.verspaetung = zug.verspaetung
+                    if zug2:
+                        planzeile.fluegelzug = zug2
+                        zug2.verspaetung = zug.verspaetung
+                        zids.add(zid2)
                 if zid2 := planzeile.kuppel_zid():
-                    zids.add(zid2)
                     zug2 = await self.request_zug(zid2)
-                    planzeile.kuppelzug = zug2
+                    if zug2:
+                        planzeile.kuppelzug = zug2
+                        zids.add(zid2)
 
     def update_bahnsteig_zuege(self):
         for bahnsteig in self.bahnsteigliste.values():
