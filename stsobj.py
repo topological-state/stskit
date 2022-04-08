@@ -497,7 +497,7 @@ class FahrplanZeile:
 
         die zid kann vom plugin-client zum ersatzzug-attribut aufgelöst werden.
         """
-        mo = re.search(r"E\(([0-9]+)\)", self.flags)
+        mo = re.search(r"E[0-9]?\(([0-9]+)\)", self.flags)
         if mo:
             return int(mo.group(1))
         else:
@@ -509,7 +509,7 @@ class FahrplanZeile:
 
         die zid kann vom plugin-client zum fluegelzug-attribut aufgelöst werden.
         """
-        mo = re.search(r"F\(([0-9]+)\)", self.flags)
+        mo = re.search(r"F[0-9]?\(([0-9]+)\)", self.flags)
         if mo:
             return int(mo.group(1))
         else:
@@ -521,7 +521,7 @@ class FahrplanZeile:
 
         die zid kann vom plugin-client zum kuppelzug-attribut aufgelöst werden.
         """
-        mo = re.search(r"K\(([0-9]+)\)", self.flags)
+        mo = re.search(r"K[0-9]?\(([0-9]+)\)", self.flags)
         if mo:
             return int(mo.group(1))
         else:
