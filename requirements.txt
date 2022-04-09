@@ -5,3 +5,4 @@ PyQt5
 trio
 qtrio
 untangle
+networkx

@@ -1,3 +1,9 @@
+"""
+schematischer netzplan (experimentell)
+
+dieses modul ist in entwicklung.
+"""
+
 from typing import Any, Dict, List, Optional, Set, Union
 
 import numpy as np

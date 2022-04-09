@@ -1,3 +1,12 @@
+"""
+ereignisticker (GUI)
+
+dieses modul implementiert ein fenster mit einem ereignisticker für das sts-charts hauptprogramm (main-modul).
+
+das fenster ist in der TickerWindow-klasse implementiert.
+die EreignisTabelle-klasse bereitet die simulationsdaten für das tabellenwidget auf.
+"""
+
 import copy
 import typing
 from typing import Any, Dict, List, Optional, Set, Union
