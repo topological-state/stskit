@@ -260,7 +260,13 @@ class SlotWindow(QtWidgets.QMainWindow):
         self._axes.figure.canvas.draw()
 
     def get_slot_hint(self, slot: Slot):
-        return f"{slot.titel}\n{slot.zug.von} - {slot.zug.nach}"
+        gleise = [fpz.gleis for fpz in slot.zug.fahrplan if fpz.gleis]
+        if slot.zug.von:
+            gleise.insert(0, slot.zug.von)
+        if slot.zug.nach:
+            gleise.append(slot.zug.nach)
+        weg = " - ".join(gleise)
+        return "\n".join([slot.titel, weg])
 
     def on_pick(self, event):
         if event.mouseevent.inaxes == self._axes:

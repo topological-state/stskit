@@ -67,6 +67,8 @@ class EinfahrtenWindow(KnotenWindow):
         self.knoten_typ = 'Einfahrt'
 
     def get_slot(self, zug: ZugDetails) -> Optional[Slot]:
+        if zug.sichtbar:
+            return None
         try:
             planzeile = zug.fahrplan[0]
             slot = Slot(zug, planzeile, zug.von)
@@ -105,7 +107,7 @@ class AusfahrtenWindow(KnotenWindow):
             slot.dauer = 1
             korrektur = self.auswertung.fahrzeiten.get_fahrzeit(planzeile.gleis, zug.nach) / 60
             if not np.isnan(korrektur):
-                slot.zeit = slot.zeit - round(korrektur)
+                slot.zeit = slot.zeit + round(korrektur)
         except (AttributeError, IndexError):
             slot = None
 
