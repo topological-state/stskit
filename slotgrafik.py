@@ -107,14 +107,17 @@ class Slot:
             return 'tab:blue'
         elif self.zug.gattung in {'S'}:
             return 'tab:purple'
-        elif self.zug.nummer < 2000:
-            return 'tab:green'
-        elif self.zug.nummer < 10000:
-            return 'tab:blue'
-        elif self.zug.nummer < 30000:
-            return 'tab:purple'
+        elif nummer := self.zug.nummer > 0:
+            if nummer < 2000:
+                return 'tab:green'
+            elif nummer < 10000:
+                return 'tab:blue'
+            elif nummer < 30000:
+                return 'tab:purple'
+            else:
+                return 'tab:brown'
         else:
-            return 'tab:brown'
+            return 'tab:gray'
 
     @property
     def randfarbe(self) -> str:

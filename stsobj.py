@@ -322,7 +322,7 @@ class ZugDetails:
         s = "".join((c for c in self.name if c.isnumeric() or c == " "))
         try:
             return int(s.rsplit(maxsplit=1)[-1])
-        except ValueError:
+        except (IndexError, ValueError):
             return 0
 
     @property
