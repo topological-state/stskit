@@ -5,7 +5,7 @@ import pandas as pd
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis, time_to_seconds
-from database import StsConfig
+from anlage import Anlage
 
 
 class FahrzeitAuswertung:
@@ -45,7 +45,7 @@ class FahrzeitAuswertung:
         :param fahrzeit in sekunden
         :return: None
         """
-        print(f"add_fahrzeit({zug.name}, {start}, {ziel}, {fahrzeit})")
+        # print(f"add_fahrzeit({zug.name}, {start}, {ziel}, {fahrzeit})")
         self.fahrten.loc[-1] = {'zug': zug.nummer, 'gattung': zug.gattung, 'von': start, 'nach': ziel, 'zeit': fahrzeit}
         self.fahrten.index = pd.RangeIndex(self.fahrten.shape[0])
         self.zeiten = pd.pivot_table(self.fahrten, columns='von', index='nach', values='zeit', aggfunc=np.min)
@@ -314,8 +314,8 @@ class ZugAuswertung:
 
 
 class StsAuswertung:
-    def __init__(self, config: StsConfig):
-        self.config: StsConfig = config
+    def __init__(self, config: Anlage):
+        self.config: Anlage = config
         self.fahrzeiten: FahrzeitAuswertung = FahrzeitAuswertung()
         self.zuege: ZugAuswertung = ZugAuswertung()
         self._update_koordinaten()

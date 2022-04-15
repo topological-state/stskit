@@ -19,6 +19,12 @@ import untangle
 
 
 def time_to_minutes(dt: Union[datetime.datetime, datetime.time, datetime.timedelta]) -> int:
+    """
+    uhrzeit in minuten seit mitternacht umrechnen.
+
+    :param dt: datetime, time oder timedelta objekt. das datum wird ignoriert.
+    :return: minuten, ganzzahlig
+    """
     try:
         # datetime, time
         return dt.hour * 60 + dt.minute
@@ -28,6 +34,12 @@ def time_to_minutes(dt: Union[datetime.datetime, datetime.time, datetime.timedel
 
 
 def time_to_seconds(dt: Union[datetime.datetime, datetime.time, datetime.timedelta]) -> int:
+    """
+    uhrzeit in sekunden seit mitternacht umrechnen.
+
+    :param dt: datetime, time oder timedelta objekt. das datum wird ignoriert.
+    :return: sekunden, ganzzahlig
+    """
     try:
         # datetime, time
         return dt.hour * 3600 + dt.minute * 60 + dt.second
@@ -82,8 +94,8 @@ class BahnsteigInfo:
 
     bemerkungen:
     - in der liste 'zuege', führt der klient die züge, die den bahnsteig in ihrem fahrplan haben.
-    - die genaue bedeutung der nachbarn habe ich noch nicht verstanden.
-      die namen der nachbarn werden in der aktuellen version unverarbeitet übernommen.
+    - die namen der nachbarbahnsteige wird in nachbar_namen gespeichert.
+      der klient löst die namen in objekte auf und speichert sie in nachbarn.
     """
 
     # xml-tagname
@@ -93,7 +105,8 @@ class BahnsteigInfo:
         super().__init__()
         self.name: str = ""
         self.haltepunkt: bool = False
-        self.nachbarn: Set[str] = set()
+        self.nachbarn_namen: List[str] = []
+        self.nachbarn: List['BahnsteigInfo'] = []
         self.zuege: List['ZugDetails'] = []
 
     def __str__(self) -> str:
@@ -116,9 +129,10 @@ class BahnsteigInfo:
         self.name = item['name']
         self.haltepunkt = str(item['haltepunkt']).lower() == 'true'
         try:
-            self.nachbarn = {n['name'] for n in item.n}
+            self.nachbarn_namen = sorted([n['name'] for n in item.n])
         except AttributeError:
-            self.nachbarn = set()
+            self.nachbarn_namen = []
+        self.nachbarn = []
         return self
 
 

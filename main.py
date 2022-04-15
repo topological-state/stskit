@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional, Set, Union
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 
 from stsplugin import PluginClient, TaskDone
-from database import StsConfig
+from anlage import Anlage
 from auswertung import StsAuswertung
 from stsobj import Ereignis
 from einausfahrten import EinfahrtenWindow, AusfahrtenWindow
@@ -29,7 +29,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.debug: bool = False
         self.closed = trio.Event()
         self.client: Optional[PluginClient] = None
-        self.config: Optional[StsConfig] = None
+        self.anlage: Optional[Anlage] = None
         self.config_path = "charts.json"
         self.auswertung: Optional[StsAuswertung] = None
 
@@ -77,8 +77,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.einfahrten_window = EinfahrtenWindow()
         if self.einfahrten_window.client is None:
             self.einfahrten_window.client = self.client
-        if self.einfahrten_window.config is None:
-            self.einfahrten_window.config = self.config
+        if self.einfahrten_window.anlage is None:
+            self.einfahrten_window.anlage = self.anlage
         if self.einfahrten_window.auswertung is None:
             self.einfahrten_window.auswertung = self.auswertung
 
@@ -90,8 +90,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ausfahrten_window = AusfahrtenWindow()
         if self.ausfahrten_window.client is None:
             self.ausfahrten_window.client = self.client
-        if self.ausfahrten_window.config is None:
-            self.ausfahrten_window.config = self.config
+        if self.ausfahrten_window.anlage is None:
+            self.ausfahrten_window.anlage = self.anlage
         if self.ausfahrten_window.auswertung is None:
             self.ausfahrten_window.auswertung = self.auswertung
 
@@ -103,8 +103,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.gleisbelegung_window = GleisbelegungWindow()
         if self.gleisbelegung_window.client is None:
             self.gleisbelegung_window.client = self.client
-        if self.gleisbelegung_window.config is None:
-            self.gleisbelegung_window.config = self.config
+        if self.gleisbelegung_window.anlage is None:
+            self.gleisbelegung_window.anlage = self.anlage
         if self.gleisbelegung_window.auswertung is None:
             self.gleisbelegung_window.auswertung = self.auswertung
 
@@ -116,8 +116,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.netz_window = GleisnetzWindow()
         if self.netz_window.client is None:
             self.netz_window.client = self.client
-        if self.netz_window.config is None:
-            self.netz_window.config = self.config
+        if self.netz_window.anlage is None:
+            self.netz_window.anlage = self.anlage
         if self.netz_window.auswertung is None:
             self.netz_window.auswertung = self.auswertung
 
@@ -131,7 +131,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if event.isAccepted():
             try:
-                self.config.save(self.config_path)
+                self.anlage.save_config(self.config_path)
             except (AttributeError, OSError):
                 pass
 
@@ -169,19 +169,19 @@ class MainWindow(QtWidgets.QMainWindow):
         for art in Ereignis.arten:
             await self.client.request_ereignis(art, self.client.zugliste.keys())
 
-        if not self.config:
-            self.config = StsConfig(self.client.anlageninfo)
+        if not self.anlage:
+            self.anlage = Anlage(self.client.anlageninfo)
+            self.anlage.auto_config(self.client)
             try:
-                self.config.load(self.config_path)
+                self.anlage.load_config(self.config_path)
             except (OSError, ValueError):
                 pass
-            if self.config.auto:
-                self.config.auto_config(self.client)
+            self.anlage.validate()
 
         if self.auswertung:
             self.auswertung.zuege_uebernehmen(self.client.zugliste.values())
         else:
-            self.auswertung = StsAuswertung(self.config)
+            self.auswertung = StsAuswertung(self.anlage)
 
     async def get_sts_data(self, alles=False):
         if alles or not self.client.anlageninfo:
@@ -203,7 +203,7 @@ class MainWindow(QtWidgets.QMainWindow):
 async def main():
     window = MainWindow()
 
-    client = PluginClient(name='sts-charts', autor='bummler', version='0.5',
+    client = PluginClient(name='sts-charts', autor='bummler', version='0.6',
                           text='sts-charts: grafische fahrpläne und gleisbelegungen')
     await client.connect()
     window.client = client

@@ -17,7 +17,7 @@ import re
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 from auswertung import StsAuswertung
-from database import StsConfig
+from anlage import Anlage
 from stsplugin import PluginClient
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes
 
@@ -193,7 +193,7 @@ class SlotWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.client: Optional[PluginClient] = None
-        self.config: Optional[StsConfig] = None
+        self.anlage: Optional[Anlage] = None
         self.auswertung: Optional[StsAuswertung] = None
 
         self.setWindowTitle("slot-grafik")

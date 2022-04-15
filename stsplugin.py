@@ -174,6 +174,10 @@ class PluginClient:
             bi = BahnsteigInfo().update(bahnsteig)
             self.bahnsteigliste[bi.name] = bi
 
+        for bahnsteig in self.bahnsteigliste.values():
+            bahnsteig.nachbarn = [self.bahnsteigliste[name] for name in bahnsteig.nachbarn_namen]
+            bahnsteig.nachbarn.sort(key=lambda b: b.name)
+
     async def request_simzeit(self) -> datetime.datetime:
         """
         simulatorzeit anfragen.
@@ -532,7 +536,7 @@ async def test():
     print("\nbahnsteige\n")
     for bi in client.bahnsteigliste.values():
         print(bi)
-        print("  nachbarn: ", ", ".join(sorted(bi.nachbarn)))
+        print("  nachbarn: ", ", ".join(sorted(bi.nachbarn_namen)))
 
     print("\neinfahrten\n")
     for knoten in client.wege_nach_typ[6]:
