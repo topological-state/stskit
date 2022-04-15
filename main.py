@@ -152,7 +152,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.gleisbelegung_window.update()
             if self.netz_window is not None:
                 self.netz_window.update()
-            await trio.sleep(60)
+            await trio.sleep(30)
 
     async def ereignis_loop(self):
         await self.client.registered.wait()

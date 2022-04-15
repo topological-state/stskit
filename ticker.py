@@ -46,7 +46,7 @@ async def query(client: PluginClient, args: argparse.Namespace) -> None:
         await client.resolve_zugflags()
         for art in Ereignis.arten:
             await client.request_ereignis(art, client.zugliste.keys())
-        await trio.sleep(60)
+        await trio.sleep(30)
 
 
 async def report(client: PluginClient, args: argparse.Namespace) -> None:

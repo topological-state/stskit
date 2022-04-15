@@ -287,14 +287,21 @@ class PluginClient:
         """
         ereignismeldung anfordern
 
+        bemerkung: nach namenswechsel muss man ereignismeldungen neu anfordern.
+        ausser für "einfahrt" schicken wir daher anforderungen nur, wenn der zug sichtbar ist.
+
+        anforderungen werden in registrierte_ereignisse notiert,
+        damit sie nicht wiederholt gesendet werden.
+
         :param art: art des ereignisses, cf. model.Ereignis.arten
         :param zids: menge oder sequenz von zug-id-nummern
         :return: None
         """
         zids = set(zids).difference(self.registrierte_ereignisse[art])
         for zid in zids:
-            await self._send_request("ereignis", art=art, zid=zid)
-            self.registrierte_ereignisse[art].update(zids)
+            if zid in self.zugliste and (art == "einfahrt" or self.zugliste[zid].sichtbar):
+                await self._send_request("ereignis", art=art, zid=zid)
+                self.registrierte_ereignisse[art].add(zid)
 
     async def request_zugfahrplan(self, zid: Optional[Union[int, Iterable[int]]] = None):
         """
