@@ -13,7 +13,7 @@ class GleisbelegungWindow(SlotWindow):
         self.zeitfenster_voraus = 55
         self.zeitfenster_zurueck = 5
 
-    def slots_erstellen(self) -> Generator[Slot, None, None]:
+    def slots_erstellen(self) -> Iterable[Slot]:
         for zug in self.client.zugliste.values():
             for planzeile in zug.fahrplan:
                 if not planzeile.gleis:

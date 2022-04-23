@@ -19,7 +19,7 @@ class KnotenWindow(SlotWindow):
         self.zeitfenster_voraus = 30
         self.zeitfenster_zurueck = 0
 
-    def slots_erstellen(self) -> Generator[Slot, None, None]:
+    def slots_erstellen(self) -> Iterable[Slot]:
         for knoten in self.client.wege_nach_typ[Knoten.TYP_NUMMER[self.knoten_typ]]:
             if not knoten.name:
                 continue

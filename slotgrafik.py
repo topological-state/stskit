@@ -146,7 +146,7 @@ class Slot:
             return f"{self.zug.name}"
 
     @property
-    def style(self) -> str:
+    def fontstyle(self) -> str:
         """
         schriftstil markiert halt oder durchfahrt
 
@@ -154,12 +154,40 @@ class Slot:
         """
         return "italic" if self.plan.durchfahrt() else "normal"
 
+    @property
+    def linestyle(self) -> str:
+        """
+        linienstil markiert halt oder durchfahrt
+
+        :return: "-" oder "--"
+        """
+        return "--" if self.plan.durchfahrt() else "-"
+
+    @property
+    def linewidth(self) -> int:
+        """
+        linienbreite verdoppeln bei konflikt oder kuppelvorgang.
+
+        :return: 1 oder 2
+        """
+        return 2 if self.konflikte or self.kuppelzug else 1
+
 
 class SlotWindow(QtWidgets.QMainWindow):
     """
     gemeinsamer vorfahr für slotdiagrammfenster
 
     nachfahren implementieren die slots_erstellen- und konflikte_loesen-methoden.
+
+    der code besteht im wesentlichen aus drei teilen:
+    - die interpretation von zugdaten geschieht in der daten_update-methode
+      und den von ihr aufgerufenen slots_erstellen und konflikte_loesen methoden.
+      die interpretierten zugdaten werden in _slots zwischengespeichert.
+    - die grafische darstellung geschieht in der grafik_update-methode.
+      diese setzt die information aus _slots in grafikbefehle um,
+      und sollte keine interpretation von zugdaten durchführen.
+    - interaktion. als einzige interaktion kann der user auf einen balken klicken,
+      wonach der fahrplan des zuges sowie ggf. jener von konfliktzügen angezeigt wird.
     """
 
     def __init__(self):
@@ -190,10 +218,33 @@ class SlotWindow(QtWidgets.QMainWindow):
         canvas.mpl_connect("pick_event", self.on_pick)
 
     def update(self):
+        """
+        daten und grafik neu aufbauen.
+
+        nötig, wenn sich z.b. der fahrplan oder verspätungsinformationen geändert haben.
+        einfache fensterereignisse werden von der grafikbibliothek selber bearbeitet.
+
+        :return: None
+        """
         self.daten_update()
         self.grafik_update()
 
     def daten_update(self):
+        """
+        slotliste neu aufbauen.
+
+        diese methode liest die zugdaten vom client neu ein und
+        baut die _slots, _gleis_slots und _gleise attribute neu auf.
+
+        die wesentliche arbeit, die slot-objekte aufzubauen wird an die slots_erstellen methode delegiert,
+        die erst von nachfahrklassen implementiert wird.
+
+        in einem zweiten schritt, werden pro gleis, allfällige konflikte gelöst.
+        dies wird an die konflikte_loesen methode delegiert,
+        die ebenfalls erst von nachfahrklassen implementiert wird.
+
+        :return: None
+        """
         self._slots = []
         self._gleis_slots = {}
         self._gleise = []
@@ -206,21 +257,58 @@ class SlotWindow(QtWidgets.QMainWindow):
             if slot not in slots:
                 slots.append(slot)
 
+        g_s_neu = {}
         for gleis, slots in self._gleis_slots.items():
-            self.konflikte_loesen(gleis, slots)
+            g_s_neu[gleis] = self.konflikte_loesen(gleis, slots)
+        self._gleis_slots = g_s_neu
 
         self._gleise = sorted(self._gleis_slots.keys(), key=gleisname_sortkey)
         self._slots = []
         for slots in self._gleis_slots.values():
             self._slots.extend(slots)
 
-    def slots_erstellen(self) -> Generator[Slot, None, None]:
-        pass
+    def slots_erstellen(self) -> Iterable[Slot]:
+        """
+        slots erstellen (abstrakt)
+
+        diese methode erstellt für jeden slot, der in der grafik dargestellt werden soll, ein Slot-objekt
+        und gibt es in einer iterablen (liste, generator, etc.) zurück.
+
+        diese methode muss von nachfahrklassen implementiert werden - sonst bleibt die grafik leer.
+
+        alle Slot-attribute müssen gemäss dokumentation gesetzt werden,
+        ausser des konflikte-attributes (dieses wird von konflikte_loesen bearbeitet):
+
+        :return: iterable oder generator liefert eine sequenz von Slot-objekten.
+        """
+        return []
 
     def konflikte_loesen(self, gleis: str, slots: List[Slot]) -> List[Slot]:
-        pass
+        """
+        konflikte erkennen und markieren oder lösen
+
+        diese methode erkennt und löst belegungskonflikte.
+
+        diese methode kann von nachfahrklassen implementiert werden,
+        sofern sie eine konflikterkennung anbieten.
+
+        :param gleis: name des gleises für das konflikte bearbeitet werden sollen.
+        :param slots: liste aller slots, die zu dem gleis erfasst sind.
+        :return: veränderte oder identische slots-liste.
+            die liste kann frei verändert oder gleich belassen werden,
+            sie muss lediglich vollständig definierte Slot-objekte zu dem angegebenen gleis enthalten.
+        """
+        return slots
 
     def grafik_update(self):
+        """
+        erstellt das balkendiagramm basierend auf slot-daten
+
+        diese methode beinhaltet nur grafikcode.
+        alle interpretation von zugdaten soll in daten_update, slots_erstellen, etc. gemacht werden.
+
+        :return: None
+        """
         self._axes.clear()
 
         kwargs = dict()
@@ -235,25 +323,31 @@ class SlotWindow(QtWidgets.QMainWindow):
         y_hgt = np.asarray([slot.dauer for slot in self._slots])
         labels = [slot.titel for slot in self._slots]
         colors = [slot.farbe for slot in self._slots]
-        style = [slot.style for slot in self._slots]
-        edgecolors = [slot.randfarbe for slot in self._slots]
-        linewidth = [w for w in map(lambda f: 1 if f == 'k' else 2, edgecolors)]
 
         self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
         self._axes.yaxis.set_major_formatter(hour_minutes_formatter)
         self._axes.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(1))
-        self._axes.yaxis.set_major_locator(mpl.ticker.MultipleLocator(10))
+        self._axes.yaxis.set_major_locator(mpl.ticker.MultipleLocator(5))
         self._axes.yaxis.grid(True, which='major')
         self._axes.xaxis.grid(True)
 
         zeit = time_to_minutes(self.client.calc_simzeit())
         self._axes.set_ylim(bottom=zeit + self.zeitfenster_voraus, top=zeit - self.zeitfenster_zurueck, auto=False)
 
-        self._balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, edgecolor=edgecolors,
-                                      linewidth=linewidth, picker=True, **kwargs)
-        self._labels = self._axes.bar_label(self._balken, labels=labels, label_type='center',
-                                            fontsize='small', fontstretch='condensed')
-        self._axes.axhline(y=0)
+        self._balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, picker=True, **kwargs)
+
+        for balken, slot in zip(self._balken, self._slots):
+            balken.set(linestyle=slot.linestyle, linewidth=slot.linewidth, edgecolor=slot.randfarbe)
+
+        self._labels = self._axes.bar_label(self._balken, labels=labels, label_type='center')
+        for label, slot in zip(self._labels, self._slots):
+            label.set(fontstyle=slot.fontstyle, fontsize='small', fontstretch='condensed')
+
+        for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
+            item.set_fontsize('small')
+
+        if self.zeitfenster_zurueck > 0:
+            self._axes.axhline(y=zeit, color='k', lw=1)
 
         self._axes.figure.tight_layout()
 
