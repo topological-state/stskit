@@ -117,7 +117,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.netz_window: Optional[QtWidgets.QWidget] = None
         self.netz_button.setEnabled(True)
 
-        self.enable_update = True
+        self.update_interval: int = 30  # seconds
+        self.enable_update: bool = True
 
     def ticker_clicked(self):
         if not self.ticker_window:
@@ -195,16 +196,24 @@ class MainWindow(QtWidgets.QMainWindow):
     async def update_loop(self):
         await self.client.registered.wait()
         while self.enable_update:
-            await self.update()
-            if self.einfahrten_window is not None:
-                self.einfahrten_window.update()
-            if self.ausfahrten_window is not None:
-                self.ausfahrten_window.update()
-            if self.gleisbelegung_window is not None:
-                self.gleisbelegung_window.update()
-            if self.netz_window is not None:
-                self.netz_window.update()
-            await trio.sleep(30)
+            try:
+                await self.update()
+            except (trio.EndOfChannel, trio.BrokenResourceError, trio.ClosedResourceError):
+                self.enable_update = False
+                break
+            except trio.BusyResourceError:
+                pass
+            else:
+                if self.einfahrten_window is not None:
+                    self.einfahrten_window.update()
+                if self.ausfahrten_window is not None:
+                    self.ausfahrten_window.update()
+                if self.gleisbelegung_window is not None:
+                    self.gleisbelegung_window.update()
+                if self.netz_window is not None:
+                    self.netz_window.update()
+
+            await trio.sleep(self.update_interval)
 
     async def ereignis_loop(self):
         await self.client.registered.wait()
