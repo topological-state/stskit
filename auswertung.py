@@ -1,11 +1,15 @@
 import datetime
-
+import logging
 import numpy as np
 import pandas as pd
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis, time_to_seconds
 from anlage import Anlage
+
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class FahrzeitAuswertung:
@@ -45,7 +49,7 @@ class FahrzeitAuswertung:
         :param fahrzeit in sekunden
         :return: None
         """
-        # print(f"add_fahrzeit({zug.name}, {start}, {ziel}, {fahrzeit})")
+        logger.debug(f"add_fahrzeit({zug.name}, {start}, {ziel}, {fahrzeit})")
         self.fahrten.loc[-1] = {'zug': zug.nummer, 'gattung': zug.gattung, 'von': start, 'nach': ziel, 'zeit': fahrzeit}
         self.fahrten.index = pd.RangeIndex(self.fahrten.shape[0])
         self.zeiten = pd.pivot_table(self.fahrten, columns='von', index='nach', values='zeit', aggfunc=np.min)
@@ -56,15 +60,16 @@ class FahrzeitAuswertung:
         # self.zeiten.index = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
 
     def report(self):
-        try:
-            self.fahrten.to_csv("fahrten.csv")
-        except AttributeError:
-            pass
+        if logger.isEnabledFor(logging.INFO):
+            try:
+                self.fahrten.to_csv("fahrten.csv")
+            except AttributeError:
+                pass
 
-        try:
-            self.zeiten.to_csv("zeiten.csv")
-        except AttributeError:
-            pass
+            try:
+                self.zeiten.to_csv("zeiten.csv")
+            except AttributeError:
+                pass
 
     def get_fahrzeit(self, start: str, ziel: str) -> Union[int, float]:
         """

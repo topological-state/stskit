@@ -1,12 +1,17 @@
-import copy
 from collections.abc import Set
 import json
-import networkx as nx
+import logging
 import re
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
+import networkx as nx
+
 from stsobj import AnlagenInfo, BahnsteigInfo, Knoten
 from stsplugin import PluginClient
+
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -310,23 +315,22 @@ class Anlage:
 
             all_nodes = set().union(*gruppen.values())
             all_nodes = sorted(all_nodes)
-            print(all_nodes)
 
             nodes = {n for c in gruppen.values() for n in c if n in self.bahnhof_graph.nodes}
             nodes = sorted(nodes)
-            print(nodes)
 
-            print(sorted(self.bahnhof_graph.nodes))
-
-            print(len(self.bahnhof_graph), len(nodes), sum(len(c) for c in gruppen))
-            for k, c in gruppen.items():
-                print(k, sorted(c))
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug("--- bahnhof_graph_erstellen debug info")
+                logger.debug(str(all_nodes))
+                logger.debug(str(nodes))
+                logger.debug(str(sorted(self.bahnhof_graph.nodes)))
+                logger.debug(f"{len(self.bahnhof_graph)}, {len(nodes)}, {sum(len(c) for c in gruppen)}")
+                for k, c in gruppen.items():
+                    logger.debug(f"{k}, {sorted(c)}")
+                logger.debug("---")
 
             self.bahnhof_graph = nx.quotient_graph(self.bahnhof_graph, gruppen)
             self.bahnhof_graph = nx.relabel_nodes(self.bahnhof_graph, get_gruppen_name)
-            # for n in self._graph.nodes:
-            #     print(n)
-            #     print(self._graph.nodes[n]['graph'])
 
         except AttributeError:
             pass

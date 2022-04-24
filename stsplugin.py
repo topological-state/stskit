@@ -12,16 +12,29 @@ vorsicht ist bei der verwendung von parallelen tasks geboten,
 damit sich zwei serveranfragen nicht überschneiden können.
 am besten werden alle anfragen im gleichen asyncio-task gestellt.
 parallel dazu kann in einem eigenen task, die ereignis-queue abgefragt werden, siehe ticker-programm.
+
+logging:
+
+stsplugin nutzt einen eigenen logger mit dem namen "stsplugin" aus dem logging modul der standardbibliothek.
+vorsicht: auf stufe DEBUG wird die gesamte kommunikation mit dem simulator ausgegeben!
+wenn dies nicht gewünscht wird, der rest des programms aber auf DEBUG bleiben soll,
+kann die stufe dieses moduls individuell angepasst werden durch
+"logging.getLogger('stsplugin').setLevel(logging.WARNING)".
 """
 
 import trio
 import datetime
+import logging
 from typing import Any, Dict, List, Iterable, Mapping, Optional, Set, Union
 import untangle
 
 from xml.sax import make_parser
 
 from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis
+
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 def check_status(status: untangle.Element):
@@ -32,10 +45,14 @@ def check_status(status: untangle.Element):
 class PluginClient:
     def __init__(self, name: str, autor: str, version: str, text: str):
         self._stream: Optional[trio.abc.Stream] = None
+        self._antwort_channel_in: Optional[trio.MemorySendChannel] = None
+        self._antwort_channel_out: Optional[trio.MemoryReceiveChannel] = None
+        self._ereignis_channel_in: Optional[trio.MemorySendChannel] = None
+        self._ereignis_channel_out: Optional[trio.MemoryReceiveChannel] = None
+
         self.connected = trio.Event()
         self.registered = trio.Event()
 
-        self.debug: bool = False
         self.name: str = name
         self.autor: str = autor
         self.version: str = version
@@ -76,11 +93,13 @@ class PluginClient:
         """
         args = [f"{k}='{v}'" for k, v in kwargs.items()]
         args = " ".join(args)
-        req = f"<{tag} {args} />\n"
+        req = f"<{tag} {args} />"
+        logger.debug("senden: " + req)
+        req += "\n"
         data = req.encode()
         await self._stream.send_all(data)
 
-    async def _receiver(self, *, task_status=trio.TASK_STATUS_IGNORED):
+    async def receiver(self, *, task_status=trio.TASK_STATUS_IGNORED):
         """
         empfangsschleife: antworten empfangen und verteilen
 
@@ -104,8 +123,7 @@ class PluginClient:
             async with self._ereignis_channel_in:
                 async for bs in self._stream:
                     for s in bs.decode().split('\n'):
-                        if self.debug:
-                            print(s)
+                        logger.debug("empfang: " + s)
                         if s:
                             parser.feed(s)
 
@@ -514,7 +532,7 @@ async def test():
     try:
         async with client._stream:
             async with trio.open_nursery() as nursery:
-                await nursery.start(client._receiver)
+                await nursery.start(client.receiver)
                 await client.register()
                 await client.request_simzeit()
                 await client.request_anlageninfo()

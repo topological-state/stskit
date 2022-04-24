@@ -2,11 +2,15 @@
 slot-grafikfenster für einfahrten und ausfahrten.
 """
 
+import logging
 import numpy as np
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 from stsobj import time_to_minutes, Knoten, ZugDetails, FahrplanZeile
 from slotgrafik import Slot, SlotWindow
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class KnotenWindow(SlotWindow):

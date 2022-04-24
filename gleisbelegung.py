@@ -1,8 +1,12 @@
 import itertools
+import logging
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 from stsobj import time_to_minutes, Knoten
 from slotgrafik import Slot, SlotWindow
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class GleisbelegungWindow(SlotWindow):

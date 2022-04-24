@@ -13,9 +13,14 @@ die update-methoden erwarten geparste xml-daten in untangle.Element objekten.
 """
 
 import datetime
+import logging
 import re
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 import untangle
+
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 def time_to_minutes(dt: Union[datetime.datetime, datetime.time, datetime.timedelta]) -> int:

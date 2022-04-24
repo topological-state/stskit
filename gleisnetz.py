@@ -4,6 +4,7 @@ schematischer netzplan (experimentell)
 dieses modul ist in entwicklung.
 """
 
+import logging
 from typing import Any, Dict, List, Optional, Set, Union
 
 import numpy as np
@@ -16,6 +17,9 @@ import networkx as nx
 from stsplugin import PluginClient
 from anlage import Anlage
 from auswertung import StsAuswertung
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class GleisnetzWindow(QtWidgets.QMainWindow):

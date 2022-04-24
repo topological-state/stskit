@@ -101,7 +101,7 @@ async def main(args: argparse.Namespace) -> None:
     try:
         async with client._stream:
             async with trio.open_nursery() as nursery:
-                await nursery.start(client._receiver)
+                await nursery.start(client.receiver)
                 await client.register()
                 await client.request_simzeit()
                 await client.request_anlageninfo()

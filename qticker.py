@@ -8,7 +8,7 @@ die EreignisTabelle-klasse bereitet die simulationsdaten für das tabellenwidget
 """
 
 import copy
-import typing
+import logging
 from typing import Any, Dict, List, Optional, Set, Union
 
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
@@ -19,6 +19,8 @@ from anlage import Anlage
 from auswertung import StsAuswertung
 from stsobj import Ereignis
 
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 EREIGNISART_QCOLOR = {
     "einfahrt": QtGui.QColor("darkYellow"),
@@ -61,7 +63,7 @@ class EreignisTabelle(QtCore.QAbstractTableModel):
     def rowCount(self, parent: QModelIndex = ...) -> int:
         return len(self.ereignisse)
 
-    def data(self, index: QModelIndex, role: int = ...) -> typing.Any:
+    def data(self, index: QModelIndex, role: int = ...) -> Any:
         if not index.isValid():
             return None
 
@@ -104,7 +106,7 @@ class EreignisTabelle(QtCore.QAbstractTableModel):
         elif role == QtCore.Qt.TextAlignmentRole:
             return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
 
-    def headerData(self, section: int, orientation: QtCore.Qt.Orientation, role: int = ...) -> typing.Any:
+    def headerData(self, section: int, orientation: QtCore.Qt.Orientation, role: int = ...) -> Any:
         if role == QtCore.Qt.DisplayRole:
             if orientation == QtCore.Qt.Horizontal:
                 return str(self._columns[section])

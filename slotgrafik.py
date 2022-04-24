@@ -7,19 +7,24 @@ spezifische implementationen sind die gleisbelegungs-, einfahrts- und ausfahrtst
 """
 
 from dataclasses import dataclass, field
+import logging
+import re
+from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
+
 import matplotlib as mpl
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import numpy as np
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
-import re
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 from auswertung import StsAuswertung
 from anlage import Anlage
 from stsplugin import PluginClient
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 mpl.use('Qt5Agg')
 
