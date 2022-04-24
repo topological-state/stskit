@@ -326,9 +326,8 @@ class StsAuswertung:
         self._update_koordinaten()
 
     def _update_koordinaten(self):
-        wegpunkte = {**self.config.bahnsteigsgruppen,
-                     **self.config.einfahrtsgruppen,
-                     **self.config.ausfahrtsgruppen}
+        wegpunkte = {**self.config.bahnsteiggruppen,
+                     **self.config.anschlussgruppen}
         self.fahrzeiten.set_koordinaten(wegpunkte)
 
     def zuege_uebernehmen(self, zuege: Iterable[ZugDetails]):

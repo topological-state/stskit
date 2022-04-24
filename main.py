@@ -82,8 +82,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.closed = trio.Event()
         self.client: Optional[PluginClient] = None
         self.anlage: Optional[Anlage] = None
-        self.config_path = "charts.json"
         self.auswertung: Optional[StsAuswertung] = None
+
+        self.config_path = Path.home() / r".stskit"
+        self.config_path.mkdir(exist_ok=True)
 
         self.setWindowTitle("sts-charts")
         self._main = QtWidgets.QWidget()
@@ -230,12 +232,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if not self.anlage:
             self.anlage = Anlage(self.client.anlageninfo)
-            self.anlage.auto_config(self.client)
-            try:
-                self.anlage.load_config(self.config_path)
-            except (OSError, ValueError):
-                pass
-            self.anlage.validate()
+        self.anlage.update(self.client, self.config_path)
 
         if self.auswertung:
             self.auswertung.zuege_uebernehmen(self.client.zugliste.values())

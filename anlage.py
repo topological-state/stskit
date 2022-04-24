@@ -1,12 +1,15 @@
+import itertools
+import os
 from collections.abc import Set
 import json
 import logging
-import re
+from pathlib import Path
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 import networkx as nx
+import numpy as np
 
-from stsobj import AnlagenInfo, BahnsteigInfo, Knoten
+from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, time_to_seconds
 from stsplugin import PluginClient
 
 
@@ -29,6 +32,10 @@ class JSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, Set):
             return dict(__class__='Set', data=list(obj))
+        if isinstance(obj, frozenset):
+            return dict(__class__='frozenset', data=list(obj))
+        if isinstance(obj, nx.Graph):
+            return "networkx.Graph"
         else:
             return super().default(obj)
 
@@ -48,35 +55,20 @@ def common_prefix(lst: Iterable) -> Generator[str, None, None]:
             return
 
 
-def strip_signals(g: nx.Graph) -> nx.Graph:
+def gemeinsamer_name(g: Iterable) -> str:
+    return ''.join(common_prefix(g)).strip()
+
+
+def dict_union(*gr: Dict[str, Set[Any]]) -> Dict[str, Set[Any]]:
     """
-    signale aus graph entfernen
+    merge dictionaries of sets.
 
-    alle signalknoten werden entfernt, ihre nachbarknoten direkt miteinander verbunden.
+    the given dictionaries are merged.
+    if two dictionaries contain the same key, the union of their values is stored.
 
-    :param g: ursprünglicher graph
-    :return: neuer graph
+    :param gr: any number of dictionaries containing sets as values
+    :return: merged dictionary
     """
-    h = g
-    n2 = len(g)
-    n1 = n2 + 1
-    while n2 < n1:
-        n1 = n2
-        h = g.copy(as_view=False)
-        for edge in g.edges:
-            if g.nodes[edge[0]]['typ'] != 2 and g.nodes[edge[1]]['typ'] == 2:
-                try:
-                    nx.contracted_edge(h, edge, self_loops=False, copy=False)
-                except ValueError:
-                    pass
-
-        n2 = len(nx.subgraph_view(h, lambda n: h.nodes[n]['typ'] == 2))
-        g = h
-
-    return h
-
-
-def gruppen_union(*gr: Dict[str, Set[str]]):
     d = dict()
     for g in gr:
         for k, v in g.items():
@@ -87,71 +79,247 @@ def gruppen_union(*gr: Dict[str, Set[str]]):
     return d
 
 
-def get_gruppen_name(g):
-    return ''.join(common_prefix(g))
+def find_set_item_in_dict(item: Any, mapping: Mapping[Any, Set[Any]]) -> Any:
+    """
+    look up a set member in a key->set mapping.
+
+    :param item: item to find in one of the sets in the dictonary.
+    :param mapping: mapping->set
+    :return: key
+    :raise ValueError if not found
+    """
+    for k, s in mapping.items():
+        if item in s:
+            return k
+    else:
+        raise ValueError(f"item {item} not found in dictionary.")
 
 
 class Anlage:
-    def __init__(self, anlage: AnlagenInfo):
-        self.anlage = anlage
-        self.auto = True
-        self._data = {'einfahrtsgruppen': dict(),
-                      'ausfahrtsgruppen': dict(),
-                      'bahnsteigsgruppen': dict()}
-        self.original_graph: Optional[nx.Graph] = None
-        self.bahnhof_graph: Optional[nx.Graph] = None
+    """
+    netzwerk-darstellungen der bahnanlage
 
-    @property
-    def einfahrtsgruppen(self) -> Dict[str, Set[str]]:
-        """
-        gruppierung von einfahrten
+    diese klasse verwaltet folgende graphen als darstellung der bahnanlage:
 
-        mehrere einfahrten können zu einer gruppe zusammengefasst werden.
+    :var self.signal_graph original "wege"-graph vom simulator
+        mit bahnsteigen, haltepunkten, signalen, einfahrten und ausfahrten.
+        dieser graph dient als basis und wird nicht speziell bearbeitet.
+        der graph ist ungerichtet, weil die richtung vom simulator nicht konsistent angegeben wird:
+        entgegengesetzte signale sind verbunden, einfahrten sind mit ausfahrsignalen verbunden.
+
+    :var self.bahnsteig_graph graph mit den bahnsteigen von der "bahnsteigliste".
+        vom simulator als nachbarn bezeichnete bahnsteige sind durch kanten verbunden.
+        der bahnsteig-graph zerfällt dadurch in bahnhof-teile.
+        es ist für den gebrauch in den charts in einigen fällen wünschbar,
+        dass bahnhof-teile zu einem ganzen bahnhof zusammengefasst werden,
+        z.b. bahnsteige und abstellgleise.
+        die zuordnung kann jedoch nicht aus dem graphen selber abgelesen werden
+        und muss separat (user, konfiguration, empirische auswertung) gemacht werden.
+
+        vorsicht: bahnsteige aus der bahnsteigliste sind teilweise im wege-graph nicht enthalten!
+
+    :var self.bahnhof_graph netz-graph mit bahnsteiggruppen, einfahrtgruppen und ausfahrtgruppen
+        vom bahnsteig-graph abgeleiteter graph, der die ganzen zugeordneten gruppen enthält.
+
+
+    :var self.anschlussgruppen gruppierung von einfahrten und ausfahrten
+
+        mehrere ein- und ausfahrten können zu einer gruppe zusammengefasst werden.
         dieser dictionary bildet gruppennamen auf sets von knotennamen ab.
 
-        :return: dictionary gruppenname -> set of (knotenname)
-        """
-        return self._data['einfahrtsgruppen']
-
-    @property
-    def ausfahrtsgruppen(self) -> Dict[str, Set[str]]:
-        """
-        gruppierung von ausfahrten
-
-        mehrere ausfahrten können zu einer gruppe zusammengefasst werden.
-        dieser dictionary bildet gruppennamen auf sets von knotennamen ab.
-
-        :return: dictionary gruppenname -> set of (knotenname)
-        """
-        return self._data['ausfahrtsgruppen']
-
-    @property
-    def bahnsteigsgruppen(self) -> Dict[str, Set[str]]:
-        """
-        gruppierung von bahnsteigen
+    :var self.bahnsteiggruppen gruppierung von bahnsteigen
 
         mehrere bahnsteige (typischerweise alle zu einem bahnhof gehörigen)
         können zu einer gruppe zusammengefasst werden.
         dieser dictionary bildet gruppennamen (bahnhofnamen) auf sets von bahnsteignamen ab.
+    """
+    def __init__(self, anlage: AnlagenInfo):
+        self.anlage = anlage
+        self.auto = True
 
-        :return: dictionary gruppenname -> set of (bahnsteigname)
+        # gruppen-id -> {gleisnamen}
+        self.anschlussgruppen: Dict[str, Set[str]] = {}
+        self.bahnsteiggruppen: Dict[str, Set[str]] = {}
+
+        # gleisname -> gruppen-id
+        self.anschluesse: Dict[str, str] = {}
+        self.bahnsteige: Dict[str, str] = {}
+
+        # gruppen-id -> gruppenname
+        self.anschlussnamen: Dict[str, str] = {}
+        self.bahnhofnamen: Dict[str, str] = {}
+
+        self.signal_graph: nx.Graph = nx.Graph()
+        self.bahnsteig_graph: nx.Graph = nx.Graph()
+        self.bahnhof_graph: nx.Graph = nx.Graph()
+
+    def update(self, client: PluginClient, config_path: os.PathLike):
+        self.anlage = client.anlageninfo
+        self.original_graphen_erstellen(client)
+        self.auto_gruppen()
+        try:
+            self.load_config(config_path)
+        except (OSError, ValueError):
+            logger.exception("fehler beim laden der anlagenkonfiguration")
+        # self.bahnhof_graph_erstellen()
+        self.bahnhof_graph_aus_fahrplan(client)
+
+    def original_graphen_erstellen(self, client: PluginClient):
         """
-        return self._data['bahnsteigsgruppen']
+        erstellt die originalgraphen nach anlageninformationen vom simulator.
 
-    def suche_gleisgruppe(self, gleis: str, gruppen: Dict) -> Optional[str]:
+        der originalgraph enthält alle signale, bahnsteige, einfahrten, ausfahrten und haltepunkte aus der wegeliste
+        als knoten. das 'typ'-attribut wird auf den sts-knotentyp (int) gesetzt.
+
+        kanten werden entsprechend der nachbarn-relationen aus der wegeliste ('typ'-attribut 'gleis').
+
+        der graph wird in self.original_graph abgelegt.
+        dieser graph sollte nicht verändert werden.
+        abgeleitete graphen können separat gespeichert werden.
+
+        :param client: PluginClient-artiges objekt mit aktuellen bahnsteigliste und wege attributen.
+        :return: None.
         """
-        suche gleis in bahnsteig- oder knotengruppe.
+        knoten_auswahl = {Knoten.TYP_NUMMER["Signal"],
+                          Knoten.TYP_NUMMER["Bahnsteig"],
+                          Knoten.TYP_NUMMER["Einfahrt"],
+                          Knoten.TYP_NUMMER["Ausfahrt"],
+                          Knoten.TYP_NUMMER["Haltepunkt"]}
 
-        :param gleis: gleisname
-        :param gruppen: dict entsprechend einfahrtsgruppen, ausfahrtsgruppen oder bahnsteigsgruppen.
-        :return: gruppenname
-        """
-        for name, gruppe in gruppen.items():
-            if gleis in gruppe:
-                return name
-        return None
+        self.signal_graph.clear()
+        for knoten1 in client.wege.values():
+            if knoten1.name and knoten1.typ in knoten_auswahl:
+                self.signal_graph.add_node(knoten1.name, typ=knoten1.typ)
+                for knoten2 in knoten1.nachbarn:
+                    if knoten2.name and knoten2.typ in knoten_auswahl:
+                        self.signal_graph.add_edge(knoten1.name, knoten2.name, typ='gleis', distanz=1)
 
-    def auto_config(self, client: PluginClient):
+        self.bahnsteig_graph.clear()
+        for bs1 in client.bahnsteigliste.values():
+            self.bahnsteig_graph.add_node(bs1.name)
+            for bs2 in bs1.nachbarn:
+                self.bahnsteig_graph.add_edge(bs1.name, bs2.name, typ='bahnhof', distanz=0)
+
+    def bahnhof_graph_erstellen(self):
+        bahnsteig_typen = {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}
+        graph = nx.Graph()
+
+        for n, s in self.bahnsteiggruppen.items():
+            graph.add_node(n, typ='bahnhof', elemente=s, name=self.bahnhofnamen[n])
+        for n, s in self.anschlussgruppen.items():
+            graph.add_node(n, typ='anschluss', elemente=s, name=self.anschlussnamen[n])
+
+        alle_gruppen = dict_union(self.bahnsteiggruppen, self.anschlussgruppen)
+        alle_gleise = set().union(*alle_gruppen.values())
+
+        gleis_graph = self.signal_graph.copy()
+        for u, d in gleis_graph.nodes(data=True):
+            d['bahnhof'] = d['typ'] in bahnsteig_typen
+            for v in gleis_graph[u]:
+                if gleis_graph.nodes[v]['typ'] in bahnsteig_typen:
+                    d['bahnhof'] = True
+                    break
+
+        for u, v in itertools.combinations(alle_gleise, 2):
+            try:
+                p = nx.shortest_path(gleis_graph, u, v)
+                for n in p[2:-2]:
+                    if gleis_graph.nodes[n]['bahnhof']:
+                        break
+                else:
+                    ug = find_set_item_in_dict(u, alle_gruppen)
+                    vg = find_set_item_in_dict(v, alle_gruppen)
+                    if ug != vg:
+                        graph.add_edge(ug, vg, distanz=len(p))
+            except (nx.NetworkXException, ValueError):
+                continue
+
+        edges_to_remove = set([])
+        for u, nbrs in graph.adj.items():
+            ns = set(nbrs) - {u}
+            for v, w in itertools.combinations(ns, 2):
+                try:
+                    luv = graph[u][v]['distanz']
+                    lvw = graph[v][w]['distanz']
+                    luw = graph[u][w]['distanz']
+                    if luv < lvw and luw < lvw:
+                        edges_to_remove.add((v, w))
+                except KeyError:
+                    pass
+
+        graph.remove_edges_from(edges_to_remove)
+
+        self.bahnhof_graph = graph
+
+    def bahnhof_graph_aus_fahrplan(self, client: PluginClient):
+        bahnsteig_typen = {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}
+        graph = self.bahnhof_graph
+
+        for n, s in self.bahnsteiggruppen.items():
+            graph.add_node(n, typ='bahnhof', elemente=s, name=self.bahnhofnamen[n])
+        for n, s in self.anschlussgruppen.items():
+            graph.add_node(n, typ='anschluss', elemente=s, name=self.anschlussnamen[n])
+
+        alle_gruppen = dict_union(self.bahnsteiggruppen, self.anschlussgruppen)
+        alle_gleise = set().union(*alle_gruppen.values())
+
+        gleis_graph = self.signal_graph.copy()
+        for u, d in gleis_graph.nodes(data=True):
+            d['bahnhof'] = d['typ'] in bahnsteig_typen
+            for v in gleis_graph[u]:
+                if gleis_graph.nodes[v]['typ'] in bahnsteig_typen:
+                    d['bahnhof'] = True
+                    break
+
+        for zug in client.zugliste.values():
+            try:
+                start = self.anschluesse[zug.von]
+                startzeit = np.nan
+            except (IndexError, KeyError):
+                continue
+
+            for zeile in zug.fahrplan:
+                ziel = self.bahnsteige[zeile.gleis]
+                zielzeit = time_to_seconds(zeile.an)
+                zeit = zielzeit - startzeit
+                try:
+                    d = graph[start][ziel]
+                    d['fahrzeit_min'] = min(d['fahrzeit_min'], zeit) if not np.isnan(d['fahrtzeit_min']) else zeit
+                    d['fahrzeit_max'] = max(d['fahrzeit_max'], zeit) if not np.isnan(d['fahrtzeit_max']) else zeit
+                except KeyError:
+                    graph.add_edge(start, ziel, fahrzeit_min=zeit, fahrzeit_max=zeit)
+                    logger.debug(f"edge {start}-{ziel} ({zeit})")
+                start = ziel
+                startzeit = time_to_seconds(zeile.ab)
+
+            try:
+                ziel = self.anschluesse[zug.nach]
+                graph.add_edge(start, ziel, fahrzeit_min=np.nan, fahrzeit_max=np.nan)
+                logger.debug(f"edge {start}-{ziel}")
+            except KeyError:
+                pass
+
+        edges_to_remove = set([])
+        for u, nbrs in graph.adj.items():
+            ns = set(nbrs) - {u}
+            for v, w in itertools.combinations(ns, 2):
+                try:
+                    luv = graph[u][v]['fahrzeit_min']
+                    lvw = graph[v][w]['fahrzeit_min']
+                    luw = graph[u][w]['fahrzeit_min']
+                    if luv < lvw and luw < lvw:
+                        edges_to_remove.add((v, w))
+                except KeyError:
+                    pass
+
+        # graph.remove_edges_from(edges_to_remove)
+
+        nodes_to_remove = [node for node, degree in graph.degree() if degree < 1]
+        graph.remove_nodes_from(nodes_to_remove)
+
+        self.bahnhof_graph = graph
+
+    def auto_gruppen(self):
         """
         bestimmt die gruppen basierend auf anlageninfo und üblicher schreibweise der gleisnamen.
 
@@ -161,193 +329,127 @@ class Anlage:
         bahnsteige werden nach nachbarn gemäss anlageninfo gruppiert.
         der gruppenname wird aus dem längsten gemeinsamen namensteil gebildet.
 
-        :param client:
         :return: None
         """
-        self.anlage = client.anlageninfo
-        expr = r"([a-zA-Z]*)([ 0-9]*).*"
+        anschlusstypen = {Knoten.TYP_NUMMER["Einfahrt"], Knoten.TYP_NUMMER["Ausfahrt"]}
+        bahnsteigtypen = {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}
 
-        for k in client.wege_nach_typ[Knoten.TYP_NUMMER['Einfahrt']]:
-            try:
-                mo = re.match(expr, k.name)
-                gr = mo.group(1)
-            except IndexError:
-                pass
-            else:
-                try:
-                    self.einfahrtsgruppen[gr].add(k.name)
-                except KeyError:
-                    self.einfahrtsgruppen[gr] = {k.name}
-                try:
-                    self.ausfahrtsgruppen[gr].add(k.name)
-                except KeyError:
-                    self.ausfahrtsgruppen[gr] = {k.name}
+        self.anschlussgruppen = {}
+        nodes = (n for n, t in self.signal_graph.nodes(data='typ') if t in anschlusstypen)
+        subgraph = self.signal_graph.subgraph(nodes)
+        gruppen = list(nx.connected_components(subgraph))
+        for i, g in enumerate(gruppen):
+            key = "".join(sorted(g))
+            name = f"{gemeinsamer_name(g)}"
+            self.anschlussgruppen[key] = g
+            self.anschlussnamen[key] = name
 
-        for k in client.wege_nach_typ[Knoten.TYP_NUMMER['Ausfahrt']]:
-            try:
-                mo = re.match(expr, k.name)
-                gr = mo.group(1)
-            except IndexError:
-                pass
-            else:
-                try:
-                    self.einfahrtsgruppen[gr].add(k.name)
-                except KeyError:
-                    self.einfahrtsgruppen[gr] = {k.name}
-                try:
-                    self.ausfahrtsgruppen[gr].add(k.name)
-                except KeyError:
-                    self.ausfahrtsgruppen[gr] = {k.name}
+        self.bahnsteiggruppen = {}
+        nodes = (n for n, t in self.signal_graph.nodes(data='typ') if t in bahnsteigtypen)
+        subgraph = self.bahnsteig_graph.subgraph(nodes)
+        gruppen = list(nx.connected_components(subgraph))
+        for i, g in enumerate(gruppen):
+            key = "".join(sorted(g))
+            name = f"{gemeinsamer_name(g)}"
+            self.bahnsteiggruppen[key] = g
+            self.bahnhofnamen[key] = name
 
-        bsl: List[BahnsteigInfo] = [bi for bi in client.bahnsteigliste.values()]
-        while bsl:
-            bs = bsl.pop(0)
-            gruppe = {bs}.union(bs.nachbarn)
+        self.auto = True
+        self._update_gruppen_dict()
 
-            # gruppenname
-            namen = [bn.name for bn in gruppe]
-            name = ''.join(common_prefix(namen))
-            if not name:
-                name = bs.name
-            try:
-                self.bahnsteigsgruppen[name].update(namen)
-            except KeyError:
-                self.bahnsteigsgruppen[name] = set(namen)
+    def _update_gruppen_dict(self):
+        self.bahnsteige = {}
+        self.anschluesse = {}
 
-            # jeder bahnsteig in max. einer gruppe
-            for bn in bs.nachbarn:
-                try:
-                    bsl.remove(bn)
-                except ValueError:
-                    pass
+        for n, s in self.bahnsteiggruppen.items():
+            for g in s:
+                self.bahnsteige[g] = n
+        for n, s in self.anschlussgruppen.items():
+            for g in s:
+                self.anschluesse[g] = n
 
-            # konsistenz mit wegnetz pruefen
-            for n in namen:
-                if n not in client.wege:
-                    print(f"bahnsteig {n} ist im gleisnetz nicht vorhanden")
-
-        self.original_graph_erstellen(client)
-
-    def load_config(self, path):
+    def load_config(self, path: os.PathLike, load_graphs=False):
         """
 
-        :param path:
-        :return:
+        :param path: verzeichnis mit den konfigurationsdaten.
+            der dateiname wird aus der anlagen-id gebildet.
+        :param load_graphs: die graphen werden normalerweise vom simulator abgefragt und erstellt.
+            für offline-auswertung können sie auch aus dem konfigurationsfile geladen werden.
+        :return: None
         :raise: OSError, JSONDecodeError(ValueError)
         """
-        with open(path) as fp:
-            d = json.load(fp, object_hook=json_object_hook)
-        try:
-            self._data = d[str(self.anlage.aid)]
-        except KeyError:
-            pass
+        if load_graphs:
+            p = Path(path) / f"{self.anlage.aid}diag.json"
         else:
+            p = Path(path) / f"{self.anlage.aid}.json"
+
+        with open(p) as fp:
+            d = json.load(fp, object_hook=json_object_hook)
+
+        assert d['_aid'] == self.anlage.aid
+        if self.anlage.build != d['_build']:
+            logger.error(f"unterschiedliche build-nummern (file: {d['_build']}, sim: {self.anlage.build})")
+
+        try:
+            self.bahnsteiggruppen = d['bahnsteiggruppen']
             self.auto = False
-
-    def save_config(self, path):
+        except KeyError:
+            logger.info("fehlende bahnsteiggruppen-konfiguration - auto-konfiguration")
         try:
-            with open(path) as fp:
-                d = json.load(fp, object_hook=json_object_hook)
-        except (OSError, json.decoder.JSONDecodeError):
-            d = dict()
-
-        if self._data:
-            aid = str(self.anlage.aid)
-            d[aid] = self._data
-            d[aid]['_region'] = self.anlage.region
-            d[aid]['_name'] = self.anlage.name
-            d[aid]['_build'] = self.anlage.build
-
-            with open(path, "w") as fp:
-                json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
-
-    def original_graph_erstellen(self, client: PluginClient):
-        knoten_auswahl = {Knoten.TYP_NUMMER["Signal"],
-                          Knoten.TYP_NUMMER["Bahnsteig"],
-                          Knoten.TYP_NUMMER["Einfahrt"],
-                          Knoten.TYP_NUMMER["Ausfahrt"],
-                          Knoten.TYP_NUMMER["Haltepunkt"]}
-
-        self.original_graph = nx.Graph()
-        for knoten1 in client.wege.values():
-            if knoten1.name and knoten1.typ in knoten_auswahl:
-                self.original_graph.add_node(knoten1.name)
-                self.original_graph.nodes[knoten1.name]['typ'] = knoten1.typ
-                for knoten2 in knoten1.nachbarn:
-                    if knoten2.name and knoten2.typ in knoten_auswahl:
-                        self.original_graph.add_edge(knoten1.name, knoten2.name)
-
-    def bahnsteige_pruefen(self):
-        pass
-
-    def einfahrten_pruefen(self):
-        pass
-
-    def ausfahrten_pruefen(self):
-        pass
-
-    def validate(self):
-        """
-        wir muessen pruefen, dass
-        - jede gruppe genau einmal vorkommt
-        - jeder bahnsteig genau einmal vorkommt und einer gruppe zugewiesen ist
-
-        :return:
-        """
-        self.einfahrten_pruefen()
-        self.ausfahrten_pruefen()
-        self.bahnsteige_pruefen()
-        self.bahnhof_graph_erstellen()
-
-    def bahnhof_graph_erstellen(self):
+            self.anschlussgruppen = d['anschlussgruppen']
+        except KeyError:
+            logger.info("fehlende anschlussgruppen-konfiguration - auto-konfiguration")
         try:
-            self.bahnhof_graph = strip_signals(self.original_graph)
+            self.bahnhofnamen = d['bahnhofnamen']
+        except KeyError:
+            logger.info("fehlende bahnhofnamen-konfiguration - verwende default")
+            self.bahnhofnamen = {k: k for k in self.bahnsteiggruppen.keys()}
+        try:
+            self.anschlussnamen = d['anschlussnamen']
+        except KeyError:
+            logger.info("fehlende anschlussnamen-konfiguration - verwende default")
+            self.anschlussnamen = {k: k for k in self.anschlussgruppen.keys()}
 
-            gruppen = gruppen_union(self.bahnsteigsgruppen,
-                                    self.einfahrtsgruppen, self.ausfahrtsgruppen)
+        self._update_gruppen_dict()
 
-            gruppen2 = {}
-            for g, s in gruppen.items():
-                t = s.intersection(self.bahnhof_graph.nodes)
-                if len(t):
-                    gruppen2[g] = t
-            gruppen = gruppen2
+        if load_graphs:
+            try:
+                self.signal_graph = nx.node_link_graph(d['signal_graph'])
+            except KeyError:
+                pass
+            try:
+                self.bahnsteig_graph = nx.node_link_graph(d['bahnsteig_graph'])
+            except KeyError:
+                pass
+            try:
+                self.bahnhof_graph = nx.node_link_graph(d['bahnhof_graph'])
+            except KeyError:
+                pass
 
-            all_nodes = set().union(*gruppen.values())
-            all_nodes = sorted(all_nodes)
+    def save_config(self, path: os.PathLike):
+        d = {'_aid': self.anlage.aid,
+             '_region': self.anlage.region,
+             '_name': self.anlage.name,
+             '_build': self.anlage.build,
+             'bahnsteiggruppen': self.bahnsteiggruppen,
+             'anschlussgruppen': self.anschlussgruppen,
+             'bahnhofnamen': self.bahnhofnamen,
+             'anschlussnamen': self.anschlussnamen}
 
-            nodes = {n for c in gruppen.values() for n in c if n in self.bahnhof_graph.nodes}
-            nodes = sorted(nodes)
+        p = Path(path) / f"{self.anlage.aid}.json"
+        with open(p, "w") as fp:
+            json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
 
-            if logger.isEnabledFor(logging.DEBUG):
-                logger.debug("--- bahnhof_graph_erstellen debug info")
-                logger.debug(str(all_nodes))
-                logger.debug(str(nodes))
-                logger.debug(str(sorted(self.bahnhof_graph.nodes)))
-                logger.debug(f"{len(self.bahnhof_graph)}, {len(nodes)}, {sum(len(c) for c in gruppen)}")
-                for k, c in gruppen.items():
-                    logger.debug(f"{k}, {sorted(c)}")
-                logger.debug("---")
+        if self.signal_graph:
+            d['signal_graph'] = dict(nx.node_link_data(self.signal_graph))
+        if self.bahnsteig_graph:
+            d['bahnsteig_graph'] = dict(nx.node_link_data(self.bahnsteig_graph))
+        if self.bahnhof_graph:
+            d['bahnhof_graph'] = dict(nx.node_link_data(self.bahnhof_graph))
 
-            self.bahnhof_graph = nx.quotient_graph(self.bahnhof_graph, gruppen)
-            self.bahnhof_graph = nx.relabel_nodes(self.bahnhof_graph, get_gruppen_name)
-
-        except AttributeError:
-            pass
-
-    def dump(self):
-        data1 = nx.readwrite.json_graph.node_link_data(self.original_graph)
-        path = f"{self.anlage.name}.netz.json"
-        with open(path, "w") as fp:
-            json.dump(data1, fp, sort_keys=True, indent=4)
-
-    def testing(self):
-        path = "Rotkreuz.netz.json"
-        with open(path, "r") as fp:
-            data = json.load(fp)
-
-        self.original_graph = nx.readwrite.node_link_graph(data)
-        self.bahnhof_graph = strip_signals(self.original_graph)
+        p = Path(path) / f"{self.anlage.aid}diag.json"
+        with open(p, "w") as fp:
+            json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
 
 
 def main():
