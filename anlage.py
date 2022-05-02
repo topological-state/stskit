@@ -279,8 +279,12 @@ class Anlage:
                 continue
 
             for zeile in zug.fahrplan:
-                ziel = self.bahnsteige[zeile.gleis]
-                zielzeit = time_to_seconds(zeile.an)
+                try:
+                    ziel = self.bahnsteige[zeile.gleis]
+                    zielzeit = time_to_seconds(zeile.an)
+                except (AttributeError, KeyError):
+                    break
+
                 zeit = zielzeit - startzeit
                 try:
                     d = graph[start][ziel]
@@ -290,13 +294,17 @@ class Anlage:
                     graph.add_edge(start, ziel, fahrzeit_min=zeit, fahrzeit_max=zeit)
                     logger.debug(f"edge {start}-{ziel} ({zeit})")
                 start = ziel
-                startzeit = time_to_seconds(zeile.ab)
+
+                try:
+                    startzeit = time_to_seconds(zeile.ab)
+                except AttributeError:
+                    break
 
             try:
                 ziel = self.anschluesse[zug.nach]
                 graph.add_edge(start, ziel, fahrzeit_min=np.nan, fahrzeit_max=np.nan)
                 logger.debug(f"edge {start}-{ziel}")
-            except KeyError:
+            except (AttributeError, KeyError):
                 pass
 
         edges_to_remove = set([])

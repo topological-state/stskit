@@ -56,15 +56,100 @@ def gleisname_sortkey(gleis: str) -> Tuple[str, int, str]:
     return prefix, nummer, suffix
 
 
-# farben = {g: mpl.colors.TABLEAU_COLORS[i % len(mpl.colors.TABLEAU_COLORS)]
-#           for i, g in enumerate(self.client.zuggattungen)}
-# colors = [farben[b[5]] for b in bars]
-farben = [k for k in mpl.colors.TABLEAU_COLORS]
+@dataclass(init=False)
+class ZugFarbschema:
+    """
+    any color accepted by matplotlib can be used, even RGB colors.
+    a table of named colors can be found at https://matplotlib.org/stable/gallery/color/named_colors.html.
+    however, only few colors should be used to avoid confusion, for instance,
+    the tableau colors (matplotlib.colors.TABLEAU_COLORS):
 
+    tab:red - hochgeschwindigkeit
+    tab:orange - international und intercity
+    tab:green - interregio
+    tab:blue - regionalexpress/regionalbahn
+    tab:cyan - staedt. nahverkehr
+    tab:pink - extrazuege
+    tab:brown - langsame gueter
+    tab:olive - schnelle gueter und betriebs-/dienst-/leerfahrten
+    tab:purple - spezielle gueter (z.b. RoLa, SIM)
+    tab:gray - uebrige
+    """
 
-# colors = [farben[i % len(farben)] for i in range(len(bars))]
+    nach_gattung: Dict[str, str]
+    nach_nummer: Dict[Tuple[int, int], str]
 
-# colors = [farben[slot['zug'].nummer // 10000] for slot in slots]
+    def zugfarbe(self, zug: ZugDetails) -> str:
+        try:
+            return self.nach_gattung[zug.gattung]
+        except KeyError:
+            pass
+
+        nummer = zug.nummer
+        for t, f in self.nach_nummer.items():
+            if t[0] <= nummer < t[1]:
+                return f
+        else:
+            return "tab:gray"
+
+    def init_schweiz(self):
+        self.nach_gattung = {
+            'ICE': 'tab:red',
+            'TGV': 'tab:red',
+            'IC': 'tab:orange',
+            'EC': 'tab:orange',
+            'RJ': 'tab:orange',
+            'IR': 'tab:green',
+            'IRE': 'tab:green',
+            'CNL': 'tab:green',
+            'RE': 'tab:blue',
+            'RB': 'tab:blue',
+            'TER': 'tab:blue',
+            'S': 'tab:cyan',
+            'G': 'tab:brown',
+            'Lok': 'tab:olive',
+            'RoLa': 'tab:purple'
+        }
+
+        self.nach_nummer = {
+            (1, 400): 'tab:red',
+            (400, 1700): 'tab:orange',
+            (1700, 3400): 'tab:green',
+            (3400, 6000): 'tab:blue',
+            (6000, 8000): 'tab:blue',
+            (8000, 9000): 'tab:cyan',
+            (9200, 9800): 'tab:red',
+            (9850, 9899): 'tab:blue',
+            (10000, 11000): 'tab:pink',
+            (11000, 13000): 'tab:cyan',
+            (13600, 26000): 'tab:cyan',
+            (26000, 27000): 'tab:blue',
+            (27000, 40000): 'tab:pink',
+            (40000, 50000): 'tab:purple',
+            (50000, 60000): 'tab:olive',
+            (60000, 70000): 'tab:brown'
+        }
+
+    def init_deutschland(self):
+        self.nach_gattung = {
+            'ICE': 'tab:red',
+            'TGV': 'tab:red',
+            'IC': 'tab:orange',
+            'EC': 'tab:orange',
+            'RJ': 'tab:orange',
+            'IR': 'tab:green',
+            'IRE': 'tab:green',
+            'CNL': 'tab:green',
+            'RE': 'tab:blue',
+            'RB': 'tab:blue',
+            'TER': 'tab:blue',
+            'S': 'tab:cyan',
+            'G': 'tab:brown',
+            'Lok': 'tab:olive',
+            'RoLa': 'tab:purple'
+        }
+
+        self.nach_nummer = {}
 
 
 @dataclass
@@ -90,39 +175,6 @@ class Slot:
 
     def __hash__(self):
         return hash((self.gleis, self.zug.name))
-
-    @property
-    def farbe(self) -> str:
-        """
-        hintergrundfarbe aus zugpriorität
-
-        die hintergrundfarbe markiert die priorität eines zuges:
-        hochgeschwindigkeitszüge vor fernverkehr vor regionalverkehr vor güterverkehr.
-
-        im moment wird die priorität aus dem zugnamen und der zugnummer abgeleitet.
-        das verfahren muss noch verfeinert und auf die verschiedenen regionen abgestimmt werden.
-
-        :return: farbbezeichnung für matplotlib
-        """
-        if self.zug.gattung in {'ICE', 'TGV'}:
-            return 'tab:orange'
-        elif self.zug.gattung in {'IC', 'EC', 'IR', 'IRE'}:
-            return 'tab:green'
-        elif self.zug.gattung in {'RE', 'RB'}:
-            return 'tab:blue'
-        elif self.zug.gattung in {'S'}:
-            return 'tab:purple'
-        elif nummer := self.zug.nummer > 0:
-            if nummer < 2000:
-                return 'tab:green'
-            elif nummer < 10000:
-                return 'tab:blue'
-            elif nummer < 30000:
-                return 'tab:purple'
-            else:
-                return 'tab:brown'
-        else:
-            return 'tab:gray'
 
     @property
     def randfarbe(self) -> str:
@@ -219,6 +271,8 @@ class SlotWindow(QtWidgets.QMainWindow):
 
         self.zeitfenster_voraus = 55
         self.zeitfenster_zurueck = 5
+        self.farbschema = ZugFarbschema()
+        self.farbschema.init_schweiz()
 
         canvas.mpl_connect("pick_event", self.on_pick)
 
@@ -327,7 +381,7 @@ class SlotWindow(QtWidgets.QMainWindow):
         y_bot = np.asarray([slot.zeit for slot in self._slots])
         y_hgt = np.asarray([slot.dauer for slot in self._slots])
         labels = [slot.titel for slot in self._slots]
-        colors = [slot.farbe for slot in self._slots]
+        colors = [self.farbschema.zugfarbe(slot.zug) for slot in self._slots]
 
         self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
         self._axes.yaxis.set_major_formatter(hour_minutes_formatter)
