@@ -548,7 +548,7 @@ class FahrplanZeile:
 
     def lokumlauf(self) -> bool:
         """
-        zeigt das durchfahrt-flag an.
+        zeigt das lokumlauf-flag an.
 
         :return: bool
         """
@@ -556,7 +556,7 @@ class FahrplanZeile:
 
     def lokwechsel(self) -> Optional[Tuple[int, int]]:
         """
-        zeigt das durchfahrt-flag an.
+        zeigt das lokwechsel-flag an.
 
         :return: zweier-tuple mit element-nummern der ein- und ausfahrten (beliebige reihenfolge) oder None.
         """

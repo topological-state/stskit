@@ -37,7 +37,9 @@ class GleisbelegungWindow(SlotWindow):
                 # ersatzzug anhängen
                 if ersatzzug := planzeile.ersatzzug:
                     try:
-                        slot.dauer = max(1, time_to_minutes(ersatzzug.fahrplan[0].an) + zug.verspaetung - slot.zeit)
+                        ersatzzeit = time_to_minutes(ersatzzug.fahrplan[0].an)
+                        slot.dauer = max(slot.dauer, ersatzzeit - slot.zeit)
+                        ersatzzug.verspaetung = slot.zeit + slot.dauer - ersatzzeit
                     except IndexError:
                         slot.dauer = 1
                 elif kuppelzug := planzeile.kuppelzug:
