@@ -69,6 +69,7 @@ def setup_logging(filename: Optional[str] = "", level: Optional[str] = "ERROR", 
         handler = logging.NullHandler()
 
     root_logger.addHandler(handler)
+    logging.captureWarnings(enable)
 
     # special modules
     logging.getLogger('matplotlib').setLevel(max(numeric_level, logging.WARNING))

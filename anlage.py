@@ -140,14 +140,17 @@ class Anlage:
         # gruppen-id -> {gleisnamen}
         self.anschlussgruppen: Dict[str, Set[str]] = {}
         self.bahnsteiggruppen: Dict[str, Set[str]] = {}
+        self.alle_gruppen: Dict[str, Set[str]] = {}
 
         # gleisname -> gruppen-id
         self.anschluesse: Dict[str, str] = {}
         self.bahnsteige: Dict[str, str] = {}
+        self.alle_ziele: Dict[str, str] = {}
 
         # gruppen-id -> gruppenname
         self.anschlussnamen: Dict[str, str] = {}
         self.bahnhofnamen: Dict[str, str] = {}
+        self.alle_namen: Dict[str, str] = {}
 
         self.signal_graph: nx.Graph = nx.Graph()
         self.bahnsteig_graph: nx.Graph = nx.Graph()
@@ -260,9 +263,6 @@ class Anlage:
         for n, s in self.anschlussgruppen.items():
             graph.add_node(n, typ='anschluss', elemente=s, name=self.anschlussnamen[n])
 
-        alle_gruppen = dict_union(self.bahnsteiggruppen, self.anschlussgruppen)
-        alle_gleise = set().union(*alle_gruppen.values())
-
         gleis_graph = self.signal_graph.copy()
         for u, d in gleis_graph.nodes(data=True):
             d['bahnhof'] = d['typ'] in bahnsteig_typen
@@ -272,6 +272,10 @@ class Anlage:
                     break
 
         for zug in client.zugliste.values():
+            if zug.sichtbar:
+                # der fahrplan von sichtbaren zügen kann unvollständig sein
+                continue
+
             try:
                 start = self.anschluesse[zug.von]
                 startzeit = np.nan
@@ -288,10 +292,12 @@ class Anlage:
                 zeit = zielzeit - startzeit
                 try:
                     d = graph[start][ziel]
-                    d['fahrzeit_min'] = min(d['fahrzeit_min'], zeit) if not np.isnan(d['fahrtzeit_min']) else zeit
-                    d['fahrzeit_max'] = max(d['fahrzeit_max'], zeit) if not np.isnan(d['fahrtzeit_max']) else zeit
+                    d['fahrzeit_sum'] = d['fahrzeit_sum'] + zeit
+                    d['fahrzeit_min'] = min(d['fahrzeit_min'], zeit) if not np.isnan(d['fahrzeit_min']) else zeit
+                    d['fahrzeit_max'] = max(d['fahrzeit_max'], zeit) if not np.isnan(d['fahrzeit_max']) else zeit
+                    d['zuege'] = d['zuege'] + 1
                 except KeyError:
-                    graph.add_edge(start, ziel, fahrzeit_min=zeit, fahrzeit_max=zeit)
+                    graph.add_edge(start, ziel, fahrzeit_sum=zeit, fahrzeit_min=zeit, fahrzeit_max=zeit, zuege=1)
                     logger.debug(f"edge {start}-{ziel} ({zeit})")
                 start = ziel
 
@@ -302,7 +308,7 @@ class Anlage:
 
             try:
                 ziel = self.anschluesse[zug.nach]
-                graph.add_edge(start, ziel, fahrzeit_min=np.nan, fahrzeit_max=np.nan)
+                graph.add_edge(start, ziel, fahrzeit_sum=0., fahrzeit_min=np.nan, fahrzeit_max=np.nan, zuege=0)
                 logger.debug(f"edge {start}-{ziel}")
             except (AttributeError, KeyError):
                 pass
@@ -326,6 +332,25 @@ class Anlage:
         graph.remove_nodes_from(nodes_to_remove)
 
         self.bahnhof_graph = graph
+
+    def generalisieren(self, metrik):
+        graph = self.bahnhof_graph
+
+        edges_to_remove = set([])
+        for u, nbrs in graph.adj.items():
+            ns = set(nbrs) - {u}
+            for v, w in itertools.combinations(ns, 2):
+                try:
+                    luv = graph[u][v][metrik]
+                    lvw = graph[v][w][metrik]
+                    luw = graph[u][w][metrik]
+                    if luv < lvw and luw < lvw:
+                        edges_to_remove.add((v, w))
+                        logger.debug(f"remove {v}-{w} from triangle ({u},{v},{w}) distance ({lvw},{luw},{luv})")
+                except KeyError:
+                    pass
+
+        graph.remove_edges_from(edges_to_remove)
 
     def auto_gruppen(self):
         """
@@ -366,6 +391,18 @@ class Anlage:
         self._update_gruppen_dict()
 
     def _update_gruppen_dict(self):
+        """
+        gruppen-dictionaries aktualisieren.
+
+        die ursprungsdaten stehen in den bahnsteiggruppen- und anschlussgruppen-dictionaries.
+        von ihnen werden die alle_gruppen, alle_namen, bahnsteige, anschluesse und alle_ziele abgeleitet.
+
+        :return: None
+        """
+
+        self.alle_gruppen = dict_union(self.bahnsteiggruppen, self.anschlussgruppen)
+        self.alle_namen = {**self.bahnhofnamen, **self.anschlussnamen}
+
         self.bahnsteige = {}
         self.anschluesse = {}
 
@@ -375,6 +412,9 @@ class Anlage:
         for n, s in self.anschlussgruppen.items():
             for g in s:
                 self.anschluesse[g] = n
+        for n, s in self.alle_gruppen.items():
+            for g in s:
+                self.alle_ziele[g] = n
 
     def load_config(self, path: os.PathLike, load_graphs=False):
         """
