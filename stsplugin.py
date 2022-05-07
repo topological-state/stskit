@@ -3,15 +3,25 @@ stellwerksim plugin-client
 
 dieses modul stellt eine PluginClient-klasse zur verfügung, die die kommunikation mit dem simulator übernimmt.
 der client speichert auch alle anlagen- und fahrplandaten zwischen und verarbeitet ereignisse.
+der PluginClient übersetzt anfragen in xml und sendet sie an den simulator.
+die xml-antworten übersetzt er in python-objekte.
 
 asynchrone kommunikation:
 
-die kommunikationsmethoden des PluginClient sind als asynchron und werden von der trio-bibliothek verwaltet.
+die kommunikation verläuft asynchron und ist nach der trio-bibliothek modelliert.
+es gibt einen socket-stream für die xml-kommunikation mit dem simulator.
+die request-methoden senden anfragen via diesen stream.
+antworten werden innerhalb der receiver-methode, die in einem eigenen task gestartet wird, verarbeitet
+und als python-objekte in die antworten- oder ereignis-queues gestellt.
+die request-methoden holen die antworten dort ab.
+für ereignisse kann das hauptprogramm einen separaten task starten und die queue auslesen.
 
 vorsicht ist bei der verwendung von parallelen tasks geboten,
 damit sich zwei serveranfragen nicht überschneiden können.
-am besten werden alle anfragen im gleichen asyncio-task gestellt.
-parallel dazu kann in einem eigenen task, die ereignis-queue abgefragt werden, siehe ticker-programm.
+am besten werden alle anfragen im gleichen task gestellt.
+in einem separaten task wird die ereignis-queue abgefragt.
+
+beispiele für die implementation zeigen das testprogramm unten, oder weitere im paket enthaltenen programme.
 
 logging:
 
@@ -25,7 +35,7 @@ kann die stufe dieses moduls individuell angepasst werden durch
 import trio
 import datetime
 import logging
-from typing import Any, Dict, List, Iterable, Mapping, Optional, Set, Union
+from typing import Any, Callable, Dict, List, Iterable, Mapping, Optional, Set, Union
 import untangle
 
 from xml.sax import make_parser
@@ -42,7 +52,15 @@ def check_status(status: untangle.Element):
         raise ValueError(f"error {status.status['code']}: {status.status.cdata}")
 
 
+def log_status_warning(request: str, response: untangle.Element):
+    if hasattr(response, 'status'):
+        logger.warning(f"{request}: {response.status}")
+
+
 class PluginClient:
+    """
+    PluginClient - der kern der plugin-schnittstelle
+    """
     def __init__(self, name: str, autor: str, version: str, text: str):
         self._stream: Optional[trio.abc.Stream] = None
         self._antwort_channel_in: Optional[trio.MemorySendChannel] = None
@@ -288,6 +306,11 @@ class PluginClient:
         """
         fahrplan eines zuges, mehrerer oder aller züge anfragen.
 
+        wenn ein ZugDetails-objekt mit der zid muss bereits in der zugliste angelegt ist,
+        wird es aktualisiert, andernfalls neu angelegt.
+        wenn ein fehler auftritt (weil z.b. der zug nicht mehr im stellwerk ist),
+        wird der zug aus der zugliste gelöscht.
+
         :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
         :return: None
         """
@@ -296,14 +319,28 @@ class PluginClient:
         else:
             zids = self.zugliste.keys()
         for zid in map(int, zids):
-            await self._send_request("zugdetails", zid=zid)
-            response = await self._antwort_channel_out.receive()
-            zug = self.zugliste[zid]
+            if zid > 0:
+                await self._send_request("zugdetails", zid=zid)
+                response = await self._antwort_channel_out.receive()
+            else:
+                logger.warning(f"request_zugdetails: anfrage mit zid={zid} ignoriert.")
+                continue
+
+            try:
+                zug = self.zugliste[zid]
+            except KeyError:
+                zug = ZugDetails()
+                zug.zid = zid
+                self.zugliste[zid] = zug
+
             try:
                 zug.update(response.zugdetails)
+                logger.debug(f"request_zugdetails: {zug}")
             except AttributeError:
                 del self.zugliste[zid]
-            self.zuggattungen.add(zug.gattung)
+                log_status_warning("request_zugdetails", response)
+            else:
+                self.zuggattungen.add(zug.gattung)
 
     async def request_ereignis(self, art, zids: Iterable[int]):
         """
@@ -329,6 +366,10 @@ class PluginClient:
         """
         fahrplan eines zuges, mehrerer oder aller züge anfragen.
 
+        das ZugDetails-objekt muss in der zugliste bereits existieren.
+
+        bemerkung: abgefahrene wegpunkte sind im fahrplan nicht mehr vorhanden.
+
         :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
         :return: None
         """
@@ -348,32 +389,40 @@ class PluginClient:
 
             try:
                 for gleis in response.zugfahrplan.gleis:
-                    zeile = FahrplanZeile(zug)
-                    zeile.update(gleis)
+                    zeile = FahrplanZeile(zug).update(gleis)
                     zug.fahrplan.append(zeile)
+                    if zug.gleis == zeile.gleis:
+                        zug.fahrplanzeile = zeile
+                    logger.debug(f"request_zugfahrplan: {zeile}")
+                zug.fahrplan.sort(key=lambda zfz: zfz.an)
             except AttributeError:
-                pass
-
-            zug.fahrplan.sort(key=lambda zfz: zfz.an)
+                log_status_warning("request_zugfahrplan", response)
 
     async def request_zugliste(self):
         """
         zugliste anfragen.
 
-        die zugliste wird angefragt und komplett neu aufgebaut.
+        die zugliste wird angefragt und neu aufgebaut.
 
         bemerkung: folgezüge sind möglicherweise nicht enthalten.
 
         :return: None
         """
+        self.zugliste = {}
+
         await self._send_request("zugliste")
         response = await self._antwort_channel_out.receive()
+
         try:
-            self.zugliste = {int(zug['zid']): ZugDetails().update(zug)
-                             for zug in response.zugliste.zug
-                             if int(zug['zid']) > 0}
+            for zug in response.zugliste.zug:
+                try:
+                    zid = int(zug['zid'])
+                    if zid > 0:
+                        self.zugliste[zid] = ZugDetails().update(zug)
+                except (KeyError, ValueError):
+                    logger.error(f"request_zugliste: fehlerhafter zug-eintrag: {zug}")
         except AttributeError:
-            self.zugliste = {}
+            log_status_warning("request_zugliste", response)
 
     async def request_zug(self, zid: int) -> Optional[ZugDetails]:
         """
@@ -385,14 +434,16 @@ class PluginClient:
         :return: ZugDetails inkl. fahrplan
         """
         zid = int(zid)
-        zug = ZugDetails()
-        zug.zid = zid
-        self.zugliste[zid] = zug
-        await self.request_zugdetails(zid)
-        await self.request_zugfahrplan(zid)
-        if zug.zid in self.zugliste:
-            return zug
+        if zid > 0:
+            await self.request_zugdetails(zid)
+            await self.request_zugfahrplan(zid)
         else:
+            return None
+
+        try:
+            zug = self.zugliste[zid]
+            return zug
+        except KeyError:
             return None
 
     async def resolve_zugflags(self, zid: Optional[Union[int, Iterable[int]]] = None):
@@ -421,24 +472,34 @@ class PluginClient:
 
             for planzeile in zug.fahrplan:
                 if zid2 := planzeile.ersatz_zid():
+                    logger.warning(f"ersatzzug {zid2} hat tiefere zid als stammzug {zid}")
                     zug2 = await self.request_zug(zid2)
                     if zug2 is not None:
                         planzeile.ersatzzug = zug2
                         zug2.verspaetung = zug.verspaetung
                         zids.add(zid2)
                 if zid2 := planzeile.fluegel_zid():
+                    logger.warning(f"fluegelzug {zid2} hat tiefere zid als stammzug {zid}")
                     zug2 = await self.request_zug(zid2)
                     if zug2:
                         planzeile.fluegelzug = zug2
                         zug2.verspaetung = zug.verspaetung
                         zids.add(zid2)
                 if zid2 := planzeile.kuppel_zid():
+                    logger.warning(f"kuppelzug {zid2} hat tiefere zid als stammzug {zid}")
                     zug2 = await self.request_zug(zid2)
                     if zug2:
                         planzeile.kuppelzug = zug2
                         zids.add(zid2)
 
     def update_bahnsteig_zuege(self):
+        """
+        züge in bahnsteigliste eintragen.
+
+        im züge-attribut der bahnsteige werden die fahrplanmässig an dem bahnsteig vorbei kommenden züge aufgelistet.
+
+        :return: None
+        """
         for bahnsteig in self.bahnsteigliste.values():
             bahnsteig.zuege = []
 
@@ -457,6 +518,14 @@ class PluginClient:
                                      key=zugsortierschluessel(bahnsteig.name, 'an', datetime.time()))
 
     def update_wege_zuege(self):
+        """
+        züge in wegelisten eintragen.
+
+        im züge-attribut der wege und knoten (einfahrten, ausfahrten, haltepunkte)
+        werden die fahrplanmässig daran vorbei kommenden züge aufgelistet.
+
+        :return: None
+        """
         for knoten in self.wege.values():
             knoten.zuege = []
 
@@ -493,7 +562,19 @@ class PluginClient:
                 knoten.zuege = sorted(set(knoten.zuege), key=ausfahrt_sortierschluessel('an', datetime.time()))
 
 
-def zugsortierschluessel(gleis, attr, default):
+def zugsortierschluessel(gleis: str, attr: str, default: datetime.time) -> Callable:
+    """
+    sortierschlüssel-funktion für züge an einem gleis erzeugen.
+
+    der sortierschlüssel ist die ankunfts- oder abfahrtszeit am angegebenen gleis im fahrplan
+    oder der default-wert, wenn die fahrplanzeile oder zeitangabe fehlt.
+
+    :param gleis: name des gleises oder bahnsteigs.
+    :param attr: name des zeit-attributs, entweder 'an' oder 'ab'.
+    :param default: default-zeit, falls das attribut fehlt.
+    :return: sortierschlüssel-funktion für sorted().
+    """
+
     def caller(zugdetails):
         try:
             return getattr(zugdetails.find_fahrplanzeile(gleis), attr)
@@ -502,7 +583,18 @@ def zugsortierschluessel(gleis, attr, default):
     return caller
 
 
-def einfahrt_sortierschluessel(attr, default):
+def einfahrt_sortierschluessel(attr: str, default: datetime.time) -> Callable:
+    """
+    sortierschlüssel-funktion für zugeinfahrten erzeugen.
+
+    der sortierschlüssel ist die ankunfts- oder abfahrtszeit des ersten fahrplanziels
+    oder der default-wert, wenn der fahrplan leer ist oder die zeitangabe fehlt.
+
+    :param attr: name des zeit-attributs, entweder 'an' oder 'ab'.
+    :param default: default-zeit, falls das attribut fehlt.
+    :return: sortierschlüssel-funktion für sorted().
+    """
+
     def caller(zugdetails):
         try:
             return getattr(zugdetails.fahrplan[0], attr)
@@ -511,7 +603,18 @@ def einfahrt_sortierschluessel(attr, default):
     return caller
 
 
-def ausfahrt_sortierschluessel(attr, default):
+def ausfahrt_sortierschluessel(attr: str, default: datetime.time) -> Callable:
+    """
+    sortierschlüssel-funktion für zugeinfahrten erzeugen.
+
+    der sortierschlüssel ist die ankunfts- oder abfahrtszeit des letzten fahrplanziels
+    oder der default-wert, wenn der fahrplan leer ist oder die zeitangabe fehlt.
+
+    :param attr: name des zeit-attributs, entweder 'an' oder 'ab'.
+    :param default: default-zeit, falls das attribut fehlt.
+    :return: sortierschlüssel-funktion für sorted().
+    """
+
     def caller(zugdetails):
         try:
             return getattr(zugdetails.fahrplan[-1], attr)
@@ -522,10 +625,29 @@ def ausfahrt_sortierschluessel(attr, default):
 
 
 class TaskDone(Exception):
+    """
+    task erfolgreich erledigt
+
+    die exception signalisiert, dass die aufgaben erfolgreich abgearbeitet worden sind.
+
+    die exception kann vom hauptprogramm ausgelöst werden, um einen trio-nursery-kontext zu verlassen,
+    der ansonsten unbestimmt auf andere tasks warten würde.
+    die exception muss ausserhalb des kontexts abgefangen werden.
+    """
     pass
 
 
-async def test():
+async def test() -> PluginClient:
+    """
+    testprogramm
+
+    das testprogramm fragt alle daten einmalig vom simulator ab und gibt sie an stdout aus.
+
+    der PluginClient bleibt bestehen, damit weitere details aus den statischen attributen ausgelesen werden können.
+    die kommunikation mit dem simulator wird jedoch geschlossen.
+
+    :return: PluginClient-instanz
+    """
     client = PluginClient(name='test', autor='tester', version='0.0', text='testing the plugin client')
     await client.connect()
 

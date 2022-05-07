@@ -14,10 +14,11 @@ die update-methoden erwarten geparste xml-daten in untangle.Element objekten.
 
 import datetime
 import logging
+import networkx as nx
+import numpy as np
 import re
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
 import untangle
-
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -29,13 +30,14 @@ def time_to_minutes(dt: Union[datetime.datetime, datetime.time, datetime.timedel
 
     :param dt: datetime, time oder timedelta objekt. das datum wird ignoriert.
     :return: minuten, ganzzahlig
+    :raise AttributeError wenn der typ nicht kompatibel oder None ist
     """
     try:
         # datetime, time
-        return dt.hour * 60 + dt.minute
+        return dt.hour * 60 + dt.minute + round(dt.second / 60)
     except AttributeError:
         # timedelta
-        return dt.seconds % 60
+        return round(dt.seconds / 60)
 
 
 def time_to_seconds(dt: Union[datetime.datetime, datetime.time, datetime.timedelta]) -> int:
@@ -44,6 +46,7 @@ def time_to_seconds(dt: Union[datetime.datetime, datetime.time, datetime.timedel
 
     :param dt: datetime, time oder timedelta objekt. das datum wird ignoriert.
     :return: sekunden, ganzzahlig
+    :raise AttributeError wenn der typ nicht kompatibel oder None ist
     """
     try:
         # datetime, time
@@ -51,6 +54,31 @@ def time_to_seconds(dt: Union[datetime.datetime, datetime.time, datetime.timedel
     except AttributeError:
         # timedelta
         return dt.seconds
+
+
+def minutes_to_time(minutes: float) -> datetime.time:
+    """
+    minuten seit mitternacht in uhrzeit umrechnen.
+
+    :param minutes: minuten seit mitternacht. dezimalstellen geben sekunden an.
+    :return datetime.time objekt. auf ganze sekunden gerundet.
+    """
+    return seconds_to_time(minutes * 60)
+
+
+def seconds_to_time(seconds: float) -> datetime.time:
+    """
+    sekunden seit mitternacht in uhrzeit umrechnen.
+
+    :param seconds: sekunden seit mitternacht. dezimalstellen werden auf ganze sekunden gerundet.
+    :return datetime.time objekt.
+    """
+    s = round(seconds)
+    m = s // 60
+    s = s % 60
+    h = m // 60
+    m = m % 60
+    return datetime.time(hour=h, minute=m, second=s)
 
 
 class AnlagenInfo:
@@ -247,6 +275,8 @@ class ZugDetails:
         self.usertext: str = ""
         self.usertextsender: str = ""
         self.fahrplan: List['FahrplanZeile'] = []
+        # aktuelles ziel
+        self.fahrplanzeile: Optional['FahrplanZeile'] = None
 
     def __eq__(self, other: 'ZugDetails') -> bool:
         return self.zid.__eq__(other.zid)
@@ -355,16 +385,96 @@ class ZugDetails:
         return self.name.startswith('Lok') or self.name.startswith('Ersatzlok') or \
                self.name.startswith('RF') or self.name.endswith('RF')
 
-    def find_fahrplanzeile(self, gleis: str) -> Optional['FahrplanZeile']:
+    def route(self) -> Iterable[str]:
         """
-        finde erste fahrplanzeile, in der gleis als aktuelles gleis vorkommt.
+        route (reihe von stationen) des zuges als generator
+
+        die route ist eine liste von stationen (gleisen, ein- und ausfahrt) in der reihenfolge des fahrplans.
+        ein- und ausfahrten können bei ersatzzügen o.ä. fehlen.
+        durchfahrtsgleise sind auch enthalten.
+
+        :return: generator
+        """
+        if self.von:
+            yield self.von
+        for fpz in self.fahrplan:
+            yield fpz.gleis
+        if self.nach:
+            yield self.nach
+
+    def graph(self) -> nx.DiGraph:
+        """
+        fahrplan im networkx directed graph format
+
+        die knoten sind anschluss- oder gleisnamen und haben folgende attribute:
+        typ: 'anschluss' oder 'gleis'
+        an: ankunftszeit als datetime.time (kann fehlen)
+        ab: ankunftszeit als datetime.time (kann fehlen)
+        aufenthalt: aufenthaltszeit in sekunden (kann fehlen)
+
+        die kanten haben folgende attribute:
+        fahrzeit: planmässige fahrzeit in sekunden (kann fehlen)
+
+        :return: nx.DiGraph
+        """
+        graph = nx.DiGraph()
+
+        start = self.von
+        startzeit = np.nan
+        if start:
+            graph.add_node(start, typ='anschluss')
+
+        for zeile in self.fahrplan:
+            ziel = zeile.gleis
+            try:
+                ankunftszeit = time_to_seconds(zeile.an)
+            except AttributeError:
+                ankunftszeit = np.nan
+            try:
+                abfahrtszeit = time_to_seconds(zeile.ab)
+            except AttributeError:
+                abfahrtszeit = np.nan
+
+            if ziel:
+                aufenthalt = abfahrtszeit - ankunftszeit if not zeile.durchfahrt() else 0
+                graph.add_node(ziel, typ='gleis')
+                if zeile.an:
+                    graph.nodes[ziel]['an'] = zeile.an
+                if zeile.ab:
+                    graph.nodes[ziel]['ab'] = zeile.ab
+                if not np.isnan(aufenthalt):
+                    graph.nodes[ziel]['aufenthalt'] = aufenthalt
+
+                if start:
+                    fahrzeit = ankunftszeit - startzeit
+                    graph.add_edge(start, ziel)
+                    if not np.isnan(fahrzeit):
+                        graph.edges[start][ziel]['fahrzeit'] = fahrzeit
+
+            start = ziel
+            startzeit = abfahrtszeit
+
+        ziel = self.nach
+        if ziel:
+            graph.add_node(ziel, typ='anschluss')
+            if start:
+                graph.add_edge(start, ziel)
+
+        return graph
+
+    def find_fahrplanzeile(self, gleis: Optional[str] = None, plan: Optional[str] = None) -> Optional['FahrplanZeile']:
+        """
+        finde erste fahrplanzeile, in der ein bestimmtes gleis vorkommt.
+
+        man kann entweder nach dem aktuellen gleis, dem plangleis oder beiden gleichzeitig suchen.
 
         :param gleis: (str)
+        :param plan: (str)
 
         :return: FahrplanZeile objekt oder None.
         """
         for zeile in self.fahrplan:
-            if gleis == zeile.gleis:
+            if (not gleis or gleis == zeile.gleis) and (not plan or plan == zeile.plan):
                 return zeile
         return None
 
@@ -464,16 +574,17 @@ class FahrplanZeile:
     """
     tag = 'gleis'
 
-    def __init__(self, zug):
+    def __init__(self, zug: ZugDetails):
         super().__init__()
         self.zug: ZugDetails = zug
         self.gleis: str = ""
         self.plan: str = ""
-        self.an: datetime.time = datetime.time(hour=0, minute=0)
-        self.ab: datetime.time = datetime.time(hour=0, minute=0)
+        self.an: Optional[datetime.time] = None
+        self.ab: Optional[datetime.time] = None
         self.flags: str = ""
         self.hinweistext: str = ""
 
+        # die nächsten drei attribute werden vom PluginClient anhand der flags aufgelöst.
         self.ersatzzug: Optional[ZugDetails] = None
         self.fluegelzug: Optional[ZugDetails] = None
         self.kuppelzug: Optional[ZugDetails] = None
