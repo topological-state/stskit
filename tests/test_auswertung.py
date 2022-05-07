@@ -1,5 +1,8 @@
+import datetime
 import unittest
-from auswertung import FahrzeitAuswertung
+
+import auswertung
+from stsobj import ZugDetails, FahrplanZeile
 
 
 class TestFahrzeitAuswertung(unittest.TestCase):
@@ -11,7 +14,7 @@ class TestFahrzeitAuswertung(unittest.TestCase):
                   'zeit': [11, 22, 12]}
 
     def test_add_fahrzeit(self):
-        fa = FahrzeitAuswertung()
+        fa = auswertung.FahrzeitAuswertung()
         fa.set_koordinaten(self.test_anlage)
         fa.add_fahrzeit("A1", "B1", 25)
 

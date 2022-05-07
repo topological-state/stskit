@@ -16,7 +16,7 @@ from PyQt5.QtCore import QModelIndex
 
 from stsplugin import PluginClient
 from anlage import Anlage
-from auswertung import StsAuswertung
+from auswertung import Auswertung
 from stsobj import Ereignis
 
 logger = logging.getLogger(__name__)
@@ -136,7 +136,7 @@ class TickerWindow(QtWidgets.QMainWindow):
 
         self.client: Optional[PluginClient] = None
         self.config: Optional[Anlage] = None
-        self.auswertung: Optional[StsAuswertung] = None
+        self.auswertung: Optional[Auswertung] = None
 
         self.setWindowTitle("ereignis-ticker")
         self._main = QtWidgets.QWidget()

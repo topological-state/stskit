@@ -18,7 +18,8 @@ import qtrio
 
 from stsplugin import PluginClient, TaskDone
 from anlage import Anlage
-from auswertung import StsAuswertung
+from auswertung import Auswertung
+from planung import Planung
 from stsobj import Ereignis
 from einausfahrten import EinfahrtenWindow, AusfahrtenWindow
 from gleisbelegung import GleisbelegungWindow
@@ -83,7 +84,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.closed = trio.Event()
         self.client: Optional[PluginClient] = None
         self.anlage: Optional[Anlage] = None
-        self.auswertung: Optional[StsAuswertung] = None
+        self.planung: Optional[Planung] = None
+        self.auswertung: Optional[Auswertung] = None
 
         self.config_path = Path.home() / r".stskit"
         self.config_path.mkdir(exist_ok=True)
@@ -131,12 +133,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def einfahrten_clicked(self):
         if self.einfahrten_window is None:
             self.einfahrten_window = EinfahrtenWindow()
-        if self.einfahrten_window.client is None:
-            self.einfahrten_window.client = self.client
-        if self.einfahrten_window.anlage is None:
-            self.einfahrten_window.anlage = self.anlage
-        if self.einfahrten_window.auswertung is None:
-            self.einfahrten_window.auswertung = self.auswertung
+
+        self.einfahrten_window.client = self.client
+        self.einfahrten_window.anlage = self.anlage
+        self.einfahrten_window.planung = self.planung
+        self.einfahrten_window.auswertung = self.auswertung
 
         self.einfahrten_window.update()
         self.einfahrten_window.show()
@@ -144,12 +145,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def ausfahrten_clicked(self):
         if self.ausfahrten_window is None:
             self.ausfahrten_window = AusfahrtenWindow()
-        if self.ausfahrten_window.client is None:
-            self.ausfahrten_window.client = self.client
-        if self.ausfahrten_window.anlage is None:
-            self.ausfahrten_window.anlage = self.anlage
-        if self.ausfahrten_window.auswertung is None:
-            self.ausfahrten_window.auswertung = self.auswertung
+
+        self.ausfahrten_window.client = self.client
+        self.ausfahrten_window.anlage = self.anlage
+        self.ausfahrten_window.planung = self.planung
+        self.ausfahrten_window.auswertung = self.auswertung
 
         self.ausfahrten_window.update()
         self.ausfahrten_window.show()
@@ -157,12 +157,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def gleisbelegung_clicked(self):
         if self.gleisbelegung_window is None:
             self.gleisbelegung_window = GleisbelegungWindow()
-        if self.gleisbelegung_window.client is None:
-            self.gleisbelegung_window.client = self.client
-        if self.gleisbelegung_window.anlage is None:
-            self.gleisbelegung_window.anlage = self.anlage
-        if self.gleisbelegung_window.auswertung is None:
-            self.gleisbelegung_window.auswertung = self.auswertung
+
+        self.gleisbelegung_window.client = self.client
+        self.gleisbelegung_window.anlage = self.anlage
+        self.gleisbelegung_window.planung = self.planung
+        self.gleisbelegung_window.auswertung = self.auswertung
 
         self.gleisbelegung_window.update()
         self.gleisbelegung_window.show()
@@ -170,12 +169,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def netz_clicked(self):
         if not self.netz_window:
             self.netz_window = GleisnetzWindow()
-        if self.netz_window.client is None:
-            self.netz_window.client = self.client
-        if self.netz_window.anlage is None:
-            self.netz_window.anlage = self.anlage
-        if self.netz_window.auswertung is None:
-            self.netz_window.auswertung = self.auswertung
+
+        self.netz_window.client = self.client
+        self.netz_window.anlage = self.anlage
+        self.netz_window.planung = self.planung
+        self.netz_window.auswertung = self.auswertung
 
         self.netz_window.update()
         self.netz_window.show()
@@ -235,10 +233,18 @@ class MainWindow(QtWidgets.QMainWindow):
             self.anlage = Anlage(self.client.anlageninfo)
         self.anlage.update(self.client, self.config_path)
 
-        if self.auswertung:
-            self.auswertung.zuege_uebernehmen(self.client.zugliste.values())
-        else:
-            self.auswertung = StsAuswertung(self.anlage)
+        if not self.planung:
+            self.planung = Planung()
+
+        if not self.auswertung:
+            self.auswertung = Auswertung(self.anlage)
+            self.planung.auswertung = self.auswertung
+
+        self.planung.zuege_uebernehmen(self.client.zugliste.values())
+        self.planung.verspaetungen_korrigieren()
+        self.planung.einfahrten_korrigieren()
+
+        self.auswertung.zuege_uebernehmen(self.client.zugliste.values())
 
     async def get_sts_data(self, alles=False):
         if alles or not self.client.anlageninfo:

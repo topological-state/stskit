@@ -18,8 +18,9 @@ from matplotlib.figure import Figure
 import numpy as np
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 
-from auswertung import StsAuswertung
+from auswertung import Auswertung
 from anlage import Anlage
+from planung import Planung
 from stsplugin import PluginClient
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes
 
@@ -167,7 +168,8 @@ class Slot:
     gleis: str = ""
     zeit: int = 0
     dauer: int = 0
-    kuppelzug: Optional[ZugDetails] = None
+    verbindung: Optional[ZugDetails] = None
+    verbindungsart: str = ""
     konflikte: List['Slot'] = field(default_factory=list)
 
     def __eq__(self, other):
@@ -185,8 +187,12 @@ class Slot:
         """
         if self.konflikte:
             return 'r'
-        elif self.kuppelzug:
-            return 'g'
+        elif self.verbindungsart == 'E':
+            return 'darkblue'
+        elif self.verbindungsart == 'K':
+            return 'm'
+        elif self.verbindungsart == 'F':
+            return 'darkgreen'
         else:
             return 'k'
 
@@ -227,7 +233,7 @@ class Slot:
 
         :return: 1 oder 2
         """
-        return 2 if self.konflikte or self.kuppelzug else 1
+        return 2 if self.konflikte or self.verbindungsart == 'K' else 1
 
 
 class SlotWindow(QtWidgets.QMainWindow):
@@ -251,7 +257,8 @@ class SlotWindow(QtWidgets.QMainWindow):
         super().__init__()
         self.client: Optional[PluginClient] = None
         self.anlage: Optional[Anlage] = None
-        self.auswertung: Optional[StsAuswertung] = None
+        self.planung: Optional[Planung] = None
+        self.auswertung: Optional[Auswertung] = None
 
         self.setWindowTitle("slot-grafik")
         self._main = QtWidgets.QWidget()
@@ -416,11 +423,7 @@ class SlotWindow(QtWidgets.QMainWindow):
         self._axes.figure.canvas.draw()
 
     def get_slot_hint(self, slot: Slot):
-        gleise = [fpz.gleis for fpz in slot.zug.fahrplan if fpz.gleis]
-        if slot.zug.von:
-            gleise.insert(0, slot.zug.von)
-        if slot.zug.nach:
-            gleise.append(slot.zug.nach)
+        gleise = [fpz.gleis for fpz in slot.zug.fahrplan if fpz.gleis and not fpz.durchfahrt()]
         weg = " - ".join(gleise)
         return "\n".join([slot.titel, weg])
 

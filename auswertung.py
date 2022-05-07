@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
-from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis, time_to_seconds
+from stsobj import ZugDetails, FahrplanZeile, Ereignis, time_to_minutes, time_to_seconds, minutes_to_time
 from anlage import Anlage
 
 
@@ -145,8 +145,8 @@ class ZugAuswertung:
                 mein_zug = ZugDetails()
                 mein_zug.zid = zug.zid
                 mein_zug.name = zug.name
-                mein_zug.von = zug.von.replace("Gleis ", "")
-                mein_zug.nach = zug.nach.replace("Gleis ", "")
+                mein_zug.von = zug.von.replace("Gleis ", "") if zug.von else ""
+                mein_zug.nach = zug.nach.replace("Gleis ", "") if zug.nach else ""
                 self.zugliste[mein_zug.zid] = mein_zug
 
             mein_zug.gleis = zug.gleis
@@ -318,7 +318,7 @@ class ZugAuswertung:
             pass
 
 
-class StsAuswertung:
+class Auswertung:
     def __init__(self, config: Anlage):
         self.config: Anlage = config
         self.fahrzeiten: FahrzeitAuswertung = FahrzeitAuswertung()
@@ -403,7 +403,7 @@ class StsAuswertung:
         :param zug: zugname
         :param start: name des startpunkts (einfahrt oder bahnsteig)
         :param ziel: name des zielpunkts (ausfahrt oder bahnsteig)
-        :return: geschätzte fahrzeit in minuten, oder None, falls eine schätzung unmöglich ist.
+        :return: geschätzte fahrzeit in sekunden, oder None, falls eine schätzung unmöglich ist.
         """
 
         return self.fahrzeiten.get_fahrzeit(start, ziel)

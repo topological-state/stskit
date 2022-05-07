@@ -290,17 +290,18 @@ class Anlage:
                     break
 
                 zeit = zielzeit - startzeit
-                try:
-                    d = graph[start][ziel]
-                    d['fahrzeit_sum'] = d['fahrzeit_sum'] + zeit
-                    d['fahrzeit_min'] = min(d['fahrzeit_min'], zeit) if not np.isnan(d['fahrzeit_min']) else zeit
-                    d['fahrzeit_max'] = max(d['fahrzeit_max'], zeit) if not np.isnan(d['fahrzeit_max']) else zeit
-                    d['zuege'] = d['zuege'] + 1
-                except KeyError:
-                    graph.add_edge(start, ziel, fahrzeit_sum=zeit, fahrzeit_min=zeit, fahrzeit_max=zeit, zuege=1)
-                    logger.debug(f"edge {start}-{ziel} ({zeit})")
-                start = ziel
+                if start != ziel:
+                    try:
+                        d = graph[start][ziel]
+                        d['fahrzeit_sum'] = d['fahrzeit_sum'] + zeit
+                        d['fahrzeit_min'] = min(d['fahrzeit_min'], zeit) if not np.isnan(d['fahrzeit_min']) else zeit
+                        d['fahrzeit_max'] = max(d['fahrzeit_max'], zeit) if not np.isnan(d['fahrzeit_max']) else zeit
+                        d['zuege'] = d['zuege'] + 1
+                    except KeyError:
+                        graph.add_edge(start, ziel, fahrzeit_sum=zeit, fahrzeit_min=zeit, fahrzeit_max=zeit, zuege=1)
+                        logger.debug(f"edge {start}-{ziel} ({zeit})")
 
+                start = ziel
                 try:
                     startzeit = time_to_seconds(zeile.ab)
                 except AttributeError:
@@ -308,8 +309,9 @@ class Anlage:
 
             try:
                 ziel = self.anschluesse[zug.nach]
-                graph.add_edge(start, ziel, fahrzeit_sum=0., fahrzeit_min=np.nan, fahrzeit_max=np.nan, zuege=0)
-                logger.debug(f"edge {start}-{ziel}")
+                if start != ziel:
+                    graph.add_edge(start, ziel, fahrzeit_sum=0., fahrzeit_min=np.nan, fahrzeit_max=np.nan, zuege=0)
+                    logger.debug(f"edge {start}-{ziel}")
             except (AttributeError, KeyError):
                 pass
 

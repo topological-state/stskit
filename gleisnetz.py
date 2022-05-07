@@ -17,7 +17,7 @@ import networkx as nx
 
 from stsplugin import PluginClient
 from anlage import Anlage
-from auswertung import StsAuswertung
+from auswertung import Auswertung
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -29,7 +29,7 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
         super().__init__()
         self.client: Optional[PluginClient] = None
         self.anlage: Optional[Anlage] = None
-        self.auswertung: Optional[StsAuswertung] = None
+        self.auswertung: Optional[Auswertung] = None
 
         self.setWindowTitle("gleisplan (experimentell)")
         self._main = QtWidgets.QWidget()
