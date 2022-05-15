@@ -455,6 +455,8 @@ class PluginClient:
         die funktion arbeitet iterativ, bis alle folgezüge aufgelöst sind.
         die züge werden in die zugliste eingetragen und im stammzug referenziert.
 
+        anmerkung: zids sind nicht chronologisch. ersatzzüge können eine tiefere zid als der stammzug haben.
+
         :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
         :return: None
         """
@@ -472,25 +474,40 @@ class PluginClient:
 
             for planzeile in zug.fahrplan:
                 if zid2 := planzeile.ersatz_zid():
-                    logger.warning(f"ersatzzug {zid2} hat tiefere zid als stammzug {zid}")
+                    logger.info(f"zid {zid2} als ersatz für {zid} anfragen")
                     zug2 = await self.request_zug(zid2)
                     if zug2 is not None:
                         planzeile.ersatzzug = zug2
+                        if zug2.stammzug and zug2.stammzug.zid != zug.zid:
+                            logger.warning(f"mehrfacher stamm, zug {zug2}")
+                        zug2.stammzug = zug
                         zug2.verspaetung = zug.verspaetung
                         zids.add(zid2)
+                    else:
+                        logger.warning(f"keine antwort für zug {zid2}")
                 if zid2 := planzeile.fluegel_zid():
-                    logger.warning(f"fluegelzug {zid2} hat tiefere zid als stammzug {zid}")
+                    logger.info(f"zid {zid2} als flügel für {zid} anfragen")
                     zug2 = await self.request_zug(zid2)
-                    if zug2:
+                    if zug2 is not None:
                         planzeile.fluegelzug = zug2
+                        if zug2.stammzug and zug2.stammzug.zid != zug.zid:
+                            logger.warning(f"mehrfacher stamm, zug {zug2}")
+                        zug2.stammzug = zug
                         zug2.verspaetung = zug.verspaetung
                         zids.add(zid2)
+                    else:
+                        logger.warning(f"keine antwort für zug {zid2}")
                 if zid2 := planzeile.kuppel_zid():
-                    logger.warning(f"kuppelzug {zid2} hat tiefere zid als stammzug {zid}")
+                    logger.info(f"zid {zid2} als kuppel für {zid} anfragen")
                     zug2 = await self.request_zug(zid2)
-                    if zug2:
+                    if zug2 is not None:
                         planzeile.kuppelzug = zug2
+                        if zug2.stammzug and zug2.stammzug.zid != zug.zid:
+                            logger.warning(f"mehrfacher stamm, zug {zug2}")
+                        zug2.stammzug = zug
                         zids.add(zid2)
+                    else:
+                        logger.warning(f"keine antwort für zug {zid2}")
 
     def update_bahnsteig_zuege(self):
         """

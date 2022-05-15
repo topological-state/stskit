@@ -277,6 +277,8 @@ class ZugDetails:
         self.fahrplan: List['FahrplanZeile'] = []
         # aktuelles ziel
         self.fahrplanzeile: Optional['FahrplanZeile'] = None
+        # zeigt an, ob der zug im flag eines anderen vorkommt
+        self.stammzug: Optional[ZugDetails] = None
 
     def __eq__(self, other: 'ZugDetails') -> bool:
         return self.zid.__eq__(other.zid)

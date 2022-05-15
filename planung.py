@@ -3,7 +3,8 @@ import logging
 import numpy as np
 from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
-from stsobj import ZugDetails, FahrplanZeile, time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
+from stsobj import ZugDetails, FahrplanZeile, Ereignis
+from stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
 from auswertung import Auswertung
 
 
@@ -161,6 +162,8 @@ class Planung:
         :param zuege:
         :return:
         """
+        verarbeitete_zuege = set(self.zugliste.keys())
+
         for zug in sorted(zuege, key=lambda z: z.zid):
             try:
                 zug_planung = self.zugliste[zug.zid]
@@ -170,6 +173,14 @@ class Planung:
                 self.zugliste[zug_planung.zid] = zug_planung
             else:
                 zug_planung.update_zug_details(zug)
+                verarbeitete_zuege.remove(zug.zid)
+
+        for zid in verarbeitete_zuege:
+            zug = self.zugliste[zid]
+            if zug.sichtbar:
+                zug.sichtbar = zug.amgleis = False
+                zug.gleis = zug.plangleis = ""
+                zug.hinweistext = "verarbeitet"
 
         self.folgezuege_aufloesen()
 
@@ -201,6 +212,7 @@ class Planung:
                             pass
                         else:
                             planzeile.ersatzzug = zug2
+                            zug2.stammzug = zug
                             zids.add(zid2)
 
                     if planzeile.fluegelzug is None and (zid2 := planzeile.fluegel_zid()):
@@ -210,6 +222,7 @@ class Planung:
                             pass
                         else:
                             planzeile.fluegelzug = zug2
+                            zug2.stammzug = zug
                             zids.add(zid2)
 
                     if planzeile.kuppelzug is None and (zid2 := planzeile.kuppel_zid()):
@@ -219,6 +232,7 @@ class Planung:
                             pass
                         else:
                             planzeile.kuppelzug = zug2
+                            zug2.stammzug = zug
                             zids.add(zid2)
 
     def einfahrten_korrigieren(self):
@@ -254,7 +268,16 @@ class Planung:
                             pass
 
     def verspaetungen_korrigieren(self):
-        for zug in sorted(self.zugliste.values(), key=lambda z: z.zid):
+        # wir muessen sicherstellen, dass folgezuege erst nach dem stammzug bearbeitet werden
+        # die zid sind nicht chronologisch
+        zids = list(filter(lambda z: self.zugliste[z].stammzug is None, self.zugliste.keys()))
+        while zids:
+            zid = zids.pop()
+            try:
+                zug = self.zugliste[zid]
+            except KeyError:
+                continue
+
             verspaetung = zug.verspaetung
 
             for plan in zug.fahrplan:
@@ -283,6 +306,7 @@ class Planung:
                 # abfahrt fruehestens wenn nummernwechsel abgeschlossen ist
                 try:
                     if plan.ersatzzug:
+                        zids.append(plan.ersatzzug.zid)
                         plan_ab = time_to_minutes(plan.ersatzzug.fahrplan[0].an)
                     else:
                         plan_ab = time_to_minutes(plan.ab)
@@ -291,6 +315,7 @@ class Planung:
 
                 # abfahrt fruehestens wenn kuppelnder zug angekommen ist
                 if plan.kuppelzug:
+                    zids.append(plan.kuppelzug.zid)
                     kuppel_verspaetung = plan.kuppelzug.verspaetung
                     try:
                         kuppel_plan = plan.kuppelzug.fahrplan[-1]
@@ -299,6 +324,10 @@ class Planung:
                         plan_ab = max(plan_ab, time_to_minutes(kuppel_plan.an) + kuppel_verspaetung)
                     except (AttributeError, IndexError):
                         plan_ab = max(plan_ab, plan_ab + kuppel_verspaetung)
+
+                # bei fluegelnden zuegen stimmt die angabe vom sim
+                if plan.fluegelzug:
+                    zids.append(plan.fluegelzug.zid)
 
                 # neue verspaetung berechnen
                 ankunft = plan_an + verspaetung
@@ -315,3 +344,24 @@ class Planung:
                     plan.ersatzzug.fahrplan[0].an = neu_ab
                 elif plan.fluegelzug:
                     plan.fluegelzug.verspaetung = verspaetung
+
+    def ereignis_uebernehmen(self, ereignis: Ereignis):
+        """
+        daten von einem ereignis uebernehmen.
+
+        noch nicht implementiert.
+
+        :param ereignis:
+        :return:
+        """
+        try:
+            zug = self.zugliste[ereignis.zid]
+        except KeyError:
+            return None
+
+        if ereignis.art == 'xxx':
+            zug.sichtbar = False
+            zug.amgleis = False
+            zug.gleis = ""
+            zug.plangleis = ""
+            zug.hinweistext = "ausgefahren"

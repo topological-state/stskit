@@ -25,6 +25,7 @@ from einausfahrten import EinfahrtenWindow, AusfahrtenWindow
 from gleisbelegung import GleisbelegungWindow
 from gleisnetz import GleisnetzWindow
 from qticker import TickerWindow
+from fahrplan import FahrplanWindow
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +75,7 @@ def setup_logging(filename: Optional[str] = "", level: Optional[str] = "ERROR", 
 
     # special modules
     logging.getLogger('matplotlib').setLevel(max(numeric_level, logging.WARNING))
+    logging.getLogger('PyQt5.uic.uiparser').setLevel(max(numeric_level, logging.WARNING))
     if not log_comm:
         logging.getLogger('stsplugin').setLevel(logging.WARNING)
 
@@ -115,6 +117,12 @@ class MainWindow(QtWidgets.QMainWindow):
         layout.addWidget(self.ticker_button)
         self.ticker_window: Optional[QtWidgets.QWidget] = None
         self.ticker_button.setEnabled(True)
+
+        self.fahrplan_button = QtWidgets.QPushButton("fahrplan", self)
+        self.fahrplan_button.clicked.connect(self.fahrplan_clicked)
+        layout.addWidget(self.fahrplan_button)
+        self.fahrplan_window: Optional[QtWidgets.QWidget] = None
+        self.fahrplan_button.setEnabled(True)
 
         self.netz_button = QtWidgets.QPushButton("gleisplan", self)
         self.netz_button.clicked.connect(self.netz_clicked)
@@ -178,6 +186,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.netz_window.update()
         self.netz_window.show()
 
+    def fahrplan_clicked(self):
+        if not self.fahrplan_window:
+            self.fahrplan_window = FahrplanWindow()
+
+        self.fahrplan_window.client = self.client
+        self.fahrplan_window.planung = self.planung
+
+        self.fahrplan_window.update()
+        self.fahrplan_window.show()
+
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         """Detect close events and emit the ``closed`` signal."""
 
@@ -213,12 +231,16 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.gleisbelegung_window.update()
                 if self.netz_window is not None:
                     self.netz_window.update()
+                if self.fahrplan_window is not None:
+                    self.fahrplan_window.update()
 
             await trio.sleep(self.update_interval)
 
     async def ereignis_loop(self):
         await self.client.registered.wait()
         async for ereignis in self.client._ereignis_channel_out:
+            if self.planung:
+                self.planung.ereignis_uebernehmen(ereignis)
             if self.auswertung:
                 self.auswertung.ereignis_uebernehmen(ereignis)
             if self.ticker_window is not None:
