@@ -148,7 +148,8 @@ class FahrplanWindow(QtWidgets.QWidget):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        uic.loadUi('qt/fahrplan.ui', self)
+        ui_path = Path('qt', 'fahrplan.ui')
+        uic.loadUi(ui_path, self)
 
         self.client: Optional[PluginClient] = None
         self.planung: Optional[Planung] = None
