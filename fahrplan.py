@@ -1,5 +1,6 @@
 import logging
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from pathlib import Path
+from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtCore import QModelIndex
 
@@ -148,7 +149,8 @@ class FahrplanWindow(QtWidgets.QWidget):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        uic.loadUi('qt/fahrplan.ui', self)
+        ui_path = Path('qt', 'fahrplan.ui')
+        uic.loadUi(ui_path, self)
 
         self.client: Optional[PluginClient] = None
         self.planung: Optional[Planung] = None
