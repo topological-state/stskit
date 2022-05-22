@@ -134,8 +134,11 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
             elif col == 'Zug':
                 return zug.name
             elif col == 'Verspätung':
-                if zug.verspaetung:
-                    return f"{zug.verspaetung:+}"
+                if zug.verspaetung is not None:
+                    if zug.verspaetung:
+                        return f"{zug.verspaetung:+}"
+                    else:
+                        return "0"
                 else:
                     return ""
             elif col == 'Von':
@@ -200,11 +203,11 @@ class FahrplanModell(QtCore.QAbstractTableModel):
         self.zug: Optional[ZugDetails] = None
         self._columns: List[str] = ['Gleis', 'An', 'Ab', 'Verspätung', 'Flags', 'Folgezug', 'Hinweis']
 
-    def set_zug(self, zug: ZugDetails):
+    def set_zug(self, zug: Optional[ZugDetails]):
         """
         anzuzeigenden zug setzen.
 
-        :param zug: ZugDetails oder ZugDetailsPlanung.
+        :param zug: ZugDetails oder ZugDetailsPlanung. None = leerer fahrplan.
         :return: None
         """
         self.zug = zug
@@ -258,8 +261,11 @@ class FahrplanModell(QtCore.QAbstractTableModel):
             elif col == 'Ab' and zeile.ab:
                 return zeile.ab.isoformat(timespec='minutes')
             elif col == 'Verspätung' and hasattr(zeile, 'verspaetung'):
-                if zeile.verspaetung:
-                    return f"{zeile.verspaetung:+}"
+                if zeile.verspaetung is not None:
+                    if zeile.verspaetung:
+                        return f"{zeile.verspaetung:+}"
+                    else:
+                        return "0"
                 else:
                     return ""
             elif col == 'Flags':
@@ -311,6 +317,8 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.zugliste_view: Optional[QTableView] = None
         self.fahrplan_view: Optional[QTableView] = None
         self.fahrplan_label: Optional[QLabel] = None
+        self.folgezug_view: Optional[QTableView] = None
+        self.folgezug_label: Optional[QLabel] = None
 
         ui_path = Path('qt', 'fahrplan.ui')
         uic.loadUi(ui_path, self)
@@ -318,7 +326,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.client: Optional[PluginClient] = None
         self.planung: Optional[Planung] = None
 
-        self.setWindowTitle("fahrplan")
+        self.setWindowTitle("Tabellarischer Fahrplan")
 
         self.zugliste_modell = ZuglisteModell()
         self.zugliste_sort_filter = QSortFilterProxyModel(self)
@@ -337,6 +345,12 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.fahrplan_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
         self.fahrplan_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
         self.fahrplan_view.verticalHeader().setVisible(False)
+
+        self.folgezug_modell = FahrplanModell()
+        self.folgezug_view.setModel(self.folgezug_modell)
+        self.folgezug_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
+        self.folgezug_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
+        self.folgezug_view.verticalHeader().setVisible(False)
 
     def update(self) -> None:
         """
@@ -383,3 +397,21 @@ class FahrplanWindow(QtWidgets.QWidget):
         else:
             self.fahrplan_view.resizeColumnsToContents()
             self.fahrplan_view.resizeRowsToContents()
+        self.update_folgezug()
+
+    def update_folgezug(self):
+        if self.fahrplan_modell.zug:
+            for fpz in self.fahrplan_modell.zug.fahrplan:
+                folgezug = fpz.ersatzzug or fpz.fluegelzug or fpz.kuppelzug
+                if folgezug:
+                    self.folgezug_modell.set_zug(folgezug)
+                    self.folgezug_label.setText(f"Fahrplan {folgezug.name}")
+                    self.folgezug_view.resizeColumnsToContents()
+                    self.folgezug_view.resizeRowsToContents()
+                    break
+            else:
+                self.folgezug_modell.set_zug(None)
+                self.folgezug_label.setText(f"Fahrplan Folgezug")
+        else:
+            self.folgezug_modell.set_zug(None)
+            self.folgezug_label.setText(f"Fahrplan Folgezug")
