@@ -28,6 +28,14 @@ class ZugDetailsPlanung(ZugDetails):
     def __init__(self):
         super().__init__()
 
+    @property
+    def einfahrtszeit(self) -> datetime.time:
+        return self.fahrplan[0].ab
+
+    @property
+    def ausfahrtszeit(self) -> datetime.time:
+        return self.fahrplan[-1].an
+
     def assign_zug_details(self, zug: ZugDetails):
         """
         objekt mit stammdaten vom PluginClient initialisieren.
@@ -268,6 +276,16 @@ class Planung:
                             pass
 
     def verspaetungen_korrigieren(self):
+        """
+        entwicklung der verspätung im zuglauf abschätzen.
+
+        die vom sim gemeldete verspätung bezieht sich auf den aktuellen ort des zuges.
+        diese methode extrapoliert die verspätung auf nachfolgende halte.
+        an längeren aufenthalten wird verspätung abgebaut.
+        beim kuppeln mit einem anderen zug wird dessen verspätung berücksichtigt.
+
+        :return: None
+        """
         # wir muessen sicherstellen, dass folgezuege erst nach dem stammzug bearbeitet werden
         # die zid sind nicht chronologisch
         zids = list(filter(lambda z: self.zugliste[z].stammzug is None, self.zugliste.keys()))
@@ -279,16 +297,28 @@ class Planung:
                 continue
 
             verspaetung = zug.verspaetung
+            ifpz0 = 0
+            if zug.sichtbar:
+                for ifpz, fpz in enumerate(zug.fahrplan):
+                    if fpz.gleis == zug.gleis:
+                        ifpz0 = ifpz
+            elif not zug.gleis:
+                continue
 
-            for plan in zug.fahrplan:
+            for ifpz, plan in enumerate(zug.fahrplan):
+                if ifpz < ifpz0:
+                    if plan.verspaetung is None:
+                        plan.verspaetung = verspaetung
+                    continue
                 if plan.hinweistext == "einfahrt" or plan.hinweistext == "ausfahrt":
+                    plan.verspaetung = verspaetung
+                    continue
+                if plan.durchfahrt():
                     plan.verspaetung = verspaetung
                     continue
 
                 # mindestaufenthaltsdauer kann von einer reihe von faktoren abhaengen:
-                if plan.durchfahrt():
-                    min_aufenthalt = 0
-                elif plan.richtungswechsel():
+                if plan.richtungswechsel():
                     min_aufenthalt = 2
                 elif plan.lokumlauf():
                     min_aufenthalt = 5
