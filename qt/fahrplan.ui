@@ -19,10 +19,10 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="">
-      <layout class="QVBoxLayout" name="verticalLayout">
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="zugliste_layout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="zugliste_label">
          <property name="text">
           <string>Züge</string>
          </property>
@@ -33,10 +33,10 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="fahrplan_layout">
        <item>
-        <widget class="QLabel" name="FahrplanLabel">
+        <widget class="QLabel" name="fahrplan_label">
          <property name="text">
           <string>Fahrplan</string>
          </property>
