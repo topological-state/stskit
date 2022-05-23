@@ -320,7 +320,8 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.folgezug_view: Optional[QTableView] = None
         self.folgezug_label: Optional[QLabel] = None
 
-        ui_path = Path('qt', 'fahrplan.ui')
+        py_path = Path(__file__).parent
+        ui_path = Path(py_path, 'qt', 'fahrplan.ui')
         uic.loadUi(ui_path, self)
 
         self.client: Optional[PluginClient] = None
