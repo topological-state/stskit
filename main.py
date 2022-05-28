@@ -282,7 +282,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.planung.auswertung = self.auswertung
 
         self.planung.zuege_uebernehmen(self.client.zugliste.values())
-        self.planung.verspaetungen_korrigieren()
+        self.planung.verspaetungen_korrigieren(uhrzeit=self.client.calc_simzeit())
         self.planung.einfahrten_korrigieren()
 
         self.auswertung.zuege_uebernehmen(self.client.zugliste.values())

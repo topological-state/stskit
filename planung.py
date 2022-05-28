@@ -325,7 +325,7 @@ class Planung:
                         except (AttributeError, ValueError):
                             pass
 
-    def verspaetungen_korrigieren(self):
+    def verspaetungen_korrigieren(self, uhrzeit: Optional[Union[datetime.time, datetime.datetime]] = None):
         """
         entwicklung der verspätung im zuglauf abschätzen.
 
@@ -336,6 +336,10 @@ class Planung:
 
         :return: None
         """
+
+        # uhrzeit_min = time_to_minutes(uhrzeit) if uhrzeit is not None else None
+        uhrzeit_min = None
+
         # wir muessen sicherstellen, dass folgezuege erst nach dem stammzug bearbeitet werden
         # die zid sind nicht chronologisch
         zids = list(filter(lambda z: self.zugliste[z].stammzug is None, self.zugliste.keys()))
@@ -346,7 +350,14 @@ class Planung:
             except KeyError:
                 continue
 
-            verspaetung = zug.verspaetung
+            # wenn der simulator eine zu kleine verspätung angibt...
+            if uhrzeit_min is not None:
+                min_verspaetung = uhrzeit_min - time_to_minutes(zug.einfahrtszeit)
+                verspaetung = max(zug.verspaetung, min_verspaetung)
+            else:
+                verspaetung = zug.verspaetung
+
+            # passierte ziele nicht mehr aktualisieren
             ifpz0 = 0
             if zug.sichtbar:
                 for ifpz, fpz in enumerate(zug.fahrplan):
@@ -374,8 +385,10 @@ class Planung:
                     min_aufenthalt = 5
                 elif plan.lokwechsel():
                     min_aufenthalt = 5
-                else:
+                elif plan.ab == plan.an:
                     min_aufenthalt = 0
+                else:
+                    min_aufenthalt = 1
 
                 try:
                     plan_an = time_to_minutes(plan.an)
