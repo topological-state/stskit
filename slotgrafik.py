@@ -423,9 +423,18 @@ class SlotWindow(QtWidgets.QMainWindow):
         self._axes.figure.canvas.draw()
 
     def get_slot_hint(self, slot: Slot):
+        gleis_zeile = slot.zug.find_fahrplanzeile(slot.gleis)
+        try:
+            verspaetung = gleis_zeile.verspaetung
+        except AttributeError:
+            verspaetung = None
+        if verspaetung is None:
+            verspaetung = slot.zug.verspaetung
+
+        titel = f"{slot.zug.name} ({verspaetung:+})"
         gleise = [fpz.gleis for fpz in slot.zug.fahrplan if fpz.gleis and not fpz.durchfahrt()]
         weg = " - ".join(gleise)
-        return "\n".join([slot.titel, weg])
+        return "\n".join([titel, weg])
 
     def on_pick(self, event):
         if event.mouseevent.inaxes == self._axes:
