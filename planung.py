@@ -12,6 +12,39 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
+class ZeitKorrektur():
+    def __init__(self, planung: 'Planung'):
+        super(self).__init__()
+        self._planung = planung
+
+    def anwenden(self, zug: 'ZugDetailsPlanung', plan: 'ZugZielPlanung', verspaetung: int):
+        pass
+
+
+class ManuelleVerspaetung(ZeitKorrektur):
+    def __init__(self, planung: 'Planung'):
+        super(self).__init__(planung)
+        self.verspaetung: Optional[int] = None
+
+    def anwenden(self, zug: 'ZugDetailsPlanung', plan: 'ZugZielPlanung', verspaetung: int):
+        if self.verspaetung is not None:
+            plan.verspaetung = self.verspaetung
+
+
+class ZugAbwarten(ZeitKorrektur):
+    def __init__(self, planung: 'Planung'):
+        super(self).__init__(planung)
+        self.referenz_zug: Optional['ZugDetailsPlanung'] = None
+        self.referenz_plangleis: Optional[str] = None
+        self.wartezeit: int = 0
+
+    def anwenden(self, zug: 'ZugDetailsPlanung', plan: 'ZugZielPlanung', verspaetung: int):
+        if self.referenz_zug is not None:
+            ref_plan = self.referenz_zug.find_fahrplanzeile(plan=self.referenz_plangleis)
+            ref_ab = ref_plan.ab + ref_plan.verspaetung
+            plan.verspaetung = ref_ab - plan.ab + self.wartezeit
+
+
 class ZugDetailsPlanung(ZugDetails):
     """
     ZugDetails für das planungsmodul
