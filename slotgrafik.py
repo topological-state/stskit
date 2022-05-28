@@ -135,26 +135,6 @@ class ZugFarbschema:
             (96000, 96999): 'tab:blue',
             (97000, 99999): 'tab:magenta'
         }
-"""
-        self.nach_nummer = {
-            (1, 400): 'tab:red',
-            (400, 1700): 'tab:orange',
-            (1700, 3400): 'tab:green',
-            (3400, 6000): 'tab:blue',
-            (6000, 8000): 'tab:blue',
-            (8000, 9000): 'tab:cyan',
-            (9200, 9800): 'tab:red',
-            (9850, 9899): 'tab:blue',
-            (10000, 11000): 'tab:pink',
-            (11000, 13000): 'tab:cyan',
-            (13600, 26000): 'tab:cyan',
-            (26000, 27000): 'tab:blue',
-            (27000, 40000): 'tab:pink',
-            (40000, 50000): 'tab:purple',
-            (50000, 60000): 'tab:olive',
-            (60000, 70000): 'tab:brown'
-        }
-"""
 
     def init_deutschland(self):
         self.nach_gattung = {
