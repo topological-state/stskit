@@ -70,7 +70,7 @@ class EinfahrtenWindow(EinAusWindow):
     def get_slot(self, zug: ZugDetailsPlanung) -> Optional[Slot]:
         try:
             planzeile = zug.fahrplan[0]
-            if planzeile.hinweistext == "einfahrt" and not zug.amgleis:
+            if planzeile.einfahrt and not zug.amgleis:
                 slot = Slot(zug, planzeile, zug.von)
                 slot.zeit = time_to_minutes(planzeile.an) + zug.verspaetung
                 slot.dauer = 1
@@ -96,7 +96,7 @@ class AusfahrtenWindow(EinAusWindow):
     def get_slot(self, zug: ZugDetailsPlanung) -> Optional[Slot]:
         try:
             planzeile = zug.fahrplan[-1]
-            if planzeile.hinweistext == "ausfahrt":
+            if planzeile.ausfahrt:
                 slot = Slot(zug, planzeile, zug.nach)
                 slot.zeit = time_to_minutes(planzeile.ab) + zug.verspaetung
                 slot.dauer = 1

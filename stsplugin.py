@@ -388,13 +388,13 @@ class PluginClient:
             response = await self._antwort_channel_out.receive()
 
             try:
+                zug.ziel_index = None
                 for gleis in response.zugfahrplan.gleis:
                     zeile = FahrplanZeile(zug).update(gleis)
                     zug.fahrplan.append(zeile)
-                    if zug.gleis == zeile.gleis:
-                        zug.fahrplanzeile = zeile
+                    if zug.plangleis == zeile.plan:
+                        zug.ziel_index = len(zug.fahrplan) - 1
                     logger.debug(f"request_zugfahrplan: {zeile}")
-                zug.fahrplan.sort(key=lambda zfz: zfz.an)
             except AttributeError:
                 log_status_warning("request_zugfahrplan", response)
 

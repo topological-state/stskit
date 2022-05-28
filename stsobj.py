@@ -81,6 +81,16 @@ def seconds_to_time(seconds: float) -> datetime.time:
     return datetime.time(hour=h, minute=m, second=s)
 
 
+def format_verspaetung(verspaetung: Optional[int]) -> str:
+    if verspaetung is not None:
+        if verspaetung:
+            return f"{verspaetung:+}"
+        else:
+            return "0"
+    else:
+        return ""
+
+
 class AnlagenInfo:
     """
     objektklasse für anlageninformationen.
@@ -275,9 +285,9 @@ class ZugDetails:
         self.usertext: str = ""
         self.usertextsender: str = ""
         self.fahrplan: List['FahrplanZeile'] = []
-        # aktuelles ziel
-        self.fahrplanzeile: Optional['FahrplanZeile'] = None
-        # zeigt an, ob der zug im flag eines anderen vorkommt
+        # index des aktuellen ziels. wird vom PluginClient aktualisiert
+        self.ziel_index: Optional[int] = None
+        # zeigt an, ob der zug im flag eines anderen vorkommt. wird vom PluginClient aktualisiert
         self.stammzug: Optional[ZugDetails] = None
 
     def __eq__(self, other: 'ZugDetails') -> bool:
@@ -387,7 +397,7 @@ class ZugDetails:
         return self.name.startswith('Lok') or self.name.startswith('Ersatzlok') or \
                self.name.startswith('RF') or self.name.endswith('RF')
 
-    def route(self) -> Iterable[str]:
+    def route(self, plan: bool = False) -> Iterable[str]:
         """
         route (reihe von stationen) des zuges als generator
 
@@ -395,12 +405,16 @@ class ZugDetails:
         ein- und ausfahrten können bei ersatzzügen o.ä. fehlen.
         durchfahrtsgleise sind auch enthalten.
 
+        :param plan: plangleise statt effektive gleise melden
         :return: generator
         """
         if self.von:
             yield self.von
         for fpz in self.fahrplan:
-            yield fpz.gleis
+            if plan:
+                yield fpz.plan
+            else:
+                yield fpz.gleis
         if self.nach:
             yield self.nach
 
@@ -478,6 +492,22 @@ class ZugDetails:
         for zeile in self.fahrplan:
             if (not gleis or gleis == zeile.gleis) and (not plan or plan == zeile.plan):
                 return zeile
+        return None
+
+    def find_fahrplan_index(self, gleis: Optional[str] = None, plan: Optional[str] = None) -> Optional[int]:
+        """
+        finde den index der ersten fahrplanzeile, in der ein bestimmtes gleis vorkommt.
+
+        man kann entweder nach dem aktuellen gleis, dem plangleis oder beiden gleichzeitig suchen.
+
+        :param gleis: (str)
+        :param plan: (str)
+
+        :return: index in fahrplan-liste oder None.
+        """
+        for index, zeile in enumerate(self.fahrplan):
+            if (not gleis or gleis == zeile.gleis) and (not plan or plan == zeile.plan):
+                return index
         return None
 
 

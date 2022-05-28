@@ -196,8 +196,8 @@ class Slot:
 
         :return: (str) zugtitel
         """
-        if self.plan.verspaetung:
-            return f"{self.zug.name} ({self.plan.verspaetung:+})"
+        if self.plan.verspaetung_an:
+            return f"{self.zug.name} ({self.plan.verspaetung_an:+})"
         else:
             return f"{self.zug.name}"
 
