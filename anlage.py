@@ -156,6 +156,9 @@ class Anlage:
         self.bahnsteig_graph: nx.Graph = nx.Graph()
         self.bahnhof_graph: nx.Graph = nx.Graph()
 
+        # strecken-name -> gruppen-namen
+        self.strecken: Dict[str, List[str]] = {}
+
     def update(self, client: PluginClient, config_path: os.PathLike):
         self.anlage = client.anlageninfo
         self.original_graphen_erstellen(client)
@@ -418,6 +421,25 @@ class Anlage:
             for g in s:
                 self.alle_ziele[g] = n
 
+    def get_strecken_distanzen(self, streckenname: str) -> Dict[str, float]:
+        """
+
+        :param streckenname:
+        :return: distanz = minimale fahrzeit in sekunden
+        """
+        strecke = self.strecken[streckenname]
+        kanten = zip(strecke[:-1], strecke[1:])
+        result = {strecke[0]: 0.}
+        for u, v in kanten:
+            try:
+                distanz = self.bahnhof_graph[u][v]['fahrzeit_min']
+            except KeyError:
+                logger.warning(f"strecke {streckenname}: verbindung {u}{v} nicht im netzplan.")
+            else:
+                result[v] = float(distanz)
+
+        return result
+
     def load_config(self, path: os.PathLike, load_graphs=False):
         """
 
@@ -459,6 +481,10 @@ class Anlage:
         except KeyError:
             logger.info("fehlende anschlussnamen-konfiguration - verwende default")
             self.anschlussnamen = {k: k for k in self.anschlussgruppen.keys()}
+        try:
+            self.strecken = d['strecken']
+        except KeyError:
+            logger.info("fehlende streckenkonfiguration")
 
         self._update_gruppen_dict()
 
@@ -484,18 +510,20 @@ class Anlage:
              'bahnsteiggruppen': self.bahnsteiggruppen,
              'anschlussgruppen': self.anschlussgruppen,
              'bahnhofnamen': self.bahnhofnamen,
-             'anschlussnamen': self.anschlussnamen}
+             'anschlussnamen': self.anschlussnamen,
+             'strecken': self.strecken}
 
         p = Path(path) / f"{self.anlage.aid}.json"
         with open(p, "w") as fp:
             json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
 
-        if self.signal_graph:
-            d['signal_graph'] = dict(nx.node_link_data(self.signal_graph))
-        if self.bahnsteig_graph:
-            d['bahnsteig_graph'] = dict(nx.node_link_data(self.bahnsteig_graph))
-        if self.bahnhof_graph:
-            d['bahnhof_graph'] = dict(nx.node_link_data(self.bahnhof_graph))
+        if logger.isEnabledFor(logging.DEBUG):
+            if self.signal_graph:
+                d['signal_graph'] = dict(nx.node_link_data(self.signal_graph))
+            if self.bahnsteig_graph:
+                d['bahnsteig_graph'] = dict(nx.node_link_data(self.bahnsteig_graph))
+            if self.bahnhof_graph:
+                d['bahnhof_graph'] = dict(nx.node_link_data(self.bahnhof_graph))
 
         p = Path(path) / f"{self.anlage.aid}diag.json"
         with open(p, "w") as fp:
