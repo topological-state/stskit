@@ -113,6 +113,30 @@ class ZugFarbschema:
         }
 
         self.nach_nummer = {
+            (1, 4099): 'tab:red',
+            (4100, 8999): 'tab:orange',
+            (9000, 9849): 'tab:red',
+            (9850, 9899): 'tab:orange',
+            (9900, 10999): 'tab:red',
+            (11000, 26999): 'tab:orange',
+            (27000, 27999): 'tab:magenta',
+            (28000, 28999): 'tab:green',
+            (29000, 29999): 'tab:blue',
+            (30000, 35999): 'tab:green',
+            (36000, 36999): 'tab:blue',
+            (37000, 39999): 'tab:green',
+            (40000, 42999): 'tab:blue',
+            (43000, 44999): 'tab:purple',
+            (45000, 49999): 'tab:cyan',
+            (50000, 50199): 'tab:orange',
+            (50200, 87599): 'tab:cyan',
+            (87600, 87999): 'tab:red',
+            (88000, 95999): 'tab:cyan',
+            (96000, 96999): 'tab:blue',
+            (97000, 99999): 'tab:magenta'
+        }
+"""
+        self.nach_nummer = {
             (1, 400): 'tab:red',
             (400, 1700): 'tab:orange',
             (1700, 3400): 'tab:green',
@@ -130,6 +154,7 @@ class ZugFarbschema:
             (50000, 60000): 'tab:olive',
             (60000, 70000): 'tab:brown'
         }
+"""
 
     def init_deutschland(self):
         self.nach_gattung = {
