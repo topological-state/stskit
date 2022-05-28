@@ -63,10 +63,26 @@ class ZugDetailsPlanung(ZugDetails):
 
     @property
     def einfahrtszeit(self) -> datetime.time:
+        """
+        planmässige einfahrtszeit (ohne verspätung)
+
+        dies entspricht der abfahrtszeit des ersten fahrplaneintrags (einfahrt).
+
+        :return: uhrzeit als datetime.time
+        :raise IndexError, wenn der fahrplan keinen eintrag enthält.
+        """
         return self.fahrplan[0].ab
 
     @property
     def ausfahrtszeit(self) -> datetime.time:
+        """
+        planmässige ausfahrtszeit (ohne verspätung)
+
+        dies enstspricht der ankunftszeit des letzten fahrplaneintrags (ausfahrt).
+
+        :return: uhrzeit als datetime.time
+        :raise IndexError, wenn der fahrplan keinen eintrag enthält.
+        """
         return self.fahrplan[-1].an
 
     def assign_zug_details(self, zug: ZugDetails):
@@ -211,6 +227,7 @@ class Planung:
             except KeyError:
                 zug_planung = ZugDetailsPlanung()
                 zug_planung.assign_zug_details(zug)
+                zug_planung.update_zug_details(zug)
                 self.zugliste[zug_planung.zid] = zug_planung
             else:
                 zug_planung.update_zug_details(zug)
@@ -235,10 +252,10 @@ class Planung:
         :return: None
         """
 
-        zids = set(self.zugliste.keys())
+        zids = list(self.zugliste.keys())
 
         while zids:
-            zid = zids.pop()
+            zid = zids.pop(0)
             try:
                 zug = self.zugliste[zid]
             except KeyError:
@@ -254,7 +271,7 @@ class Planung:
                         else:
                             planzeile.ersatzzug = zug2
                             zug2.stammzug = zug
-                            zids.add(zid2)
+                            zids.append(zid2)
 
                     if planzeile.fluegelzug is None and (zid2 := planzeile.fluegel_zid()):
                         try:
@@ -264,7 +281,7 @@ class Planung:
                         else:
                             planzeile.fluegelzug = zug2
                             zug2.stammzug = zug
-                            zids.add(zid2)
+                            zids.append(zid2)
 
                     if planzeile.kuppelzug is None and (zid2 := planzeile.kuppel_zid()):
                         try:
@@ -274,7 +291,7 @@ class Planung:
                         else:
                             planzeile.kuppelzug = zug2
                             zug2.stammzug = zug
-                            zids.add(zid2)
+                            zids.append(zid2)
 
     def einfahrten_korrigieren(self):
         for zug in self.zugliste.values():
@@ -323,7 +340,7 @@ class Planung:
         # die zid sind nicht chronologisch
         zids = list(filter(lambda z: self.zugliste[z].stammzug is None, self.zugliste.keys()))
         while zids:
-            zid = zids.pop()
+            zid = zids.pop(0)
             try:
                 zug = self.zugliste[zid]
             except KeyError:
