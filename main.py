@@ -16,6 +16,7 @@ from PyQt5 import QtCore, QtWidgets, uic, QtGui
 import trio
 import qtrio
 
+from bildfahrplan import BildFahrplanWindow
 from stsplugin import PluginClient, TaskDone
 from anlage import Anlage
 from auswertung import Auswertung
@@ -118,11 +119,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ticker_window: Optional[QtWidgets.QWidget] = None
         self.ticker_button.setEnabled(True)
 
-        self.fahrplan_button = QtWidgets.QPushButton("fahrplan", self)
+        self.fahrplan_button = QtWidgets.QPushButton("tabellenfahrplan", self)
         self.fahrplan_button.clicked.connect(self.fahrplan_clicked)
         layout.addWidget(self.fahrplan_button)
         self.fahrplan_window: Optional[QtWidgets.QWidget] = None
         self.fahrplan_button.setEnabled(True)
+
+        self.bildfahrplan_button = QtWidgets.QPushButton("bildfahrplan", self)
+        self.bildfahrplan_button.clicked.connect(self.bildfahrplan_clicked)
+        layout.addWidget(self.bildfahrplan_button)
+        self.bildfahrplan_window: Optional[QtWidgets.QWidget] = None
+        self.bildfahrplan_button.setEnabled(True)
 
         self.netz_button = QtWidgets.QPushButton("gleisplan", self)
         self.netz_button.clicked.connect(self.netz_clicked)
@@ -196,6 +203,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.fahrplan_window.update()
         self.fahrplan_window.show()
 
+    def bildfahrplan_clicked(self):
+        if not self.bildfahrplan_window:
+            self.bildfahrplan_window = BildFahrplanWindow()
+
+        self.bildfahrplan_window.client = self.client
+        self.bildfahrplan_window.planung = self.planung
+
+        self.bildfahrplan_window.update()
+        self.bildfahrplan_window.show()
+
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         """Detect close events and emit the ``closed`` signal."""
 
@@ -233,6 +250,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.netz_window.update()
                 if self.fahrplan_window is not None:
                     self.fahrplan_window.update()
+                if self.bildfahrplan_window is not None:
+                    self.bildfahrplan_window.update()
 
             await trio.sleep(self.update_interval)
 
