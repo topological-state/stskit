@@ -70,7 +70,10 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
                         sel_nach = list(self.anlage.alle_gruppen[e2].intersection(set(df.index)))
                         # loc[zeile, spalte] !!!
                         zeiten: pd.DataFrame = self.auswertung.fahrzeiten.zeiten.loc[sel_nach, sel_von]
-                        zeit = zeiten.sum().sum() / zeiten.count().sum()
+                        s = zeiten.sum().sum()
+                        n = zeiten.count().sum()
+                        if n > 0:
+                            zeit = s / n
                     except AttributeError:
                         break
                     except KeyError:
