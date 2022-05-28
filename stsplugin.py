@@ -461,12 +461,12 @@ class PluginClient:
         :return: None
         """
         if zid is not None:
-            zids = {int(zid)}
+            zids = [int(zid)]
         else:
-            zids = set(self.zugliste.keys())
+            zids = list(self.zugliste.keys())
 
         while zids:
-            zid = zids.pop()
+            zid = zids.pop(0)
             try:
                 zug = self.zugliste[zid]
             except KeyError:
@@ -482,7 +482,7 @@ class PluginClient:
                             logger.warning(f"mehrfacher stamm, zug {zug2}")
                         zug2.stammzug = zug
                         zug2.verspaetung = zug.verspaetung
-                        zids.add(zid2)
+                        zids.append(zid2)
                     else:
                         logger.warning(f"keine antwort für zug {zid2}")
                 if zid2 := planzeile.fluegel_zid():
@@ -494,7 +494,7 @@ class PluginClient:
                             logger.warning(f"mehrfacher stamm, zug {zug2}")
                         zug2.stammzug = zug
                         zug2.verspaetung = zug.verspaetung
-                        zids.add(zid2)
+                        zids.append(zid2)
                     else:
                         logger.warning(f"keine antwort für zug {zid2}")
                 if zid2 := planzeile.kuppel_zid():
@@ -505,7 +505,7 @@ class PluginClient:
                         if zug2.stammzug and zug2.stammzug.zid != zug.zid:
                             logger.warning(f"mehrfacher stamm, zug {zug2}")
                         zug2.stammzug = zug
-                        zids.add(zid2)
+                        zids.append(zid2)
                     else:
                         logger.warning(f"keine antwort für zug {zid2}")
 

@@ -19,11 +19,9 @@ class GleisbelegungWindow(SlotWindow):
 
     def slots_erstellen(self) -> Iterable[Slot]:
         for zug in self.planung.zugliste.values():
-            verspaetung = zug.verspaetung
-            for planzeile in zug.fahrplan:
-                if not planzeile.gleis or planzeile.hinweistext == "einfahrt" or planzeile.hinweistext == "ausfahrt":
-                    continue
+            verspaetung = zug.fahrplan[0].verspaetung
 
+            for planzeile in zug.fahrplan:
                 try:
                     plan_an = time_to_minutes(planzeile.an)
                 except AttributeError:
@@ -34,21 +32,22 @@ class GleisbelegungWindow(SlotWindow):
                     plan_ab = plan_an + 1
                 verspaetung_neu = planzeile.verspaetung if planzeile.verspaetung is not None else verspaetung
 
-                slot = Slot(zug, planzeile, planzeile.gleis)
-                slot.zeit = plan_an + verspaetung
-                slot.dauer = max(1, plan_ab + verspaetung_neu - plan_an - verspaetung)
+                if planzeile.gleis and planzeile.hinweistext != "einfahrt" and planzeile.hinweistext != "ausfahrt":
+                    slot = Slot(zug, planzeile, planzeile.gleis)
+                    slot.zeit = plan_an + verspaetung
+                    slot.dauer = max(1, plan_ab + verspaetung_neu - plan_an - verspaetung)
 
-                if planzeile.ersatzzug:
-                    slot.verbindung = planzeile.ersatzzug
-                    slot.verbindungsart = "E"
-                elif planzeile.kuppelzug:
-                    slot.verbindung = planzeile.kuppelzug
-                    slot.verbindungsart = "K"
-                elif planzeile.fluegelzug:
-                    slot.verbindung = planzeile.fluegelzug
-                    slot.verbindungsart = "F"
+                    if planzeile.ersatzzug:
+                        slot.verbindung = planzeile.ersatzzug
+                        slot.verbindungsart = "E"
+                    elif planzeile.kuppelzug:
+                        slot.verbindung = planzeile.kuppelzug
+                        slot.verbindungsart = "K"
+                    elif planzeile.fluegelzug:
+                        slot.verbindung = planzeile.fluegelzug
+                        slot.verbindungsart = "F"
 
-                yield slot
+                    yield slot
 
                 verspaetung = verspaetung_neu
 

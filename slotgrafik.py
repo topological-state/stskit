@@ -20,7 +20,7 @@ from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 
 from auswertung import Auswertung
 from anlage import Anlage
-from planung import Planung
+from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stsplugin import PluginClient
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes
 
@@ -163,12 +163,12 @@ class Slot:
 
     properties berechnen gewisse statische darstellungsmerkmale wie farben.
     """
-    zug: ZugDetails
-    plan: FahrplanZeile
+    zug: ZugDetailsPlanung
+    plan: ZugZielPlanung
     gleis: str = ""
     zeit: int = 0
     dauer: int = 0
-    verbindung: Optional[ZugDetails] = None
+    verbindung: Optional[ZugDetailsPlanung] = None
     verbindungsart: str = ""
     konflikte: List['Slot'] = field(default_factory=list)
 
@@ -203,8 +203,8 @@ class Slot:
 
         :return: (str) zugtitel
         """
-        if self.zug.verspaetung:
-            return f"{self.zug.name} ({self.zug.verspaetung:+})"
+        if self.plan.verspaetung:
+            return f"{self.zug.name} ({self.plan.verspaetung:+})"
         else:
             return f"{self.zug.name}"
 
@@ -423,9 +423,18 @@ class SlotWindow(QtWidgets.QMainWindow):
         self._axes.figure.canvas.draw()
 
     def get_slot_hint(self, slot: Slot):
+        gleis_zeile = slot.zug.find_fahrplanzeile(slot.gleis)
+        try:
+            verspaetung = gleis_zeile.verspaetung
+        except AttributeError:
+            verspaetung = None
+        if verspaetung is None:
+            verspaetung = slot.zug.verspaetung
+
+        titel = f"{slot.zug.name} ({verspaetung:+})"
         gleise = [fpz.gleis for fpz in slot.zug.fahrplan if fpz.gleis and not fpz.durchfahrt()]
         weg = " - ".join(gleise)
-        return "\n".join([slot.titel, weg])
+        return "\n".join([titel, weg])
 
     def on_pick(self, event):
         if event.mouseevent.inaxes == self._axes:

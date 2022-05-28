@@ -6,8 +6,9 @@ import logging
 import numpy as np
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
-from stsobj import time_to_minutes, Knoten, ZugDetails, FahrplanZeile
+from stsobj import time_to_minutes
 from slotgrafik import Slot, SlotWindow
+from planung import ZugDetailsPlanung, ZugZielPlanung
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -31,7 +32,7 @@ class EinAusWindow(SlotWindow):
             if slot is not None:
                 yield slot
 
-    def get_slot(self, zug: ZugDetails) -> Optional[Slot]:
+    def get_slot(self, zug: ZugDetailsPlanung) -> Optional[Slot]:
         """
         slot-objekt für einen zug erstellen.
 
@@ -66,10 +67,10 @@ class EinfahrtenWindow(EinAusWindow):
         super().__init__()
         self.setWindowTitle("einfahrten")
 
-    def get_slot(self, zug: ZugDetails) -> Optional[Slot]:
+    def get_slot(self, zug: ZugDetailsPlanung) -> Optional[Slot]:
         try:
             planzeile = zug.fahrplan[0]
-            if planzeile.hinweistext == "einfahrt":
+            if planzeile.hinweistext == "einfahrt" and not zug.amgleis:
                 slot = Slot(zug, planzeile, zug.von)
                 slot.zeit = time_to_minutes(planzeile.an) + zug.verspaetung
                 slot.dauer = 1
@@ -92,7 +93,7 @@ class AusfahrtenWindow(EinAusWindow):
         super().__init__()
         self.setWindowTitle("ausfahrten")
 
-    def get_slot(self, zug: ZugDetails) -> Optional[Slot]:
+    def get_slot(self, zug: ZugDetailsPlanung) -> Optional[Slot]:
         try:
             planzeile = zug.fahrplan[-1]
             if planzeile.hinweistext == "ausfahrt":
