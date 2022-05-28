@@ -128,7 +128,7 @@ class ZugFarbschema:
             (40000, 42999): 'tab:blue',
             (43000, 44999): 'tab:purple',
             (45000, 49999): 'tab:cyan',
-            (50000, 50199): 'tab:orange',
+            (50000, 50199): 'tab:olive',
             (50200, 87599): 'tab:cyan',
             (87600, 87999): 'tab:red',
             (88000, 95999): 'tab:cyan',
