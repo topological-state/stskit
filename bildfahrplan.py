@@ -25,7 +25,7 @@ mpl.use('Qt5Agg')
 
 
 @dataclass
-class Trasse():
+class Trasse:
     zug: ZugDetails
     color: str = "b"
     fontstyle: str = "normal"
@@ -70,7 +70,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         if not self._strecke:
             try:
                 self.set_strecke(list(self.anlage.strecken.keys())[0])
-            except IndexError:
+            except (AttributeError, IndexError):
                 logger.warning("bildfahrplan: keine strecken definiert.")
                 return
 
@@ -79,7 +79,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     def daten_update(self):
         for zug in self.client.zugliste.values():
-            trasse = Trasse()
+            trasse = Trasse(zug)
             koord = []
             plan1 = zug.fahrplan[0]
             for plan2 in zug.fahrplan[1:]:
