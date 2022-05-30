@@ -28,6 +28,7 @@ EREIGNISART_QCOLOR = {
     "rothalt": QtGui.QColor("darkRed"),
     "fahrt": QtGui.QColor("darkGreen"),
     "ankunft": QtGui.QColor("darkCyan"),
+    "durchfahrt": QtGui.QColor("darkCyan"),
     "bereit": QtGui.QColor("darkRed"),
     "abfahrt": QtGui.QColor("darkMagenta"),
     "kuppeln": QtGui.QColor("black"),
@@ -41,6 +42,7 @@ EREIGNISART_QCOLOR_SVG = {
     "rothalt": QtGui.QColor("red"),
     "fahrt": QtGui.QColor("darkGreen"),
     "ankunft": QtGui.QColor("darkCyan"),
+    "durchfahrt": QtGui.QColor("darkCyan"),
     "bereit": QtGui.QColor("darkorange"),
     "abfahrt": QtGui.QColor("darkGreen"),
     "kuppeln": QtGui.QColor("steelblue"),
@@ -94,7 +96,7 @@ class EreignisTabelle(QtCore.QAbstractTableModel):
             try:
                 return EREIGNISART_QCOLOR_SVG[ereignis.art]
             except KeyError:
-                return QtGui.QColor("red")
+                return EREIGNISART_QCOLOR_SVG["default"]
 
         elif role == QtCore.Qt.CheckStateRole:
             if col == 'gleis' and ereignis.gleis:
@@ -117,6 +119,9 @@ class EreignisTabelle(QtCore.QAbstractTableModel):
         if ereignis.art == "abfahrt" and ereignis.amgleis:
             ereignis = copy.copy(ereignis)
             ereignis.art = "bereit"
+        elif ereignis.art == "ankunft" and not ereignis.amgleis:
+            ereignis = copy.copy(ereignis)
+            ereignis.art = "durchfahrt"
         elif ereignis.art == "wurdegruen":
             ereignis = copy.copy(ereignis)
             ereignis.art = "fahrt"
