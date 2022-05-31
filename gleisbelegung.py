@@ -19,7 +19,13 @@ class GleisbelegungWindow(SlotWindow):
 
     def slots_erstellen(self) -> Iterable[Slot]:
         for zug in self.planung.zugliste.values():
-            verspaetung = zug.fahrplan[0].verspaetung
+            try:
+                verspaetung = zug.fahrplan[0].verspaetung
+            except IndexError:
+                continue
+            if verspaetung is None:
+                verspaetung = zug.verspaetung
+                logger.warning(f"zug {zug.name} (zid {zug.zid}) hat keine detaillierten verspätungsangaben.")
 
             for planzeile in zug.fahrplan:
                 try:
