@@ -97,38 +97,31 @@ class ZugFarbschema:
         self.nach_gattung = {
             'ICE': 'tab:red',
             'TGV': 'tab:red',
-            'IC': 'tab:orange',
-            'EC': 'tab:orange',
-            'RJ': 'tab:orange',
-            'IR': 'tab:green',
-            'IRE': 'tab:green',
-            'CNL': 'tab:green',
-            'RE': 'tab:blue',
-            'RB': 'tab:blue',
-            'TER': 'tab:blue',
-            'S': 'tab:cyan',
-            'G': 'tab:brown',
-            'Lok': 'tab:olive',
-            'RoLa': 'tab:purple'
+            'Lok': 'tab:gray'
         }
 
         self.nach_nummer = {
-            (1, 400): 'tab:red',
-            (400, 1700): 'tab:orange',
-            (1700, 3400): 'tab:green',
-            (3400, 6000): 'tab:blue',
-            (6000, 8000): 'tab:blue',
-            (8000, 9000): 'tab:cyan',
-            (9200, 9800): 'tab:red',
-            (9850, 9899): 'tab:blue',
-            (10000, 11000): 'tab:pink',
-            (11000, 13000): 'tab:cyan',
-            (13600, 26000): 'tab:cyan',
-            (26000, 27000): 'tab:blue',
-            (27000, 40000): 'tab:pink',
-            (40000, 50000): 'tab:purple',
-            (50000, 60000): 'tab:olive',
-            (60000, 70000): 'tab:brown'
+            (1, 4100): 'tab:red',
+            (4100, 9000): 'tab:orange',
+            (9000, 9850): 'tab:red',
+            (9850, 9900): 'tab:orange',
+            (9900, 11000): 'tab:red',
+            (11000, 27000): 'tab:orange',
+            (27000, 28000): 'tab:magenta',
+            (28000, 29000): 'tab:green',
+            (29000, 30000): 'tab:blue',
+            (30000, 36000): 'tab:green',
+            (36000, 37000): 'tab:blue',
+            (37000, 40000): 'tab:green',
+            (40000, 43000): 'tab:blue',
+            (43000, 45000): 'tab:purple',
+            (45000, 50000): 'tab:cyan',
+            (50000, 50200): 'tab:olive',
+            (50200, 87600): 'tab:cyan',
+            (87600, 88000): 'tab:red',
+            (88000, 96000): 'tab:cyan',
+            (96000, 97000): 'tab:blue',
+            (97000, 100000): 'tab:magenta'
         }
 
     def init_deutschland(self):
@@ -259,6 +252,7 @@ class SlotWindow(QtWidgets.QMainWindow):
         self.anlage: Optional[Anlage] = None
         self.planung: Optional[Planung] = None
         self.auswertung: Optional[Auswertung] = None
+        self.farbschema: Optional[ZugFarbschema] = None
 
         self.setWindowTitle("slot-grafik")
         self._main = QtWidgets.QWidget()
@@ -278,8 +272,6 @@ class SlotWindow(QtWidgets.QMainWindow):
 
         self.zeitfenster_voraus = 55
         self.zeitfenster_zurueck = 5
-        self.farbschema = ZugFarbschema()
-        self.farbschema.init_schweiz()
 
         canvas.mpl_connect("pick_event", self.on_pick)
 
@@ -292,6 +284,15 @@ class SlotWindow(QtWidgets.QMainWindow):
 
         :return: None
         """
+        if self.farbschema is None:
+            self.farbschema = ZugFarbschema()
+            regionen_schweiz = {"Bern - Lötschberg", "Ostschweiz", "Tessin", "Westschweiz", "Zentralschweiz",
+                                "Zürich und Umgebung"}
+            if self.anlage.anlage.region in regionen_schweiz:
+                self.farbschema.init_schweiz()
+            else:
+                self.farbschema.init_deutschland()
+
         self.daten_update()
         self.grafik_update()
 
