@@ -22,7 +22,7 @@ from auswertung import Auswertung
 from anlage import Anlage
 from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stsplugin import PluginClient
-from stsobj import FahrplanZeile, ZugDetails, time_to_minutes
+from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -424,16 +424,42 @@ class SlotWindow(QtWidgets.QMainWindow):
         self._axes.figure.canvas.draw()
 
     def get_slot_hint(self, slot: Slot):
-        gleis_zeile = slot.zug.find_fahrplanzeile(slot.gleis)
+        gleis_index = slot.zug.find_fahrplan_index(gleis=slot.gleis)
         try:
-            verspaetung = gleis_zeile.verspaetung
+            gleis_zeile = slot.zug.fahrplan[gleis_index]
+        except (IndexError, TypeError):
+            gleis_zeile = None
+        try:
+            verspaetung = gleis_zeile.verspaetung_an
         except AttributeError:
             verspaetung = None
         if verspaetung is None:
             verspaetung = slot.zug.verspaetung
 
-        titel = f"{slot.zug.name} ({verspaetung:+})"
-        gleise = [fpz.gleis for fpz in slot.zug.fahrplan if fpz.gleis and not fpz.durchfahrt()]
+        titel = f"{slot.zug.name} ({format_verspaetung(verspaetung)})"
+        if slot.verbindungsart:
+            titel = titel + " " + slot.verbindungsart
+
+        gleise = []
+        ell_links = False
+        ell_rechts = False
+        for fpz in slot.zug.fahrplan:
+            if fpz.durchfahrt():
+                gleise.append("(" + fpz.gleis + ")")
+            else:
+                gleise.append(fpz.gleis)
+        while gleis_index < len(gleise) - 3:
+            del gleise[-2]
+            ell_rechts = True
+        while gleis_index > 2:
+            del gleise[1]
+            gleis_index -= 1
+            ell_links = True
+        if ell_links:
+            gleise.insert(1, "...")
+        if ell_rechts:
+            gleise.insert(-1, "...")
+
         weg = " - ".join(gleise)
         return "\n".join([titel, weg])
 
