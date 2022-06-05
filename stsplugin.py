@@ -315,10 +315,14 @@ class PluginClient:
         :return: None
         """
         if zid is not None:
-            zids = [zid]
+            try:
+                zids = list(iter(zid))
+            except TypeError:
+                zids = [int(zid)]
         else:
-            zids = self.zugliste.keys()
-        for zid in map(int, zids):
+            zids = list(self.zugliste.keys())
+
+        for zid in zids:
             if zid > 0:
                 await self._send_request("zugdetails", zid=zid)
                 response = await self._antwort_channel_out.receive()
