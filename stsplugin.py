@@ -34,11 +34,12 @@ kann die stufe dieses moduls individuell angepasst werden durch
 
 import trio
 import datetime
+import html.entities
 import logging
+import re
 from typing import Any, Callable, Dict, List, Iterable, Mapping, Optional, Set, Union
 import untangle
-
-from xml.sax import make_parser
+import xml.sax
 
 from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis
 
@@ -55,6 +56,15 @@ def check_status(status: untangle.Element):
 def log_status_warning(request: str, response: untangle.Element):
     if hasattr(response, 'status'):
         logger.warning(f"{request}: {response.status}")
+
+
+class MyEntityResolver(untangle.Handler, xml.sax.handler.EntityResolver):
+    def skippedEntity(self, name):
+        print(f"skipped entity: {name}")
+
+    def resolveEntity(self, publicId, systemId):
+        print(f"resolve entity: {publicId}, {systemId}")
+        return "test.dtd"
 
 
 class PluginClient:
@@ -129,9 +139,17 @@ class PluginClient:
         und läuft, bis die verbindung unterbrochen wird.
         """
 
-        parser: Any = make_parser()
+        parser: Any = xml.sax.make_parser()
         handler = untangle.Handler()
         parser.setContentHandler(handler)
+        ro = re.compile(r"&[a-z]+;")
+
+        def resolve_char_ref(match) -> str:
+            try:
+                cp = html.entities.name2codepoint[match.group(0)[1:-1]]
+                return f"&#{cp};"
+            except (KeyError, IndexError):
+                return "?"
 
         self._antwort_channel_in, self._antwort_channel_out = trio.open_memory_channel(0)
         self._ereignis_channel_in, self._ereignis_channel_out = trio.open_memory_channel(0)
@@ -142,8 +160,14 @@ class PluginClient:
                 async for bs in self._stream:
                     for s in bs.decode().split('\n'):
                         logger.debug("empfang: " + s)
-                        if s:
+                        if not s:
+                            continue
+
+                        s = re.sub(ro, resolve_char_ref, s)
+                        try:
                             parser.feed(s)
+                        except xml.sax.SAXException:
+                            logger.exception("error parsing xml: " + s)
 
                         # xml tag complete?
                         if len(handler.elements) == 0:
@@ -315,10 +339,14 @@ class PluginClient:
         :return: None
         """
         if zid is not None:
-            zids = [zid]
+            try:
+                zids = list(iter(zid))
+            except TypeError:
+                zids = [int(zid)]
         else:
-            zids = self.zugliste.keys()
-        for zid in map(int, zids):
+            zids = list(self.zugliste.keys())
+
+        for zid in zids:
             if zid > 0:
                 await self._send_request("zugdetails", zid=zid)
                 response = await self._antwort_channel_out.receive()
@@ -388,13 +416,13 @@ class PluginClient:
             response = await self._antwort_channel_out.receive()
 
             try:
+                zug.ziel_index = None
                 for gleis in response.zugfahrplan.gleis:
                     zeile = FahrplanZeile(zug).update(gleis)
                     zug.fahrplan.append(zeile)
-                    if zug.gleis == zeile.gleis:
-                        zug.fahrplanzeile = zeile
+                    if zug.plangleis == zeile.plan:
+                        zug.ziel_index = len(zug.fahrplan) - 1
                     logger.debug(f"request_zugfahrplan: {zeile}")
-                zug.fahrplan.sort(key=lambda zfz: zfz.an)
             except AttributeError:
                 log_status_warning("request_zugfahrplan", response)
 

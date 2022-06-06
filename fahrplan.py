@@ -11,7 +11,7 @@ from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
 from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stsplugin import PluginClient
-from stsobj import ZugDetails, time_to_minutes
+from stsobj import ZugDetails, time_to_minutes, format_verspaetung
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -130,16 +130,16 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
             if col == 'ID':
                 return zug.zid
             elif col == 'Einfahrt':
-                return zug.einfahrtszeit.isoformat(timespec='minutes')
+                try:
+                    return zug.einfahrtszeit.isoformat(timespec='minutes')
+                except AttributeError:
+                    return ""
             elif col == 'Zug':
                 return zug.name
             elif col == 'Verspätung':
-                if zug.verspaetung is not None:
-                    if zug.verspaetung:
-                        return f"{zug.verspaetung:+}"
-                    else:
-                        return "0"
-                else:
+                try:
+                    return format_verspaetung(zug.verspaetung)
+                except AttributeError:
                     return ""
             elif col == 'Von':
                 return zug.von
@@ -201,7 +201,7 @@ class FahrplanModell(QtCore.QAbstractTableModel):
         super().__init__()
 
         self.zug: Optional[ZugDetails] = None
-        self._columns: List[str] = ['Gleis', 'An', 'Ab', 'Verspätung', 'Flags', 'Folgezug', 'Hinweis']
+        self._columns: List[str] = ['Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Folgezug', 'Hinweis']
 
     def set_zug(self, zug: Optional[ZugDetails]):
         """
@@ -260,13 +260,15 @@ class FahrplanModell(QtCore.QAbstractTableModel):
                 return zeile.an.isoformat(timespec='minutes')
             elif col == 'Ab' and zeile.ab:
                 return zeile.ab.isoformat(timespec='minutes')
-            elif col == 'Verspätung' and hasattr(zeile, 'verspaetung'):
-                if zeile.verspaetung is not None:
-                    if zeile.verspaetung:
-                        return f"{zeile.verspaetung:+}"
-                    else:
-                        return "0"
-                else:
+            elif col == 'VAn':
+                try:
+                    return format_verspaetung(zeile.verspaetung_an)
+                except AttributeError:
+                    return ""
+            elif col == 'VAb':
+                try:
+                    return format_verspaetung(zeile.verspaetung_ab)
+                except AttributeError:
                     return ""
             elif col == 'Flags':
                 return str(zeile.flags)

@@ -166,7 +166,7 @@ class Anlage:
         try:
             self.load_config(config_path)
         except (OSError, ValueError):
-            logger.exception("fehler beim laden der anlagenkonfiguration")
+            logger.warning("fehler beim laden der anlagenkonfiguration")
         # self.bahnhof_graph_erstellen()
         self.bahnhof_graph_aus_fahrplan(client)
 

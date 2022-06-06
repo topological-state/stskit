@@ -20,9 +20,9 @@ from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 
 from auswertung import Auswertung
 from anlage import Anlage
-from planung import Planung
+from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stsplugin import PluginClient
-from stsobj import FahrplanZeile, ZugDetails, time_to_minutes
+from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -97,38 +97,31 @@ class ZugFarbschema:
         self.nach_gattung = {
             'ICE': 'tab:red',
             'TGV': 'tab:red',
-            'IC': 'tab:orange',
-            'EC': 'tab:orange',
-            'RJ': 'tab:orange',
-            'IR': 'tab:green',
-            'IRE': 'tab:green',
-            'CNL': 'tab:green',
-            'RE': 'tab:blue',
-            'RB': 'tab:blue',
-            'TER': 'tab:blue',
-            'S': 'tab:cyan',
-            'G': 'tab:brown',
-            'Lok': 'tab:olive',
-            'RoLa': 'tab:purple'
+            'Lok': 'tab:gray'
         }
 
         self.nach_nummer = {
-            (1, 400): 'tab:red',
-            (400, 1700): 'tab:orange',
-            (1700, 3400): 'tab:green',
-            (3400, 6000): 'tab:blue',
-            (6000, 8000): 'tab:blue',
-            (8000, 9000): 'tab:cyan',
-            (9200, 9800): 'tab:red',
-            (9850, 9899): 'tab:blue',
-            (10000, 11000): 'tab:pink',
-            (11000, 13000): 'tab:cyan',
-            (13600, 26000): 'tab:cyan',
-            (26000, 27000): 'tab:blue',
-            (27000, 40000): 'tab:pink',
-            (40000, 50000): 'tab:purple',
-            (50000, 60000): 'tab:olive',
-            (60000, 70000): 'tab:brown'
+            (1, 4100): 'tab:red',
+            (4100, 9000): 'tab:orange',
+            (9000, 9850): 'tab:red',
+            (9850, 9900): 'tab:orange',
+            (9900, 11000): 'tab:red',
+            (11000, 27000): 'tab:orange',
+            (27000, 28000): 'tab:magenta',
+            (28000, 29000): 'tab:green',
+            (29000, 30000): 'tab:blue',
+            (30000, 36000): 'tab:green',
+            (36000, 37000): 'tab:blue',
+            (37000, 40000): 'tab:green',
+            (40000, 43000): 'tab:blue',
+            (43000, 45000): 'tab:purple',
+            (45000, 50000): 'tab:cyan',
+            (50000, 50200): 'tab:olive',
+            (50200, 87600): 'tab:cyan',
+            (87600, 88000): 'tab:red',
+            (88000, 96000): 'tab:cyan',
+            (96000, 97000): 'tab:blue',
+            (97000, 100000): 'tab:magenta'
         }
 
     def init_deutschland(self):
@@ -163,12 +156,12 @@ class Slot:
 
     properties berechnen gewisse statische darstellungsmerkmale wie farben.
     """
-    zug: ZugDetails
-    plan: FahrplanZeile
+    zug: ZugDetailsPlanung
+    plan: ZugZielPlanung
     gleis: str = ""
     zeit: int = 0
     dauer: int = 0
-    verbindung: Optional[ZugDetails] = None
+    verbindung: Optional[ZugDetailsPlanung] = None
     verbindungsart: str = ""
     konflikte: List['Slot'] = field(default_factory=list)
 
@@ -203,8 +196,8 @@ class Slot:
 
         :return: (str) zugtitel
         """
-        if self.zug.verspaetung:
-            return f"{self.zug.name} ({self.zug.verspaetung:+})"
+        if self.plan.verspaetung_an:
+            return f"{self.zug.name} ({self.plan.verspaetung_an:+})"
         else:
             return f"{self.zug.name}"
 
@@ -259,6 +252,7 @@ class SlotWindow(QtWidgets.QMainWindow):
         self.anlage: Optional[Anlage] = None
         self.planung: Optional[Planung] = None
         self.auswertung: Optional[Auswertung] = None
+        self.farbschema: Optional[ZugFarbschema] = None
 
         self.setWindowTitle("slot-grafik")
         self._main = QtWidgets.QWidget()
@@ -278,8 +272,6 @@ class SlotWindow(QtWidgets.QMainWindow):
 
         self.zeitfenster_voraus = 55
         self.zeitfenster_zurueck = 5
-        self.farbschema = ZugFarbschema()
-        self.farbschema.init_schweiz()
 
         canvas.mpl_connect("pick_event", self.on_pick)
 
@@ -292,6 +284,15 @@ class SlotWindow(QtWidgets.QMainWindow):
 
         :return: None
         """
+        if self.farbschema is None:
+            self.farbschema = ZugFarbschema()
+            regionen_schweiz = {"Bern - Lötschberg", "Ostschweiz", "Tessin", "Westschweiz", "Zentralschweiz",
+                                "Zürich und Umgebung"}
+            if self.anlage.anlage.region in regionen_schweiz:
+                self.farbschema.init_schweiz()
+            else:
+                self.farbschema.init_deutschland()
+
         self.daten_update()
         self.grafik_update()
 
@@ -423,16 +424,42 @@ class SlotWindow(QtWidgets.QMainWindow):
         self._axes.figure.canvas.draw()
 
     def get_slot_hint(self, slot: Slot):
-        gleis_zeile = slot.zug.find_fahrplanzeile(slot.gleis)
+        gleis_index = slot.zug.find_fahrplan_index(gleis=slot.gleis)
         try:
-            verspaetung = gleis_zeile.verspaetung
+            gleis_zeile = slot.zug.fahrplan[gleis_index]
+        except (IndexError, TypeError):
+            gleis_zeile = None
+        try:
+            verspaetung = gleis_zeile.verspaetung_an
         except AttributeError:
             verspaetung = None
         if verspaetung is None:
             verspaetung = slot.zug.verspaetung
 
-        titel = f"{slot.zug.name} ({verspaetung:+})"
-        gleise = [fpz.gleis for fpz in slot.zug.fahrplan if fpz.gleis and not fpz.durchfahrt()]
+        titel = f"{slot.zug.name} ({format_verspaetung(verspaetung)})"
+        if slot.verbindungsart:
+            titel = titel + " " + slot.verbindungsart
+
+        gleise = []
+        ell_links = False
+        ell_rechts = False
+        for fpz in slot.zug.fahrplan:
+            if fpz.durchfahrt():
+                gleise.append("(" + fpz.gleis + ")")
+            else:
+                gleise.append(fpz.gleis)
+        while gleis_index < len(gleise) - 3:
+            del gleise[-2]
+            ell_rechts = True
+        while gleis_index > 2:
+            del gleise[1]
+            gleis_index -= 1
+            ell_links = True
+        if ell_links:
+            gleise.insert(1, "...")
+        if ell_rechts:
+            gleise.insert(-1, "...")
+
         weg = " - ".join(gleise)
         return "\n".join([titel, weg])
 

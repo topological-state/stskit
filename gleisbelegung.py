@@ -19,38 +19,32 @@ class GleisbelegungWindow(SlotWindow):
 
     def slots_erstellen(self) -> Iterable[Slot]:
         for zug in self.planung.zugliste.values():
-            verspaetung = zug.verspaetung
             for planzeile in zug.fahrplan:
-                if not planzeile.gleis or planzeile.hinweistext == "einfahrt" or planzeile.hinweistext == "ausfahrt":
-                    continue
-
                 try:
-                    plan_an = time_to_minutes(planzeile.an)
+                    plan_an = time_to_minutes(planzeile.an) + planzeile.verspaetung_an
                 except AttributeError:
                     break
                 try:
-                    plan_ab = time_to_minutes(planzeile.ab)
+                    plan_ab = time_to_minutes(planzeile.ab) + planzeile.verspaetung_ab
                 except AttributeError:
                     plan_ab = plan_an + 1
-                verspaetung_neu = planzeile.verspaetung if planzeile.verspaetung is not None else verspaetung
 
-                slot = Slot(zug, planzeile, planzeile.gleis)
-                slot.zeit = plan_an + verspaetung
-                slot.dauer = max(1, plan_ab + verspaetung_neu - plan_an - verspaetung)
+                if planzeile.gleis and not planzeile.einfahrt and not planzeile.ausfahrt:
+                    slot = Slot(zug, planzeile, planzeile.gleis)
+                    slot.zeit = plan_an
+                    slot.dauer = max(1, plan_ab - plan_an)
 
-                if planzeile.ersatzzug:
-                    slot.verbindung = planzeile.ersatzzug
-                    slot.verbindungsart = "E"
-                elif planzeile.kuppelzug:
-                    slot.verbindung = planzeile.kuppelzug
-                    slot.verbindungsart = "K"
-                elif planzeile.fluegelzug:
-                    slot.verbindung = planzeile.fluegelzug
-                    slot.verbindungsart = "F"
+                    if planzeile.ersatzzug:
+                        slot.verbindung = planzeile.ersatzzug
+                        slot.verbindungsart = "E"
+                    elif planzeile.kuppelzug:
+                        slot.verbindung = planzeile.kuppelzug
+                        slot.verbindungsart = "K"
+                    elif planzeile.fluegelzug:
+                        slot.verbindung = planzeile.fluegelzug
+                        slot.verbindungsart = "F"
 
-                yield slot
-
-                verspaetung = verspaetung_neu
+                    yield slot
 
     def konflikte_loesen(self, gleis: str, slots: List[Slot]) -> List[Slot]:
         for s1, s2 in itertools.permutations(slots, 2):
@@ -70,7 +64,7 @@ class GleisbelegungWindow(SlotWindow):
         s2.verbindungsart = s1.verbindungsart
         try:
             s2_zeile = s2.zug.find_fahrplanzeile(gleis=s1.gleis)
-            s2_an = time_to_minutes(s2_zeile.an) + s2.zug.verspaetung
+            s2_an = time_to_minutes(s2_zeile.an) + s2_zeile.verspaetung_an
             if s2_an > s1.zeit:
                 s1.dauer = s2_an - s1.zeit
             elif s1.zeit > s2_an:
