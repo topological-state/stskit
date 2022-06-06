@@ -51,6 +51,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         layout.addWidget(canvas)
         self._axes = canvas.figure.subplots()
 
+        self._strecken_name: str = ""
         # bahnhofname -> distanz [minuten]
         self._strecke: Dict[str, float] = {}
         self._trassen: List[Trasse] = []
@@ -61,13 +62,21 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.farbschema.init_schweiz()
 
     def set_strecke(self, streckenname: str):
+        self._strecken_name = streckenname
+        self._strecke = {}
+        for v, k in enumerate(self.anlage.strecken[streckenname]):
+            self._strecke[k] = v
+        return None
+
         sd = self.anlage.get_strecken_distanzen(streckenname)
+        print(sd)
         for k, v in sd.items():
             sd[k] = v / 60
-        self.update()
+        self._strecke = sd
+        # self.update()
 
     def update(self):
-        if not self._strecke:
+        if not self._strecken_name:
             try:
                 self.set_strecke(list(self.anlage.strecken.keys())[0])
             except (AttributeError, IndexError):
@@ -78,16 +87,19 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.grafik_update()
 
     def daten_update(self):
-        for zug in self.client.zugliste.values():
+        self._trassen = []
+        for zug in self.planung.zugliste.values():
             trasse = Trasse(zug)
             koord = []
             plan1 = zug.fahrplan[0]
             for plan2 in zug.fahrplan[1:]:
-                gruppe1 = self.anlage.bahnsteige[plan1.gleis]
-                gruppe2 = self.anlage.bahnsteige[plan2.gleis]
+                gruppe1 = self.anlage.alle_namen[self.anlage.alle_ziele[plan1.gleis]]
+                gruppe2 = self.anlage.alle_namen[self.anlage.alle_ziele[plan2.gleis]]
                 if gruppe1 in self._strecke and gruppe2 in self._strecke:
-                    koord.append((self.distanz[gruppe1], time_to_minutes(plan1.ab)))
-                    koord.append((self.distanz[gruppe2], time_to_minutes(plan2.an)))
+                    koord.append((self._strecke[gruppe1], time_to_minutes(plan1.ab) + plan1.verspaetung_ab))
+                    koord.append((self._strecke[gruppe2], time_to_minutes(plan2.an) + plan2.verspaetung_an))
+                plan1 = plan2
+
             trasse.koord = koord
             trasse.color = self.farbschema.zugfarbe(zug)
             self._trassen.append(trasse)
@@ -106,26 +118,31 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self._axes.xaxis.grid(True)
 
         zeit = time_to_minutes(self.client.calc_simzeit())
-        self._axes.set_ylim(bottom=zeit + self.zeitfenster_voraus, top=zeit - self.zeitfenster_zurueck, auto=False)
+        ylim = (zeit - self.zeitfenster_zurueck, zeit + self.zeitfenster_voraus)
+        self._axes.set_ylim(top=ylim[0], bottom=ylim[1], auto=False)
 
         wid_x = x_labels_pos[-1] - x_labels_pos[0]
         wid_y = self.zeitfenster_zurueck + self.zeitfenster_voraus
         off_x = 0
-        off_y = 1  # todo : von pixel umrechnen
+        off = self._axes.transData.inverted().transform([(0, 0), (0, -5)])
+        off_y = (off[1] - off[0])[1]
 
         for trasse in self._trassen:
-            lines = self._axes.plot(trasse.koord, color=trasse.color, lw=trasse.linewidth, ls=trasse.linestyle)
+            pos_x = [pos[0] for pos in trasse.koord]
+            pos_y = [pos[1] for pos in trasse.koord]
+            lines = self._axes.plot(pos_x, pos_y, color=trasse.color, lw=trasse.linewidth, ls=trasse.linestyle)
             labels = []
             for seg in zip(trasse.koord[:-1], trasse.koord[1:]):
+                pix = self._axes.transData.transform(seg)
                 cx = (seg[0][0] + seg[1][0]) / 2 + off_x
                 cy = (seg[0][1] + seg[1][1]) / 2 + off_y
                 dx = (seg[1][0] - seg[0][0])
                 dy = (seg[1][1] - seg[0][1])
-                if abs(dx) > wid_x / 10:
-                    # todo : koordinaten in pixel umrechnen
-                    ang = math.degrees(math.atan2(dy, dx))
+                if ylim[0] < cy < ylim[1] and abs(pix[1][0] - pix[0][0]) > 20:
+                    ang = math.degrees(math.atan(dy / dx))
                     titel = trasse.zug.name
-                    label = self._axes.text(cx, cy, titel, fontsize='small', fontstretch='condensed', rotation=ang)
+                    label = self._axes.text(cx, cy, titel, fontsize='small', fontstretch='condensed', rotation=ang,
+                                            rotation_mode='anchor', transform_rotates_text=True, ha='center', va='center')
                     labels.append(label)
 
             trasse.lines = lines

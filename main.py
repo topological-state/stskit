@@ -208,7 +208,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.bildfahrplan_window = BildFahrplanWindow()
 
         self.bildfahrplan_window.client = self.client
+        self.bildfahrplan_window.anlage = self.anlage
         self.bildfahrplan_window.planung = self.planung
+        self.bildfahrplan_window.auswertung = self.auswertung
 
         self.bildfahrplan_window.update()
         self.bildfahrplan_window.show()
@@ -282,7 +284,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.planung.auswertung = self.auswertung
 
         self.planung.zuege_uebernehmen(self.client.zugliste.values())
-        self.planung.verspaetungen_korrigieren(uhrzeit=self.client.calc_simzeit())
+        self.planung.verspaetungen_korrigieren()
         self.planung.einfahrten_korrigieren()
 
         self.auswertung.zuege_uebernehmen(self.client.zugliste.values())

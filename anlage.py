@@ -9,7 +9,7 @@ from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set,
 import networkx as nx
 import numpy as np
 
-from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, time_to_seconds
+from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, time_to_seconds
 from stsplugin import PluginClient
 
 
@@ -118,7 +118,7 @@ class Anlage:
 
         vorsicht: bahnsteige aus der bahnsteigliste sind teilweise im wege-graph nicht enthalten!
 
-    :var self.bahnhof_graph netz-graph mit bahnsteiggruppen, einfahrtgruppen und ausfahrtgruppen
+    :var self.bahnhof_graph netz-graph mit bahnsteiggruppen, einfahrtgruppen und ausfahrtgruppen.
         vom bahnsteig-graph abgeleiteter graph, der die ganzen zugeordneten gruppen enthält.
 
 
@@ -135,6 +135,7 @@ class Anlage:
     """
     def __init__(self, anlage: AnlagenInfo):
         self.anlage = anlage
+        self.config_loaded = False
         self.auto = True
 
         # gruppen-id -> {gleisnamen}
@@ -157,18 +158,25 @@ class Anlage:
         self.bahnhof_graph: nx.Graph = nx.Graph()
 
         # strecken-name -> gruppen-namen
-        self.strecken: Dict[str, List[str]] = {}
+        self.strecken: Dict[str, Tuple[str]] = {}
 
     def update(self, client: PluginClient, config_path: os.PathLike):
-        self.anlage = client.anlageninfo
-        self.original_graphen_erstellen(client)
-        self.auto_gruppen()
-        try:
-            self.load_config(config_path)
-        except (OSError, ValueError):
-            logger.warning("fehler beim laden der anlagenkonfiguration")
-        # self.bahnhof_graph_erstellen()
-        self.bahnhof_graph_aus_fahrplan(client)
+        if not self.anlage:
+            self.anlage = client.anlageninfo
+
+        if len(self.signal_graph) == 0:
+            self.original_graphen_erstellen(client)
+            self.auto_gruppen()
+
+        if not self.config_loaded:
+            try:
+                self.load_config(config_path)
+            except (OSError, ValueError):
+                logger.warning("fehler beim laden der anlagenkonfiguration")
+
+        if len(self.bahnhof_graph) == 0:
+            # self.bahnhof_graph_erstellen()
+            self.bahnhof_graph_aus_fahrplan(client.zugliste.values())
 
     def original_graphen_erstellen(self, client: PluginClient):
         """
@@ -207,6 +215,16 @@ class Anlage:
                 self.bahnsteig_graph.add_edge(bs1.name, bs2.name, typ='bahnhof', distanz=0)
 
     def bahnhof_graph_erstellen(self):
+        """
+        bahnhof-graph aus signal-graph ableiten
+
+        der bahnhofgraph enthält die bahnhöfe (self.bahnhofnamen) als knoten und verbindungen als kanten.
+
+        self.bahnsteiggruppen, self.anschlussgruppen,
+        self.bahnhofnamen und self.anschlussnamen müssen bereits definiert sein.
+
+        :return:
+        """
         bahnsteig_typen = {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}
         graph = nx.Graph()
 
@@ -257,7 +275,17 @@ class Anlage:
 
         self.bahnhof_graph = graph
 
-    def bahnhof_graph_aus_fahrplan(self, client: PluginClient):
+    def bahnhof_graph_aus_fahrplan(self, zugliste: Iterable[ZugDetails]):
+        """
+        bahnhof-graph aus signal-graph ableiten
+
+        der bahnhofgraph enthält die bahnhöfe (self.bahnhofnamen) als knoten und verbindungen als kanten.
+
+        self.bahnsteiggruppen, self.anschlussgruppen,
+        self.bahnhofnamen und self.anschlussnamen müssen bereits definiert sein.
+
+        :return:
+        """
         bahnsteig_typen = {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}
         graph = self.bahnhof_graph
 
@@ -274,10 +302,19 @@ class Anlage:
                     d['bahnhof'] = True
                     break
 
-        for zug in client.zugliste.values():
+        strecken = set([])
+
+        for zug in zugliste:
             if zug.sichtbar:
                 # der fahrplan von sichtbaren zügen kann unvollständig sein
                 continue
+
+            try:
+                strecke = tuple((self.alle_namen[self.alle_ziele[wp]] for wp in zug.route(plan=True)))
+                if len(strecke) >= 3:
+                    strecken.add(strecke)
+            except KeyError:
+                logger.warning(f"wegpunkte von zug {zug.name} können nicht auf bahnhöfe abgebildet werden.")
 
             try:
                 start = self.anschluesse[zug.von]
@@ -338,6 +375,10 @@ class Anlage:
 
         self.bahnhof_graph = graph
 
+        self.strecken = {f"{s[0]}-{s[-1]}": s for s in strecken}
+        for k, v in self.strecken.items():
+            print(f"{k}: {v}")
+
     def generalisieren(self, metrik):
         graph = self.bahnhof_graph
 
@@ -373,14 +414,21 @@ class Anlage:
         bahnsteigtypen = {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}
 
         self.anschlussgruppen = {}
-        nodes = (n for n, t in self.signal_graph.nodes(data='typ') if t in anschlusstypen)
+        nodes = [n for n, t in self.signal_graph.nodes(data='typ') if t in anschlusstypen]
         subgraph = self.signal_graph.subgraph(nodes)
-        gruppen = list(nx.connected_components(subgraph))
+        gr1 = set([n.split(" ")[0] for n in nodes])
+        print(gr1)
+        gruppen = []
+        for k in gr1:
+            gruppen.append(set([n for n in nodes if n.split(" ")[0] == k]))
+        print(gruppen)
+        # gruppen = list(nx.connected_components(subgraph))
         for i, g in enumerate(gruppen):
             key = "".join(sorted(g))
             name = f"{gemeinsamer_name(g)}"
             self.anschlussgruppen[key] = g
             self.anschlussnamen[key] = name
+            print(f"anschluss[{key}] = {name}")
 
         self.bahnsteiggruppen = {}
         nodes = (n for n, t in self.signal_graph.nodes(data='typ') if t in bahnsteigtypen)
@@ -391,6 +439,7 @@ class Anlage:
             name = f"{gemeinsamer_name(g)}"
             self.bahnsteiggruppen[key] = g
             self.bahnhofnamen[key] = name
+            print(f"bahnhof[{key}] = {name}")
 
         self.auto = True
         self._update_gruppen_dict()
@@ -487,6 +536,7 @@ class Anlage:
             logger.info("fehlende streckenkonfiguration")
 
         self._update_gruppen_dict()
+        self.config_loaded = True
 
         if load_graphs:
             try:
