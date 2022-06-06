@@ -146,8 +146,9 @@ class PluginClient:
 
         def resolve_char_ref(match) -> str:
             try:
-                return html.entities.entitydefs[match.group(0)[1:-1]]
-            except IndexError:
+                cp = html.entities.name2codepoint[match.group(0)[1:-1]]
+                return f"&#{cp};"
+            except (KeyError, IndexError):
                 return "?"
 
         self._antwort_channel_in, self._antwort_channel_out = trio.open_memory_channel(0)
