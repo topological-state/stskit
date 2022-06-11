@@ -59,6 +59,7 @@ class Trasse:
     zug: ZugDetails
     start: ZugZielPlanung
     ziel: ZugZielPlanung
+    koord: List[Tuple[int]]
     color: str = "b"
     fontstyle: str = "normal"
     linestyle: str = "-"
@@ -94,18 +95,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.farbschema.init_schweiz()
 
     def set_strecke(self, streckenname: str):
-        self._strecken_name = streckenname
-        self._strecke = {}
-        for v, k in enumerate(self.anlage.strecken[streckenname]):
-            self._strecke[k] = v
-        return None
-
-        sd = self.anlage.get_strecken_distanzen(streckenname)
-        print(sd)
-        for k, v in sd.items():
-            sd[k] = v / 60
-        self._strecke = sd
-        # self.update()
+        if streckenname != self._strecken_name:
+            self._strecken_name = streckenname
+            self._strecke = {}
 
     def update(self):
         if not self._strecken_name:
@@ -117,16 +109,17 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                     v0 = v
             if k0:
                 self.set_strecke(k0)
-            # try:
-            #     self.set_strecke(list(self.anlage.strecken.keys())[0])
-            # except (AttributeError, IndexError):
-            #     logger.warning("bildfahrplan: keine strecken definiert.")
-            #     return
 
-        self.daten_update()
-        self.grafik_update()
+        if self._strecken_name:
+            self.daten_update()
+            self.grafik_update()
 
     def daten_update(self):
+        sd = self.anlage.get_strecken_distanzen(self._strecken_name)
+        for k, v in sd.items():
+            sd[k] = v / 60
+        self._strecke = sd
+
         self._trassen = []
         for zug in self.planung.zugliste.values():
             trasse = Trasse()
@@ -136,11 +129,15 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             for plan2 in zug.fahrplan[1:]:
                 trasse.start = plan1
                 trasse.ziel = plan2
-                gruppe1 = self.anlage.alle_namen[self.anlage.alle_ziele[plan1.gleis]]
-                gruppe2 = self.anlage.alle_namen[self.anlage.alle_ziele[plan2.gleis]]
-                if gruppe1 in self._strecke and gruppe2 in self._strecke:
-                    koord.append((self._strecke[gruppe1], time_to_minutes(plan1.ab) + plan1.verspaetung_ab))
-                    koord.append((self._strecke[gruppe2], time_to_minutes(plan2.an) + plan2.verspaetung_an))
+                try:
+                    gruppe1 = self.anlage.gleiszuordnung[plan1.gleis]
+                    gruppe2 = self.anlage.gleiszuordnung[plan2.gleis]
+                except KeyError:
+                    logger.warning(f"gleis {plan1.gleis} oder {plan2.gleis} kann keinem bahnhof zugeordnet werden.")
+                else:
+                    if gruppe1 in self._strecke and gruppe2 in self._strecke:
+                        koord.append((self._strecke[gruppe1], time_to_minutes(plan1.ab) + plan1.verspaetung_ab))
+                        koord.append((self._strecke[gruppe2], time_to_minutes(plan2.an) + plan2.verspaetung_an))
                 plan1 = plan2
 
             trasse.koord = koord

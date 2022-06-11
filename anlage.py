@@ -139,20 +139,19 @@ class Anlage:
         self.config_loaded = False
         self.auto = True
 
-        # gruppen-id -> {gleisnamen}
+        # gruppenname -> {gleisnamen}
         self.anschlussgruppen: Dict[str, Set[str]] = {}
         self.bahnsteiggruppen: Dict[str, Set[str]] = {}
-        self.alle_gruppen: Dict[str, Set[str]] = {}
+        self.gleisgruppen: Dict[str, Set[str]] = {}
 
-        # gleisname -> gruppen-id
-        self.anschluesse: Dict[str, str] = {}
-        self.bahnsteige: Dict[str, str] = {}
-        self.alle_ziele: Dict[str, str] = {}
+        # gleisname -> gruppenname
+        self.anschlusszuordnung: Dict[str, str] = {}
+        self.bahnsteigzuordnung: Dict[str, str] = {}
+        self.gleiszuordnung: Dict[str, str] = {}
 
-        # gruppen-id -> gruppenname
-        self.anschlussnamen: Dict[str, str] = {}
-        self.bahnhofnamen: Dict[str, str] = {}
-        self.alle_namen: Dict[str, str] = {}
+        # lage des anschlusses auf dem gleisbild
+        # gruppenname -> "links", "mitte", "rechts", "oben", "unten"
+        self.anschlusslage: Dict[str, str] = {}
 
         self.signal_graph: nx.Graph = nx.DiGraph()
         self.bahnsteig_graph: nx.Graph = nx.DiGraph()
@@ -174,10 +173,13 @@ class Anlage:
                 self.load_config(config_path)
             except (OSError, ValueError):
                 logger.warning("fehler beim laden der anlagenkonfiguration")
+            self.config_loaded = True
 
         if len(self.bahnhof_graph) == 0:
-            # self.bahnhof_graph_erstellen()
             self.bahnhof_graph_aus_fahrplan(client.zugliste.values())
+
+        if not self.strecken:
+            self.strecken_aus_fahrplan(client.zugliste.values())
 
     def original_graphen_erstellen(self, client: PluginClient):
         """
@@ -244,8 +246,7 @@ class Anlage:
 
         der bahnhofgraph enthält die bahnhöfe (self.bahnhofnamen) als knoten und verbindungen als kanten.
 
-        self.bahnsteiggruppen, self.anschlussgruppen,
-        self.bahnhofnamen und self.anschlussnamen müssen bereits definiert sein.
+        self.bahnsteiggruppen und self.anschlussgruppen müssen bereits definiert sein.
 
         :return:
         """
@@ -253,14 +254,14 @@ class Anlage:
         graph = nx.Graph()
 
         for n, s in self.bahnsteiggruppen.items():
-            graph.add_node(n, typ='bahnhof', elemente=s, name=self.bahnhofnamen[n])
+            graph.add_node(n, typ='bahnhof', elemente=s, name=n)
         for n, s in self.anschlussgruppen.items():
-            graph.add_node(n, typ='anschluss', elemente=s, name=self.anschlussnamen[n])
+            graph.add_node(n, typ='anschluss', elemente=s, name=n)
 
         alle_gruppen = dict_union(self.bahnsteiggruppen, self.anschlussgruppen)
         alle_gleise = set().union(*alle_gruppen.values())
 
-        gleis_graph = self.signal_graph.copy()
+        gleis_graph = self.signal_graph.to_undirected()
         for u, d in gleis_graph.nodes(data=True):
             d['bahnhof'] = d['typ'] in bahnsteig_typen
             for v in gleis_graph[u]:
@@ -301,12 +302,11 @@ class Anlage:
 
     def bahnhof_graph_aus_fahrplan(self, zugliste: Iterable[ZugDetails]):
         """
-        bahnhof-graph aus signal-graph ableiten
+        bahnhof-graph aus fahrplan erstellen.
 
         der bahnhofgraph enthält die bahnhöfe (self.bahnhofnamen) als knoten und verbindungen als kanten.
 
-        self.bahnsteiggruppen, self.anschlussgruppen,
-        self.bahnhofnamen und self.anschlussnamen müssen bereits definiert sein.
+        self.bahnsteiggruppen, self.anschlussgruppen definieren die knoten und müssen daher schon konfiguriert sein.
 
         :return:
         """
@@ -314,9 +314,9 @@ class Anlage:
         graph = self.bahnhof_graph
 
         for n, s in self.bahnsteiggruppen.items():
-            graph.add_node(n, typ='bahnhof', elemente=s, name=self.bahnhofnamen[n])
+            graph.add_node(n, typ='bahnhof', elemente=s, name=n)
         for n, s in self.anschlussgruppen.items():
-            graph.add_node(n, typ='anschluss', elemente=s, name=self.anschlussnamen[n])
+            graph.add_node(n, typ='anschluss', elemente=s, name=n)
 
         gleis_graph = self.signal_graph.copy()
         for u, d in gleis_graph.nodes(data=True):
@@ -326,29 +326,20 @@ class Anlage:
                     d['bahnhof'] = True
                     break
 
-        strecken = set([])
-
         for zug in zugliste:
             if zug.sichtbar:
                 # der fahrplan von sichtbaren zügen kann unvollständig sein
                 continue
 
             try:
-                strecke = tuple((self.alle_namen[self.alle_ziele[wp]] for wp in zug.route(plan=True)))
-                if len(strecke) >= 3:
-                    strecken.add(strecke)
-            except KeyError:
-                logger.warning(f"wegpunkte von zug {zug.name} können nicht auf bahnhöfe abgebildet werden.")
-
-            try:
-                start = self.anschluesse[zug.von]
+                start = self.gleiszuordnung[zug.von]
                 startzeit = np.nan
             except (IndexError, KeyError):
                 continue
 
             for zeile in zug.fahrplan:
                 try:
-                    ziel = self.bahnsteige[zeile.gleis]
+                    ziel = self.gleiszuordnung[zeile.plan]
                     zielzeit = time_to_seconds(zeile.an)
                 except (AttributeError, KeyError):
                     break
@@ -372,7 +363,7 @@ class Anlage:
                     break
 
             try:
-                ziel = self.anschluesse[zug.nach]
+                ziel = self.gleiszuordnung[zug.nach]
                 if start != ziel:
                     graph.add_edge(start, ziel, fahrzeit_sum=0., fahrzeit_min=np.nan, fahrzeit_max=np.nan, zuege=0)
                     logger.debug(f"edge {start}-{ziel}")
@@ -398,10 +389,6 @@ class Anlage:
         graph.remove_nodes_from(nodes_to_remove)
 
         self.bahnhof_graph = graph
-
-        self.strecken = {f"{s[0]}-{s[-1]}": s for s in strecken}
-        for k, v in self.strecken.items():
-            print(f"{k}: {v}")
 
     def generalisieren(self, metrik):
         graph = self.bahnhof_graph
@@ -446,11 +433,9 @@ class Anlage:
         gruppen = []
         for k in gr1:
             gruppen.append(set([n for n in nodes if n.split(" ")[0] == k]))
-        for i, g in enumerate(gruppen):
-            key = "".join(sorted(g))
-            name = f"{gemeinsamer_name(g)}"
-            self.anschlussgruppen[key] = g
-            self.anschlussnamen[key] = name
+        for g in gruppen:
+            name = sorted(g)[0]
+            self.anschlussgruppen[name] = g
 
         def filter_node(n1):
             try:
@@ -468,11 +453,9 @@ class Anlage:
         subgraph = nx.subgraph_view(self.bahnsteig_graph, filter_node=filter_node, filter_edge=filter_edge)
         subgraph = subgraph.to_undirected()
         gruppen = list(nx.connected_components(subgraph))
-        for ig, g in enumerate(gruppen):
-            key = "".join(sorted(g))
-            name = f"{gemeinsamer_name(g)}"
-            self.bahnsteiggruppen[key] = g
-            self.bahnhofnamen[key] = name
+        for g in gruppen:
+            name = sorted(g)[0]
+            self.bahnsteiggruppen[name] = g
 
         self.auto = True
         self._update_gruppen_dict()
@@ -482,26 +465,58 @@ class Anlage:
         gruppen-dictionaries aktualisieren.
 
         die ursprungsdaten stehen in den bahnsteiggruppen- und anschlussgruppen-dictionaries.
-        von ihnen werden die alle_gruppen, alle_namen, bahnsteige, anschluesse und alle_ziele abgeleitet.
+        von ihnen werden die zuordnungen, gleisgruppen und gleiszuordnung abgeleitet.
 
         :return: None
         """
 
-        self.alle_gruppen = dict_union(self.bahnsteiggruppen, self.anschlussgruppen)
-        self.alle_namen = {**self.bahnhofnamen, **self.anschlussnamen}
+        self.anschlusszuordnung = {}
+        for name, gruppe in self.anschlussgruppen.items():
+            for gleis in gruppe:
+                self.anschlusszuordnung[gleis] = name
 
-        self.bahnsteige = {}
-        self.anschluesse = {}
+        self.bahnsteigzuordnung = {}
+        for name, gruppe in self.bahnsteiggruppen.items():
+            for gleis in gruppe:
+                self.bahnsteigzuordnung[gleis] = name
 
-        for n, s in self.bahnsteiggruppen.items():
-            for g in s:
-                self.bahnsteige[g] = n
-        for n, s in self.anschlussgruppen.items():
-            for g in s:
-                self.anschluesse[g] = n
-        for n, s in self.alle_gruppen.items():
-            for g in s:
-                self.alle_ziele[g] = n
+        self.gleisgruppen = dict_union(self.bahnsteiggruppen, self.anschlussgruppen)
+        self.gleiszuordnung = {**self.bahnsteigzuordnung, **self.anschlusszuordnung}
+
+    def strecken_aus_fahrplan(self, zugliste: Iterable[ZugDetails]):
+        """
+        streckenliste aus fahrplan erstellen.
+
+        :return:
+        """
+
+        strecken = set([])
+
+        for zug in zugliste:
+            if zug.sichtbar:
+                # der fahrplan von sichtbaren zügen kann unvollständig sein
+                continue
+
+            try:
+                strecke = tuple((self.gleiszuordnung[wp] for wp in zug.route(plan=True)))
+                if len(strecke) >= 3:
+                    strecken.add(strecke)
+            except KeyError:
+                logger.warning(f"wegpunkte von zug {zug.name} können nicht auf bahnhöfe abgebildet werden.")
+
+        vereinigte_strecken = set([])
+        for strecke1, strecke2 in itertools.permutations(strecken, 2):
+            # strecken aneinanderreihen
+            if strecke1[-1] == strecke2[0]:
+                strecke3 = list(strecke1[:-1])
+                strecke3.extend(strecke2)
+                strecke3 = tuple(strecke3)
+                vereinigte_strecken.add(strecke3)
+            # laengere strecke
+            if set(strecke1).issuperset(set(strecke2)):
+                vereinigte_strecken.add(strecke1)
+
+        self.strecken = {f"{s[0]}-{s[-1]}": s for s in strecken}
 
     def get_strecken_distanzen(self, streckenname: str) -> Dict[str, float]:
         """
@@ -511,18 +526,24 @@ class Anlage:
         """
         strecke = self.strecken[streckenname]
         kanten = zip(strecke[:-1], strecke[1:])
-        result = {strecke[0]: 0.}
+        distanz = 0.
+        result = {strecke[0]: distanz}
         for u, v in kanten:
             try:
-                distanz = self.bahnhof_graph[u][v]['fahrzeit_min']
+                zeit = self.bahnhof_graph[u][v]['fahrzeit_min']
+                if not np.isnan(zeit):
+                    distanz += zeit
+                else:
+                    distanz += 60.
             except KeyError:
                 logger.warning(f"strecke {streckenname}: verbindung {u}{v} nicht im netzplan.")
-            else:
-                result[v] = float(distanz)
+                distanz += 60.
+
+            result[v] = float(distanz)
 
         return result
 
-    def load_config(self, path: os.PathLike, load_graphs=False):
+    def load_config(self, path: os.PathLike, load_graphs=False, ignore_version=False):
         """
 
         :param path: verzeichnis mit den konfigurationsdaten.
@@ -540,15 +561,17 @@ class Anlage:
         with open(p) as fp:
             d = json.load(fp, object_hook=json_object_hook)
 
-        assert d['_aid'] == self.anlage.aid
-        if self.anlage.build != d['_build']:
-            logger.warning(f"unterschiedliche build-nummern (file: {d['_build']}, sim: {self.anlage.build})")
-        if '_version' in d:
-            if d['_version'] < 1:
-                logger.error(f"inkompatible konfigurationsdatei. konfiguration wird nicht geladen.")
+        if not ignore_version:
+            assert d['_aid'] == self.anlage.aid
+            if self.anlage.build != d['_build']:
+                logger.warning(f"unterschiedliche build-nummern (file: {d['_build']}, sim: {self.anlage.build})")
+
+            if '_version' not in d:
+                d['_version'] = 1
+                logger.warning(f"konfigurationsdatei ohne versionsangabe. nehme 1 an.")
+            if d['_version'] < 2:
+                logger.error(f"inkompatible konfigurationsdatei - auto-konfiguration")
                 return
-        else:
-            logger.warning(f"konfigurationsdatei ohne versionsangabe. nehme 1 an.")
 
         try:
             self.bahnsteiggruppen = d['bahnsteiggruppen']
@@ -560,15 +583,10 @@ class Anlage:
         except KeyError:
             logger.info("fehlende anschlussgruppen-konfiguration - auto-konfiguration")
         try:
-            self.bahnhofnamen = d['bahnhofnamen']
+            self.anschlusslage = d['anschlusslage']
         except KeyError:
-            logger.info("fehlende bahnhofnamen-konfiguration - verwende default")
-            self.bahnhofnamen = {k: k for k in self.bahnsteiggruppen.keys()}
-        try:
-            self.anschlussnamen = d['anschlussnamen']
-        except KeyError:
-            logger.info("fehlende anschlussnamen-konfiguration - verwende default")
-            self.anschlussnamen = {k: k for k in self.anschlussgruppen.keys()}
+            self.anschlusslage = {k: "mitte" for k in self.anschlussgruppen.keys()}
+
         try:
             self.strecken = d['strecken']
         except KeyError:
@@ -596,11 +614,10 @@ class Anlage:
              '_region': self.anlage.region,
              '_name': self.anlage.name,
              '_build': self.anlage.build,
-             '_version': 1,
+             '_version': 2,
              'bahnsteiggruppen': self.bahnsteiggruppen,
              'anschlussgruppen': self.anschlussgruppen,
-             'bahnhofnamen': self.bahnhofnamen,
-             'anschlussnamen': self.anschlussnamen,
+             'anschlusslage': self.anschlusslage,
              'strecken': self.strecken}
 
         p = Path(path) / f"{self.anlage.aid}.json"

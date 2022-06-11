@@ -66,8 +66,8 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
                         df = self.auswertung.fahrzeiten.zeiten
                         assert df.columns.name == 'von'
                         assert df.index.name == 'nach'
-                        sel_von = list(self.anlage.alle_gruppen[e1].intersection(set(df.columns)))
-                        sel_nach = list(self.anlage.alle_gruppen[e2].intersection(set(df.index)))
+                        sel_von = list(self.anlage.gleisgruppen[e1].intersection(set(df.columns)))
+                        sel_nach = list(self.anlage.gleisgruppen[e2].intersection(set(df.index)))
                         # loc[zeile, spalte] !!!
                         zeiten: pd.DataFrame = self.auswertung.fahrzeiten.zeiten.loc[sel_nach, sel_von]
                         s = zeiten.sum().sum()
