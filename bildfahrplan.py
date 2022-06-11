@@ -16,7 +16,7 @@ from anlage import Anlage
 from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from slotgrafik import hour_minutes_formatter, ZugFarbschema
 from stsplugin import PluginClient
-from stsobj import FahrplanZeile, ZugDetails, time_to_minutes
+from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -24,9 +24,41 @@ logger.addHandler(logging.NullHandler())
 mpl.use('Qt5Agg')
 
 
-@dataclass
+def format_label(plan1: ZugZielPlanung, plan2: ZugZielPlanung):
+    """
+    zuglabel formatieren mit verspätungsangabe
+
+    das label besteht aus zugname und verspätungsangabe (falls nicht null).
+    die verspätungsangabe besteht aus einem teil wenn sie am anfang und ende der linie gleich ist,
+    sonst aus der verspätung am anfang und ende.
+
+    :param plan1: anfangspunkt der linie. zug.name und verspaetung_ab werden benutzt.
+    :param plan2: endpunkt der linie. verspaetung_an wird benutzt.
+    :return: (str)
+    """
+    v1 = plan1.verspaetung_ab
+    v2 = plan2.verspaetung_an
+    name = plan1.zug.name
+
+    if v1 == v2:
+        if v1 == 0:
+            v = ""
+        else:
+            v = format_verspaetung(v1)
+    else:
+        v = "|".join((format_verspaetung(v1), format_verspaetung(v2)))
+
+    if v:
+        return f"{name} ({v})"
+    else:
+        return f"{name}"
+
+
+@dataclass(init=False)
 class Trasse:
     zug: ZugDetails
+    start: ZugZielPlanung
+    ziel: ZugZielPlanung
     color: str = "b"
     fontstyle: str = "normal"
     linestyle: str = "-"
@@ -89,10 +121,13 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     def daten_update(self):
         self._trassen = []
         for zug in self.planung.zugliste.values():
-            trasse = Trasse(zug)
+            trasse = Trasse()
+            trasse.zug = zug
             koord = []
             plan1 = zug.fahrplan[0]
             for plan2 in zug.fahrplan[1:]:
+                trasse.start = plan1
+                trasse.ziel = plan2
                 gruppe1 = self.anlage.alle_namen[self.anlage.alle_ziele[plan1.gleis]]
                 gruppe2 = self.anlage.alle_namen[self.anlage.alle_ziele[plan2.gleis]]
                 if gruppe1 in self._strecke and gruppe2 in self._strecke:
@@ -140,7 +175,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                 dy = (seg[1][1] - seg[0][1])
                 if ylim[0] < cy < ylim[1] and abs(pix[1][0] - pix[0][0]) > 20:
                     ang = math.degrees(math.atan(dy / dx))
-                    titel = trasse.zug.name
+                    titel = format_label(trasse.start, trasse.ziel)
                     label = self._axes.text(cx, cy, titel, fontsize='small', fontstretch='condensed', rotation=ang,
                                             rotation_mode='anchor', transform_rotates_text=True, ha='center', va='center')
                     labels.append(label)
