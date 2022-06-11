@@ -109,11 +109,19 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     def update(self):
         if not self._strecken_name:
-            try:
-                self.set_strecke(list(self.anlage.strecken.keys())[0])
-            except (AttributeError, IndexError):
-                logger.warning("bildfahrplan: keine strecken definiert.")
-                return
+            k0 = None
+            v0 = []
+            for k, v in self.anlage.strecken.items():
+                if len(v) > len(v0):
+                    k0 = k
+                    v0 = v
+            if k0:
+                self.set_strecke(k0)
+            # try:
+            #     self.set_strecke(list(self.anlage.strecken.keys())[0])
+            # except (AttributeError, IndexError):
+            #     logger.warning("bildfahrplan: keine strecken definiert.")
+            #     return
 
         self.daten_update()
         self.grafik_update()
