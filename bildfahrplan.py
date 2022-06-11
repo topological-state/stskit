@@ -159,7 +159,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         zeit = time_to_minutes(self.client.calc_simzeit())
         ylim = (zeit - self.zeitfenster_zurueck, zeit + self.zeitfenster_voraus)
-        self._axes.set_ylim(top=ylim[0], bottom=ylim[1], auto=False)
+        self._axes.set_ylim(top=ylim[0], bottom=ylim[1])
+        self._axes.set_xlim(left=x_labels_pos[0], right=x_labels_pos[-1])
 
         wid_x = x_labels_pos[-1] - x_labels_pos[0]
         wid_y = self.zeitfenster_zurueck + self.zeitfenster_voraus
