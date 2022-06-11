@@ -1,5 +1,6 @@
 import itertools
 import os
+import re
 from collections.abc import Set
 import json
 import logging
@@ -153,8 +154,8 @@ class Anlage:
         self.bahnhofnamen: Dict[str, str] = {}
         self.alle_namen: Dict[str, str] = {}
 
-        self.signal_graph: nx.Graph = nx.Graph()
-        self.bahnsteig_graph: nx.Graph = nx.Graph()
+        self.signal_graph: nx.Graph = nx.DiGraph()
+        self.bahnsteig_graph: nx.Graph = nx.DiGraph()
         self.bahnhof_graph: nx.Graph = nx.Graph()
 
         # strecken-name -> gruppen-namen
@@ -180,16 +181,34 @@ class Anlage:
 
     def original_graphen_erstellen(self, client: PluginClient):
         """
-        erstellt die originalgraphen nach anlageninformationen vom simulator.
+        erstellt die signal- und bahnsteig-graphen nach anlageninformationen vom simulator.
 
-        der originalgraph enthält alle signale, bahnsteige, einfahrten, ausfahrten und haltepunkte aus der wegeliste
-        als knoten. das 'typ'-attribut wird auf den sts-knotentyp (int) gesetzt.
-
-        kanten werden entsprechend der nachbarn-relationen aus der wegeliste ('typ'-attribut 'gleis').
-
-        der graph wird in self.original_graph abgelegt.
+        der signal-graph enthält alle signale, bahnsteige, einfahrten, ausfahrten und haltepunkte aus der wege-liste
+        der plugin-schnittstelle als knoten.
+        das 'typ'-attribut wird auf den sts-knotentyp (int) gesetzt.
+        kanten werden entsprechend der nachbarn-relationen aus der wegeliste ('typ'-attribut 'gleis') gesetzt.
+        der graph ist gerichtet, da die nachbarbeziehung nicht reziprok ist.
+        die kante zeigt auf die knoten, die als nachbarn aufgeführt sind.
+        der graph wird in self.signal_graph abgelegt.
         dieser graph sollte nicht verändert werden.
-        abgeleitete graphen können separat gespeichert werden.
+
+        der bahnsteig-graph enthält alle bahnsteige aus der bahnsteigliste der plugin-schnittstelle als knoten.
+        kanten werden entsprechend der nachbar-relationen gesetzt.
+        der graph ist gerichtet, da die nachbarbeziehung nicht reziprok ist.
+        die kante zeigt auf die knoten, die als nachbarn aufgeführt sind.
+
+        signal-attribute
+        ----------------
+        knoten 'typ': (int) stsobj.Knoten.TYP_NUMMER
+        kanten 'typ': (str) 'gleis'
+        kanten 'distanz': (int) länge (anzahl knoten) des kürzesten pfades zwischen den knoten. wird auf 1 gesetzt.
+
+        bahnsteig-attribute
+        -------------------
+        kanten 'typ': (str) 'bahnhof', wenn die bahnsteignamen mit der gleichen buchstabenfolge
+                      (oder direkt mit der gleisnummer) beginnen und damit zum gleichen bahnhof gehören,
+                      sonst 'nachbar'.
+        kanten 'distanz': (int) länge (anzahl knoten) des kürzesten pfades zwischen den knoten. wird auf 0 gesetzt.
 
         :param client: PluginClient-artiges objekt mit aktuellen bahnsteigliste und wege attributen.
         :return: None.
@@ -208,11 +227,16 @@ class Anlage:
                     if knoten2.name and knoten2.typ in knoten_auswahl:
                         self.signal_graph.add_edge(knoten1.name, knoten2.name, typ='gleis', distanz=1)
 
-        self.bahnsteig_graph.clear()
+        pat = re.compile(r'[^\d\W]*')
         for bs1 in client.bahnsteigliste.values():
             self.bahnsteig_graph.add_node(bs1.name)
+            pre1 = re.match(pat, bs1.name).group(0)
             for bs2 in bs1.nachbarn:
-                self.bahnsteig_graph.add_edge(bs1.name, bs2.name, typ='bahnhof', distanz=0)
+                pre2 = re.match(pat, bs2.name).group(0)
+                if pre1 == pre2:
+                    self.bahnsteig_graph.add_edge(bs1.name, bs2.name, typ='bahnhof', distanz=0)
+                else:
+                    self.bahnsteig_graph.add_edge(bs1.name, bs2.name, typ='nachbar', distanz=0)
 
     def bahnhof_graph_erstellen(self):
         """
@@ -400,10 +424,13 @@ class Anlage:
 
     def auto_gruppen(self):
         """
-        bestimmt die gruppen basierend auf anlageninfo und üblicher schreibweise der gleisnamen.
+        gruppiert bahnsteige zu bahnhöfen und ein-/ausfahrten zu anschlüssen.
 
         einfahrten und ausfahrten werden nach dem ersten namensteil gruppiert.
-        der erste namensteil wird zum gruppennamen.
+        der erste namensteil wird zum anschlussnamen.
+        dieser algorithmus fasst in einigen stellwerken zu viele einfahrten zu einer gruppe zusammen.
+        diese müssen manuell über die konfiguration aufgeteilt werden,
+        da es keine einfache möglichkeit gibt, solche fälle anhand der plugin-schnittstelle zu erkennen.
 
         bahnsteige werden nach nachbarn gemäss anlageninfo gruppiert.
         der gruppenname wird aus dem längsten gemeinsamen namensteil gebildet.
@@ -415,31 +442,37 @@ class Anlage:
 
         self.anschlussgruppen = {}
         nodes = [n for n, t in self.signal_graph.nodes(data='typ') if t in anschlusstypen]
-        subgraph = self.signal_graph.subgraph(nodes)
         gr1 = set([n.split(" ")[0] for n in nodes])
-        print(gr1)
         gruppen = []
         for k in gr1:
             gruppen.append(set([n for n in nodes if n.split(" ")[0] == k]))
-        print(gruppen)
-        # gruppen = list(nx.connected_components(subgraph))
         for i, g in enumerate(gruppen):
             key = "".join(sorted(g))
             name = f"{gemeinsamer_name(g)}"
             self.anschlussgruppen[key] = g
             self.anschlussnamen[key] = name
-            print(f"anschluss[{key}] = {name}")
+
+        def filter_node(n1):
+            try:
+                return self.signal_graph.nodes[n1]["typ"] in bahnsteigtypen
+            except KeyError:
+                return False
+
+        def filter_edge(n1, n2):
+            try:
+                return self.bahnsteig_graph[n1][n2]["typ"] == "bahnhof"
+            except KeyError:
+                return False
 
         self.bahnsteiggruppen = {}
-        nodes = (n for n, t in self.signal_graph.nodes(data='typ') if t in bahnsteigtypen)
-        subgraph = self.bahnsteig_graph.subgraph(nodes)
+        subgraph = nx.subgraph_view(self.bahnsteig_graph, filter_node=filter_node, filter_edge=filter_edge)
+        subgraph = subgraph.to_undirected()
         gruppen = list(nx.connected_components(subgraph))
-        for i, g in enumerate(gruppen):
+        for ig, g in enumerate(gruppen):
             key = "".join(sorted(g))
             name = f"{gemeinsamer_name(g)}"
             self.bahnsteiggruppen[key] = g
             self.bahnhofnamen[key] = name
-            print(f"bahnhof[{key}] = {name}")
 
         self.auto = True
         self._update_gruppen_dict()
@@ -509,7 +542,13 @@ class Anlage:
 
         assert d['_aid'] == self.anlage.aid
         if self.anlage.build != d['_build']:
-            logger.error(f"unterschiedliche build-nummern (file: {d['_build']}, sim: {self.anlage.build})")
+            logger.warning(f"unterschiedliche build-nummern (file: {d['_build']}, sim: {self.anlage.build})")
+        if '_version' in d:
+            if d['_version'] < 1:
+                logger.error(f"inkompatible konfigurationsdatei. konfiguration wird nicht geladen.")
+                return
+        else:
+            logger.warning(f"konfigurationsdatei ohne versionsangabe. nehme 1 an.")
 
         try:
             self.bahnsteiggruppen = d['bahnsteiggruppen']
@@ -557,6 +596,7 @@ class Anlage:
              '_region': self.anlage.region,
              '_name': self.anlage.name,
              '_build': self.anlage.build,
+             '_version': 1,
              'bahnsteiggruppen': self.bahnsteiggruppen,
              'anschlussgruppen': self.anschlussgruppen,
              'bahnhofnamen': self.bahnhofnamen,
@@ -575,9 +615,9 @@ class Anlage:
             if self.bahnhof_graph:
                 d['bahnhof_graph'] = dict(nx.node_link_data(self.bahnhof_graph))
 
-        p = Path(path) / f"{self.anlage.aid}diag.json"
-        with open(p, "w") as fp:
-            json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
+            p = Path(path) / f"{self.anlage.aid}diag.json"
+            with open(p, "w") as fp:
+                json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
 
 
 def main():
