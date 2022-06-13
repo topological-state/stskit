@@ -1,3 +1,4 @@
+import collections
 import itertools
 import os
 import re
@@ -60,6 +61,57 @@ def gemeinsamer_name(g: Iterable) -> str:
     return ''.join(common_prefix(g)).strip()
 
 
+ALPHA_PREFIX_PATTERN = re.compile(r'[^\d\W]*')
+NON_DIGIT_PREFIX_PATTERN = re.compile(r'\D*')
+
+
+def alpha_prefix(name: str) -> str:
+    """
+    alphabetischen anfang eines namens extrahieren.
+
+    anfang des namens bis zum ersten nicht-alphabetischen zeichen (ziffer, leerzeichen, sonderzeichen).
+    umlaute etc. werden als alphabetisch betrachtet.
+    leerer string, wenn keine alphabetischen zeichen gefunden wurden.
+
+    :param name: z.b. gleisname
+    :return: resultat
+
+    """
+    return re.match(ALPHA_PREFIX_PATTERN, name).group(0)
+
+
+def default_bahnhofname(gleis: str) -> str:
+    """
+    bahnhofnamen aus gleisnamen ableiten.
+
+    es wird angenommen, dass der bahnhofname aus den alphabetischen zeichen am anfang des gleisnamens besteht.
+    wenn der gleisname keine alphabetischen zeichen enthält, wird per default "HBf" zurückgegeben.
+
+    :param gleis: gleis- bzw. bahnsteigname
+    :return: bahnhofname
+    """
+
+    name = alpha_prefix(gleis)
+    if name:
+        return name
+    else:
+        return "HBf"
+
+
+def default_anschlussname(gleis: str) -> str:
+    """
+    anschlussname aus gleisnamen ableiten.
+
+    es wird angenommen, dass der bahnhofname aus den alphabetischen zeichen am anfang des gleisnamens besteht.
+    wenn der gleisname keine alphabetischen zeichen enthält, wird ein leerer string zurückgegeben.
+
+    :param gleis: gleisname
+    :return: anschlussname
+    """
+
+    return re.match(ALPHA_PREFIX_PATTERN, gleis).group(0).strip()
+
+
 def dict_union(*gr: Dict[str, Set[Any]]) -> Dict[str, Set[Any]]:
     """
     merge dictionaries of sets.
@@ -94,6 +146,17 @@ def find_set_item_in_dict(item: Any, mapping: Mapping[Any, Set[Any]]) -> Any:
             return k
     else:
         raise ValueError(f"item {item} not found in dictionary.")
+
+
+anschluss_name_funktionen = {}
+    # "Bern - Lötschberg": alpha_prefix,
+    # "Ostschweiz": alpha_prefix,
+    # "Tessin": alpha_prefix,
+    # "Westschweiz": alpha_prefix,
+    # "Zentralschweiz": alpha_prefix,
+    # "Zürich und Umgebung": alpha_prefix}
+
+bahnhof_name_funktionen = {}
 
 
 class Anlage:
@@ -139,6 +202,9 @@ class Anlage:
         self.config_loaded = False
         self.auto = True
 
+        self.f_anschlussname = default_anschlussname
+        self.f_bahnhofname = default_bahnhofname
+
         # gruppenname -> {gleisnamen}
         self.anschlussgruppen: Dict[str, Set[str]] = {}
         self.bahnsteiggruppen: Dict[str, Set[str]] = {}
@@ -164,6 +230,15 @@ class Anlage:
         if not self.anlage:
             self.anlage = client.anlageninfo
 
+            try:
+                self.f_anschlussname = anschluss_name_funktionen[self.anlage.region]
+            except KeyError:
+                pass
+            try:
+                self.f_bahnhofname = bahnhof_name_funktionen[self.anlage.region]
+            except KeyError:
+                pass
+
         if len(self.signal_graph) == 0:
             self.original_graphen_erstellen(client)
             self.auto_gruppen()
@@ -171,8 +246,10 @@ class Anlage:
         if not self.config_loaded:
             try:
                 self.load_config(config_path)
-            except (OSError, ValueError):
-                logger.warning("fehler beim laden der anlagenkonfiguration")
+            except OSError:
+                logger.exception("fehler beim laden der anlagenkonfiguration")
+            except ValueError as e:
+                logger.exception("fehlerhafte anlagenkonfiguration")
             self.config_loaded = True
 
         if len(self.bahnhof_graph) == 0:
@@ -229,12 +306,11 @@ class Anlage:
                     if knoten2.name and knoten2.typ in knoten_auswahl:
                         self.signal_graph.add_edge(knoten1.name, knoten2.name, typ='gleis', distanz=1)
 
-        pat = re.compile(r'[^\d\W]*')
         for bs1 in client.bahnsteigliste.values():
             self.bahnsteig_graph.add_node(bs1.name)
-            pre1 = re.match(pat, bs1.name).group(0)
+            pre1 = alpha_prefix(bs1.name)
             for bs2 in bs1.nachbarn:
-                pre2 = re.match(pat, bs2.name).group(0)
+                pre2 = alpha_prefix(bs2.name)
                 if pre1 == pre2:
                     self.bahnsteig_graph.add_edge(bs1.name, bs2.name, typ='bahnhof', distanz=0)
                 else:
@@ -311,7 +387,7 @@ class Anlage:
         :return:
         """
         bahnsteig_typen = {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}
-        graph = self.bahnhof_graph
+        graph = nx.Graph()
 
         for n, s in self.bahnsteiggruppen.items():
             graph.add_node(n, typ='bahnhof', elemente=s, name=n)
@@ -413,29 +489,24 @@ class Anlage:
         """
         gruppiert bahnsteige zu bahnhöfen und ein-/ausfahrten zu anschlüssen.
 
-        einfahrten und ausfahrten werden nach dem ersten namensteil gruppiert.
-        der erste namensteil wird zum anschlussnamen.
-        dieser algorithmus fasst in einigen stellwerken zu viele einfahrten zu einer gruppe zusammen.
-        diese müssen manuell über die konfiguration aufgeteilt werden,
-        da es keine einfache möglichkeit gibt, solche fälle anhand der plugin-schnittstelle zu erkennen.
-
         bahnsteige werden nach nachbarn gemäss anlageninfo gruppiert.
-        der gruppenname wird aus dem längsten gemeinsamen namensteil gebildet.
+        der gruppenname wird aus gemäss der regionsabhängigen f_bahnhofname-funktion gebildet
+        (per default die alphabetischen zeichen bis zum ersten nicht-alphabetischen zeichen).
+        falls dieses verfahren jedoch zu mehrdeutigen bezeichnungen führen würde,
+        wird der alphabetisch erste gleisnamen übernommen.
+
+        einfahrten und ausfahrten werden nach dem namen gruppiert,
+        der durch die regionsabhängige f_anschlussname gebildet wird.
+        falls ein anschlussname mit einem bahnhofsnamen kollidiert, wird ein pluszeichen nachgestellt.
+
+        da es keine allgemeine konvention für gleis- und anschlussnamen gibt,
+        kann der algorithmus abhängig vom stellwerk zu viele oder zu wenige gleise zusammenfassen.
+        in diesen fällen muss die zuordnung in der konfigurationsdatei manuell korrigiert werden.
 
         :return: None
         """
         anschlusstypen = {Knoten.TYP_NUMMER["Einfahrt"], Knoten.TYP_NUMMER["Ausfahrt"]}
         bahnsteigtypen = {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}
-
-        self.anschlussgruppen = {}
-        nodes = [n for n, t in self.signal_graph.nodes(data='typ') if t in anschlusstypen]
-        gr1 = set([n.split(" ")[0] for n in nodes])
-        gruppen = []
-        for k in gr1:
-            gruppen.append(set([n for n in nodes if n.split(" ")[0] == k]))
-        for g in gruppen:
-            name = sorted(g)[0]
-            self.anschlussgruppen[name] = g
 
         def filter_node(n1):
             try:
@@ -449,13 +520,24 @@ class Anlage:
             except KeyError:
                 return False
 
-        self.bahnsteiggruppen = {}
+        # durch nachbarbeziehung verbundene bahnsteige bilden einen bahnhof
         subgraph = nx.subgraph_view(self.bahnsteig_graph, filter_node=filter_node, filter_edge=filter_edge)
         subgraph = subgraph.to_undirected()
-        gruppen = list(nx.connected_components(subgraph))
-        for g in gruppen:
-            name = sorted(g)[0]
-            self.bahnsteiggruppen[name] = g
+        gruppen = {sorted(g)[0]: g for g in nx.connected_components(subgraph)}
+        # gleisbezeichnung abtrennen
+        nice_names = {k: self.f_bahnhofname(k) for k in gruppen}
+        # mehrdeutige bahnhofsnamen identifizieren und durch gleichbezeichnung ersetzen
+        counts_nice = collections.Counter(nice_names.values())
+        counts_safe = {sn: counts_nice[nice_names[sn]] for sn in gruppen.keys()}
+        self.bahnsteiggruppen = {nice_names[sn] if counts_safe[sn] == 1 else sn: g for sn, g in gruppen.items()}
+
+        # ein- und ausfahrten, die auf den gleichen anschlussnamen abbilden, bilden einen anschluss
+        nodes = [n for n, t in self.signal_graph.nodes(data='typ') if t in anschlusstypen]
+        nice_names = {k: self.f_anschlussname(k) for k in nodes}
+        # anschlüsse, die den gleichen namen wie ein bahnhof haben, umbenennen
+        nice_names = {k: v if v not in self.bahnsteiggruppen else v + "+" for k, v in nice_names.items()}
+        unique_names = set(nice_names.values())
+        self.anschlussgruppen = {k: set([n for n in nodes if self.f_anschlussname(n) == k]) for k in unique_names}
 
         self.auto = True
         self._update_gruppen_dict()
@@ -536,7 +618,7 @@ class Anlage:
                 else:
                     distanz += 60.
             except KeyError:
-                logger.warning(f"strecke {streckenname}: verbindung {u}{v} nicht im netzplan.")
+                logger.warning(f"strecke {streckenname}: verbindung {u}-{v} nicht im netzplan.")
                 distanz += 60.
 
             result[v] = float(distanz)
