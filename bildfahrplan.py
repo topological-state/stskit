@@ -1,7 +1,6 @@
 import math
 from dataclasses import dataclass, field
 import logging
-import re
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 import matplotlib as mpl
@@ -59,11 +58,24 @@ class Trasse:
     zug: ZugDetails
     start: ZugZielPlanung
     ziel: ZugZielPlanung
-    koord: List[Tuple[int]]
+    koord: List[Tuple[float]]
     color: str = "b"
     fontstyle: str = "normal"
     linestyle: str = "-"
     linewidth: int = 1
+    marker: str = "."
+
+    def plot_args(self):
+        args = {'color': self.color,
+                'linewidth': self.linewidth,
+                'linestyle': self.linestyle,
+                'marker': self.marker}
+        try:
+            args['markevery'] = [not self.start.durchfahrt(), not self.ziel.durchfahrt()]
+        except AttributeError:
+            args['marker'] = ""
+
+        return args
 
 
 class BildFahrplanWindow(QtWidgets.QMainWindow):
@@ -87,7 +99,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self._strecken_name: str = ""
         # bahnhofname -> distanz [minuten]
         self._strecke: Dict[str, float] = {}
-        self._trassen: List[Trasse] = []
+        self._zug_trassen: Dict[int, List[Trasse]] = {}
 
         self.zeitfenster_voraus = 55
         self.zeitfenster_zurueck = 5
@@ -115,34 +127,49 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.grafik_update()
 
     def daten_update(self):
+        self.update_strecke()
+        for zug in self.planung.zugliste.values():
+            self.update_zuglauf(zug)
+
+    def update_strecke(self):
         sd = self.anlage.get_strecken_distanzen(self._strecken_name)
         for k, v in sd.items():
             sd[k] = v / 60
         self._strecke = sd
 
-        self._trassen = []
-        for zug in self.planung.zugliste.values():
+    def update_zuglauf(self, zug: ZugDetailsPlanung):
+        color = self.farbschema.zugfarbe(zug)
+        zuglauf = []
+        plan1 = zug.fahrplan[0]
+
+        for plan2 in zug.fahrplan[1:]:
             trasse = Trasse()
             trasse.zug = zug
-            koord = []
-            plan1 = zug.fahrplan[0]
-            for plan2 in zug.fahrplan[1:]:
-                trasse.start = plan1
-                trasse.ziel = plan2
-                try:
-                    gruppe1 = self.anlage.gleiszuordnung[plan1.gleis]
-                    gruppe2 = self.anlage.gleiszuordnung[plan2.gleis]
-                except KeyError:
-                    logger.warning(f"gleis {plan1.gleis} oder {plan2.gleis} kann keinem bahnhof zugeordnet werden.")
-                else:
-                    if gruppe1 in self._strecke and gruppe2 in self._strecke:
-                        koord.append((self._strecke[gruppe1], time_to_minutes(plan1.ab) + plan1.verspaetung_ab))
-                        koord.append((self._strecke[gruppe2], time_to_minutes(plan2.an) + plan2.verspaetung_an))
-                plan1 = plan2
+            trasse.color = color
+            trasse.start = plan1
+            trasse.ziel = plan2
 
-            trasse.koord = koord
-            trasse.color = self.farbschema.zugfarbe(zug)
-            self._trassen.append(trasse)
+            try:
+                gruppe1 = self.anlage.gleiszuordnung[plan1.gleis]
+                gruppe2 = self.anlage.gleiszuordnung[plan2.gleis]
+            except KeyError:
+                logger.warning(f"zug {zug.name}, gleis {plan1.gleis} oder {plan2.gleis} "
+                               f"kann keinem bahnhof zugeordnet werden.")
+            else:
+                if gruppe1 in self._strecke and gruppe2 in self._strecke:
+                    trasse.koord = [(self._strecke[gruppe1], time_to_minutes(plan1.ab) + plan1.verspaetung_ab),
+                                    (self._strecke[gruppe2], time_to_minutes(plan2.an) + plan2.verspaetung_an)]
+                    zuglauf.append(trasse)
+
+            plan1 = plan2
+
+        if zuglauf:
+            self._zug_trassen[zug.zid] = zuglauf
+        else:
+            try:
+                del self._zug_trassen[zug.zid]
+            except (AttributeError, KeyError):
+                pass
 
     def grafik_update(self):
         self._axes.clear()
@@ -168,12 +195,19 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         off = self._axes.transData.inverted().transform([(0, 0), (0, -5)])
         off_y = (off[1] - off[0])[1]
 
-        for trasse in self._trassen:
-            pos_x = [pos[0] for pos in trasse.koord]
-            pos_y = [pos[1] for pos in trasse.koord]
-            lines = self._axes.plot(pos_x, pos_y, color=trasse.color, lw=trasse.linewidth, ls=trasse.linestyle)
-            labels = []
-            for seg in zip(trasse.koord[:-1], trasse.koord[1:]):
+        label_args = {'ha': 'center',
+                      'va': 'center',
+                      'fontsize': 'small',
+                      'fontstretch': 'condensed',
+                      'rotation_mode': 'anchor',
+                      'transform_rotates_text': True}
+
+        for zuglauf in self._zug_trassen.values():
+            for trasse in zuglauf:
+                pos_x = [pos[0] for pos in trasse.koord]
+                pos_y = [pos[1] for pos in trasse.koord]
+                trasse.mpl_line = self._axes.plot(pos_x, pos_y, **trasse.plot_args())
+                seg = trasse.koord
                 pix = self._axes.transData.transform(seg)
                 cx = (seg[0][0] + seg[1][0]) / 2 + off_x
                 cy = (seg[0][1] + seg[1][1]) / 2 + off_y
@@ -182,12 +216,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                 if ylim[0] < cy < ylim[1] and abs(pix[1][0] - pix[0][0]) > 20:
                     ang = math.degrees(math.atan(dy / dx))
                     titel = format_label(trasse.start, trasse.ziel)
-                    label = self._axes.text(cx, cy, titel, fontsize='small', fontstretch='condensed', rotation=ang,
-                                            rotation_mode='anchor', transform_rotates_text=True, ha='center', va='center')
-                    labels.append(label)
-
-            trasse.lines = lines
-            trasse.labels = labels
+                    trasse.mpl_label = self._axes.text(cx, cy, titel, rotation=ang, **label_args)
 
         for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
             item.set_fontsize('small')
