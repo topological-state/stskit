@@ -10,9 +10,10 @@ from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set,
 
 import networkx as nx
 import numpy as np
+import trio
 
 from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, time_to_seconds
-from stsplugin import PluginClient
+from stsplugin import PluginClient, TaskDone
 
 
 logger = logging.getLogger(__name__)
@@ -692,6 +693,27 @@ class Anlage:
                 pass
 
     def save_config(self, path: os.PathLike):
+        d = self.get_config(graphs=False)
+        p = Path(path) / f"{self.anlage.aid}.json"
+        with open(p, "w") as fp:
+            json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
+
+        if logger.isEnabledFor(logging.DEBUG):
+            d = self.get_config(graphs=True)
+            p = Path(path) / f"{self.anlage.aid}diag.json"
+            with open(p, "w") as fp:
+                json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
+
+    def get_config(self, graphs=False) -> Dict:
+        """
+        aktuelle konfiguration im dict-format auslesen
+
+        das dictionary kann dann im json-format abgespeichert und als konfigurationsdatei verwendet werden.
+
+        :param graphs: gibt an, ob die graphen (im networkx node-link format mitgeliefert werden sollen.
+        :return: dictionary mit konfiguration- und diagnostik-daten.
+        """
+
         d = {'_aid': self.anlage.aid,
              '_region': self.anlage.region,
              '_name': self.anlage.name,
@@ -702,11 +724,7 @@ class Anlage:
              'anschlusslage': self.anschlusslage,
              'strecken': self.strecken}
 
-        p = Path(path) / f"{self.anlage.aid}.json"
-        with open(p, "w") as fp:
-            json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
-
-        if logger.isEnabledFor(logging.DEBUG):
+        if graphs:
             if self.signal_graph:
                 d['signal_graph'] = dict(nx.node_link_data(self.signal_graph))
             if self.bahnsteig_graph:
@@ -714,14 +732,46 @@ class Anlage:
             if self.bahnhof_graph:
                 d['bahnhof_graph'] = dict(nx.node_link_data(self.bahnhof_graph))
 
-            p = Path(path) / f"{self.anlage.aid}diag.json"
-            with open(p, "w") as fp:
-                json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
+        return d
 
 
-def main():
-    pass
+async def main():
+    """
+    anlagenkonfiguration ausgeben
 
+    diese funktion dient der inspektion der anlage.
+    die anlage inkl. wege, bahnsteige und zuege wird vom sim abgefragt und automatisch konfiguriert.
+    die konfiguration wird dann im json-format an stdout ausgegeben.
+
+    :return: None
+    """
+    client = PluginClient(name='anlageinfo', autor='tester', version='0.0', text='anlagekonfiguration auslesen')
+    await client.connect()
+
+    try:
+        async with client._stream:
+            async with trio.open_nursery() as nursery:
+                await nursery.start(client.receiver)
+                await client.register()
+                await client.request_simzeit()
+                await client.request_anlageninfo()
+                await client.request_bahnsteigliste()
+                await client.request_wege()
+                await client.request_zugliste()
+                await client.request_zugdetails()
+                await client.request_zugfahrplan()
+                await client.resolve_zugflags()
+                client.update_bahnsteig_zuege()
+                client.update_wege_zuege()
+
+                anlage = Anlage(client.anlageninfo)
+                anlage.update(client, "")
+                d = anlage.get_config(graphs=True)
+                s = json.dumps(d, sort_keys=True, indent=4, cls=JSONEncoder)
+                print(s)
+                raise TaskDone()
+    except TaskDone:
+        pass
 
 if __name__ == "__main__":
-    main()
+    trio.run(main)
