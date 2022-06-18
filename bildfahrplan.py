@@ -88,6 +88,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.auswertung: Optional[Auswertung] = None
 
         self.setWindowTitle("bildfahrplan")
+        ss = f"background-color: {mpl.rcParams['axes.facecolor']};"
+        self.setStyleSheet(ss)
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)
         layout = QtWidgets.QVBoxLayout(self._main)
@@ -222,7 +224,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             item.set_fontsize('small')
 
         if self.zeitfenster_zurueck > 0:
-            self._axes.axhline(y=zeit, color='k', lw=1)
+            self._axes.axhline(y=zeit, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
 
         self._axes.figure.tight_layout()
         self._axes.figure.canvas.draw()
