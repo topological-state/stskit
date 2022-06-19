@@ -107,7 +107,7 @@ class ZugFarbschema:
             (9850, 9900): 'tab:orange',
             (9900, 11000): 'tab:red',
             (11000, 27000): 'tab:orange',
-            (27000, 28000): 'tab:magenta',
+            (27000, 28000): 'tab:pink',
             (28000, 29000): 'tab:green',
             (29000, 30000): 'tab:blue',
             (30000, 36000): 'tab:green',
@@ -121,7 +121,7 @@ class ZugFarbschema:
             (87600, 88000): 'tab:red',
             (88000, 96000): 'tab:cyan',
             (96000, 97000): 'tab:blue',
-            (97000, 100000): 'tab:magenta'
+            (97000, 100000): 'tab:pink'
         }
 
     def init_deutschland(self):
