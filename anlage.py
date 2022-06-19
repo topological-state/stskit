@@ -198,6 +198,14 @@ class Anlage:
         können zu einer gruppe zusammengefasst werden.
         dieser dictionary bildet gruppennamen (bahnhofnamen) auf sets von bahnsteignamen ab.
     """
+
+    BAHNHOF_GRAPH_INIT_ATTR = {
+        "fahrzeit_sum": 0,
+        "fahrzeit_min": np.nan,
+        "fahrzeit_max": np.nan,
+        "fahrzeit_count": 0
+    }
+
     def __init__(self, anlage: AnlagenInfo):
         self.anlage = anlage
         self.config_loaded = False
@@ -227,6 +235,8 @@ class Anlage:
         # strecken-name -> gruppen-namen
         self.strecken: Dict[str, Tuple[str]] = {}
 
+        self._verbindungsstrecke_cache: Dict[Tuple[str, str], List[str]] = {}
+
     def update(self, client: PluginClient, config_path: os.PathLike):
         if not self.anlage:
             self.anlage = client.anlageninfo
@@ -242,7 +252,7 @@ class Anlage:
 
         if len(self.signal_graph) == 0:
             self.original_graphen_erstellen(client)
-            self.auto_gruppen()
+            self.gleise_gruppieren()
 
         if not self.config_loaded:
             try:
@@ -254,10 +264,12 @@ class Anlage:
             self.config_loaded = True
 
         if len(self.bahnhof_graph) == 0:
-            self.bahnhof_graph_aus_fahrplan(client.zugliste.values())
+            self.bahnhof_graph_erstellen()
 
-        if not self.strecken:
-            self.strecken_aus_fahrplan(client.zugliste.values())
+        if len(self.strecken) == 0:
+            self.strecken_aus_signalgraph()
+
+        self.bahnhof_graph_zugupdate(client.zugliste.values())
 
     def original_graphen_erstellen(self, client: PluginClient):
         """
@@ -317,176 +329,9 @@ class Anlage:
                 else:
                     self.bahnsteig_graph.add_edge(bs1.name, bs2.name, typ='nachbar', distanz=0)
 
-    def bahnhof_graph_erstellen(self):
-        """
-        bahnhof-graph aus signal-graph ableiten
+        self._verbindungsstrecke_cache = {}
 
-        der bahnhofgraph enthält die bahnhöfe (self.bahnhofnamen) als knoten und verbindungen als kanten.
-
-        self.bahnsteiggruppen und self.anschlussgruppen müssen bereits definiert sein.
-
-        :return:
-        """
-        bahnsteig_typen = {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}
-        graph = nx.Graph()
-
-        for n, s in self.bahnsteiggruppen.items():
-            graph.add_node(n, typ='bahnhof', elemente=s, name=n)
-        for n, s in self.anschlussgruppen.items():
-            graph.add_node(n, typ='anschluss', elemente=s, name=n)
-
-        alle_gruppen = dict_union(self.bahnsteiggruppen, self.anschlussgruppen)
-        alle_gleise = set().union(*alle_gruppen.values())
-
-        gleis_graph = self.signal_graph.to_undirected()
-        for u, d in gleis_graph.nodes(data=True):
-            d['bahnhof'] = d['typ'] in bahnsteig_typen
-            for v in gleis_graph[u]:
-                if gleis_graph.nodes[v]['typ'] in bahnsteig_typen:
-                    d['bahnhof'] = True
-                    break
-
-        for u, v in itertools.combinations(alle_gleise, 2):
-            try:
-                p = nx.shortest_path(gleis_graph, u, v)
-                for n in p[2:-2]:
-                    if gleis_graph.nodes[n]['bahnhof']:
-                        break
-                else:
-                    ug = find_set_item_in_dict(u, alle_gruppen)
-                    vg = find_set_item_in_dict(v, alle_gruppen)
-                    if ug != vg:
-                        graph.add_edge(ug, vg, distanz=len(p))
-            except (nx.NetworkXException, ValueError):
-                continue
-
-        edges_to_remove = set([])
-        for u, nbrs in graph.adj.items():
-            ns = set(nbrs) - {u}
-            for v, w in itertools.combinations(ns, 2):
-                try:
-                    luv = graph[u][v]['distanz']
-                    lvw = graph[v][w]['distanz']
-                    luw = graph[u][w]['distanz']
-                    if luv < lvw and luw < lvw:
-                        edges_to_remove.add((v, w))
-                except KeyError:
-                    pass
-
-        graph.remove_edges_from(edges_to_remove)
-
-        self.bahnhof_graph = graph
-
-    def bahnhof_graph_aus_fahrplan(self, zugliste: Iterable[ZugDetails]):
-        """
-        bahnhof-graph aus fahrplan erstellen.
-
-        der bahnhofgraph enthält die bahnhöfe (self.bahnhofnamen) als knoten und verbindungen als kanten.
-
-        self.bahnsteiggruppen, self.anschlussgruppen definieren die knoten und müssen daher schon konfiguriert sein.
-
-        :return:
-        """
-        bahnsteig_typen = {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}
-        graph = nx.Graph()
-
-        for n, s in self.bahnsteiggruppen.items():
-            graph.add_node(n, typ='bahnhof', elemente=s, name=n)
-        for n, s in self.anschlussgruppen.items():
-            graph.add_node(n, typ='anschluss', elemente=s, name=n)
-
-        gleis_graph = self.signal_graph.copy()
-        for u, d in gleis_graph.nodes(data=True):
-            d['bahnhof'] = d['typ'] in bahnsteig_typen
-            for v in gleis_graph[u]:
-                if gleis_graph.nodes[v]['typ'] in bahnsteig_typen:
-                    d['bahnhof'] = True
-                    break
-
-        for zug in zugliste:
-            if zug.sichtbar:
-                # der fahrplan von sichtbaren zügen kann unvollständig sein
-                continue
-
-            try:
-                start = self.gleiszuordnung[zug.von]
-                startzeit = np.nan
-            except (IndexError, KeyError):
-                continue
-
-            for zeile in zug.fahrplan:
-                try:
-                    ziel = self.gleiszuordnung[zeile.plan]
-                    zielzeit = time_to_seconds(zeile.an)
-                except (AttributeError, KeyError):
-                    break
-
-                zeit = zielzeit - startzeit
-                if start != ziel:
-                    try:
-                        d = graph[start][ziel]
-                        d['fahrzeit_sum'] = d['fahrzeit_sum'] + zeit
-                        d['fahrzeit_min'] = min(d['fahrzeit_min'], zeit) if not np.isnan(d['fahrzeit_min']) else zeit
-                        d['fahrzeit_max'] = max(d['fahrzeit_max'], zeit) if not np.isnan(d['fahrzeit_max']) else zeit
-                        d['zuege'] = d['zuege'] + 1
-                    except KeyError:
-                        graph.add_edge(start, ziel, fahrzeit_sum=zeit, fahrzeit_min=zeit, fahrzeit_max=zeit, zuege=1)
-                        logger.debug(f"edge {start}-{ziel} ({zeit})")
-
-                start = ziel
-                try:
-                    startzeit = time_to_seconds(zeile.ab)
-                except AttributeError:
-                    break
-
-            try:
-                ziel = self.gleiszuordnung[zug.nach]
-                if start != ziel:
-                    graph.add_edge(start, ziel, fahrzeit_sum=0., fahrzeit_min=np.nan, fahrzeit_max=np.nan, zuege=0)
-                    logger.debug(f"edge {start}-{ziel}")
-            except (AttributeError, KeyError):
-                pass
-
-        edges_to_remove = set([])
-        for u, nbrs in graph.adj.items():
-            ns = set(nbrs) - {u}
-            for v, w in itertools.combinations(ns, 2):
-                try:
-                    luv = graph[u][v]['fahrzeit_min']
-                    lvw = graph[v][w]['fahrzeit_min']
-                    luw = graph[u][w]['fahrzeit_min']
-                    if luv < lvw and luw < lvw:
-                        edges_to_remove.add((v, w))
-                except KeyError:
-                    pass
-
-        # graph.remove_edges_from(edges_to_remove)
-
-        nodes_to_remove = [node for node, degree in graph.degree() if degree < 1]
-        graph.remove_nodes_from(nodes_to_remove)
-
-        self.bahnhof_graph = graph
-
-    def generalisieren(self, metrik):
-        graph = self.bahnhof_graph
-
-        edges_to_remove = set([])
-        for u, nbrs in graph.adj.items():
-            ns = set(nbrs) - {u}
-            for v, w in itertools.combinations(ns, 2):
-                try:
-                    luv = graph[u][v][metrik]
-                    lvw = graph[v][w][metrik]
-                    luw = graph[u][w][metrik]
-                    if luv < lvw and luw < lvw:
-                        edges_to_remove.add((v, w))
-                        logger.debug(f"remove {v}-{w} from triangle ({u},{v},{w}) distance ({lvw},{luw},{luv})")
-                except KeyError:
-                    pass
-
-        graph.remove_edges_from(edges_to_remove)
-
-    def auto_gruppen(self):
+    def gleise_gruppieren(self):
         """
         gruppiert bahnsteige zu bahnhöfen und ein-/ausfahrten zu anschlüssen.
 
@@ -566,40 +411,170 @@ class Anlage:
         self.gleisgruppen = dict_union(self.bahnsteiggruppen, self.anschlussgruppen)
         self.gleiszuordnung = {**self.bahnsteigzuordnung, **self.anschlusszuordnung}
 
-    def strecken_aus_fahrplan(self, zugliste: Iterable[ZugDetails]):
-        """
-        streckenliste aus fahrplan erstellen.
+        self._verbindungsstrecke_cache = {}
 
-        :return:
+    def bahnhof_graph_erstellen(self):
         """
+        bahnhofgraph aus signalgraph und gruppenkonfiguration neu erstellen.
 
-        strecken = set([])
+        der bahnhofgraph wird aus den kürzesten verbindungsstrecken aller möglichen kombinationen von ein- und
+        ausfahrten gebildet. er enthält die von ihnen berührten bahnhöfe und anschlüsse als knoten.
+
+        die self.anschlussgruppen und self.bahnsteiggruppen müssen bereits konfiguriert sein.
+
+        :return: kein
+        """
+        self.bahnhof_graph.clear()
+
+        endpunkte = [list(gruppe)[0] for gruppe in self.gleisgruppen.values() if len(gruppe) > 0]
+
+        for ein, aus in itertools.combinations(endpunkte, 2):
+            strecke = self.verbindungsstrecke(ein, aus)
+            if len(strecke):
+                start = None
+                for ziel in strecke:
+                    if ziel in self.bahnsteiggruppen:
+                        self.bahnhof_graph.add_node(ziel, typ="bahnhof")
+                    else:
+                        self.bahnhof_graph.add_node(ziel, typ="anschluss")
+                    if start is not None:
+                        self.bahnhof_graph.add_edge(start, ziel, **Anlage.BAHNHOF_GRAPH_INIT_ATTR)
+                    start = ziel
+
+    def bahnhof_graph_zugupdate(self, zugliste: Iterable[ZugDetails]):
+        """
+        bahnhof-graph aus fahrplan aktualisieren.
+
+        der bahnhofgraph wird von der bahnhof_graph_erstellen-methode erstellt.
+        diese methode aktualisiert die fahrzeiten-attribute der kanten anhand des fahrplans.
+        fahrzeit_sum, fahrzeit_min, fahrzeit_max und fahrzeit_count werden aktualisiert.
+        die fahrzeiten sind in sekunden.
+        fahrzeit_count ist die anzahl betrachteter zugverbindungen.
+
+        :return: kein
+        """
 
         for zug in zugliste:
-            if zug.sichtbar:
-                # der fahrplan von sichtbaren zügen kann unvollständig sein
-                continue
+            start = None
+            startzeit = 0
+            for zeile in zug.fahrplan:
+                try:
+                    ziel = self.gleiszuordnung[zeile.plan]
+                    zielzeit = time_to_seconds(zeile.an)
+                except (AttributeError, KeyError):
+                    break
 
-            try:
-                strecke = tuple((self.gleiszuordnung[wp] for wp in zug.route(plan=True)))
-                if len(strecke) >= 3:
-                    strecken.add(strecke)
-            except KeyError:
-                logger.warning(f"wegpunkte von zug {zug.name} können nicht auf bahnhöfe abgebildet werden.")
+                if start and start != ziel:
+                    zeit = zielzeit - startzeit
+                    try:
+                        d = self.bahnhof_graph[start][ziel]
+                    except KeyError:
+                        self.bahnhof_graph.add_edge(start, ziel, **Anlage.BAHNHOF_GRAPH_INIT_ATTR)
+                        d = self.bahnhof_graph[start][ziel]
 
-        vereinigte_strecken = set([])
-        for strecke1, strecke2 in itertools.permutations(strecken, 2):
-            # strecken aneinanderreihen
-            if strecke1[-1] == strecke2[0]:
-                strecke3 = list(strecke1[:-1])
-                strecke3.extend(strecke2)
-                strecke3 = tuple(strecke3)
-                vereinigte_strecken.add(strecke3)
-            # laengere strecke
-            if set(strecke1).issuperset(set(strecke2)):
-                vereinigte_strecken.add(strecke1)
+                    d['fahrzeit_sum'] = d['fahrzeit_sum'] + zeit
+                    d['fahrzeit_min'] = min(d['fahrzeit_min'], zeit) if not np.isnan(d['fahrzeit_min']) else zeit
+                    d['fahrzeit_max'] = max(d['fahrzeit_max'], zeit) if not np.isnan(d['fahrzeit_max']) else zeit
+                    d['fahrzeit_count'] = d['fahrzeit_count'] + 1
+
+                start = ziel
+                try:
+                    startzeit = time_to_seconds(zeile.ab)
+                except AttributeError:
+                    break
+
+    def generalisieren(self, metrik):
+        graph = self.bahnhof_graph
+
+        edges_to_remove = set([])
+        for u, nbrs in graph.adj.items():
+            ns = set(nbrs) - {u}
+            for v, w in itertools.combinations(ns, 2):
+                try:
+                    luv = graph[u][v][metrik]
+                    lvw = graph[v][w][metrik]
+                    luw = graph[u][w][metrik]
+                    if luv < lvw and luw < lvw:
+                        edges_to_remove.add((v, w))
+                        logger.debug(f"remove {v}-{w} from triangle ({u},{v},{w}) distance ({lvw},{luw},{luv})")
+                except KeyError:
+                    pass
+
+        graph.remove_edges_from(edges_to_remove)
+
+    def strecken_aus_signalgraph(self):
+        """
+        strecken aus signalgraph ableiten
+
+        diese funktion bestimmt die kürzesten pfade zwischen allen anschlüssen und bahnsteigen
+        und listet die an diesen pfaden liegenden bahnhöfe auf.
+        der kürzeste pfad im signalgraph besteht meist nur aus signalen.
+        bahnsteige erscheinen als nachbarn eines oder mehrerer signale auf dem pfad.
+
+        eine strecke besteht aus einer liste von bahnhöfen plus einfahrt am anfang und ausfahrt am ende.
+        die namen der elemente sind gruppennamen, d.h. die schlüssel aus self.gleisgruppen.
+        der streckenname (schlüssel von self.strecken) wird aus dem ersten und letzten wegpunkt gebildet,
+        die mit einem bindestrich aneinandergefügt werden.
+
+        :return: das result wird in self.strecken abgelegt.
+        """
+        anschlussgleise = [list(gruppe)[0] for gruppe in self.anschlussgruppen.values() if len(gruppe) > 0]
+        strecken = []
+        for ein, aus in itertools.combinations(anschlussgleise, 2):
+            strecke = self.verbindungsstrecke(ein, aus)
+            if len(strecke) >= 1:
+                strecken.append(strecke)
 
         self.strecken = {f"{s[0]}-{s[-1]}": s for s in strecken}
+
+    def verbindungsstrecke(self, start_gleis: str, ziel_gleis: str) -> List[str]:
+        """
+        kürzeste verbindung zwischen zwei gleisen bestimmen
+
+        die kürzeste verbindung wird aus dem signalgraphen bestimmt.
+        start und ziel müssen knoten im signalgraphen sein,
+        also gleisbezeichnungen (einfahrten, ausfahrten, bahnsteige, haltepunkte), die im fahrplan vorkommen.
+
+        die berechnete strecke ist eine geordnete liste von gruppennamen (bahnhöfe bzw. anschlussgruppen).
+
+        da die streckenberechnung aufwändig sein kann, werden die resultate im self._verbindungsstrecke_cache
+        gespeichert. der cache muss gelöscht werden, wenn sich der signalgraph oder die bahnsteigzuordnung ändert.
+
+        :param start_gleis: gleis- oder einfahrtsbezeichnung
+        :param ziel_gleis: gleis- oder ausfahrtsbezeichnung
+        :return: liste von befahrenen gleisgruppen vom start zum ziel.
+            die liste kann leer sein, wenn kein pfad gefunden wurde!
+        """
+
+        try:
+            return self._verbindungsstrecke_cache[(start_gleis, ziel_gleis)]
+        except KeyError:
+            pass
+
+        try:
+            pfad = nx.shortest_path(self.signal_graph, start_gleis, ziel_gleis)
+        except nx.NetworkXException:
+            wegpunkte = []
+        else:
+            nachbar_haltepunkte = [[hp for hp in self.signal_graph.neighbors(n)
+                                    if self.signal_graph.nodes[hp]['typ'] in {5, 12}]
+                                   for n in pfad]
+            wegpunkte = [hp[0] for hp in nachbar_haltepunkte if hp]
+            wegpunkte.insert(0, start_gleis)
+            wegpunkte.append(ziel_gleis)
+
+        strecke = []
+        for hp in wegpunkte:
+            try:
+                bf = self.gleiszuordnung[hp]
+            except KeyError:
+                pass
+            else:
+                if bf not in strecke:
+                    strecke.append(bf)
+
+        self._verbindungsstrecke_cache[(start_gleis, ziel_gleis)] = strecke
+        return strecke
 
     def get_strecken_distanzen(self, streckenname: str) -> Dict[str, float]:
         """

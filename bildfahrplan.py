@@ -59,6 +59,7 @@ class Trasse:
     start: ZugZielPlanung
     ziel: ZugZielPlanung
     koord: List[Tuple[float]]
+    halt: bool = False
     color: str = "b"
     fontstyle: str = "normal"
     linestyle: str = "-"
@@ -162,6 +163,20 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                     trasse.koord = [(self._strecke[gruppe1], time_to_minutes(plan1.ab) + plan1.verspaetung_ab),
                                     (self._strecke[gruppe2], time_to_minutes(plan2.an) + plan2.verspaetung_an)]
                     zuglauf.append(trasse)
+
+                    # haltelinie
+                    an = time_to_minutes(plan2.an) + plan2.verspaetung_an
+                    ab = time_to_minutes(plan2.ab) + plan2.verspaetung_ab
+                    if ab > an:
+                        trasse = Trasse()
+                        trasse.zug = zug
+                        trasse.color = color
+                        trasse.start = plan2
+                        trasse.ziel = plan2
+                        trasse.halt = True
+                        trasse.linestyle = '--'
+                        trasse.koord = [(self._strecke[gruppe2], an), (self._strecke[gruppe2], ab)]
+                        zuglauf.append(trasse)
 
             plan1 = plan2
 

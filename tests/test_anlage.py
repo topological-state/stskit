@@ -57,13 +57,13 @@ class TestAnlage(unittest.TestCase):
 
         return g
 
-    def test_auto_gruppen(self):
+    def test_gleise_gruppieren(self):
         _anlage = anlage.Anlage(None)
         sg = self.make_demo_graph()
         bg = nx.subgraph(sg, ['H1', 'B1', 'B2', 'B3'])
         _anlage.signal_graph = sg
         _anlage.bahnsteig_graph = bg
-        _anlage.auto_gruppen()
+        _anlage.gleise_gruppieren()
         ag = {'E1': {'E1'}, 'A1': {'A1'}, 'E2': {'E2'}, 'A2': {'A2'}}
         bg = {'H1': {'H1'}, 'B': {'B1', 'B2', 'B3'}}
         self.assertDictEqual(_anlage.anschlussgruppen, ag)

@@ -1,0 +1,67 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object simulator
+object konfiguration
+konfiguration : anschluesse
+konfiguration : bahnhoefe
+konfiguration : strecken
+
+object zugliste
+zugliste : variabel
+
+object wegeliste
+wegeliste : konstant
+
+object bahnsteigliste
+bahnsteigliste : konstant
+
+object auswertung
+
+object signalgraph
+signalgraph : signale
+signalgraph : gleise
+signalgraph : einfahrten
+signalgraph : ausfahrten
+
+object bahnhofgraph
+bahnhofgraph : bahnhoefe
+bahnhofgraph : anschluesse
+bahnhofgraph : relationen
+
+object bahnsteiggraph
+
+object anschlussgruppen
+object bahnsteiggruppen
+
+object strecken
+strecken : bahnhoefe
+strecken : anschluesse
+
+simulator --> zugliste
+simulator --> wegeliste
+simulator --> bahnsteigliste
+
+wegeliste --> signalgraph : original-graph
+signalgraph --> anschlussgruppen : auto-gruppen
+
+bahnsteigliste --> bahnsteiggraph : original-graph
+bahnsteiggraph --> bahnsteiggruppen : auto-gruppen
+
+zugliste --> bahnhofgraph : fahrzeiten
+bahnsteiggruppen --> bahnhofgraph : bahnhoefe
+anschlussgruppen --> bahnhofgraph : anschluesse
+
+signalgraph --> strecken : relationen
+signalgraph --> bahnhofgraph : relationen
+bahnsteiggruppen --> strecken : bahnhoefe
+anschlussgruppen --> strecken : anschluesse
+
+konfiguration --> bahnsteiggruppen
+konfiguration --> anschlussgruppen
+konfiguration --> strecken
+
+auswertung --> bahnhofgraph : fahrzeiten
+'strecken --> bahnhofgraph : relationen
+
+@enduml
