@@ -1,14 +1,16 @@
 import math
 from dataclasses import dataclass, field
 import logging
+from pathlib import Path
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 import matplotlib as mpl
+from PyQt5.QtCore import pyqtSlot
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import numpy as np
-from PyQt5 import Qt, QtCore, QtGui, QtWidgets
+from PyQt5 import Qt, QtCore, QtGui, QtWidgets, uic
 
 from auswertung import Auswertung
 from anlage import Anlage
@@ -79,7 +81,7 @@ class Trasse:
         return args
 
 
-class BildFahrplanWindow(QtWidgets.QMainWindow):
+class BildFahrplanWindow(QtWidgets.QWidget):
 
     def __init__(self):
         super().__init__()
@@ -88,18 +90,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.planung: Optional[Planung] = None
         self.auswertung: Optional[Auswertung] = None
 
-        self.setWindowTitle("bildfahrplan")
-        ss = f"background-color: {mpl.rcParams['axes.facecolor']};"
-        self.setStyleSheet(ss)
-        self._main = QtWidgets.QWidget()
-        self.setCentralWidget(self._main)
-        layout = QtWidgets.QVBoxLayout(self._main)
-
-        canvas = FigureCanvas(Figure(figsize=(5, 3)))
-        layout.addWidget(canvas)
-        self._axes = canvas.figure.subplots()
-
         self._strecken_name: str = ""
+        self._strecke_von: str = ""
+        self._strecke_nach: str = ""
+
         # bahnhofname -> distanz [minuten]
         self._strecke: Dict[str, float] = {}
         self._zug_trassen: Dict[int, List[Trasse]] = {}
@@ -109,36 +103,123 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.farbschema = ZugFarbschema()
         self.farbschema.init_schweiz()
 
+        self.setWindowTitle("bildfahrplan")
+        ss = f"background-color: {mpl.rcParams['axes.facecolor']};" \
+             f"color: {mpl.rcParams['text.color']};"
+        # further possible entries:
+        # "selection-color: yellow;"
+        # "selection-background-color: blue;"
+        self.setStyleSheet(ss)
+
+        self.verticalLayout = QtWidgets.QVBoxLayout(self)
+        self.stackedWidget = QtWidgets.QStackedWidget(self)
+        self.settings_page = QtWidgets.QWidget()
+        self.splitter = QtWidgets.QSplitter(self.settings_page)
+        self.splitter.setGeometry(QtCore.QRect(10, 10, 310, 252))
+        self.splitter.setOrientation(QtCore.Qt.Horizontal)
+        self.widget = QtWidgets.QWidget(self.splitter)
+        self.settings_layout = QtWidgets.QFormLayout(self.widget)
+        self.settings_layout.setContentsMargins(0, 0, 0, 0)
+
+        self.von_label = QtWidgets.QLabel(self.widget)
+        self.settings_layout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.von_label)
+        self.von_combo = QtWidgets.QComboBox(self.widget)
+        self.settings_layout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.von_combo)
+        self.nach_label = QtWidgets.QLabel(self.widget)
+        self.settings_layout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.nach_label)
+        self.nach_combo = QtWidgets.QComboBox(self.widget)
+        self.settings_layout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.nach_combo)
+        self.strecke_label = QtWidgets.QLabel(self.widget)
+        self.settings_layout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.strecke_label)
+        self.strecke_list = QtWidgets.QListWidget(self.widget)
+        self.settings_layout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.strecke_list)
+        self.hidden_widget = QtWidgets.QWidget(self.splitter)
+
+        self.stackedWidget.addWidget(self.settings_page)
+
+        self.display_page = QtWidgets.QWidget()
+        self.stackedWidget.addWidget(self.display_page)
+        self.verticalLayout.addWidget(self.stackedWidget)
+
+        self.display_layout = QtWidgets.QVBoxLayout(self.display_page)
+        self.display_page.setLayout(self.display_layout)
+        self.display_canvas = FigureCanvas(Figure(figsize=(5, 3)))
+        self.display_layout.addWidget(self.display_canvas)
+
+        self.settings_button = QtWidgets.QPushButton("strecke", self.display_canvas)
+        self.display_button = QtWidgets.QPushButton("anzeigen")
+        self.settings_layout.addWidget(self.display_button)
+
+        self.stackedWidget.setCurrentIndex(0)
+
+        self.von_combo.currentIndexChanged.connect(self.strecke_selection_changed)
+        self.nach_combo.currentIndexChanged.connect(self.strecke_selection_changed)
+        self.settings_button.clicked.connect(self.settings_button_clicked)
+        self.display_button.clicked.connect(self.display_button_clicked)
+
+        self._axes = self.display_canvas.figure.subplots()
+
     def set_strecke(self, streckenname: str):
         if streckenname != self._strecken_name:
             self._strecken_name = streckenname
             self._strecke = {}
 
-    def update(self):
-        if not self._strecken_name:
-            k0 = None
-            v0 = []
-            for k, v in self.anlage.strecken.items():
-                if len(v) > len(v0):
-                    k0 = k
-                    v0 = v
-            if k0:
-                self.set_strecke(k0)
+    def update_combos(self):
+        self.von_combo.clear()
+        self.von_combo.addItems(sorted(self.anlage.gleisgruppen.keys()))
+        if self._strecke_von:
+            self.von_combo.setCurrentText(self._strecke_von)
+        self.nach_combo.clear()
+        self.nach_combo.addItems(sorted(self.anlage.gleisgruppen.keys()))
+        if self._strecke_nach:
+            self.nach_combo.setCurrentText(self._strecke_nach)
 
-        if self._strecken_name:
+    @pyqtSlot()
+    def strecke_selection_changed(self):
+        self._strecke_von = self.von_combo.currentText()
+        self._strecke_nach = self.nach_combo.currentText()
+        self.update_strecke()
+
+    @pyqtSlot()
+    def settings_button_clicked(self):
+        self.stackedWidget.setCurrentIndex(0)
+
+    @pyqtSlot()
+    def display_button_clicked(self):
+        self.stackedWidget.setCurrentIndex(1)
+        if self._strecke_von and self._strecke_nach:
+            self.daten_update()
+            self.grafik_update()
+
+    def update(self):
+        if self.von_combo.count() == 0:
+            self.update_combos()
+        if self._strecke_von and self._strecke_nach:
             self.daten_update()
             self.grafik_update()
 
     def daten_update(self):
-        self.update_strecke()
         for zug in self.planung.zugliste.values():
             self.update_zuglauf(zug)
 
     def update_strecke(self):
-        sd = self.anlage.get_strecken_distanzen(self._strecken_name)
-        for k, v in sd.items():
-            sd[k] = v / 60
-        self._strecke = sd
+        if self._strecke_von and self._strecke_nach:
+            von_gleis = min(self.anlage.gleisgruppen[self._strecke_von], default="")
+            nach_gleis = min(self.anlage.gleisgruppen[self._strecke_nach], default="")
+            strecke = self.anlage.verbindungsstrecke(von_gleis, nach_gleis)
+        else:
+            strecke = []
+
+        self.strecke_list.clear()
+        self.strecke_list.addItems(strecke)
+
+        if len(strecke):
+            sd = self.anlage.get_strecken_distanzen(strecke)
+            for k, v in sd.items():
+                sd[k] = v / 60
+            self._strecke = sd
+
+        self.setWindowTitle(f"bildfahrplan {self._strecke_von}-{self._strecke_nach}")
 
     def update_zuglauf(self, zug: ZugDetailsPlanung):
         color = self.farbschema.zugfarbe(zug)

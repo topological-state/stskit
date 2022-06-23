@@ -576,13 +576,12 @@ class Anlage:
         self._verbindungsstrecke_cache[(start_gleis, ziel_gleis)] = strecke
         return strecke
 
-    def get_strecken_distanzen(self, streckenname: str) -> Dict[str, float]:
+    def get_strecken_distanzen(self, strecke: List[str]) -> Dict[str, float]:
         """
 
-        :param streckenname:
+        :param strecke: liste von gleisgruppen-namen
         :return: distanz = minimale fahrzeit in sekunden
         """
-        strecke = self.strecken[streckenname]
         kanten = zip(strecke[:-1], strecke[1:])
         distanz = 0.
         result = {strecke[0]: distanz}
@@ -594,7 +593,7 @@ class Anlage:
                 else:
                     distanz += 60.
             except KeyError:
-                logger.warning(f"strecke {streckenname}: verbindung {u}-{v} nicht im netzplan.")
+                logger.warning(f"verbindung {u}-{v} nicht im netzplan.")
                 distanz += 60.
 
             result[v] = float(distanz)
