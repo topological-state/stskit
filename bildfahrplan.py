@@ -165,14 +165,25 @@ class BildFahrplanWindow(QtWidgets.QWidget):
             self._strecke = {}
 
     def update_combos(self):
+        von = self._strecke_von
+        nach = self._strecke_nach
+
+        laengste_strecke = max(self.anlage.strecken.values(), key=len)
+        if not von and len(laengste_strecke) >= 2:
+            von = laengste_strecke[0]
+        if not nach and len(laengste_strecke) >= 2:
+            nach = laengste_strecke[-1]
+
+        gruppen_liste = sorted((gr for gr in self.anlage.gleisgruppen.keys()))
         self.von_combo.clear()
-        self.von_combo.addItems(sorted(self.anlage.gleisgruppen.keys()))
-        if self._strecke_von:
-            self.von_combo.setCurrentText(self._strecke_von)
+        self.von_combo.addItems(gruppen_liste)
         self.nach_combo.clear()
-        self.nach_combo.addItems(sorted(self.anlage.gleisgruppen.keys()))
-        if self._strecke_nach:
-            self.nach_combo.setCurrentText(self._strecke_nach)
+        self.nach_combo.addItems(gruppen_liste)
+
+        if von:
+            self.von_combo.setCurrentText(von)
+        if nach:
+            self.nach_combo.setCurrentText(nach)
 
     @pyqtSlot()
     def strecke_selection_changed(self):

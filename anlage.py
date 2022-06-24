@@ -199,11 +199,15 @@ class Anlage:
         dieser dictionary bildet gruppennamen (bahnhofnamen) auf sets von bahnsteignamen ab.
     """
 
-    BAHNHOF_GRAPH_INIT_ATTR = {
+    BAHNHOF_GRAPH_INIT_EDGE = {
         "fahrzeit_sum": 0,
         "fahrzeit_min": np.nan,
         "fahrzeit_max": np.nan,
         "fahrzeit_count": 0
+    }
+
+    BAHNHOF_GRAPH_INIT_NODE = {
+        "zug_count": 0
     }
 
     def __init__(self, anlage: AnlagenInfo):
@@ -433,12 +437,10 @@ class Anlage:
             if len(strecke):
                 start = None
                 for ziel in strecke:
-                    if ziel in self.bahnsteiggruppen:
-                        self.bahnhof_graph.add_node(ziel, typ="bahnhof")
-                    else:
-                        self.bahnhof_graph.add_node(ziel, typ="anschluss")
+                    typ = "bahnhof" if ziel in self.bahnsteiggruppen else "anschluss"
+                    self.bahnhof_graph.add_node(ziel, **Anlage.BAHNHOF_GRAPH_INIT_NODE, typ=typ)
                     if start is not None:
-                        self.bahnhof_graph.add_edge(start, ziel, **Anlage.BAHNHOF_GRAPH_INIT_ATTR)
+                        self.bahnhof_graph.add_edge(start, ziel, **Anlage.BAHNHOF_GRAPH_INIT_EDGE)
                     start = ziel
 
     def bahnhof_graph_zugupdate(self, zugliste: Iterable[ZugDetails]):
@@ -463,13 +465,16 @@ class Anlage:
                     zielzeit = time_to_seconds(zeile.an)
                 except (AttributeError, KeyError):
                     break
+                else:
+                    d = self.bahnhof_graph.nodes[ziel]
+                    d['zug_count'] = d['zug_count'] + 1
 
                 if start and start != ziel:
                     zeit = zielzeit - startzeit
                     try:
                         d = self.bahnhof_graph[start][ziel]
                     except KeyError:
-                        self.bahnhof_graph.add_edge(start, ziel, **Anlage.BAHNHOF_GRAPH_INIT_ATTR)
+                        self.bahnhof_graph.add_edge(start, ziel, **Anlage.BAHNHOF_GRAPH_INIT_EDGE)
                         d = self.bahnhof_graph[start][ziel]
 
                     d['fahrzeit_sum'] = d['fahrzeit_sum'] + zeit
