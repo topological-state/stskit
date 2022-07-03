@@ -226,7 +226,10 @@ class MainWindow(QtWidgets.QMainWindow):
             except (AttributeError, OSError):
                 pass
 
-            self.auswertung.fahrzeiten.report()
+            try:
+                self.auswertung.fahrzeiten.report()
+            except (AttributeError, OSError):
+                pass
 
             self.enable_update = False
             self.closed.set()

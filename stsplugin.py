@@ -493,8 +493,14 @@ class PluginClient:
         else:
             zids = list(self.zugliste.keys())
 
+        erledigte_zids = []
         while zids:
             zid = zids.pop(0)
+            if zid in erledigte_zids:
+                continue  # unendliche rekursion verhindern
+            else:
+                erledigte_zids.append(zid)
+
             try:
                 zug = self.zugliste[zid]
             except KeyError:

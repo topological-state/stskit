@@ -877,11 +877,11 @@ class Anlage:
         with open(p, "w") as fp:
             json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
 
-        # if logger.isEnabledFor(logging.DEBUG):
-        #     d = self.get_config(graphs=True)
-        #     p = Path(path) / f"{self.anlage.aid}diag.json"
-        #     with open(p, "w") as fp:
-        #         json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
+        if logger.isEnabledFor(logging.DEBUG):
+            d = self.get_config(graphs=True)
+            p = Path(path) / f"{self.anlage.aid}diag.json"
+            with open(p, "w") as fp:
+                json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
 
     def get_config(self, graphs=False) -> Dict:
         """
@@ -908,8 +908,9 @@ class Anlage:
                 d['signal_graph'] = dict(nx.node_link_data(self.signal_graph))
             if self.bahnsteig_graph:
                 d['bahnsteig_graph'] = dict(nx.node_link_data(self.bahnsteig_graph))
-            if self.bahnhof_graph:
-                d['bahnhof_graph'] = dict(nx.node_link_data(self.bahnhof_graph))
+            # bahnhofgraph kann im moment wegen kontraktionen nicht codiert werden
+            # if self.bahnhof_graph:
+            #     d['bahnhof_graph'] = dict(nx.node_link_data(self.bahnhof_graph))
 
         return d
 
