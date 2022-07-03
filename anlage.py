@@ -160,6 +160,211 @@ anschluss_name_funktionen = {}
 bahnhof_name_funktionen = {}
 
 
+def graph_weichen_ersetzen(g: nx.Graph) -> nx.Graph:
+    """
+    weichen durch kanten ersetzen
+
+    vereinfacht die gleisanlage, indem weichen durch direkte kanten der nachbarknoten ersetzt werden.
+
+    :param g: ungerichteter graph
+    :return: graph g mit ersetzten weichen
+    """
+    weichen = {n for n, _d in g.nodes.items() if _d['typ'] in {3, 4}}
+    for w in weichen:
+        for v in g[w]:
+            # w wird entfernt
+            g = nx.contracted_nodes(g, v, w, self_loops=False, copy=False)
+            break
+
+    return g
+
+
+def graph_anschluesse_pruefen(g: nx.Graph) -> nx.Graph:
+    """
+    kanten von anschlüssen prüfen und vereinfachen
+
+    anschlüsse sollten wenn möglich mit signalen verbunden sein.
+    direkte verbindungen zu bahnsteigen werden entfernt,
+    ausser es liegen keine signale in der nachbarschaft.
+
+    :param g: ungerichteter graph
+    :return: graph g mit geänderten anschlüssen
+    """
+    anschl = {n for n, _d in g.nodes.items() if _d['typ'] in {6, 7}}
+    for a in anschl:
+        edges_to_remove = []
+        signal_gefunden = False
+        nbr = [n for n in g[a]]
+        for n in nbr:
+            if g.nodes[n]['typ'] == 2:
+                signal_gefunden = True
+            else:
+                edges_to_remove.append((a, n))
+        if signal_gefunden:
+            g.remove_edges_from(edges_to_remove)
+
+    return g
+
+
+def graph_bahnsteigsignale_ersetzen(g: nx.Graph) -> nx.Graph:
+    """
+    bahnsteig-signal-kombinationen durch bahnsteige ersetzen
+
+    vereinfacht die gleisanlage, indem signale in der nachbarschaft von bahnsteigen und haltepunkten entfernt werden.
+    die von den betroffenen signalen ausgehenden kanten werden durch direkte kanten der jeweiligen partner ersetzt.
+
+    die funktion hat zum zweck, dass in der vereinfachten gleisanlage pfade nicht an den bahnsteigen vorbeiführen.
+
+    :param g: ungerichteter graph
+    :return: graph g mit ersetzten weichen
+    """
+    bahnsteige = {n for n, _d in g.nodes.items() if _d['typ'] in {5, 12}}
+    for b in bahnsteige:
+        nbr = [n for n in g[b]]
+        for v in nbr:
+            if g.nodes[v]['typ'] == 2:
+                g = nx.contracted_nodes(g, b, v, self_loops=False, copy=False)
+
+    return g
+
+
+def graph_signalpaare_ersetzen(g: nx.Graph) -> nx.Graph:
+    """
+    signalpaare kontrahieren
+
+    signale, die mit einem anderen signal verbunden sind, werden durch ein einzelnes ersetzt.
+
+    :param g: ungerichteter graph
+    :return: graph g mit ersetzten signalpaaren
+    """
+    while True:
+        signale = {n for n, _d in g.nodes.items() if _d['typ'] == 2}
+        for s1 in signale:
+            for s2 in g[s1]:
+                if g.nodes[s2]['typ'] == 2:
+                    g = nx.contracted_nodes(g, s1, s2, self_loops=False, copy=False)
+                    signale.remove(s2)
+                    break
+            else:
+                continue
+            break
+        else:
+            break
+
+    return g
+
+
+def graph_zwischensignale_entfernen(g: nx.Graph) -> nx.Graph:
+    """
+    einzelne signale zwischen bahnsteigen durch kanten ersetzen
+
+    :param g: ungerichteter graph
+    :return: graph g mit entfernten signalen
+    """
+    signale = {n for n, _d in g.nodes.items() if _d['typ'] == 2}
+    while signale:
+        s1 = signale.pop()
+        for s2 in g[s1]:
+            if g.nodes[s2]['typ'] in {5, 12}:
+                g = nx.contracted_nodes(g, s2, s1, self_loops=False, copy=False)
+                break
+
+    return g
+
+
+def graph_gleise_zuordnen(g: nx.Graph, gleiszuordnung: Dict[str, str]) -> nx.Graph:
+    """
+    gleise in graph zu gruppen zusammenfassen
+
+    :param g: signal-graph, gleis-graph oder ähnlicher graph.
+    :param gleiszuordnung: mapping gleisname -> gruppenname
+    :return: graph g mit zugeordneten gleisen
+    """
+    g = nx.relabel_nodes(g, gleiszuordnung, copy=False)
+    g.remove_edges_from(nx.selfloop_edges(g))
+    return g
+
+
+def graph_schleifen_aufloesen(g: nx.Graph) -> nx.Graph:
+    cycles = nx.cycle_basis(g)
+    degrees = g.degree()
+    edges_to_remove = []
+    for c in cycles:
+        ds = []
+        dmin = len(c)
+        nmin = None
+        for n in c:
+            if g.nodes[n]['typ'] in {6, 7}:
+                d = len(c)
+            else:
+                d = degrees[n]
+            ds.append(d)
+            if d < dmin:
+                nmin = n
+                dmin = d
+
+        # nur dreiecke bearbeiten
+        if len(ds) == 3 and dmin == 2:
+            c.remove(nmin)
+            edges_to_remove.append((c[0], c[1]))
+
+    g.remove_edges_from(edges_to_remove)
+
+    return g
+
+
+def graph_mehrdeutige_strecken(g: nx.Graph, max_knoten: int = 3) -> List[Set[str]]:
+    """
+    findet mehrdeutige streckenabschnitte
+
+    in mehrdeutigen streckenabschnitten ist die reihenfolge von stationen aus dem signalgraph unklar.
+    im graphen erscheinen sie als schleifen, meistens dreiecke.
+
+    :param g: signal-graph, gleis-graph oder ähnlicher graph.
+    :param max_knoten: filtert abschnitte mit mehr als einer maximalen knotenzahl heraus,
+        wenn längere schleifen nicht gemeldet werden sollen.
+    :return: liste von mehrdeutigen kanten
+    """
+    cycles = nx.cycle_basis(g)
+    cycles = [c for c in cycles if len(c) <= max_knoten]
+    return cycles
+
+
+def graph_mehrdeutige_strecke_abgleichen(g: nx.Graph, strecke: Iterable[str], routen: Iterable[Iterable[str]]):
+    """
+    mehrdeutige strecke mit zugrouten abgleichen
+
+    wenn die reihenfolge der stationen auf einer strecke nicht eindeutig bestimmt werden kann,
+    bleiben im gleis-graphen schleifen zurück.
+    diese funktion versucht die reihenfolge anhand von bekannten zugläufen zu bestimmen.
+    wenn ein zug alle stationen der strecke anfährt, werden diese kanten im graphen belassen
+    und alle unbedienten in der nachbarschaft entfernt.
+
+    :param g: gleis-graph oder ähnlich
+    :param strecke: sequenz von stationen, deren reihenfolge abgeglichen werden soll
+    :param routen: liste von routen. jede route besteht aus einer sequenz von stationsnamen im graphen g.
+    :return: modifizierter graph g
+    """
+    nachbarschaft = set([])
+    for k in strecke:
+        nachbarschaft.update(g.adj[k])
+
+    edges_to_remove = set([])
+    for route in routen:
+        match_index = [i for i, n in enumerate(route) if n in nachbarschaft]
+        if len(match_index) >= len(nachbarschaft):
+            pfad = route[min(match_index):max(match_index)+1]
+            rg = nx.Graph(zip(pfad[:-1], pfad[1:]))
+            for n in strecke:
+                for e in g.edges(n):
+                    if e not in rg.edges:
+                        edges_to_remove.add(e)
+            break
+
+    g.remove_edges_from(edges_to_remove)
+    return g
+
+
 class Anlage:
     """
     netzwerk-darstellungen der bahnanlage
@@ -233,8 +438,10 @@ class Anlage:
         self.anschlusslage: Dict[str, str] = {}
 
         self.signal_graph: nx.Graph = nx.DiGraph()
+        self.gleis_graph: nx.Graph = nx.Graph()
         self.bahnsteig_graph: nx.Graph = nx.DiGraph()
         self.bahnhof_graph: nx.Graph = nx.Graph()
+        self.gleis_graph_probleme: List[Any] = []
 
         # strecken-name -> gruppen-namen
         self.strecken: Dict[str, Tuple[str]] = {}
@@ -267,11 +474,13 @@ class Anlage:
                 logger.exception("fehlerhafte anlagenkonfiguration")
             self.config_loaded = True
 
-        if len(self.bahnhof_graph) == 0:
+        if len(self.gleis_graph) == 0 or len(self.bahnhof_graph) == 0 or len(self.gleis_graph_probleme) > 0:
+            self.gleis_graph_erstellen(client.zugliste.values())
+            self.gleis_graph_probleme = graph_mehrdeutige_strecken(self.gleis_graph)
             self.bahnhof_graph_erstellen()
 
         if len(self.strecken) == 0:
-            self.strecken_aus_signalgraph()
+            self.strecken_aus_bahnhofgraph()
 
         self.bahnhof_graph_zugupdate(client.zugliste.values())
 
@@ -279,12 +488,13 @@ class Anlage:
         """
         erstellt die signal- und bahnsteig-graphen nach anlageninformationen vom simulator.
 
-        der signal-graph enthält alle signale, bahnsteige, einfahrten, ausfahrten und haltepunkte aus der wege-liste
-        der plugin-schnittstelle als knoten.
+        der signal-graph enthält das gleisbild aus der wege-liste der plugin-schnittstelle mit sämtlichen knoten und kanten.
         das 'typ'-attribut wird auf den sts-knotentyp (int) gesetzt.
         kanten werden entsprechend der nachbarn-relationen aus der wegeliste ('typ'-attribut 'gleis') gesetzt.
         der graph ist gerichtet, da die nachbarbeziehung nicht reziprok ist.
         die kante zeigt auf die knoten, die als nachbarn aufgeführt sind.
+        meist werden von der schnittstelle jedoch kanten in beide richtung angegeben,
+        weshalb z.b. nicht herausgefunden werden kann, für welche richtung ein signal gilt.
         der graph wird in self.signal_graph abgelegt.
         dieser graph sollte nicht verändert werden.
 
@@ -309,18 +519,16 @@ class Anlage:
         :param client: PluginClient-artiges objekt mit aktuellen bahnsteigliste und wege attributen.
         :return: None.
         """
-        knoten_auswahl = {Knoten.TYP_NUMMER["Signal"],
-                          Knoten.TYP_NUMMER["Bahnsteig"],
-                          Knoten.TYP_NUMMER["Einfahrt"],
-                          Knoten.TYP_NUMMER["Ausfahrt"],
-                          Knoten.TYP_NUMMER["Haltepunkt"]}
 
         self.signal_graph.clear()
+        self.gleis_graph.clear()
+        self._verbindungsstrecke_cache = {}
+
         for knoten1 in client.wege.values():
-            if knoten1.name and knoten1.typ in knoten_auswahl:
+            if knoten1.name:
                 self.signal_graph.add_node(knoten1.name, typ=knoten1.typ)
                 for knoten2 in knoten1.nachbarn:
-                    if knoten2.name and knoten2.typ in knoten_auswahl:
+                    if knoten2.name:
                         self.signal_graph.add_edge(knoten1.name, knoten2.name, typ='gleis', distanz=1)
 
         for bs1 in client.bahnsteigliste.values():
@@ -333,7 +541,38 @@ class Anlage:
                 else:
                     self.bahnsteig_graph.add_edge(bs1.name, bs2.name, typ='nachbar', distanz=0)
 
+    def gleis_graph_erstellen(self, zugliste: Iterable[ZugDetails]):
+        """
+        gleis-graph erstellen
+
+        der gleisgraph dient als grundlage zur streckenberechnung zwischen start- und zielpunkten.
+
+        für die erstellung des gleis-graphen sind der signal-graph, die gleiszuordnung sowie eine zugliste nötig.
+
+        :return: None. der graph wird im gleis_graph-attribut gespeichert.
+        """
         self._verbindungsstrecke_cache = {}
+        g = self.signal_graph.to_undirected()
+        g = graph_weichen_ersetzen(g)
+        g = graph_anschluesse_pruefen(g)
+        g = graph_bahnsteigsignale_ersetzen(g)
+        g = graph_signalpaare_ersetzen(g)
+        g = graph_gleise_zuordnen(g, self.gleiszuordnung)
+        g = graph_schleifen_aufloesen(g)
+        g = graph_zwischensignale_entfernen(g)
+        g = graph_schleifen_aufloesen(g)
+        mehrdeutige_strecken = graph_mehrdeutige_strecken(g)
+        if mehrdeutige_strecken:
+            routen = set([])
+            for zug in zugliste:
+                try:
+                    routen.add(tuple([self.gleiszuordnung[n] for n in zug.route()]))
+                except KeyError:
+                    continue
+            for kante in mehrdeutige_strecken:
+                g = graph_mehrdeutige_strecke_abgleichen(g, kante, routen)
+
+        self.gleis_graph = g
 
     def gleise_gruppieren(self):
         """
@@ -428,20 +667,12 @@ class Anlage:
 
         :return: kein
         """
-        self.bahnhof_graph.clear()
-
-        endpunkte = [list(gruppe)[0] for gruppe in self.gleisgruppen.values() if len(gruppe) > 0]
-
-        for ein, aus in itertools.combinations(endpunkte, 2):
-            strecke = self.verbindungsstrecke(ein, aus)
-            if len(strecke):
-                start = None
-                for ziel in strecke:
-                    typ = "bahnhof" if ziel in self.bahnsteiggruppen else "anschluss"
-                    self.bahnhof_graph.add_node(ziel, **Anlage.BAHNHOF_GRAPH_INIT_NODE, typ=typ)
-                    if start is not None:
-                        self.bahnhof_graph.add_edge(start, ziel, **Anlage.BAHNHOF_GRAPH_INIT_EDGE)
-                    start = ziel
+        self.bahnhof_graph = self.gleis_graph.copy()
+        for n in self.bahnhof_graph.nodes:
+            self.bahnhof_graph.nodes[n].update(Anlage.BAHNHOF_GRAPH_INIT_NODE)
+            self.bahnhof_graph.nodes[n]['typ'] = "bahnhof" if n in self.bahnsteiggruppen else "anschluss"
+        for e in self.bahnhof_graph.edges:
+            self.bahnhof_graph.edges[e].update(Anlage.BAHNHOF_GRAPH_INIT_EDGE)
 
     def bahnhof_graph_zugupdate(self, zugliste: Iterable[ZugDetails]):
         """
@@ -466,21 +697,16 @@ class Anlage:
                 except (AttributeError, KeyError):
                     break
                 else:
-                    d = self.bahnhof_graph.nodes[ziel]
-                    d['zug_count'] = d['zug_count'] + 1
+                    try:
+                        d = self.bahnhof_graph.nodes[ziel]
+                        d['zug_count'] = d['zug_count'] + 1
+                    except KeyError:
+                        logger.error(f"KeyError {ziel} (zug {zug.name}) nicht im bahnhofgraph")
+                        break
 
                 if start and start != ziel:
                     zeit = zielzeit - startzeit
-                    try:
-                        d = self.bahnhof_graph[start][ziel]
-                    except KeyError:
-                        self.bahnhof_graph.add_edge(start, ziel, **Anlage.BAHNHOF_GRAPH_INIT_EDGE)
-                        d = self.bahnhof_graph[start][ziel]
-
-                    d['fahrzeit_sum'] = d['fahrzeit_sum'] + zeit
-                    d['fahrzeit_min'] = min(d['fahrzeit_min'], zeit) if not np.isnan(d['fahrzeit_min']) else zeit
-                    d['fahrzeit_max'] = max(d['fahrzeit_max'], zeit) if not np.isnan(d['fahrzeit_max']) else zeit
-                    d['fahrzeit_count'] = d['fahrzeit_count'] + 1
+                    self.fahrzeit_update(start, ziel, zeit)
 
                 start = ziel
                 try:
@@ -488,42 +714,35 @@ class Anlage:
                 except AttributeError:
                     break
 
-    def generalisieren(self, metrik):
-        graph = self.bahnhof_graph
+    def fahrzeit_update(self, start, ziel, zeit, recursive=True):
+        try:
+            d = self.bahnhof_graph[start][ziel]
+        except KeyError:
+            if recursive:
+                strecke = self.verbindungsstrecke(start, ziel)
+                for s, z in zip(strecke[:-1], strecke[1:]):
+                    self.fahrzeit_update(s, z, round(zeit / (len(strecke) - 1)), recursive=False)
+        else:
+            d['fahrzeit_sum'] = d['fahrzeit_sum'] + zeit
+            d['fahrzeit_min'] = min(d['fahrzeit_min'], zeit) if not np.isnan(d['fahrzeit_min']) else zeit
+            d['fahrzeit_max'] = max(d['fahrzeit_max'], zeit) if not np.isnan(d['fahrzeit_max']) else zeit
+            d['fahrzeit_count'] = d['fahrzeit_count'] + 1
 
-        edges_to_remove = set([])
-        for u, nbrs in graph.adj.items():
-            ns = set(nbrs) - {u}
-            for v, w in itertools.combinations(ns, 2):
-                try:
-                    luv = graph[u][v][metrik]
-                    lvw = graph[v][w][metrik]
-                    luw = graph[u][w][metrik]
-                    if luv < lvw and luw < lvw:
-                        edges_to_remove.add((v, w))
-                        logger.debug(f"remove {v}-{w} from triangle ({u},{v},{w}) distance ({lvw},{luw},{luv})")
-                except KeyError:
-                    pass
-
-        graph.remove_edges_from(edges_to_remove)
-
-    def strecken_aus_signalgraph(self):
+    def strecken_aus_bahnhofgraph(self):
         """
-        strecken aus signalgraph ableiten
+        strecken aus bahnhofgraph ableiten
 
-        diese funktion bestimmt die kürzesten pfade zwischen allen anschlüssen und bahnsteigen
-        und listet die an diesen pfaden liegenden bahnhöfe auf.
-        der kürzeste pfad im signalgraph besteht meist nur aus signalen.
-        bahnsteige erscheinen als nachbarn eines oder mehrerer signale auf dem pfad.
+        diese funktion bestimmt die kürzesten strecken zwischen allen anschlusskombinationen.
+        die strecken werden in self.strecken abgelegt.
 
-        eine strecke besteht aus einer liste von bahnhöfen plus einfahrt am anfang und ausfahrt am ende.
+        eine strecke besteht aus einer liste von bahnhöfen inklusive einfahrt am anfang und ausfahrt am ende.
         die namen der elemente sind gruppennamen, d.h. die schlüssel aus self.gleisgruppen.
         der streckenname (schlüssel von self.strecken) wird aus dem ersten und letzten wegpunkt gebildet,
         die mit einem bindestrich aneinandergefügt werden.
 
         :return: das result wird in self.strecken abgelegt.
         """
-        anschlussgleise = [list(gruppe)[0] for gruppe in self.anschlussgruppen.values() if len(gruppe) > 0]
+        anschlussgleise = list(self.anschlussgruppen.keys())
         strecken = []
         for ein, aus in itertools.combinations(anschlussgleise, 2):
             strecke = self.verbindungsstrecke(ein, aus)
@@ -536,17 +755,15 @@ class Anlage:
         """
         kürzeste verbindung zwischen zwei gleisen bestimmen
 
-        die kürzeste verbindung wird aus dem signalgraphen bestimmt.
-        start und ziel müssen knoten im signalgraphen sein,
-        also gleisbezeichnungen (einfahrten, ausfahrten, bahnsteige, haltepunkte), die im fahrplan vorkommen.
-
-        die berechnete strecke ist eine geordnete liste von gruppennamen (bahnhöfe bzw. anschlussgruppen).
+        die kürzeste verbindung wird aus dem bahnhofgraphen bestimmt.
+        start und ziel müssen knoten im bahnhofgraphen sein, also gruppennamen (bahnhöfe oder anschlüsse).
+        die berechnete strecke ist eine geordnete liste von gruppennamen.
 
         da die streckenberechnung aufwändig sein kann, werden die resultate im self._verbindungsstrecke_cache
-        gespeichert. der cache muss gelöscht werden, wenn sich der signalgraph oder die bahnsteigzuordnung ändert.
+        gespeichert. der cache muss gelöscht werden, wenn sich der bahnhofgraph oder die bahnsteigzuordnung ändert.
 
-        :param start_gleis: gleis- oder einfahrtsbezeichnung
-        :param ziel_gleis: gleis- oder ausfahrtsbezeichnung
+        :param start_gleis: bahnhof- oder anschlussname
+        :param ziel_gleis: bahnhof- oder anschlussname
         :return: liste von befahrenen gleisgruppen vom start zum ziel.
             die liste kann leer sein, wenn kein pfad gefunden wurde!
         """
@@ -557,26 +774,9 @@ class Anlage:
             pass
 
         try:
-            pfad = nx.shortest_path(self.signal_graph, start_gleis, ziel_gleis)
+            strecke = nx.shortest_path(self.bahnhof_graph, start_gleis, ziel_gleis)
         except nx.NetworkXException:
-            wegpunkte = []
-        else:
-            nachbar_haltepunkte = [[hp for hp in self.signal_graph.neighbors(n)
-                                    if self.signal_graph.nodes[hp]['typ'] in {5, 12}]
-                                   for n in pfad]
-            wegpunkte = [hp[0] for hp in nachbar_haltepunkte if hp]
-            wegpunkte.insert(0, start_gleis)
-            wegpunkte.append(ziel_gleis)
-
-        strecke = []
-        for hp in wegpunkte:
-            try:
-                bf = self.gleiszuordnung[hp]
-            except KeyError:
-                pass
-            else:
-                if bf not in strecke:
-                    strecke.append(bf)
+            return []
 
         self._verbindungsstrecke_cache[(start_gleis, ziel_gleis)] = strecke
         return strecke
@@ -677,11 +877,11 @@ class Anlage:
         with open(p, "w") as fp:
             json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
 
-        if logger.isEnabledFor(logging.DEBUG):
-            d = self.get_config(graphs=True)
-            p = Path(path) / f"{self.anlage.aid}diag.json"
-            with open(p, "w") as fp:
-                json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
+        # if logger.isEnabledFor(logging.DEBUG):
+        #     d = self.get_config(graphs=True)
+        #     p = Path(path) / f"{self.anlage.aid}diag.json"
+        #     with open(p, "w") as fp:
+        #         json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
 
     def get_config(self, graphs=False) -> Dict:
         """

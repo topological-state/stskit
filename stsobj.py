@@ -409,14 +409,14 @@ class ZugDetails:
         :return: generator
         """
         if self.von:
-            yield self.von
+            yield self.von.replace("Gleis ", "")
         for fpz in self.fahrplan:
             if plan:
-                yield fpz.plan
+                yield fpz.plan.replace("Gleis ", "")
             else:
-                yield fpz.gleis
+                yield fpz.gleis.replace("Gleis ", "")
         if self.nach:
-            yield self.nach
+            yield self.nach.replace("Gleis ", "")
 
     def graph(self) -> nx.DiGraph:
         """

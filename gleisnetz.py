@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional, Set, Union
 import numpy as np
 import pandas as pd
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
+from PyQt5.QtCore import pyqtSlot
 import matplotlib as mpl
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -31,9 +32,11 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
         self.client: Optional[PluginClient] = None
         self.anlage: Optional[Anlage] = None
         self.auswertung: Optional[Auswertung] = None
+        self.layout_seed: int = 0
 
-        self.setWindowTitle("gleisplan (experimentell)")
-        ss = f"background-color: {mpl.rcParams['axes.facecolor']};"
+        self.setWindowTitle("gleisplan")
+        ss = f"background-color: {mpl.rcParams['axes.facecolor']};" \
+             f"color: {mpl.rcParams['text.color']};"
         self.setStyleSheet(ss)
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)
@@ -43,6 +46,15 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
         layout.addWidget(canvas)
         self._axes = canvas.figure.subplots()
 
+        self.layout_spinbox = QtWidgets.QSpinBox(canvas)
+        self.layout_spinbox.setMinimum(0)
+        self.layout_spinbox.valueChanged.connect(self.layout_spinbox_changed)
+
+    @pyqtSlot(int)
+    def layout_spinbox_changed(self, v):
+        self.layout_seed = max(0, int(v))
+        self.update()
+
     def update(self):
         try:
             self._axes.clear()
@@ -51,10 +63,10 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
                     d['spring_weight'] = 1 / np.sqrt(d['fahrzeit_min']) if d['fahrzeit_min'] > 0 else 1
                     d['spectral_weight'] = 1
 
-                pos = nx.spring_layout(self.anlage.bahnhof_graph, weight='spring_weight', seed=0)
+                pos = nx.spring_layout(self.anlage.bahnhof_graph, weight='spring_weight', seed=self.layout_seed)
                 # pos = nx.circular_layout(self.anlage.bahnhof_graph)
                 # pos = nx.spectral_layout(self.anlage.bahnhof_graph, weight='spectral_weight')
-                # pos = nx.shell_layout(self.anlage.bahnhof_graph, seed=0)
+                # pos = nx.shell_layout(self.anlage.bahnhof_graph, seed=self.layout_seed)
                 # pos = nx.multipartite_layout(self.anlage.bahnhof_graph)
 
                 colormap = {'bahnhof': 'tab:blue', 'anschluss': 'tab:orange'}

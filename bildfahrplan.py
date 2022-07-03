@@ -206,6 +206,7 @@ class BildFahrplanWindow(QtWidgets.QWidget):
         if self.von_combo.count() == 0:
             self.update_combos()
         if self._strecke_von and self._strecke_nach:
+            self.update_strecke()
             self.daten_update()
             self.grafik_update()
 
@@ -215,8 +216,8 @@ class BildFahrplanWindow(QtWidgets.QWidget):
 
     def update_strecke(self):
         if self._strecke_von and self._strecke_nach:
-            von_gleis = min(self.anlage.gleisgruppen[self._strecke_von], default="")
-            nach_gleis = min(self.anlage.gleisgruppen[self._strecke_nach], default="")
+            von_gleis = self._strecke_von
+            nach_gleis = self._strecke_nach
             strecke = self.anlage.verbindungsstrecke(von_gleis, nach_gleis)
         else:
             strecke = []
