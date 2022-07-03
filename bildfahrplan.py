@@ -247,12 +247,18 @@ class BildFahrplanWindow(QtWidgets.QWidget):
 
             try:
                 gruppe1 = self.anlage.gleiszuordnung[plan1.gleis]
+            except KeyError:
+                logger.warning(f"gleis {plan1.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
+                gruppe1 = ""
+
+            try:
                 gruppe2 = self.anlage.gleiszuordnung[plan2.gleis]
             except KeyError:
-                logger.warning(f"zug {zug.name}, gleis {plan1.gleis} oder {plan2.gleis} "
-                               f"kann keinem bahnhof zugeordnet werden.")
-            else:
-                if gruppe1 in self._strecke and gruppe2 in self._strecke:
+                logger.warning(f"gleis {plan2.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
+                gruppe2 = ""
+
+            if gruppe1 in self._strecke:
+                if gruppe2 in self._strecke:
                     try:
                         trasse.koord = [(self._strecke[gruppe1], time_to_minutes(plan1.ab) + plan1.verspaetung_ab),
                                         (self._strecke[gruppe2], time_to_minutes(plan2.an) + plan2.verspaetung_an)]
@@ -279,7 +285,9 @@ class BildFahrplanWindow(QtWidgets.QWidget):
                             trasse.koord = [(self._strecke[gruppe2], an), (self._strecke[gruppe2], ab)]
                             zuglauf.append(trasse)
 
-            plan1 = plan2
+                    plan1 = plan2
+            else:
+                plan1 = plan2
 
         if zuglauf:
             self._zug_trassen[zug.zid] = zuglauf
