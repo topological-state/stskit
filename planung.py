@@ -368,19 +368,23 @@ class ZugDetailsPlanung(ZugDetails):
             ziel.ausfahrt = True
             self.fahrplan.append(ziel)
 
-        for index, ziel in enumerate(self.fahrplan):
-            if zug.plangleis == ziel.plan:
-                self.ziel_index = index
-                break
-        else:
-            if len(zug.fahrplan) and not zug.sichtbar:
-                self.ziel_index = 0
-            else:
-                self.ziel_index = None
+        self.ziel_index = 0
+        if zug.sichtbar:
+            vorheriges_ziel = None
+            for ziel in self.fahrplan:
+                if zug.plangleis == ziel.plan:
+                    if zug.amgleis:
+                        ziel.angekommen = True
+                    break
+                if not ziel.ausfahrt:
+                    ziel.angekommen = True
+                if vorheriges_ziel:
+                    vorheriges_ziel.abgefahren = True
+                vorheriges_ziel = ziel
 
     def update_zug_details(self, zug: ZugDetails):
         """
-        aktualisiert die veränderlichen attribute vom PluginClient
+        aktualisiert die veränderlichen attribute eines zuges
 
         die folgenden attribute werden aktualisert, alle anderen bleiben unverändert.
         gleis, plangleis, amgleis, sichtbar, verspaetung, usertext, usertextsender, fahrplanzeile.
@@ -388,19 +392,27 @@ class ZugDetailsPlanung(ZugDetails):
 
         im fahrplan werden die gleisänderungen aktualisiert.
 
-        :param zug: original-ZugDetails-objekt vom PluginClient.zugliste.
+        anstelle des zuges kann auch ein ereignis übergeben werden.
+        Ereignis-objekte entsprechen weitgehend den ZugDetails-objekten,
+        enthalten jedoch keinen usertext und keinen fahrplan.
+
+        :param zug: ZugDetails- oder Ereignis-objekt vom PluginClient.
         :return: None
         """
-        self.gleis = zug.gleis
-        self.plangleis = zug.plangleis
+
+        if zug.gleis:
+            self.gleis = zug.gleis
+            self.plangleis = zug.plangleis
+        else:
+            self.gleis = self.plangleis = self.nach
+
         self.verspaetung = zug.verspaetung
         self.amgleis = zug.amgleis
         self.sichtbar = zug.sichtbar
-        self.usertext = zug.usertext
-        self.usertextsender = zug.usertextsender
 
-        if len(zug.fahrplan) == 0:
-            self.gleis = self.plangleis = self.nach
+        if not isinstance(zug, Ereignis):
+            self.usertext = zug.usertext
+            self.usertextsender = zug.usertextsender
 
         for zeile in zug.fahrplan:
             ziel = self.find_fahrplanzeile(plan=zeile.plan)
@@ -413,10 +425,9 @@ class ZugDetailsPlanung(ZugDetails):
         try:
             self.ziel_index = route.index(zug.plangleis)
         except ValueError:
-            pass
-
-        for zeile in zug.fahrplan[0:self.ziel_index]:
-            zeile.passiert = True
+            # zug faehrt aus
+            if not zug.plangleis:
+                self.ziel_index = -1
 
 
 class ZugZielPlanung(FahrplanZeile):
@@ -427,7 +438,7 @@ class ZugZielPlanung(FahrplanZeile):
     - nach ziel aufgelöste ankunfts- und abfahrtsverspätung.
     - daten zur verspätungsanpassung.
     - status des fahrplanziels.
-      nachdem das ziel passiert wurde, sind die verspätungsangaben effektiv, vorher schätzwerte.
+      nach ankunft/abfahrt sind die entsprechenden verspätungsangaben effektiv, vorher schätzwerte.
 
     """
 
@@ -436,15 +447,13 @@ class ZugZielPlanung(FahrplanZeile):
 
         self.einfahrt: bool = False
         self.ausfahrt: bool = False
-        # verspaetung ist die geschätzte verspätung bei der abfahrt von diesem wegpunkt.
-        # solange der zug noch nicht am gleis angekommen ist,
-        # kann z.b. das auswertungsmodul oder der fahrdienstleiter die geschätzte verspätung anpassen.
         self.verspaetung_an: int = 0
         self.verspaetung_ab: int = 0
         self.mindestaufenthalt: int = 0
         self.auto_korrektur: Optional[VerspaetungsKorrektur] = None
         self.fdl_korrektur: Optional[VerspaetungsKorrektur] = None
-        self.passiert: bool = False
+        self.angekommen: bool = False
+        self.abgefahren: bool = False
 
     def assign_fahrplan_zeile(self, zeile: FahrplanZeile):
         """
@@ -549,7 +558,7 @@ class Planung:
         :param zuege:
         :return:
         """
-        verarbeitete_zuege = set(self.zugliste.keys())
+        ausgefahrene_zuege = set(self.zugliste.keys())
 
         for zug in zuege:
             try:
@@ -559,20 +568,21 @@ class Planung:
                 zug_planung = ZugDetailsPlanung()
                 zug_planung.assign_zug_details(zug)
                 zug_planung.update_zug_details(zug)
-                self.zug_korrekturen_definieren(zug_planung)
                 self.zugliste[zug_planung.zid] = zug_planung
-                verarbeitete_zuege.discard(zug.zid)
+                ausgefahrene_zuege.discard(zug.zid)
             else:
                 # bekannter zug
                 zug_planung.update_zug_details(zug)
-                verarbeitete_zuege.discard(zug.zid)
+                ausgefahrene_zuege.discard(zug.zid)
 
-        for zid in verarbeitete_zuege:
+        for zid in ausgefahrene_zuege:
             zug = self.zugliste[zid]
             if zug.sichtbar:
                 zug.sichtbar = zug.amgleis = False
                 zug.gleis = zug.plangleis = ""
                 zug.ausgefahren = True
+                for zeile in zug.fahrplan:
+                    zeile.abgefahren = True
 
         self.folgezuege_aufloesen()
         self.korrekturen_definieren()
@@ -638,6 +648,18 @@ class Planung:
             zug.folgezuege_aufgeloest = folgezuege_aufgeloest
 
     def einfahrten_korrigieren(self):
+        """
+        ein- und ausfahrtszeiten abschätzen.
+
+        die ein- und ausfahrtszeiten werden vom sim nicht vorgegeben.
+        wir schätzen sie die einfahrtszeit aus der ankunftszeit des anschliessenden wegpunkts
+        und er kürzesten beobachteten fahrzeit zwischen der einfahrt und dem wegpunkt ab.
+        die einfahrtszeit wird im ersten fahrplaneintrag eingetragen (an und ab).
+
+        analog wird die ausfahrtszeit im letzten fahrplaneintrag abgeschätzt.
+
+        :return:
+        """
         for zug in self.zugliste.values():
             try:
                 einfahrt = zug.fahrplan[0]
@@ -670,6 +692,14 @@ class Planung:
                             pass
 
     def verspaetungen_korrigieren(self):
+        """
+        verspätungsangaben aller züge nachführen
+
+        die methode ruft die zugverspaetung_korrigieren methode für jeden stammzug (zug ohne vorgänger) auf.
+        folgezüge werden rekursiv durch die autokorrektur behandelt.
+
+        :return:
+        """
         zids = list(filter(lambda z: self.zugliste[z].stammzug is None, self.zugliste.keys()))
         while zids:
             zid = zids.pop(0)
@@ -680,43 +710,41 @@ class Planung:
             else:
                 self.zugverspaetung_korrigieren(zug)
 
-    def zugverspaetung_korrigieren(self, zug: ZugDetailsPlanung, start: int = None, stop: int = None):
+    def zugverspaetung_korrigieren(self, zug: ZugDetailsPlanung):
+        """
+        geschätzte verspätung an jedem punkt im fahrplan berechnen
+
+        passierte wegpunkte werden nicht mehr verändert.
+        am aktuellen ziel wird die aktuelle verspätung eingetragen
+        (ankunftsverspätung, wenn das ziel noch nicht erreicht wurde, sonst die abfahrtsverspätung).
+
+        die verspätungen an den folgenden wegpunkten werden nach auto- und fdl-korrektur geschätzt.
+
+        :param zug: ZugDetailsPlanung mit aktuellem fahrplan und aktueller zielangabe.
+            es ist wichtig, dass die angekommen- und abgefahren-attribute korrekt gesetzt sind!
+        :return:
+        """
+
         verspaetung = zug.verspaetung
 
-        if start is None:
-            start = zug.ziel_index
-        if start is None:
-            start = 0
+        for ziel in zug.fahrplan:
+            if not ziel.angekommen:
+                ziel.verspaetung_an = verspaetung
 
-        # aktuelle verspaetung uebernehmen
-        try:
-            if start >= 1:
-                zug.fahrplan[start-1].verspaetung_ab = verspaetung
-        except IndexError:
-            pass
+            if not ziel.abgefahren:
+                ziel.verspaetung_ab = verspaetung
 
-        try:
-            einfahrt = zug.fahrplan[0]
-            if einfahrt.einfahrt:
-                einfahrt.verspaetung_an = einfahrt.verspaetung_ab
-        except IndexError:
-            pass
+                try:
+                    ziel.auto_korrektur.anwenden(zug, ziel)
+                except AttributeError:
+                    pass
 
-        sl = slice(start, stop)
-        for ziel in zug.fahrplan[sl]:
-            ziel.verspaetung_ab = ziel.verspaetung_an = verspaetung
+                try:
+                    ziel.fdl_korrektur.anwenden(zug, ziel)
+                except AttributeError:
+                    pass
 
-            try:
-                ziel.auto_korrektur.anwenden(zug, ziel)
-            except AttributeError:
-                pass
-
-            try:
-                ziel.fdl_korrektur.anwenden(zug, ziel)
-            except AttributeError:
-                pass
-
-            verspaetung = ziel.verspaetung_ab
+                verspaetung = ziel.verspaetung_ab
 
     def korrekturen_definieren(self):
         for zug in self.zugliste.values():
@@ -781,18 +809,68 @@ class Planung:
         """
         daten von einem ereignis uebernehmen.
 
-        noch nicht implementiert.
+        aktualisiert die verspätung und angekommen/abgefahren-flags anhand eines ereignisses.
 
-        :param ereignis:
+        :param ereignis: Ereignis-objekt vom PluginClient
         :return:
         """
         try:
             zug = self.zugliste[ereignis.zid]
         except KeyError:
+            logger.warning(f"zug von ereignis {ereignis} nicht in zugliste")
             return None
 
-        if ereignis.art == 'xxx':
-            zug.sichtbar = False
-            zug.amgleis = False
-            zug.gleis = ""
-            zug.plangleis = ""
+        try:
+            alter_index = zug.ziel_index
+            altes_ziel = zug.fahrplan[zug.ziel_index]
+        except IndexError:
+            alter_index = None
+            altes_ziel = None
+
+        # veraltetes ereignis? - kommt vor!!!
+        neuer_index = zug.find_fahrplan_index(plan=ereignis.plangleis)
+        if neuer_index is None or alter_index is None or (neuer_index < alter_index):
+            logger.debug(f"ignoriere veraltetes ereignis {ereignis}")
+            return
+        else:
+            neues_ziel = zug.fahrplan[neuer_index]
+
+        if ereignis.art == 'einfahrt':
+            try:
+                einfahrt = zug.fahrplan[0]
+            except IndexError:
+                pass
+            else:
+                if einfahrt.einfahrt:
+                    einfahrt.verspaetung_ab = ereignis.verspaetung
+                    einfahrt.angekommen = einfahrt.abgefahren = True
+
+        elif ereignis.art == 'ausfahrt':
+            try:
+                ausfahrt = zug.fahrplan[-1]
+            except IndexError:
+                pass
+            else:
+                if ausfahrt.ausfahrt:
+                    ausfahrt.verspaetung_an = ausfahrt.verspaetung_ab = ereignis.verspaetung
+                    ausfahrt.angekommen = ausfahrt.abgefahren = True
+                    zug.ausgefahren = True
+
+        elif ereignis.art == 'ankunft':
+            altes_ziel.verspaetung_an = ereignis.verspaetung
+            altes_ziel.angekommen = True
+            if altes_ziel.durchfahrt():
+                altes_ziel.verspaetung_ab = ereignis.verspaetung
+                altes_ziel.abgefahren = True
+            # falls ein ereignis vergessen gegangen ist:
+            for ziel in zug.fahrplan[0:alter_index]:
+                ziel.angekommen = True
+                ziel.abgefahren = True
+
+        elif ereignis.art == 'abfahrt':
+            altes_ziel.verspaetung_ab = ereignis.verspaetung
+            if not ereignis.amgleis:
+                altes_ziel.abgefahren = True
+
+        elif ereignis.art == 'rothalt' or ereignis.art == 'wurdegruen':
+            neues_ziel.verspaetung_an = ereignis.verspaetung
