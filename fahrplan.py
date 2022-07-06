@@ -21,7 +21,7 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
     """
     tabellenmodell für die zugliste
 
-    die tabelle enthält die spalten 'Einfahrt', 'Zug', 'Von', 'Nach', 'Gleis', 'Verspätung', 'Hinweis'.
+    die tabelle enthält die spalten 'Einfahrt', 'Zug', 'Von', 'Nach', 'Gleis', 'Verspätung'.
     jeder zug wird in einer zeile dargestellt.
 
     implementiert die methoden von QAbstractTableModel.
@@ -36,7 +36,7 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
 
         self._zugliste: Dict[int, ZugDetailsPlanung] = {}
         self._reihenfolge: List[int] = []
-        self._columns: List[str] = ['Einfahrt', 'Zug', 'Von', 'Nach', 'Gleis', 'Verspätung', 'Hinweis']
+        self._columns: List[str] = ['Einfahrt', 'Zug', 'Von', 'Nach', 'Gleis', 'Verspätung']
 
     def set_zugliste(self, zugliste: Dict[int, ZugDetailsPlanung]) -> None:
         """
@@ -121,8 +121,6 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
                 return zug.nach
             elif col == 'Gleis':
                 return zug.gleis
-            elif col == 'Hinweis':
-                return zug.hinweistext
             else:
                 return None
         
@@ -150,8 +148,6 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
                     return zug.gleis
                 else:
                     return f"{zug.gleis} /{zug.plangleis}/"
-            elif col == 'Hinweis' and zug.hinweistext:
-                return zug.hinweistext
             else:
                 return None
 
@@ -192,7 +188,7 @@ class FahrplanModell(QtCore.QAbstractTableModel):
     """
     tabellenmodell für den zugfahrplan
 
-    die spalten sind 'Gleis', 'An', 'Ab', 'Verspätung', 'Flags', 'Folgezug', 'Hinweis'.
+    die spalten sind 'Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Folgezug'.
     jede zeile entspricht einem fahrplanziel.
 
     der anzuzeigende zug wird durch set_zug gesetzt.
@@ -201,7 +197,7 @@ class FahrplanModell(QtCore.QAbstractTableModel):
         super().__init__()
 
         self.zug: Optional[ZugDetails] = None
-        self._columns: List[str] = ['Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Folgezug', 'Hinweis']
+        self._columns: List[str] = ['Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Folgezug']
 
     def set_zug(self, zug: Optional[ZugDetails]):
         """
@@ -281,10 +277,16 @@ class FahrplanModell(QtCore.QAbstractTableModel):
                     return zeile.fluegelzug.name
                 else:
                     return None
-            elif col == 'Hinweis' and zeile.hinweistext:
-                return str(zeile.hinweistext)
             else:
                 return None
+
+        elif role == QtCore.Qt.ForegroundRole:
+            if zeile.abgefahren:
+                return QtGui.QColor("gray")
+            elif zeile.angekommen:
+                return QtGui.QColor("darkCyan")
+            else:
+                return QtGui.QColor("darkBlue")
 
         elif role == QtCore.Qt.TextAlignmentRole:
             return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
