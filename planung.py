@@ -44,6 +44,9 @@ class FesteVerspaetung(VerspaetungsKorrektur):
         super().__init__(planung)
         self.verspaetung: int = 0
 
+    def __str__(self):
+        return f"fix({self.verspaetung})"
+
     def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
         ziel.verspaetung_ab = self.verspaetung
 
@@ -55,6 +58,9 @@ class PlanmaessigeAbfahrt(VerspaetungsKorrektur):
     dies ist die normale abfertigung in abwesenheit soweit kein anderer zug involviert ist.
     die verspaetung wird soweit moeglich reduziert, ohne die mindestaufenthaltsdauer zu unterschreiten.
     """
+
+    def __str__(self):
+        return f"Plan"
 
     def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
         try:
@@ -95,6 +101,9 @@ class AnkunftAbwarten(VerspaetungsKorrektur):
         super().__init__(planung)
         self.ursprung: Optional[ZugZielPlanung] = None
         self.wartezeit: int = 0
+
+    def __str__(self):
+        return f"Ankunft({self.ursprung.zug.name}, {self.wartezeit})"
 
     def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
         try:
@@ -140,6 +149,9 @@ class AbfahrtAbwarten(VerspaetungsKorrektur):
         self.ursprung: Optional[ZugZielPlanung] = None
         self.wartezeit: int = 0
 
+    def __str__(self):
+        return f"Abfahrt({self.ursprung.zug.name}, {self.wartezeit})"
+
     def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
         try:
             plan_an = time_to_minutes(ziel.an)
@@ -168,6 +180,10 @@ class Ersatzzug(VerspaetungsKorrektur):
 
     das erste fahrplanziel des ersatzzuges muss it einer AnschlussAbwarten-korrektur markiert sein.
     """
+
+    def __str__(self):
+        return f"Ersatz"
+
     def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
         try:
             plan_an = time_to_minutes(ziel.an)
@@ -202,6 +218,10 @@ class Kupplung(VerspaetungsKorrektur):
 
     bemerkung: der zug mit dem kuppel-flag verschwindet. der verlinkte zug fährt weiter.
     """
+
+    def __str__(self):
+        return f"Kupplung"
+
     def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
         try:
             plan_an = time_to_minutes(ziel.an)
@@ -237,6 +257,9 @@ class Kupplung(VerspaetungsKorrektur):
 
 
 class Fluegelung(VerspaetungsKorrektur):
+    def __str__(self):
+        return f"Flügelung"
+
     def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
         try:
             plan_an = time_to_minutes(ziel.an)

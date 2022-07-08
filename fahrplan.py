@@ -197,7 +197,7 @@ class FahrplanModell(QtCore.QAbstractTableModel):
         super().__init__()
 
         self.zug: Optional[ZugDetails] = None
-        self._columns: List[str] = ['Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Folgezug']
+        self._columns: List[str] = ['Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Folgezug', 'Abhängigkeiten']
 
     def set_zug(self, zug: Optional[ZugDetails]):
         """
@@ -277,6 +277,13 @@ class FahrplanModell(QtCore.QAbstractTableModel):
                     return zeile.fluegelzug.name
                 else:
                     return None
+            elif col == 'Abhängigkeiten':
+                abh = []
+                if zeile.auto_korrektur:
+                    abh.append(str(zeile.auto_korrektur))
+                if zeile.fdl_korrektur:
+                    abh.append(str(zeile.fdl_korrektur))
+                return ", ".join(abh)
             else:
                 return None
 
