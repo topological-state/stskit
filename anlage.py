@@ -781,15 +781,21 @@ class Anlage:
         self._verbindungsstrecke_cache[(start_gleis, ziel_gleis)] = strecke
         return strecke
 
-    def get_strecken_distanzen(self, strecke: List[str]) -> Dict[str, float]:
+    def get_strecken_distanzen(self, strecke: List[str]) -> List[float]:
         """
+        distanzen (minimale fahrzeit) entlang einer strecke berechnen
+
+        distanzen der bahnhöfe zum ersten punkt der strecke berechnen.
+        die distanz wird als minimale fahrzeit in sekunden angegeben.
 
         :param strecke: liste von gleisgruppen-namen
-        :return: distanz = minimale fahrzeit in sekunden
+        :return: distanz = minimale fahrzeit in sekunden.
+            die liste enthält die gleiche anzahl elemente wie die strecke.
+            das erste element ist 0.
         """
         kanten = zip(strecke[:-1], strecke[1:])
         distanz = 0.
-        result = {strecke[0]: distanz}
+        result = [distanz]
         for u, v in kanten:
             try:
                 zeit = self.bahnhof_graph[u][v]['fahrzeit_min']
@@ -801,7 +807,7 @@ class Anlage:
                 logger.warning(f"verbindung {u}-{v} nicht im netzplan.")
                 distanz += 60.
 
-            result[v] = float(distanz)
+            result.append(float(distanz))
 
         return result
 

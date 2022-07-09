@@ -92,18 +92,20 @@ class BildFahrplanWindow(QtWidgets.QWidget):
 
         self._strecken_name: str = ""
         self._strecke_von: str = ""
+        self._strecke_via: str = ""
         self._strecke_nach: str = ""
 
         # bahnhofname -> distanz [minuten]
-        self._strecke: Dict[str, float] = {}
-        self._zug_trassen: Dict[int, List[Trasse]] = {}
+        self._strecke: List[str] = []
+        self._distanz: List[float] = []
+        self._zug_trassen: List[List[Trasse]] = []
 
         self.zeitfenster_voraus = 55
         self.zeitfenster_zurueck = 5
         self.farbschema = ZugFarbschema()
         self.farbschema.init_schweiz()
 
-        self.setWindowTitle("bildfahrplan")
+        self.setWindowTitle("Bildfahrplan")
         ss = f"background-color: {mpl.rcParams['axes.facecolor']};" \
              f"color: {mpl.rcParams['text.color']};"
         # further possible entries:
@@ -115,24 +117,33 @@ class BildFahrplanWindow(QtWidgets.QWidget):
         self.stackedWidget = QtWidgets.QStackedWidget(self)
         self.settings_page = QtWidgets.QWidget()
         self.splitter = QtWidgets.QSplitter(self.settings_page)
-        self.splitter.setGeometry(QtCore.QRect(10, 10, 310, 252))
-        self.splitter.setOrientation(QtCore.Qt.Horizontal)
-        self.widget = QtWidgets.QWidget(self.splitter)
-        self.settings_layout = QtWidgets.QFormLayout(self.widget)
+        self.settings_splitter = QtWidgets.QSplitter(self.settings_page)
+        self.settings_splitter.setGeometry(QtCore.QRect(10, 10, 300, 400))
+        self.settings_splitter.setOrientation(QtCore.Qt.Horizontal)
+        self.settings_widget = QtWidgets.QWidget(self.settings_splitter)
+        self.settings_layout = QtWidgets.QVBoxLayout(self.settings_widget)
         self.settings_layout.setContentsMargins(0, 0, 0, 0)
+        self.settings_page.setLayout(self.settings_layout)
 
-        self.von_label = QtWidgets.QLabel(self.widget)
-        self.settings_layout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.von_label)
-        self.von_combo = QtWidgets.QComboBox(self.widget)
-        self.settings_layout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.von_combo)
-        self.nach_label = QtWidgets.QLabel(self.widget)
-        self.settings_layout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.nach_label)
-        self.nach_combo = QtWidgets.QComboBox(self.widget)
-        self.settings_layout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.nach_combo)
-        self.strecke_label = QtWidgets.QLabel(self.widget)
-        self.settings_layout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.strecke_label)
-        self.strecke_list = QtWidgets.QListWidget(self.widget)
-        self.settings_layout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.strecke_list)
+        self.von_label = QtWidgets.QLabel("&Von", self.settings_widget)
+        self.settings_layout.addWidget(self.von_label)
+        self.von_combo = QtWidgets.QComboBox(self.settings_widget)
+        self.settings_layout.addWidget(self.von_combo)
+        self.von_label.setBuddy(self.von_combo)
+        self.via_label = QtWidgets.QLabel("V&ia (optional)", self.settings_widget)
+        self.settings_layout.addWidget(self.via_label)
+        self.via_combo = QtWidgets.QComboBox(self.settings_widget)
+        self.settings_layout.addWidget(self.via_combo)
+        self.via_label.setBuddy(self.via_combo)
+        self.nach_label = QtWidgets.QLabel("&Nach", self.settings_widget)
+        self.settings_layout.addWidget(self.nach_label)
+        self.nach_combo = QtWidgets.QComboBox(self.settings_widget)
+        self.settings_layout.addWidget(self.nach_combo)
+        self.nach_label.setBuddy(self.nach_combo)
+        self.strecke_label = QtWidgets.QLabel("Strecke", self.settings_widget)
+        self.settings_layout.addWidget(self.strecke_label)
+        self.strecke_list = QtWidgets.QListWidget(self.settings_widget)
+        self.settings_layout.addWidget(self.strecke_list)
         self.hidden_widget = QtWidgets.QWidget(self.splitter)
 
         self.stackedWidget.addWidget(self.settings_page)
@@ -146,13 +157,14 @@ class BildFahrplanWindow(QtWidgets.QWidget):
         self.display_canvas = FigureCanvas(Figure(figsize=(5, 3)))
         self.display_layout.addWidget(self.display_canvas)
 
-        self.settings_button = QtWidgets.QPushButton("strecke", self.display_canvas)
-        self.display_button = QtWidgets.QPushButton("anzeigen")
+        self.settings_button = QtWidgets.QPushButton("&Strecke", self.display_canvas)
+        self.display_button = QtWidgets.QPushButton("&Anzeigen")
         self.settings_layout.addWidget(self.display_button)
 
         self.stackedWidget.setCurrentIndex(0)
 
         self.von_combo.currentIndexChanged.connect(self.strecke_selection_changed)
+        self.via_combo.currentIndexChanged.connect(self.strecke_selection_changed)
         self.nach_combo.currentIndexChanged.connect(self.strecke_selection_changed)
         self.settings_button.clicked.connect(self.settings_button_clicked)
         self.display_button.clicked.connect(self.display_button_clicked)
@@ -162,10 +174,11 @@ class BildFahrplanWindow(QtWidgets.QWidget):
     def set_strecke(self, streckenname: str):
         if streckenname != self._strecken_name:
             self._strecken_name = streckenname
-            self._strecke = {}
+            self._strecke = []
 
     def update_combos(self):
         von = self._strecke_von
+        via = self._strecke_via
         nach = self._strecke_nach
 
         laengste_strecke = max(self.anlage.strecken.values(), key=len)
@@ -177,17 +190,22 @@ class BildFahrplanWindow(QtWidgets.QWidget):
         gruppen_liste = sorted((gr for gr in self.anlage.gleisgruppen.keys()))
         self.von_combo.clear()
         self.von_combo.addItems(gruppen_liste)
+        self.via_combo.clear()
+        self.via_combo.addItems(["", *gruppen_liste])
         self.nach_combo.clear()
         self.nach_combo.addItems(gruppen_liste)
 
         if von:
             self.von_combo.setCurrentText(von)
+        if via:
+            self.via_combo.setCurrentText(via)
         if nach:
             self.nach_combo.setCurrentText(nach)
 
     @pyqtSlot()
     def strecke_selection_changed(self):
         self._strecke_von = self.von_combo.currentText()
+        self._strecke_via = self.via_combo.currentText()
         self._strecke_nach = self.nach_combo.currentText()
         self.update_strecke()
 
@@ -211,14 +229,25 @@ class BildFahrplanWindow(QtWidgets.QWidget):
             self.grafik_update()
 
     def daten_update(self):
+        self._zug_trassen = []
         for zug in self.planung.zugliste.values():
             self.update_zuglauf(zug)
+            self.update_zuglauf(zug, rueckwaerts=True)
 
     def update_strecke(self):
         if self._strecke_von and self._strecke_nach:
-            von_gleis = self._strecke_von
-            nach_gleis = self._strecke_nach
-            strecke = self.anlage.verbindungsstrecke(von_gleis, nach_gleis)
+            if self._strecke_via:
+                von_gleis = self._strecke_von
+                nach_gleis = self._strecke_via
+                strecke1 = self.anlage.verbindungsstrecke(von_gleis, nach_gleis)
+                von_gleis = self._strecke_via
+                nach_gleis = self._strecke_nach
+                strecke2 = self.anlage.verbindungsstrecke(von_gleis, nach_gleis)
+                strecke = [*strecke1[:-1], *strecke2]
+            else:
+                von_gleis = self._strecke_von
+                nach_gleis = self._strecke_nach
+                strecke = self.anlage.verbindungsstrecke(von_gleis, nach_gleis)
         else:
             strecke = []
 
@@ -227,17 +256,24 @@ class BildFahrplanWindow(QtWidgets.QWidget):
 
         if len(strecke):
             sd = self.anlage.get_strecken_distanzen(strecke)
-            for k, v in sd.items():
-                sd[k] = v / 60
-            self._strecke = sd
+            self._strecke = strecke
+            self._distanz = [v / 60 for v in sd]
 
-        self.setWindowTitle(f"bildfahrplan {self._strecke_von}-{self._strecke_nach}")
+        self.setWindowTitle(f"Bildfahrplan {self._strecke_von}-{self._strecke_nach}")
 
-    def update_zuglauf(self, zug: ZugDetailsPlanung):
+    def update_zuglauf(self, zug: ZugDetailsPlanung, rueckwaerts: bool = False):
         color = self.farbschema.zugfarbe(zug)
         zuglauf = []
-        plan1 = zug.fahrplan[0]
+        if rueckwaerts:
+            strecke = list(reversed(self._strecke))
+            distanz = list(reversed(self._distanz))
+        else:
+            strecke = self._strecke
+            distanz = self._distanz
 
+        plan1 = zug.fahrplan[0]
+        i_gruppe1 = 0
+        an_vorher = 0
         for plan2 in zug.fahrplan[1:]:
             trasse = Trasse()
             trasse.zug = zug
@@ -250,58 +286,61 @@ class BildFahrplanWindow(QtWidgets.QWidget):
             except KeyError:
                 logger.warning(f"gleis {plan1.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
                 gruppe1 = ""
+            try:
+                i_gruppe1 = strecke.index(gruppe1, i_gruppe1)
+            except ValueError:
+                plan1 = plan2
+                continue
 
             try:
                 gruppe2 = self.anlage.gleiszuordnung[plan2.gleis]
             except KeyError:
                 logger.warning(f"gleis {plan2.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
                 gruppe2 = ""
+            try:
+                i_gruppe2 = strecke.index(gruppe2, i_gruppe1)
+            except ValueError:
+                continue
 
-            if gruppe1 in self._strecke:
-                if gruppe2 in self._strecke:
-                    try:
-                        trasse.koord = [(self._strecke[gruppe1], time_to_minutes(plan1.ab) + plan1.verspaetung_ab),
-                                        (self._strecke[gruppe2], time_to_minutes(plan2.an) + plan2.verspaetung_an)]
-                    except AttributeError:
-                        pass
-                    else:
-                        zuglauf.append(trasse)
-
-                    # haltelinie
-                    try:
-                        an = time_to_minutes(plan2.an) + plan2.verspaetung_an
-                        ab = time_to_minutes(plan2.ab) + plan2.verspaetung_ab
-                    except AttributeError:
-                        pass
-                    else:
-                        if ab > an:
-                            trasse = Trasse()
-                            trasse.zug = zug
-                            trasse.color = color
-                            trasse.start = plan2
-                            trasse.ziel = plan2
-                            trasse.halt = True
-                            trasse.linestyle = '--'
-                            trasse.koord = [(self._strecke[gruppe2], an), (self._strecke[gruppe2], ab)]
-                            zuglauf.append(trasse)
-
-                    plan1 = plan2
+            try:
+                ab = time_to_minutes(plan1.ab) + plan1.verspaetung_ab
+                an = time_to_minutes(plan2.an) + plan2.verspaetung_an
+                trasse.koord = [(distanz[i_gruppe1], max(ab, an_vorher)),
+                                (distanz[i_gruppe2], an)]
+                an_vorher = an
+            except AttributeError:
+                pass
             else:
-                plan1 = plan2
+                zuglauf.append(trasse)
+
+            # haltelinie
+            try:
+                an = time_to_minutes(plan2.an) + plan2.verspaetung_an
+                ab = time_to_minutes(plan2.ab) + plan2.verspaetung_ab
+            except AttributeError:
+                pass
+            else:
+                if ab > an:
+                    trasse = Trasse()
+                    trasse.zug = zug
+                    trasse.color = color
+                    trasse.start = plan2
+                    trasse.ziel = plan2
+                    trasse.halt = True
+                    trasse.linestyle = '--'
+                    trasse.koord = [(distanz[i_gruppe2], an), (distanz[i_gruppe2], ab)]
+                    zuglauf.append(trasse)
+
+            plan1 = plan2
 
         if zuglauf:
-            self._zug_trassen[zug.zid] = zuglauf
-        else:
-            try:
-                del self._zug_trassen[zug.zid]
-            except (AttributeError, KeyError):
-                pass
+            self._zug_trassen.append(zuglauf)
 
     def grafik_update(self):
         self._axes.clear()
 
-        x_labels = list(self._strecke.keys())
-        x_labels_pos = list(self._strecke.values())
+        x_labels = self._strecke
+        x_labels_pos = self._distanz
 
         self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
         self._axes.yaxis.set_major_formatter(hour_minutes_formatter)
@@ -314,6 +353,14 @@ class BildFahrplanWindow(QtWidgets.QWidget):
         ylim = (zeit - self.zeitfenster_zurueck, zeit + self.zeitfenster_voraus)
         self._axes.set_ylim(top=ylim[0], bottom=ylim[1])
         self._axes.set_xlim(left=x_labels_pos[0], right=x_labels_pos[-1])
+
+        try:
+            idx = self._strecke.index(self._strecke_via)
+        except ValueError:
+            pass
+        else:
+            self._axes.axvline(x=self._distanz[idx], color=mpl.rcParams['grid.color'],
+                               linewidth=mpl.rcParams['axes.linewidth'])
 
         wid_x = x_labels_pos[-1] - x_labels_pos[0]
         wid_y = self.zeitfenster_zurueck + self.zeitfenster_voraus
@@ -328,7 +375,7 @@ class BildFahrplanWindow(QtWidgets.QWidget):
                       'rotation_mode': 'anchor',
                       'transform_rotates_text': True}
 
-        for zuglauf in self._zug_trassen.values():
+        for zuglauf in self._zug_trassen:
             for trasse in zuglauf:
                 pos_x = [pos[0] for pos in trasse.koord]
                 pos_y = [pos[1] for pos in trasse.koord]
@@ -339,7 +386,7 @@ class BildFahrplanWindow(QtWidgets.QWidget):
                 cy = (seg[0][1] + seg[1][1]) / 2 + off_y
                 dx = (seg[1][0] - seg[0][0])
                 dy = (seg[1][1] - seg[0][1])
-                if ylim[0] < cy < ylim[1] and abs(pix[1][0] - pix[0][0]) > 20:
+                if ylim[0] < cy < ylim[1] and abs(pix[1][0] - pix[0][0]) > 30:
                     ang = math.degrees(math.atan(dy / dx))
                     titel = format_label(trasse.start, trasse.ziel)
                     trasse.mpl_label = self._axes.text(cx, cy, titel, rotation=ang, **label_args)
