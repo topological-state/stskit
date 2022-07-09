@@ -33,7 +33,7 @@ class VerspaetungsKorrektur:
 
 class FesteVerspaetung(VerspaetungsKorrektur):
     """
-    verspaetung auf einen festen wert setzen.
+    verspätung auf einen festen wert setzen.
 
     kann bei vorzeitiger abfahrt auch negativ sein.
 
@@ -51,12 +51,25 @@ class FesteVerspaetung(VerspaetungsKorrektur):
         ziel.verspaetung_ab = self.verspaetung
 
 
+class Signalhalt(FesteVerspaetung):
+    """
+    verspätung durch signalhalt
+
+    diese klasse wird in der verarbeitung des Abfahrt-ereignisses eingesetzt,
+    wenn der zug an einem bahnsteig steht, auf ein offenes signal wartet und dadurch verspätet wird.
+    die wirkung auf den fahrplan ist dieselbe wie von FesteVerspaetung.
+    der andere name und objekt-string dient der unterscheidung.
+    """
+    def __str__(self):
+        return f"Signal({self.verspaetung})"
+
+
 class PlanmaessigeAbfahrt(VerspaetungsKorrektur):
     """
-    planmaessige abfahrt oder verspaetung aufholen, wenn moeglich
+    planmässige abfahrt oder verspätung aufholen wenn möglich
 
-    dies ist die normale abfertigung in abwesenheit soweit kein anderer zug involviert ist.
-    die verspaetung wird soweit moeglich reduziert, ohne die mindestaufenthaltsdauer zu unterschreiten.
+    dies ist die normale abfertigung, soweit kein anderer zug involviert ist.
+    die verspätung wird soweit möglich reduziert, ohne die mindestaufenthaltsdauer zu unterschreiten.
     """
 
     def __str__(self):
@@ -891,8 +904,12 @@ class Planung:
                 ziel.abgefahren = True
 
         elif ereignis.art == 'abfahrt':
-            altes_ziel.verspaetung_ab = ereignis.verspaetung
-            if not ereignis.amgleis:
+            if ereignis.amgleis:
+                if ereignis.verspaetung > 0:
+                    altes_ziel.auto_korrektur = Signalhalt(self)
+                    altes_ziel.auto_korrektur.verspaetung = ereignis.verspaetung
+            else:
+                altes_ziel.verspaetung_ab = ereignis.verspaetung
                 altes_ziel.abgefahren = True
 
         elif ereignis.art == 'rothalt' or ereignis.art == 'wurdegruen':
