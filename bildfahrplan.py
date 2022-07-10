@@ -9,9 +9,11 @@ from PyQt5.QtCore import pyqtSlot
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
+from matplotlib.lines import Line2D
 import numpy as np
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, uic
 
+import planung
 from auswertung import Auswertung
 from anlage import Anlage
 from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
@@ -57,7 +59,8 @@ def format_label(plan1: ZugZielPlanung, plan2: ZugZielPlanung):
 
 @dataclass(init=False)
 class Trasse:
-    zug: ZugDetails
+    zug: ZugDetailsPlanung
+    richtung: int
     start: ZugZielPlanung
     ziel: ZugZielPlanung
     koord: List[Tuple[float]]
@@ -67,6 +70,15 @@ class Trasse:
     linestyle: str = "-"
     linewidth: int = 1
     marker: str = "."
+
+    def __str__(self):
+        return f"{self.zug.name}: {self.start.plan}-{self.ziel.plan}"
+
+    def __hash__(self) -> int:
+        return hash(self.key)
+
+    def key(self) -> Tuple[int, int, str, str]:
+        return self.zug.zid, self.richtung, self.start.plan, self.ziel.plan
 
     def plot_args(self):
         args = {'color': self.color,
@@ -95,10 +107,13 @@ class BildFahrplanWindow(QtWidgets.QWidget):
         self._strecke_via: str = ""
         self._strecke_nach: str = ""
 
+        self._trasse_auswahl: Optional[Trasse] = None
+        self._pick_event: bool = False
+
         # bahnhofname -> distanz [minuten]
         self._strecke: List[str] = []
         self._distanz: List[float] = []
-        self._zug_trassen: List[List[Trasse]] = []
+        self._zuglaeufe: Dict[Tuple[int, int], List[Trasse]] = {}
 
         self.zeitfenster_voraus = 55
         self.zeitfenster_zurueck = 5
@@ -170,6 +185,11 @@ class BildFahrplanWindow(QtWidgets.QWidget):
         self.display_button.clicked.connect(self.display_button_clicked)
 
         self._axes = self.display_canvas.figure.subplots()
+        self.display_canvas.mpl_connect("button_press_event", self.on_button_press)
+        self.display_canvas.mpl_connect("button_release_event", self.on_button_release)
+        self.display_canvas.mpl_connect("pick_event", self.on_pick)
+        self.display_canvas.mpl_connect("key_press_event", self.on_key_press)
+        self.display_canvas.mpl_connect("resize_event", self.on_resize)
 
     def set_strecke(self, streckenname: str):
         if streckenname != self._strecken_name:
@@ -229,10 +249,9 @@ class BildFahrplanWindow(QtWidgets.QWidget):
             self.grafik_update()
 
     def daten_update(self):
-        self._zug_trassen = []
+        self._zuglaeufe = {}
         for zug in self.planung.zugliste.values():
             self.update_zuglauf(zug)
-            self.update_zuglauf(zug, rueckwaerts=True)
 
     def update_strecke(self):
         if self._strecke_von and self._strecke_nach:
@@ -261,10 +280,14 @@ class BildFahrplanWindow(QtWidgets.QWidget):
 
         self.setWindowTitle(f"Bildfahrplan {self._strecke_von}-{self._strecke_nach}")
 
-    def update_zuglauf(self, zug: ZugDetailsPlanung, rueckwaerts: bool = False):
+    def update_zuglauf(self, zug: ZugDetailsPlanung):
+        self._update_zuglauf_richtung(zug, +1)
+        self._update_zuglauf_richtung(zug, -1)
+
+    def _update_zuglauf_richtung(self, zug: ZugDetailsPlanung, richtung: int):
         color = self.farbschema.zugfarbe(zug)
         zuglauf = []
-        if rueckwaerts:
+        if richtung < 0:
             strecke = list(reversed(self._strecke))
             distanz = list(reversed(self._distanz))
         else:
@@ -277,6 +300,7 @@ class BildFahrplanWindow(QtWidgets.QWidget):
         for plan2 in zug.fahrplan[1:]:
             trasse = Trasse()
             trasse.zug = zug
+            trasse.richtung = richtung
             trasse.color = color
             trasse.start = plan1
             trasse.ziel = plan2
@@ -323,6 +347,7 @@ class BildFahrplanWindow(QtWidgets.QWidget):
                 if ab > an:
                     trasse = Trasse()
                     trasse.zug = zug
+                    trasse.richtung = richtung
                     trasse.color = color
                     trasse.start = plan2
                     trasse.ziel = plan2
@@ -334,7 +359,12 @@ class BildFahrplanWindow(QtWidgets.QWidget):
             plan1 = plan2
 
         if zuglauf:
-            self._zug_trassen.append(zuglauf)
+            self._zuglaeufe[(zug.zid, richtung)] = zuglauf
+        else:
+            try:
+                del self._zuglaeufe[(zug.zid, richtung)]
+            except KeyError:
+                pass
 
     def grafik_update(self):
         self._axes.clear()
@@ -375,11 +405,12 @@ class BildFahrplanWindow(QtWidgets.QWidget):
                       'rotation_mode': 'anchor',
                       'transform_rotates_text': True}
 
-        for zuglauf in self._zug_trassen:
+        for zuglauf in self._zuglaeufe.values():
             for trasse in zuglauf:
                 pos_x = [pos[0] for pos in trasse.koord]
                 pos_y = [pos[1] for pos in trasse.koord]
-                trasse.mpl_line = self._axes.plot(pos_x, pos_y, **trasse.plot_args())
+                mpl_lines = self._axes.plot(pos_x, pos_y, picker=True, pickradius=5, **trasse.plot_args())
+                mpl_lines[0].trasse = trasse
                 seg = trasse.koord
                 pix = self._axes.transData.transform(seg)
                 cx = (seg[0][0] + seg[1][0]) / 2 + off_x
@@ -389,7 +420,7 @@ class BildFahrplanWindow(QtWidgets.QWidget):
                 if ylim[0] < cy < ylim[1] and abs(pix[1][0] - pix[0][0]) > 30:
                     ang = math.degrees(math.atan(dy / dx))
                     titel = format_label(trasse.start, trasse.ziel)
-                    trasse.mpl_label = self._axes.text(cx, cy, titel, rotation=ang, **label_args)
+                    self._axes.text(cx, cy, titel, rotation=ang, **label_args)
 
         for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
             item.set_fontsize('small')
@@ -397,5 +428,84 @@ class BildFahrplanWindow(QtWidgets.QWidget):
         if self.zeitfenster_zurueck > 0:
             self._axes.axhline(y=zeit, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
 
+        if self._trasse_auswahl:
+            zuglauf = self._zuglaeufe[(self._trasse_auswahl.zug.zid, self._trasse_auswahl.richtung)]
+            for trasse in zuglauf:
+                if trasse.start == self._trasse_auswahl.start and trasse.ziel == self._trasse_auswahl.ziel:
+                    pos_x = [pos[0] for pos in trasse.koord]
+                    pos_y = [pos[1] for pos in trasse.koord]
+                    args = trasse.plot_args()
+                    args['color'] = 'yellow'
+                    args['alpha'] = 0.5
+                    args['linewidth'] = 2
+                    self._axes.plot(pos_x, pos_y, **args)
+                    break
+
         self._axes.figure.tight_layout()
         self._axes.figure.canvas.draw()
+
+    def on_resize(self, event):
+        self.grafik_update()
+
+    def on_button_press(self, event):
+        if self._trasse_auswahl and not self._pick_event:
+            self._trasse_auswahl = None
+            self.grafik_update()
+
+        self._pick_event = False
+
+    def on_button_release(self, event):
+        pass
+
+    def on_pick(self, event):
+        auswahl_vorher = self._trasse_auswahl
+        self._trasse_auswahl = None
+        if event.mouseevent.inaxes == self._axes:
+            if isinstance(event.artist, Line2D):
+                try:
+                    self._trasse_auswahl = event.artist.trasse
+                    self._pick_event = True
+                except AttributeError:
+                    pass
+        if self._trasse_auswahl != auswahl_vorher:
+            self.grafik_update()
+
+    def on_key_press(self, event):
+        if event.key == "+":
+            if self._trasse_auswahl:
+                self.verspaetung_aendern(self._trasse_auswahl, 1, True)
+                self.grafik_update()
+        elif event.key == "-":
+            if self._trasse_auswahl:
+                self.verspaetung_aendern(self._trasse_auswahl, -1, True)
+                self.grafik_update()
+
+    def verspaetung_aendern(self, trasse: Trasse, verspaetung: int, relativ: bool = False):
+        korrektur = trasse.start.fdl_korrektur
+        if not isinstance(korrektur, planung.FesteVerspaetung):
+            korrektur = planung.FesteVerspaetung(self.planung)
+            korrektur.verspaetung = trasse.start.verspaetung_ab
+
+        if relativ:
+            korrektur.verspaetung += verspaetung
+        else:
+            korrektur.verspaetung = verspaetung
+        if korrektur.verspaetung == 0:
+            korrektur = None
+
+        trasse.start.fdl_korrektur = korrektur
+        self.planung.zugverspaetung_korrigieren(trasse.zug)
+        self.update_zuglauf(trasse.zug)
+
+    def abhaengigkeit_definieren(self, trasse: Trasse, referenz: ZugZielPlanung, abfahrt: bool = False,
+                                 wartezeit: int = 0):
+        if abfahrt:
+            korrektur = planung.AbfahrtAbwarten(self.planung)
+        else:
+            korrektur = planung.AnkunftAbwarten(self.planung)
+        korrektur.ursprung = referenz
+        korrektur.wartezeit = wartezeit
+
+        trasse.start.fdl_korrektur = korrektur
+        self.planung.zugverspaetung_korrigieren(trasse.zug)
+        self.update_zuglauf(trasse.zug)

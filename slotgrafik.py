@@ -254,6 +254,8 @@ class SlotWindow(QtWidgets.QMainWindow):
         self.auswertung: Optional[Auswertung] = None
         self.farbschema: Optional[ZugFarbschema] = None
 
+        self._pick_event = False
+
         self.setWindowTitle("slot-grafik")
         ss = f"background-color: {mpl.rcParams['axes.facecolor']};"
         self.setStyleSheet(ss)
@@ -276,6 +278,8 @@ class SlotWindow(QtWidgets.QMainWindow):
         self.zeitfenster_zurueck = 5
 
         canvas.mpl_connect("pick_event", self.on_pick)
+        canvas.mpl_connect("resize_event", self.on_resize)
+        canvas.mpl_connect("button_press_event", self.on_button_press)
 
     def update(self):
         """
@@ -465,7 +469,18 @@ class SlotWindow(QtWidgets.QMainWindow):
         weg = " - ".join(gleise)
         return "\n".join([titel, weg])
 
+    def on_resize(self, event):
+        self.grafik_update()
+
+    def on_button_press(self, event):
+        if self._zugdetails.get_visible() and not self._pick_event:
+            self._zugdetails.set_visible(False)
+            self._axes.figure.canvas.draw()
+
+        self._pick_event = False
+
     def on_pick(self, event):
+        self._pick_event = True
         if event.mouseevent.inaxes == self._axes:
             gleis = self._gleise[round(event.mouseevent.xdata)]
             zeit = event.mouseevent.ydata
@@ -481,7 +496,3 @@ class SlotWindow(QtWidgets.QMainWindow):
                 self._zugdetails.set(text="\n".join(text), visible=True, x=self._gleise.index(gleis),
                                      y=(ymin + ymax) / 2)
                 self._axes.figure.canvas.draw()
-        else:
-            # im mouseclick event behandeln
-            self._zugdetails.set_visible(False)
-            self._axes.figure.canvas.draw()

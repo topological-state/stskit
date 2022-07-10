@@ -841,6 +841,68 @@ class Planung:
 
         return result
 
+    def zug_finden(self, zug: Union[int, str, ZugDetails]) -> Optional[ZugDetailsPlanung]:
+        """
+        zug nach name oder nummer in zugliste suchen
+
+        :param zug: nummer oder name des zuges oder ein beliebiges objekt mit einem zid attribut,
+            z.b. ein ZugDetails vom PluginClient oder ein Ereignis.
+        :return: entsprechendes ZugDetailsPlanung aus der zugliste dieser klasse.
+            None, wenn kein passendes objekt gefunden wurde.
+        """
+
+        zid = None
+        try:
+            zid = zug.zid
+        except AttributeError:
+            for z in self.zugliste.values():
+                if z.nummer == zug or z.name == zug:
+                    zid = z.zid
+                    break
+
+        try:
+            return self.zugliste[zid]
+        except KeyError:
+            return None
+
+    def fdl_korrektur_setzen(self, korrektur: VerspaetungsKorrektur,
+                             ziel: Union[int, str, ZugZielPlanung],
+                             zug: Optional[Union[int, str, ZugDetails]] = None,
+                             zid: Optional[int] = None):
+        """
+        fahrdienstleiter-korrektur setzen
+
+        mit dieser methode kann der fahrdienstleiter eine manuelle verspätungskorrektur auf eine fahrplanzeile anwenden,
+        z.b. eine feste abgangsverspätung setzen oder eine abhängigkeit von einem kreuzenden zug festlegen.
+
+        :param korrektur: von VerspaetungsKorrektur abgeleitetes korrekturobjekt.
+            in frage kommen normalerweise FesteVerspaetung, AnkunftAbwarten oder AbfahrtAbwarten.
+        :param ziel: fahrplanziel auf die die korrektur angewendet wird.
+            dies kann ein ZugDetailsPlanung-objekt aus der zugliste dieser klasse sein
+            oder ein gleisname oder fahrplan-index.
+            in den letzteren beiden fällen, muss auch der zug oder zid angegeben werden.
+        :param zug: zugname, zugnummer oder ein objekt mit zid-attribut.
+            nur nötig, wenn ziel nicht das interne ZugDetailsPlanung-objekt ist.
+        :param zid: zug-id.
+            nur nötig, wenn ziel nicht das interne ZugDetailsPlanung-objekt ist.
+            hat vorrang gegenüber zug.
+        :return: None
+        """
+
+        if not isinstance(ziel, ZugDetailsPlanung):
+            try:
+                zug = self.zugliste[zid]
+            except KeyError:
+                zug = self.zug_finden(zug)
+            try:
+                ziel = zug.fahrplan[ziel]
+            except IndexError:
+                ziel = zug.find_fahrplanzeile(gleis=ziel, plan=ziel)
+            except AttributeError:
+                ziel = None
+        if ziel:
+            ziel.fdl_korrektur = korrektur
+
     def ereignis_uebernehmen(self, ereignis: Ereignis):
         """
         daten von einem ereignis uebernehmen.
@@ -909,6 +971,7 @@ class Planung:
                     altes_ziel.auto_korrektur = Signalhalt(self)
                     altes_ziel.auto_korrektur.verspaetung = ereignis.verspaetung
             else:
+                altes_ziel.fdl_korrektur = None
                 altes_ziel.verspaetung_ab = ereignis.verspaetung
                 altes_ziel.abgefahren = True
 

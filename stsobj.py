@@ -482,7 +482,8 @@ class ZugDetails:
         """
         finde erste fahrplanzeile, in der ein bestimmtes gleis vorkommt.
 
-        man kann entweder nach dem aktuellen gleis, dem plangleis oder beiden gleichzeitig suchen.
+        man kann nach dem aktuellen gleis oder dem plangleis suchen.
+        mindestens eines der beiden muss zutreffen.
 
         :param gleis: (str)
         :param plan: (str)
@@ -490,7 +491,7 @@ class ZugDetails:
         :return: FahrplanZeile objekt oder None.
         """
         for zeile in self.fahrplan:
-            if (not gleis or gleis == zeile.gleis) and (not plan or plan == zeile.plan):
+            if gleis == zeile.gleis or plan == zeile.plan:
                 return zeile
         return None
 
@@ -498,7 +499,8 @@ class ZugDetails:
         """
         finde den index der ersten fahrplanzeile, in der ein bestimmtes gleis vorkommt.
 
-        man kann entweder nach dem aktuellen gleis, dem plangleis oder beiden gleichzeitig suchen.
+        man kann nach dem aktuellen gleis oder dem plangleis suchen.
+        mindestens eines der beiden muss zutreffen.
 
         :param gleis: (str)
         :param plan: (str)
@@ -506,7 +508,7 @@ class ZugDetails:
         :return: index in fahrplan-liste oder None.
         """
         for index, zeile in enumerate(self.fahrplan):
-            if (not gleis or gleis == zeile.gleis) and (not plan or plan == zeile.plan):
+            if gleis == zeile.gleis or plan == zeile.plan:
                 return index
         return None
 
