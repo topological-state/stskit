@@ -64,6 +64,7 @@ def gemeinsamer_name(g: Iterable) -> str:
 
 ALPHA_PREFIX_PATTERN = re.compile(r'[^\d\W]*')
 NON_DIGIT_PREFIX_PATTERN = re.compile(r'\D*')
+EINZEL_ANSCHLUESSE = ['Anschluss', 'Feld', 'Gruppe', 'Gleis', 'Gr.', 'Anschl.', 'Gl.', 'Industrie', 'Depot', 'Abstellung']
 
 
 def alpha_prefix(name: str) -> str:
@@ -99,6 +100,22 @@ def default_bahnhofname(gleis: str) -> str:
         return "HBf"
 
 
+def ist_einzel_anschluss(gleis: str) -> bool:
+    """
+    prüft anhand von schlüsselwörtern, ob das gleis ein einfacher anschluss ist.
+
+    zeigt True, wenn eine zeichenfolge aus EINZEL_ANSCHLUESSE im gleisnamen vorkommt.
+
+    :param gleis: name des anschlussgleises
+    :return:
+    """
+    for ea in EINZEL_ANSCHLUESSE:
+        if gleis.find(ea) >= 0:
+            return True
+
+    return False
+
+
 def default_anschlussname(gleis: str) -> str:
     """
     anschlussname aus gleisnamen ableiten.
@@ -106,11 +123,16 @@ def default_anschlussname(gleis: str) -> str:
     es wird angenommen, dass der bahnhofname aus den alphabetischen zeichen am anfang des gleisnamens besteht.
     wenn der gleisname keine alphabetischen zeichen enthält, wird ein leerer string zurückgegeben.
 
+    wenn eine zeichenfolge aus EINZEL_ANSCHLUESSE im gleisnamen vorkommt, wird der gleisname unverändert zurückgegeben.
+
     :param gleis: gleisname
     :return: anschlussname
     """
 
-    return re.match(ALPHA_PREFIX_PATTERN, gleis).group(0).strip()
+    if ist_einzel_anschluss(gleis):
+        return gleis
+    else:
+        return re.match(ALPHA_PREFIX_PATTERN, gleis).group(0).strip()
 
 
 def dict_union(*gr: Dict[str, Set[Any]]) -> Dict[str, Set[Any]]:
