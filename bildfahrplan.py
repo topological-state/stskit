@@ -285,17 +285,15 @@ class BildFahrplanWindow(QtWidgets.QWidget):
         self._update_zuglauf_richtung(zug, -1)
 
     def _update_zuglauf_richtung(self, zug: ZugDetailsPlanung, richtung: int):
+        richtung = +1 if richtung >= 0 else -1
         color = self.farbschema.zugfarbe(zug)
         zuglauf = []
-        if richtung < 0:
-            strecke = list(reversed(self._strecke))
-            distanz = list(reversed(self._distanz))
-        else:
-            strecke = self._strecke
-            distanz = self._distanz
+        strecke = self._strecke
+        distanz = self._distanz
 
         plan1 = zug.fahrplan[0]
-        i_gruppe1 = 0
+        i_gruppe1 = 0 if richtung > 0 else -1
+        i_gruppe2 = 0
         an_vorher = 0
         for plan2 in zug.fahrplan[1:]:
             trasse = Trasse()
@@ -311,8 +309,12 @@ class BildFahrplanWindow(QtWidgets.QWidget):
                 logger.warning(f"gleis {plan1.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
                 gruppe1 = ""
             try:
-                i_gruppe1 = strecke.index(gruppe1, i_gruppe1)
-            except ValueError:
+                while strecke[i_gruppe1] != gruppe1:
+                    i_gruppe1 += richtung
+            except IndexError:
+                # startbahnhof nicht in strecke (bzw. nicht in fahrtrichtung)
+                # mit nächstem fahrplanziel nochmals versuchen
+                i_gruppe1 = i_gruppe2
                 plan1 = plan2
                 continue
 
@@ -322,9 +324,19 @@ class BildFahrplanWindow(QtWidgets.QWidget):
                 logger.warning(f"gleis {plan2.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
                 gruppe2 = ""
             try:
-                i_gruppe2 = strecke.index(gruppe2, i_gruppe1)
-            except ValueError:
-                continue
+                i_gruppe2 = i_gruppe1
+                while strecke[i_gruppe2] != gruppe2:
+                    i_gruppe2 += richtung
+            except IndexError:
+                # zielbahnhof nicht in strecke (bzw. nicht in fahrtrichtung)
+                # richtungswechsel versuchen
+                try:
+                    i_gruppe2 = i_gruppe1
+                    while strecke[i_gruppe2] != gruppe2:
+                        i_gruppe2 -= richtung
+                    richtung *= -1
+                except IndexError:
+                    continue
 
             try:
                 ab = time_to_minutes(plan1.ab) + plan1.verspaetung_ab
@@ -429,7 +441,11 @@ class BildFahrplanWindow(QtWidgets.QWidget):
             self._axes.axhline(y=zeit, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
 
         if self._trasse_auswahl:
-            zuglauf = self._zuglaeufe[(self._trasse_auswahl.zug.zid, self._trasse_auswahl.richtung)]
+            try:
+                zuglauf = self._zuglaeufe[(self._trasse_auswahl.zug.zid, self._trasse_auswahl.richtung)]
+            except KeyError:
+                zuglauf = []
+
             for trasse in zuglauf:
                 if trasse.start == self._trasse_auswahl.start and trasse.ziel == self._trasse_auswahl.ziel:
                     pos_x = [pos[0] for pos in trasse.koord]
