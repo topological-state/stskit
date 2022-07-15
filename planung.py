@@ -865,15 +865,15 @@ class Planung:
         except KeyError:
             return None
 
-    def fdl_korrektur_setzen(self, korrektur: VerspaetungsKorrektur,
-                             ziel: Union[int, str, ZugZielPlanung],
-                             zug: Optional[Union[int, str, ZugDetails]] = None,
-                             zid: Optional[int] = None):
+    def fdl_korrektur_setzen(self, korrektur: VerspaetungsKorrektur, ziel: Union[int, str, ZugZielPlanung]):
         """
         fahrdienstleiter-korrektur setzen
 
         mit dieser methode kann der fahrdienstleiter eine manuelle verspätungskorrektur auf eine fahrplanzeile anwenden,
         z.b. eine feste abgangsverspätung setzen oder eine abhängigkeit von einem kreuzenden zug festlegen.
+
+        beim setzen einer fdl-korrektur werden alle nachfolgenden gelöscht!
+        beim löschen (auf None setzen) bleiben sie erhalten.
 
         :param korrektur: von VerspaetungsKorrektur abgeleitetes korrekturobjekt.
             in frage kommen normalerweise FesteVerspaetung, AnkunftAbwarten oder AbfahrtAbwarten.
@@ -881,27 +881,16 @@ class Planung:
             dies kann ein ZugDetailsPlanung-objekt aus der zugliste dieser klasse sein
             oder ein gleisname oder fahrplan-index.
             in den letzteren beiden fällen, muss auch der zug oder zid angegeben werden.
-        :param zug: zugname, zugnummer oder ein objekt mit zid-attribut.
-            nur nötig, wenn ziel nicht das interne ZugDetailsPlanung-objekt ist.
-        :param zid: zug-id.
-            nur nötig, wenn ziel nicht das interne ZugDetailsPlanung-objekt ist.
-            hat vorrang gegenüber zug.
         :return: None
         """
 
-        if not isinstance(ziel, ZugDetailsPlanung):
-            try:
-                zug = self.zugliste[zid]
-            except KeyError:
-                zug = self.zug_finden(zug)
-            try:
-                ziel = zug.fahrplan[ziel]
-            except IndexError:
-                ziel = zug.find_fahrplanzeile(gleis=ziel, plan=ziel)
-            except AttributeError:
-                ziel = None
-        if ziel:
-            ziel.fdl_korrektur = korrektur
+        zug = ziel.zug
+        ziel_index = zug.find_fahrplan_index(plan=ziel.plan)
+
+        ziel.fdl_korrektur = korrektur
+        if korrektur:
+            for z in zug.fahrplan[ziel_index + 1:]:
+                z.fdl_korrektur = None
 
     def ereignis_uebernehmen(self, ereignis: Ereignis):
         """
@@ -976,4 +965,5 @@ class Planung:
                 altes_ziel.abgefahren = True
 
         elif ereignis.art == 'rothalt' or ereignis.art == 'wurdegruen':
+            zug.verspaetung = ereignis.verspaetung
             neues_ziel.verspaetung_an = ereignis.verspaetung

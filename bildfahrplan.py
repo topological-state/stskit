@@ -85,6 +85,9 @@ class Trasse:
                 'linewidth': self.linewidth,
                 'linestyle': self.linestyle,
                 'marker': self.marker}
+
+        if self.start.fdl_korrektur:
+            args['marker'] = 's'
         try:
             args['markevery'] = [not self.start.durchfahrt(), not self.ziel.durchfahrt()]
         except AttributeError:
@@ -495,6 +498,10 @@ class BildFahrplanWindow(QtWidgets.QWidget):
             if self._trasse_auswahl:
                 self.verspaetung_aendern(self._trasse_auswahl, -1, True)
                 self.grafik_update()
+        elif event.key == "0":
+            if self._trasse_auswahl:
+                self.verspaetung_aendern(self._trasse_auswahl, 0, False)
+                self.grafik_update()
 
     def verspaetung_aendern(self, trasse: Trasse, verspaetung: int, relativ: bool = False):
         korrektur = trasse.start.fdl_korrektur
@@ -509,7 +516,7 @@ class BildFahrplanWindow(QtWidgets.QWidget):
         if korrektur.verspaetung == 0:
             korrektur = None
 
-        trasse.start.fdl_korrektur = korrektur
+        self.planung.fdl_korrektur_setzen(korrektur, trasse.start)
         self.planung.zugverspaetung_korrigieren(trasse.zug)
         self.update_zuglauf(trasse.zug)
 
@@ -522,6 +529,6 @@ class BildFahrplanWindow(QtWidgets.QWidget):
         korrektur.ursprung = referenz
         korrektur.wartezeit = wartezeit
 
-        trasse.start.fdl_korrektur = korrektur
+        self.planung.fdl_korrektur_setzen(korrektur, trasse.start)
         self.planung.zugverspaetung_korrigieren(trasse.zug)
         self.update_zuglauf(trasse.zug)
