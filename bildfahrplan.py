@@ -420,6 +420,7 @@ class BildFahrplanWindow(QtWidgets.QWidget):
                       'rotation_mode': 'anchor',
                       'transform_rotates_text': True}
 
+        label_unterdrueckt = False
         for zuglauf in self._zuglaeufe.values():
             for trasse in zuglauf:
                 pos_x = [pos[0] for pos in trasse.koord]
@@ -432,10 +433,18 @@ class BildFahrplanWindow(QtWidgets.QWidget):
                 cy = (seg[0][1] + seg[1][1]) / 2 + off_y
                 dx = (seg[1][0] - seg[0][0])
                 dy = (seg[1][1] - seg[0][1])
-                if ylim[0] < cy < ylim[1] and abs(pix[1][0] - pix[0][0]) > 30:
-                    ang = math.degrees(math.atan(dy / dx))
-                    titel = format_label(trasse.start, trasse.ziel)
-                    self._axes.text(cx, cy, titel, rotation=ang, **label_args)
+                if ylim[0] < cy < ylim[1]:
+                    if abs(pix[1][0] - pix[0][0]) > 30 or label_unterdrueckt:
+                        label_unterdrueckt = False
+                        try:
+                            ang = math.degrees(math.atan(dy / dx))
+                        except ZeroDivisionError:
+                            pass
+                        else:
+                            titel = format_label(trasse.start, trasse.ziel)
+                            self._axes.text(cx, cy, titel, rotation=ang, **label_args)
+                    else:
+                        label_unterdrueckt = True
 
         for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
             item.set_fontsize('small')
