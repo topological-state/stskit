@@ -22,12 +22,32 @@ class VerspaetungsKorrektur:
 
     über das _planung-attribut hat die klasse zugriff auf die ganze zugliste.
     sie darf jedoch nur das angegebene ziel sowie allfällige verknüpfte züge direkt ändern.
+
+    wenn ein fahrplanziel abgearbeitet wurde, wird statt `anwenden` die `weiterleiten`-methode aufgerufen,
+    um die verspätungskorrektur von folgezügen durchzuführen.
     """
     def __init__(self, planung: 'Planung'):
         super().__init__()
         self._planung = planung
 
     def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
+        """
+        verspätungskorrektur anwenden
+
+        :param zug:
+        :param ziel:
+        :return:
+        """
+        pass
+
+    def weiterleiten(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
+        """
+        verspätungskorrektur von folgezügen aufrufen wenn nötig
+
+        :param zug:
+        :param ziel:
+        :return:
+        """
         pass
 
 
@@ -45,7 +65,7 @@ class FesteVerspaetung(VerspaetungsKorrektur):
         self.verspaetung: int = 0
 
     def __str__(self):
-        return f"fix({self.verspaetung})"
+        return f"Fix({self.verspaetung})"
 
     def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
         ziel.verspaetung_ab = self.verspaetung
@@ -222,6 +242,10 @@ class Ersatzzug(VerspaetungsKorrektur):
             ziel.ersatzzug.verspaetung = ziel.verspaetung_ab
             self._planung.zugverspaetung_korrigieren(ziel.ersatzzug)
 
+    def weiterleiten(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
+        if ziel.ersatzzug:
+            self._planung.zugverspaetung_korrigieren(ziel.ersatzzug)
+
 
 class Kupplung(VerspaetungsKorrektur):
     """
@@ -268,6 +292,10 @@ class Kupplung(VerspaetungsKorrektur):
         if ziel.kuppelzug:
             self._planung.zugverspaetung_korrigieren(ziel.kuppelzug)
 
+    def weiterleiten(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
+        if ziel.kuppelzug:
+            self._planung.zugverspaetung_korrigieren(ziel.kuppelzug)
+
 
 class Fluegelung(VerspaetungsKorrektur):
     def __str__(self):
@@ -293,6 +321,10 @@ class Fluegelung(VerspaetungsKorrektur):
         if ziel.fluegelzug:
             ziel.fluegelzug.verspaetung = ziel.verspaetung_an
             ziel.fluegelzug.fahrplan[0].verspaetung_an = ziel.verspaetung_an
+            self._planung.zugverspaetung_korrigieren(ziel.fluegelzug)
+
+    def weiterleiten(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
+        if ziel.fluegelzug:
             self._planung.zugverspaetung_korrigieren(ziel.fluegelzug)
 
 
@@ -404,19 +436,16 @@ class ZugDetailsPlanung(ZugDetails):
             ziel.ausfahrt = True
             self.fahrplan.append(ziel)
 
-        self.ziel_index = 0
+        # zug ist neu in liste und schon im stellwerk -> startaufstellung
         if zug.sichtbar:
-            vorheriges_ziel = None
-            for ziel in self.fahrplan:
-                if zug.plangleis == ziel.plan:
-                    if zug.amgleis:
-                        ziel.angekommen = True
-                    break
-                if not ziel.ausfahrt:
-                    ziel.angekommen = True
-                if vorheriges_ziel:
-                    vorheriges_ziel.abgefahren = True
-                vorheriges_ziel = ziel
+            ziel_index = self.find_fahrplan_index(plan=zug.plangleis)
+            if ziel_index is None:
+                # ziel ist ausfahrt
+                ziel_index = -1
+            for ziel in self.fahrplan[0:ziel_index]:
+                ziel.abgefahren = ziel.angekommen = True
+            if zug.amgleis:
+                self.fahrplan[ziel_index].angekommen = True
 
     def update_zug_details(self, zug: ZugDetails):
         """
@@ -762,6 +791,7 @@ class Planung:
         """
 
         verspaetung = zug.verspaetung
+        logger.debug(f"korrektur {zug.name} ({zug.verspaetung})")
 
         for ziel in zug.fahrplan:
             if not ziel.angekommen:
@@ -781,6 +811,11 @@ class Planung:
                     pass
 
                 verspaetung = ziel.verspaetung_ab
+            else:
+                try:
+                    ziel.auto_korrektur.weiterleiten(zug, ziel)
+                except AttributeError:
+                    pass
 
     def korrekturen_definieren(self):
         for zug in self.zugliste.values():
@@ -901,6 +936,9 @@ class Planung:
         :param ereignis: Ereignis-objekt vom PluginClient
         :return:
         """
+
+        logger.debug(f"{ereignis.art} {ereignis.name} ({ereignis.verspaetung})")
+
         try:
             zug = self.zugliste[ereignis.zid]
         except KeyError:
