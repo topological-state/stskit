@@ -12,6 +12,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
+import matplotlib.style
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 import trio
 import qtrio
@@ -92,6 +93,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.config_path = Path.home() / r".stskit"
         self.config_path.mkdir(exist_ok=True)
+
+        try:
+            p = Path(__file__).parent / r"mplstyle" / r"dark.mplstyle"
+            matplotlib.style.use(p)
+        except OSError:
+            pass
 
         self.setWindowTitle("sts-charts")
         self._main = QtWidgets.QWidget()
