@@ -22,7 +22,7 @@ from stsplugin import PluginClient, TaskDone
 from anlage import Anlage
 from auswertung import Auswertung
 from planung import Planung
-from stsobj import Ereignis
+from stsobj import Ereignis, time_to_minutes
 from einausfahrten import EinfahrtenWindow, AusfahrtenWindow
 from gleisbelegung import GleisbelegungWindow
 from gleisnetz import GleisnetzWindow
@@ -294,8 +294,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.planung.auswertung = self.auswertung
 
         self.planung.zuege_uebernehmen(self.client.zugliste.values())
-        self.planung.verspaetungen_korrigieren()
         self.planung.einfahrten_korrigieren()
+        self.planung.verspaetungen_korrigieren(time_to_minutes(self.client.calc_simzeit()))
 
         self.auswertung.zuege_uebernehmen(self.client.zugliste.values())
 

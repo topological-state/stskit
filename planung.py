@@ -38,7 +38,8 @@ class VerspaetungsKorrektur:
         :param ziel:
         :return:
         """
-        pass
+
+        ziel.verspaetung_ab = ziel.verspaetung_an
 
     def weiterleiten(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
         """
@@ -84,6 +85,35 @@ class Signalhalt(FesteVerspaetung):
         return f"Signal({self.verspaetung})"
 
 
+class Einfahrtszeit(VerspaetungsKorrektur):
+    """
+    verspätete einfahrt
+
+    die vom simulator gemeldete einfahrtszeit (inkl. verspätung) ist manchmal kleiner als die aktuelle sim-zeit.
+    in diesem fall erhöht diese korrektur die verspätung, so dass die einfahrtszeit der aktuellen uhrzeit entspricht.
+    """
+
+    def __str__(self):
+        return f"Einfahrt"
+
+    def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
+        try:
+            plan_an = time_to_minutes(ziel.an)
+        except AttributeError:
+            logger.debug(f"zug {zug.name} hat keine ankunft in zeile {ziel}")
+            ziel.verspaetung_ab = ziel.verspaetung_an
+            return
+
+        try:
+            plan_ab = time_to_minutes(ziel.ab)
+        except AttributeError:
+            plan_ab = plan_an
+
+        ankunft = plan_an + ziel.verspaetung_an
+        abfahrt = max(ankunft, self._planung.simzeit_minuten)
+        ziel.verspaetung_ab = abfahrt - plan_ab
+
+
 class PlanmaessigeAbfahrt(VerspaetungsKorrektur):
     """
     planmässige abfahrt oder verspätung aufholen wenn möglich
@@ -100,7 +130,9 @@ class PlanmaessigeAbfahrt(VerspaetungsKorrektur):
             plan_an = time_to_minutes(ziel.an)
         except AttributeError:
             logger.debug(f"zug {zug.name} hat keine ankunft in zeile {ziel}")
+            ziel.verspaetung_ab = ziel.verspaetung_an
             return
+
         try:
             plan_ab = time_to_minutes(ziel.ab)
         except AttributeError:
@@ -222,6 +254,7 @@ class Ersatzzug(VerspaetungsKorrektur):
             plan_an = time_to_minutes(ziel.an)
         except AttributeError:
             logger.debug(f"zug {zug.name} hat keine ankunft in zeile {ziel}")
+            ziel.verspaetung_ab = ziel.verspaetung_an
             return
 
         try:
@@ -264,6 +297,7 @@ class Kupplung(VerspaetungsKorrektur):
             plan_an = time_to_minutes(ziel.an)
         except AttributeError:
             logger.warning(f"zug {zug} hat keine ankunft in zeile {ziel}")
+            ziel.verspaetung_ab = ziel.verspaetung_an
             return
 
         try:
@@ -306,6 +340,7 @@ class Fluegelung(VerspaetungsKorrektur):
             plan_an = time_to_minutes(ziel.an)
         except AttributeError:
             logger.warning(f"zug {zug} hat keine ankunft in zeile {ziel}")
+            ziel.verspaetung_ab = ziel.verspaetung_an
             return
 
         try:
@@ -609,6 +644,7 @@ class Planung:
     def __init__(self):
         self.zugliste: Dict[int, ZugDetailsPlanung] = dict()
         self.auswertung: Optional[Auswertung] = None
+        self.simzeit_minuten: int = 0
 
     def zuege_uebernehmen(self, zuege: Iterable[ZugDetails]):
         """
@@ -756,7 +792,7 @@ class Planung:
                         except (AttributeError, ValueError):
                             pass
 
-    def verspaetungen_korrigieren(self):
+    def verspaetungen_korrigieren(self, simzeit_minuten: int):
         """
         verspätungsangaben aller züge nachführen
 
@@ -765,6 +801,9 @@ class Planung:
 
         :return:
         """
+
+        self.simzeit_minuten = simzeit_minuten
+
         zids = list(filter(lambda z: self.zugliste[z].stammzug is None, self.zugliste.keys()))
         while zids:
             zid = zids.pop(0)
@@ -798,18 +837,12 @@ class Planung:
                 ziel.verspaetung_an = verspaetung
 
             if not ziel.abgefahren:
-                ziel.verspaetung_ab = verspaetung
-
-                try:
-                    ziel.auto_korrektur.anwenden(zug, ziel)
-                except AttributeError:
-                    pass
-
-                try:
+                if ziel.fdl_korrektur is not None:
                     ziel.fdl_korrektur.anwenden(zug, ziel)
-                except AttributeError:
-                    pass
-
+                elif ziel.auto_korrektur is not None:
+                    ziel.auto_korrektur.anwenden(zug, ziel)
+                else:
+                    ziel.verspaetung_ab = ziel.verspaetung_an
                 verspaetung = ziel.verspaetung_ab
             else:
                 try:
@@ -831,10 +864,6 @@ class Planung:
         return result
 
     def ziel_korrekturen_definieren(self, ziel: ZugZielPlanung) -> bool:
-        if ziel.einfahrt or ziel.ausfahrt or ziel.durchfahrt():
-            ziel.mindestaufenthalt = 0
-            return True
-
         result = True
 
         if ziel.richtungswechsel():
@@ -844,7 +873,13 @@ class Planung:
         elif ziel.lokwechsel():
             ziel.mindestaufenthalt = 5
 
-        if ziel.ersatz_zid():
+        if ziel.einfahrt:
+            ziel.auto_korrektur = Einfahrtszeit(self)
+        elif ziel.ausfahrt:
+            pass
+        elif ziel.durchfahrt():
+            pass
+        elif ziel.ersatz_zid():
             ziel.auto_korrektur = Ersatzzug(self)
             anschluss = AnkunftAbwarten(self)
             anschluss.ursprung = ziel
@@ -900,7 +935,7 @@ class Planung:
         except KeyError:
             return None
 
-    def fdl_korrektur_setzen(self, korrektur: VerspaetungsKorrektur, ziel: Union[int, str, ZugZielPlanung]):
+    def fdl_korrektur_setzen(self, korrektur: Optional[VerspaetungsKorrektur], ziel: Union[int, str, ZugZielPlanung]):
         """
         fahrdienstleiter-korrektur setzen
 
@@ -912,6 +947,7 @@ class Planung:
 
         :param korrektur: von VerspaetungsKorrektur abgeleitetes korrekturobjekt.
             in frage kommen normalerweise FesteVerspaetung, AnkunftAbwarten oder AbfahrtAbwarten.
+            bei None wird die korrektur gelöscht.
         :param ziel: fahrplanziel auf die die korrektur angewendet wird.
             dies kann ein ZugDetailsPlanung-objekt aus der zugliste dieser klasse sein
             oder ein gleisname oder fahrplan-index.
@@ -967,7 +1003,7 @@ class Planung:
                 pass
             else:
                 if einfahrt.einfahrt:
-                    einfahrt.verspaetung_ab = ereignis.verspaetung
+                    einfahrt.verspaetung_ab = time_to_minutes(ereignis.zeit) - time_to_minutes(einfahrt.ab)
                     einfahrt.angekommen = einfahrt.abgefahren = True
 
         elif ereignis.art == 'ausfahrt':
