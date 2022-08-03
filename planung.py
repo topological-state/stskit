@@ -479,8 +479,11 @@ class ZugDetailsPlanung(ZugDetails):
                 ziel_index = -1
             for ziel in self.fahrplan[0:ziel_index]:
                 ziel.abgefahren = ziel.angekommen = True
+                ziel.verspaetung_ab = ziel.verspaetung_an = zug.verspaetung
             if zug.amgleis:
-                self.fahrplan[ziel_index].angekommen = True
+                ziel = self.fahrplan[ziel_index]
+                ziel.angekommen = True
+                ziel.verspaetung_an = zug.verspaetung
 
     def update_zug_details(self, zug: ZugDetails):
         """
