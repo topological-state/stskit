@@ -1,0 +1,10 @@
+.idea/
+
+.ipynb*/
+patch/
+research/
+varianten/
+icons/
+
+playground.py
+*.log
