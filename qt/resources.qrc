@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="chart.png">../icons/chart.png</file>
+        <file alias="gear.png">../icons/gear.png</file>
+        <file alias="hourglass--minus.png">../icons/hourglass--minus.png</file>
+        <file alias="hourglass--plus.png">../icons/hourglass--plus.png</file>
+        <file alias="hourglass--pencil.png">../icons/hourglass--pencil.png</file>
+        <file alias="train--arrow.png">../icons/train--arrow.png</file>
+        <file alias="train.png">../icons/train.png</file>
+        <file alias="eraser.png">../icons/eraser.png</file>
+        <file alias="equalizer.png">../icons/equalizer.png</file>
+    </qresource>
+</RCC>
