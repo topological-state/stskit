@@ -167,11 +167,13 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionPlusEins.triggered.connect(self.action_plus_eins)
         self.ui.actionMinusEins.triggered.connect(self.action_minus_eins)
         self.ui.actionLoeschen.triggered.connect(self.action_loeschen)
+        self.ui.actionAnkunftAbwarten.triggered.connect(self.action_ankunft_abwarten)
+        self.ui.actionAbfahrtAbwarten.triggered.connect(self.action_abfahrt_abwarten)
         self.ui.stackedWidget.currentChanged.connect(self.page_changed)
+        self.ui.vordefiniert_combo.currentIndexChanged.connect(self.strecke_selection_changed)
         self.ui.von_combo.currentIndexChanged.connect(self.strecke_selection_changed)
         self.ui.via_combo.currentIndexChanged.connect(self.strecke_selection_changed)
         self.ui.nach_combo.currentIndexChanged.connect(self.strecke_selection_changed)
-        self.ui.vordefiniert_combo.setEnabled(False)  # nicht implementiert
 
         self._axes = self.display_canvas.figure.subplots()
         self.display_canvas.mpl_connect("button_press_event", self.on_button_press)
@@ -180,11 +182,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.display_canvas.mpl_connect("resize_event", self.on_resize)
 
         self.update_actions()
-
-    def set_strecke(self, streckenname: str):
-        if streckenname != self._strecken_name:
-            self._strecken_name = streckenname
-            self._strecke = []
 
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
@@ -197,10 +194,11 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionLoeschen.setEnabled(display_mode and trasse_auswahl)
         self.ui.actionPlusEins.setEnabled(display_mode and trasse_auswahl)
         self.ui.actionMinusEins.setEnabled(display_mode and trasse_auswahl)
-        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and trasse_paar and False)  # not implemented
-        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and trasse_paar and False)  # not implemented
+        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and trasse_paar)
+        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and trasse_paar)
 
     def update_combos(self):
+        name = self._strecken_name
         von = self._strecke_von
         via = self._strecke_via
         nach = self._strecke_nach
@@ -218,6 +216,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.via_combo.addItems(["", *gruppen_liste])
         self.ui.nach_combo.clear()
         self.ui.nach_combo.addItems(gruppen_liste)
+        self.ui.vordefiniert_combo.clear()
+        self.ui.vordefiniert_combo.addItems([""])
+        self.ui.vordefiniert_combo.addItems(self.anlage.strecken.keys())
 
         if von:
             self.ui.von_combo.setCurrentText(von)
@@ -225,9 +226,12 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.ui.via_combo.setCurrentText(via)
         if nach:
             self.ui.nach_combo.setCurrentText(nach)
+        if name:
+            self.ui.vordefiniert_combo.setCurrentText(name)
 
     @pyqtSlot()
     def strecke_selection_changed(self):
+        self._strecken_name = self.ui.vordefiniert_combo.currentText()
         self._strecke_von = self.ui.von_combo.currentText()
         self._strecke_via = self.ui.via_combo.currentText()
         self._strecke_nach = self.ui.nach_combo.currentText()
@@ -263,7 +267,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.update_zuglauf(zug)
 
     def update_strecke(self):
-        if self._strecke_von and self._strecke_nach:
+        if self._strecken_name in self.anlage.strecken:
+            strecke = self.anlage.strecken[self._strecken_name]
+        elif self._strecke_von and self._strecke_nach:
             if self._strecke_via:
                 von_gleis = self._strecke_von
                 nach_gleis = self._strecke_via
@@ -524,7 +530,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def action_plus_eins(self):
-        print("+1", self._trasse_auswahl)
         try:
             self.verspaetung_aendern(self._trasse_auswahl[0], 1, True)
         except IndexError:
@@ -535,7 +540,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def action_minus_eins(self):
-        print("-1", self._trasse_auswahl)
         try:
             self.verspaetung_aendern(self._trasse_auswahl[0], -1, True)
         except IndexError:
@@ -546,34 +550,63 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def action_loeschen(self):
-        print("0", self._trasse_auswahl)
         try:
-            self.verspaetung_aendern(self._trasse_auswahl[0], 0, False)
+            trasse = self._trasse_auswahl[0]
         except IndexError:
             pass
+        else:
+            trasse.start.fdl_korrektur = None
+            self.planung.zugverspaetung_korrigieren(trasse.zug)
+            self.update_zuglauf(trasse.zug)
+
+        self.grafik_update()
+        self.update_actions()
+
+    @pyqtSlot()
+    def action_abfahrt_abwarten(self):
+        try:
+            self.abhaengigkeit_definieren(self._trasse_auswahl[0], self._trasse_auswahl[1].start, 1, abfahrt=True)
+        except IndexError:
+            return
+
+        self.grafik_update()
+        self.update_actions()
+
+    @pyqtSlot()
+    def action_ankunft_abwarten(self):
+        try:
+            self.abhaengigkeit_definieren(self._trasse_auswahl[0], self._trasse_auswahl[1].ziel, 1, abfahrt=False)
+        except IndexError:
+            return
 
         self.grafik_update()
         self.update_actions()
 
     def verspaetung_aendern(self, trasse: Trasse, verspaetung: int, relativ: bool = False):
         korrektur = trasse.start.fdl_korrektur
-        if not isinstance(korrektur, planung.FesteVerspaetung):
+        neu = korrektur is None
+
+        if relativ and hasattr(korrektur, "wartezeit"):
+            korrektur.wartezeit += verspaetung
+        elif not isinstance(korrektur, planung.FesteVerspaetung):
             korrektur = planung.FesteVerspaetung(self.planung)
             korrektur.verspaetung = trasse.start.verspaetung_ab
+            neu = True
 
-        if relativ:
-            korrektur.verspaetung += verspaetung
-        else:
-            korrektur.verspaetung = verspaetung
-        if korrektur.verspaetung == 0:
-            korrektur = None
+        if hasattr(korrektur, "verspaetung"):
+            if relativ:
+                korrektur.verspaetung += verspaetung
+            else:
+                korrektur.verspaetung = verspaetung
 
-        self.planung.fdl_korrektur_setzen(korrektur, trasse.start)
+        if neu:
+            self.planung.fdl_korrektur_setzen(korrektur, trasse.start)
+
         self.planung.zugverspaetung_korrigieren(trasse.zug)
         self.update_zuglauf(trasse.zug)
 
-    def abhaengigkeit_definieren(self, trasse: Trasse, referenz: ZugZielPlanung, abfahrt: bool = False,
-                                 wartezeit: int = 0):
+    def abhaengigkeit_definieren(self, trasse: Trasse, referenz: ZugZielPlanung, wartezeit: int = 0,
+                                 abfahrt: bool = False):
         if abfahrt:
             korrektur = planung.AbfahrtAbwarten(self.planung)
         else:
