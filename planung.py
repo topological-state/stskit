@@ -1021,10 +1021,10 @@ class Planung:
                     zug.ausgefahren = True
 
         elif ereignis.art == 'ankunft':
-            altes_ziel.verspaetung_an = ereignis.verspaetung
+            altes_ziel.verspaetung_an = time_to_minutes(ereignis.zeit) - time_to_minutes(altes_ziel.an)
             altes_ziel.angekommen = True
             if altes_ziel.durchfahrt():
-                altes_ziel.verspaetung_ab = ereignis.verspaetung
+                altes_ziel.verspaetung_ab = altes_ziel.verspaetung_an
                 altes_ziel.abgefahren = True
             # falls ein ereignis vergessen gegangen ist:
             for ziel in zug.fahrplan[0:alter_index]:
