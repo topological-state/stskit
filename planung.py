@@ -448,7 +448,7 @@ class ZugDetailsPlanung(ZugDetails):
         self.hinweistext = zug.hinweistext
 
         self.fahrplan = []
-        if not self.sichtbar and self.von and not zug.von.startswith("Gleis"):
+        if not zug.sichtbar and self.von and not zug.von.startswith("Gleis"):
             ziel = ZugZielPlanung(self)
             ziel.plan = ziel.gleis = self.von
             try:
