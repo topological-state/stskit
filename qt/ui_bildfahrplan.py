@@ -74,7 +74,7 @@ class Ui_BildfahrplanWindow(object):
         self.displaySplitter.setOrientation(QtCore.Qt.Vertical)
         self.displaySplitter.setObjectName("displaySplitter")
         self.grafikWidget = QtWidgets.QWidget(self.displaySplitter)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.grafikWidget.sizePolicy().hasHeightForWidth())
@@ -160,7 +160,7 @@ class Ui_BildfahrplanWindow(object):
         self.strecke_label.setBuddy(self.strecke_list)
 
         self.retranslateUi(BildfahrplanWindow)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(BildfahrplanWindow)
 
     def retranslateUi(self, BildfahrplanWindow):
@@ -199,4 +199,3 @@ class Ui_BildfahrplanWindow(object):
         self.actionAbfahrtAbwarten.setToolTip(_translate("BildfahrplanWindow", "Überholung/Abfahrt von zweitem gewählten Zug abwarten (F)"))
         self.actionAbfahrtAbwarten.setShortcut(_translate("BildfahrplanWindow", "F"))
 
-import resources_rc

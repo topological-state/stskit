@@ -2,20 +2,183 @@ import itertools
 import logging
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
-from stsobj import time_to_minutes, Knoten
-from slotgrafik import Slot, SlotWindow
+import matplotlib as mpl
+from PyQt5.QtCore import pyqtSlot
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+import numpy as np
+from PyQt5 import Qt, QtCore, QtGui, QtWidgets
+
+from auswertung import Auswertung
+from anlage import Anlage
+from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
+from stsplugin import PluginClient
+from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
+from slotgrafik import hour_minutes_formatter, gleisname_sortkey, Slot, ZugFarbschema
+
+from qt.ui_gleisbelegung import Ui_GleisbelegungWindow
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
+
+mpl.use('Qt5Agg')
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-class GleisbelegungWindow(SlotWindow):
+def weginfo_kurz(zug: ZugDetailsPlanung, gleis_index: int) -> str:
+    gleise = []
+    ell_links = False
+    ell_rechts = False
+
+    for fpz in zug.fahrplan:
+        if fpz.durchfahrt():
+            gleise.append("(" + fpz.gleis + ")")
+        else:
+            gleise.append(fpz.gleis)
+
+    while gleis_index < len(gleise) - 3:
+        del gleise[-2]
+        ell_rechts = True
+
+    while gleis_index > 2:
+        del gleise[1]
+        gleis_index -= 1
+        ell_links = True
+
+    if ell_links:
+        gleise.insert(1, "...")
+    if ell_rechts:
+        gleise.insert(-1, "...")
+
+    return " - ".join(gleise)
+
+
+class GleisbelegungWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("gleisbelegung")
+        self.client: Optional[PluginClient] = None
+        self.anlage: Optional[Anlage] = None
+        self.planung: Optional[Planung] = None
+        self.auswertung: Optional[Auswertung] = None
+        self.farbschema: ZugFarbschema = ZugFarbschema()
+        self.farbschema.init_schweiz()
+
+        self._balken = None
+        self._labels = []
+        self._pick_event = False
+
+        self._gleise: List[str] = []
+        self._slots: List[Slot] = []
+        self._gleis_slots: Dict[str, List[Slot]] = {}
+        self._auswahl: List[Slot] = []
+
         self.zeitfenster_voraus = 55
         self.zeitfenster_zurueck = 5
+
+        self.ui = Ui_GleisbelegungWindow()
+        self.ui.setupUi(self)
+
+        self.setWindowTitle("Gleisbelegung")
+        ss = f"background-color: {mpl.rcParams['axes.facecolor']};" \
+             f"color: {mpl.rcParams['text.color']};"
+        # further possible entries:
+        # "selection-color: yellow;"
+        # "selection-background-color: blue;"
+        self.setStyleSheet(ss)
+
+        self.display_canvas = FigureCanvas(Figure(figsize=(5, 3)))
+        self.ui.displayLayout = QtWidgets.QHBoxLayout(self.ui.grafikWidget)
+        self.ui.displayLayout.setObjectName("displayLayout")
+        self.ui.displayLayout.addWidget(self.display_canvas)
+
+        self.ui.actionAnzeige.triggered.connect(self.display_button_clicked)
+        self.ui.actionSetup.triggered.connect(self.settings_button_clicked)
+        self.ui.actionPlusEins.triggered.connect(self.action_plus_eins)
+        self.ui.actionMinusEins.triggered.connect(self.action_minus_eins)
+        self.ui.actionLoeschen.triggered.connect(self.action_loeschen)
+        self.ui.stackedWidget.currentChanged.connect(self.page_changed)
+
+        self._axes = self.display_canvas.figure.subplots()
+        self.display_canvas.mpl_connect("button_press_event", self.on_button_press)
+        self.display_canvas.mpl_connect("button_release_event", self.on_button_release)
+        self.display_canvas.mpl_connect("pick_event", self.on_pick)
+        self.display_canvas.mpl_connect("resize_event", self.on_resize)
+
+        self.update_actions()
+
+    def update_actions(self):
+        display_mode = self.ui.stackedWidget.currentIndex() == 1
+
+        self.ui.actionSetup.setEnabled(display_mode and False)  # not implemented
+        self.ui.actionAnzeige.setEnabled(not display_mode)
+        self.ui.actionFix.setEnabled(display_mode and False)  # not implemented
+        self.ui.actionLoeschen.setEnabled(display_mode and False)  # not implemented
+        self.ui.actionPlusEins.setEnabled(display_mode and False)  # not implemented
+        self.ui.actionMinusEins.setEnabled(display_mode and False)  # not implemented
+        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and False)  # not implemented
+        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and False)  # not implemented
+
+    def update(self):
+        """
+        daten und grafik neu aufbauen.
+
+        nötig, wenn sich z.b. der fahrplan oder verspätungsinformationen geändert haben.
+        einfache fensterereignisse werden von der grafikbibliothek selber bearbeitet.
+
+        :return: None
+        """
+        if self.farbschema is None:
+            self.farbschema = ZugFarbschema()
+            regionen_schweiz = {"Bern - Lötschberg", "Ostschweiz", "Tessin", "Westschweiz", "Zentralschweiz",
+                                "Zürich und Umgebung"}
+            if self.anlage.anlage.region in regionen_schweiz:
+                self.farbschema.init_schweiz()
+            else:
+                self.farbschema.init_deutschland()
+
+        self.daten_update()
+        self.grafik_update()
+
+    def daten_update(self):
+        """
+        slotliste neu aufbauen.
+
+        diese methode liest die zugdaten vom client neu ein und
+        baut die _slots, _gleis_slots und _gleise attribute neu auf.
+
+        die wesentliche arbeit, die slot-objekte aufzubauen wird an die slots_erstellen methode delegiert,
+        die erst von nachfahrklassen implementiert wird.
+
+        in einem zweiten schritt, werden pro gleis, allfällige konflikte gelöst.
+        dies wird an die konflikte_loesen methode delegiert,
+        die ebenfalls erst von nachfahrklassen implementiert wird.
+
+        :return: None
+        """
+        self._slots = []
+        self._gleis_slots = {}
+        self._gleise = []
+
+        for slot in self.slots_erstellen():
+            try:
+                slots = self._gleis_slots[slot.gleis]
+            except KeyError:
+                slots = self._gleis_slots[slot.gleis] = []
+            if slot not in slots:
+                slots.append(slot)
+
+        g_s_neu = {}
+        for gleis, slots in self._gleis_slots.items():
+            g_s_neu[gleis] = self.konflikte_loesen(gleis, slots)
+        self._gleis_slots = g_s_neu
+
+        self._gleise = sorted(self._gleis_slots.keys(), key=gleisname_sortkey)
+        self._slots = []
+        for slots in self._gleis_slots.values():
+            self._slots.extend(slots)
 
     def slots_erstellen(self) -> Iterable[Slot]:
         for zug in self.planung.zugliste.values():
@@ -71,3 +234,134 @@ class GleisbelegungWindow(SlotWindow):
                 s2.dauer = s1.zeit - s2_an
         except AttributeError:
             pass
+
+    def grafik_update(self):
+        """
+        erstellt das balkendiagramm basierend auf slot-daten
+
+        diese methode beinhaltet nur grafikcode.
+        alle interpretation von zugdaten soll in daten_update, slots_erstellen, etc. gemacht werden.
+
+        :return: None
+        """
+
+        self._axes.clear()
+
+        kwargs = dict()
+        kwargs['align'] = 'center'
+        kwargs['alpha'] = 0.5
+        kwargs['width'] = 1.0
+
+        x_labels = self._gleise
+        x_labels_pos = list(range(len(x_labels)))
+        x_pos = np.asarray([self._gleise.index(slot.gleis) for slot in self._slots])
+        y_bot = np.asarray([slot.zeit for slot in self._slots])
+        y_hgt = np.asarray([slot.dauer for slot in self._slots])
+        labels = [slot.titel for slot in self._slots]
+        colors = ['yellow' if slot in self._auswahl else self.farbschema.zugfarbe(slot.zug) for slot in self._slots]
+
+        self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
+        self._axes.yaxis.set_major_formatter(hour_minutes_formatter)
+        self._axes.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(1))
+        self._axes.yaxis.set_major_locator(mpl.ticker.MultipleLocator(5))
+        self._axes.yaxis.grid(True, which='major')
+        self._axes.xaxis.grid(True)
+
+        zeit = time_to_minutes(self.client.calc_simzeit())
+        self._axes.set_ylim(bottom=zeit + self.zeitfenster_voraus, top=zeit - self.zeitfenster_zurueck, auto=False)
+
+        self._balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, picker=True, **kwargs)
+
+        for balken, slot in zip(self._balken, self._slots):
+            balken.set(linestyle=slot.linestyle, linewidth=slot.linewidth, edgecolor=slot.randfarbe)
+
+        self._labels = self._axes.bar_label(self._balken, labels=labels, label_type='center')
+        for label, slot in zip(self._labels, self._slots):
+            label.set(fontstyle=slot.fontstyle, fontsize='small', fontstretch='condensed')
+
+        for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
+            item.set_fontsize('small')
+
+        if self.zeitfenster_zurueck > 0:
+            self._axes.axhline(y=zeit, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
+
+        self._axes.figure.tight_layout()
+        self._axes.figure.canvas.draw()
+
+    def get_slot_hint(self, slot: Slot):
+        name = slot.zug.name
+        von = slot.zug.fahrplan[0].gleis
+        nach = slot.zug.fahrplan[-1].gleis
+
+        gleis_index = slot.zug.find_fahrplan_index(gleis=slot.gleis)
+        try:
+            gleis_zeile = slot.zug.fahrplan[gleis_index]
+        except (IndexError, TypeError):
+            fp = slot.gleis
+        else:
+            z1 = gleis_zeile.an.isoformat('minutes')
+            z2 = gleis_zeile.ab.isoformat('minutes')
+            v1 = f"{gleis_zeile.verspaetung_ab:+}"
+            v2 = f"{gleis_zeile.verspaetung_an:+}"
+            fp = f"{slot.gleis} an {z1}{v1}, ab {z2}{v2}"
+
+        return f"{name} ({von} - {nach}): {fp}"
+
+    def on_resize(self, event):
+        self.grafik_update()
+
+    def on_button_press(self, event):
+        if self._auswahl and not self._pick_event:
+            self._auswahl = []
+            self.ui.zuginfoLabel.setText("")
+            self.grafik_update()
+            self.update_actions()
+
+        self._pick_event = False
+
+    def on_button_release(self, event):
+        pass
+
+    def on_pick(self, event):
+        self._pick_event = True
+
+        if event.mouseevent.inaxes == self._axes:
+            gleis = self._gleise[round(event.mouseevent.xdata)]
+            zeit = event.mouseevent.ydata
+            text = []
+            auswahl = []
+            if isinstance(event.artist, mpl.patches.Rectangle):
+                for slot in self._gleis_slots[gleis]:
+                    if slot.zeit <= zeit <= slot.zeit + slot.dauer:
+                        auswahl.append(slot)
+                        text.append(self.get_slot_hint(slot))
+
+            self.ui.zuginfoLabel.setText("\n".join(text))
+            self._auswahl = auswahl
+            self.grafik_update()
+            self.update_actions()
+
+    @pyqtSlot()
+    def settings_button_clicked(self):
+        self.ui.stackedWidget.setCurrentIndex(0)
+
+    @pyqtSlot()
+    def display_button_clicked(self):
+        self.ui.stackedWidget.setCurrentIndex(1)
+
+    @pyqtSlot()
+    def page_changed(self):
+        self.update_actions()
+
+    @pyqtSlot()
+    def action_plus_eins(self):
+        pass
+
+    @pyqtSlot()
+    def action_minus_eins(self):
+        pass
+
+    @pyqtSlot()
+    def action_loeschen(self):
+        pass
+

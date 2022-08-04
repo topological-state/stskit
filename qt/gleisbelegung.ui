@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BildfahrplanWindow</class>
- <widget class="QMainWindow" name="BildfahrplanWindow">
+ <class>GleisbelegungWindow</class>
+ <widget class="QMainWindow" name="GleisbelegungWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Bildfahrplan</string>
+   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -23,89 +23,175 @@
       <widget class="QWidget" name="settings_page">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <layout class="QVBoxLayout" name="settings_layout">
+         <widget class="QTreeWidget" name="treeWidget">
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::MultiSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectItems</enum>
+          </property>
+          <attribute name="headerDefaultSectionSize">
+           <number>200</number>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Gleis</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Konfliktgruppe</string>
+           </property>
+          </column>
           <item>
-           <widget class="QLabel" name="vordefiniert_label">
+           <property name="text">
+            <string>Anschlüsse</string>
+           </property>
+           <property name="checkState">
+            <enum>Checked</enum>
+           </property>
+           <item>
             <property name="text">
-             <string>Vordefinierte &amp;Strecke</string>
+             <string>EA</string>
             </property>
-            <property name="buddy">
-             <cstring>vordefiniert_combo</cstring>
+            <property name="checkState">
+             <enum>Checked</enum>
             </property>
-           </widget>
+            <item>
+             <property name="text">
+              <string>EA 1</string>
+             </property>
+             <property name="checkState">
+              <enum>Checked</enum>
+             </property>
+             <property name="text">
+              <string>EA</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>EA 2</string>
+             </property>
+             <property name="checkState">
+              <enum>Checked</enum>
+             </property>
+             <property name="text">
+              <string>EA</string>
+             </property>
+            </item>
+           </item>
           </item>
           <item>
-           <widget class="QComboBox" name="vordefiniert_combo"/>
-          </item>
-          <item>
-           <widget class="QLabel" name="von_label">
+           <property name="text">
+            <string>Bahnhöfe</string>
+           </property>
+           <property name="checkState">
+            <enum>PartiallyChecked</enum>
+           </property>
+           <item>
             <property name="text">
-             <string>&amp;Von</string>
+             <string>A</string>
             </property>
-            <property name="buddy">
-             <cstring>von_combo</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="von_combo"/>
-          </item>
-          <item>
-           <widget class="QLabel" name="via_label">
-            <property name="text">
-             <string>V&amp;ia</string>
-            </property>
-            <property name="buddy">
-             <cstring>via_combo</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="via_combo"/>
-          </item>
-          <item>
-           <widget class="QLabel" name="nach_label">
-            <property name="text">
-             <string>&amp;Nach</string>
-            </property>
-            <property name="buddy">
-             <cstring>nach_combo</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="nach_combo"/>
-          </item>
-          <item>
-           <widget class="QLabel" name="strecke_label">
-            <property name="text">
-             <string>S&amp;trecke</string>
-            </property>
-            <property name="buddy">
-             <cstring>strecke_list</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QListWidget" name="strecke_list"/>
-          </item>
-          <item>
-           <widget class="QToolButton" name="display_button">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+            <property name="checkState">
+             <enum>PartiallyChecked</enum>
             </property>
             <property name="text">
-             <string>Anzeigen</string>
+             <string/>
             </property>
-            <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonTextBesideIcon</enum>
+            <property name="flags">
+             <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
             </property>
-           </widget>
+            <item>
+             <property name="text">
+              <string>A 1</string>
+             </property>
+             <property name="checkState">
+              <enum>Checked</enum>
+             </property>
+             <property name="text">
+              <string>A 1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>A 1 kurz</string>
+             </property>
+             <property name="checkState">
+              <enum>Checked</enum>
+             </property>
+             <property name="text">
+              <string>A 1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>A 2</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+             <property name="text">
+              <string>A 2</string>
+             </property>
+            </item>
+           </item>
+           <item>
+            <property name="text">
+             <string>B</string>
+            </property>
+            <property name="checkState">
+             <enum>PartiallyChecked</enum>
+            </property>
+            <item>
+             <property name="text">
+              <string>B 1</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+             <property name="text">
+              <string>B1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>B 2</string>
+             </property>
+             <property name="checkState">
+              <enum>Unchecked</enum>
+             </property>
+             <property name="text">
+              <string>B2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>B 3a</string>
+             </property>
+             <property name="checkState">
+              <enum>Checked</enum>
+             </property>
+             <property name="text">
+              <string>B3</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>B 3b</string>
+             </property>
+             <property name="checkState">
+              <enum>Checked</enum>
+             </property>
+             <property name="text">
+              <string>B3</string>
+             </property>
+            </item>
+           </item>
           </item>
-         </layout>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -181,19 +267,13 @@
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
-    <string>Tool Bar</string>
-   </property>
-   <property name="movable">
-    <bool>false</bool>
+    <string>toolBar</string>
    </property>
    <property name="iconSize">
     <size>
      <width>16</width>
      <height>16</height>
     </size>
-   </property>
-   <property name="floatable">
-    <bool>false</bool>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -214,14 +294,14 @@
   </widget>
   <action name="actionSetup">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/equalizer.png</normaloff>:/equalizer.png</iconset>
    </property>
    <property name="text">
     <string>Setup</string>
    </property>
    <property name="toolTip">
-    <string>Streckendefinition (S)</string>
+    <string>Gleisauswahl (S)</string>
    </property>
    <property name="shortcut">
     <string>S</string>
@@ -229,7 +309,7 @@
   </action>
   <action name="actionAnzeige">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/chart.png</normaloff>:/chart.png</iconset>
    </property>
    <property name="text">
@@ -244,14 +324,14 @@
   </action>
   <action name="actionPlusEins">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/hourglass--plus.png</normaloff>:/hourglass--plus.png</iconset>
    </property>
    <property name="text">
     <string>+1</string>
    </property>
    <property name="toolTip">
-    <string>Feste Verspätung +1 Minute auf ausgewähltem Segment (+)</string>
+    <string>Feste Verspätung +1 Minute auf ausgewähltem Slot (+)</string>
    </property>
    <property name="shortcut">
     <string>+</string>
@@ -259,14 +339,14 @@
   </action>
   <action name="actionMinusEins">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/hourglass--minus.png</normaloff>:/hourglass--minus.png</iconset>
    </property>
    <property name="text">
     <string>-1</string>
    </property>
    <property name="toolTip">
-    <string>Feste Verspätung -1 Minute auf ausgewähltem Segment (-)</string>
+    <string>Feste Verspätung -1 Minute auf ausgewähltem Slot (-)</string>
    </property>
    <property name="shortcut">
     <string>-</string>
@@ -274,14 +354,14 @@
   </action>
   <action name="actionFix">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/hourglass--pencil.png</normaloff>:/hourglass--pencil.png</iconset>
    </property>
    <property name="text">
     <string>Fix</string>
    </property>
    <property name="toolTip">
-    <string>Feste Verspätung auf ausgewähltem Segment festlegen (V)</string>
+    <string>Feste Verspätung auf ausgewähltem Slot festlegen (V)</string>
    </property>
    <property name="shortcut">
     <string>V</string>
@@ -289,14 +369,14 @@
   </action>
   <action name="actionLoeschen">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/eraser.png</normaloff>:/eraser.png</iconset>
    </property>
    <property name="text">
     <string>Löschen</string>
    </property>
    <property name="toolTip">
-    <string>Korrekturen auf ausgewähltem Segment löschen (Del)</string>
+    <string>Korrekturen auf ausgewähltem Slot löschen (Del)</string>
    </property>
    <property name="shortcut">
     <string>Del</string>
@@ -304,7 +384,7 @@
   </action>
   <action name="actionAnkunftAbwarten">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/train.png</normaloff>:/train.png</iconset>
    </property>
    <property name="text">
@@ -319,7 +399,7 @@
   </action>
   <action name="actionAbfahrtAbwarten">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/train--arrow.png</normaloff>:/train--arrow.png</iconset>
    </property>
    <property name="text">
@@ -333,6 +413,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
