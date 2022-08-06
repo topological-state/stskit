@@ -5,9 +5,13 @@
         <file alias="hourglass--minus.png">../icons/hourglass--minus.png</file>
         <file alias="hourglass--plus.png">../icons/hourglass--plus.png</file>
         <file alias="hourglass--pencil.png">../icons/hourglass--pencil.png</file>
-        <file alias="train--arrow.png">../icons/train--arrow.png</file>
-        <file alias="train.png">../icons/train.png</file>
         <file alias="eraser.png">../icons/eraser.png</file>
         <file alias="equalizer.png">../icons/equalizer.png</file>
+        <file alias="zug-abfahrt-abwarten.png">../icons/zug-abfahrt-abwarten.png</file>
+        <file alias="zug-ankunft-abwraten.png">../icons/zug-ankunft-abwarten.png</file>
+        <file alias="clock--plus.png">../icons/clock--plus.png</file>
+        <file alias="clock--minus.png">../icons/clock--minus.png</file>
+        <file alias="clock--pencil.png">../icons/clock--pencil.png</file>
+        <file alias="cross-script.png">../icons/cross-script.png</file>
     </qresource>
 </RCC>

@@ -284,11 +284,11 @@
    <addaction name="actionSetup"/>
    <addaction name="actionAnzeige"/>
    <addaction name="separator"/>
-   <addaction name="actionAnkunftAbwarten"/>
-   <addaction name="actionAbfahrtAbwarten"/>
    <addaction name="actionPlusEins"/>
    <addaction name="actionMinusEins"/>
    <addaction name="actionFix"/>
+   <addaction name="actionAnkunftAbwarten"/>
+   <addaction name="actionAbfahrtAbwarten"/>
    <addaction name="separator"/>
    <addaction name="actionLoeschen"/>
   </widget>
@@ -325,7 +325,7 @@
   <action name="actionPlusEins">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/hourglass--plus.png</normaloff>:/hourglass--plus.png</iconset>
+     <normaloff>:/clock--plus.png</normaloff>:/clock--plus.png</iconset>
    </property>
    <property name="text">
     <string>+1</string>
@@ -340,7 +340,7 @@
   <action name="actionMinusEins">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/hourglass--minus.png</normaloff>:/hourglass--minus.png</iconset>
+     <normaloff>:/clock--minus.png</normaloff>:/clock--minus.png</iconset>
    </property>
    <property name="text">
     <string>-1</string>
@@ -355,7 +355,7 @@
   <action name="actionFix">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/hourglass--pencil.png</normaloff>:/hourglass--pencil.png</iconset>
+     <normaloff>:/clock--pencil.png</normaloff>:/clock--pencil.png</iconset>
    </property>
    <property name="text">
     <string>Fix</string>
@@ -370,7 +370,7 @@
   <action name="actionLoeschen">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/eraser.png</normaloff>:/eraser.png</iconset>
+     <normaloff>:/cross-script.png</normaloff>:/cross-script.png</iconset>
    </property>
    <property name="text">
     <string>Löschen</string>
@@ -385,7 +385,7 @@
   <action name="actionAnkunftAbwarten">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/train.png</normaloff>:/train.png</iconset>
+     <normaloff>:/zug-ankunft-abwraten.png</normaloff>:/zug-ankunft-abwraten.png</iconset>
    </property>
    <property name="text">
     <string>Ankunft</string>
@@ -400,7 +400,7 @@
   <action name="actionAbfahrtAbwarten">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/train--arrow.png</normaloff>:/train--arrow.png</iconset>
+     <normaloff>:/zug-abfahrt-abwarten.png</normaloff>:/zug-abfahrt-abwarten.png</iconset>
    </property>
    <property name="text">
     <string>Abfahrt</string>
