@@ -387,6 +387,181 @@ def graph_mehrdeutige_strecke_abgleichen(g: nx.Graph, strecke: Iterable[str], ro
     return g
 
 
+class Sektoren:
+    """
+    verwaltet sektoren (abschnitte) von bahnsteigen
+
+    wenn mehrere "gleise" oder "bahnsteige" nach sts-terminologie am gleichen physischen bahnsteig liegen,
+    nennen wir die einzelnen gleise "sektoren" und den übergeordneten bahnsteig "hauptgleis".
+    das hauptgleis kann im sim ebenfalls ein eigenes gleis darstellen ("1" und "1 kurz")
+    oder auch nicht ("1" für "1A" und "1B").
+    diese klasse bildet sektoren auf hauptgleise ab und umgekehrt.
+
+    die sektorzuordnung ist automatisch und explizit konfigurierbar.
+
+    die automatische konfiguration setzt voraus, dass sich ein gleisname aus dem hauptgleis und einer sektorbezeichnung
+    zusammensetzt. der name des hauptgleises kann mit einem bahnhofkürzel beginnen und endet immer mit der gleisnummer.
+    die sektorbezeichnung beginnt mit einem alphabetischen zeichen und kann ansonsten beliebig zusammengesetzt sein.
+
+    die manuelle konfiguration muss nicht alle gleise in der anlage aufführen.
+    daher sollte vor dem laden eine automatische konfiguration durchgeführt werden.
+
+    die verwendung der klasse erfolgt über methoden und properties.
+    die privaten attribute sollten nicht direkt angesprochen werden.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self._sektoren: Dict[str, Set[str]] = {}
+        self._hauptgleise: Dict[str, str] = {}
+
+    def sektoren(self, hauptgleis: str) -> Set[str]:
+        """
+        gibt die zu einem hauptgleis gehörenden gleise an.
+
+        :param hauptgleis: name des hauptgleises
+        :return: namen der sektoren als set.
+            wenn das gefragte gleis nicht konfiguriert ist, enthält die menge nur dieses element.
+        """
+        try:
+            return self._sektoren[hauptgleis]
+        except KeyError:
+            return {hauptgleis}
+
+    def hauptgleis(self, sektor: str):
+        """
+        gibt das zu einem sektor gehörende hauptgleis an.
+
+        :param sektor: gleisname, wie er im sim verwendet wird.
+        :return: name des hauptgleises.
+        """
+        try:
+            return self._hauptgleise[sektor]
+        except KeyError:
+            return sektor
+
+    def get_config(self, knapp=True) -> Dict[str, Set[str]]:
+        """
+        konfiguration auslesen.
+
+        gleise, die nicht aus mehreren sektoren bestehen, können ausgeblendet werden.
+
+        :knapp: wenn True werden nur gleise zurückgeliefert, die aus mehreren sektoren bestehen.
+            diese darstellung enthält alle nötige information und hilft, die konfigurationsdatei kurz zu halten.
+        :return: die dictionary keys sind die hauptgleisnamen, die items sets von zugehörigen gleisnamen.
+            vorsicht: der rückgabewert ist als read-only zu betrachten!
+            modifikationen können die originaldaten überschreiben!
+        """
+
+        if knapp:
+            sektoren = {hg: sekt for hg, sekt in self._sektoren.items() if len(sekt) > 1}
+        else:
+            sektoren = self._sektoren
+        return sektoren
+
+    def set_config(self, sektoren: Dict[str, Set[str]]):
+        """
+        übernimmt eine spezifische konfiguration.
+
+        :param sektoren: die dictionary keys sind die hauptgleisnamen, die items sets von zugehörigen gleisnamen.
+            jedes gleis darf nur einmal in einem set vorkommen.
+            duplikate werden gesucht und entfernt, es ist jedoch nicht vorhersagbar, welches entfernt wird.
+            es muss nicht jedes in der anlage vorhandene hauptgleis aufgeführt sein,
+            wenn vorher die auto_config durchgeführt wird.
+        :return: None
+        """
+
+        # neu zu konfigurierende gleise vorher entfernen, so dass wir dict.update verwenden können
+        for hg, sk in sektoren.items():
+            for gl in sk:
+                try:
+                    hg2 = self._hauptgleise[gl]
+                    self._sektoren[hg2].discard(gl)
+                    if len(self._sektoren[hg2]) == 0:
+                        del self._sektoren[hg2]
+                except KeyError:
+                    pass
+
+        self._sektoren.update(sektoren)
+        self._duplikate_entfernen(self._sektoren)
+        self._update_hauptgleise()
+
+    def auto_config(self, gleise: Iterable[str]):
+        """
+        automatische konfiguration
+
+        die automatische konfiguration setzt ein bestimmtes muster von gleisnamen voraus,
+        bestehend aus dem bahnhofsnamen (optional), der gleisnummer und dem sektornamen.
+        der hauptgleisname wird dann aus dem bahnhofsnamen und der gleisnummer gebildet.
+
+        :param gleise: vollstaendige liste von gleisen (bahnsteigen) der anlage
+        :return: None
+        """
+
+        self._hauptgleise = {}
+        rx = r'[a-zA-Z ]*[0-9]+'
+        ro = re.compile(rx)
+        for gleis in gleise:
+            mo = re.match(ro, gleis)
+            if mo:
+                self._hauptgleise[gleis] = mo[0]
+        self._update_sektoren()
+
+    @staticmethod
+    def _duplikate_entfernen(sektoren: Dict[str, Set[str]]):
+        """
+        entfernt duplikate aus den sektormengen
+
+        die funktion dient zur herstellung der eindeutigkeit des sektormodells
+        und kann auf das _sektor-attribut oder einen unabhängigen sektor-dictionary angewendet werden.
+        welches von mehrfachen sektorgleisen entfernt wird, ist willkürlich.
+        wenn eine sektormenge leer wird, wird auch das hauptgleis entfernt.
+
+        :param sektoren: die dictionary keys sind die hauptgleisnamen, die items sets von zugehörigen gleisnamen.
+            die korrektur wird direkt in diesem dictionary durchgeführt.
+        :return: None
+        """
+        duplikate = {}
+        for hg1, sk1 in sektoren.items():
+            for gl1 in sk1:
+                for hg2, sk2 in sektoren.items():
+                    for gl2 in sk2:
+                        if gl2 == gl1 and hg2 != hg1:
+                            duplikate[hg1] = gl1
+
+        for hg, gl in duplikate.items():
+            try:
+                sektoren[hg].discard(gl)
+                if len(sektoren[hg]) == 0:
+                    del sektoren[hg]
+            except KeyError:
+                pass
+
+    def _update_hauptgleise(self):
+        """
+        _hauptgleise attribut nach änderung an _sektoren aktualisieren.
+
+        :return: None
+        """
+        self._hauptgleise = {}
+        for hauptgleis, sektoren in self._sektoren.items():
+            for sektor in sektoren:
+                self._hauptgleise[sektor] = hauptgleis
+
+    def _update_sektoren(self):
+        """
+        _sektoren attribut nach änderung an _hauptgleise aktualisieren.
+
+        :return: None
+        """
+        self._sektoren = {}
+        for sektor, hauptgleis in self._hauptgleise.items():
+            try:
+                self._sektoren[hauptgleis].add(sektor)
+            except KeyError:
+                self._sektoren[hauptgleis] = {sektor}
+
+
 class Anlage:
     """
     netzwerk-darstellungen der bahnanlage
@@ -454,6 +629,8 @@ class Anlage:
         self.anschlusszuordnung: Dict[str, str] = {}
         self.bahnsteigzuordnung: Dict[str, str] = {}
         self.gleiszuordnung: Dict[str, str] = {}
+
+        self.sektoren = Sektoren()
 
         # lage des anschlusses auf dem gleisbild
         # gruppenname -> "links", "mitte", "rechts", "oben", "unten"
@@ -652,6 +829,7 @@ class Anlage:
 
         self.auto = True
         self._update_gruppen_dict()
+        self.sektoren.auto_config(self.bahnsteigzuordnung.keys())
 
     def _update_gruppen_dict(self):
         """
@@ -873,6 +1051,10 @@ class Anlage:
         except KeyError:
             logger.info("fehlende anschlussgruppen-konfiguration - auto-konfiguration")
         try:
+            self.sektoren.set_config(d['sektoren'])
+        except KeyError:
+            logger.info("keine sektoren-konfiguration")
+        try:
             self.anschlusslage = d['anschlusslage']
         except KeyError:
             self.anschlusslage = {k: "mitte" for k in self.anschlussgruppen.keys()}
@@ -928,6 +1110,7 @@ class Anlage:
              '_version': 2,
              'bahnsteiggruppen': self.bahnsteiggruppen,
              'anschlussgruppen': self.anschlussgruppen,
+             'sektoren': self.sektoren.get_config(),
              'anschlusslage': self.anschlusslage,
              'strecken': self.strecken}
 
