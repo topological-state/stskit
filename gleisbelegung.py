@@ -1,13 +1,15 @@
 import itertools
 import logging
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import AbstractSet, Any, Dict, Generator, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
 import matplotlib as mpl
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel
+
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
-from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 
 from auswertung import Auswertung
 from anlage import Anlage
@@ -55,6 +57,280 @@ def weginfo_kurz(zug: ZugDetailsPlanung, gleis_index: int) -> str:
     return " - ".join(gleise)
 
 
+class GleisauswahlItem:
+    TYPEN = {"root", "Kategorie", "Gruppe", "Hauptgleis", "Gleis"}
+
+    def __init__(self, modell: 'GleisauswahlModell', typ: str, name: str):
+        super().__init__()
+        assert typ in self.TYPEN, f"Unbekannter GleisauswahlItem-Typ {typ}"
+        self.modell = modell
+        self.typ = typ
+        self.name = name
+        self._column_count = 1
+        self._parent = None
+        self._children = []
+        self._row = 0
+        self._check_state: bool = False
+
+    def columnCount(self) -> int:
+        return self._column_count
+
+    def childCount(self) -> int:
+        return len(self._children)
+
+    def child(self, row: int) -> Optional['GleisauswahlItem']:
+        try:
+            return self._children[row]
+        except IndexError:
+            return None
+
+    def children(self) -> Iterable['GleisauswahlItem']:
+        for child in self._children:
+            yield child
+
+    def parent(self):
+        return self._parent
+
+    def row(self):
+        return self._row
+
+    def addChild(self, child: 'GleisauswahlItem'):
+        child._parent = self
+        child._row = len(self._children)
+        self._children.append(child)
+        self._column_count = max(child.columnCount(), self._column_count)
+
+    def checkState(self) -> QtCore.Qt.CheckState:
+        if len(self._children):
+            checked = 0
+            unchecked = 0
+            undefined = 0
+            for item in self._children:
+                state = item.checkState()
+                if state == QtCore.Qt.Checked:
+                    checked += 1
+                elif state == QtCore.Qt.Unchecked:
+                    unchecked += 1
+                else:
+                    undefined += 1
+
+            if checked == len(self._children):
+                return QtCore.Qt.Checked
+            elif unchecked == len(self._children):
+                return QtCore.Qt.Unchecked
+            else:
+                return QtCore.Qt.PartiallyChecked
+        else:
+            return QtCore.Qt.Checked if self._check_state else QtCore.Qt.Unchecked
+
+    def setCheckState(self, check_state: QtCore.Qt.CheckState):
+        if len(self._children) == 0:
+            self._check_state = check_state == QtCore.Qt.Checked
+
+    def flags(self):
+        flags = QtCore.Qt.ItemIsEnabled
+
+        if self.name:
+            flags = flags | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable
+        if self.typ == "Gleis":
+            flags = flags | QtCore.Qt.ItemNeverHasChildren
+        else:
+            flags = flags | QtCore.Qt.ItemIsAutoTristate
+
+        return flags
+
+    def data(self, column, role):
+        if role == QtCore.Qt.DisplayRole:
+            if column == 0:
+                return self.name
+
+        elif role == QtCore.Qt.CheckStateRole:
+            if column == 0:
+                return self.checkState()
+
+        return None
+
+    def setData(self, index: QModelIndex, value: Any, role: int) -> bool:
+        column = index.column()
+        if role == QtCore.Qt.EditRole:
+            return False
+        elif role == QtCore.Qt.CheckStateRole:
+            if column == 0:
+                self.setCheckState(value)
+                if len(self._children):
+                    for child in self._children:
+                        child_index = self.modell.index(child._row, column, index)
+                        child.setData(child_index, value, role)
+                self.modell.dataChanged.emit(index, index)
+                return True
+        return False
+
+
+class GleisauswahlModell(QtCore.QAbstractItemModel):
+    def __init__(self, parent: Optional[QtCore.QObject]):
+        super(GleisauswahlModell, self).__init__(parent)
+        self._root = GleisauswahlItem(self, "root", "")
+
+        self.alle_gleise: Set[str] = set([])
+
+    def columnCount(self, parent: QModelIndex = ...) -> int:
+        if parent.isValid():
+            return parent.internalPointer().columnCount()
+        return self._root.columnCount()
+
+    def rowCount(self, parent: QModelIndex = ...) -> int:
+        if parent.isValid():
+            return parent.internalPointer().childCount()
+        else:
+            return self._root.childCount()
+
+    def index(self, row: int, column: int, _parent: QModelIndex = ...) -> QModelIndex:
+        if not _parent or not _parent.isValid():
+            parent = self._root
+        else:
+            parent = _parent.internalPointer()
+
+        if not QtCore.QAbstractItemModel.hasIndex(self, row, column, _parent):
+            return QtCore.QModelIndex()
+
+        child = parent.child(row)
+        if child:
+            return QtCore.QAbstractItemModel.createIndex(self, row, column, child)
+        else:
+            return QtCore.QModelIndex()
+
+    def parent(self, child: QModelIndex) -> QModelIndex:
+        if child.isValid():
+            p = child.internalPointer().parent()
+            if p and p is not self._root:
+                return QtCore.QAbstractItemModel.createIndex(self, p.row(), 0, p)
+        return QtCore.QModelIndex()
+
+    def addChild(self, node: GleisauswahlItem, _parent: QModelIndex) -> None:
+        if not _parent or not _parent.isValid():
+            parent = self._root
+        else:
+            parent = _parent.internalPointer()
+        parent.addChild(node)
+
+    def headerData(self, section: int, orientation: QtCore.Qt.Orientation, role: int = ...) -> Any:
+        if role == QtCore.Qt.DisplayRole:
+            if orientation == QtCore.Qt.Horizontal:
+                if section == 0:
+                    return "Gleis"
+
+        return None
+
+    def flags(self, index: QModelIndex) -> QtCore.Qt.ItemFlags:
+        if not index.isValid():
+            return QtCore.Qt.ItemIsEnabled
+
+        node: GleisauswahlItem = index.internalPointer()
+        return node.flags()
+
+    def data(self, index: QModelIndex, role: int = ...) -> Any:
+        if not index.isValid():
+            return None
+
+        node: GleisauswahlItem = index.internalPointer()
+        return node.data(index.column(), role)
+
+    def setData(self, index: QModelIndex, value: Any, role: int = ...) -> bool:
+        if not index.isValid():
+            return False
+
+        node: GleisauswahlItem = index.internalPointer()
+
+        if role == QtCore.Qt.CheckStateRole:
+            node.setData(index, value, role)
+
+            parent_index = index
+            while True:
+                parent_index = self.parent(parent_index)
+                if parent_index.isValid():
+                    self.dataChanged.emit(parent_index, parent_index)
+                else:
+                    break
+
+            return True
+
+        return False
+
+    def gleise_definieren(self, anlage: Anlage, zufahrten=False, bahnsteige=True) -> None:
+        self.beginResetModel()
+
+        self._root = GleisauswahlItem(self, "root", "")
+        self.alle_gleise = set(anlage.bahnsteigzuordnung.keys())
+
+        if zufahrten:
+            zufahrten_item = GleisauswahlItem(self, "Kategorie", "Zufahrten")
+            self._root.addChild(zufahrten_item)
+
+            for gruppe, gleise in anlage.anschlussgruppen.items():
+                gruppen_item = GleisauswahlItem(self, "Gruppe", gruppe)
+                zufahrten_item.addChild(gruppen_item)
+                for gleis in sorted(gleise):
+                    gleis_item = GleisauswahlItem(self, "Gleis", gleis)
+                    gruppen_item.addChild(gleis_item)
+
+        if bahnsteige:
+            bahnsteige_item = GleisauswahlItem(self, "Kategorie", "Bahnsteige")
+            self._root.addChild(bahnsteige_item)
+
+            for bahnhof, gleise in anlage.bahnsteiggruppen.items():
+                bahnhof_item = GleisauswahlItem(self, "Gruppe", bahnhof)
+                bahnsteige_item.addChild(bahnhof_item)
+
+                hauptgleise = {}
+                for gleis in sorted(gleise):
+                    hauptgleis = anlage.sektoren.hauptgleis(gleis)
+                    gleis_item = GleisauswahlItem(self, "Gleis", gleis)
+
+                    if gleis == hauptgleis:
+                        hauptgleise[hauptgleis] = gleis_item
+                    else:
+                        try:
+                            hauptgleis_item = hauptgleise[hauptgleis]
+                        except KeyError:
+                            hauptgleis_item = GleisauswahlItem(self, "Hauptgleis", hauptgleis)
+                            hauptgleise[hauptgleis] = hauptgleis_item
+
+                        hauptgleis_item.addChild(gleis_item)
+
+                for gleis in sorted(hauptgleise.keys()):
+                    bahnhof_item.addChild(hauptgleise[gleis])
+
+        self.endResetModel()
+
+    def gleis_items(self, parent: Optional[GleisauswahlItem] = None, level: int = 0) -> Iterable[GleisauswahlItem]:
+        if parent is None:
+            parent = self._root
+        for i in range(parent.childCount()):
+            item = parent.child(i)
+            if item.childCount() > 0:
+                yield from self.gleis_items(parent=item, level=level+1)
+            else:
+                yield item
+
+    def set_auswahl(self, gleise: Union[AbstractSet[str], Sequence[str]]) -> None:
+        for item in self.gleis_items():
+            state = QtCore.Qt.Checked if item.name in gleise else QtCore.Qt.Unchecked
+            item.setCheckState(state)
+
+        self.dataChanged.emit(self.index(0, 0, QModelIndex()),
+                              self.index(self._root.columnCount() - 1, self._root.childCount() - 1, QModelIndex()))
+
+    def get_auswahl(self) -> Set[str]:
+        gleise = set([])
+        for item in self.gleis_items():
+            name = item.name
+            state = item.checkState()
+            if name in self.alle_gleise and state == QtCore.Qt.Checked:
+                gleise.add(name)
+
+        return gleise
+
+
 class GleisbelegungWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
@@ -80,6 +356,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_GleisbelegungWindow()
         self.ui.setupUi(self)
+        self.gleisauswahl = GleisauswahlModell(None)
+        self.ui.gleisView.setModel(self.gleisauswahl)
 
         self.setWindowTitle("Gleisbelegung")
         ss = f"background-color: {mpl.rcParams['axes.facecolor']};" \
@@ -112,7 +390,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
 
-        self.ui.actionSetup.setEnabled(display_mode and False)  # not implemented
+        self.ui.actionSetup.setEnabled(display_mode)
         self.ui.actionAnzeige.setEnabled(not display_mode)
         self.ui.actionFix.setEnabled(display_mode and False)  # not implemented
         self.ui.actionLoeschen.setEnabled(display_mode and False)  # not implemented
@@ -160,7 +438,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         """
         self._slots = []
         self._gleis_slots = {}
-        self._gleise = []
 
         for slot in self.slots_erstellen():
             try:
@@ -175,10 +452,12 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             g_s_neu[gleis] = self.konflikte_loesen(gleis, slots)
         self._gleis_slots = g_s_neu
 
-        self._gleise = sorted(self._gleis_slots.keys(), key=gleisname_sortkey)
+        if not self._gleise:
+            self._gleise = sorted(self._gleis_slots.keys(), key=gleisname_sortkey)
         self._slots = []
-        for slots in self._gleis_slots.values():
-            self._slots.extend(slots)
+        for gleis, slots in self._gleis_slots.items():
+            if gleis in self._gleise:
+                self._slots.extend(slots)
 
     def slots_erstellen(self) -> Iterable[Slot]:
         for zug in self.planung.zugliste.values():
@@ -344,10 +623,16 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def settings_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(0)
+        self.gleisauswahl.gleise_definieren(self.anlage)
+        self.gleisauswahl.set_auswahl(self._gleise)
+        self.ui.gleisView.expandAll()
 
     @pyqtSlot()
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
+        self._gleise = sorted(self.gleisauswahl.get_auswahl(), key=gleisname_sortkey)
+        self.daten_update()
+        self.grafik_update()
 
     @pyqtSlot()
     def page_changed(self):
