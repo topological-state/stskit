@@ -284,21 +284,21 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
                 hauptgleise = {}
                 for gleis in sorted(gleise):
                     hauptgleis = anlage.sektoren.hauptgleis(gleis)
+                    try:
+                        hauptgleis_item = hauptgleise[hauptgleis]
+                    except KeyError:
+                        hauptgleis_item = GleisauswahlItem(self, "Hauptgleis", hauptgleis)
+                        hauptgleise[hauptgleis] = hauptgleis_item
+
                     gleis_item = GleisauswahlItem(self, "Gleis", gleis)
+                    hauptgleis_item.addChild(gleis_item)
 
-                    if gleis == hauptgleis:
-                        hauptgleise[hauptgleis] = gleis_item
+                for hauptgleis in sorted(hauptgleise.keys()):
+                    hauptgleis_item = hauptgleise[hauptgleis]
+                    if hauptgleis_item.childCount() > 1:
+                        bahnhof_item.addChild(hauptgleis_item)
                     else:
-                        try:
-                            hauptgleis_item = hauptgleise[hauptgleis]
-                        except KeyError:
-                            hauptgleis_item = GleisauswahlItem(self, "Hauptgleis", hauptgleis)
-                            hauptgleise[hauptgleis] = hauptgleis_item
-
-                        hauptgleis_item.addChild(gleis_item)
-
-                for gleis in sorted(hauptgleise.keys()):
-                    bahnhof_item.addChild(hauptgleise[gleis])
+                        bahnhof_item.addChild(hauptgleis_item.child(0))
 
         self.endResetModel()
 
