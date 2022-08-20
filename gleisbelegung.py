@@ -16,7 +16,7 @@ from anlage import Anlage
 from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stsplugin import PluginClient
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
-from slotgrafik import hour_minutes_formatter, gleisname_sortkey, Slot, ZugFarbschema
+from slotgrafik import hour_minutes_formatter, gleisname_sortkey, Slot, ZugFarbschema, Gleisbelegung, Konflikt
 
 from qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 
@@ -260,7 +260,7 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
         self.beginResetModel()
 
         self._root = GleisauswahlItem(self, "root", "")
-        self.alle_gleise = set(anlage.bahnsteigzuordnung.keys())
+        self.alle_gleise = set(anlage.gleiszuordnung.keys())
 
         if zufahrten:
             zufahrten_item = GleisauswahlItem(self, "Kategorie", "Zufahrten")
@@ -341,15 +341,16 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.auswertung: Optional[Auswertung] = None
         self.farbschema: ZugFarbschema = ZugFarbschema()
         self.farbschema.init_schweiz()
+        self.show_zufahrten: bool = False
+        self.show_bahnsteige: bool = True
 
         self._balken = None
         self._labels = []
         self._pick_event = False
 
         self._gleise: List[str] = []
-        self._slots: List[Slot] = []
-        self._gleis_slots: Dict[str, List[Slot]] = {}
         self._auswahl: List[Slot] = []
+        self.belegung: Optional[Gleisbelegung] = None
 
         self.zeitfenster_voraus = 55
         self.zeitfenster_zurueck = 5
@@ -421,98 +422,15 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.grafik_update()
 
     def daten_update(self):
-        """
-        slotliste neu aufbauen.
+        if self.belegung is None:
+            self.belegung = Gleisbelegung(self.anlage)
+            self.gleisauswahl.gleise_definieren(self.anlage, zufahrten=self.show_zufahrten,
+                                                bahnsteige=self.show_bahnsteige)
+            self.gleisauswahl.set_auswahl(self.gleisauswahl.alle_gleise)
+            self._gleise = sorted(self.gleisauswahl.get_auswahl(), key=gleisname_sortkey)
 
-        diese methode liest die zugdaten vom client neu ein und
-        baut die _slots, _gleis_slots und _gleise attribute neu auf.
-
-        die wesentliche arbeit, die slot-objekte aufzubauen wird an die slots_erstellen methode delegiert,
-        die erst von nachfahrklassen implementiert wird.
-
-        in einem zweiten schritt, werden pro gleis, allfällige konflikte gelöst.
-        dies wird an die konflikte_loesen methode delegiert,
-        die ebenfalls erst von nachfahrklassen implementiert wird.
-
-        :return: None
-        """
-        self._slots = []
-        self._gleis_slots = {}
-
-        for slot in self.slots_erstellen():
-            try:
-                slots = self._gleis_slots[slot.gleis]
-            except KeyError:
-                slots = self._gleis_slots[slot.gleis] = []
-            if slot not in slots:
-                slots.append(slot)
-
-        g_s_neu = {}
-        for gleis, slots in self._gleis_slots.items():
-            g_s_neu[gleis] = self.konflikte_loesen(gleis, slots)
-        self._gleis_slots = g_s_neu
-
-        if not self._gleise:
-            self._gleise = sorted(self._gleis_slots.keys(), key=gleisname_sortkey)
-        self._slots = []
-        for gleis, slots in self._gleis_slots.items():
-            if gleis in self._gleise:
-                self._slots.extend(slots)
-
-    def slots_erstellen(self) -> Iterable[Slot]:
-        for zug in self.planung.zugliste.values():
-            for planzeile in zug.fahrplan:
-                try:
-                    plan_an = time_to_minutes(planzeile.an) + planzeile.verspaetung_an
-                except AttributeError:
-                    break
-                try:
-                    plan_ab = time_to_minutes(planzeile.ab) + planzeile.verspaetung_ab
-                except AttributeError:
-                    plan_ab = plan_an + 1
-
-                if planzeile.gleis and not planzeile.einfahrt and not planzeile.ausfahrt:
-                    slot = Slot(zug, planzeile, planzeile.gleis)
-                    slot.zeit = plan_an
-                    slot.dauer = max(1, plan_ab - plan_an)
-
-                    if planzeile.ersatzzug:
-                        slot.verbindung = planzeile.ersatzzug
-                        slot.verbindungsart = "E"
-                    elif planzeile.kuppelzug:
-                        slot.verbindung = planzeile.kuppelzug
-                        slot.verbindungsart = "K"
-                    elif planzeile.fluegelzug:
-                        slot.verbindung = planzeile.fluegelzug
-                        slot.verbindungsart = "F"
-
-                    yield slot
-
-    def konflikte_loesen(self, gleis: str, slots: List[Slot]) -> List[Slot]:
-        for s1, s2 in itertools.permutations(slots, 2):
-            if s1.verbindung is not None and s1.verbindung == s2.zug:
-                self.verbinden(s1, s2)
-            elif s2.verbindung is not None and s2.verbindung == s1.zug:
-                self.verbinden(s2, s1)
-            elif s1.zeit <= s2.zeit < s1.zeit + s1.dauer:
-                s1.konflikte.append(s2)
-                s2.konflikte.append(s1)
-
-        return slots
-
-    @staticmethod
-    def verbinden(s1: Slot, s2: Slot) -> None:
-        s2.verbindung = s1.zug
-        s2.verbindungsart = s1.verbindungsart
-        try:
-            s2_zeile = s2.zug.find_fahrplanzeile(gleis=s1.gleis)
-            s2_an = time_to_minutes(s2_zeile.an) + s2_zeile.verspaetung_an
-            if s2_an > s1.zeit:
-                s1.dauer = s2_an - s1.zeit
-            elif s1.zeit > s2_an:
-                s2.dauer = s1.zeit - s2_an
-        except AttributeError:
-            pass
+        self.belegung.gleise_auswaehlen(self._gleise)
+        self.belegung.update(self.planung.zugliste.values())
 
     def grafik_update(self):
         """
@@ -533,11 +451,15 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         x_labels = self._gleise
         x_labels_pos = list(range(len(x_labels)))
-        x_pos = np.asarray([self._gleise.index(slot.gleis) for slot in self._slots])
-        y_bot = np.asarray([slot.zeit for slot in self._slots])
-        y_hgt = np.asarray([slot.dauer for slot in self._slots])
-        labels = [slot.titel for slot in self._slots]
-        colors = ['yellow' if slot in self._auswahl else self.farbschema.zugfarbe(slot.zug) for slot in self._slots]
+        try:
+            x_pos = np.asarray([self._gleise.index(slot.gleis) for slot in self.belegung.slots])
+        except ValueError:
+            return None
+
+        y_bot = np.asarray([slot.zeit for slot in self.belegung.slots])
+        y_hgt = np.asarray([slot.dauer for slot in self.belegung.slots])
+        labels = [slot.titel for slot in self.belegung.slots]
+        colors = ['yellow' if slot in self._auswahl else self.farbschema.zugfarbe(slot.zug) for slot in self.belegung.slots]
 
         self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
         self._axes.yaxis.set_major_formatter(hour_minutes_formatter)
@@ -549,14 +471,23 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         zeit = time_to_minutes(self.client.calc_simzeit())
         self._axes.set_ylim(bottom=zeit + self.zeitfenster_voraus, top=zeit - self.zeitfenster_zurueck, auto=False)
 
-        self._balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, picker=True, **kwargs)
-
-        for balken, slot in zip(self._balken, self._slots):
+        _slot_balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, picker=True, **kwargs)
+        for balken, slot in zip(_slot_balken, self.belegung.slots):
             balken.set(linestyle=slot.linestyle, linewidth=slot.linewidth, edgecolor=slot.randfarbe)
-
-        self._labels = self._axes.bar_label(self._balken, labels=labels, label_type='center')
-        for label, slot in zip(self._labels, self._slots):
+        _slot_labels = self._axes.bar_label(_slot_balken, labels=labels, label_type='center')
+        for label, slot in zip(_slot_labels, self.belegung.slots):
             label.set(fontstyle=slot.fontstyle, fontsize='small', fontstretch='condensed')
+
+        for konflikt in self.belegung.konflikte:
+            try:
+                x = [x_labels_pos[x_labels.index(gleis)] for gleis in konflikt.gleise]
+            except ValueError:
+                continue
+            xy = (min(x) - kwargs['width'] / 2, konflikt.zeit)
+            w = max(x) - min(x) + kwargs['width']
+            h = konflikt.dauer
+            r = mpl.patches.Rectangle(xy, w, h, fill=False, linestyle=konflikt.linestyle, linewidth=konflikt.linewidth, edgecolor=konflikt.randfarbe)
+            self._axes.add_patch(r)
 
         for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
             item.set_fontsize('small')
@@ -566,25 +497,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self._axes.figure.tight_layout()
         self._axes.figure.canvas.draw()
-
-    def get_slot_hint(self, slot: Slot):
-        name = slot.zug.name
-        von = slot.zug.fahrplan[0].gleis
-        nach = slot.zug.fahrplan[-1].gleis
-
-        gleis_index = slot.zug.find_fahrplan_index(gleis=slot.gleis)
-        try:
-            gleis_zeile = slot.zug.fahrplan[gleis_index]
-        except (IndexError, TypeError):
-            fp = slot.gleis
-        else:
-            z1 = gleis_zeile.an.isoformat('minutes')
-            z2 = gleis_zeile.ab.isoformat('minutes')
-            v1 = f"{gleis_zeile.verspaetung_ab:+}"
-            v2 = f"{gleis_zeile.verspaetung_an:+}"
-            fp = f"{slot.gleis} an {z1}{v1}, ab {z2}{v2}"
-
-        return f"{name} ({von} - {nach}): {fp}"
 
     def on_resize(self, event):
         self.grafik_update()
@@ -610,10 +522,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             text = []
             auswahl = []
             if isinstance(event.artist, mpl.patches.Rectangle):
-                for slot in self._gleis_slots[gleis]:
+                for slot in self.belegung.gleis_slots[gleis]:
                     if slot.zeit <= zeit <= slot.zeit + slot.dauer:
                         auswahl.append(slot)
-                        text.append(self.get_slot_hint(slot))
+                        text.append(str(slot))
 
             self.ui.zuginfoLabel.setText("\n".join(text))
             self._auswahl = auswahl
@@ -623,7 +535,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def settings_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(0)
-        self.gleisauswahl.gleise_definieren(self.anlage)
+        self.gleisauswahl.gleise_definieren(self.anlage, zufahrten=self.show_zufahrten, bahnsteige=self.show_bahnsteige)
         self.gleisauswahl.set_auswahl(self._gleise)
         self.ui.gleisView.expandAll()
 

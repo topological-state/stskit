@@ -1,22 +1,18 @@
 """
-abstraktes slotgrafik-fenster
+datenstrukturen fuer slotgrafik
 
 die slotgrafik besteht aus einem balkendiagramm das die belegung von einzelnen gleisen durch züge im lauf der zeit darstellt.
-
-spezifische implementationen sind die gleisbelegungs-, einfahrts- und ausfahrtstabellen.
+spezifische implementationen sind die gleisbelegungs-, einfahrts- und ausfahrtsdiagramme.
 """
 
 from dataclasses import dataclass, field
+import itertools
 import logging
 import re
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 import matplotlib as mpl
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
 import numpy as np
-from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 
 from auswertung import Auswertung
 from anlage import Anlage
@@ -26,8 +22,6 @@ from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetun
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
-
-mpl.use('Qt5Agg')
 
 
 def hour_minutes_formatter(x: Union[int, float], pos: Any) -> str:
@@ -146,6 +140,9 @@ class ZugFarbschema:
         self.nach_nummer = {}
 
 
+SLOT_TYPEN = {'gleis', 'einfahrt', 'ausfahrt'}
+
+
 @dataclass
 class Slot:
     """
@@ -156,20 +153,54 @@ class Slot:
 
     properties berechnen gewisse statische darstellungsmerkmale wie farben.
     """
+
     zug: ZugDetailsPlanung
     plan: ZugZielPlanung
+    typ: str = ""
     gleis: str = ""
     zeit: int = 0
     dauer: int = 0
     verbindung: Optional[ZugDetailsPlanung] = None
     verbindungsart: str = ""
-    konflikte: List['Slot'] = field(default_factory=list)
+    konflikte: List['Konflikt'] = field(default_factory=list)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return self.zug.name == other.zug.name and self.gleis == other.gleis
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.gleis, self.zug.name))
+
+    def __str__(self) -> str:
+        name = self.zug.name
+        von = self.zug.fahrplan[0].gleis
+        nach = self.zug.fahrplan[-1].gleis
+
+        gleis_index = self.zug.find_fahrplan_index(gleis=self.gleis)
+        try:
+            gleis_zeile = self.zug.fahrplan[gleis_index]
+        except (IndexError, TypeError):
+            fp = self.gleis
+        else:
+            zt = []
+            try:
+                z1 = gleis_zeile.an.isoformat('minutes')
+                v1 = f"{gleis_zeile.verspaetung_ab:+}"
+                # zt.append(f"⇥ {z1}{v1}")
+                zt.append(f"{z1}{v1}")
+            except AttributeError:
+                pass
+
+            try:
+                z2 = gleis_zeile.ab.isoformat('minutes')
+                v2 = f"{gleis_zeile.verspaetung_an:+}"
+                # zt.append(f"↦ {z2}{v2}")
+                zt.append(f"{z2}{v2}")
+            except AttributeError:
+                pass
+
+            fp = self.gleis + " " + " - ".join(zt)
+
+        return f"{name} ({von} - {nach}): {fp}"
 
     @property
     def randfarbe(self) -> str:
@@ -178,16 +209,8 @@ class Slot:
 
         :return: farbbezeichnung für matplotlib
         """
-        if self.konflikte:
-            return 'r'
-        elif self.verbindungsart == 'E':
-            return 'darkblue'
-        elif self.verbindungsart == 'K':
-            return 'm'
-        elif self.verbindungsart == 'F':
-            return 'darkgreen'
-        else:
-            return 'k'
+
+        return 'k'
 
     @property
     def titel(self) -> str:
@@ -196,10 +219,16 @@ class Slot:
 
         :return: (str) zugtitel
         """
+
         if self.plan.verspaetung_an:
-            return f"{self.zug.name} ({self.plan.verspaetung_an:+})"
+            s = f"{self.zug.name} ({self.plan.verspaetung_an:+})"
         else:
-            return f"{self.zug.name}"
+            s = f"{self.zug.name}"
+        if self.plan.einfahrt:
+            s = "→ " + s
+        elif self.plan.ausfahrt:
+            s = s + " →"
+        return s
 
     @property
     def fontstyle(self) -> str:
@@ -208,6 +237,7 @@ class Slot:
 
         :return: "normal" oder "italic"
         """
+
         return "italic" if self.plan.durchfahrt() else "normal"
 
     @property
@@ -217,7 +247,88 @@ class Slot:
 
         :return: "-" oder "--"
         """
+
         return "--" if self.plan.durchfahrt() else "-"
+
+    @property
+    def linewidth(self) -> int:
+        """
+        linienbreite
+
+        in der aktuellen version immer 1
+
+        :return: 1 oder 2
+        """
+
+        return 1
+
+
+KONFLIKT_STATUS = ['undefiniert', 'gleis', 'hauptgleis', 'ersatz', 'kuppeln', 'flügeln', 'fdl-markiert', 'fdl-ignoriert']
+VERBINDUNGS_KONFLIKT = {'E': 'ersatz', 'K': 'kuppeln', 'F': 'flügeln'}
+KONFLIKT_FARBE = {'undefiniert': 'gray',
+                  'gleis': 'red',
+                  'hauptgleis': 'orange',
+                  'ersatz': 'darkblue',
+                  'kuppeln': 'magenta',
+                  'flügeln': 'darkgreen',
+                  'fdl-markiert': 'red',
+                  'fdl-ignoriert': 'gray'}
+KONFLIKT_BREITE = {'undefiniert': 1,
+                   'gleis': 2,
+                   'hauptgleis': 2,
+                   'ersatz': 1,
+                   'kuppeln': 2,
+                   'flügeln': 2,
+                   'fdl-markiert': 2,
+                   'fdl-ignoriert': 1}
+
+
+@dataclass
+class Konflikt:
+    """
+    repräsentation eines gleiskonflikts im belegungsplan.
+
+    dieses objekt enthält alle daten für die darstellung in der slotgrafik.
+    die daten sind fertig verarbeitet.
+
+    properties berechnen gewisse statische darstellungsmerkmale wie farben.
+    """
+
+    gleise: Set[str] = field(default_factory=set)
+    zeit: int = 0
+    dauer: int = 0
+    status: str = "undefiniert"
+    # ziele: List[ZugZielPlanung] = field(default_factory=list)  # ueber slots[].plan erreichbar
+    slots: List[Slot] = field(default_factory=list)
+
+    def __eq__(self, other: 'Konflikt') -> bool:
+        return self.gleise == other.gleise and self.zeit == other.zeit
+
+    def __hash__(self) -> int:
+        return hash((*sorted(self.gleise), self.zeit))
+
+    def __str__(self) -> str:
+        return f"Konflikt ({self.status}) um {hour_minutes_formatter(self.zeit, None)} auf {self.gleise}"
+
+    @property
+    def randfarbe(self) -> str:
+        """
+        randfarbe markiert konflikte und kuppelvorgänge
+
+        :return: farbbezeichnung für matplotlib
+        """
+
+        return KONFLIKT_FARBE[self.status]
+
+    @property
+    def linestyle(self) -> str:
+        """
+        linienstil
+
+        :return: "-" oder "--"
+        """
+
+        return "--"
 
     @property
     def linewidth(self) -> int:
@@ -226,273 +337,179 @@ class Slot:
 
         :return: 1 oder 2
         """
-        return 2 if self.konflikte or self.verbindungsart == 'K' else 1
+
+        return KONFLIKT_BREITE[self.status]
 
 
-class SlotWindow(QtWidgets.QMainWindow):
-    """
-    gemeinsamer vorfahr für slotdiagrammfenster
+GLEIS_TYPEN = {'haupt', 'sektor', 'zufahrt'}
 
-    nachfahren implementieren die slots_erstellen- und konflikte_loesen-methoden.
 
-    der code besteht im wesentlichen aus drei teilen:
-    - die interpretation von zugdaten geschieht in der daten_update-methode
-      und den von ihr aufgerufenen slots_erstellen und konflikte_loesen methoden.
-      die interpretierten zugdaten werden in _slots zwischengespeichert.
-    - die grafische darstellung geschieht in der grafik_update-methode.
-      diese setzt die information aus _slots in grafikbefehle um,
-      und sollte keine interpretation von zugdaten durchführen.
-    - interaktion. als einzige interaktion kann der user auf einen balken klicken,
-      wonach der fahrplan des zuges sowie ggf. jener von konfliktzügen angezeigt wird.
-    """
+class Gleisbelegung:
+    def __init__(self, anlage: Anlage):
+        self.anlage: Anlage = anlage
+        self.gleise: List[str] = []
+        self.gleis_typen: Dict[str, str] = {}
+        self.slots: List[Slot] = []
+        self.gleis_slots: Dict[str, List[Slot]] = {}
+        self.hauptgleis_slots: Dict[str, List[Slot]] = {}
+        self.konflikte: List[Konflikt] = []
+        self.gleis_konflikte: Dict[str, List[Konflikt]] = {}
 
-    def __init__(self):
-        super().__init__()
-        self.client: Optional[PluginClient] = None
-        self.anlage: Optional[Anlage] = None
-        self.planung: Optional[Planung] = None
-        self.auswertung: Optional[Auswertung] = None
-        self.farbschema: Optional[ZugFarbschema] = None
-
-        self._pick_event = False
-
-        self.setWindowTitle("slot-grafik")
-        ss = f"background-color: {mpl.rcParams['axes.facecolor']};"
-        self.setStyleSheet(ss)
-        self._main = QtWidgets.QWidget()
-        self.setCentralWidget(self._main)
-        layout = QtWidgets.QVBoxLayout(self._main)
-
-        canvas = FigureCanvas(Figure(figsize=(5, 3)))
-        layout.addWidget(canvas)
-        self._axes = canvas.figure.subplots()
-        self._balken = None
-        self._labels = []
-        self._zugdetails: mpl.text.Text = None
-
-        self._gleise: List[str] = []
-        self._slots: List[Slot] = []
-        self._gleis_slots: Dict[str, List[Slot]] = {}
-
-        self.zeitfenster_voraus = 55
-        self.zeitfenster_zurueck = 5
-
-        canvas.mpl_connect("pick_event", self.on_pick)
-        canvas.mpl_connect("resize_event", self.on_resize)
-        canvas.mpl_connect("button_press_event", self.on_button_press)
-
-    def update(self):
+    def update(self, zugliste: Iterable[ZugDetailsPlanung]):
         """
-        daten und grafik neu aufbauen.
+        daten einlesen und slotliste neu aufbauen.
 
-        nötig, wenn sich z.b. der fahrplan oder verspätungsinformationen geändert haben.
-        einfache fensterereignisse werden von der grafikbibliothek selber bearbeitet.
-
-        :return: None
-        """
-        if self.farbschema is None:
-            self.farbschema = ZugFarbschema()
-            regionen_schweiz = {"Bern - Lötschberg", "Ostschweiz", "Tessin", "Westschweiz", "Zentralschweiz",
-                                "Zürich und Umgebung"}
-            if self.anlage.anlage.region in regionen_schweiz:
-                self.farbschema.init_schweiz()
-            else:
-                self.farbschema.init_deutschland()
-
-        self.daten_update()
-        self.grafik_update()
-
-    def daten_update(self):
-        """
-        slotliste neu aufbauen.
-
-        diese methode liest die zugdaten vom client neu ein und
-        baut die _slots, _gleis_slots und _gleise attribute neu auf.
-
-        die wesentliche arbeit, die slot-objekte aufzubauen wird an die slots_erstellen methode delegiert,
-        die erst von nachfahrklassen implementiert wird.
-
+        diese methode liest die zugdaten neu ein und baut die attribute neu auf.
         in einem zweiten schritt, werden pro gleis, allfällige konflikte gelöst.
-        dies wird an die konflikte_loesen methode delegiert,
-        die ebenfalls erst von nachfahrklassen implementiert wird.
 
         :return: None
         """
-        self._slots = []
-        self._gleis_slots = {}
-        self._gleise = []
 
-        for slot in self.slots_erstellen():
-            try:
-                slots = self._gleis_slots[slot.gleis]
-            except KeyError:
-                slots = self._gleis_slots[slot.gleis] = []
-            if slot not in slots:
-                slots.append(slot)
+        if len(self.gleise) == 0:
+            self.gleise_auswaehlen(self.anlage.gleiszuordnung.keys())
+        self.slots_erstellen(zugliste)
+        self.konflikte_erkennen()
 
-        g_s_neu = {}
-        for gleis, slots in self._gleis_slots.items():
-            g_s_neu[gleis] = self.konflikte_loesen(gleis, slots)
-        self._gleis_slots = g_s_neu
+    def gleise_auswaehlen(self, gleise: Iterable[str]):
+        self.gleise = sorted(gleise, key=gleisname_sortkey)
 
-        self._gleise = sorted(self._gleis_slots.keys(), key=gleisname_sortkey)
-        self._slots = []
-        for slots in self._gleis_slots.values():
-            self._slots.extend(slots)
+    def slots_erstellen(self, zugliste: Iterable[ZugDetailsPlanung]):
+        self.slots = []
+        self.gleis_slots = {}
+        self.hauptgleis_slots = {}
 
-    def slots_erstellen(self) -> Iterable[Slot]:
-        """
-        slots erstellen (abstrakt)
+        for zug in zugliste:
+            for planzeile in zug.fahrplan:
+                try:
+                    plan_an = time_to_minutes(planzeile.an) + planzeile.verspaetung_an
+                except AttributeError:
+                    break
+                try:
+                    plan_ab = time_to_minutes(planzeile.ab) + planzeile.verspaetung_ab
+                except AttributeError:
+                    plan_ab = plan_an + 1
 
-        diese methode erstellt für jeden slot, der in der grafik dargestellt werden soll, ein Slot-objekt
-        und gibt es in einer iterablen (liste, generator, etc.) zurück.
+                if planzeile.gleis in self.gleise:
+                    slot = Slot(zug, planzeile)
+                    slot.gleis = planzeile.gleis
+                    slot.zeit = plan_an
+                    slot.dauer = max(1, plan_ab - plan_an)
 
-        diese methode muss von nachfahrklassen implementiert werden - sonst bleibt die grafik leer.
+                    if planzeile.einfahrt:
+                        slot.typ = 'einfahrt'
+                    elif planzeile.ausfahrt:
+                        slot.typ = 'ausfahrt'
+                    else:
+                        slot.typ = 'gleis'
 
-        alle Slot-attribute müssen gemäss dokumentation gesetzt werden,
-        ausser des konflikte-attributes (dieses wird von konflikte_loesen bearbeitet):
+                    if planzeile.ersatzzug:
+                        slot.verbindung = planzeile.ersatzzug
+                        slot.verbindungsart = "E"
+                    elif planzeile.kuppelzug:
+                        slot.verbindung = planzeile.kuppelzug
+                        slot.verbindungsart = "K"
+                    elif planzeile.fluegelzug:
+                        slot.verbindung = planzeile.fluegelzug
+                        slot.verbindungsart = "F"
 
-        :return: iterable oder generator liefert eine sequenz von Slot-objekten.
-        """
-        return []
+                    self.slots.append(slot)
 
-    def konflikte_loesen(self, gleis: str, slots: List[Slot]) -> List[Slot]:
-        """
-        konflikte erkennen und markieren oder lösen
+                    try:
+                        gls = self.gleis_slots[planzeile.gleis]
+                    except KeyError:
+                        gls = []
+                        self.gleis_slots[planzeile.gleis] = gls
+                    gls.append(slot)
 
-        diese methode erkennt und löst belegungskonflikte.
+                    hauptgleis = self.anlage.sektoren.hauptgleis(planzeile.gleis)
+                    try:
+                        gls = self.hauptgleis_slots[hauptgleis]
+                    except KeyError:
+                        gls = []
+                        self.hauptgleis_slots[hauptgleis] = gls
+                    gls.append(slot)
 
-        diese methode kann von nachfahrklassen implementiert werden,
-        sofern sie eine konflikterkennung anbieten.
-
-        :param gleis: name des gleises für das konflikte bearbeitet werden sollen.
-        :param slots: liste aller slots, die zu dem gleis erfasst sind.
-        :return: veränderte oder identische slots-liste.
-            die liste kann frei verändert oder gleich belassen werden,
-            sie muss lediglich vollständig definierte Slot-objekte zu dem angegebenen gleis enthalten.
-        """
-        return slots
-
-    def grafik_update(self):
-        """
-        erstellt das balkendiagramm basierend auf slot-daten
-
-        diese methode beinhaltet nur grafikcode.
-        alle interpretation von zugdaten soll in daten_update, slots_erstellen, etc. gemacht werden.
-
-        :return: None
-        """
-        self._axes.clear()
-
-        kwargs = dict()
-        kwargs['align'] = 'center'
-        kwargs['alpha'] = 0.5
-        kwargs['width'] = 1.0
-
-        x_labels = self._gleise
-        x_labels_pos = list(range(len(x_labels)))
-        x_pos = np.asarray([self._gleise.index(slot.gleis) for slot in self._slots])
-        y_bot = np.asarray([slot.zeit for slot in self._slots])
-        y_hgt = np.asarray([slot.dauer for slot in self._slots])
-        labels = [slot.titel for slot in self._slots]
-        colors = [self.farbschema.zugfarbe(slot.zug) for slot in self._slots]
-
-        self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
-        self._axes.yaxis.set_major_formatter(hour_minutes_formatter)
-        self._axes.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(1))
-        self._axes.yaxis.set_major_locator(mpl.ticker.MultipleLocator(5))
-        self._axes.yaxis.grid(True, which='major')
-        self._axes.xaxis.grid(True)
-
-        zeit = time_to_minutes(self.client.calc_simzeit())
-        self._axes.set_ylim(bottom=zeit + self.zeitfenster_voraus, top=zeit - self.zeitfenster_zurueck, auto=False)
-
-        self._balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, picker=True, **kwargs)
-
-        for balken, slot in zip(self._balken, self._slots):
-            balken.set(linestyle=slot.linestyle, linewidth=slot.linewidth, edgecolor=slot.randfarbe)
-
-        self._labels = self._axes.bar_label(self._balken, labels=labels, label_type='center')
-        for label, slot in zip(self._labels, self._slots):
-            label.set(fontstyle=slot.fontstyle, fontsize='small', fontstretch='condensed')
-
-        for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
-            item.set_fontsize('small')
-
-        if self.zeitfenster_zurueck > 0:
-            self._axes.axhline(y=zeit, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
-
-        self._axes.figure.tight_layout()
-
-        self._zugdetails = self._axes.text(1, zeit, 'leerfahrt', bbox={'facecolor': 'yellow', 'alpha': 0.5},
-                                           fontsize='small', fontstretch='condensed', visible=False)
-
-        self._axes.figure.canvas.draw()
-
-    def get_slot_hint(self, slot: Slot):
-        gleis_index = slot.zug.find_fahrplan_index(gleis=slot.gleis)
-        try:
-            gleis_zeile = slot.zug.fahrplan[gleis_index]
-        except (IndexError, TypeError):
-            gleis_zeile = None
-        try:
-            verspaetung = gleis_zeile.verspaetung_an
-        except AttributeError:
-            verspaetung = None
-        if verspaetung is None:
-            verspaetung = slot.zug.verspaetung
-
-        titel = f"{slot.zug.name} ({format_verspaetung(verspaetung)})"
-        if slot.verbindungsart:
-            titel = titel + " " + slot.verbindungsart
-
-        gleise = []
-        ell_links = False
-        ell_rechts = False
-        for fpz in slot.zug.fahrplan:
-            if fpz.durchfahrt():
-                gleise.append("(" + fpz.gleis + ")")
+    def konflikte_erkennen(self):
+        self.konflikte.clear()
+        for gleis, slots in self.gleis_slots.items():
+            if gleis in self.anlage.anschlusszuordnung.keys():
+                self.zufahrt_konflikte_loesen(slots)
             else:
-                gleise.append(fpz.gleis)
-        while gleis_index < len(gleise) - 3:
-            del gleise[-2]
-            ell_rechts = True
-        while gleis_index > 2:
-            del gleise[1]
-            gleis_index -= 1
-            ell_links = True
-        if ell_links:
-            gleise.insert(1, "...")
-        if ell_rechts:
-            gleise.insert(-1, "...")
+                self.gleis_konflikte_loesen(slots)
 
-        weg = " - ".join(gleise)
-        return "\n".join([titel, weg])
+        for gleis, slots in self.hauptgleis_slots.items():
+            self.hauptgleis_konflikte_loesen(slots)
 
-    def on_resize(self, event):
-        self.grafik_update()
+    def gleis_konflikte_loesen(self, slots: List[Slot]):
+        for s1, s2 in itertools.permutations(slots, 2):
+            if s1.zug == s2.zug:
+                continue
+            if s1.verbindung is not None and s1.verbindung == s2.zug:
+                self.verbinden(s1, s2)
+            elif s2.verbindung is not None and s2.verbindung == s1.zug:
+                self.verbinden(s2, s1)
+            elif s1.zeit <= s2.zeit <= s1.zeit + s1.dauer:
+                k = Konflikt(gleise={s1.gleis, s2.gleis}, zeit=s1.zeit, status="gleis")
+                k.dauer = max(s1.dauer, s2.zeit + s2.dauer - s1.zeit)
+                k.slots = [s1, s2]
+                self.konflikte.append(k)
+                s1.konflikte.append(k)
+                s2.konflikte.append(k)
 
-    def on_button_press(self, event):
-        if self._zugdetails.get_visible() and not self._pick_event:
-            self._zugdetails.set_visible(False)
-            self._axes.figure.canvas.draw()
+    def hauptgleis_konflikte_loesen(self, slots: List[Slot]):
+        for s1, s2 in itertools.permutations(slots, 2):
+            if s1.zug == s2.zug or s1.gleis == s2.gleis:
+                continue
+            if s1.verbindung is not None and s1.verbindung == s2.zug:
+                pass
+            elif s2.verbindung is not None and s2.verbindung == s1.zug:
+                pass
+            elif s1.zeit <= s2.zeit <= s1.zeit + s1.dauer:
+                k = Konflikt(gleise={s1.gleis, s2.gleis}, zeit=s1.zeit, status="hauptgleis")
+                k.dauer = max(s1.dauer, s2.zeit + s2.dauer - s1.zeit)
+                k.slots = [s1, s2]
+                self.konflikte.append(k)
+                s1.konflikte.append(k)
+                s2.konflikte.append(k)
 
-        self._pick_event = False
+    def zufahrt_konflikte_loesen(self, slots: List[Slot]):
+        slots = sorted(slots, key=lambda s: s.zeit)
+        letzter = slots[0]
+        frei = letzter.zeit + letzter.dauer
+        konflikt = None
+        for slot in slots[1:]:
+            if slot.zeit < frei:
+                if konflikt is None:
+                    konflikt = Konflikt(gleise={letzter.gleis}, zeit=letzter.zeit, status="gleis")
+                    konflikt.slots.append(letzter)
+                    self.konflikte.append(konflikt)
+                konflikt.slots.append(slot)
+                slot.konflikte.append(konflikt)
+                letzter.konflikte.append(konflikt)
+                slot.zeit = max(frei, slot.zeit)
+                konflikt.dauer = slot.zeit + slot.dauer - konflikt.zeit
+                frei = slot.zeit + slot.dauer
+                letzter = slot
+            else:
+                konflikt = None
 
-    def on_pick(self, event):
-        self._pick_event = True
-        if event.mouseevent.inaxes == self._axes:
-            gleis = self._gleise[round(event.mouseevent.xdata)]
-            zeit = event.mouseevent.ydata
-            text = []
-            ymin = 24 * 60
-            ymax = 0
-            if isinstance(event.artist, mpl.patches.Rectangle):
-                for slot in self._gleis_slots[gleis]:
-                    if slot.zeit <= zeit <= slot.zeit + slot.dauer:
-                        ymin = min(ymin, slot.zeit)
-                        ymax = max(ymax, slot.zeit + slot.dauer)
-                        text.append(self.get_slot_hint(slot))
-                self._zugdetails.set(text="\n".join(text), visible=True, x=self._gleise.index(gleis),
-                                     y=(ymin + ymax) / 2)
-                self._axes.figure.canvas.draw()
+    def verbinden(self, s1: Slot, s2: Slot) -> None:
+        s2.verbindung = s1.zug
+        s2.verbindungsart = s1.verbindungsart
+        try:
+            s2_zeile = s2.zug.find_fahrplanzeile(gleis=s1.gleis)
+            s2_an = time_to_minutes(s2_zeile.an) + s2_zeile.verspaetung_an
+            if s2_an > s1.zeit:
+                s1.dauer = s2_an - s1.zeit
+            elif s1.zeit > s2_an:
+                s2.dauer = s1.zeit - s2_an
+            k = Konflikt(gleise={s1.gleis, s2.gleis})
+            k.status = VERBINDUNGS_KONFLIKT[s1.verbindungsart]
+            k.zeit = min(s1.zeit, s2.zeit)
+            k.dauer = max(s1.zeit + s1.dauer - k.zeit, s2.zeit + s2.dauer - k.zeit)
+            k.slots = [s1, s2]
+            self.konflikte.append(k)
+            s1.konflikte.append(k)
+            s2.konflikte.append(k)
+        except AttributeError:
+            pass

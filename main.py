@@ -23,7 +23,6 @@ from anlage import Anlage
 from auswertung import Auswertung
 from planung import Planung
 from stsobj import Ereignis, time_to_minutes
-from einausfahrten import EinfahrtenWindow, AusfahrtenWindow
 from gleisbelegung import GleisbelegungWindow
 from gleisnetz import GleisnetzWindow
 from qticker import TickerWindow
@@ -105,32 +104,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self._main)
         layout = QtWidgets.QVBoxLayout(self._main)
 
-        self.einfahrten_button = QtWidgets.QPushButton("einfahrten", self)
+        self.einfahrten_button = QtWidgets.QPushButton("einfahrten/ausfahrten", self)
         self.einfahrten_button.clicked.connect(self.einfahrten_clicked)
         layout.addWidget(self.einfahrten_button)
-        self.einfahrten_window: Optional[EinfahrtenWindow] = None
-
-        self.ausfahrten_button = QtWidgets.QPushButton("ausfahrten", self)
-        self.ausfahrten_button.clicked.connect(self.ausfahrten_clicked)
-        layout.addWidget(self.ausfahrten_button)
-        self.ausfahrten_window: Optional[AusfahrtenWindow] = None
+        self.einfahrten_window: Optional[GleisbelegungWindow] = None
 
         self.gleisbelegung_button = QtWidgets.QPushButton("gleisbelegung", self)
         self.gleisbelegung_button.clicked.connect(self.gleisbelegung_clicked)
         layout.addWidget(self.gleisbelegung_button)
         self.gleisbelegung_window: Optional[GleisbelegungWindow] = None
-
-        self.ticker_button = QtWidgets.QPushButton("ticker", self)
-        self.ticker_button.clicked.connect(self.ticker_clicked)
-        layout.addWidget(self.ticker_button)
-        self.ticker_window: Optional[QtWidgets.QWidget] = None
-        self.ticker_button.setEnabled(True)
-
-        self.fahrplan_button = QtWidgets.QPushButton("tabellenfahrplan", self)
-        self.fahrplan_button.clicked.connect(self.fahrplan_clicked)
-        layout.addWidget(self.fahrplan_button)
-        self.fahrplan_window: Optional[QtWidgets.QWidget] = None
-        self.fahrplan_button.setEnabled(True)
 
         self.bildfahrplan_button = QtWidgets.QPushButton("bildfahrplan", self)
         self.bildfahrplan_button.clicked.connect(self.bildfahrplan_clicked)
@@ -138,11 +120,23 @@ class MainWindow(QtWidgets.QMainWindow):
         self.bildfahrplan_window: Optional[QtWidgets.QWidget] = None
         self.bildfahrplan_button.setEnabled(True)
 
+        self.fahrplan_button = QtWidgets.QPushButton("tabellenfahrplan", self)
+        self.fahrplan_button.clicked.connect(self.fahrplan_clicked)
+        layout.addWidget(self.fahrplan_button)
+        self.fahrplan_window: Optional[QtWidgets.QWidget] = None
+        self.fahrplan_button.setEnabled(True)
+
         self.netz_button = QtWidgets.QPushButton("gleisplan", self)
         self.netz_button.clicked.connect(self.netz_clicked)
         layout.addWidget(self.netz_button)
         self.netz_window: Optional[QtWidgets.QWidget] = None
         self.netz_button.setEnabled(True)
+
+        self.ticker_button = QtWidgets.QPushButton("ticker", self)
+        self.ticker_button.clicked.connect(self.ticker_clicked)
+        layout.addWidget(self.ticker_button)
+        self.ticker_window: Optional[QtWidgets.QWidget] = None
+        self.ticker_button.setEnabled(True)
 
         self.update_interval: int = 30  # seconds
         self.enable_update: bool = True
@@ -154,27 +148,19 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def einfahrten_clicked(self):
         if self.einfahrten_window is None:
-            self.einfahrten_window = EinfahrtenWindow()
+            self.einfahrten_window = GleisbelegungWindow()
 
         self.einfahrten_window.client = self.client
         self.einfahrten_window.anlage = self.anlage
         self.einfahrten_window.planung = self.planung
         self.einfahrten_window.auswertung = self.auswertung
+        self.einfahrten_window.show_zufahrten = True
+        self.einfahrten_window.show_bahnsteige = False
+        self.einfahrten_window.setWindowTitle("Einfahrten/Ausfahrten")
+        self.einfahrten_window.zeitfenster_voraus = 25
 
         self.einfahrten_window.update()
         self.einfahrten_window.show()
-
-    def ausfahrten_clicked(self):
-        if self.ausfahrten_window is None:
-            self.ausfahrten_window = AusfahrtenWindow()
-
-        self.ausfahrten_window.client = self.client
-        self.ausfahrten_window.anlage = self.anlage
-        self.ausfahrten_window.planung = self.planung
-        self.ausfahrten_window.auswertung = self.auswertung
-
-        self.ausfahrten_window.update()
-        self.ausfahrten_window.show()
 
     def gleisbelegung_clicked(self):
         if self.gleisbelegung_window is None:
@@ -254,8 +240,6 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 if self.einfahrten_window is not None:
                     self.einfahrten_window.update()
-                if self.ausfahrten_window is not None:
-                    self.ausfahrten_window.update()
                 if self.gleisbelegung_window is not None:
                     self.gleisbelegung_window.update()
                 if self.netz_window is not None:
