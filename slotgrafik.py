@@ -238,14 +238,12 @@ class Slot:
         :return: (str) zugtitel
         """
 
-        if self.plan.verspaetung_an:
-            s = f"{self.zug.name} ({self.plan.verspaetung_an:+})"
-        else:
-            s = f"{self.zug.name}"
+        s = f"{self.zug.name}"
         if self.plan.einfahrt:
             s = "→ " + s
         elif self.plan.ausfahrt:
             s = s + " →"
+
         return s
 
     @property

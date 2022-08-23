@@ -469,6 +469,11 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         zeit = time_to_minutes(self.client.calc_simzeit())
         self._axes.set_ylim(bottom=zeit + self.zeitfenster_voraus, top=zeit - self.zeitfenster_zurueck, auto=False)
 
+        for x, c, slot in zip(x_pos, colors, slots):
+            pos_x = [x, x]
+            pos_y = [slot.zeit - slot.plan.verspaetung_an, slot.zeit]
+            self._axes.plot(pos_x, pos_y, color=c, ls="-", lw=2, marker=None, alpha=0.5)
+
         _slot_balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, picker=True, **kwargs)
         for balken, slot in zip(_slot_balken, slots):
             balken.set(linestyle=slot.linestyle, linewidth=slot.linewidth, edgecolor=slot.randfarbe)
