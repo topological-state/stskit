@@ -29,6 +29,9 @@ def hour_minutes_formatter(x: Union[int, float], pos: Any) -> str:
     return f"{int(x) // 60:02}:{int(x) % 60:02}"
 
 
+GLEISNAME_REGEXP = re.compile(r"([a-zA-Z ]*)([0-9]*)([a-zA-Z ]*)")
+
+
 def gleisname_sortkey(gleis: str) -> Tuple[str, int, str]:
     """
     gleisname in sortierschlüssel umwandeln
@@ -40,8 +43,8 @@ def gleisname_sortkey(gleis: str) -> Tuple[str, int, str]:
     :param gleis: gleisname, wie er im fahrplan der züge steht
     :return: tupel (präfix, nummer, suffix). leerzeichen entfernt.
     """
-    expr = r"([a-zA-Z ]*)([0-9]*)([a-zA-Z ]*)"
-    mo = re.match(expr, gleis)
+
+    mo = re.match(GLEISNAME_REGEXP, gleis)
     prefix = mo.group(1).replace(" ", "")
     try:
         nummer = int(mo.group(2))
@@ -49,6 +52,23 @@ def gleisname_sortkey(gleis: str) -> Tuple[str, int, str]:
         nummer = 0
     suffix = mo.group(3).replace(" ", "")
     return prefix, nummer, suffix
+
+
+def gleis_sektor_sortkey(gleis_sektor: Tuple[str, str]) -> Tuple[str, int, str, str, int, str]:
+    """
+    hauptgleis und sektorgleis in sortierschlüssel umwandeln
+
+    :param gleis_sektor: tupel aus hauptgleis und sektorgleis.
+        sektorgleis, wie es im fahrplan der züge steht,
+        hauptgleis, wie es in der anlagenkonfiguration steht.
+    :return: tupel aus präfix, nummer, suffix des hauptgleises
+        und darauf folgend präfix, nummer, suffix des sektorgleises,
+        jeweils wie von gleisname_sortkey.
+    """
+
+    g1, g2, g3 = gleisname_sortkey(gleis_sektor[0])
+    s1, s2, s3 = gleisname_sortkey(gleis_sektor[1])
+    return g1, g2, g3, s1, s2, s3
 
 
 @dataclass(init=False)

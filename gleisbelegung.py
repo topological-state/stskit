@@ -16,7 +16,7 @@ from anlage import Anlage
 from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stsplugin import PluginClient
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
-from slotgrafik import hour_minutes_formatter, gleisname_sortkey, Slot, ZugFarbschema, Gleisbelegung, Konflikt
+from slotgrafik import hour_minutes_formatter, Slot, ZugFarbschema, Gleisbelegung, Konflikt, gleis_sektor_sortkey
 
 from qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 
@@ -427,7 +427,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             self.gleisauswahl.gleise_definieren(self.anlage, zufahrten=self.show_zufahrten,
                                                 bahnsteige=self.show_bahnsteige)
             self.gleisauswahl.set_auswahl(self.gleisauswahl.alle_gleise)
-            self._gleise = sorted(self.gleisauswahl.get_auswahl(), key=gleisname_sortkey)
+            self.set_gleise(self.gleisauswahl.get_auswahl())
 
         self.belegung.gleise_auswaehlen(self._gleise)
         self.belegung.update(self.planung.zugliste.values())
@@ -449,17 +449,15 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         kwargs['alpha'] = 0.5
         kwargs['width'] = 1.0
 
+        slots = [slot for slot in self.belegung.slots if slot.gleis in self._gleise]
         x_labels = self._gleise
         x_labels_pos = list(range(len(x_labels)))
-        try:
-            x_pos = np.asarray([self._gleise.index(slot.gleis) for slot in self.belegung.slots])
-        except ValueError:
-            return None
+        x_pos = np.asarray([self._gleise.index(slot.gleis) for slot in slots])
 
-        y_bot = np.asarray([slot.zeit for slot in self.belegung.slots])
-        y_hgt = np.asarray([slot.dauer for slot in self.belegung.slots])
-        labels = [slot.titel for slot in self.belegung.slots]
-        colors = ['yellow' if slot in self._auswahl else self.farbschema.zugfarbe(slot.zug) for slot in self.belegung.slots]
+        y_bot = np.asarray([slot.zeit for slot in slots])
+        y_hgt = np.asarray([slot.dauer for slot in slots])
+        labels = [slot.titel for slot in slots]
+        colors = ['yellow' if slot in self._auswahl else self.farbschema.zugfarbe(slot.zug) for slot in slots]
 
         self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
         self._axes.yaxis.set_major_formatter(hour_minutes_formatter)
@@ -472,17 +470,15 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self._axes.set_ylim(bottom=zeit + self.zeitfenster_voraus, top=zeit - self.zeitfenster_zurueck, auto=False)
 
         _slot_balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, picker=True, **kwargs)
-        for balken, slot in zip(_slot_balken, self.belegung.slots):
+        for balken, slot in zip(_slot_balken, slots):
             balken.set(linestyle=slot.linestyle, linewidth=slot.linewidth, edgecolor=slot.randfarbe)
         _slot_labels = self._axes.bar_label(_slot_balken, labels=labels, label_type='center')
-        for label, slot in zip(_slot_labels, self.belegung.slots):
+        for label, slot in zip(_slot_labels, slots):
             label.set(fontstyle=slot.fontstyle, fontsize='small', fontstretch='condensed')
 
         for konflikt in self.belegung.konflikte:
-            try:
-                x = [x_labels_pos[x_labels.index(gleis)] for gleis in konflikt.gleise]
-            except ValueError:
-                continue
+            konflikt_gleise = [gleis for gleis in konflikt.gleise if gleis in self._gleise]
+            x = [x_labels_pos[x_labels.index(gleis)] for gleis in konflikt_gleise]
             xy = (min(x) - kwargs['width'] / 2, konflikt.zeit)
             w = max(x) - min(x) + kwargs['width']
             h = konflikt.dauer
@@ -542,7 +538,12 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
-        self._gleise = sorted(self.gleisauswahl.get_auswahl(), key=gleisname_sortkey)
+        self.set_gleise(self.gleisauswahl.get_auswahl())
+
+    def set_gleise(self, gleise):
+        hauptgleise = [self.anlage.sektoren.hauptgleis(gleis) for gleis in gleise]
+        gleis_sektoren = sorted(zip(hauptgleise, gleise), key=gleis_sektor_sortkey)
+        self._gleise = [gs[1] for gs in gleis_sektoren]
         self.daten_update()
         self.grafik_update()
 
