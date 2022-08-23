@@ -184,16 +184,14 @@ class Slot:
             zt = []
             try:
                 z1 = gleis_zeile.an.isoformat('minutes')
-                v1 = f"{gleis_zeile.verspaetung_ab:+}"
-                # zt.append(f"⇥ {z1}{v1}")
+                v1 = f"{gleis_zeile.verspaetung_an:+}"
                 zt.append(f"{z1}{v1}")
             except AttributeError:
                 pass
 
             try:
                 z2 = gleis_zeile.ab.isoformat('minutes')
-                v2 = f"{gleis_zeile.verspaetung_an:+}"
-                # zt.append(f"↦ {z2}{v2}")
+                v2 = f"{gleis_zeile.verspaetung_ab:+}"
                 zt.append(f"{z2}{v2}")
             except AttributeError:
                 pass
