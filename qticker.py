@@ -22,32 +22,18 @@ from stsobj import Ereignis
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
-EREIGNISART_QCOLOR = {
-    "einfahrt": QtGui.QColor("darkYellow"),
-    "ausfahrt": QtGui.QColor("darkBlue"),
-    "rothalt": QtGui.QColor("darkRed"),
-    "fahrt": QtGui.QColor("darkGreen"),
-    "ankunft": QtGui.QColor("darkCyan"),
-    "durchfahrt": QtGui.QColor("darkCyan"),
-    "bereit": QtGui.QColor("darkRed"),
-    "abfahrt": QtGui.QColor("darkMagenta"),
-    "kuppeln": QtGui.QColor("black"),
-    "flügeln": QtGui.QColor("darkGrey"),
-    "default": QtGui.QColor("black")
-}
-
 EREIGNISART_QCOLOR_SVG = {
-    "einfahrt": QtGui.QColor("darkMagenta"),
-    "ausfahrt": QtGui.QColor("darkBlue"),
-    "rothalt": QtGui.QColor("red"),
-    "fahrt": QtGui.QColor("darkGreen"),
-    "ankunft": QtGui.QColor("darkCyan"),
-    "durchfahrt": QtGui.QColor("darkCyan"),
-    "bereit": QtGui.QColor("darkorange"),
-    "abfahrt": QtGui.QColor("darkGreen"),
-    "kuppeln": QtGui.QColor("steelblue"),
-    "flügeln": QtGui.QColor("darkviolet"),
-    "default": QtGui.QColor("darkGrey")
+    "einfahrt": QtGui.QColor("orchid"),
+    "ausfahrt": QtGui.QColor("dodgerblue"),
+    "rothalt": QtGui.QColor("tomato"),
+    "fahrt": QtGui.QColor("limegreen"),
+    "ankunft": QtGui.QColor("skyblue"),
+    "durchfahrt": QtGui.QColor("skyblue"),
+    "bereit": QtGui.QColor("khaki"),
+    "abfahrt": QtGui.QColor("limegreen"),
+    "kuppeln": QtGui.QColor("coral"),
+    "flügeln": QtGui.QColor("orange"),
+    "default": QtGui.QColor("gray")
 }
 
 

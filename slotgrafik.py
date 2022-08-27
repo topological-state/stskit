@@ -95,6 +95,12 @@ class ZugFarbschema:
     nach_nummer: Dict[Tuple[int, int], str]
 
     def zugfarbe(self, zug: ZugDetails) -> str:
+        """
+        matplotlib-farbcode eines zuges
+
+        :param zug:
+        :return: str
+        """
         try:
             return self.nach_gattung[zug.gattung]
         except KeyError:
@@ -106,6 +112,18 @@ class ZugFarbschema:
                 return f
         else:
             return "tab:gray"
+
+    def zugfarbe_rgb(self, zug: ZugDetails) -> Tuple[int]:
+        """
+        rgb-farbcode eines zuges
+
+        :param zug:
+        :return: tupel (r,g,b)
+        """
+        farbe = self.zugfarbe(zug)
+        frgb = mpl.colors.to_rgb(farbe)
+        rgb = [round(255 * v) for v in frgb]
+        return tuple(rgb)
 
     def init_schweiz(self):
         self.nach_gattung = {

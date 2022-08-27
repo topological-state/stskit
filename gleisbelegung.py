@@ -361,12 +361,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.gleisView.setModel(self.gleisauswahl)
 
         self.setWindowTitle("Gleisbelegung")
-        ss = f"background-color: {mpl.rcParams['axes.facecolor']};" \
-             f"color: {mpl.rcParams['text.color']};"
-        # further possible entries:
-        # "selection-color: yellow;"
-        # "selection-background-color: blue;"
-        self.setStyleSheet(ss)
 
         self.display_canvas = FigureCanvas(Figure(figsize=(5, 3)))
         self.ui.displayLayout = QtWidgets.QHBoxLayout(self.ui.grafikWidget)

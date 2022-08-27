@@ -99,6 +99,14 @@ class MainWindow(QtWidgets.QMainWindow):
         except OSError:
             pass
 
+        try:
+            p = Path(__file__).parent / r"qt" / r"dark.css"
+            ss = p.read_text(encoding="utf8")
+            app = QtWidgets.QApplication.instance()
+            app.setStyleSheet(ss)
+        except OSError:
+            pass
+
         self.setWindowTitle("sts-charts")
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)

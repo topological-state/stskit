@@ -12,9 +12,19 @@ from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stsplugin import PluginClient
 from stsobj import ZugDetails, time_to_minutes, format_verspaetung
+from slotgrafik import hour_minutes_formatter, ZugFarbschema
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+
+
+def zug_status(zug: ZugDetailsPlanung) -> str:
+    if zug.sichtbar:
+        return "S"
+    elif zug.gleis:
+        return "E"
+    else:
+        return "A"
 
 
 class ZuglisteModell(QtCore.QAbstractTableModel):
@@ -36,7 +46,9 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
 
         self._zugliste: Dict[int, ZugDetailsPlanung] = {}
         self._reihenfolge: List[int] = []
-        self._columns: List[str] = ['Einfahrt', 'Zug', 'Von', 'Nach', 'Gleis', 'Verspätung']
+        self._columns: List[str] = ['Status', 'Einfahrt', 'Zug', 'Von', 'Nach', 'Gleis', 'Verspätung']
+        self.farbschema: ZugFarbschema = ZugFarbschema()
+        self.farbschema.init_schweiz()
 
     def set_zugliste(self, zugliste: Dict[int, ZugDetailsPlanung]) -> None:
         """
@@ -110,7 +122,10 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
             if col == 'ID':
                 return zug.zid
             elif col == 'Einfahrt':
-                return time_to_minutes(zug.einfahrtszeit) + zug.verspaetung
+                try:
+                    return time_to_minutes(zug.einfahrtszeit) + zug.verspaetung
+                except AttributeError:
+                    return None
             elif col == 'Zug':
                 return zug.nummer
             elif col == 'Verspätung':
@@ -121,6 +136,8 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
                 return zug.nach
             elif col == 'Gleis':
                 return zug.gleis
+            elif col == 'Status':
+                return zug_status(zug)
             else:
                 return None
         
@@ -148,6 +165,8 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
                     return zug.gleis
                 else:
                     return f"{zug.gleis} /{zug.plangleis}/"
+            elif col == 'Status':
+                return zug_status(zug)
             else:
                 return None
 
@@ -159,12 +178,12 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
                     return QtCore.Qt.Unchecked
 
         elif role == QtCore.Qt.ForegroundRole:
-            if zug.sichtbar:
-                return QtGui.QColor("darkRed")
-            elif zug.gleis:
-                return QtGui.QColor("darkBlue")
+            if zug.sichtbar or zug.gleis:
+                rgb = self.farbschema.zugfarbe_rgb(zug)
+                farbe = QtGui.QColor(*rgb)
             else:
-                return QtGui.QColor("gray")
+                farbe = QtGui.QColor("gray")
+            return farbe
 
         elif role == QtCore.Qt.TextAlignmentRole:
             return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
@@ -288,12 +307,15 @@ class FahrplanModell(QtCore.QAbstractTableModel):
                 return None
 
         elif role == QtCore.Qt.ForegroundRole:
-            if zeile.abgefahren:
-                return QtGui.QColor("gray")
-            elif zeile.angekommen:
-                return QtGui.QColor("darkCyan")
+            if self.zug.sichtbar:
+                if zeile.abgefahren:
+                    return QtGui.QColor("darkCyan")
+                elif zeile.angekommen or zeile.gleis == self.zug.gleis:
+                    return QtGui.QColor("cyan")
+                else:
+                    return None
             else:
-                return QtGui.QColor("darkBlue")
+                return None
 
         elif role == QtCore.Qt.TextAlignmentRole:
             return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
@@ -338,7 +360,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.client: Optional[PluginClient] = None
         self.planung: Optional[Planung] = None
 
-        self.setWindowTitle("Tabellarischer Fahrplan")
+        self.setWindowTitle("Tabellenfahrplan")
 
         self.zugliste_modell = ZuglisteModell()
         self.zugliste_sort_filter = QSortFilterProxyModel(self)
