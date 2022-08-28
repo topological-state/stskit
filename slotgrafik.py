@@ -499,8 +499,9 @@ class Gleisbelegung:
             elif s2.verbindung is not None and s2.verbindung == s1.zug:
                 pass
             elif s1.zeit <= s2.zeit <= s1.zeit + s1.dauer:
-                k = Konflikt(gleise={s1.gleis, s2.gleis}, zeit=s1.zeit, status="hauptgleis")
-                k.dauer = max(s1.dauer, s2.zeit + s2.dauer - s1.zeit)
+                k = Konflikt(gleise={s1.gleis, s2.gleis}, status="hauptgleis")
+                k.zeit = max(s1.zeit, s2.zeit)
+                k.dauer = min(s1.zeit + s1.dauer, s2.zeit + s2.dauer) - k.zeit
                 k.slots = [s1, s2]
                 self.konflikte.append(k)
                 s1.konflikte.append(k)
