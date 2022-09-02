@@ -1033,6 +1033,7 @@ class Anlage:
             assert d['_aid'] == self.anlage.aid
             if self.anlage.build != d['_build']:
                 logger.warning(f"unterschiedliche build-nummern (file: {d['_build']}, sim: {self.anlage.build})")
+                return
 
             if '_version' not in d:
                 d['_version'] = 1
