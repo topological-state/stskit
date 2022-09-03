@@ -29,7 +29,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QTableView" name="zugliste_view"/>
+        <widget class="QTableView" name="zugliste_view">
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -37,7 +41,7 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QLabel" name="fahrplan_label">
@@ -47,11 +51,15 @@
          </widget>
         </item>
         <item>
-         <widget class="QTableView" name="fahrplan_view"/>
+         <widget class="QTableView" name="fahrplan_view">
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QLabel" name="folgezug_label">
@@ -61,7 +69,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QTableView" name="folgezug_view"/>
+         <widget class="QTableView" name="folgezug_view">
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

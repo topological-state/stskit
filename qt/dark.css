@@ -1,8 +1,55 @@
 
 * { color: white;
     background-color: #3f3f3f;
-    alternate-background-color: #5f5f5f;
+    alternate-background-color: #373737;
     selection-color: #afaf00;
-    selection-background-color: blue }
+    selection-background-color: #3c3c76 }
 
-QToolTip { color: white; background-color: #5f5f5f; border: none; }
+QToolTip {
+    color: white;
+    background-color: #5f5f5f;
+    border: none; }
+
+QHeaderView::section {
+    background-color: #4f4f4f;
+}
+
+QTableCornerButton::section {
+    background-color: #4f4f4f;
+}
+
+QTableView {
+    selection-color: white;
+    selection-background-color: #3c3c76;
+}
+
+QTreeView {
+    selection-color: white;
+    selection-background-color: #3c3c76;
+}
+
+QScrollBar:horizontal {
+    background-color: #3f3f3f;
+    height: 8px;
+}
+
+QScrollBar:vertical {
+    background-color: #3f3f3f;
+    width: 8px;
+}
+
+QScrollBar::handle {
+    background-color: #4f4f4f;
+}
+
+QScrollBar::add-line {
+    border: 0px;
+    width: 0px;
+    height: 0px;
+}
+
+QScrollBar::sub-line {
+    border: 0px;
+    width: 0px;
+    height: 0px;
+}

@@ -23,7 +23,11 @@
       <widget class="QWidget" name="settings_page">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QTreeView" name="gleisView"/>
+         <widget class="QTreeView" name="gleisView">
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

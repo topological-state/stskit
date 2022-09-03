@@ -52,6 +52,7 @@ class Ui_BildfahrplanWindow(object):
         self.strecke_label.setObjectName("strecke_label")
         self.settings_layout.addWidget(self.strecke_label)
         self.strecke_list = QtWidgets.QListWidget(self.settings_page)
+        self.strecke_list.setAlternatingRowColors(True)
         self.strecke_list.setObjectName("strecke_list")
         self.settings_layout.addWidget(self.strecke_list)
         self.display_button = QtWidgets.QToolButton(self.settings_page)

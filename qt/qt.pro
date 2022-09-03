@@ -1,6 +1,7 @@
 FORMS += \
     bildfahrplan.ui \
-    gleisbelegung.ui
+    gleisbelegung.ui \
+    fahrplan.ui
 
 RESOURCES += \
     resources.qrc

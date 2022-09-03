@@ -87,7 +87,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QListWidget" name="strecke_list"/>
+           <widget class="QListWidget" name="strecke_list">
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QToolButton" name="display_button">

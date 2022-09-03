@@ -23,6 +23,7 @@ class Ui_GleisbelegungWindow(object):
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.settings_page)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.gleisView = QtWidgets.QTreeView(self.settings_page)
+        self.gleisView.setAlternatingRowColors(True)
         self.gleisView.setObjectName("gleisView")
         self.horizontalLayout_2.addWidget(self.gleisView)
         self.stackedWidget.addWidget(self.settings_page)
