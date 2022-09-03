@@ -6,6 +6,7 @@ spezifische implementationen sind die gleisbelegungs-, einfahrts- und ausfahrtsd
 """
 
 from dataclasses import dataclass, field
+import functools
 import itertools
 import logging
 import re
@@ -14,11 +15,9 @@ from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set,
 import matplotlib as mpl
 import numpy as np
 
-from auswertung import Auswertung
 from anlage import Anlage
 from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
-from stsplugin import PluginClient
-from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
+from stsobj import FahrplanZeile, ZugDetails, time_to_minutes
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -178,9 +177,7 @@ class ZugFarbschema:
         self.nach_nummer = {}
 
 
-SLOT_TYPEN = {'gleis', 'einfahrt', 'ausfahrt'}
-
-
+@functools.total_ordering
 @dataclass
 class Slot:
     """
@@ -193,20 +190,82 @@ class Slot:
     """
 
     zug: ZugDetailsPlanung
-    plan: ZugZielPlanung
-    typ: str = ""
+    ziel: ZugZielPlanung
+    gleistyp: str = ""
     gleis: str = ""
     zeit: int = 0
     dauer: int = 0
     verbindung: Optional[ZugDetailsPlanung] = None
     verbindungsart: str = ""
-    konflikte: List['Konflikt'] = field(default_factory=list)
+    warnungen: Set['SlotWarnung'] = field(default_factory=set)
 
-    def __eq__(self, other) -> bool:
-        return self.zug.name == other.zug.name and self.gleis == other.gleis
+    def __init__(self, zug: ZugDetailsPlanung, ziel: ZugZielPlanung):
+        self.zug = zug
+        self.ziel = ziel
+        self.gleistyp = ziel.gleistyp
+        self.gleis = ziel.gleis
+        self.zeit = 0
+        self.dauer = 0
+
+        if ziel.ersatzzug:
+            self.verbindung = ziel.ersatzzug
+            self.verbindungsart = "E"
+        elif ziel.kuppelzug:
+            self.verbindung = ziel.kuppelzug
+            self.verbindungsart = "K"
+        elif ziel.fluegelzug:
+            self.verbindung = ziel.fluegelzug
+            self.verbindungsart = "F"
+        else:
+            self.verbindung = None
+            self.verbindungsart = ""
+
+        self.warnungen = set([])
+
+    @property
+    def key(self) -> Tuple[str, str, int]:
+        """
+        identifikationsschlüssel des slots
+
+        definiert die unterscheidungsmerkmale von slots.
+
+        :return: tupel aus gleisname, geplanter ankunftszeit und zugname
+        """
+
+        return self.gleis, self.zug.name, self.ziel.zielnr
+
+    def __eq__(self, other: 'Slot') -> bool:
+        """
+        gleichheit von slots
+
+        die gleichheit von slots wird anhand ihrer key-properties bestimmt.
+
+        :param other: anderes Slot-objekt
+        :return: bool
+        """
+        return self.key == other.key
+
+    def __lt__(self, other: 'Slot') -> bool:
+        """
+        kleiner als operator
+
+        der operator wird zum sortieren gebraucht.
+        slots werden nach self.key sortiert.
+
+        :param other: Slot
+        :return: bool
+        """
+        return self.key < other.key
 
     def __hash__(self) -> int:
-        return hash((self.gleis, self.zug.name))
+        """
+        hash-wert
+
+        der hash wird aus dem self.key berechnet.
+
+        :return: int
+        """
+        return hash(self.key)
 
     def __str__(self) -> str:
         name = self.zug.name
@@ -257,9 +316,9 @@ class Slot:
         """
 
         s = f"{self.zug.name}"
-        if self.plan.einfahrt:
+        if self.ziel.einfahrt:
             s = "→ " + s
-        elif self.plan.ausfahrt:
+        elif self.ziel.ausfahrt:
             s = s + " →"
 
         return s
@@ -272,7 +331,7 @@ class Slot:
         :return: "normal" oder "italic"
         """
 
-        return "italic" if self.plan.durchfahrt() else "normal"
+        return "italic" if self.ziel.durchfahrt() else "normal"
 
     @property
     def linestyle(self) -> str:
@@ -282,7 +341,7 @@ class Slot:
         :return: "-" oder "--"
         """
 
-        return "--" if self.plan.durchfahrt() else "-"
+        return "--" if self.ziel.durchfahrt() else "-"
 
     @property
     def linewidth(self) -> int:
@@ -297,28 +356,29 @@ class Slot:
         return 1
 
 
-KONFLIKT_STATUS = ['undefiniert', 'gleis', 'hauptgleis', 'ersatz', 'kuppeln', 'flügeln', 'fdl-markiert', 'fdl-ignoriert']
-VERBINDUNGS_KONFLIKT = {'E': 'ersatz', 'K': 'kuppeln', 'F': 'flügeln'}
-KONFLIKT_FARBE = {'undefiniert': 'gray',
-                  'gleis': 'red',
-                  'hauptgleis': 'orange',
-                  'ersatz': 'darkblue',
-                  'kuppeln': 'magenta',
-                  'flügeln': 'darkgreen',
-                  'fdl-markiert': 'red',
-                  'fdl-ignoriert': 'gray'}
-KONFLIKT_BREITE = {'undefiniert': 1,
-                   'gleis': 2,
-                   'hauptgleis': 2,
-                   'ersatz': 1,
-                   'kuppeln': 2,
-                   'flügeln': 2,
-                   'fdl-markiert': 2,
-                   'fdl-ignoriert': 1}
+WARNUNG_STATUS = ['undefiniert', 'gleis', 'hauptgleis', 'ersatz', 'kuppeln', 'flügeln', 'fdl-markiert', 'fdl-ignoriert']
+WARNUNG_VERBINDUNG = {'E': 'ersatz', 'K': 'kuppeln', 'F': 'flügeln'}
+WARNUNG_FARBE = {'undefiniert': 'gray',
+                 'gleis': 'red',
+                 'hauptgleis': 'orange',
+                 'ersatz': 'darkblue',
+                 'kuppeln': 'magenta',
+                 'flügeln': 'darkgreen',
+                 'fdl-markiert': 'red',
+                 'fdl-ignoriert': 'gray'}
+WARNUNG_BREITE = {'undefiniert': 1,
+                  'gleis': 2,
+                  'hauptgleis': 2,
+                  'ersatz': 1,
+                  'kuppeln': 2,
+                  'flügeln': 2,
+                  'fdl-markiert': 2,
+                  'fdl-ignoriert': 1}
 
 
+@functools.total_ordering
 @dataclass
-class Konflikt:
+class SlotWarnung:
     """
     repräsentation eines gleiskonflikts im belegungsplan.
 
@@ -332,17 +392,31 @@ class Konflikt:
     zeit: int = 0
     dauer: int = 0
     status: str = "undefiniert"
-    # ziele: List[ZugZielPlanung] = field(default_factory=list)  # ueber slots[].plan erreichbar
-    slots: List[Slot] = field(default_factory=list)
+    slots: Set[Slot] = field(default_factory=set)
 
-    def __eq__(self, other: 'Konflikt') -> bool:
-        return self.gleise == other.gleise and self.zeit == other.zeit
+    @property
+    def key(self) -> frozenset:
+        """
+        identifikationsschlüssel der warnung
+
+        warnung werden anhand der betroffenen slots identifiziert.
+
+        :return: frozenset von Slot.key von alle self.slots
+        """
+
+        return frozenset((s.key for s in self.slots))
+
+    def __eq__(self, other: 'SlotWarnung') -> bool:
+        return self.key == other.key
+
+    def __lt__(self, other):
+        return self.key < other.key
 
     def __hash__(self) -> int:
-        return hash((*sorted(self.gleise), self.zeit))
+        return hash(self.key)
 
     def __str__(self) -> str:
-        return f"Konflikt ({self.status}) um {hour_minutes_formatter(self.zeit, None)} auf {self.gleise}"
+        return f"Warnung ({self.status}) um {hour_minutes_formatter(self.zeit, None)} auf {self.gleise}"
 
     @property
     def randfarbe(self) -> str:
@@ -352,7 +426,7 @@ class Konflikt:
         :return: farbbezeichnung für matplotlib
         """
 
-        return KONFLIKT_FARBE[self.status]
+        return WARNUNG_FARBE[self.status]
 
     @property
     def linestyle(self) -> str:
@@ -372,22 +446,57 @@ class Konflikt:
         :return: 1 oder 2
         """
 
-        return KONFLIKT_BREITE[self.status]
+        return WARNUNG_BREITE[self.status]
 
 
 GLEIS_TYPEN = {'haupt', 'sektor', 'zufahrt'}
 
 
 class Gleisbelegung:
+    """
+    gleisbelegungsmodell
+
+    diese klasse stellt die gleisbelegung für eine auswahl von gleisen dar.
+    ausserdem wertet sie die gleisbelegung aus und erstellt warnungen bei konflikten oder betrieblichen vorgängen.
+
+    in einem model-view-controller-muster implementiert diese klasse das modell.
+    view und controller werden im gleisbelegungsfenster implementiert.
+
+    verwendung
+    ----------
+
+    1. zu beobachtende gleise auswaehlen (gleise_auswaehlen methode)
+    2. (wiederholt) daten von zugliste übernehmen (update methode)
+    3. daten aus den relevanten attributen auslesen.
+       die daten sollten nicht verändert werden, da sie bis auf ein paar ausnahmen beim update überschrieben werden.
+       die ausnahmen sind: status-attribut von warnungen.
+    4. schritte 2-3 nach bedarf wiederholen.
+
+    attribute
+    ---------
+
+    anlage: link zum anlagenobjekt. wird für gleiszuordnung benötigt.
+
+    gleise: liste von verwalteten gleisen. sortiert nach gleisname_sortkey.
+
+    slots: dict von slots. keys sind Slot.key.
+
+    gleis_slots: slots aufgeschlüsselt nach gleis.
+        werte sind dict von slots mit Slot.key als schlüssel.
+
+    hauptgleis_slots: slots aufgeschlüsselt nach hauptgleis (union von sektorgleisen).
+        werte sind dict von slots mit Slot.key als schlüssel.
+
+    warnungen: dict von warnungen. keys sind SlotWarnung.key.
+    """
+
     def __init__(self, anlage: Anlage):
         self.anlage: Anlage = anlage
         self.gleise: List[str] = []
-        self.gleis_typen: Dict[str, str] = {}
-        self.slots: List[Slot] = []
-        self.gleis_slots: Dict[str, List[Slot]] = {}
-        self.hauptgleis_slots: Dict[str, List[Slot]] = {}
-        self.konflikte: List[Konflikt] = []
-        self.gleis_konflikte: Dict[str, List[Konflikt]] = {}
+        self.slots: Dict[Any, Slot] = {}
+        self.gleis_slots: Dict[str, Dict[Any, Slot]] = {}
+        self.hauptgleis_slots: Dict[str, Dict[Any, Slot]] = {}
+        self.warnungen: Dict[Any, SlotWarnung] = {}
 
     def update(self, zugliste: Iterable[ZugDetailsPlanung]):
         """
@@ -402,95 +511,165 @@ class Gleisbelegung:
         if len(self.gleise) == 0:
             self.gleise_auswaehlen(self.anlage.gleiszuordnung.keys())
         self.slots_erstellen(zugliste)
-        self.konflikte_erkennen()
+        self.warnungen_aktualisieren()
 
     def gleise_auswaehlen(self, gleise: Iterable[str]):
+        """
+        zu beobachtende gleise wählen.
+
+        :param gleise: sequenz von gleisnamen.
+        :return: None
+        """
+
         self.gleise = sorted(gleise, key=gleisname_sortkey)
 
     def slots_erstellen(self, zugliste: Iterable[ZugDetailsPlanung]):
-        self.slots = []
+        """
+        slotliste aus zugdaten erstellen/aktualisieren.
+
+        :param zugliste: sequenz von zugplanungsobjekten.
+        :return: None
+        """
+
+        keys_bisherige = set(self.slots.keys())
+
+        for zug in zugliste:
+            for ziel in zug.fahrplan:
+                plan_an = ziel.ankunft_minute
+                if plan_an is None:
+                    continue
+                plan_ab = ziel.abfahrt_minute
+                if plan_ab is None:
+                    plan_ab = plan_an + 1
+
+                slot = Slot(zug, ziel)
+                key = slot.key
+                if ziel.gleis in self.gleise:
+                    try:
+                        # slot existiert schon?
+                        slot = self.slots[key]
+                    except KeyError:
+                        # neuen slot übernehmen
+                        self.slots[key] = slot
+                    # aktuellen fahrplan übernehmen
+                    slot.gleis = ziel.gleis
+                    slot.zeit = plan_an
+                    slot.dauer = max(1, plan_ab - plan_an)
+                    keys_bisherige.discard(key)
+
+        for key in keys_bisherige:
+            del self.slots[key]
+
+        self._kataloge_aktualisieren()
+
+    def _kataloge_aktualisieren(self):
+        """
+        aktualisiert die gleis_slots und hauptgleis_slots kataloge.
+
+        untermethode von slots_erstellen.
+
+        :return: None
+        """
+
         self.gleis_slots = {}
         self.hauptgleis_slots = {}
 
-        for zug in zugliste:
-            for planzeile in zug.fahrplan:
-                try:
-                    plan_an = time_to_minutes(planzeile.an) + planzeile.verspaetung_an
-                except AttributeError:
-                    break
-                try:
-                    plan_ab = time_to_minutes(planzeile.ab) + planzeile.verspaetung_ab
-                except AttributeError:
-                    plan_ab = plan_an + 1
+        for gleis in self.gleise:
+            self.gleis_slots[gleis] = {}
+            hauptgleis = self.anlage.sektoren.hauptgleis(gleis)
+            self.hauptgleis_slots[hauptgleis] = {}
 
-                if planzeile.gleis in self.gleise:
-                    slot = Slot(zug, planzeile)
-                    slot.gleis = planzeile.gleis
-                    slot.zeit = plan_an
-                    slot.dauer = max(1, plan_ab - plan_an)
+        for slot in self.slots.values():
+            gleis = slot.ziel.gleis
+            hauptgleis = self.anlage.sektoren.hauptgleis(gleis)
+            key = slot.key
+            self.gleis_slots[gleis][key] = slot
+            self.hauptgleis_slots[hauptgleis][key] = slot
 
-                    if planzeile.einfahrt:
-                        slot.typ = 'einfahrt'
-                    elif planzeile.ausfahrt:
-                        slot.typ = 'ausfahrt'
-                    else:
-                        slot.typ = 'gleis'
+    def warnungen_aktualisieren(self):
+        """
+        erstellt warnungen basierend auf den gleisbelegungsdaten
 
-                    if planzeile.ersatzzug:
-                        slot.verbindung = planzeile.ersatzzug
-                        slot.verbindungsart = "E"
-                    elif planzeile.kuppelzug:
-                        slot.verbindung = planzeile.kuppelzug
-                        slot.verbindungsart = "K"
-                    elif planzeile.fluegelzug:
-                        slot.verbindung = planzeile.fluegelzug
-                        slot.verbindungsart = "F"
+        warnungen betreffen gleiskonflikte, konflikte auf zufahrten, betriebliche vorgänge.
+        die warnungen stehen nachher in self.warnungen.
 
-                    self.slots.append(slot)
+        bereits vorhandene warnungen (identifiziert anhand ihres SlotWarnung.key) werden aktualisiert,
+        neue warnungen hinzugefügt, veraltete entfernt.
 
-                    try:
-                        gls = self.gleis_slots[planzeile.gleis]
-                    except KeyError:
-                        gls = []
-                        self.gleis_slots[planzeile.gleis] = gls
-                    gls.append(slot)
+        :return: None
+        """
 
-                    hauptgleis = self.anlage.sektoren.hauptgleis(planzeile.gleis)
-                    try:
-                        gls = self.hauptgleis_slots[hauptgleis]
-                    except KeyError:
-                        gls = []
-                        self.hauptgleis_slots[hauptgleis] = gls
-                    gls.append(slot)
+        keys_bisherige = set(self.warnungen.keys())
 
-    def konflikte_erkennen(self):
-        self.konflikte.clear()
-        for gleis, slots in self.gleis_slots.items():
+        for w_neu in self._warnungen():
+            key = w_neu.key
+            try:
+                w = self.warnungen[key]
+                w.zeit = w_neu.zeit
+                w.dauer = w_neu.dauer
+            except KeyError:
+                w = w_neu
+                self.warnungen[key] = w_neu
+            for s in w.slots:
+                s.warnungen.add(w)
+            keys_bisherige.discard(key)
+
+        for key in keys_bisherige:
+            del self.warnungen[key]
+
+    def _warnungen(self) -> Iterable[SlotWarnung]:
+        """
+        warnungen generieren.
+
+        private untermethode von warnungen_aktualisieren.
+
+        :return: generator von SlotWarnung
+        """
+
+        for gleis, slot_dict in self.gleis_slots.items():
+            slots = slot_dict.values()
             if gleis in self.anlage.anschlusszuordnung.keys():
-                self.zufahrt_konflikte_loesen(slots)
+                yield from self._zufahrtwarnungen(slots)
             else:
-                self.gleis_konflikte_loesen(slots)
+                yield from self._gleiswarnungen(slots)
 
-        for gleis, slots in self.hauptgleis_slots.items():
-            self.hauptgleis_konflikte_loesen(slots)
+        for gleis, slot_dict in self.hauptgleis_slots.items():
+            slots = slot_dict.values()
+            yield from self._hauptgleiswarnungen(slots)
 
-    def gleis_konflikte_loesen(self, slots: List[Slot]):
+    def _gleiswarnungen(self, slots: Iterable[Slot]) -> Iterable[SlotWarnung]:
+        """
+        warnungen von gleiskonflikten generieren.
+
+        private untermethode von warnungen_aktualisieren.
+
+        :param slots: alles slots müssen zum gleichen gleis gehären
+        :return: generator von SlotWarnung
+        """
+
         for s1, s2 in itertools.permutations(slots, 2):
             if s1.zug == s2.zug:
                 continue
             if s1.verbindung is not None and s1.verbindung == s2.zug:
-                self.verbinden(s1, s2)
+                yield from self._zugfolgewarnung(s1, s2)
             elif s2.verbindung is not None and s2.verbindung == s1.zug:
-                self.verbinden(s2, s1)
+                pass
             elif s1.zeit <= s2.zeit <= s1.zeit + s1.dauer:
-                k = Konflikt(gleise={s1.gleis, s2.gleis}, zeit=s1.zeit, status="gleis")
+                k = SlotWarnung(gleise={s1.gleis, s2.gleis}, zeit=s1.zeit, status="gleis")
                 k.dauer = max(s1.dauer, s2.zeit + s2.dauer - s1.zeit)
-                k.slots = [s1, s2]
-                self.konflikte.append(k)
-                s1.konflikte.append(k)
-                s2.konflikte.append(k)
+                k.slots = {s1, s2}
+                yield k
 
-    def hauptgleis_konflikte_loesen(self, slots: List[Slot]):
+    def _hauptgleiswarnungen(self, slots: Iterable[Slot]) -> Iterable[SlotWarnung]:
+        """
+        warnungen von sektorkonflikten generieren.
+
+        private untermethode von warnungen_aktualisieren.
+
+        :param slots: alles slots müssen zum gleichen gleis gehären
+        :return: generator von SlotWarnung
+        """
+
         for s1, s2 in itertools.permutations(slots, 2):
             if s1.zug == s2.zug or s1.gleis == s2.gleis:
                 continue
@@ -499,52 +678,80 @@ class Gleisbelegung:
             elif s2.verbindung is not None and s2.verbindung == s1.zug:
                 pass
             elif s1.zeit <= s2.zeit <= s1.zeit + s1.dauer:
-                k = Konflikt(gleise={s1.gleis, s2.gleis}, status="hauptgleis")
+                k = SlotWarnung(gleise={s1.gleis, s2.gleis}, status="hauptgleis")
                 k.zeit = max(s1.zeit, s2.zeit)
                 k.dauer = min(s1.zeit + s1.dauer, s2.zeit + s2.dauer) - k.zeit
-                k.slots = [s1, s2]
-                self.konflikte.append(k)
-                s1.konflikte.append(k)
-                s2.konflikte.append(k)
+                k.slots = {s1, s2}
+                yield k
 
-    def zufahrt_konflikte_loesen(self, slots: List[Slot]):
+    def _zufahrtwarnungen(self, slots: Iterable[Slot]) -> Iterable[SlotWarnung]:
+        """
+        warnungen von überlappenden zufahrten generieren.
+
+        zufahrt = einfahrt oder ausfahrt.
+
+        private untermethode von warnungen_aktualisieren.
+
+        :param slots: alles slots müssen zum gleichen gleis gehären
+        :return: generator von SlotWarnung
+        """
         slots = sorted(slots, key=lambda s: s.zeit)
-        letzter = slots[0]
+        try:
+            letzter = slots[0]
+        except IndexError:
+            return None
+
         frei = letzter.zeit + letzter.dauer
         konflikt = None
         for slot in slots[1:]:
             if slot.zeit < frei:
                 if konflikt is None:
-                    konflikt = Konflikt(gleise={letzter.gleis}, zeit=letzter.zeit, status="gleis")
-                    konflikt.slots.append(letzter)
-                    self.konflikte.append(konflikt)
-                konflikt.slots.append(slot)
-                slot.konflikte.append(konflikt)
-                letzter.konflikte.append(konflikt)
-                slot.zeit = max(frei, slot.zeit)
+                    konflikt = SlotWarnung(gleise={letzter.gleis}, zeit=letzter.zeit, status="gleis")
+                    konflikt.slots.add(letzter)
+                konflikt.slots.add(slot)
+                slot.zeit = slot.ziel.ankunft_minute
+                if slot.zeit is None or frei > slot.zeit:
+                    slot.zeit = frei
                 konflikt.dauer = slot.zeit + slot.dauer - konflikt.zeit
                 frei = slot.zeit + slot.dauer
                 letzter = slot
-            else:
+            elif konflikt is not None:
+                yield konflikt
                 konflikt = None
 
-    def verbinden(self, s1: Slot, s2: Slot) -> None:
-        s2.verbindung = s1.zug
-        s2.verbindungsart = s1.verbindungsart
+        if konflikt is not None:
+            yield konflikt
+
+    def _zugfolgewarnung(self, s1: Slot, s2: Slot) -> Iterable[SlotWarnung]:
+        """
+        verbindet zwei slots und erstellt eine warnung
+
+        passt die längen des ersten slots so an, dass sich die slots berühren.
+
+        der erste slot muss den zweiten als folgeslot (infolge ersatz, kupplung, flügelung) haben
+        und insbesondere im gleichen gleis liegen.
+
+        :param s1: erster slot
+        :param s2: zweiter slot (später als s1)
+        :return: generator von SlotWarnung
+        """
+
+        if s1.verbindungsart == "K":
+            pass
+        elif s2.ziel.zielnr > 0:
+            return
+
         try:
-            s2_zeile = s2.zug.find_fahrplanzeile(gleis=s1.gleis)
+            s2_zeile = s2.ziel
             s2_an = time_to_minutes(s2_zeile.an) + s2_zeile.verspaetung_an
             if s2_an > s1.zeit:
                 s1.dauer = s2_an - s1.zeit
-            elif s1.zeit > s2_an:
-                s2.dauer = s1.zeit - s2_an
-            k = Konflikt(gleise={s1.gleis, s2.gleis})
-            k.status = VERBINDUNGS_KONFLIKT[s1.verbindungsart]
+
+            k = SlotWarnung(gleise={s1.gleis, s2.gleis})
+            k.status = WARNUNG_VERBINDUNG[s1.verbindungsart]
             k.zeit = min(s1.zeit, s2.zeit)
             k.dauer = max(s1.zeit + s1.dauer - k.zeit, s2.zeit + s2.dauer - k.zeit)
-            k.slots = [s1, s2]
-            self.konflikte.append(k)
-            s1.konflikte.append(k)
-            s2.konflikte.append(k)
+            k.slots = {s1, s2}
+            yield k
         except AttributeError:
             pass

@@ -471,6 +471,9 @@ class ZugDetailsPlanung(ZugDetails):
             ziel.ausfahrt = True
             self.fahrplan.append(ziel)
 
+        for n, z in enumerate(self.fahrplan):
+            z.zielnr = n * 1000
+
         # zug ist neu in liste und schon im stellwerk -> startaufstellung
         if zug.sichtbar:
             ziel_index = self.find_fahrplan_index(plan=zug.plangleis)
@@ -543,11 +546,21 @@ class ZugZielPlanung(FahrplanZeile):
     - status des fahrplanziels.
       nach ankunft/abfahrt sind die entsprechenden verspätungsangaben effektiv, vorher schätzwerte.
 
+    attribute
+    ---------
+
+    - zielnr: definiert die reihenfolge von fahrzielen.
+              bei originalen fahrzielen entspricht sie fahrplan-index multipliziert mit 1000.
+              bei eingefügten betriebshalten ist sie nicht durch 1000 teilbar.
+              die zielnummer wird als schlüssel in der gleisbelegung verwendet.
+              sie wird vom ZugDetailsPlanung-objekt gesetzt
+              und ändert sich über die lebensdauer des zugobjekts nicht.
     """
 
     def __init__(self, zug: ZugDetails):
         super().__init__(zug)
 
+        self.zielnr: Optional[int] = None
         self.einfahrt: bool = False
         self.ausfahrt: bool = False
         self.verspaetung_an: int = 0
@@ -628,6 +641,15 @@ class ZugZielPlanung(FahrplanZeile):
         :return: verspaetung in minuten
         """
         return self.verspaetung_ab
+
+    @property
+    def gleistyp(self) -> str:
+        if self.einfahrt:
+            return 'Einfahrt'
+        elif self.ausfahrt:
+            return 'Ausfahrt'
+        else:
+            return 'Gleis'
 
 
 class Planung:

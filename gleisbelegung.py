@@ -16,7 +16,7 @@ from anlage import Anlage
 from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stsplugin import PluginClient
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
-from slotgrafik import hour_minutes_formatter, Slot, ZugFarbschema, Gleisbelegung, Konflikt, gleis_sektor_sortkey
+from slotgrafik import hour_minutes_formatter, Slot, ZugFarbschema, Gleisbelegung, SlotWarnung, gleis_sektor_sortkey
 
 from qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 
@@ -443,7 +443,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         kwargs['alpha'] = 0.5
         kwargs['width'] = 1.0
 
-        slots = [slot for slot in self.belegung.slots if slot.gleis in self._gleise]
+        slots = [slot for slot in self.belegung.slots.values() if slot.gleis in self._gleise]
         x_labels = self._gleise
         x_labels_pos = list(range(len(x_labels)))
         x_pos = np.asarray([self._gleise.index(slot.gleis) for slot in slots])
@@ -464,11 +464,11 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self._axes.set_ylim(bottom=zeit + self.zeitfenster_voraus, top=zeit - self.zeitfenster_zurueck, auto=False)
 
         for x, c, slot in zip(x_pos, colors, slots):
-            if slot.plan.verspaetung_an > 15:
+            if slot.ziel.verspaetung_an > 15:
                 v = 15
                 ls = "--"
             else:
-                v = slot.plan.verspaetung_an
+                v = slot.ziel.verspaetung_an
                 ls = "-"
             pos_x = [x, x]
             pos_y = [slot.zeit - v, slot.zeit]
@@ -481,13 +481,13 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         for label, slot in zip(_slot_labels, slots):
             label.set(fontstyle=slot.fontstyle, fontsize='small', fontstretch='condensed')
 
-        for konflikt in self.belegung.konflikte:
-            konflikt_gleise = [gleis for gleis in konflikt.gleise if gleis in self._gleise]
-            x = [x_labels_pos[x_labels.index(gleis)] for gleis in konflikt_gleise]
-            xy = (min(x) - kwargs['width'] / 2, konflikt.zeit)
+        for warnung in self.belegung.warnungen.values():
+            warnung_gleise = [gleis for gleis in warnung.gleise if gleis in self._gleise]
+            x = [x_labels_pos[x_labels.index(gleis)] for gleis in warnung_gleise]
+            xy = (min(x) - kwargs['width'] / 2, warnung.zeit)
             w = max(x) - min(x) + kwargs['width']
-            h = konflikt.dauer
-            r = mpl.patches.Rectangle(xy, w, h, fill=False, linestyle=konflikt.linestyle, linewidth=konflikt.linewidth, edgecolor=konflikt.randfarbe)
+            h = warnung.dauer
+            r = mpl.patches.Rectangle(xy, w, h, fill=False, linestyle=warnung.linestyle, linewidth=warnung.linewidth, edgecolor=warnung.randfarbe)
             self._axes.add_patch(r)
 
         for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
@@ -523,7 +523,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             text = []
             auswahl = []
             if isinstance(event.artist, mpl.patches.Rectangle):
-                for slot in self.belegung.gleis_slots[gleis]:
+                for slot in self.belegung.gleis_slots[gleis].values():
                     if slot.zeit <= zeit <= slot.zeit + slot.dauer:
                         auswahl.append(slot)
                         text.append(str(slot))
