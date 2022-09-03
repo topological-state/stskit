@@ -13,10 +13,12 @@ import numpy as np
 
 from auswertung import Auswertung
 from anlage import Anlage
-from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
+from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung
 from stsplugin import PluginClient
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
-from slotgrafik import hour_minutes_formatter, Slot, ZugFarbschema, Gleisbelegung, SlotWarnung, gleis_sektor_sortkey
+from slotgrafik import hour_minutes_formatter, Slot, ZugFarbschema, Gleisbelegung, SlotWarnung, gleis_sektor_sortkey, \
+    WARNUNG_VERBINDUNG, WARNUNG_STATUS
+
 
 from qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 
@@ -349,7 +351,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self._pick_event = False
 
         self._gleise: List[str] = []
-        self._auswahl: List[Slot] = []
+        self._slot_auswahl: List[Slot] = []
+        self._warnung_auswahl: List[SlotWarnung] = []
         self.belegung: Optional[Gleisbelegung] = None
 
         self.zeitfenster_voraus = 55
@@ -369,6 +372,9 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.ui.actionAnzeige.triggered.connect(self.display_button_clicked)
         self.ui.actionSetup.triggered.connect(self.settings_button_clicked)
+        self.ui.actionWarnungSetzen.triggered.connect(self.action_warnung_setzen)
+        self.ui.actionWarnungIgnorieren.triggered.connect(self.action_warnung_ignorieren)
+        self.ui.actionWarnungReset.triggered.connect(self.action_warnung_reset)
         self.ui.actionPlusEins.triggered.connect(self.action_plus_eins)
         self.ui.actionMinusEins.triggered.connect(self.action_minus_eins)
         self.ui.actionLoeschen.triggered.connect(self.action_loeschen)
@@ -387,10 +393,13 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.ui.actionSetup.setEnabled(display_mode)
         self.ui.actionAnzeige.setEnabled(not display_mode)
+        self.ui.actionWarnungSetzen.setEnabled(display_mode and len(self._slot_auswahl))
+        self.ui.actionWarnungReset.setEnabled(display_mode and len(self._warnung_auswahl))
+        self.ui.actionWarnungIgnorieren.setEnabled(display_mode and len(self._warnung_auswahl))
         self.ui.actionFix.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionLoeschen.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionPlusEins.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionMinusEins.setEnabled(display_mode and False)  # not implemented
+        self.ui.actionLoeschen.setEnabled(display_mode and len(self._slot_auswahl))
+        self.ui.actionPlusEins.setEnabled(display_mode and len(self._slot_auswahl))
+        self.ui.actionMinusEins.setEnabled(display_mode and len(self._slot_auswahl))
         self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and False)  # not implemented
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and False)  # not implemented
 
@@ -451,7 +460,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         y_bot = np.asarray([slot.zeit for slot in slots])
         y_hgt = np.asarray([slot.dauer for slot in slots])
         labels = [slot.titel for slot in slots]
-        colors = ['yellow' if slot in self._auswahl else self.farbschema.zugfarbe(slot.zug) for slot in slots]
+        colors = ['yellow' if slot in self._slot_auswahl else self.farbschema.zugfarbe(slot.zug) for slot in slots]
 
         self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
         self._axes.yaxis.set_major_formatter(hour_minutes_formatter)
@@ -503,8 +512,9 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.grafik_update()
 
     def on_button_press(self, event):
-        if self._auswahl and not self._pick_event:
-            self._auswahl = []
+        if self._slot_auswahl and not self._pick_event:
+            self._slot_auswahl = []
+            self._warnung_auswahl = []
             self.ui.zuginfoLabel.setText("")
             self.grafik_update()
             self.update_actions()
@@ -529,7 +539,13 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
                         text.append(str(slot))
 
             self.ui.zuginfoLabel.setText("\n".join(text))
-            self._auswahl = auswahl
+            self._slot_auswahl = auswahl
+
+            warnungen = set([])
+            for slot in auswahl:
+                warnungen = warnungen | set(self.belegung.slot_warnungen(slot))
+            self._warnung_auswahl = list(warnungen)
+
             self.grafik_update()
             self.update_actions()
 
@@ -558,13 +574,83 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def action_plus_eins(self):
-        pass
+        try:
+            self.verspaetung_aendern(self._slot_auswahl[0], 1, True)
+        except IndexError:
+            pass
+        else:
+            self.grafik_update()
+        self.update_actions()
 
     @pyqtSlot()
     def action_minus_eins(self):
-        pass
+        try:
+            self.verspaetung_aendern(self._slot_auswahl[0], -1, True)
+        except IndexError:
+            pass
+        else:
+            self.grafik_update()
+        self.update_actions()
 
     @pyqtSlot()
     def action_loeschen(self):
-        pass
+        try:
+            slot = self._slot_auswahl[0]
+        except IndexError:
+            pass
+        else:
+            slot.ziel.fdl_korrektur = None
+            self.planung.zugverspaetung_korrigieren(slot.zug)
+            self.daten_update()
+            self.grafik_update()
+        self.update_actions()
 
+    @pyqtSlot()
+    def action_warnung_ignorieren(self):
+        for w in self._warnung_auswahl:
+            if w.status not in WARNUNG_VERBINDUNG.values():
+                w.status = "fdl-ignoriert"
+        self.grafik_update()
+        self.update_actions()
+
+    @pyqtSlot()
+    def action_warnung_setzen(self):
+        gleise = set((slot.gleis for slot in self._slot_auswahl))
+        k = SlotWarnung(gleise=gleise, status="fdl-markiert")
+        k.zeit = min((slot.zeit for slot in self._slot_auswahl))
+        k.dauer = max((slot.zeit + slot.dauer for slot in self._slot_auswahl)) - k.zeit
+        k.slots = set(self._slot_auswahl)
+        self.belegung.warnung_setzen(k)
+        self.grafik_update()
+        self.update_actions()
+
+    @pyqtSlot()
+    def action_warnung_reset(self):
+        for w in self._warnung_auswahl:
+            self.belegung.warnung_loeschen(w.key)
+        self.daten_update()
+        self.grafik_update()
+        self.update_actions()
+
+    def verspaetung_aendern(self, slot: Slot, verspaetung: int, relativ: bool = False):
+        korrektur = slot.ziel.fdl_korrektur
+        neu = korrektur is None
+
+        if relativ and hasattr(korrektur, "wartezeit"):
+            korrektur.wartezeit += verspaetung
+        elif not isinstance(korrektur, FesteVerspaetung):
+            korrektur = FesteVerspaetung(self.planung)
+            korrektur.verspaetung = slot.ziel.verspaetung_ab
+            neu = True
+
+        if hasattr(korrektur, "verspaetung"):
+            if relativ:
+                korrektur.verspaetung += verspaetung
+            else:
+                korrektur.verspaetung = verspaetung
+
+        if neu:
+            self.planung.fdl_korrektur_setzen(korrektur, slot.ziel)
+
+        self.planung.zugverspaetung_korrigieren(slot.zug)
+        self.daten_update()

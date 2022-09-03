@@ -120,6 +120,10 @@
    <addaction name="actionSetup"/>
    <addaction name="actionAnzeige"/>
    <addaction name="separator"/>
+   <addaction name="actionWarnungSetzen"/>
+   <addaction name="actionWarnungIgnorieren"/>
+   <addaction name="actionWarnungReset"/>
+   <addaction name="separator"/>
    <addaction name="actionPlusEins"/>
    <addaction name="actionMinusEins"/>
    <addaction name="actionFix"/>
@@ -246,6 +250,51 @@
    </property>
    <property name="shortcut">
     <string>F</string>
+   </property>
+  </action>
+  <action name="actionWarnungSetzen">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/flag.png</normaloff>:/flag.png</iconset>
+   </property>
+   <property name="text">
+    <string>Warnung</string>
+   </property>
+   <property name="toolTip">
+    <string>Slot-Warnung setzen (W)</string>
+   </property>
+   <property name="shortcut">
+    <string>W</string>
+   </property>
+  </action>
+  <action name="actionWarnungIgnorieren">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/flag-green.png</normaloff>:/flag-green.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ignorieren</string>
+   </property>
+   <property name="toolTip">
+    <string>Slot-Warnung ignorieren (I)</string>
+   </property>
+   <property name="shortcut">
+    <string>I</string>
+   </property>
+  </action>
+  <action name="actionWarnungReset">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/flag-white.png</normaloff>:/flag-white.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reset</string>
+   </property>
+   <property name="toolTip">
+    <string>Slot-Warnung zurücksetzen (R)</string>
+   </property>
+   <property name="shortcut">
+    <string>R</string>
    </property>
   </action>
  </widget>

@@ -197,7 +197,6 @@ class Slot:
     dauer: int = 0
     verbindung: Optional[ZugDetailsPlanung] = None
     verbindungsart: str = ""
-    warnungen: Set['SlotWarnung'] = field(default_factory=set)
 
     def __init__(self, zug: ZugDetailsPlanung, ziel: ZugZielPlanung):
         self.zug = zug
@@ -219,8 +218,6 @@ class Slot:
         else:
             self.verbindung = None
             self.verbindungsart = ""
-
-        self.warnungen = set([])
 
     @property
     def key(self) -> Tuple[str, str, int]:
@@ -498,6 +495,18 @@ class Gleisbelegung:
         self.hauptgleis_slots: Dict[str, Dict[Any, Slot]] = {}
         self.warnungen: Dict[Any, SlotWarnung] = {}
 
+    def slot_warnungen(self, slot: Slot) -> Iterable[SlotWarnung]:
+        """
+        warnungen zu einem bestimmten slot auflisten.
+
+        :param slot: zu suchender slot
+        :return: generator von zugehörigen SlotWarnung objekten aus self.warnungen
+        """
+
+        for w in self.warnungen.values():
+            if slot in w.slots:
+                yield w
+
     def update(self, zugliste: Iterable[ZugDetailsPlanung]):
         """
         daten einlesen und slotliste neu aufbauen.
@@ -600,6 +609,9 @@ class Gleisbelegung:
         """
 
         keys_bisherige = set(self.warnungen.keys())
+        for w in self.warnungen.values():
+            if w.status.startswith("fdl"):
+                keys_bisherige.discard(w.key)
 
         for w_neu in self._warnungen():
             key = w_neu.key
@@ -610,8 +622,6 @@ class Gleisbelegung:
             except KeyError:
                 w = w_neu
                 self.warnungen[key] = w_neu
-            for s in w.slots:
-                s.warnungen.add(w)
             keys_bisherige.discard(key)
 
         for key in keys_bisherige:
@@ -755,3 +765,9 @@ class Gleisbelegung:
             yield k
         except AttributeError:
             pass
+
+    def warnung_setzen(self, warnung: SlotWarnung) -> None:
+        self.warnungen[warnung.key] = warnung
+
+    def warnung_loeschen(self, key: Any) -> None:
+        del self.warnungen[key]

@@ -13,5 +13,8 @@
         <file alias="clock--minus.png">../icons/clock--minus.png</file>
         <file alias="clock--pencil.png">../icons/clock--pencil.png</file>
         <file alias="cross-script.png">../icons/cross-script.png</file>
+        <file alias="flag-green.png">../icons/flag-green.png</file>
+        <file alias="flag.png">../icons/flag.png</file>
+        <file alias="flag-white.png">../icons/flag-white.png</file>
     </qresource>
 </RCC>
