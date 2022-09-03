@@ -678,10 +678,10 @@ class Anlage:
             self.gleis_graph_probleme = graph_mehrdeutige_strecken(self.gleis_graph)
             self.bahnhof_graph_erstellen()
 
+        self.bahnhof_graph_zugupdate(client.zugliste.values())
+
         if len(self.strecken) == 0:
             self.strecken_aus_bahnhofgraph()
-
-        self.bahnhof_graph_zugupdate(client.zugliste.values())
 
     def original_graphen_erstellen(self, client: PluginClient):
         """
@@ -928,7 +928,7 @@ class Anlage:
             d['fahrzeit_max'] = max(d['fahrzeit_max'], zeit) if not np.isnan(d['fahrzeit_max']) else zeit
             d['fahrzeit_count'] = d['fahrzeit_count'] + 1
 
-    def strecken_aus_bahnhofgraph(self):
+    def strecken_aus_bahnhofgraph(self, nur_benutzte: bool = False):
         """
         strecken aus bahnhofgraph ableiten
 
@@ -940,14 +940,27 @@ class Anlage:
         der streckenname (schlüssel von self.strecken) wird aus dem ersten und letzten wegpunkt gebildet,
         die mit einem bindestrich aneinandergefügt werden.
 
+        :param: nur_benutzte: nur anschlüsse, die von mindestens einem zug benutzt werden, inkludieren.
+            per default, werden auch strecken zwischen unbenutzten anschlüssen erstellt.
+            zum konfigurationszeitpunkt, steht die zugliste jedoch nicht zur verfügung oder ist unvollständig,
+            da noch nicht alle verbindungen im fahrplan erscheinen.
+
         :return: das result wird in self.strecken abgelegt.
         """
+
         anschlussgleise = list(self.anschlussgruppen.keys())
         strecken = []
-        for ein, aus in itertools.combinations(anschlussgleise, 2):
-            strecke = self.verbindungsstrecke(ein, aus)
-            if len(strecke) >= 1:
-                strecken.append(strecke)
+
+        for ein, aus in itertools.permutations(anschlussgleise, 2):
+            try:
+                zuege = min(self.bahnhof_graph.nodes[ein]['zug_count'], self.bahnhof_graph.nodes[aus]['zug_count'])
+            except KeyError:
+                zuege = -1
+
+            if ein != aus and (not nur_benutzte or zuege > 0):
+                strecke = self.verbindungsstrecke(ein, aus)
+                if len(strecke) >= 1:
+                    strecken.append(strecke)
 
         self.strecken = {f"{s[0]}-{s[-1]}": s for s in strecken}
 

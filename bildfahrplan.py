@@ -197,7 +197,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         via = self._strecke_via
         nach = self._strecke_nach
 
-        laengste_strecke = max(self.anlage.strecken.values(), key=len)
+        try:
+            laengste_strecke = max(self.anlage.strecken.values(), key=len)
+        except ValueError:
+            laengste_strecke = []
         if not von and len(laengste_strecke) >= 2:
             von = laengste_strecke[0]
         if not nach and len(laengste_strecke) >= 2:
