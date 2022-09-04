@@ -492,9 +492,12 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         for warnung in self.belegung.warnungen.values():
             warnung_gleise = [gleis for gleis in warnung.gleise if gleis in self._gleise]
-            x = [x_labels_pos[x_labels.index(gleis)] for gleis in warnung_gleise]
-            xy = (min(x) - kwargs['width'] / 2, warnung.zeit)
-            w = max(x) - min(x) + kwargs['width']
+            try:
+                x = [x_labels_pos[x_labels.index(gleis)] for gleis in warnung_gleise]
+                xy = (min(x) - kwargs['width'] / 2, warnung.zeit)
+                w = max(x) - min(x) + kwargs['width']
+            except ValueError:
+                continue
             h = warnung.dauer
             r = mpl.patches.Rectangle(xy, w, h, fill=False, linestyle=warnung.linestyle, linewidth=warnung.linewidth, edgecolor=warnung.randfarbe)
             self._axes.add_patch(r)
