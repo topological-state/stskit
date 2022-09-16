@@ -725,9 +725,12 @@ class Gleisbelegung:
                 konflikt.dauer = slot.zeit + slot.dauer - konflikt.zeit
                 frei = slot.zeit + slot.dauer
                 letzter = slot
-            elif konflikt is not None:
-                yield konflikt
-                konflikt = None
+            else:
+                if konflikt is not None:
+                    yield konflikt
+                    konflikt = None
+                letzter = slot
+                frei = slot.zeit + slot.dauer
 
         if konflikt is not None:
             yield konflikt
