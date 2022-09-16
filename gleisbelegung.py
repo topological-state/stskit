@@ -433,7 +433,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             self.set_gleise(self.gleisauswahl.get_auswahl())
 
         self.belegung.gleise_auswaehlen(self._gleise)
-        self.belegung.update(self.planung.zugliste.values())
+        try:
+            self.belegung.update(self.planung.zugliste.values())
+        except AttributeError:
+            pass
 
     def grafik_update(self):
         """
