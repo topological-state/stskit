@@ -906,6 +906,7 @@ class Planung:
             pass
         elif ziel.ersatz_zid():
             ziel.auto_korrektur = Ersatzzug(self)
+            ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, 1)
             anschluss = AnkunftAbwarten(self)
             anschluss.ursprung = ziel
             try:
@@ -914,6 +915,7 @@ class Planung:
                 result = False
         elif ziel.kuppel_zid():
             ziel.auto_korrektur = Kupplung(self)
+            ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, 1)
             anschluss = AnkunftAbwarten(self)
             anschluss.ursprung = ziel
             try:
@@ -923,7 +925,7 @@ class Planung:
                 result = False
         elif ziel.fluegel_zid():
             ziel.auto_korrektur = Fluegelung(self)
-            ziel.mindestaufenthalt = 1
+            ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, 1)
             anschluss = AbfahrtAbwarten(self)
             anschluss.ursprung = ziel
             anschluss.wartezeit = 2
