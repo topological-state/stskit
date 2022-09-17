@@ -226,10 +226,24 @@ class Slot:
 
         definiert die unterscheidungsmerkmale von slots.
 
-        :return: tupel aus gleisname, geplanter ankunftszeit und zugname
+        :return: tupel aus gleisname, zugname und zielnummer
         """
 
         return self.gleis, self.zug.name, self.ziel.zielnr
+
+    @staticmethod
+    def build_key(ziel: ZugZielPlanung):
+        """
+        identifikationsschlüssel wie key-property aufbauen
+
+        diese methode kann benutzt werden, wenn man den schlüssel eines fahrplanziels wissen will,
+        ohne ein Slot-objekt aufzubauen.
+
+        :param ziel: zugziel
+        :return: tupel aus gleisname, zugname und zielnummer
+        """
+
+        return ziel.gleis, ziel.zug.name, ziel.zielnr
 
     def __eq__(self, other: 'Slot') -> bool:
         """

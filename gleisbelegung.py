@@ -3,6 +3,7 @@ import logging
 from typing import AbstractSet, Any, Dict, Generator, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel
@@ -13,7 +14,7 @@ import numpy as np
 
 from auswertung import Auswertung
 from anlage import Anlage
-from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung
+from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, AbfahrtAbwarten, AnkunftAbwarten
 from stsplugin import PluginClient
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
 from slotgrafik import hour_minutes_formatter, Slot, ZugFarbschema, Gleisbelegung, SlotWarnung, gleis_sektor_sortkey, \
@@ -378,6 +379,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.actionPlusEins.triggered.connect(self.action_plus_eins)
         self.ui.actionMinusEins.triggered.connect(self.action_minus_eins)
         self.ui.actionLoeschen.triggered.connect(self.action_loeschen)
+        self.ui.actionAnkunftAbwarten.triggered.connect(self.action_ankunft_abwarten)
+        self.ui.actionAbfahrtAbwarten.triggered.connect(self.action_abfahrt_abwarten)
         self.ui.stackedWidget.currentChanged.connect(self.page_changed)
 
         self._axes = self.display_canvas.figure.subplots()
@@ -400,8 +403,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.actionLoeschen.setEnabled(display_mode and len(self._slot_auswahl))
         self.ui.actionPlusEins.setEnabled(display_mode and len(self._slot_auswahl))
         self.ui.actionMinusEins.setEnabled(display_mode and len(self._slot_auswahl))
-        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and False)  # not implemented
+        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and len(self._slot_auswahl) == 2)
+        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and len(self._slot_auswahl) == 2)
 
     def update(self):
         """
@@ -463,7 +466,15 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         y_bot = np.asarray([slot.zeit for slot in slots])
         y_hgt = np.asarray([slot.dauer for slot in slots])
         labels = [slot.titel for slot in slots]
-        colors = ['yellow' if slot in self._slot_auswahl else self.farbschema.zugfarbe(slot.zug) for slot in slots]
+
+        colors = {slot: self.farbschema.zugfarbe(slot.zug) for slot in slots}
+        if len(self._slot_auswahl) == 2:
+            colors[self._slot_auswahl[0]] = 'yellow'
+            colors[self._slot_auswahl[1]] = 'cyan'
+        else:
+            for slot in self._slot_auswahl:
+                colors[slot] = 'yellow'
+        colors = [colors[slot] for slot in slots]
 
         self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
         self._axes.yaxis.set_major_formatter(hour_minutes_formatter)
@@ -475,6 +486,29 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         zeit = time_to_minutes(self.client.calc_simzeit())
         self._axes.set_ylim(bottom=zeit + self.zeitfenster_voraus, top=zeit - self.zeitfenster_zurueck, auto=False)
 
+        self._plot_verspaetungen(slots, x_pos, colors)
+
+        # balken
+        _slot_balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, picker=True, **kwargs)
+        for balken, slot in zip(_slot_balken, slots):
+            balken.set(linestyle=slot.linestyle, linewidth=slot.linewidth, edgecolor=slot.randfarbe)
+        _slot_labels = self._axes.bar_label(_slot_balken, labels=labels, label_type='center')
+        for label, slot in zip(_slot_labels, slots):
+            label.set(fontstyle=slot.fontstyle, fontsize='small', fontstretch='condensed')
+
+        self._plot_abhaengigkeiten(slots, x_pos, x_labels, x_labels_pos, colors)
+        self._plot_warnungen(x_labels, x_labels_pos, kwargs)
+
+        for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
+            item.set_fontsize('small')
+
+        if self.zeitfenster_zurueck > 0:
+            self._axes.axhline(y=zeit, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
+
+        self._axes.figure.tight_layout()
+        self._axes.figure.canvas.draw()
+
+    def _plot_verspaetungen(self, slots, x_pos, colors):
         for x, c, slot in zip(x_pos, colors, slots):
             if slot.ziel.verspaetung_an > 15:
                 v = 15
@@ -486,13 +520,43 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             pos_y = [slot.zeit - v, slot.zeit]
             self._axes.plot(pos_x, pos_y, color=c, ls=ls, lw=2, marker=None, alpha=0.5)
 
-        _slot_balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, picker=True, **kwargs)
-        for balken, slot in zip(_slot_balken, slots):
-            balken.set(linestyle=slot.linestyle, linewidth=slot.linewidth, edgecolor=slot.randfarbe)
-        _slot_labels = self._axes.bar_label(_slot_balken, labels=labels, label_type='center')
-        for label, slot in zip(_slot_labels, slots):
-            label.set(fontstyle=slot.fontstyle, fontsize='small', fontstretch='condensed')
+    def _plot_abhaengigkeiten(self, slots, x_pos, x_labels, x_labels_pos, colors):
+        for x1, c, slot1 in zip(x_pos, colors, slots):
+            try:
+                slot2 = self.belegung.slots[Slot.build_key(slot1.ziel.fdl_korrektur.ursprung)]
+                x2 = x_labels_pos[x_labels.index(slot2.gleis)]
+            except (AttributeError, KeyError, ValueError):
+                continue
 
+            y1 = slot1.zeit + slot1.dauer
+            if isinstance(slot1.ziel.fdl_korrektur, AnkunftAbwarten):
+                y2 = slot2.zeit
+            elif isinstance(slot1.ziel.fdl_korrektur, AbfahrtAbwarten):
+                y2 = slot2.zeit + slot2.dauer
+            else:
+                continue
+
+            if x1 < x2:
+                x1 += 0.25
+                x2 -= 0.25
+            else:
+                x1 -= 0.25
+                x2 += 0.25
+
+            if y1 < y2:
+                y1 += 0.1
+                y2 -= 0.1
+            else:
+                y1 -= 0.1
+                y2 += 0.2
+
+            arrow = mpl.patches.FancyArrowPatch((x2, y2), (x1, y1), arrowstyle='-|>', mutation_scale=10,
+                                                color='#7f7f7f', picker=True)
+            arrow.ziel_slot = slot1
+            arrow.ref_slot = slot2
+            self._axes.add_patch(arrow)
+
+    def _plot_warnungen(self, x_labels, x_labels_pos, kwargs):
         for warnung in self.belegung.warnungen.values():
             warnung_gleise = [gleis for gleis in warnung.gleise if gleis in self._gleise]
             try:
@@ -502,17 +566,9 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             except ValueError:
                 continue
             h = warnung.dauer
-            r = mpl.patches.Rectangle(xy, w, h, fill=False, linestyle=warnung.linestyle, linewidth=warnung.linewidth, edgecolor=warnung.randfarbe)
+            r = mpl.patches.Rectangle(xy, w, h, fill=False, linestyle=warnung.linestyle, linewidth=warnung.linewidth,
+                                      edgecolor=warnung.randfarbe)
             self._axes.add_patch(r)
-
-        for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
-            item.set_fontsize('small')
-
-        if self.zeitfenster_zurueck > 0:
-            self._axes.axhline(y=zeit, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
-
-        self._axes.figure.tight_layout()
-        self._axes.figure.canvas.draw()
 
     def on_resize(self, event):
         self.grafik_update()
@@ -531,27 +587,41 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         pass
 
     def on_pick(self, event):
-        self._pick_event = True
+        auswahl_vorher = tuple(self._slot_auswahl)
 
         if event.mouseevent.inaxes == self._axes:
             gleis = self._gleise[round(event.mouseevent.xdata)]
             zeit = event.mouseevent.ydata
-            text = []
-            auswahl = []
+            auswahl = list(self._slot_auswahl)
+            self._pick_event = True
+
             if isinstance(event.artist, mpl.patches.Rectangle):
                 for slot in self.belegung.gleis_slots[gleis].values():
                     if slot.zeit <= zeit <= slot.zeit + slot.dauer:
-                        auswahl.append(slot)
-                        text.append(str(slot))
-
-            self.ui.zuginfoLabel.setText("\n".join(text))
-            self._slot_auswahl = auswahl
+                        try:
+                            auswahl.remove(slot)
+                        except ValueError:
+                            auswahl.append(slot)
+            elif isinstance(event.artist, mpl.patches.FancyArrowPatch):
+                try:
+                    auswahl = [event.artist.ziel_slot, event.artist.ref_slot]
+                except AttributeError:
+                    pass
 
             warnungen = set([])
             for slot in auswahl:
                 warnungen = warnungen | set(self.belegung.slot_warnungen(slot))
             self._warnung_auswahl = list(warnungen)
 
+            slots = set(auswahl)
+            for warnung in warnungen:
+                slots = slots | warnung.slots
+
+            text = "\n".join((str(slot) for slot in sorted(slots, key=lambda s: s.zeit)))
+            self.ui.zuginfoLabel.setText(text)
+            self._slot_auswahl = auswahl
+
+        if tuple(self._slot_auswahl) != auswahl_vorher:
             self.grafik_update()
             self.update_actions()
 
@@ -612,6 +682,28 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.update_actions()
 
     @pyqtSlot()
+    def action_abfahrt_abwarten(self):
+        try:
+            self.abhaengigkeit_definieren(self._slot_auswahl[0], self._slot_auswahl[1].ziel, 1, abfahrt=True)
+        except IndexError:
+            return
+
+        self.daten_update()
+        self.grafik_update()
+        self.update_actions()
+
+    @pyqtSlot()
+    def action_ankunft_abwarten(self):
+        try:
+            self.abhaengigkeit_definieren(self._slot_auswahl[0], self._slot_auswahl[1].ziel, 1, abfahrt=False)
+        except IndexError:
+            return
+
+        self.daten_update()
+        self.grafik_update()
+        self.update_actions()
+
+    @pyqtSlot()
     def action_warnung_ignorieren(self):
         for w in self._warnung_auswahl:
             if w.status not in WARNUNG_VERBINDUNG.values():
@@ -660,3 +752,16 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.planung.zugverspaetung_korrigieren(slot.zug)
         self.daten_update()
+
+    def abhaengigkeit_definieren(self, slot: Slot, referenz: ZugZielPlanung, wartezeit: int = 0,
+                                 abfahrt: bool = False):
+
+        if abfahrt:
+            korrektur = AbfahrtAbwarten(self.planung)
+        else:
+            korrektur = AnkunftAbwarten(self.planung)
+        korrektur.ursprung = referenz
+        korrektur.wartezeit = wartezeit
+
+        self.planung.fdl_korrektur_setzen(korrektur, slot.ziel)
+        self.planung.zugverspaetung_korrigieren(slot.zug)
