@@ -631,6 +631,8 @@ class Anlage:
         self.gleiszuordnung: Dict[str, str] = {}
 
         self.sektoren = Sektoren()
+        # set von gleisnamen
+        self.gleissperrungen: Set[str] = set([])
 
         # lage des anschlusses auf dem gleisbild
         # gruppenname -> "links", "mitte", "rechts", "oben", "unten"

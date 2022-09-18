@@ -69,7 +69,8 @@ class GleisauswahlItem:
         self.modell = modell
         self.typ = typ
         self.name = name
-        self._column_count = 1
+        self.sperrung: bool = False
+        self._column_count = 2 if self.typ == "Gleis" else 1
         self._parent = None
         self._children = []
         self._row = 0
@@ -146,10 +147,14 @@ class GleisauswahlItem:
         if role == QtCore.Qt.DisplayRole:
             if column == 0:
                 return self.name
+            if column == 1:
+                return ""
 
         elif role == QtCore.Qt.CheckStateRole:
             if column == 0:
                 return self.checkState()
+            elif column == 1 and self.typ == "Gleis":
+                return QtCore.Qt.Checked if self.sperrung else QtCore.Qt.Unchecked
 
         return None
 
@@ -166,6 +171,11 @@ class GleisauswahlItem:
                         child.setData(child_index, value, role)
                 self.modell.dataChanged.emit(index, index)
                 return True
+            elif column == 1 and self.typ == "Gleis":
+                self.sperrung = value != QtCore.Qt.Unchecked
+                self.modell.dataChanged.emit(index, index)
+                return True
+
         return False
 
 
@@ -177,9 +187,7 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
         self.alle_gleise: Set[str] = set([])
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
-        if parent.isValid():
-            return parent.internalPointer().columnCount()
-        return self._root.columnCount()
+        return 2
 
     def rowCount(self, parent: QModelIndex = ...) -> int:
         if parent.isValid():
@@ -221,6 +229,8 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
             if orientation == QtCore.Qt.Horizontal:
                 if section == 0:
                     return "Gleis"
+                elif section == 1:
+                    return "Sperrung"
 
         return None
 
@@ -333,6 +343,14 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
 
         return gleise
 
+    def set_sperrungen(self, gleissperrungen: AbstractSet[str]) -> None:
+        for item in self.gleis_items():
+            item.sperrung = item.name in gleissperrungen
+
+    def get_sperrungen(self) -> Set[str]:
+        sperrungen = (item.name for item in self.gleis_items() if item.sperrung and item.typ == "Gleis")
+        return set(sperrungen)
+
 
 class GleisbelegungWindow(QtWidgets.QMainWindow):
 
@@ -433,6 +451,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             self.gleisauswahl.gleise_definieren(self.anlage, zufahrten=self.show_zufahrten,
                                                 bahnsteige=self.show_bahnsteige)
             self.gleisauswahl.set_auswahl(self.gleisauswahl.alle_gleise)
+            self.gleisauswahl.set_sperrungen(self.anlage.gleissperrungen)
             self.set_gleise(self.gleisauswahl.get_auswahl())
 
         self.belegung.gleise_auswaehlen(self._gleise)
@@ -486,6 +505,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         zeit = time_to_minutes(self.client.calc_simzeit())
         self._axes.set_ylim(bottom=zeit + self.zeitfenster_voraus, top=zeit - self.zeitfenster_zurueck, auto=False)
 
+        self._plot_sperrungen(x_labels, x_labels_pos, kwargs)
         self._plot_verspaetungen(slots, x_pos, colors)
 
         # balken
@@ -507,6 +527,19 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self._axes.figure.tight_layout()
         self._axes.figure.canvas.draw()
+
+    def _plot_sperrungen(self, x_labels, x_labels_pos, kwargs):
+        for gleis in self.anlage.gleissperrungen:
+            ylim = self._axes.get_ylim()
+            try:
+                x = x_labels_pos[x_labels.index(gleis)]
+                xy = (x - kwargs['width'] / 2, min(ylim))
+                w = kwargs['width']
+            except ValueError:
+                continue
+            h = max(ylim) - min(ylim)
+            r = mpl.patches.Rectangle(xy, w, h, fill=False, hatch='/', color='r', linewidth=None)
+            self._axes.add_patch(r)
 
     def _plot_verspaetungen(self, slots, x_pos, colors):
         for x, c, slot in zip(x_pos, colors, slots):
@@ -630,19 +663,22 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(0)
         self.gleisauswahl.gleise_definieren(self.anlage, zufahrten=self.show_zufahrten, bahnsteige=self.show_bahnsteige)
         self.gleisauswahl.set_auswahl(self._gleise)
+        self.gleisauswahl.set_sperrungen(self.anlage.gleissperrungen)
         self.ui.gleisView.expandAll()
+        self.ui.gleisView.resizeColumnToContents(0)
 
     @pyqtSlot()
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.set_gleise(self.gleisauswahl.get_auswahl())
+        self.anlage.gleissperrungen = self.gleisauswahl.get_sperrungen()
+        self.daten_update()
+        self.grafik_update()
 
     def set_gleise(self, gleise):
         hauptgleise = [self.anlage.sektoren.hauptgleis(gleis) for gleis in gleise]
         gleis_sektoren = sorted(zip(hauptgleise, gleise), key=gleis_sektor_sortkey)
         self._gleise = [gs[1] for gs in gleis_sektoren]
-        self.daten_update()
-        self.grafik_update()
 
     @pyqtSlot()
     def page_changed(self):
