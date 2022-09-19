@@ -600,7 +600,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
                 continue
             h = warnung.dauer
             r = mpl.patches.Rectangle(xy, w, h, fill=False, linestyle=warnung.linestyle, linewidth=warnung.linewidth,
-                                      edgecolor=warnung.randfarbe)
+                                      edgecolor=warnung.randfarbe, picker=True)
             self._axes.add_patch(r)
 
     def on_resize(self, event):
