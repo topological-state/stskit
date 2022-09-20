@@ -512,6 +512,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         _slot_balken = self._axes.bar(x_pos, y_hgt, bottom=y_bot, data=None, color=colors, picker=True, **kwargs)
         for balken, slot in zip(_slot_balken, slots):
             balken.set(linestyle=slot.linestyle, linewidth=slot.linewidth, edgecolor=slot.randfarbe)
+            balken.slot = slot
         _slot_labels = self._axes.bar_label(_slot_balken, labels=labels, label_type='center')
         for label, slot in zip(_slot_labels, slots):
             label.set(fontstyle=slot.fontstyle, fontsize='small', fontstretch='condensed')
@@ -607,12 +608,16 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.grafik_update()
 
     def on_button_press(self, event):
-        if self._slot_auswahl and not self._pick_event:
-            self._slot_auswahl = []
-            self._warnung_auswahl = []
-            self.ui.zuginfoLabel.setText("")
+        if self._pick_event:
             self.grafik_update()
             self.update_actions()
+        else:
+            if self._slot_auswahl:
+                self._slot_auswahl = []
+                self._warnung_auswahl = []
+                self.ui.zuginfoLabel.setText("")
+                self.grafik_update()
+                self.update_actions()
 
         self._pick_event = False
 
@@ -620,8 +625,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         pass
 
     def on_pick(self, event):
-        auswahl_vorher = tuple(self._slot_auswahl)
-
         if event.mouseevent.inaxes == self._axes:
             gleis = self._gleise[round(event.mouseevent.xdata)]
             zeit = event.mouseevent.ydata
@@ -629,12 +632,15 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             self._pick_event = True
 
             if isinstance(event.artist, mpl.patches.Rectangle):
-                for slot in self.belegung.gleis_slots[gleis].values():
-                    if slot.zeit <= zeit <= slot.zeit + slot.dauer:
-                        try:
-                            auswahl.remove(slot)
-                        except ValueError:
-                            auswahl.append(slot)
+                try:
+                    slot = event.artist.slot
+                except AttributeError:
+                    pass
+                else:
+                    try:
+                        auswahl.remove(slot)
+                    except ValueError:
+                        auswahl.append(slot)
             elif isinstance(event.artist, mpl.patches.FancyArrowPatch):
                 try:
                     auswahl = [event.artist.ziel_slot, event.artist.ref_slot]
@@ -653,10 +659,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             text = "\n".join((str(slot) for slot in sorted(slots, key=lambda s: s.zeit)))
             self.ui.zuginfoLabel.setText(text)
             self._slot_auswahl = auswahl
-
-        if tuple(self._slot_auswahl) != auswahl_vorher:
-            self.grafik_update()
-            self.update_actions()
 
     @pyqtSlot()
     def settings_button_clicked(self):
