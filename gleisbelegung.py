@@ -530,7 +530,20 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self._axes.figure.canvas.draw()
 
     def _plot_sperrungen(self, x_labels, x_labels_pos, kwargs):
-        for gleis in self.anlage.gleissperrungen:
+        """
+        gleissperrungen mit einer schraffur markieren
+
+        :param x_labels: liste von gleisnamen
+        :param x_labels_pos: liste von x-koordinaten der gleise
+        :param kwargs: kwargs-dict, der für die axes.bar-methode vorgesehen ist.
+        :return: None
+        """
+
+        try:
+            sperrungen = self.anlage.gleissperrungen
+        except AttributeError:
+            sperrungen = []
+        for gleis in sperrungen:
             ylim = self._axes.get_ylim()
             try:
                 x = x_labels_pos[x_labels.index(gleis)]
