@@ -1,11 +1,14 @@
 import datetime
 import logging
-import numpy as np
-import pandas as pd
+import json
+from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
+import networkx as nx
+import numpy as np
+
 from stsobj import ZugDetails, FahrplanZeile, Ereignis, time_to_minutes, time_to_seconds, minutes_to_time
-from anlage import Anlage
+from anlage import Anlage, JSONEncoder
 
 
 logger = logging.getLogger(__name__)
@@ -16,19 +19,13 @@ class FahrzeitAuswertung:
     """
     auswertungsklasse für fahrzeiten zwischen gleisen.
 
-    die pandas-dataframes werden mit einem multiindex indiziert,
-    wo der erste level der gleisname und der zweite level der gruppenname ist.
     messdaten werden per gleis hinzugefügt, können aber auch per gruppe ausgewertet werden.
-
-    spalten: zielgleise
-    zeilen: startgleise
-    df.loc[start, ziel]
-    df[ziel]
-    df.loc[start]
+    die gruppenzuordnung muss vor den daten definiert werden.
     """
+
     def __init__(self):
-        self.fahrten = pd.DataFrame(columns=['zug', 'gattung', 'von', 'nach', 'zeit'])
-        self.zeiten: Optional[pd.DataFrame] = None
+        self.gleis_zeiten = nx.DiGraph()
+        self.bahnhof_zeiten = nx.DiGraph()
         self.gruppen: Dict[str, str] = {}
 
     def set_koordinaten(self, koordinaten: Mapping[str, Iterable[str]]) -> None:
@@ -36,8 +33,6 @@ class FahrzeitAuswertung:
         for gruppe, gleise in koordinaten.items():
             for gleis in gleise:
                 self.gruppen[gleis] = gruppe
-
-        # self.index = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
 
     def add_fahrzeit(self, zug: ZugDetails, start: str, ziel: str, fahrzeit: float) -> None:
         """
@@ -49,58 +44,105 @@ class FahrzeitAuswertung:
         :param fahrzeit in sekunden
         :return: None
         """
-        logger.debug(f"add_fahrzeit({zug.name}, {start}, {ziel}, {fahrzeit})")
-        self.fahrten.loc[-1] = {'zug': zug.nummer, 'gattung': zug.gattung, 'von': start, 'nach': ziel, 'zeit': fahrzeit}
-        self.fahrten.index = pd.RangeIndex(self.fahrten.shape[0])
-        self.zeiten = pd.pivot_table(self.fahrten, columns='von', index='nach', values='zeit', aggfunc=np.min)
 
-        # tuples = [(gleis, self.gruppen[gleis]) for gleis in self.zeiten.columns]
-        # self.zeiten.columns = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
-        # tuples = [(gleis, self.gruppen[gleis]) for gleis in self.zeiten.index]
-        # self.zeiten.index = pd.MultiIndex.from_tuples(tuples, names=['Gleis', 'Gruppe'])
+        logger.debug(f"add_fahrzeit({zug.name}, {start}, {ziel}, {fahrzeit})")
+
+        self._add_edge_stats(self.gleis_zeiten, start, ziel, fahrzeit)
+        try:
+            self._add_edge_stats(self.bahnhof_zeiten, self.gruppen[start], self.gruppen[ziel], fahrzeit)
+        except KeyError:
+            logger.debug(f"add_fahrzeit: fehlende gruppendzuordnung für {start} oder {ziel}")
+
+    @staticmethod
+    def _add_edge_stats(g: nx.Graph, u: Any, v: Any, wert: float) -> Dict[str, Any]:
+        """
+        neue messung zu statistikattributen einer kante addieren
+
+        :param g: graph
+        :param u: startknoten
+        :param v: zielknoten
+        :param wert: messwert
+        :return: aktualisierter attribut-dict
+        """
+        try:
+            d = g.edges[u, v]
+        except KeyError:
+            d = {'min': wert, 'max': wert, 'sum': wert, 'sum2': wert**2, 'count': 1}
+        else:
+            d['min'] = min(d['min'], wert)
+            d['max'] = max(d['max'], wert)
+            d['sum'] = d['sum'] + wert
+            d['sum2'] = d['sum2'] + wert ** 2
+            d['count'] = d['count'] + 1
+
+        d['avg'] = d['sum'] / d['count']
+        d['sdev'] = np.sqrt(d['sum2'] / d['count'] - d['avg'] ** 2)
+
+        g.add_edge(u, v, **d)
+        return d
 
     def report(self):
         if logger.isEnabledFor(logging.INFO):
             try:
-                self.fahrten.to_csv("fahrten.csv")
+                d = {'gleis_zeiten': dict(nx.node_link_data(self.gleis_zeiten)),
+                     'bahnhof_zeiten': dict(nx.node_link_data(self.bahnhof_zeiten))}
+                p = Path.home() / r".stskit" / f"auswertung.json"
+                with open(p, "w") as fp:
+                    json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
             except AttributeError:
                 pass
 
-            try:
-                self.zeiten.to_csv("zeiten.csv")
-            except AttributeError:
-                pass
-
-    def get_fahrzeit(self, start: str, ziel: str) -> Union[int, float]:
+    def get_fahrzeit(self, start: str, ziel: str) -> float:
         """
-        fahrzeit auslesen
+        durchschnittliche fahrzeit zwischen zwei gleisen oder gruppen auslesen
 
-        bemerkungen:
+        die fahrzeit wird als mittelwert der über add_fahrzeit erfassten einzelmessungen ermittelt.
 
-        ~~~~~~{.py}
-        self.zeiten.at[ziel, start]
-        return self.zeiten[start][ziel]
-        ~~~~~~
+        wenn entsprechende daten vorhanden sind, wird die fahrzeit zwischen gleisen ausgegeben.
+        ansonsten wird die fahrzeit zwischen den entsprechenden gruppen ausgegeben.
+        gleisnamen werden dabei anhand self.gruppen übersetzt.
 
-        fuer scalar index geben diese statements den gewuenschten wert oder ein KeyError.
-        fuer multiindex gibt das erste einen TypeError, das zweite einen KeyError.
+        start und ziel müssen nicht nebeneinander liegen.
+        jedoch müssen die teilstrecken lückenlos erfasst worden sein.
 
-        ~~~~~~{.py}
-        self.zeiten[gleis]
-        ~~~~~~
-
-        dieses statement gibt einen frame mit der entsprechenden 'von'-spalte zurueck.
-        die gruppe kann so nicht angesprochen werden.
-
-
-        :param start:
-        :param ziel:
-        :return:
+        :param start: gleis- oder gruppenname
+        :param ziel: gleis- oder gruppenname
+        :return: mittlere gemessene fahrzeit zwischen start und ziel in sekunden.
+            numpy.nan, wenn keine passende verbindung gefunden wurde.
         """
+
         try:
-            return self.zeiten.at[ziel, start]
-        except (AttributeError, KeyError, TypeError, ValueError):
-            return np.nan
+            z = self._get_graph_fahrzeit(self.gleis_zeiten, start, ziel)
+        except (KeyError, nx.NetworkXException):
+            try:
+                start = self.gruppen[start]
+                ziel = self.gruppen[ziel]
+            except KeyError:
+                pass
+        else:
+            return z
+
+        try:
+            z = self._get_graph_fahrzeit(self.bahnhof_zeiten, start, ziel)
+        except (KeyError, nx.NetworkXException):
+            pass
+        else:
+            return z
+
+        return np.nan
+
+    @staticmethod
+    def _get_graph_fahrzeit(graph, start, ziel):
+        try:
+            return graph[start][ziel]['avg']
+        except KeyError:
+            pass
+
+        p = nx.shortest_path(graph, start, ziel, 'avg')
+        s = 0
+        for u, v in zip(p[:-1], p[1:]):
+            s = s + graph[u][v]['avg']
+        return s
 
 
 class ZugAuswertung:
@@ -368,33 +410,27 @@ class Auswertung:
         """
         fahrzeit zum letzten halt auswerten.
 
-        diese funktion berechnet die fahrzeiten von jedem registrierten ankunftsereignis zum letzten.
-        im fall von 3 ereignissen also:
-        - einfahrt -> ankunft 3
-        - ankunft 1 -> ankunft 3
-        - ankunft 2 -> ankunft 3
+        diese funktion berechnet die fahrzeit zum letzten ankunftsereignis.
 
         etwaige haltezeiten (auch ausserplanmässige) werden nicht eingerechnet.
 
         :param zug:
         :return:
         """
-        ziel = None
-        gesamt = 0
-        an = 0
-        for fpz in reversed(zug.fahrplan):
-            if ziel:
-                start = fpz.gleis
-                ab = time_to_seconds(fpz.ab)
-                strecke = an - ab
-                if strecke < 0:
-                    strecke += 24 * 60 * 60
-                gesamt = gesamt + strecke
-                if start and not zug.ist_rangierfahrt:
-                    self.fahrzeiten.add_fahrzeit(zug, start, ziel, gesamt)
-            else:
-                ziel = fpz.gleis
-            an = time_to_seconds(fpz.an)
+
+        try:
+            ziel = zug.fahrplan[-1]
+            start = zug.fahrplan[-2]
+        except IndexError:
+            pass
+        else:
+            ab = time_to_seconds(start.ab)
+            an = time_to_seconds(ziel.an)
+            strecke = an - ab
+            if strecke < 0:
+                strecke += 24 * 60 * 60
+            if not zug.ist_rangierfahrt:
+                self.fahrzeiten.add_fahrzeit(zug, start.gleis, ziel.gleis, strecke)
 
     def fahrzeit_schaetzen(self, zug: str, start: str, ziel: str) -> Optional[int]:
         """
