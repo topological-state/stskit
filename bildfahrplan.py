@@ -463,67 +463,106 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self._axes.axhline(y=zeit, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
 
         for tr, farbe in zip(self._trasse_auswahl, ['yellow', 'cyan']):
-            self.trasse_markieren(tr, farbe)
+            self._trasse_markieren(tr, farbe)
 
         self._axes.figure.tight_layout()
         self._axes.figure.canvas.draw()
 
-    def trasse_markieren(self, trasse: Trasse, farbe: str):
-        try:
-            zuglauf = self._zuglaeufe[(trasse.zug.zid, trasse.richtung)]
-        except KeyError:
-            zuglauf = []
+    def _trasse_markieren(self, trasse: Trasse, farbe: str):
+        """
+        zeichnet die angegebene trasse als markierung in einer wählbaren farbe
 
-        for tr in zuglauf:
-            if tr.start == trasse.start and tr.ziel == trasse.ziel:
-                pos_x = [pos[0] for pos in tr.koord]
-                pos_y = [pos[1] for pos in tr.koord]
-                args = tr.plot_args()
-                args['color'] = farbe
-                args['alpha'] = 0.5
-                args['linewidth'] = 2
-                self._axes.plot(pos_x, pos_y, **args)
-                break
+        die trasse muss teil eines zuglaufs (self.zuglaeufe) sein.
+
+        :param trasse: zu markierendes Trasse-objekt
+        :param farbe: matplotlib-farbname
+        :return: None
+        """
+
+        pos_x = [pos[0] for pos in trasse.koord]
+        pos_y = [pos[1] for pos in trasse.koord]
+        args = trasse.plot_args()
+        args['color'] = farbe
+        args['alpha'] = 0.5
+        args['linewidth'] = 2
+        self._axes.plot(pos_x, pos_y, **args)
 
     def on_resize(self, event):
+        """
+        matplotlib resize-event
+
+        zeichnet die grafik neu.
+
+        :param event:
+        :return:
+        """
+
         self.grafik_update()
 
     def on_button_press(self, event):
-        if self._trasse_auswahl and not self._pick_event:
-            self._trasse_auswahl = []
-            self.ui.zuginfoLabel.setText("")
+        """
+        matplotlib button-press event
+
+        aktualisiert die grafik, wenn zuvor ein pick-event stattgefunden hat.
+        wenn kein pick-event stattgefunden hat, wird die aktuelle trassenauswahl gelöscht.
+
+        :param event:
+        :return:
+        """
+
+        if self._pick_event:
             self.grafik_update()
             self.update_actions()
+        else:
+            if self._trasse_auswahl:
+                self._trasse_auswahl = []
+                self.ui.zuginfoLabel.setText("")
+                self.grafik_update()
+                self.update_actions()
 
         self._pick_event = False
 
     def on_button_release(self, event):
+        """
+        matplotlib button-release event
+
+        hat im moment keine wirkung.
+
+        :param event:
+        :return:
+        """
+
         pass
 
     def on_pick(self, event):
-        auswahl_vorher = tuple(self._trasse_auswahl)
+        """
+        matplotlib pick-event wählt liniensegmente (trassen) aus oder ab
 
-        if len(self._trasse_auswahl) >= 2:
-            self._trasse_auswahl = []
+        die auswahl wird in self._trasse_auswahl gespeichert.
+        es können maximal zwei trassen gewählt sein.
+
+        :param event:
+        :return:
+        """
 
         if event.mouseevent.inaxes == self._axes:
+            auswahl = list(self._trasse_auswahl)
+            self._pick_event = True
             if isinstance(event.artist, Line2D):
                 try:
                     try:
-                        self._trasse_auswahl.remove(event.artist.trasse)
+                        auswahl.remove(event.artist.trasse)
                     except ValueError:
-                        self._trasse_auswahl.append(event.artist.trasse)
-                    self._pick_event = True
+                        auswahl.append(event.artist.trasse)
                 except AttributeError:
                     pass
 
-        l = [format_zuginfo(tr) for tr in self._trasse_auswahl]
-        s = "\n".join(l)
-        self.ui.zuginfoLabel.setText(s)
-
-        if tuple(self._trasse_auswahl) != auswahl_vorher:
-            self.grafik_update()
-            self.update_actions()
+            if len(auswahl) > 2:
+                auswahl = auswahl[-2:]
+            self._trasse_auswahl = auswahl
+            l = [format_zuginfo(tr) for tr in self._trasse_auswahl]
+            s = "\n".join(l)
+            self.ui.zuginfoLabel.setText(s)
 
     @pyqtSlot()
     def action_plus_eins(self):
