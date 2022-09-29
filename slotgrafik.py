@@ -498,6 +498,8 @@ class Gleisbelegung:
     hauptgleis_slots: slots aufgeschlüsselt nach hauptgleis (union von sektorgleisen).
         werte sind dict von slots mit Slot.key als schlüssel.
 
+    belegte_gleise: namen der gleise, die irgendwann von einem zug belegt sind.
+
     warnungen: dict von warnungen. keys sind SlotWarnung.key.
     """
 
@@ -507,6 +509,7 @@ class Gleisbelegung:
         self.slots: Dict[Any, Slot] = {}
         self.gleis_slots: Dict[str, Dict[Any, Slot]] = {}
         self.hauptgleis_slots: Dict[str, Dict[Any, Slot]] = {}
+        self.belegte_gleise: Set[str] = set([])
         self.warnungen: Dict[Any, SlotWarnung] = {}
 
     def slot_warnungen(self, slot: Slot) -> Iterable[SlotWarnung]:
@@ -596,6 +599,7 @@ class Gleisbelegung:
 
         self.gleis_slots = {}
         self.hauptgleis_slots = {}
+        self.belegte_gleise = set([])
 
         for gleis in self.gleise:
             self.gleis_slots[gleis] = {}
@@ -608,6 +612,7 @@ class Gleisbelegung:
             key = slot.key
             self.gleis_slots[gleis][key] = slot
             self.hauptgleis_slots[hauptgleis][key] = slot
+            self.belegte_gleise.add(gleis)
 
     def warnungen_aktualisieren(self):
         """

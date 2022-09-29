@@ -119,6 +119,7 @@
    </attribute>
    <addaction name="actionSetup"/>
    <addaction name="actionAnzeige"/>
+   <addaction name="actionBelegteGleise"/>
    <addaction name="separator"/>
    <addaction name="actionWarnungSetzen"/>
    <addaction name="actionWarnungIgnorieren"/>
@@ -135,7 +136,8 @@
   <action name="actionSetup">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/equalizer.png</normaloff>:/equalizer.png</iconset>
+     <normaloff>:/equalizer.png</normaloff>
+     <disabledoff>:/equalizer-dis.png</disabledoff>:/equalizer.png</iconset>
    </property>
    <property name="text">
     <string>Setup</string>
@@ -150,7 +152,8 @@
   <action name="actionAnzeige">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/chart.png</normaloff>:/chart.png</iconset>
+     <normaloff>:/slots.png</normaloff>
+     <disabledoff>:/slots-dis.png</disabledoff>:/slots.png</iconset>
    </property>
    <property name="text">
     <string>Grafik</string>
@@ -295,6 +298,31 @@
    </property>
    <property name="shortcut">
     <string>R</string>
+   </property>
+  </action>
+  <action name="actionBelegteGleise">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/funnel-small.png</normaloff>
+     <disabledoff>:/funnel-small-dis</disabledoff>:/funnel-small.png</iconset>
+   </property>
+   <property name="text">
+    <string>Belegte Gleise</string>
+   </property>
+   <property name="toolTip">
+    <string>Nur belegte Gleise anzeigen (B)</string>
+   </property>
+   <property name="shortcut">
+    <string>B</string>
    </property>
   </action>
  </widget>

@@ -376,6 +376,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.zeitfenster_voraus = 55
         self.zeitfenster_zurueck = 5
+        self.belegte_gleise_zeigen = False
 
         self.ui = Ui_GleisbelegungWindow()
         self.ui.setupUi(self)
@@ -391,6 +392,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.ui.actionAnzeige.triggered.connect(self.display_button_clicked)
         self.ui.actionSetup.triggered.connect(self.settings_button_clicked)
+        self.ui.actionBelegteGleise.triggered.connect(self.action_belegte_gleise)
         self.ui.actionWarnungSetzen.triggered.connect(self.action_warnung_setzen)
         self.ui.actionWarnungIgnorieren.triggered.connect(self.action_warnung_ignorieren)
         self.ui.actionWarnungReset.triggered.connect(self.action_warnung_reset)
@@ -414,6 +416,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.ui.actionSetup.setEnabled(display_mode)
         self.ui.actionAnzeige.setEnabled(not display_mode)
+        self.ui.actionBelegteGleise.setEnabled(display_mode)
+        self.ui.actionBelegteGleise.setChecked(self.belegte_gleise_zeigen)
         self.ui.actionWarnungSetzen.setEnabled(display_mode and len(self._slot_auswahl))
         self.ui.actionWarnungReset.setEnabled(display_mode and len(self._warnung_auswahl))
         self.ui.actionWarnungIgnorieren.setEnabled(display_mode and len(self._warnung_auswahl))
@@ -477,10 +481,14 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         kwargs['alpha'] = 0.5
         kwargs['width'] = 1.0
 
-        slots = [slot for slot in self.belegung.slots.values() if slot.gleis in self._gleise]
-        x_labels = self._gleise
+        if self.belegte_gleise_zeigen:
+            gleise = [gleis for gleis in self._gleise if gleis in self.belegung.belegte_gleise]
+        else:
+            gleise = self._gleise
+        slots = [slot for slot in self.belegung.slots.values() if slot.gleis in gleise]
+        x_labels = gleise
         x_labels_pos = list(range(len(x_labels)))
-        x_pos = np.asarray([self._gleise.index(slot.gleis) for slot in slots])
+        x_pos = np.asarray([gleise.index(slot.gleis) for slot in slots])
 
         y_bot = np.asarray([slot.zeit for slot in slots])
         y_hgt = np.asarray([slot.dauer for slot in slots])
@@ -697,6 +705,12 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def page_changed(self):
+        self.update_actions()
+
+    @pyqtSlot()
+    def action_belegte_gleise(self):
+        self.belegte_gleise_zeigen = not self.belegte_gleise_zeigen
+        self.grafik_update()
         self.update_actions()
 
     @pyqtSlot()

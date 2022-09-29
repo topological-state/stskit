@@ -219,7 +219,8 @@
   <action name="actionSetup">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/equalizer.png</normaloff>:/equalizer.png</iconset>
+     <normaloff>:/equalizer.png</normaloff>
+     <disabledoff>:/equalizer-dis.png</disabledoff>:/equalizer.png</iconset>
    </property>
    <property name="text">
     <string>Setup</string>
@@ -234,7 +235,8 @@
   <action name="actionAnzeige">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/chart.png</normaloff>:/chart.png</iconset>
+     <normaloff>:/slots.png</normaloff>
+     <disabledoff>:/slots-dis.png</disabledoff>:/slots.png</iconset>
    </property>
    <property name="text">
     <string>Grafik</string>

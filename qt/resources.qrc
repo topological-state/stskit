@@ -5,7 +5,6 @@
         <file alias="hourglass--minus.png">../icons/hourglass--minus.png</file>
         <file alias="hourglass--plus.png">../icons/hourglass--plus.png</file>
         <file alias="hourglass--pencil.png">../icons/hourglass--pencil.png</file>
-        <file alias="eraser.png">../icons/eraser.png</file>
         <file alias="equalizer.png">../icons/equalizer.png</file>
         <file alias="zug-abfahrt-abwarten.png">../icons/zug-abfahrt-abwarten.png</file>
         <file alias="zug-ankunft-abwraten.png">../icons/zug-ankunft-abwarten.png</file>
@@ -16,5 +15,10 @@
         <file alias="flag-green.png">../icons/flag-green.png</file>
         <file alias="flag.png">../icons/flag.png</file>
         <file alias="flag-white.png">../icons/flag-white.png</file>
+        <file alias="funnel-small.png">../icons/funnel-small.png</file>
+        <file alias="funnel-small-dis">../icons/funnel-small-dis.png</file>
+        <file alias="slots.png">../icons/slots.png</file>
+        <file alias="slots-dis.png">../icons/slots-dis.png</file>
+        <file alias="equalizer-dis.png">../icons/equalizer-dis.png</file>
     </qresource>
 </RCC>
