@@ -798,12 +798,6 @@ class Anlage:
         anschlusstypen = {Knoten.TYP_NUMMER["Einfahrt"], Knoten.TYP_NUMMER["Ausfahrt"]}
         bahnsteigtypen = {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}
 
-        def filter_node(n1):
-            try:
-                return self.signal_graph.nodes[n1]["typ"] in bahnsteigtypen
-            except KeyError:
-                return False
-
         def filter_edge(n1, n2):
             try:
                 return self.bahnsteig_graph[n1][n2]["typ"] == "bahnhof"
@@ -811,7 +805,7 @@ class Anlage:
                 return False
 
         # durch nachbarbeziehung verbundene bahnsteige bilden einen bahnhof
-        subgraph = nx.subgraph_view(self.bahnsteig_graph, filter_node=filter_node, filter_edge=filter_edge)
+        subgraph = nx.subgraph_view(self.bahnsteig_graph, filter_edge=filter_edge)
         subgraph = subgraph.to_undirected()
         gruppen = {sorted(g)[0]: g for g in nx.connected_components(subgraph)}
         # gleisbezeichnung abtrennen
