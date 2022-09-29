@@ -37,7 +37,7 @@ import datetime
 import html.entities
 import logging
 import re
-from typing import Any, Callable, Dict, List, Iterable, Mapping, Optional, Set, Union
+from typing import Any, Callable, Dict, List, Iterable, Mapping, Optional, Set, Tuple, Union
 import untangle
 import xml.sax
 
@@ -70,7 +70,23 @@ class MyEntityResolver(untangle.Handler, xml.sax.handler.EntityResolver):
 class PluginClient:
     """
     PluginClient - der kern der plugin-schnittstelle
+
+    attribute
+    ---------
+
+    wege: dict von Knoten-objekten repräsentiert den wege-graph.
+        der dict ist nach Knoten.key aufgeschlüsselt.
+    wege_nach_enr: wege-graph nach enr-nummern aufgeschlüsselt.
+        der dict enthält die Knoten-objekte, die eine enr-nummer deklariert haben
+        (signale, weichen, einfahrten und ausfahrten).
+    wege_nach_namen: wege-graph nach knoten-namen aufgeschlüsselt.
+        der dict enthält die Knoten-objekte, die einen namen deklariert haben
+        (einfahrten, ausfahrten, bahnsteige und haltepunkte).
+        achtung: namen sind nicht eindeutig! deshalb enthält der dict sets von Knoten-objekte.
+    wege_nach_typ: wege-graph nach typ-nummer aufgeschlüsselt.
+        der dict enthält sets von Knoten-objekten.
     """
+
     def __init__(self, name: str, autor: str, version: str, text: str):
         self._stream: Optional[trio.abc.Stream] = None
         self._antwort_channel_in: Optional[trio.MemorySendChannel] = None
@@ -88,7 +104,8 @@ class PluginClient:
 
         self.anlageninfo: Optional[AnlagenInfo] = None
         self.bahnsteigliste: Dict[str, BahnsteigInfo] = {}
-        self.wege: Dict[str, Knoten] = {}
+        self.wege: Dict[Tuple[int, Union[int, str]], Knoten] = {}
+        self.wege_nach_enr: Dict[int, Knoten] = {}
         self.wege_nach_namen: Dict[str, Set[Knoten]] = {}
         self.wege_nach_typ: Dict[int, Set[Knoten]] = {}
         self.zugliste: Dict[int, ZugDetails] = {}
@@ -283,17 +300,38 @@ class PluginClient:
         return datetime.datetime.now() + self.time_offset
 
     async def request_wege(self):
+        """
+        wege-graph anfragen
+
+        der wege-graph enthält die elemente des gleisbilds und ihre verbindungen.
+        im PluginClient wird er als dict von Knoten-objekten dargestellt,
+        die über ihre nachbarn-attribute verlinkt sind.
+
+        da der simulator für die elemente zwei verschiedene schlüssel (enr und name) verwendet,
+        ist der schlüssel des wege-dict zweiteilig und enthält den elementtyp und
+        - je nach typ - entweder die enr oder den namen.
+        die wege_nach_enr, wege_nach_namen und wege_nach_typ indizieren den graphen
+        nach einfachen schlüsseln haben jedoch sets als bildmenge bzw. enthalten nicht alle elemente.
+
+        die methode aktualisiert folgende attribute:
+        wege, wege_nach_enr, wege_nach_namen, wege_nach_typ.
+
+        :return: None
+        """
+
         await self._send_request("wege")
         response = await self._antwort_channel_out.receive()
         self.wege = {}
+        self.wege_nach_enr = {}
         self.wege_nach_namen = {}
         self.wege_nach_typ = {}
 
         for shape in response.wege.shape:
             knoten = Knoten().update(shape)
-            # assert knoten.key not in self.wege, f"name/enr {knoten.key} kommt mehrfach vor"
             if knoten.key:
                 self.wege[knoten.key] = knoten
+            if knoten.enr:
+                self.wege_nach_enr[knoten.enr] = knoten
             if knoten.name:
                 try:
                     self.wege_nach_namen[knoten.name].add(knoten)
@@ -308,18 +346,18 @@ class PluginClient:
         for connector in response.wege.connector:
             try:
                 if connector['enr1']:
-                    knoten1 = self.wege[connector['enr1']]
+                    knoten1 = self.wege_nach_enr[connector['enr1']]
                 else:
-                    knoten1 = self.wege[connector['name1']]
-            except KeyError:
+                    knoten1 = list(self.wege_nach_namen[connector['name1']])[0]
+            except (KeyError, IndexError):
                 knoten1 = None
 
             try:
                 if connector['enr2']:
-                    knoten2 = self.wege[connector['enr2']]
+                    knoten2 = self.wege_nach_enr[connector['enr2']]
                 else:
-                    knoten2 = self.wege[connector['name2']]
-            except KeyError:
+                    knoten2 = list(self.wege_nach_namen[connector['name2']])[0]
+            except (KeyError, IndexError):
                 knoten2 = None
 
             if knoten1 is not None and knoten2 is not None:

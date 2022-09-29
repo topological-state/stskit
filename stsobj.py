@@ -188,8 +188,8 @@ class Knoten:
     bemerkungen:
     - einige shape-tags haben nur enr-nummern, andere nur einen namen, einige beides.
       da wir alle elemente im gleichen dictionary speichern wollen,
-      deklariert diese klasse noch einen 'key',
-      der wo möglich aus der enr-nummer (in str-repräsentation) und sonst aus dem namen besteht.
+      deklariert diese klasse noch einen 'key', der den knoten eindeutig identifiziert.
+      der key besteht aus der typ-nummer und entweder (wo deklariert) der enr-nummer oder dem namen.
     - der elementtyp wird numerisch gespeichert.
       er kann mittels der dicts TYP_NAME und TYP_NUMMER übersetzt werden.
     - in der liste 'zuege', führt der klient die züge, die über das gleiselement fahren
@@ -217,7 +217,7 @@ class Knoten:
 
     def __init__(self):
         super().__init__()
-        self.key: str = ""
+        self.key: Tuple[int, str] = (0, "")
         self.enr: int = 0
         self.name: str = ""
         self.typ: int = 0
@@ -249,15 +249,19 @@ class Knoten:
         except TypeError:
             self.enr = None
         self.name = shape['name']
-        if self.enr:
-            self.key = str(self.enr)
-        else:
-            self.key = self.name
         try:
             self.typ = int(shape['type'])
         except TypeError:
             self.typ = 0
+        if self.enr:
+            self.key = (self.typ, self.enr)
+        else:
+            self.key = (self.typ, self.name)
         return self
+
+    @property
+    def typ_name(self) -> str:
+        return self.TYP_NAME[self.typ]
 
 
 class ZugDetails:
