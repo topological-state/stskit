@@ -459,30 +459,17 @@ class Sektoren:
             sektoren = self._sektoren
         return sektoren
 
-    def set_config(self, sektoren: Dict[str, Set[str]]):
+    def set_config(self, sektoren: Mapping[str, Set[str]]):
         """
         übernimmt eine spezifische konfiguration.
 
         :param sektoren: die dictionary keys sind die hauptgleisnamen, die items sets von zugehörigen gleisnamen.
             jedes gleis darf nur einmal in einem set vorkommen.
-            duplikate werden gesucht und entfernt, es ist jedoch nicht vorhersagbar, welches entfernt wird.
-            es muss nicht jedes in der anlage vorhandene hauptgleis aufgeführt sein,
-            wenn vorher die auto_config durchgeführt wird.
+
         :return: None
         """
 
-        # neu zu konfigurierende gleise vorher entfernen, so dass wir dict.update verwenden können
-        for hg, sk in sektoren.items():
-            for gl in sk:
-                try:
-                    hg2 = self._hauptgleise[gl]
-                    self._sektoren[hg2].discard(gl)
-                    if len(self._sektoren[hg2]) == 0:
-                        del self._sektoren[hg2]
-                except KeyError:
-                    pass
-
-        self._sektoren.update(sektoren)
+        self._sektoren = {**sektoren}
         self._duplikate_entfernen(self._sektoren)
         self._update_hauptgleise()
 
