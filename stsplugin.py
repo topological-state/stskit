@@ -344,21 +344,27 @@ class PluginClient:
                     self.wege_nach_typ[knoten.typ] = {knoten}
 
         for connector in response.wege.connector:
+            knoten1 = None
             try:
                 if connector['enr1']:
-                    knoten1 = self.wege_nach_enr[connector['enr1']]
-                else:
-                    knoten1 = list(self.wege_nach_namen[connector['name1']])[0]
+                    knoten1 = self.wege_nach_enr[int(connector['enr1'])]
+                elif connector['name1']:
+                    for knoten in self.wege_nach_namen[str(connector['name1'])]:
+                        knoten1 = knoten
+                        break
             except (KeyError, IndexError):
-                knoten1 = None
+                pass
 
+            knoten2 = None
             try:
                 if connector['enr2']:
-                    knoten2 = self.wege_nach_enr[connector['enr2']]
-                else:
-                    knoten2 = list(self.wege_nach_namen[connector['name2']])[0]
+                    knoten2 = self.wege_nach_enr[int(connector['enr2'])]
+                elif connector['name2']:
+                    for knoten in self.wege_nach_namen[str(connector['name2'])]:
+                        knoten2 = knoten
+                        break
             except (KeyError, IndexError):
-                knoten2 = None
+                pass
 
             if knoten1 is not None and knoten2 is not None:
                 knoten1.nachbarn.add(knoten2)
