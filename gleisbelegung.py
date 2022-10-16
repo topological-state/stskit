@@ -460,7 +460,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.belegung.gleise_auswaehlen(self._gleise)
         try:
-            self.belegung.update(self.planung.zugliste.values())
+            self.belegung.update(self.planung.zugbaum)
         except AttributeError:
             pass
 

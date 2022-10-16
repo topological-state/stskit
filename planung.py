@@ -3,6 +3,8 @@ import logging
 import numpy as np
 from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
+import networkx as nx
+
 from stsobj import ZugDetails, FahrplanZeile, Ereignis
 from stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
 from auswertung import Auswertung
@@ -665,9 +667,22 @@ class Planung:
     - bei folgenden quelldatenübernahmen, werden nur noch die zielattribute nachgeführt,
       der fahrplan bleibt jedoch bestehen (im PluginClient werden abgefahrene ziele entfernt).
     - die fahrpläne der züge haben auch einträge zur einfahrt und ausfahrt.
+
+    zugbaum: im zugbaum sind die züge hierarchisch nach folgezug-beziehungen verknüpft.
+        der zugbaum ist ein networkx-DiGraph, wobei die nodes zid-nummern sind
+        und die edges gerichtete referenzen von stammzügen auf folgezüge.
+        das ZugDetailsPlanung-objekt ist, falls vorhanden, im node-attribut obj referenziert.
+        das objekt kann fehlen, wenn der fahrplan vom simulator noch nicht übermittelt worden ist.
+        edges haben die attribute flag ('E', 'F', 'K') und zielnr (zielnr-attribut im stammzug).
+
+        hinweise:
+        - topological_sort sortiert die zids von stamm zu nachfolgern.
+        - dict(zugbaum) liefert einen dict ähnlich zugliste: zid -> {'obj': ZugDetailsPlanung}
+        - list(zugbaum) liefert eine liste vom zids
     """
     def __init__(self):
         self.zugliste: Dict[int, ZugDetailsPlanung] = dict()
+        self.zugbaum = nx.DiGraph()
         self.auswertung: Optional[Auswertung] = None
         self.simzeit_minuten: int = 0
 
@@ -700,6 +715,7 @@ class Planung:
                 # bekannter zug
                 zug_planung.update_zug_details(zug)
                 ausgefahrene_zuege.discard(zug.zid)
+            self.zugbaum.add_node(zug.zid, obj=zug_planung)
 
         for zid in ausgefahrene_zuege:
             zug = self.zugliste[zid]
@@ -748,6 +764,7 @@ class Planung:
                             planzeile.ersatzzug = zug2
                             zug2.stammzug = zug
                             zids.append(zid2)
+                        self.zugbaum.add_edge(zid, zid2, flag='E', zielnr=planzeile.zielnr)
 
                     if zid2 := planzeile.fluegel_zid():
                         try:
@@ -759,6 +776,7 @@ class Planung:
                             planzeile.fluegelzug = zug2
                             zug2.stammzug = zug
                             zids.append(zid2)
+                        self.zugbaum.add_edge(zid, zid2, flag='F', zielnr=planzeile.zielnr)
 
                     if zid2 := planzeile.kuppel_zid():
                         try:
@@ -770,6 +788,7 @@ class Planung:
                             planzeile.kuppelzug = zug2
                             zug2.stammzug = zug
                             zids.append(zid2)
+                        self.zugbaum.add_edge(zid, zid2, flag='K', zielnr=planzeile.zielnr)
 
             zug.folgezuege_aufgeloest = folgezuege_aufgeloest
 

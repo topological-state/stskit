@@ -13,6 +13,7 @@ import re
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 import matplotlib as mpl
+import networkx as nx
 import numpy as np
 
 from anlage import Anlage
@@ -187,10 +188,17 @@ class Slot:
     die daten sind fertig verarbeitet, zugpaarung ist eingetragen, konflikte sind markiert oder gelöst.
 
     properties berechnen gewisse statische darstellungsmerkmale wie farben.
+
+    attribute
+    ---------
+
+    zugstamm : set von zid-nummern von allen zügen, die über flags miteinander verknüpft sind.
+        bei zügen aus demselben stamm werden keine gleiskonflikte angezeigt.
     """
 
     zug: ZugDetailsPlanung
     ziel: ZugZielPlanung
+    zugstamm: Set[int] = field(default_factory=set)
     gleistyp: str = ""
     gleis: str = ""
     zeit: int = 0
@@ -201,6 +209,7 @@ class Slot:
     def __init__(self, zug: ZugDetailsPlanung, ziel: ZugZielPlanung):
         self.zug = zug
         self.ziel = ziel
+        self.zugstamm = set([])
         self.gleistyp = ziel.gleistyp
         self.gleis = ziel.gleis
         self.zeit = 0
@@ -524,19 +533,21 @@ class Gleisbelegung:
             if slot in w.slots:
                 yield w
 
-    def update(self, zugliste: Iterable[ZugDetailsPlanung]):
+    def update(self, zugbaum: nx.DiGraph):
         """
         daten einlesen und slotliste neu aufbauen.
 
         diese methode liest die zugdaten neu ein und baut die attribute neu auf.
         in einem zweiten schritt, werden pro gleis, allfällige konflikte gelöst.
 
+        :param zugbaum: zugbaum aus dem planungsmodul
+
         :return: None
         """
 
         if len(self.gleise) == 0:
             self.gleise_auswaehlen(self.anlage.gleiszuordnung.keys())
-        self.slots_erstellen(zugliste)
+        self.slots_erstellen(zugbaum)
         self.warnungen_aktualisieren()
 
     def gleise_auswaehlen(self, gleise: Iterable[str]):
@@ -549,17 +560,21 @@ class Gleisbelegung:
 
         self.gleise = sorted(gleise, key=gleisname_sortkey)
 
-    def slots_erstellen(self, zugliste: Iterable[ZugDetailsPlanung]):
+    def slots_erstellen(self, zugbaum: nx.DiGraph):
         """
         slotliste aus zugdaten erstellen/aktualisieren.
 
-        :param zugliste: sequenz von zugplanungsobjekten.
+        :param zugbaum: zugbaum aus dem planungsmodul
+
         :return: None
         """
 
         keys_bisherige = set(self.slots.keys())
+        zugbaum_ud = zugbaum.to_undirected(as_view=True)
 
-        for zug in zugliste:
+        for zid, zug in zugbaum.nodes.data(data='obj'):
+            if zug is None:
+                continue
             for ziel in zug.fahrplan:
                 plan_an = ziel.ankunft_minute
                 if plan_an is None:
@@ -581,6 +596,7 @@ class Gleisbelegung:
                     slot.gleis = ziel.gleis
                     slot.zeit = plan_an
                     slot.dauer = max(1, plan_ab - plan_an)
+                    slot.zugstamm = nx.node_connected_component(zugbaum_ud, zug.zid)
                     keys_bisherige.discard(key)
 
         for key in keys_bisherige:
@@ -681,7 +697,7 @@ class Gleisbelegung:
                 continue
             if s1.verbindung is not None and s1.verbindung == s2.zug:
                 yield from self._zugfolgewarnung(s1, s2)
-            elif s2.verbindung is not None and s2.verbindung == s1.zug:
+            elif s2.zug.zid in s1.zugstamm:
                 pass
             elif s1.zeit <= s2.zeit <= s1.zeit + s1.dauer:
                 k = SlotWarnung(gleise={s1.gleis, s2.gleis}, zeit=s1.zeit, status="gleis")
@@ -702,9 +718,7 @@ class Gleisbelegung:
         for s1, s2 in itertools.permutations(slots, 2):
             if s1.zug == s2.zug or s1.gleis == s2.gleis:
                 continue
-            if s1.verbindung is not None and s1.verbindung == s2.zug:
-                pass
-            elif s2.verbindung is not None and s2.verbindung == s1.zug:
+            if s2.zug.zid in s1.zugstamm:
                 pass
             elif s1.zeit <= s2.zeit <= s1.zeit + s1.dauer:
                 k = SlotWarnung(gleise={s1.gleis, s2.gleis}, status="hauptgleis")
