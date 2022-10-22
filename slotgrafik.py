@@ -533,21 +533,21 @@ class Gleisbelegung:
             if slot in w.slots:
                 yield w
 
-    def update(self, zugbaum: nx.DiGraph):
+    def update(self, planung: Planung):
         """
         daten einlesen und slotliste neu aufbauen.
 
         diese methode liest die zugdaten neu ein und baut die attribute neu auf.
         in einem zweiten schritt, werden pro gleis, allfällige konflikte gelöst.
 
-        :param zugbaum: zugbaum aus dem planungsmodul
+        :param planung: planungsmodul
 
         :return: None
         """
 
         if len(self.gleise) == 0:
             self.gleise_auswaehlen(self.anlage.gleiszuordnung.keys())
-        self.slots_erstellen(zugbaum)
+        self.slots_erstellen(planung)
         self.warnungen_aktualisieren()
 
     def gleise_auswaehlen(self, gleise: Iterable[str]):
@@ -560,21 +560,18 @@ class Gleisbelegung:
 
         self.gleise = sorted(gleise, key=gleisname_sortkey)
 
-    def slots_erstellen(self, zugbaum: nx.DiGraph):
+    def slots_erstellen(self, planung: Planung):
         """
         slotliste aus zugdaten erstellen/aktualisieren.
 
-        :param zugbaum: zugbaum aus dem planungsmodul
+        :param planung: Planungsmodul
 
         :return: None
         """
 
         keys_bisherige = set(self.slots.keys())
-        zugbaum_ud = zugbaum.to_undirected(as_view=True)
 
-        for zid, zug in zugbaum.nodes.data(data='obj'):
-            if zug is None:
-                continue
+        for zug in planung.zuege():
             for ziel in zug.fahrplan:
                 plan_an = ziel.ankunft_minute
                 if plan_an is None:
@@ -596,7 +593,7 @@ class Gleisbelegung:
                     slot.gleis = ziel.gleis
                     slot.zeit = plan_an
                     slot.dauer = max(1, plan_ab - plan_an)
-                    slot.zugstamm = nx.node_connected_component(zugbaum_ud, zug.zid)
+                    slot.zugstamm = planung.zugstamm[zug.zid]
                     keys_bisherige.discard(key)
 
         for key in keys_bisherige:

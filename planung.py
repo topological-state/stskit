@@ -1,7 +1,7 @@
 import datetime
 import logging
 import numpy as np
-from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 import networkx as nx
 
@@ -658,33 +658,76 @@ class Planung:
     """
     zug-planung und disposition
 
-    diese klasse führt eine zugliste ähnlich zu der vom PluginClient.
-    sie unterscheidet sich jedoch in einigen merkmalen:
+    diese klasse führt einen fahrplan ähnlich wie der PluginClient.
+    der fahrplan wird in dieser klasse jedoch vom fahrdienstleiter und vordefinierten algorithmen bearbeitet
+    (z.b. für die verspätungsfortpflanzung).
 
-    - die liste enthält ZugDetailsPlanung-objekte statt ZugDetails.
-    - züge werden bei ihrem ersten auftreten in den quelldaten übernommen und bleiben in der liste,
+    - die planung erfolgt mittels ZugDetailsPlanung-objekten (entsprechend ZugDetails im PluginClient).
+    - züge werden bei ihrem ersten auftreten von den quelldaten übernommen und bleiben in der planung,
       bis sie explizit entfernt werden.
     - bei folgenden quelldatenübernahmen, werden nur noch die zielattribute nachgeführt,
-      der fahrplan bleibt jedoch bestehen (im PluginClient werden abgefahrene ziele entfernt).
+      die fahrplaneingträge bleiben bestehen (im PluginClient werden abgefahrene ziele entfernt).
     - die fahrpläne der züge haben auch einträge zur einfahrt und ausfahrt.
 
-    zugbaum: im zugbaum sind die züge hierarchisch nach folgezug-beziehungen verknüpft.
+    attribute
+    ---------
+
+    zugbaum: der zugbaum ist der primäre speicherort für alle fahrplan-daten.
         der zugbaum ist ein networkx-DiGraph, wobei die nodes zid-nummern sind
         und die edges gerichtete referenzen von stammzügen auf folgezüge.
+
         das ZugDetailsPlanung-objekt ist, falls vorhanden, im node-attribut obj referenziert.
         das objekt kann fehlen, wenn der fahrplan vom simulator noch nicht übermittelt worden ist.
         edges haben die attribute flag ('E', 'F', 'K') und zielnr (zielnr-attribut im stammzug).
 
         hinweise:
-        - topological_sort sortiert die zids von stamm zu nachfolgern.
-        - dict(zugbaum) liefert einen dict ähnlich zugliste: zid -> {'obj': ZugDetailsPlanung}
-        - list(zugbaum) liefert eine liste vom zids
+        - einzelne zugobjekte werden über zugbaum.nodes[zid]['obj'] abgefragt.
+          für einen einfachern zugriff steht alternativ das attribut zugliste zur verfügung.
+        - dict(zugbaum) liefert einen dict: zid -> {'obj': ZugDetailsPlanung}
+        - list(zugbaum) liefert eine liste von zids
+        - self.zugbaum.nodes.data(data='obj') liefert einen iterator (zid, ZugDetailsPlanung)
+
+    zugliste: ist ein abgeleitetes objekt und ermöglicht einen kürzeren zugriff auf das zugobjekt.
+        der dict ist topologisch sortiert (s. zugsortierung).
+
+    zuege: erstellt einen topologisch sortierten generator von zügen (s. zugsortierung).
+
+    zugbaum_ungerichtet: view auf zugbaum mit ungerichteten kanten.
+
+    zugsortierung: topologisch sortierte liste von zid.
+        folgezüge kommen in dieser liste nie vor dem stammzug.
+
+    zugstamm: gibt zu jedem zid den stamm an, d.h. ein set mit allen verknüpften zid.
+
+    auswertung: ...
+
+    simzeit_minuten: ...
     """
+
     def __init__(self):
         self.zugliste: Dict[int, ZugDetailsPlanung] = dict()
         self.zugbaum = nx.DiGraph()
+        self.zugbaum_ungerichtet = nx.Graph()
+        self.zugsortierung: List[int] = []
+        self.zugstamm: Dict[int, Set[int]] = {}
         self.auswertung: Optional[Auswertung] = None
         self.simzeit_minuten: int = 0
+
+    def zuege(self) -> Iterable[ZugDetailsPlanung]:
+        """
+        topologisch sortierter generator von zuegen
+
+        die sortierung garantiert, dass folgezuege hinter ihren stammzuegen gelistet werden.
+
+        :return: iteration von ZugDetailsPlanung-objekten
+        """
+
+        for zid in self.zugsortierung:
+            try:
+                zug = self.zugbaum.nodes[zid]['obj']
+                yield zug
+            except KeyError:
+                pass
 
     def zuege_uebernehmen(self, zuege: Iterable[ZugDetails]):
         """
@@ -699,17 +742,17 @@ class Planung:
         :param zuege:
         :return:
         """
-        ausgefahrene_zuege = set(self.zugliste.keys())
+
+        ausgefahrene_zuege = set(self.zugbaum.nodes)
 
         for zug in zuege:
             try:
-                zug_planung = self.zugliste[zug.zid]
+                zug_planung = self.zugbaum.nodes[zug.zid]['obj']
             except KeyError:
                 # neuer zug
                 zug_planung = ZugDetailsPlanung()
                 zug_planung.assign_zug_details(zug)
                 zug_planung.update_zug_details(zug)
-                self.zugliste[zug_planung.zid] = zug_planung
                 ausgefahrene_zuege.discard(zug.zid)
             else:
                 # bekannter zug
@@ -718,18 +761,46 @@ class Planung:
             self.zugbaum.add_node(zug.zid, obj=zug_planung)
 
         for zid in ausgefahrene_zuege:
-            zug = self.zugliste[zid]
-            if zug.sichtbar:
-                zug.sichtbar = zug.amgleis = False
-                zug.gleis = zug.plangleis = ""
-                zug.ausgefahren = True
-                for zeile in zug.fahrplan:
-                    zeile.abgefahren = True
+            try:
+                zug = self.zugbaum.nodes[zid]['obj']
+            except KeyError:
+                pass
+            else:
+                if zug.sichtbar:
+                    zug.sichtbar = zug.amgleis = False
+                    zug.gleis = zug.plangleis = ""
+                    zug.ausgefahren = True
+                    for zeile in zug.fahrplan:
+                        zeile.abgefahren = True
 
-        self.folgezuege_aufloesen()
+        self._folgezuege_aufloesen()
+        self._zugbaum_analysieren()
         self.korrekturen_definieren()
 
-    def folgezuege_aufloesen(self):
+    def _zugbaum_analysieren(self) -> None:
+        """
+        aktualisiert von zugbaum abgeleitete objekte
+
+        - zugbaum_ungerichtet
+        - zugsortierung
+        - zugstamm
+        - zugliste
+
+        muss jedesmal ausgeführt werden, wenn die zusammensetzung von self.zugbaum verändert wurde.
+
+        :return: None
+        """
+
+        self.zugsortierung = list(nx.topological_sort(self.zugbaum))
+        self.zugbaum_ungerichtet = self.zugbaum.to_undirected(as_view=True)
+        for stamm in nx.connected_components(self.zugbaum_ungerichtet):
+            for zid in stamm:
+                self.zugstamm[zid] = stamm
+
+        self.zugliste = {zid: data['obj'] for zid in self.zugsortierung
+                         if 'obj' in (data := self.zugbaum.nodes[zid])}
+
+    def _folgezuege_aufloesen(self):
         """
         folgezüge aus den zugflags auflösen.
 
@@ -739,12 +810,12 @@ class Planung:
         :return: None
         """
 
-        zids = list(self.zugliste.keys())
+        zids = list(self.zugbaum)
 
         while zids:
             zid = zids.pop(0)
             try:
-                zug = self.zugliste[zid]
+                zug = self.zugbaum.nodes[zid]['obj']
             except KeyError:
                 continue
 
@@ -756,7 +827,7 @@ class Planung:
                 if set(planzeile.flags).intersection({'E', 'F', 'K'}):
                     if zid2 := planzeile.ersatz_zid():
                         try:
-                            zug2 = self.zugliste[zid2]
+                            zug2 = self.zugbaum.nodes[zid2]['obj']
                         except KeyError:
                             planzeile.ersatzzug = None
                             folgezuege_aufgeloest = False
@@ -768,7 +839,7 @@ class Planung:
 
                     if zid2 := planzeile.fluegel_zid():
                         try:
-                            zug2 = self.zugliste[zid2]
+                            zug2 = self.zugbaum.nodes[zid2]['obj']
                         except KeyError:
                             planzeile.fluegelzug = None
                             folgezuege_aufgeloest = False
@@ -780,7 +851,7 @@ class Planung:
 
                     if zid2 := planzeile.kuppel_zid():
                         try:
-                            zug2 = self.zugliste[zid2]
+                            zug2 = self.zugbaum.nodes[zid2]['obj']
                         except KeyError:
                             planzeile.kuppelzug = None
                             folgezuege_aufgeloest = False
@@ -805,7 +876,8 @@ class Planung:
 
         :return:
         """
-        for zug in self.zugliste.values():
+
+        for zug in self.zuege():
             try:
                 einfahrt = zug.fahrplan[0]
                 ziel1 = zug.fahrplan[1]
@@ -895,7 +967,7 @@ class Planung:
                     pass
 
     def korrekturen_definieren(self):
-        for zug in self.zugliste.values():
+        for zug in self.zuege():
             if not zug.korrekturen_definiert:
                 result = self.zug_korrekturen_definieren(zug)
                 zug.korrekturen_definiert = zug.folgezuege_aufgeloest and result
@@ -971,13 +1043,13 @@ class Planung:
         try:
             zid = zug.zid
         except AttributeError:
-            for z in self.zugliste.values():
+            for z in self.zuege():
                 if z.nummer == zug or z.name == zug:
                     zid = z.zid
                     break
 
         try:
-            return self.zugliste[zid]
+            return self.zugbaum[zid]['obj']
         except KeyError:
             return None
 
@@ -1022,7 +1094,7 @@ class Planung:
         logger.debug(f"{ereignis.art} {ereignis.name} ({ereignis.verspaetung})")
 
         try:
-            zug = self.zugliste[ereignis.zid]
+            zug = self.zugbaum.nodes[ereignis.zid]['obj']
         except KeyError:
             logger.warning(f"zug von ereignis {ereignis} nicht in zugliste")
             return None
