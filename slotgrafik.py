@@ -205,6 +205,7 @@ class Slot:
     dauer: int = 0
     verbindung: Optional[ZugDetailsPlanung] = None
     verbindungsart: str = ""
+    verbunden: bool = False
 
     def __init__(self, zug: ZugDetailsPlanung, ziel: ZugZielPlanung):
         self.zug = zug
@@ -696,6 +697,8 @@ class Gleisbelegung:
             if s1.zug == s2.zug:
                 continue
             if s1.verbindung is not None and s1.verbindung == s2.zug:
+                if s1.verbindungsart in {'E', 'F'}:
+                    s2.verbunden = True
                 yield from self._zugfolgewarnung(s1, s2)
             elif s2.zug.zid in s1.zugstamm:
                 pass

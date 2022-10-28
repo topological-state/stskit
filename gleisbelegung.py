@@ -565,7 +565,9 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
     def _plot_verspaetungen(self, slots, x_pos, colors):
         for x, c, slot in zip(x_pos, colors, slots):
-            if slot.ziel.verspaetung_an > 15:
+            if slot.verbunden:
+                continue
+            elif slot.ziel.verspaetung_an > 15:
                 v = 15
                 ls = "--"
             else:
