@@ -592,7 +592,10 @@ class Gleisbelegung:
                     # aktuellen fahrplan übernehmen
                     slot.gleis = ziel.gleis
                     slot.zeit = plan_an
-                    slot.dauer = max(1, plan_ab - plan_an)
+                    if slot.ziel.einfahrt or slot.ziel.ausfahrt:
+                        slot.dauer = 1
+                    else:
+                        slot.dauer = max(1, plan_ab - plan_an)
                     slot.zugstamm = planung.zugstamm[zug.zid]
                     keys_bisherige.discard(key)
 
