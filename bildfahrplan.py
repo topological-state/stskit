@@ -18,6 +18,7 @@ from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from slotgrafik import hour_minutes_formatter, ZugFarbschema
 from stsplugin import PluginClient
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
+from zentrale import DatenZentrale
 
 from qt.ui_bildfahrplan import Ui_BildfahrplanWindow
 
@@ -120,12 +121,11 @@ class Trasse:
 
 class BildFahrplanWindow(QtWidgets.QMainWindow):
 
-    def __init__(self):
+    def __init__(self, zentrale: DatenZentrale):
         super().__init__()
-        self.client: Optional[PluginClient] = None
-        self.anlage: Optional[Anlage] = None
-        self.planung: Optional[Planung] = None
-        self.auswertung: Optional[Auswertung] = None
+
+        self.zentrale = zentrale
+        self.zentrale.planung_update.register(self.planung_update)
 
         self._strecken_name: str = ""
         self._strecke_von: str = ""
@@ -176,6 +176,22 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.display_canvas.mpl_connect("resize_event", self.on_resize)
 
         self.update_actions()
+
+    @property
+    def anlage(self) -> Anlage:
+        return self.zentrale.anlage
+
+    @property
+    def client(self) -> PluginClient:
+        return self.zentrale.client
+
+    @property
+    def planung(self) -> Planung:
+        return self.zentrale.planung
+
+    @property
+    def auswertung(self) -> Auswertung:
+        return self.zentrale.auswertung
 
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
@@ -249,7 +265,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     def page_changed(self):
         self.update_actions()
 
-    def update(self):
+    def planung_update(self, *args, **kwargs):
         if self.ui.von_combo.count() == 0:
             self.update_combos()
         if self._strecke_von and self._strecke_nach:

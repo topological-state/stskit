@@ -9,8 +9,8 @@ from PyQt5 import Qt, QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QTableView, QLabel
 from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
+from zentrale import  DatenZentrale
 from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
-from stsplugin import PluginClient
 from stsobj import ZugDetails, time_to_minutes, format_verspaetung
 from slotgrafik import hour_minutes_formatter, ZugFarbschema
 
@@ -348,8 +348,11 @@ class FahrplanWindow(QtWidgets.QWidget):
     der zug kann in der zugliste durch anklicken ausgewählt werden.
     die zugliste kann durch klicken auf die kopfzeile sortiert werden.
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, zentrale: DatenZentrale, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.zentrale = zentrale
+        self.zentrale.planung_update.register(self.planung_update)
 
         self.zugliste_view: Optional[QTableView] = None
         self.fahrplan_view: Optional[QTableView] = None
@@ -360,9 +363,6 @@ class FahrplanWindow(QtWidgets.QWidget):
         py_path = Path(__file__).parent
         ui_path = Path(py_path, 'qt', 'fahrplan.ui')
         uic.loadUi(ui_path, self)
-
-        self.client: Optional[PluginClient] = None
-        self.planung: Optional[Planung] = None
 
         self.setWindowTitle("Tabellenfahrplan")
 
@@ -390,7 +390,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.folgezug_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
         self.folgezug_view.verticalHeader().setVisible(False)
 
-    def update(self) -> None:
+    def planung_update(self, *args, **kwargs) -> None:
         """
         fahrplan mit neuen daten aktualisieren.
 
@@ -404,7 +404,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         except IndexError:
             model_index = None
 
-        self.zugliste_modell.set_zugliste(self.planung.zugliste)
+        self.zugliste_modell.set_zugliste(self.zentrale.planung.zugliste)
 
         if model_index:
             view_index = self.zugliste_sort_filter.mapFromSource(model_index)

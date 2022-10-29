@@ -18,6 +18,7 @@ from stsplugin import PluginClient
 from anlage import Anlage
 from auswertung import Auswertung
 from stsobj import Ereignis
+from zentrale import DatenZentrale
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -122,12 +123,11 @@ class EreignisTabelle(QtCore.QAbstractTableModel):
 
 class TickerWindow(QtWidgets.QMainWindow):
 
-    def __init__(self):
+    def __init__(self, zentrale: DatenZentrale):
         super().__init__()
 
-        self.client: Optional[PluginClient] = None
-        self.config: Optional[Anlage] = None
-        self.auswertung: Optional[Auswertung] = None
+        self.zentrale = zentrale
+        self.zentrale.plugin_ereignis.register(self.add_ereignis)
 
         self.setWindowTitle("ereignis-ticker")
         self._main = QtWidgets.QWidget()
@@ -140,7 +140,7 @@ class TickerWindow(QtWidgets.QMainWindow):
         self.table.setSelectionMode(Qt.QAbstractItemView.NoSelection)
         layout.addWidget(self.table)
 
-    def add_ereignis(self, ereignis: Ereignis):
+    def add_ereignis(self, *args, ereignis: Ereignis, **kwargs):
         self.model.add_ereignis(ereignis)
         self.model.layoutChanged.emit()
         self.table.resizeColumnsToContents()

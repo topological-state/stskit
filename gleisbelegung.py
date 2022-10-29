@@ -19,7 +19,7 @@ from stsplugin import PluginClient
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
 from slotgrafik import hour_minutes_formatter, Slot, ZugFarbschema, Gleisbelegung, SlotWarnung, gleis_sektor_sortkey, \
     WARNUNG_VERBINDUNG, WARNUNG_STATUS
-
+from zentrale import DatenZentrale
 
 from qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 
@@ -354,12 +354,12 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
 
 class GleisbelegungWindow(QtWidgets.QMainWindow):
 
-    def __init__(self):
+    def __init__(self, zentrale: DatenZentrale):
         super().__init__()
-        self.client: Optional[PluginClient] = None
-        self.anlage: Optional[Anlage] = None
-        self.planung: Optional[Planung] = None
-        self.auswertung: Optional[Auswertung] = None
+
+        self.zentrale = zentrale
+        self.zentrale.planung_update.register(self.planung_update)
+
         self.farbschema: ZugFarbschema = ZugFarbschema()
         self.farbschema.init_schweiz()
         self.show_zufahrten: bool = False
@@ -411,6 +411,22 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.update_actions()
 
+    @property
+    def anlage(self) -> Anlage:
+        return self.zentrale.anlage
+
+    @property
+    def client(self) -> PluginClient:
+        return self.zentrale.client
+
+    @property
+    def planung(self) -> Planung:
+        return self.zentrale.planung
+
+    @property
+    def auswertung(self) -> Auswertung:
+        return self.zentrale.auswertung
+
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
 
@@ -428,7 +444,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and len(self._slot_auswahl) == 2)
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and len(self._slot_auswahl) == 2)
 
-    def update(self):
+    def planung_update(self, *args, **kwargs):
         """
         daten und grafik neu aufbauen.
 

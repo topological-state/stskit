@@ -20,6 +20,7 @@ import networkx as nx
 from stsplugin import PluginClient
 from anlage import Anlage
 from auswertung import Auswertung
+from zentrale import DatenZentrale
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -27,11 +28,12 @@ logger.addHandler(logging.NullHandler())
 
 class GleisnetzWindow(QtWidgets.QMainWindow):
 
-    def __init__(self):
+    def __init__(self, zentrale: DatenZentrale):
         super().__init__()
-        self.client: Optional[PluginClient] = None
-        self.anlage: Optional[Anlage] = None
-        self.auswertung: Optional[Auswertung] = None
+
+        self.zentrale = zentrale
+        self.zentrale.anlage_update.register(self.anlage_update)
+
         self.layout_seed: int = 0
 
         self.setWindowTitle("gleisplan")
@@ -50,12 +52,20 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
         self.layout_spinbox.setMinimum(0)
         self.layout_spinbox.valueChanged.connect(self.layout_spinbox_changed)
 
+    @property
+    def anlage(self) -> Anlage:
+        return self.zentrale.anlage
+
+    @property
+    def client(self) -> PluginClient:
+        return self.zentrale.client
+
     @pyqtSlot(int)
     def layout_spinbox_changed(self, v):
         self.layout_seed = max(0, int(v))
         self.update()
 
-    def update(self):
+    def anlage_update(self, *args, **kwargs):
         try:
             self._axes.clear()
             if self.anlage.bahnhof_graph:
