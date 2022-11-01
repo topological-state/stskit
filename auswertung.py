@@ -45,13 +45,12 @@ class FahrzeitAuswertung:
         :return: None
         """
 
-        logger.debug(f"add_fahrzeit({zug.name}, {start}, {ziel}, {fahrzeit})")
-
-        self._add_edge_stats(self.gleis_zeiten, start, ziel, fahrzeit)
         try:
             self._add_edge_stats(self.bahnhof_zeiten, self.gruppen[start], self.gruppen[ziel], fahrzeit)
+            self._add_edge_stats(self.gleis_zeiten, start, ziel, fahrzeit)
+            logger.debug(f"add_fahrzeit({zug.name}, {start}, {ziel}, {fahrzeit})")
         except KeyError:
-            logger.debug(f"add_fahrzeit: fehlende gruppendzuordnung für {start} oder {ziel}")
+            logger.debug(f"add_fahrzeit: fehlende gruppenzuordnung für {start} oder {ziel}")
 
     @staticmethod
     def _add_edge_stats(g: nx.Graph, u: Any, v: Any, wert: float) -> Dict[str, Any]:
@@ -111,38 +110,61 @@ class FahrzeitAuswertung:
             numpy.nan, wenn keine passende verbindung gefunden wurde.
         """
 
-        try:
-            z = self._get_graph_fahrzeit(self.gleis_zeiten, start, ziel)
-        except (KeyError, nx.NetworkXException):
-            try:
-                start = self.gruppen[start]
-                ziel = self.gruppen[ziel]
-            except KeyError:
-                pass
-        else:
-            return z
+        fahrzeiten = []
+        fahrzeiten.extend(self._get_graph_fahrzeit(self.gleis_zeiten, start, ziel))
 
         try:
-            z = self._get_graph_fahrzeit(self.bahnhof_zeiten, start, ziel)
-        except (KeyError, nx.NetworkXException):
+            start_bahnhof = self.gruppen[start]
+            ziel_bahnhof = self.gruppen[ziel]
+        except KeyError:
             pass
         else:
-            return z
+            fahrzeiten.extend(self._get_graph_fahrzeit(self.bahnhof_zeiten, start_bahnhof, ziel_bahnhof))
 
-        return np.nan
+        return min(fahrzeiten, default=np.nan)
 
     @staticmethod
     def _get_graph_fahrzeit(graph, start, ziel):
+        """
+        fahrzeit aus einem graphen auslesen.
+
+        die fahrzeit wird aus dem 'avg'-attribut der kante im graphen ausgelesen.
+        die methode gibt eine liste von bis zu drei werten aus:
+        1. direkte kante zwischen start und ziel,
+        2. direkte kante zwischen ziel und start (rückweg),
+        3. summe über den kürzesten pfad.
+
+        :param graph: dies muss einer der eigenen graphen gleis_zeiten oder bahnhof_zeiten sein
+            (oder ein kompatibler graph).
+        :param start: startgleis bzw. startbahnhof
+        :param ziel: zielgleis bzw. zielbahnhof
+        :return: liste von fahrzeiten in sekunden
+        """
+
+        result = []
+
         try:
-            return graph[start][ziel]['avg']
+            result.append(graph[start][ziel]['avg'])
         except KeyError:
             pass
 
-        p = nx.shortest_path(graph, start, ziel, 'avg')
-        s = 0
-        for u, v in zip(p[:-1], p[1:]):
-            s = s + graph[u][v]['avg']
-        return s
+        try:
+            result.append(graph[ziel][start]['avg'])
+        except KeyError:
+            pass
+
+        try:
+            ud = graph.to_undirected(as_view=True)
+            p = nx.shortest_path(ud, start, ziel, 'avg')
+            s = 0
+            for u, v in zip(p[:-1], p[1:]):
+                s = s + graph[u][v]['avg']
+        except (nx.NetworkXException, KeyError):
+            pass
+        else:
+            result.append(s)
+
+        return result
 
 
 class ZugAuswertung:
