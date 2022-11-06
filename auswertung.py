@@ -451,10 +451,10 @@ class Auswertung:
             strecke = an - ab
             if strecke < 0:
                 strecke += 24 * 60 * 60
-            if not zug.ist_rangierfahrt:
+            if start.gleis and not zug.ist_rangierfahrt:
                 self.fahrzeiten.add_fahrzeit(zug, start.gleis, ziel.gleis, strecke)
 
-    def fahrzeit_schaetzen(self, zug: str, start: str, ziel: str) -> Optional[int]:
+    def fahrzeit_schaetzen(self, zug: str, start: str, ziel: str) -> float:
         """
         fahrzeit eines zuges von start zu ziel abschätzen.
 

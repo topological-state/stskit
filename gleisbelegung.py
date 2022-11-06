@@ -28,9 +28,6 @@ logger.addHandler(logging.NullHandler())
 
 mpl.use('Qt5Agg')
 
-logger = logging.getLogger(__name__)
-logger.addHandler(logging.NullHandler())
-
 
 def weginfo_kurz(zug: ZugDetailsPlanung, gleis_index: int) -> str:
     gleise = []
