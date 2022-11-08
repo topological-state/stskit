@@ -22,6 +22,7 @@ import qtrio
 
 from stsplugin import PluginClient, TaskDone
 from zentrale import DatenZentrale
+from anschlussmatrix import AnschlussmatrixWindow
 from bildfahrplan import BildFahrplanWindow
 from gleisbelegung import GleisbelegungWindow
 from gleisnetz import GleisnetzWindow
@@ -142,6 +143,11 @@ class MainWindow(QtWidgets.QMainWindow):
         layout.addWidget(self.bildfahrplan_button)
         self.bildfahrplan_button.setEnabled(True)
 
+        self.matrix_button = QtWidgets.QPushButton("anschlussmatrix", self)
+        self.matrix_button.clicked.connect(self.matrix_clicked)
+        layout.addWidget(self.matrix_button)
+        self.matrix_button.setEnabled(True)
+
         self.fahrplan_button = QtWidgets.QPushButton("tabellenfahrplan", self)
         self.fahrplan_button.clicked.connect(self.fahrplan_clicked)
         layout.addWidget(self.fahrplan_button)
@@ -177,6 +183,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def gleisbelegung_clicked(self):
         window = GleisbelegungWindow(self.zentrale)
+        window.planung_update()
+        window.show()
+        self.windows.add(window)
+
+    def matrix_clicked(self):
+        window = AnschlussmatrixWindow(self.zentrale)
         window.planung_update()
         window.show()
         self.windows.add(window)

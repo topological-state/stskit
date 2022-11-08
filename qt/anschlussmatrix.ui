@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AnschlussmatrixWindow</class>
+ <widget class="QMainWindow" name="AnschlussmatrixWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="settings_page">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="bahnhofLabel">
+            <property name="text">
+             <string>&amp;Bahnhof</string>
+            </property>
+            <property name="buddy">
+             <cstring>bahnhofBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QComboBox" name="bahnhofBox">
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToContents</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="display_page">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSplitter" name="displaySplitter">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <widget class="QWidget" name="grafikWidget" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+          <widget class="QLabel" name="zuginfoLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="text">
+            <string>Zuginfo: (keine Auswahl)</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::AutoText</enum>
+           </property>
+           <property name="textInteractionFlags">
+            <set>Qt::TextSelectableByMouse</set>
+           </property>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionSetup"/>
+   <addaction name="actionAnzeige"/>
+   <addaction name="actionBelegteGleise"/>
+   <addaction name="separator"/>
+   <addaction name="actionWarnungSetzen"/>
+   <addaction name="actionWarnungIgnorieren"/>
+   <addaction name="actionWarnungReset"/>
+   <addaction name="separator"/>
+   <addaction name="actionPlusEins"/>
+   <addaction name="actionMinusEins"/>
+   <addaction name="actionFix"/>
+   <addaction name="actionAnkunftAbwarten"/>
+   <addaction name="actionAbfahrtAbwarten"/>
+   <addaction name="separator"/>
+   <addaction name="actionLoeschen"/>
+  </widget>
+  <action name="actionSetup">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/equalizer.png</normaloff>
+     <disabledoff>:/equalizer-dis.png</disabledoff>:/equalizer.png</iconset>
+   </property>
+   <property name="text">
+    <string>Setup</string>
+   </property>
+   <property name="toolTip">
+    <string>Gleisauswahl (S)</string>
+   </property>
+   <property name="shortcut">
+    <string>S</string>
+   </property>
+  </action>
+  <action name="actionAnzeige">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/slots.png</normaloff>
+     <disabledoff>:/slots-dis.png</disabledoff>:/slots.png</iconset>
+   </property>
+   <property name="text">
+    <string>Grafik</string>
+   </property>
+   <property name="toolTip">
+    <string>Grafik anzeigen (G)</string>
+   </property>
+   <property name="shortcut">
+    <string>G</string>
+   </property>
+  </action>
+  <action name="actionPlusEins">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/clock--plus.png</normaloff>:/clock--plus.png</iconset>
+   </property>
+   <property name="text">
+    <string>+1</string>
+   </property>
+   <property name="toolTip">
+    <string>Feste Verspätung +1 Minute auf ausgewähltem Slot (+)</string>
+   </property>
+   <property name="shortcut">
+    <string>+</string>
+   </property>
+  </action>
+  <action name="actionMinusEins">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/clock--minus.png</normaloff>:/clock--minus.png</iconset>
+   </property>
+   <property name="text">
+    <string>-1</string>
+   </property>
+   <property name="toolTip">
+    <string>Feste Verspätung -1 Minute auf ausgewähltem Slot (-)</string>
+   </property>
+   <property name="shortcut">
+    <string>-</string>
+   </property>
+  </action>
+  <action name="actionFix">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/clock--pencil.png</normaloff>:/clock--pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fix</string>
+   </property>
+   <property name="toolTip">
+    <string>Feste Verspätung auf ausgewähltem Slot festlegen (V)</string>
+   </property>
+   <property name="shortcut">
+    <string>V</string>
+   </property>
+  </action>
+  <action name="actionLoeschen">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/cross-script.png</normaloff>:/cross-script.png</iconset>
+   </property>
+   <property name="text">
+    <string>Löschen</string>
+   </property>
+   <property name="toolTip">
+    <string>Korrekturen auf ausgewähltem Slot löschen (Del)</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="actionAnkunftAbwarten">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/zug-ankunft-abwraten.png</normaloff>:/zug-ankunft-abwraten.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ankunft</string>
+   </property>
+   <property name="toolTip">
+    <string>Kreuzung/Ankunft von zweitem gewählten Zug abwarten (K)</string>
+   </property>
+   <property name="shortcut">
+    <string>K</string>
+   </property>
+  </action>
+  <action name="actionAbfahrtAbwarten">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/zug-abfahrt-abwarten.png</normaloff>:/zug-abfahrt-abwarten.png</iconset>
+   </property>
+   <property name="text">
+    <string>Abfahrt</string>
+   </property>
+   <property name="toolTip">
+    <string>Überholung/Abfahrt von zweitem gewählten Zug abwarten (F)</string>
+   </property>
+   <property name="shortcut">
+    <string>F</string>
+   </property>
+  </action>
+  <action name="actionWarnungSetzen">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/flag.png</normaloff>:/flag.png</iconset>
+   </property>
+   <property name="text">
+    <string>Warnung</string>
+   </property>
+   <property name="toolTip">
+    <string>Slot-Warnung setzen (W)</string>
+   </property>
+   <property name="shortcut">
+    <string>W</string>
+   </property>
+  </action>
+  <action name="actionWarnungIgnorieren">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/flag-green.png</normaloff>:/flag-green.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ignorieren</string>
+   </property>
+   <property name="toolTip">
+    <string>Slot-Warnung ignorieren (I)</string>
+   </property>
+   <property name="shortcut">
+    <string>I</string>
+   </property>
+  </action>
+  <action name="actionWarnungReset">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/flag-white.png</normaloff>:/flag-white.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reset</string>
+   </property>
+   <property name="toolTip">
+    <string>Slot-Warnung zurücksetzen (R)</string>
+   </property>
+   <property name="shortcut">
+    <string>R</string>
+   </property>
+  </action>
+  <action name="actionBelegteGleise">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/funnel-small.png</normaloff>
+     <disabledoff>:/funnel-small-dis</disabledoff>:/funnel-small.png</iconset>
+   </property>
+   <property name="text">
+    <string>Belegte Gleise</string>
+   </property>
+   <property name="toolTip">
+    <string>Nur belegte Gleise anzeigen (B)</string>
+   </property>
+   <property name="shortcut">
+    <string>B</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
