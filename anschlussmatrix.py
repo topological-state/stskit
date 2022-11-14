@@ -97,8 +97,24 @@ class Anschlussmatrix:
         return s
 
     def update(self, planung: Planung):
-        self.zid_ankuenfte = []
-        self.zid_abfahrten = []
+        """
+        daten für anschlussmatrix zusammentragen
+
+        1. die listen der in frage kommenden züge werden zusammengestellt.
+            dies sind züge, die innerhalb des zeitfensters ankommen oder abfahren,
+            nicht durchfahren und nicht schon angekommen bzw. abgefahren sind.
+            betriebliche vorgänge wie nummernwechsel erzeugen keine separaten einträge.
+
+        2. ankunfts- und abfahrtstabellen werden nach zeit sortiert.
+
+        3. umsteigezeiten und anschlussstatus werden für jede mögliche verbindung berechnet.
+
+        :param planung:
+        :return:
+        """
+
+        _zid_ankuenfte = set([])
+        _zid_abfahrten = set([])
         self.zuege = {}
         self.ziele = {}
 
@@ -108,18 +124,38 @@ class Anschlussmatrix:
 
         for zid, zug in planung.zugliste.items():
             for ziel in zug.fahrplan:
-                if ziel.gleis in self.gleise:
-                    if not ziel.angekommen and not ziel.durchfahrt() and time_to_minutes(ziel.an) < endzeit:
-                        self.zid_ankuenfte.append(zid)
-                        self.zuege[zid] = zug
-                        self.ziele[zid] = ziel
-                    if not ziel.abgefahren and not ziel.durchfahrt() and time_to_minutes(ziel.ab) < endzeit:
-                        self.zid_abfahrten.append(zid)
-                        self.zuege[zid] = zug
-                        self.ziele[zid] = ziel
+                if ziel.gleis in self.gleise and not ziel.durchfahrt():
+                    if not ziel.abgefahren and time_to_minutes(ziel.an) < endzeit:
+                        # keine ankunft, wenn zug aus nummernwechsel auf diesem gleis hervorgeht
+                        for stamm_zid, ziel_zid, stamm_data in planung.zugbaum.in_edges(zid, data=True):
+                            try:
+                                stamm_zug = planung.zugbaum.nodes[stamm_zid]['obj']
+                                stamm_ziel = stamm_zug.find_fahrplan_zielnr(stamm_data['zielnr'])
+                                if stamm_data['flag'] == 'E' and stamm_ziel.ersatzzug.zid == zid:
+                                    break
+                            except (AttributeError, KeyError, ValueError) as e:
+                                logger.debug("kann stammzug nicht finden: " + str(e))
+                        else:
+                            _zid_ankuenfte.add(zid)
+                            self.zuege[zid] = zug
+                            self.ziele[zid] = ziel
 
-        self.zid_ankuenfte.sort(key=lambda z: self.ziele[z].an)
-        self.zid_abfahrten.sort(key=lambda z: self.ziele[z].ab)
+                    if not ziel.abgefahren and time_to_minutes(ziel.ab) < endzeit + min_umsteigezeit:
+                        # keine abfahrt, wenn zug ersetzt wird
+                        if ziel.ersatzzug is None and ziel.kuppelzug is None:
+                            _zid_abfahrten.add(zid)
+                            self.zuege[zid] = zug
+                            self.ziele[zid] = ziel
+
+        self.zid_ankuenfte = sorted(_zid_ankuenfte, key=lambda z: self.ziele[z].an)
+        self.zid_abfahrten = sorted(_zid_abfahrten, key=lambda z: self.ziele[z].ab)
+
+        _labels = {ziel.zug.zid: self.format_label(ziel.zug.name, time_to_minutes(ziel.an), ziel.verspaetung_an)
+                   for ziel in self.ziele.values()}
+        self.ankunft_labels = {zid: _labels[zid] for zid in self.zid_ankuenfte}
+        _labels = {ziel.zug.zid: self.format_label(ziel.zug.name, time_to_minutes(ziel.ab), ziel.verspaetung_ab)
+                   for ziel in self.ziele.values()}
+        self.abfahrt_labels = {zid: _labels[zid] for zid in self.zid_abfahrten}
 
         n_an = len(self.zid_ankuenfte)
         n_ab = len(self.zid_abfahrten)
@@ -131,13 +167,11 @@ class Anschlussmatrix:
             zid_ab = self.zid_abfahrten[i_ab]
             ziel_ab = self.ziele[zid_ab]
             zeit_ab = time_to_minutes(ziel_ab.ab)
-            self.abfahrt_labels[zid_ab] = self.format_label(ziel_ab.zug.name, zeit_ab, ziel_ab.verspaetung_ab)
 
             for i_an in range(n_an):
                 zid_an = self.zid_ankuenfte[i_an]
                 ziel_an = self.ziele[zid_an]
                 zeit_an = time_to_minutes(ziel_an.an)
-                self.ankunft_labels[zid_an] = self.format_label(ziel_an.zug.name, zeit_an, ziel_an.verspaetung_an)
 
                 umsteigezeit = zeit_ab - zeit_an
                 verspaetung = -umsteigezeit
@@ -145,7 +179,11 @@ class Anschlussmatrix:
                 verspaetung += ziel_an.verspaetung_an
                 verspaetung += min_umsteigezeit
 
-                if zid_ab == zid_an:
+                try:
+                    flag = planung.zugbaum.edges[zid_an, zid_ab]['flag']
+                except KeyError:
+                    flag = ""
+                if zid_ab == zid_an or flag in {'E', 'K', 'F'}:
                     status = ANSCHLUSS_SELBST
                 elif umsteigezeit >= min_umsteigezeit:
                     if verspaetung > 0:
@@ -173,8 +211,12 @@ class Anschlussmatrix:
         im.set_clim((0., 19.))
         ax.set_ylabel('abfahrt')
         ax.set_xlabel('ankunft')
-        x_labels = [self.ankunft_labels[zid] for zid in self.zid_ankuenfte]
-        y_labels = [self.abfahrt_labels[zid] for zid in self.zid_abfahrten]
+        try:
+            x_labels = [self.ankunft_labels[zid] for zid in self.zid_ankuenfte]
+            y_labels = [self.abfahrt_labels[zid] for zid in self.zid_abfahrten]
+        except KeyError as e:
+            print(e)
+            return
         ax.set_xticks(np.arange(self.verspaetung.shape[1]), labels=x_labels, rotation=45, rotation_mode='anchor',
                       horizontalalignment='left', verticalalignment='bottom')
         ax.set_yticks(np.arange(self.verspaetung.shape[0]), labels=y_labels)

@@ -537,6 +537,21 @@ class ZugDetailsPlanung(ZugDetails):
             if not zug.plangleis:
                 self.ziel_index = -1
 
+    def find_fahrplan_zielnr(self, zielnr: int) -> 'ZugZielPlanung':
+        """
+        fahrplaneintrag nach zielnummer suchen
+
+        :param zielnr: gesuchte zielnr
+        :return: ZugZielPlanung
+        :raise: ValueError, wenn zielnr nicht gefunden wird.
+        """
+
+        for ziel in self.fahrplan:
+            if ziel.zielnr == zielnr:
+                return ziel
+        else:
+            raise ValueError(f"zielnr {zielnr} nicht gefunden in zug {self.name}")
+
 
 class ZugZielPlanung(FahrplanZeile):
     """
