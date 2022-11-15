@@ -82,6 +82,8 @@ class Anschlussmatrix:
         self.verspaetung = np.zeros((0, 0), dtype=np.float)
         self.ankunft_labels: Dict[int, str] = {}
         self.abfahrt_labels: Dict[int, str] = {}
+        self.farbschema: ZugFarbschema = ZugFarbschema()
+        self.farbschema.init_schweiz()
 
     def set_bahnhof(self, bahnhof: str):
         self.bahnhof = bahnhof
@@ -220,15 +222,22 @@ class Anschlussmatrix:
         ax.set_xlabel('ankunft')
         try:
             x_labels = [self.ankunft_labels[zid] for zid in self.zid_ankuenfte]
+            x_labels_colors = [self.farbschema.zugfarbe(self.zuege[zid]) for zid in self.zid_ankuenfte]
             y_labels = [self.abfahrt_labels[zid] for zid in self.zid_abfahrten]
+            y_labels_colors = [self.farbschema.zugfarbe(self.zuege[zid]) for zid in self.zid_abfahrten]
         except KeyError as e:
-            print(e)
+            logger.warning(e)
             return
+
         ax.set_xticks(np.arange(self.verspaetung.shape[1]), labels=x_labels, rotation=45, rotation_mode='anchor',
                       horizontalalignment='left', verticalalignment='bottom')
         ax.set_yticks(np.arange(self.verspaetung.shape[0]), labels=y_labels)
         ax.tick_params(top=True, bottom=False, labeltop=True, labelbottom=False)
-        # ax.spines[:].set_visible(False)
+
+        for label, color in zip(ax.get_xticklabels(), x_labels_colors):
+            label.set_color(color)
+        for label, color in zip(ax.get_yticklabels(), y_labels_colors):
+            label.set_color(color)
 
         ax.set_xticks(np.arange(self.verspaetung.shape[1] + 1) - .5, minor=True)
         ax.set_yticks(np.arange(self.verspaetung.shape[0] + 1) - .5, minor=True)
@@ -256,9 +265,6 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.zentrale = zentrale
         self.zentrale.planung_update.register(self.planung_update)
-
-        self.farbschema: ZugFarbschema = ZugFarbschema()
-        self.farbschema.init_schweiz()
 
         self.anschlussmatrix: Optional[Anschlussmatrix] = None
 
@@ -373,27 +379,22 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         :return: None
         """
 
-        if self.farbschema is None:
-            self.farbschema = ZugFarbschema()
-            regionen_schweiz = {"Bern - Lötschberg", "Ostschweiz", "Tessin", "Westschweiz", "Zentralschweiz",
-                                "Zürich und Umgebung"}
-            if self.anlage.anlage.region in regionen_schweiz:
-                self.farbschema.init_schweiz()
-            else:
-                self.farbschema.init_deutschland()
-
         self.daten_update()
         self.grafik_update()
 
     def daten_update(self):
         if self.anschlussmatrix is None and self.anlage is not None:
             self.anschlussmatrix = Anschlussmatrix(self.anlage)
+            regionen_schweiz = {"Bern - Lötschberg", "Ostschweiz", "Tessin", "Westschweiz", "Zentralschweiz",
+                                "Zürich und Umgebung"}
+            if self.anlage.anlage.region in regionen_schweiz:
+                self.anschlussmatrix.farbschema.init_schweiz()
+            else:
+                self.anschlussmatrix.farbschema.init_deutschland()
             self.update_combos()
 
-        try:
+        if self.anschlussmatrix:
             self.anschlussmatrix.update(self.planung)
-        except AttributeError:
-            pass
 
     def grafik_update(self):
         try:
