@@ -137,6 +137,8 @@ class Anschlussmatrix:
                                 stamm_ziel = stamm_zug.find_fahrplan_zielnr(stamm_data['zielnr'])
                                 if stamm_data['flag'] == 'E' and stamm_ziel.ersatzzug.zid == zid:
                                     break
+                                elif stamm_data['flag'] == 'F' and stamm_ziel.fluegelzug.zid == zid:
+                                    break
                             except (AttributeError, KeyError, ValueError) as e:
                                 logger.debug("kann stammzug nicht finden: " + str(e))
                         else:
