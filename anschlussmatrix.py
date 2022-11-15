@@ -4,9 +4,7 @@ datenstrukturen fuer anschlussmatrix
 
 """
 
-from dataclasses import dataclass, field
-import functools
-import itertools
+import datetime
 import logging
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
@@ -90,8 +88,13 @@ class Anschlussmatrix:
         self.gleise = self.anlage.bahnsteiggruppen[bahnhof]
 
     @staticmethod
-    def format_label(name: str, zeit: int, verspaetung: int) -> str:
-        s = f"{name}: {int(zeit) // 60:02}:{int(zeit) % 60:02}"
+    def format_label(name: str, zeit: datetime.time, verspaetung: int) -> str:
+        try:
+            zeit = time_to_minutes(zeit)
+        except AttributeError:
+            s = f"{name}"
+        else:
+            s = f"{name}: {int(zeit) // 60:02}:{int(zeit) % 60:02}"
         if verspaetung > 0:
             s += f" ({int(verspaetung):+})"
         return s
@@ -125,7 +128,8 @@ class Anschlussmatrix:
         for zid, zug in planung.zugliste.items():
             for ziel in zug.fahrplan:
                 if ziel.gleis in self.gleise and not ziel.durchfahrt():
-                    if not ziel.abgefahren and time_to_minutes(ziel.an) < endzeit:
+                    if not ziel.abgefahren \
+                            and ziel.an is not None and time_to_minutes(ziel.an) < endzeit:
                         # keine ankunft, wenn zug aus nummernwechsel auf diesem gleis hervorgeht
                         for stamm_zid, ziel_zid, stamm_data in planung.zugbaum.in_edges(zid, data=True):
                             try:
@@ -140,7 +144,8 @@ class Anschlussmatrix:
                             self.zuege[zid] = zug
                             self.ziele[zid] = ziel
 
-                    if not ziel.abgefahren and time_to_minutes(ziel.ab) < endzeit + min_umsteigezeit:
+                    if not ziel.abgefahren \
+                            and ziel.ab is not None and time_to_minutes(ziel.ab) < endzeit + min_umsteigezeit:
                         # keine abfahrt, wenn zug ersetzt wird
                         if ziel.ersatzzug is None and ziel.kuppelzug is None:
                             _zid_abfahrten.add(zid)
@@ -150,10 +155,10 @@ class Anschlussmatrix:
         self.zid_ankuenfte = sorted(_zid_ankuenfte, key=lambda z: self.ziele[z].an)
         self.zid_abfahrten = sorted(_zid_abfahrten, key=lambda z: self.ziele[z].ab)
 
-        _labels = {ziel.zug.zid: self.format_label(ziel.zug.name, time_to_minutes(ziel.an), ziel.verspaetung_an)
+        _labels = {ziel.zug.zid: self.format_label(ziel.zug.name, ziel.an, ziel.verspaetung_an)
                    for ziel in self.ziele.values()}
         self.ankunft_labels = {zid: _labels[zid] for zid in self.zid_ankuenfte}
-        _labels = {ziel.zug.zid: self.format_label(ziel.zug.name, time_to_minutes(ziel.ab), ziel.verspaetung_ab)
+        _labels = {ziel.zug.zid: self.format_label(ziel.zug.name, ziel.ab, ziel.verspaetung_ab)
                    for ziel in self.ziele.values()}
         self.abfahrt_labels = {zid: _labels[zid] for zid in self.zid_abfahrten}
 
