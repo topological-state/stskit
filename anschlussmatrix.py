@@ -90,16 +90,20 @@ class Anschlussmatrix:
         self.gleise = self.anlage.bahnsteiggruppen[bahnhof]
 
     @staticmethod
-    def format_label(name: str, zeit: datetime.time, verspaetung: int) -> str:
-        try:
-            zeit = time_to_minutes(zeit)
-        except AttributeError:
-            s = f"{name}"
-        else:
-            s = f"{name}: {int(zeit) // 60:02}:{int(zeit) % 60:02}"
+    def format_label(name: str, richtung: str, zeit: datetime.time, verspaetung: int) -> str:
+        label = [name, richtung.replace("Gleis ", "").split(" ")[0]]
+
+        # try:
+        #     zeit = time_to_minutes(zeit)
+        # except AttributeError:
+        #     pass
+        # else:
+        #     label.append(f"{int(zeit) // 60:02}:{int(zeit) % 60:02}")
+
         if verspaetung > 0:
-            s += f" ({int(verspaetung):+})"
-        return s
+            label.append(f"({int(verspaetung):+})")
+
+        return " ".join(label)
 
     def update(self, planung: Planung):
         """
@@ -159,10 +163,10 @@ class Anschlussmatrix:
         self.zid_ankuenfte = sorted(_zid_ankuenfte, key=lambda z: self.ziele[z].an)
         self.zid_abfahrten = sorted(_zid_abfahrten, key=lambda z: self.ziele[z].ab)
 
-        _labels = {ziel.zug.zid: self.format_label(ziel.zug.name, ziel.an, ziel.verspaetung_an)
+        _labels = {ziel.zug.zid: self.format_label(ziel.zug.name, ziel.zug.von, ziel.an, ziel.verspaetung_an)
                    for ziel in self.ziele.values()}
         self.ankunft_labels = {zid: _labels[zid] for zid in self.zid_ankuenfte}
-        _labels = {ziel.zug.zid: self.format_label(ziel.zug.name, ziel.ab, ziel.verspaetung_ab)
+        _labels = {ziel.zug.zid: self.format_label(ziel.zug.name, ziel.zug.nach, ziel.ab, ziel.verspaetung_ab)
                    for ziel in self.ziele.values()}
         self.abfahrt_labels = {zid: _labels[zid] for zid in self.zid_abfahrten}
 
