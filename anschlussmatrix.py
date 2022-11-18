@@ -227,8 +227,10 @@ class Anschlussmatrix:
         try:
             x_labels = [self.ankunft_labels[zid] for zid in self.zid_ankuenfte]
             x_labels_colors = [self.farbschema.zugfarbe(self.zuege[zid]) for zid in self.zid_ankuenfte]
+            x_labels_weigths = ['bold' if self.zuege[zid].amgleis and self.zuege[zid].gleis in self.gleise else 'normal' for zid in self.zid_ankuenfte]
             y_labels = [self.abfahrt_labels[zid] for zid in self.zid_abfahrten]
             y_labels_colors = [self.farbschema.zugfarbe(self.zuege[zid]) for zid in self.zid_abfahrten]
+            y_labels_weigths = ['bold' if self.zuege[zid].amgleis and self.zuege[zid].gleis in self.gleise else 'normal' for zid in self.zid_abfahrten]
         except KeyError as e:
             logger.warning(e)
             return
@@ -238,10 +240,12 @@ class Anschlussmatrix:
         ax.set_yticks(np.arange(self.verspaetung.shape[0]), labels=y_labels)
         ax.tick_params(top=True, bottom=False, labeltop=True, labelbottom=False)
 
-        for label, color in zip(ax.get_xticklabels(), x_labels_colors):
+        for label, color, weight in zip(ax.get_xticklabels(), x_labels_colors, x_labels_weigths):
             label.set_color(color)
-        for label, color in zip(ax.get_yticklabels(), y_labels_colors):
+            label.set_fontweight(weight)
+        for label, color, weight in zip(ax.get_yticklabels(), y_labels_colors, y_labels_weigths):
             label.set_color(color)
+            label.set_fontweight(weight)
 
         ax.set_xticks(np.arange(self.verspaetung.shape[1] + 1) - .5, minor=True)
         ax.set_yticks(np.arange(self.verspaetung.shape[0] + 1) - .5, minor=True)
