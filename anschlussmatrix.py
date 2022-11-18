@@ -18,7 +18,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
 from anlage import Anlage
-from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, AnkunftAbwarten
+from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, AnkunftAbwarten, AbfahrtAbwarten
 from slotgrafik import hour_minutes_formatter, ZugFarbschema
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
 from zentrale import DatenZentrale
@@ -77,6 +77,7 @@ class Anschlussmatrix:
         self.zid_abfahrten: List[int] = []
         self.zuege: Dict[int, ZugDetailsPlanung] = {}
         self.ziele: Dict[int, ZugZielPlanung] = {}
+        self.eff_ankunftszeiten: Dict[int, int] = {}
         self.anschlussplan = np.zeros((0, 0), dtype=np.float)
         self.anschlussstatus = np.zeros((0, 0), dtype=np.float)
         self.verspaetung = np.zeros((0, 0), dtype=np.float)
@@ -160,6 +161,9 @@ class Anschlussmatrix:
                             self.zuege[zid] = zug
                             self.ziele[zid] = ziel
 
+                    if zug.amgleis and zug.gleis == ziel.gleis and zid not in self.eff_ankunftszeiten:
+                        self.eff_ankunftszeiten[zid] = startzeit
+
         self.zid_ankuenfte = sorted(_zid_ankuenfte, key=lambda z: self.ziele[z].an)
         self.zid_abfahrten = sorted(_zid_abfahrten, key=lambda z: self.ziele[z].ab)
 
@@ -190,19 +194,33 @@ class Anschlussmatrix:
                 verspaetung = -umsteigezeit
                 verspaetung -= ziel_ab.verspaetung_ab
                 verspaetung += ziel_an.verspaetung_an
-                verspaetung += min_umsteigezeit
 
                 try:
                     flag = planung.zugbaum.edges[zid_an, zid_ab]['flag']
                 except KeyError:
                     flag = ""
                 if zid_ab == zid_an or flag in {'E', 'K', 'F'}:
-                    status = ANSCHLUSS_SELBST
+                    if startzeit >= zeit_ab:
+                        status = ANSCHLUSS_ERFOLGT
+                    else:
+                        status = ANSCHLUSS_SELBST
                 elif umsteigezeit >= min_umsteigezeit:
-                    if verspaetung > 0:
-                        status = ANSCHLUSS_KONFLIKT
-                    elif isinstance(ziel_ab.fdl_korrektur, AnkunftAbwarten):
+                    try:
+                        freigabe = startzeit >= self.eff_ankunftszeiten[zid_an] + min_umsteigezeit
+                    except KeyError:
+                        freigabe = False
+                    if freigabe:
+                        status = ANSCHLUSS_ERFOLGT
+                    elif isinstance(ziel_ab.fdl_korrektur, AnkunftAbwarten) and \
+                            ziel_ab.fdl_korrektur.ursprung.zug.zid == zid_an:
                         status = ANSCHLUSS_ABWARTEN
+                        verspaetung = ziel_ab.verspaetung_ab
+                    elif isinstance(ziel_ab.fdl_korrektur, AbfahrtAbwarten) and \
+                             ziel_ab.fdl_korrektur.ursprung.zug.zid == zid_an:
+                        status = ANSCHLUSS_ABWARTEN
+                        verspaetung = ziel_ab.verspaetung_ab
+                    elif verspaetung > min_umsteigezeit:
+                        status = ANSCHLUSS_KONFLIKT
                     else:
                         status = ANSCHLUSS_OK
                 else:
@@ -255,7 +273,7 @@ class Anschlussmatrix:
         for i in range(self.verspaetung.shape[0]):
             for j in range(self.verspaetung.shape[1]):
                 v = self.verspaetung[i, j]
-                if self.anschlussstatus[i, j] in {ANSCHLUSS_KONFLIKT, ANSCHLUSS_ABWARTEN} and not np.isnan(v) and v > 0:
+                if self.anschlussstatus[i, j] in {ANSCHLUSS_KONFLIKT, ANSCHLUSS_ABWARTEN} and v > 0:
                     text = ax.text(j, i, round(v),
                                    ha="center", va="center", color="w", fontsize="small")
 
