@@ -106,6 +106,31 @@ class Anschlussmatrix:
 
         return " ".join(label)
 
+    def _fahrplan_filter(self, fahrplan: Iterable[ZugZielPlanung], ankuenfte: bool = False, abfahrten: bool = False) \
+            -> Iterable[ZugZielPlanung]:
+        """
+        ankunfts- und abfahrtseintrag aus fahrplan herausfiltern.
+
+        filtert die zugziele für ankunft und abfahrt eines zuges im aktuellen bahnhof.
+        in den meisten fällen ergibt das genau ein ziel pro zug.
+        bei verknüpften zügen oder rangierfahrten, sind die einträge bei ankunft und abfahrt jedoch nicht die gleichen.
+
+        :param fahrplan: iterable von ZugZielPlanung aus ZugDetailsPlanung.fahrplan
+        :param ankuenfte: ankunft zurückgeben
+        :param abfahrten: abfahrt zurückgeben
+        :return: generator
+        """
+
+        letztes: Optional[ZugZielPlanung] = None
+        for ziel in fahrplan:
+            if not ziel.durchfahrt():
+                if ziel.gleis in self.gleise:
+                    if letztes is None and ankuenfte:
+                        yield ziel
+                    letztes = ziel
+        if letztes is not None and abfahrten:
+            yield letztes
+
     def update(self, planung: Planung):
         """
         daten für anschlussmatrix zusammentragen
@@ -133,36 +158,36 @@ class Anschlussmatrix:
         min_umsteigezeit = 2
 
         for zid, zug in planung.zugliste.items():
-            for ziel in zug.fahrplan:
-                if ziel.gleis in self.gleise and not ziel.durchfahrt():
-                    if not ziel.abgefahren \
-                            and ziel.an is not None and time_to_minutes(ziel.an) < endzeit:
-                        # keine ankunft, wenn zug aus nummernwechsel auf diesem gleis hervorgeht
-                        for stamm_zid, ziel_zid, stamm_data in planung.zugbaum.in_edges(zid, data=True):
-                            try:
-                                stamm_zug = planung.zugbaum.nodes[stamm_zid]['obj']
-                                stamm_ziel = stamm_zug.find_fahrplan_zielnr(stamm_data['zielnr'])
-                                if stamm_data['flag'] == 'E' and stamm_ziel.ersatzzug.zid == zid:
-                                    break
-                                elif stamm_data['flag'] == 'F' and stamm_ziel.fluegelzug.zid == zid:
-                                    break
-                            except (AttributeError, KeyError, ValueError) as e:
-                                logger.debug("kann stammzug nicht finden: " + str(e))
-                        else:
-                            _zid_ankuenfte.add(zid)
-                            self.zuege[zid] = zug
-                            self.ziele[zid] = ziel
+            for ziel in self._fahrplan_filter(zug.fahrplan, True, False):
+                if not ziel.abgefahren \
+                        and ziel.an is not None and time_to_minutes(ziel.an) < endzeit:
+                    # keine ankunft, wenn zug aus nummernwechsel auf diesem gleis hervorgeht
+                    for stamm_zid, ziel_zid, stamm_data in planung.zugbaum.in_edges(zid, data=True):
+                        try:
+                            stamm_zug = planung.zugbaum.nodes[stamm_zid]['obj']
+                            stamm_ziel = stamm_zug.find_fahrplan_zielnr(stamm_data['zielnr'])
+                            if stamm_data['flag'] == 'E' and stamm_ziel.ersatzzug.zid == zid:
+                                break
+                            elif stamm_data['flag'] == 'F' and stamm_ziel.fluegelzug.zid == zid:
+                                break
+                        except (AttributeError, KeyError, ValueError) as e:
+                            logger.debug("kann stammzug nicht finden: " + str(e))
+                    else:
+                        _zid_ankuenfte.add(zid)
+                        self.zuege[zid] = zug
+                        self.ziele[zid] = ziel
 
-                    if not ziel.abgefahren \
-                            and ziel.ab is not None and time_to_minutes(ziel.ab) < endzeit + min_umsteigezeit:
-                        # keine abfahrt, wenn zug ersetzt wird
-                        if ziel.ersatzzug is None and ziel.kuppelzug is None:
-                            _zid_abfahrten.add(zid)
-                            self.zuege[zid] = zug
-                            self.ziele[zid] = ziel
+            for ziel in self._fahrplan_filter(zug.fahrplan, False, True):
+                if not ziel.abgefahren \
+                        and ziel.ab is not None and time_to_minutes(ziel.ab) < endzeit + min_umsteigezeit:
+                    # keine abfahrt, wenn zug ersetzt wird
+                    if ziel.ersatzzug is None and ziel.kuppelzug is None:
+                        _zid_abfahrten.add(zid)
+                        self.zuege[zid] = zug
+                        self.ziele[zid] = ziel
 
-                    if zug.amgleis and zug.gleis == ziel.gleis and zid not in self.eff_ankunftszeiten:
-                        self.eff_ankunftszeiten[zid] = startzeit
+            if zug.amgleis and zug.gleis in self.gleise and zid not in self.eff_ankunftszeiten:
+                self.eff_ankunftszeiten[zid] = startzeit
 
         self.zid_ankuenfte = sorted(_zid_ankuenfte, key=lambda z: self.ziele[z].an)
         self.zid_abfahrten = sorted(_zid_abfahrten, key=lambda z: self.ziele[z].ab)
@@ -200,7 +225,7 @@ class Anschlussmatrix:
                 except KeyError:
                     flag = ""
                 if zid_ab == zid_an or flag in {'E', 'K', 'F'}:
-                    if startzeit >= zeit_ab:
+                    if startzeit >= zeit_ab and ziel_an.angekommen:
                         status = ANSCHLUSS_ERFOLGT
                     else:
                         status = ANSCHLUSS_SELBST
