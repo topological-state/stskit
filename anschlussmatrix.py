@@ -34,6 +34,7 @@ mpl.use('Qt5Agg')
 ANSCHLUSS_KEIN = np.nan
 ANSCHLUSS_OK = 0
 ANSCHLUSS_SELBST = 14
+ANSCHLUSS_FLAG = 12
 ANSCHLUSS_ABWARTEN = 2
 ANSCHLUSS_ERFOLGT = 4
 ANSCHLUSS_KONFLIKT = 6
@@ -61,7 +62,7 @@ class Anschlussmatrix:
         6/7: anschluss gebrochen
         8/9:
         10/11:
-        12/13:
+        12/13: flag
         14/15: selber zug
         16/17: auswahlfarbe 1
         18/19: auswahlfarbe 2
@@ -261,6 +262,9 @@ class Anschlussmatrix:
                 if zid_ab == zid_an or flag in {'E', 'K', 'F'}:
                     if startzeit >= zeit_ab and ziel_an.angekommen:
                         status = ANSCHLUSS_ERFOLGT
+                    elif flag == 'K':
+                        status = ANSCHLUSS_FLAG
+                        verspaetung -= min_umsteigezeit
                     else:
                         status = ANSCHLUSS_SELBST
                 elif plan_umsteigezeit >= min_umsteigezeit:
@@ -330,7 +334,7 @@ class Anschlussmatrix:
         for i in range(self.verspaetung.shape[0]):
             for j in range(self.verspaetung.shape[1]):
                 v = self.verspaetung[i, j]
-                if self.anschlussstatus[i, j] in {ANSCHLUSS_KONFLIKT, ANSCHLUSS_ABWARTEN} and v > 0:
+                if self.anschlussstatus[i, j] in {ANSCHLUSS_KONFLIKT, ANSCHLUSS_ABWARTEN, ANSCHLUSS_FLAG} and v > 0:
                     text = ax.text(j, i, round(v),
                                    ha="center", va="center", color="w", fontsize="small")
 
