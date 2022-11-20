@@ -69,9 +69,17 @@ class Anschlussmatrix:
     - verspaetung: verspätung des ankommenden zuges in minuten
 
     """
+
+    ZUG_SCHILDER = ['gleis', 'name', 'richtung', 'zeit', 'verspaetung']
+
     def __init__(self, anlage: Anlage):
         self.anlage: Anlage = anlage
         self.bahnhof: Optional[str] = None
+        self.anschlusszeit: int = 15
+        self.umsteigezeit: int = 2
+        self.ankunft_schilder: List[str] = ['name', 'richtung', 'verspaetung']
+        self.abfahrt_schilder: List[str] = ['name', 'richtung', 'verspaetung']
+
         self.gleise: Set[str] = set([])
         self.zid_ankuenfte: List[int] = []
         self.zid_abfahrten: List[int] = []
@@ -90,21 +98,48 @@ class Anschlussmatrix:
         self.bahnhof = bahnhof
         self.gleise = self.anlage.bahnsteiggruppen[bahnhof]
 
-    @staticmethod
-    def format_label(name: str, richtung: str, zeit: datetime.time, verspaetung: int) -> str:
-        label = [name, richtung.replace("Gleis ", "").split(" ")[0]]
+    def format_label(self, ziel: ZugZielPlanung, abfahrt: bool = False) -> str:
+        """
+        name: str, richtung: str, zeit: datetime.time, verspaetung: int)
+        :param ziel:
+        :param abfahrt:
+        :return:
+        """
 
-        # try:
-        #     zeit = time_to_minutes(zeit)
-        # except AttributeError:
-        #     pass
-        # else:
-        #     label.append(f"{int(zeit) // 60:02}:{int(zeit) % 60:02}")
+        args = {'name': ziel.zug.name, 'gleis': ziel.gleis + ':'}
+        if abfahrt:
+            schilder = self.abfahrt_schilder.copy()
+            richtung = ziel.zug.nach
+            zeit = ziel.ab
+            verspaetung = ziel.verspaetung_ab
+        else:
+            schilder = self.ankunft_schilder.copy()
+            richtung = ziel.zug.von
+            zeit = ziel.an
+            verspaetung = ziel.verspaetung_an
+
+        args['richtung'] = richtung.replace("Gleis ", "").split(" ")[0]
+
+        try:
+            zeit = time_to_minutes(zeit)
+        except AttributeError:
+            try:
+                schilder.remove("zeit")
+            except ValueError:
+                pass
+        else:
+            args['zeit'] = f"{int(zeit) // 60:02}:{int(zeit) % 60:02}"
 
         if verspaetung > 0:
-            label.append(f"({int(verspaetung):+})")
+            args['verspaetung'] = f"({int(verspaetung):+})"
+        else:
+            try:
+                schilder.remove("verspaetung")
+            except ValueError:
+                pass
 
-        return " ".join(label)
+        beschriftung = " ".join((args[schild] for schild in schilder))
+        return beschriftung
 
     def _fahrplan_filter(self, fahrplan: Iterable[ZugZielPlanung], ankuenfte: bool = False, abfahrten: bool = False) \
             -> Iterable[ZugZielPlanung]:
@@ -154,8 +189,8 @@ class Anschlussmatrix:
         self.ziele = {}
 
         startzeit = planung.simzeit_minuten
-        endzeit = startzeit + 15
-        min_umsteigezeit = 2
+        endzeit = startzeit + self.anschlusszeit
+        min_umsteigezeit = self.umsteigezeit
 
         for zid, zug in planung.zugliste.items():
             for ziel in self._fahrplan_filter(zug.fahrplan, True, False):
@@ -192,10 +227,10 @@ class Anschlussmatrix:
         self.zid_ankuenfte = sorted(_zid_ankuenfte, key=lambda z: self.ziele[z].an)
         self.zid_abfahrten = sorted(_zid_abfahrten, key=lambda z: self.ziele[z].ab)
 
-        _labels = {ziel.zug.zid: self.format_label(ziel.zug.name, ziel.zug.von, ziel.an, ziel.verspaetung_an)
+        _labels = {ziel.zug.zid: self.format_label(ziel, False)
                    for ziel in self.ziele.values()}
         self.ankunft_labels = {zid: _labels[zid] for zid in self.zid_ankuenfte}
-        _labels = {ziel.zug.zid: self.format_label(ziel.zug.name, ziel.zug.nach, ziel.ab, ziel.verspaetung_ab)
+        _labels = {ziel.zug.zid: self.format_label(ziel, True)
                    for ziel in self.ziele.values()}
         self.abfahrt_labels = {zid: _labels[zid] for zid in self.zid_abfahrten}
 
@@ -316,6 +351,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.anschlussmatrix: Optional[Anschlussmatrix] = None
 
+        self.in_update = True
         self.ui = Ui_AnschlussmatrixWindow()
         self.ui.setupUi(self)
 
@@ -337,7 +373,11 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         # self.ui.actionAnkunftAbwarten.triggered.connect(self.action_ankunft_abwarten)
         # self.ui.actionAbfahrtAbwarten.triggered.connect(self.action_abfahrt_abwarten)
         self.ui.stackedWidget.currentChanged.connect(self.page_changed)
+
         self.ui.bahnhofBox.currentIndexChanged.connect(self.bahnhof_changed)
+        self.ui.umsteigezeitSpin.valueChanged.connect(self.umsteigezeit_changed)
+        self.ui.anschlusszeitSpin.valueChanged.connect(self.anschlusszeit_changed)
+        self.ui.zugbeschriftungTable.itemChanged.connect(self.beschriftung_changed)
 
         self._axes = self.display_canvas.figure.subplots()
         # self.display_canvas.mpl_connect("button_press_event", self.on_button_press)
@@ -346,6 +386,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.display_canvas.mpl_connect("resize_event", self.on_resize)
 
         self.update_actions()
+        self.in_update = False
 
     @property
     def anlage(self) -> Anlage:
@@ -371,7 +412,9 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and False)  # not implemented
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and False)  # not implemented
 
-    def update_combos(self):
+    def update_widgets(self):
+        self.in_update = True
+
         try:
             bahnhoefe = self.anlage.bahnsteiggruppen.keys()
             bahnhoefe_nach_namen = sorted(bahnhoefe)
@@ -394,17 +437,62 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         if bahnhof:
             self.ui.bahnhofBox.setCurrentText(bahnhof)
 
+        self.ui.anschlusszeitSpin.setValue(self.anschlussmatrix.anschlusszeit)
+        self.ui.umsteigezeitSpin.setValue(self.anschlussmatrix.umsteigezeit)
+        self._update_beschriftung_spalte(0, self.anschlussmatrix.ankunft_schilder)
+        self._update_beschriftung_spalte(1, self.anschlussmatrix.abfahrt_schilder)
+        self.ui.zugbeschriftungTable.resizeColumnsToContents()
+        self.ui.zugbeschriftungTable.resizeRowsToContents()
+
+        self.in_update = False
+
+    def _update_beschriftung_spalte(self, column: int, schilder: List[str]):
+        for row in range(5):
+            item = self.ui.zugbeschriftungTable.item(row, column)
+            schild = self.anschlussmatrix.ZUG_SCHILDER[row]
+            state = QtCore.Qt.Checked if schild in schilder else QtCore.Qt.Unchecked
+            item.setCheckState(state)
+
     @pyqtSlot()
     def bahnhof_changed(self):
         try:
             self.anschlussmatrix.set_bahnhof(self.ui.bahnhofBox.currentText())
             self.setWindowTitle("Anschlussmatrix " + self.anschlussmatrix.bahnhof)
-        except AttributeError:
+        except (AttributeError, KeyError):
             pass
+
+    @pyqtSlot()
+    def umsteigezeit_changed(self):
+        try:
+            self.anschlussmatrix.umsteigezeit = self.ui.umsteigezeitSpin.value()
+        except ValueError:
+            pass
+
+    @pyqtSlot()
+    def anschlusszeit_changed(self):
+        try:
+            self.anschlussmatrix.anschlusszeit = self.ui.anschlusszeitSpin.value()
+        except ValueError:
+            pass
+
+    @pyqtSlot()
+    def beschriftung_changed(self):
+        if not self.in_update:
+            self._beschriftung_spalte_changed(0, self.anschlussmatrix.ankunft_schilder)
+            self._beschriftung_spalte_changed(1, self.anschlussmatrix.abfahrt_schilder)
+
+    def _beschriftung_spalte_changed(self, column: int, schilder: List[str]):
+        schilder.clear()
+        for row in range(5):
+            item = self.ui.zugbeschriftungTable.item(row, column)
+            schild = self.anschlussmatrix.ZUG_SCHILDER[row]
+            if item.checkState() == QtCore.Qt.Checked:
+                schilder.append(schild)
 
     @pyqtSlot()
     def settings_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(0)
+        self.update_widgets()
 
     @pyqtSlot()
     def display_button_clicked(self):
@@ -439,7 +527,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                 self.anschlussmatrix.farbschema.init_schweiz()
             else:
                 self.anschlussmatrix.farbschema.init_deutschland()
-            self.update_combos()
+            self.update_widgets()
 
         if self.anschlussmatrix:
             self.anschlussmatrix.update(self.planung)
