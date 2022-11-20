@@ -585,8 +585,8 @@ class ZugZielPlanung(FahrplanZeile):
         self.mindestaufenthalt: int = 0
         self.auto_korrektur: Optional[VerspaetungsKorrektur] = None
         self.fdl_korrektur: Optional[VerspaetungsKorrektur] = None
-        self.angekommen: bool = False
-        self.abgefahren: bool = False
+        self.angekommen: Union[bool, datetime.datetime] = False
+        self.abgefahren: Union[bool, datetime.datetime] = False
 
     def assign_fahrplan_zeile(self, zeile: FahrplanZeile):
         """
@@ -786,7 +786,7 @@ class Planung:
                     zug.gleis = zug.plangleis = ""
                     zug.ausgefahren = True
                     for zeile in zug.fahrplan:
-                        zeile.abgefahren = True
+                        zeile.abgefahren = zeile.abgefahren or True
 
         self._folgezuege_aufloesen()
         self._zugbaum_analysieren()
@@ -1137,7 +1137,7 @@ class Planung:
             else:
                 if einfahrt.einfahrt:
                     einfahrt.verspaetung_ab = time_to_minutes(ereignis.zeit) - time_to_minutes(einfahrt.ab)
-                    einfahrt.angekommen = einfahrt.abgefahren = True
+                    einfahrt.angekommen = einfahrt.abgefahren = ereignis.zeit
 
         elif ereignis.art == 'ausfahrt':
             try:
@@ -1147,7 +1147,7 @@ class Planung:
             else:
                 if ausfahrt.ausfahrt:
                     ausfahrt.verspaetung_an = ausfahrt.verspaetung_ab = ereignis.verspaetung
-                    ausfahrt.angekommen = ausfahrt.abgefahren = True
+                    ausfahrt.angekommen = ausfahrt.abgefahren = ereignis.zeit
                     zug.ausgefahren = True
 
         elif ereignis.art == 'ankunft':
@@ -1158,8 +1158,8 @@ class Planung:
                 altes_ziel.abgefahren = True
             # falls ein ereignis vergessen gegangen ist:
             for ziel in zug.fahrplan[0:alter_index]:
-                ziel.angekommen = True
-                ziel.abgefahren = True
+                ziel.angekommen = ziel.angekommen or True
+                ziel.abgefahren = ziel.abgefahren or True
 
         elif ereignis.art == 'abfahrt':
             if ereignis.amgleis:

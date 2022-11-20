@@ -1,10 +1,9 @@
 """
-datenstrukturen fuer anschlussmatrix
+datenstrukturen und fenster für anschlussmatrix
 
 
 """
 
-import datetime
 import logging
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
@@ -15,12 +14,11 @@ import numpy as np
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
 from anlage import Anlage
 from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, AnkunftAbwarten, AbfahrtAbwarten
-from slotgrafik import hour_minutes_formatter, ZugFarbschema
-from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
+from slotgrafik import ZugFarbschema
+from stsobj import time_to_minutes
 from zentrale import DatenZentrale
 
 from qt.ui_anschlussmatrix import Ui_AnschlussmatrixWindow
@@ -47,13 +45,20 @@ class Anschlussmatrix:
     attribute
     ---------
 
-    - anschlussplan: umsteigezeit in minuten nach fahrplan.
-        ein anschluss besteht nur, wenn die umsteigezeit grösser als die minimale umsteigezeit des bahnhofs ist.
-    - anschlussstatus: status des anschlusses.
+    - bahnhof: name des bahnhofs in anlage.bahnsteiggruppen.
+    - umsteigezeit: minimal nötige umsteigezeit in minuten im bahnhof.
+        dies bestimmt einerseits, ob ein zugspaar als anschluss erkannt wird,
+        und andererseits um wie viel sich ein abganszug verspätet, wenn er den anschluss abwartet.
+    - anschlusszeit: zeitfenster in minuten, in dem anschlüsse erkannt werden.
+        definiert damit indirekt auch die länge der matrix.
+    - anschlussplan (matrix): umsteigezeit in minuten nach fahrplan.
+        ein anschluss besteht, wenn die umsteigezeit grösser als `min_umsteigezeit` und kleiner als `anschlusszeit` ist.
+    - anschlussstatus (matrix): status des anschlusses.
         dies ist gleichzeitig auch der numerische wert für die grafische darstellung.
         der automatische status ist eine gerade zahl.
         wenn der status vom fdl quittiert worden ist, wird die nächsthöhere ungerade zahl eingetragen,
         was in der grafik die farbe ausbleicht.
+        mögliche werte sind als ANSCHLUSS_XXXX konstanten deklariert.
 
         nan: kein anschluss
         0/1: anschluss erfüllt
@@ -67,8 +72,20 @@ class Anschlussmatrix:
         16/17: auswahlfarbe 1
         18/19: auswahlfarbe 2
 
-    - verspaetung: verspätung des ankommenden zuges in minuten
-
+    - verspaetung (matrix): geschätzte abgangsverspätung des abgängers in minuten
+    - ankunft_label_muster, abfahrt_label_muster: liste von ZUG_SCHILDER,
+        die den inhalt der zugbeschriftungen definieren.
+    - gleise: set von gleisen, die zum bahnhof gehören (von anlage übernommen)
+    - zid_ankuenfte_set, zid_abfahrten_set: zid von zügen, die in der matrix dargestellt sind.
+    - zid_ankuenfte_index, zid_abfahrten_index: geordnete liste von zügen, die in der matrix dargestellt sind.
+        diese listen definieren die achsen der matrix,
+        abfahrten in dimension 0 (zeilen), ankünfte in dimension 1 (spalten).
+    - zuege: ZugDetailsPlanung-objekte der in der matrix enthaltenen züge, indiziert nach zid.
+    - ankunft_ziele, abfahrt_ziele: ZugZielPlanung-objekte der inder matrix enthaltenen anschlüsse, indiziert nach zid.
+    - eff_ankunftszeiten: effektive ankunftszeiten der züge in der matrix, indiziert nach zid.
+        die zeit wird in minuten ab mitternacht gemessen.
+        dient zur freigabe von anschlüssen nach der min_umsteigezeit.
+    - ankunft_labels, abfahrt_labels: zugbeschriftungen, indiziert nach zid.
     """
 
     ZUG_SCHILDER = ['gleis', 'name', 'richtung', 'zeit', 'verspaetung']
@@ -78,14 +95,17 @@ class Anschlussmatrix:
         self.bahnhof: Optional[str] = None
         self.anschlusszeit: int = 15
         self.umsteigezeit: int = 2
-        self.ankunft_schilder: List[str] = ['name', 'richtung', 'verspaetung']
-        self.abfahrt_schilder: List[str] = ['name', 'richtung', 'verspaetung']
+        self.ankunft_label_muster: List[str] = ['name', 'richtung', 'verspaetung']
+        self.abfahrt_label_muster: List[str] = ['name', 'richtung', 'verspaetung']
 
         self.gleise: Set[str] = set([])
-        self.zid_ankuenfte: List[int] = []
-        self.zid_abfahrten: List[int] = []
+        self.zid_ankuenfte_set: Set[int] = set([])
+        self.zid_abfahrten_set: Set[int] = set([])
+        self.zid_ankuenfte_index: List[int] = []
+        self.zid_abfahrten_index: List[int] = []
         self.zuege: Dict[int, ZugDetailsPlanung] = {}
-        self.ziele: Dict[int, ZugZielPlanung] = {}
+        self.ankunft_ziele: Dict[int, ZugZielPlanung] = {}
+        self.abfahrt_ziele: Dict[int, ZugZielPlanung] = {}
         self.eff_ankunftszeiten: Dict[int, int] = {}
         self.anschlussplan = np.zeros((0, 0), dtype=np.float)
         self.anschlussstatus = np.zeros((0, 0), dtype=np.float)
@@ -96,25 +116,35 @@ class Anschlussmatrix:
         self.farbschema.init_schweiz()
 
     def set_bahnhof(self, bahnhof: str):
-        self.bahnhof = bahnhof
-        self.gleise = self.anlage.bahnsteiggruppen[bahnhof]
+        """
+        bahnhof auswählen
+
+        :param bahnhof: muss ein schlüsselwort aus anlage.bahnsteiggruppen sein
+        :return: None
+        """
+        if bahnhof != self.bahnhof:
+            self.bahnhof = bahnhof
+            self.gleise = self.anlage.bahnsteiggruppen[bahnhof]
+            self.zid_ankuenfte_set = set([])
+            self.zid_abfahrten_set = set([])
 
     def format_label(self, ziel: ZugZielPlanung, abfahrt: bool = False) -> str:
         """
-        name: str, richtung: str, zeit: datetime.time, verspaetung: int)
-        :param ziel:
-        :param abfahrt:
-        :return:
+        zugbeschriftung nach ankunfts- oder abfahrtsmuster formatieren
+
+        :param ziel: zugziel
+        :param abfahrt: abfahrt (True) oder ankunft (False)
+        :return: str
         """
 
         args = {'name': ziel.zug.name, 'gleis': ziel.gleis + ':'}
         if abfahrt:
-            schilder = self.abfahrt_schilder.copy()
+            muster = list(self.abfahrt_label_muster)
             richtung = ziel.zug.nach
             zeit = ziel.ab
             verspaetung = ziel.verspaetung_ab
         else:
-            schilder = self.ankunft_schilder.copy()
+            muster = list(self.ankunft_label_muster)
             richtung = ziel.zug.von
             zeit = ziel.an
             verspaetung = ziel.verspaetung_an
@@ -125,7 +155,7 @@ class Anschlussmatrix:
             zeit = time_to_minutes(zeit)
         except AttributeError:
             try:
-                schilder.remove("zeit")
+                muster.remove("zeit")
             except ValueError:
                 pass
         else:
@@ -135,11 +165,11 @@ class Anschlussmatrix:
             args['verspaetung'] = f"({int(verspaetung):+})"
         else:
             try:
-                schilder.remove("verspaetung")
+                muster.remove("verspaetung")
             except ValueError:
                 pass
 
-        beschriftung = " ".join((args[schild] for schild in schilder))
+        beschriftung = " ".join((args[schild] for schild in muster))
         return beschriftung
 
     def _fahrplan_filter(self, fahrplan: Iterable[ZugZielPlanung], ankuenfte: bool = False, abfahrten: bool = False) \
@@ -184,19 +214,14 @@ class Anschlussmatrix:
         :return:
         """
 
-        _zid_ankuenfte = set([])
-        _zid_abfahrten = set([])
-        self.zuege = {}
-        self.ziele = {}
-
         startzeit = planung.simzeit_minuten
         endzeit = startzeit + self.anschlusszeit
         min_umsteigezeit = self.umsteigezeit
 
         for zid, zug in planung.zugliste.items():
+            # ankünfte
             for ziel in self._fahrplan_filter(zug.fahrplan, True, False):
-                if not ziel.abgefahren \
-                        and ziel.an is not None and time_to_minutes(ziel.an) < endzeit:
+                if not ziel.abgefahren and ziel.an is not None and time_to_minutes(ziel.an) < endzeit:
                     # keine ankunft, wenn zug aus nummernwechsel auf diesem gleis hervorgeht
                     for stamm_zid, ziel_zid, stamm_data in planung.zugbaum.in_edges(zid, data=True):
                         try:
@@ -207,48 +232,46 @@ class Anschlussmatrix:
                             elif stamm_data['flag'] == 'F' and stamm_ziel.fluegelzug.zid == zid:
                                 break
                         except (AttributeError, KeyError, ValueError) as e:
-                            logger.debug("kann stammzug nicht finden: " + str(e))
+                            logger.warning("kann stammzug nicht finden: " + str(e))
                     else:
-                        _zid_ankuenfte.add(zid)
+                        self.zid_ankuenfte_set.add(zid)
                         self.zuege[zid] = zug
-                        self.ziele[zid] = ziel
+                        self.ankunft_ziele[zid] = ziel
 
+            # abfahrten
             for ziel in self._fahrplan_filter(zug.fahrplan, False, True):
-                if not ziel.abgefahren \
-                        and ziel.ab is not None and time_to_minutes(ziel.ab) < endzeit + min_umsteigezeit:
+                if not ziel.abgefahren and ziel.ab is not None and time_to_minutes(ziel.ab) < endzeit + min_umsteigezeit:
                     # keine abfahrt, wenn zug ersetzt wird
                     if ziel.ersatzzug is None and ziel.kuppelzug is None:
-                        _zid_abfahrten.add(zid)
+                        self.zid_abfahrten_set.add(zid)
                         self.zuege[zid] = zug
-                        self.ziele[zid] = ziel
+                        self.abfahrt_ziele[zid] = ziel
+                    else:
+                        self.zid_abfahrten_set.discard(zid)
+                else:
+                    self.zid_abfahrten_set.discard(zid)
 
             if zug.amgleis and zug.gleis in self.gleise and zid not in self.eff_ankunftszeiten:
-                self.eff_ankunftszeiten[zid] = startzeit
+                try:
+                    self.eff_ankunftszeiten[zid] = time_to_minutes(zug.find_fahrplanzeile(gleis=zug.gleis).angekommen)
+                except AttributeError:
+                    self.eff_ankunftszeiten[zid] = startzeit
 
-        self.zid_ankuenfte = sorted(_zid_ankuenfte, key=lambda z: self.ziele[z].an)
-        self.zid_abfahrten = sorted(_zid_abfahrten, key=lambda z: self.ziele[z].ab)
+        self.zid_ankuenfte_index = sorted(self.zid_ankuenfte_set, key=lambda z: self.ankunft_ziele[z].an)
+        self.zid_abfahrten_index = sorted(self.zid_abfahrten_set, key=lambda z: self.abfahrt_ziele[z].ab)
 
-        _labels = {ziel.zug.zid: self.format_label(ziel, False)
-                   for ziel in self.ziele.values()}
-        self.ankunft_labels = {zid: _labels[zid] for zid in self.zid_ankuenfte}
-        _labels = {ziel.zug.zid: self.format_label(ziel, True)
-                   for ziel in self.ziele.values()}
-        self.abfahrt_labels = {zid: _labels[zid] for zid in self.zid_abfahrten}
+        n_ab, n_an = len(self.zid_abfahrten_index), len(self.zid_ankuenfte_index)
+        a_ab, a_an = n_ab, n_an
+        self.anschlussplan = np.ones((a_ab, a_an), dtype=np.float) * np.nan
+        self.anschlussstatus = np.ones((a_ab, a_an), dtype=np.float) * np.nan
+        self.verspaetung = np.zeros((a_ab, a_an), dtype=np.float)
 
-        n_an = len(self.zid_ankuenfte)
-        n_ab = len(self.zid_abfahrten)
-        self.anschlussplan = np.ones((n_ab, n_an), dtype=np.float) * np.nan
-        self.anschlussstatus = np.ones((n_ab, n_an), dtype=np.float) * np.nan
-        self.verspaetung = np.zeros((n_ab, n_an), dtype=np.float)
-
-        for i_ab in range(n_ab):
-            zid_ab = self.zid_abfahrten[i_ab]
-            ziel_ab = self.ziele[zid_ab]
+        for i_ab, zid_ab in enumerate(self.zid_abfahrten_index):
+            ziel_ab = self.abfahrt_ziele[zid_ab]
             zeit_ab = time_to_minutes(ziel_ab.ab)
 
-            for i_an in range(n_an):
-                zid_an = self.zid_ankuenfte[i_an]
-                ziel_an = self.ziele[zid_an]
+            for i_an, zid_an in enumerate(self.zid_ankuenfte_index):
+                ziel_an = self.ankunft_ziele[zid_an]
                 zeit_an = time_to_minutes(ziel_an.an)
 
                 plan_umsteigezeit = zeit_ab - zeit_an
@@ -267,7 +290,7 @@ class Anschlussmatrix:
                         verspaetung -= min_umsteigezeit
                     else:
                         status = ANSCHLUSS_SELBST
-                elif plan_umsteigezeit >= min_umsteigezeit:
+                elif self.anschlusszeit >= plan_umsteigezeit >= min_umsteigezeit:
                     try:
                         freigabe = startzeit >= self.eff_ankunftszeiten[zid_an] + min_umsteigezeit
                     except KeyError:
@@ -291,32 +314,66 @@ class Anschlussmatrix:
                 self.anschlussstatus[i_ab, i_an] = status
                 self.verspaetung[i_ab, i_an] = verspaetung
 
-    def plot(self, ax):
-        kwargs = dict()
-        # kwargs['align'] = 'center'
-        kwargs['alpha'] = 0.5
-        # kwargs['width'] = 1.0
-        kwargs['cmap'] = 'tab10'
-        # kwargs['origin'] = 'lower'
+        spalten = np.any(~np.isnan(self.anschlussstatus), axis=0)
+        self.zid_ankuenfte_index = list(np.asarray(self.zid_ankuenfte_index)[spalten])
+        self.zid_ankuenfte_set = set(self.zid_ankuenfte_index)
+        self.anschlussplan = self.anschlussplan[:, spalten]
+        self.anschlussstatus = self.anschlussstatus[:, spalten]
+        self.verspaetung = self.verspaetung[:, spalten]
 
+        self.ankunft_labels = {zid: self.format_label(self.ankunft_ziele[zid], False)
+                               for zid in self.zid_ankuenfte_index}
+        self.abfahrt_labels = {zid: self.format_label(self.abfahrt_ziele[zid], True)
+                               for zid in self.zid_abfahrten_index}
+
+        loeschen = set(self.zuege.keys()) - self.zid_ankuenfte_set - self.zid_abfahrten_set
+        for zid in loeschen:
+            del self.zuege[zid]
+            try:
+                del self.ankunft_ziele[zid]
+            except KeyError:
+                pass
+            try:
+                del self.abfahrt_ziele[zid]
+            except KeyError:
+                pass
+
+    def plot(self, ax):
+        """
+        anschlussmatrix auf matplotlib-achsen zeichnen
+
+        :param ax: matplotlib-Axes
+        :return: None
+        """
+
+        kwargs = dict()
+        kwargs['alpha'] = 0.5
+        kwargs['cmap'] = 'tab10'
+
+        a_ab, a_an = self.anschlussstatus.shape
+        n_ab, n_an = len(self.zid_abfahrten_index), len(self.zid_ankuenfte_index)
         im = ax.imshow(self.anschlussstatus, **kwargs)
         im.set_clim((0., 19.))
         ax.set_ylabel('abfahrt')
         ax.set_xlabel('ankunft')
         try:
-            x_labels = [self.ankunft_labels[zid] for zid in self.zid_ankuenfte]
-            x_labels_colors = [self.farbschema.zugfarbe(self.zuege[zid]) for zid in self.zid_ankuenfte]
-            x_labels_weigths = ['bold' if self.zuege[zid].amgleis and self.zuege[zid].gleis in self.gleise else 'normal' for zid in self.zid_ankuenfte]
-            y_labels = [self.abfahrt_labels[zid] for zid in self.zid_abfahrten]
-            y_labels_colors = [self.farbschema.zugfarbe(self.zuege[zid]) for zid in self.zid_abfahrten]
-            y_labels_weigths = ['bold' if self.zuege[zid].amgleis and self.zuege[zid].gleis in self.gleise else 'normal' for zid in self.zid_abfahrten]
+            x_labels = [self.ankunft_labels[zid] for zid in self.zid_ankuenfte_index] + [''] * (a_an - n_an)
+            x_labels_colors = [self.farbschema.zugfarbe(self.zuege[zid])
+                               for zid in self.zid_ankuenfte_index] + ['w'] * (a_an - n_an)
+            x_labels_weigths = ['bold' if self.zuege[zid].amgleis and self.zuege[zid].gleis in self.gleise else 'normal'
+                                for zid in self.zid_ankuenfte_index] + ['normal'] * (a_an - n_an)
+            y_labels = [self.abfahrt_labels[zid] for zid in self.zid_abfahrten_index] + [''] * (a_ab - n_ab)
+            y_labels_colors = [self.farbschema.zugfarbe(self.zuege[zid])
+                               for zid in self.zid_abfahrten_index] + ['w'] * (a_ab - n_ab)
+            y_labels_weigths = ['bold' if self.zuege[zid].amgleis and self.zuege[zid].gleis in self.gleise else 'normal'
+                                for zid in self.zid_abfahrten_index] + ['normal'] * (a_ab - n_ab)
         except KeyError as e:
             logger.warning(e)
             return
 
-        ax.set_xticks(np.arange(self.verspaetung.shape[1]), labels=x_labels, rotation=45, rotation_mode='anchor',
+        ax.set_xticks(np.arange(a_an), labels=x_labels, rotation=45, rotation_mode='anchor',
                       horizontalalignment='left', verticalalignment='bottom')
-        ax.set_yticks(np.arange(self.verspaetung.shape[0]), labels=y_labels)
+        ax.set_yticks(np.arange(a_ab), labels=y_labels)
         ax.tick_params(top=True, bottom=False, labeltop=True, labelbottom=False)
 
         for label, color, weight in zip(ax.get_xticklabels(), x_labels_colors, x_labels_weigths):
@@ -326,13 +383,13 @@ class Anschlussmatrix:
             label.set_color(color)
             label.set_fontweight(weight)
 
-        ax.set_xticks(np.arange(self.verspaetung.shape[1] + 1) - .5, minor=True)
-        ax.set_yticks(np.arange(self.verspaetung.shape[0] + 1) - .5, minor=True)
+        ax.set_xticks(np.arange(a_an + 1) - .5, minor=True)
+        ax.set_yticks(np.arange(a_ab + 1) - .5, minor=True)
         ax.grid(which="minor", color=mpl.rcParams['axes.facecolor'], linestyle='-', linewidth=3)
         ax.tick_params(which="minor", bottom=False, left=False)
 
-        for i in range(self.verspaetung.shape[0]):
-            for j in range(self.verspaetung.shape[1]):
+        for i in range(n_ab):
+            for j in range(n_an):
                 v = self.verspaetung[i, j]
                 if self.anschlussstatus[i, j] in {ANSCHLUSS_KONFLIKT, ANSCHLUSS_ABWARTEN, ANSCHLUSS_FLAG} and v > 0:
                     text = ax.text(j, i, round(v),
@@ -443,8 +500,8 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.ui.anschlusszeitSpin.setValue(self.anschlussmatrix.anschlusszeit)
         self.ui.umsteigezeitSpin.setValue(self.anschlussmatrix.umsteigezeit)
-        self._update_beschriftung_spalte(0, self.anschlussmatrix.ankunft_schilder)
-        self._update_beschriftung_spalte(1, self.anschlussmatrix.abfahrt_schilder)
+        self._update_beschriftung_spalte(0, self.anschlussmatrix.ankunft_label_muster)
+        self._update_beschriftung_spalte(1, self.anschlussmatrix.abfahrt_label_muster)
         self.ui.zugbeschriftungTable.resizeColumnsToContents()
         self.ui.zugbeschriftungTable.resizeRowsToContents()
 
@@ -482,8 +539,8 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def beschriftung_changed(self):
         if not self.in_update:
-            self._beschriftung_spalte_changed(0, self.anschlussmatrix.ankunft_schilder)
-            self._beschriftung_spalte_changed(1, self.anschlussmatrix.abfahrt_schilder)
+            self._beschriftung_spalte_changed(0, self.anschlussmatrix.ankunft_label_muster)
+            self._beschriftung_spalte_changed(1, self.anschlussmatrix.abfahrt_label_muster)
 
     def _beschriftung_spalte_changed(self, column: int, schilder: List[str]):
         schilder.clear()
