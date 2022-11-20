@@ -251,8 +251,8 @@ class Anschlussmatrix:
                 zeit_an = time_to_minutes(ziel_an.an)
 
                 plan_umsteigezeit = zeit_ab - zeit_an
-                eff_umsteigezeit = plan_umsteigezeit + ziel_ab.verspaetung_an - ziel_an.verspaetung_an
-                verspaetung = min_umsteigezeit - eff_umsteigezeit
+                eff_umsteigezeit = plan_umsteigezeit + ziel_ab.verspaetung_ab - ziel_an.verspaetung_an
+                verspaetung = zeit_an + ziel_an.verspaetung_an + min_umsteigezeit - zeit_ab
 
                 try:
                     flag = planung.zugbaum.edges[zid_an, zid_ab]['flag']
