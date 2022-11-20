@@ -215,10 +215,9 @@ class Anschlussmatrix:
                 ziel_an = self.ziele[zid_an]
                 zeit_an = time_to_minutes(ziel_an.an)
 
-                umsteigezeit = zeit_ab - zeit_an
-                verspaetung = -umsteigezeit
-                verspaetung -= ziel_ab.verspaetung_ab
-                verspaetung += ziel_an.verspaetung_an
+                plan_umsteigezeit = zeit_ab - zeit_an
+                eff_umsteigezeit = plan_umsteigezeit + ziel_ab.verspaetung_an - ziel_an.verspaetung_an
+                verspaetung = min_umsteigezeit - eff_umsteigezeit
 
                 try:
                     flag = planung.zugbaum.edges[zid_an, zid_ab]['flag']
@@ -229,7 +228,7 @@ class Anschlussmatrix:
                         status = ANSCHLUSS_ERFOLGT
                     else:
                         status = ANSCHLUSS_SELBST
-                elif umsteigezeit >= min_umsteigezeit:
+                elif plan_umsteigezeit >= min_umsteigezeit:
                     try:
                         freigabe = startzeit >= self.eff_ankunftszeiten[zid_an] + min_umsteigezeit
                     except KeyError:
@@ -239,19 +238,17 @@ class Anschlussmatrix:
                     elif isinstance(ziel_ab.fdl_korrektur, AnkunftAbwarten) and \
                             ziel_ab.fdl_korrektur.ursprung.zug.zid == zid_an:
                         status = ANSCHLUSS_ABWARTEN
-                        verspaetung = ziel_ab.verspaetung_ab
                     elif isinstance(ziel_ab.fdl_korrektur, AbfahrtAbwarten) and \
                              ziel_ab.fdl_korrektur.ursprung.zug.zid == zid_an:
                         status = ANSCHLUSS_ABWARTEN
-                        verspaetung = ziel_ab.verspaetung_ab
-                    elif verspaetung > min_umsteigezeit:
+                    elif eff_umsteigezeit < min_umsteigezeit:
                         status = ANSCHLUSS_KONFLIKT
                     else:
                         status = ANSCHLUSS_OK
                 else:
                     status = ANSCHLUSS_KEIN
 
-                self.anschlussplan[i_ab, i_an] = umsteigezeit
+                self.anschlussplan[i_ab, i_an] = plan_umsteigezeit
                 self.anschlussstatus[i_ab, i_an] = status
                 self.verspaetung[i_ab, i_an] = verspaetung
 
