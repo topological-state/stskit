@@ -219,14 +219,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if event.isAccepted():
             try:
-                self.anlage.save_config(self.config_path)
-            except (AttributeError, OSError):
-                pass
+                self.zentrale.anlage.save_config(self.config_path)
+            except (AttributeError, OSError) as e:
+                logger.error(e)
 
             try:
                 self.auswertung.fahrzeiten.report()
-            except (AttributeError, OSError):
-                pass
+            except (AttributeError, OSError) as e:
+                logger.error(e)
 
             self.enable_update = False
             self.closed.set()
