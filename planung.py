@@ -1118,13 +1118,19 @@ class Planung:
             alter_index = zug.ziel_index
             altes_ziel = zug.fahrplan[zug.ziel_index]
         except IndexError:
-            alter_index = None
-            altes_ziel = None
+            logger.warning(f"fehlendes vorheriges ziel bei {ereignis}")
+            return
 
-        # veraltetes ereignis? - kommt vor!!!
-        neuer_index = zug.find_fahrplan_index(plan=ereignis.plangleis)
-        if neuer_index is None or alter_index is None or (neuer_index < alter_index):
-            logger.debug(f"ignoriere veraltetes ereignis {ereignis}")
+        if ereignis.plangleis:
+            neuer_index = zug.find_fahrplan_index(plan=ereignis.plangleis)
+        else:
+            # ausfahrt
+            neuer_index = len(zug.fahrplan) - 1
+        if neuer_index is None:
+            logger.warning(f"ereignisziel nicht in fahrplan bei {ereignis}")
+            return
+        elif neuer_index < alter_index:
+            logger.warning(f"ignoriere veraltetes ereignis {ereignis}")
             return
         else:
             neues_ziel = zug.fahrplan[neuer_index]
@@ -1152,10 +1158,10 @@ class Planung:
 
         elif ereignis.art == 'ankunft':
             altes_ziel.verspaetung_an = time_to_minutes(ereignis.zeit) - time_to_minutes(altes_ziel.an)
-            altes_ziel.angekommen = True
+            altes_ziel.angekommen = ereignis.zeit
             if altes_ziel.durchfahrt():
                 altes_ziel.verspaetung_ab = altes_ziel.verspaetung_an
-                altes_ziel.abgefahren = True
+                altes_ziel.abgefahren = ereignis.zeit
             # falls ein ereignis vergessen gegangen ist:
             for ziel in zug.fahrplan[0:alter_index]:
                 ziel.angekommen = ziel.angekommen or True
@@ -1167,9 +1173,8 @@ class Planung:
                     altes_ziel.auto_korrektur = Signalhalt(self)
                     altes_ziel.auto_korrektur.verspaetung = ereignis.verspaetung
             else:
-                altes_ziel.fdl_korrektur = None
                 altes_ziel.verspaetung_ab = ereignis.verspaetung
-                altes_ziel.abgefahren = True
+                altes_ziel.abgefahren = ereignis.zeit
 
         elif ereignis.art == 'rothalt' or ereignis.art == 'wurdegruen':
             zug.verspaetung = ereignis.verspaetung
