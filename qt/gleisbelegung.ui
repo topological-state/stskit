@@ -128,9 +128,9 @@
    <addaction name="actionPlusEins"/>
    <addaction name="actionMinusEins"/>
    <addaction name="actionFix"/>
+   <addaction name="separator"/>
    <addaction name="actionAnkunftAbwarten"/>
    <addaction name="actionAbfahrtAbwarten"/>
-   <addaction name="separator"/>
    <addaction name="actionLoeschen"/>
   </widget>
   <action name="actionSetup">
@@ -213,7 +213,7 @@
   <action name="actionLoeschen">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/cross-script.png</normaloff>:/cross-script.png</iconset>
+     <normaloff>:/chain--return.png</normaloff>:/chain--return.png</iconset>
    </property>
    <property name="text">
     <string>Löschen</string>
@@ -228,7 +228,7 @@
   <action name="actionAnkunftAbwarten">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/zug-ankunft-abwraten.png</normaloff>:/zug-ankunft-abwraten.png</iconset>
+     <normaloff>:/chain--arrow-in.png</normaloff>:/chain--arrow-in.png</iconset>
    </property>
    <property name="text">
     <string>Ankunft</string>
@@ -243,7 +243,7 @@
   <action name="actionAbfahrtAbwarten">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/zug-abfahrt-abwarten.png</normaloff>:/zug-abfahrt-abwarten.png</iconset>
+     <normaloff>:/chain--arrow.png</normaloff>:/chain--arrow.png</iconset>
    </property>
    <property name="text">
     <string>Abfahrt</string>

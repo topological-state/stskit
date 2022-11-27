@@ -317,18 +317,17 @@
    </attribute>
    <addaction name="actionSetup"/>
    <addaction name="actionAnzeige"/>
-   <addaction name="actionBelegteGleise"/>
    <addaction name="separator"/>
-   <addaction name="actionWarnungSetzen"/>
-   <addaction name="actionWarnungIgnorieren"/>
-   <addaction name="actionWarnungReset"/>
+   <addaction name="actionZugAusblenden"/>
+   <addaction name="actionZugEinblenden"/>
    <addaction name="separator"/>
    <addaction name="actionPlusEins"/>
    <addaction name="actionMinusEins"/>
    <addaction name="actionFix"/>
+   <addaction name="separator"/>
    <addaction name="actionAnkunftAbwarten"/>
    <addaction name="actionAbfahrtAbwarten"/>
-   <addaction name="separator"/>
+   <addaction name="actionAnschlussAufgeben"/>
    <addaction name="actionLoeschen"/>
   </widget>
   <action name="actionSetup">
@@ -338,10 +337,10 @@
      <disabledoff>:/equalizer-dis.png</disabledoff>:/equalizer.png</iconset>
    </property>
    <property name="text">
-    <string>Setup</string>
+    <string>Einstellungen</string>
    </property>
    <property name="toolTip">
-    <string>Gleisauswahl (S)</string>
+    <string>Bahnhofauswahl (S)</string>
    </property>
    <property name="shortcut">
     <string>S</string>
@@ -372,7 +371,7 @@
     <string>+1</string>
    </property>
    <property name="toolTip">
-    <string>Feste Verspätung +1 Minute auf ausgewähltem Slot (+)</string>
+    <string>Verspätung/Wartezeit um 1 Minute erhöhen (+)</string>
    </property>
    <property name="shortcut">
     <string>+</string>
@@ -387,7 +386,7 @@
     <string>-1</string>
    </property>
    <property name="toolTip">
-    <string>Feste Verspätung -1 Minute auf ausgewähltem Slot (-)</string>
+    <string>Verspätung/Wartezeit um 1 Minute reduzieren (-)</string>
    </property>
    <property name="shortcut">
     <string>-</string>
@@ -402,7 +401,7 @@
     <string>Fix</string>
    </property>
    <property name="toolTip">
-    <string>Feste Verspätung auf ausgewähltem Slot festlegen (V)</string>
+    <string>Feste Verspätung festlegen (V)</string>
    </property>
    <property name="shortcut">
     <string>V</string>
@@ -411,13 +410,13 @@
   <action name="actionLoeschen">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/cross-script.png</normaloff>:/cross-script.png</iconset>
+     <normaloff>:/chain--return.png</normaloff>:/chain--return.png</iconset>
    </property>
    <property name="text">
-    <string>Löschen</string>
+    <string>Verknüpfung auflösen</string>
    </property>
    <property name="toolTip">
-    <string>Korrekturen auf ausgewähltem Slot löschen (Del)</string>
+    <string>Verknüpfung auf ausgewählten Anschlüssen auflösen (Del)</string>
    </property>
    <property name="shortcut">
     <string>Del</string>
@@ -426,13 +425,13 @@
   <action name="actionAnkunftAbwarten">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/zug-ankunft-abwraten.png</normaloff>:/zug-ankunft-abwraten.png</iconset>
+     <normaloff>:/chain--arrow-in.png</normaloff>:/chain--arrow-in.png</iconset>
    </property>
    <property name="text">
-    <string>Ankunft</string>
+    <string>Ankunft abwarten</string>
    </property>
    <property name="toolTip">
-    <string>Kreuzung/Ankunft von zweitem gewählten Zug abwarten (K)</string>
+    <string>Ankunft von Zubringer abwarten (K)</string>
    </property>
    <property name="shortcut">
     <string>K</string>
@@ -441,13 +440,13 @@
   <action name="actionAbfahrtAbwarten">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/zug-abfahrt-abwarten.png</normaloff>:/zug-abfahrt-abwarten.png</iconset>
+     <normaloff>:/chain--arrow.png</normaloff>:/chain--arrow.png</iconset>
    </property>
    <property name="text">
-    <string>Abfahrt</string>
+    <string>Abfahrt abwarten</string>
    </property>
    <property name="toolTip">
-    <string>Überholung/Abfahrt von zweitem gewählten Zug abwarten (F)</string>
+    <string>Abfahrt von Zubringer abwarten (F)</string>
    </property>
    <property name="shortcut">
     <string>F</string>
@@ -462,7 +461,7 @@
     <string>Warnung</string>
    </property>
    <property name="toolTip">
-    <string>Slot-Warnung setzen (W)</string>
+    <string>Warnung setzen (W)</string>
    </property>
    <property name="shortcut">
     <string>W</string>
@@ -477,7 +476,7 @@
     <string>Ignorieren</string>
    </property>
    <property name="toolTip">
-    <string>Slot-Warnung ignorieren (I)</string>
+    <string>Warnung ignorieren (I)</string>
    </property>
    <property name="shortcut">
     <string>I</string>
@@ -492,35 +491,55 @@
     <string>Reset</string>
    </property>
    <property name="toolTip">
-    <string>Slot-Warnung zurücksetzen (R)</string>
+    <string>Warnung zurücksetzen (R)</string>
    </property>
    <property name="shortcut">
     <string>R</string>
    </property>
   </action>
-  <action name="actionBelegteGleise">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>false</bool>
-   </property>
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
+  <action name="actionAnschlussAufgeben">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/funnel-small.png</normaloff>
-     <disabledoff>:/funnel-small-dis</disabledoff>:/funnel-small.png</iconset>
+     <normaloff>:/chain--cross.png</normaloff>:/chain--cross.png</iconset>
    </property>
    <property name="text">
-    <string>Belegte Gleise</string>
+    <string>Anschluss aufgeben</string>
    </property>
    <property name="toolTip">
-    <string>Nur belegte Gleise anzeigen (B)</string>
+    <string>Anschluss nicht abwarten (A)</string>
    </property>
    <property name="shortcut">
-    <string>B</string>
+    <string>A</string>
+   </property>
+  </action>
+  <action name="actionZugAusblenden">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/train--minus.png</normaloff>:/train--minus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zug ausblenden</string>
+   </property>
+   <property name="toolTip">
+    <string>Zug ausblenden (H)</string>
+   </property>
+   <property name="shortcut">
+    <string>H</string>
+   </property>
+  </action>
+  <action name="actionZugEinblenden">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/train--return.png</normaloff>:/train--return.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zug einblenden</string>
+   </property>
+   <property name="toolTip">
+    <string>Alle Züge einblenden (Z)</string>
+   </property>
+   <property name="shortcut">
+    <string>Z</string>
    </property>
   </action>
  </widget>

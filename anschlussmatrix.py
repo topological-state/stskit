@@ -3,20 +3,22 @@ datenstrukturen und fenster für anschlussmatrix
 
 
 """
-
+import itertools
 import logging
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 import matplotlib as mpl
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from matplotlib.image import AxesImage
+from matplotlib.text import Text
 import numpy as np
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
 from anlage import Anlage
-from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, AnkunftAbwarten, AbfahrtAbwarten
+from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, AnkunftAbwarten, AbfahrtAbwarten, FesteVerspaetung
 from slotgrafik import ZugFarbschema
 from stsobj import time_to_minutes
 from zentrale import DatenZentrale
@@ -31,13 +33,16 @@ mpl.use('Qt5Agg')
 
 ANSCHLUSS_KEIN = np.nan
 ANSCHLUSS_OK = 0
-ANSCHLUSS_SELBST = 14
-ANSCHLUSS_FLAG = 12
 ANSCHLUSS_ABWARTEN = 2
 ANSCHLUSS_ERFOLGT = 4
-ANSCHLUSS_KONFLIKT = 6
+ANSCHLUSS_WARNUNG = 6
+ANSCHLUSS_AUFGEBEN = 8
+ANSCHLUSS_FLAG = 12
+ANSCHLUSS_SELBST = 14
 ANSCHLUSS_AUSWAHL_1 = 16
 ANSCHLUSS_AUSWAHL_2 = 18
+
+ANSCHLUESSE_VERSPAETET = {ANSCHLUSS_WARNUNG, ANSCHLUSS_ABWARTEN, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_FLAG}
 
 
 class Anschlussmatrix:
@@ -62,10 +67,10 @@ class Anschlussmatrix:
 
         nan: kein anschluss
         0/1: anschluss erfüllt
-        2/3: anschlusszug wartet
+        2/3: anschluss abwarten
         4/5: wartezeit erreicht, zug kann fahren
-        6/7: anschluss gebrochen
-        8/9:
+        6/7: anschlusswarnung
+        8/9: anschluss aufgeben
         10/11:
         12/13: flag
         14/15: selber zug
@@ -97,6 +102,10 @@ class Anschlussmatrix:
         self.umsteigezeit: int = 2
         self.ankunft_label_muster: List[str] = ['name', 'richtung', 'verspaetung']
         self.abfahrt_label_muster: List[str] = ['name', 'richtung', 'verspaetung']
+        self.ankuenfte_ausblenden: Set[int] = set([])
+        self.abfahrten_ausblenden: Set[int] = set([])
+        self.anschluss_auswahl: Set[Tuple[int, int]] = set([])
+        self.anschluss_aufgabe: Set[Tuple[int, int]] = set([])
 
         self.gleise: Set[str] = set([])
         self.zid_ankuenfte_set: Set[int] = set([])
@@ -107,9 +116,10 @@ class Anschlussmatrix:
         self.ankunft_ziele: Dict[int, ZugZielPlanung] = {}
         self.abfahrt_ziele: Dict[int, ZugZielPlanung] = {}
         self.eff_ankunftszeiten: Dict[int, int] = {}
-        self.anschlussplan = np.zeros((0, 0), dtype=np.float)
         self.anschlussstatus = np.zeros((0, 0), dtype=np.float)
-        self.verspaetung = np.zeros((0, 0), dtype=np.float)
+        self.anschlussplan = np.zeros_like(self.anschlussstatus)
+        self.verspaetung = np.zeros_like(self.anschlussstatus)
+        self.anzeigematrix = np.zeros_like(self.anschlussstatus)
         self.ankunft_labels: Dict[int, str] = {}
         self.abfahrt_labels: Dict[int, str] = {}
         self.farbschema: ZugFarbschema = ZugFarbschema()
@@ -257,6 +267,8 @@ class Anschlussmatrix:
                 except AttributeError:
                     self.eff_ankunftszeiten[zid] = startzeit
 
+        self.zid_ankuenfte_set.difference_update(self.ankuenfte_ausblenden)
+        self.zid_abfahrten_set.difference_update(self.abfahrten_ausblenden)
         self.zid_ankuenfte_index = sorted(self.zid_ankuenfte_set, key=lambda z: self.ankunft_ziele[z].an)
         self.zid_abfahrten_index = sorted(self.zid_abfahrten_set, key=lambda z: self.abfahrt_ziele[z].ab)
 
@@ -304,7 +316,7 @@ class Anschlussmatrix:
                              ziel_ab.fdl_korrektur.ursprung.zug.zid == zid_an:
                         status = ANSCHLUSS_ABWARTEN
                     elif eff_umsteigezeit < min_umsteigezeit:
-                        status = ANSCHLUSS_KONFLIKT
+                        status = ANSCHLUSS_WARNUNG
                     else:
                         status = ANSCHLUSS_OK
                 else:
@@ -320,6 +332,11 @@ class Anschlussmatrix:
         self.anschlussplan = self.anschlussplan[:, spalten]
         self.anschlussstatus = self.anschlussstatus[:, spalten]
         self.verspaetung = self.verspaetung[:, spalten]
+
+        aufgabe_auswahl = self._make_auswahl_matrix(self.anschluss_aufgabe)
+        aufgabe_maske = np.isin(self.anschlussstatus, [ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK])
+        aufgabe_auswahl = np.logical_and(aufgabe_auswahl, aufgabe_maske)
+        self.anschlussstatus = np.where(aufgabe_auswahl, ANSCHLUSS_AUFGEBEN, self.anschlussstatus)
 
         self.ankunft_labels = {zid: self.format_label(self.ankunft_ziele[zid], False)
                                for zid in self.zid_ankuenfte_index}
@@ -348,11 +365,13 @@ class Anschlussmatrix:
 
         kwargs = dict()
         kwargs['alpha'] = 0.5
-        kwargs['cmap'] = 'tab10'
+        kwargs['cmap'] = 'tab20'
+        kwargs['picker'] = True
 
         a_ab, a_an = self.anschlussstatus.shape
         n_ab, n_an = len(self.zid_abfahrten_index), len(self.zid_ankuenfte_index)
-        im = ax.imshow(self.anschlussstatus, **kwargs)
+        self.anzeigematrix = self.anschlussstatus + self._make_auswahl_matrix(self.anschluss_auswahl)
+        im = ax.imshow(self.anzeigematrix, **kwargs)
         im.set_clim((0., 19.))
         ax.set_ylabel('abfahrt')
         ax.set_xlabel('ankunft')
@@ -376,12 +395,18 @@ class Anschlussmatrix:
         ax.set_yticks(np.arange(a_ab), labels=y_labels)
         ax.tick_params(top=True, bottom=False, labeltop=True, labelbottom=False)
 
-        for label, color, weight in zip(ax.get_xticklabels(), x_labels_colors, x_labels_weigths):
+        for zid, label, color, weight in zip(self.zid_ankuenfte_index, ax.get_xticklabels(), x_labels_colors,
+                                             x_labels_weigths):
             label.set_color(color)
             label.set_fontweight(weight)
-        for label, color, weight in zip(ax.get_yticklabels(), y_labels_colors, y_labels_weigths):
+            label.set_picker(True)
+            label.zids = (-1, zid)
+        for zid, label, color, weight in zip(self.zid_abfahrten_index, ax.get_yticklabels(), y_labels_colors,
+                                             y_labels_weigths):
             label.set_color(color)
             label.set_fontweight(weight)
+            label.set_picker(True)
+            label.zids = (zid, -1)
 
         ax.set_xticks(np.arange(a_an + 1) - .5, minor=True)
         ax.set_yticks(np.arange(a_ab + 1) - .5, minor=True)
@@ -391,7 +416,7 @@ class Anschlussmatrix:
         for i in range(n_ab):
             for j in range(n_an):
                 v = self.verspaetung[i, j]
-                if self.anschlussstatus[i, j] in {ANSCHLUSS_KONFLIKT, ANSCHLUSS_ABWARTEN, ANSCHLUSS_FLAG} and v > 0:
+                if self.anschlussstatus[i, j] in ANSCHLUESSE_VERSPAETET and v > 0:
                     text = ax.text(j, i, round(v),
                                    ha="center", va="center", color="w", fontsize="small")
 
@@ -400,6 +425,76 @@ class Anschlussmatrix:
 
         ax.figure.tight_layout()
         ax.figure.canvas.draw()
+
+    def _make_auswahl_matrix(self, auswahl: Iterable[Tuple[int, int]]):
+        """
+        erstellt eine auswahlmatrix aus einer liste von anschlüssen
+
+        :param auswahl: iterable von (zid_ab, zid_an)-tupeln
+            negative werte wählen eine ganze spalte bzw. zeile aus.
+        :return: matrix mit der gleichen grösse wie self.anschlussstatus.
+            die matrix enthält einsen an den ausgewählten anschlussrelationen und nullen in den übrigen elementen.
+        """
+
+        matrix = np.zeros_like(self.anschlussstatus)
+        for zid_ab, zid_an in auswahl:
+            try:
+                if zid_ab >= 0:
+                    i_ab = self.zid_abfahrten_index.index(zid_ab)
+                else:
+                    i_ab = -1
+            except ValueError:
+                continue
+
+            try:
+                if zid_an >= 0:
+                    i_an = self.zid_ankuenfte_index.index(zid_an)
+                else:
+                    i_an = -1
+            except ValueError:
+                continue
+
+            if i_an < 0:
+                matrix[i_ab, :] = 1
+            elif i_ab < 0:
+                matrix[:, i_an] = 1
+            elif i_an >= 0 and i_ab >= 0:
+                matrix[i_ab, i_an] = 1
+            else:
+                matrix[:, :] = 0
+
+        return matrix
+
+    def auswahl_expandieren(self, auswahl: Iterable[Tuple[int, int]]) -> Set[Tuple[int, int]]:
+        result = set([])
+        for zid_ab, zid_an in auswahl:
+            if zid_ab >= 0:
+                _zids_ab = [zid_ab]
+            else:
+                _zids_ab = self.zid_abfahrten_index
+            if zid_an >= 0:
+                _zids_an = [zid_an]
+            else:
+                _zids_an = self.zid_ankuenfte_index
+            result.update(itertools.product(_zids_ab, _zids_an))
+        return result
+
+    def abfahrt_suchen(self, ankunft_zid: int) -> List[int]:
+        """
+        abfahrts-zid eines zuges suchen
+
+        :param ankunft_zid: zid bei ankunft
+        :return: zids bei abfahrt.
+            die liste kann kein (zug endet oder fährt ausserhalb des anschlussfensters weiter),
+            ein (zug fährt weiter) oder
+            zwei (zug flügelt) elemente enthalten.
+        """
+
+        index = self.zid_ankuenfte_index.index(ankunft_zid)
+        abfahrten = self.anschlussstatus[:, index]
+        index_ab = np.nonzero(abfahrten == ANSCHLUSS_SELBST)[0]
+        zid_ab = [self.zid_abfahrten_index[idx] for idx in index_ab]
+        return zid_ab
 
 
 class AnschlussmatrixWindow(QtWidgets.QMainWindow):
@@ -411,6 +506,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.zentrale.planung_update.register(self.planung_update)
 
         self.anschlussmatrix: Optional[Anschlussmatrix] = None
+        self._pick_event: bool = False
 
         self.in_update = True
         self.ui = Ui_AnschlussmatrixWindow()
@@ -425,14 +521,14 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.ui.actionAnzeige.triggered.connect(self.display_button_clicked)
         self.ui.actionSetup.triggered.connect(self.settings_button_clicked)
-        # self.ui.actionWarnungSetzen.triggered.connect(self.action_warnung_setzen)
-        # self.ui.actionWarnungIgnorieren.triggered.connect(self.action_warnung_ignorieren)
-        # self.ui.actionWarnungReset.triggered.connect(self.action_warnung_reset)
-        # self.ui.actionPlusEins.triggered.connect(self.action_plus_eins)
-        # self.ui.actionMinusEins.triggered.connect(self.action_minus_eins)
-        # self.ui.actionLoeschen.triggered.connect(self.action_loeschen)
-        # self.ui.actionAnkunftAbwarten.triggered.connect(self.action_ankunft_abwarten)
-        # self.ui.actionAbfahrtAbwarten.triggered.connect(self.action_abfahrt_abwarten)
+        self.ui.actionPlusEins.triggered.connect(self.action_plus_eins)
+        self.ui.actionMinusEins.triggered.connect(self.action_minus_eins)
+        self.ui.actionLoeschen.triggered.connect(self.action_anschluss_reset)
+        self.ui.actionAnkunftAbwarten.triggered.connect(self.action_ankunft_abwarten)
+        self.ui.actionAbfahrtAbwarten.triggered.connect(self.action_abfahrt_abwarten)
+        self.ui.actionAnschlussAufgeben.triggered.connect(self.action_anschluss_aufgeben)
+        self.ui.actionZugAusblenden.triggered.connect(self.action_zug_ausblenden)
+        self.ui.actionZugEinblenden.triggered.connect(self.action_zug_einblenden)
         self.ui.stackedWidget.currentChanged.connect(self.page_changed)
 
         self.ui.bahnhofBox.currentIndexChanged.connect(self.bahnhof_changed)
@@ -441,9 +537,9 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.ui.zugbeschriftungTable.itemChanged.connect(self.beschriftung_changed)
 
         self._axes = self.display_canvas.figure.subplots()
-        # self.display_canvas.mpl_connect("button_press_event", self.on_button_press)
-        # self.display_canvas.mpl_connect("button_release_event", self.on_button_release)
-        # self.display_canvas.mpl_connect("pick_event", self.on_pick)
+        self.display_canvas.mpl_connect("button_press_event", self.on_button_press)
+        self.display_canvas.mpl_connect("button_release_event", self.on_button_release)
+        self.display_canvas.mpl_connect("pick_event", self.on_pick)
         self.display_canvas.mpl_connect("resize_event", self.on_resize)
 
         self.update_actions()
@@ -459,19 +555,29 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
+        auswahl = display_mode and self.anschlussmatrix is not None and len(self.anschlussmatrix.anschluss_auswahl) > 0
+        loeschen_enabled = auswahl and np.any(np.isin(self.anschlussstatus, [ANSCHLUSS_ABWARTEN, ANSCHLUSS_AUFGEBEN]))
+        minus_enabled = auswahl and np.any(np.isin(self.anschlussstatus, [ANSCHLUSS_ABWARTEN]))
+        plus_enabled = auswahl and np.any(np.isin(self.anschlussstatus, [ANSCHLUSS_ABWARTEN, ANSCHLUSS_WARNUNG,
+                                                                         ANSCHLUSS_OK]))
+        abwarten_enabled = auswahl and np.any(np.isin(self.anschlussstatus, [ANSCHLUSS_WARNUNG, ANSCHLUSS_OK]))
+        einblenden_enabled = display_mode and (len(self.anschlussmatrix.abfahrten_ausblenden) or
+                                               len(self.anschlussmatrix.ankuenfte_ausblenden))
 
         self.ui.actionSetup.setEnabled(display_mode)
         self.ui.actionAnzeige.setEnabled(not display_mode)
-        self.ui.actionBelegteGleise.setEnabled(display_mode)
         self.ui.actionWarnungSetzen.setEnabled(display_mode and False)  # not implemented
         self.ui.actionWarnungReset.setEnabled(display_mode and False)  # not implemented
         self.ui.actionWarnungIgnorieren.setEnabled(display_mode and False)  # not implemented
         self.ui.actionFix.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionLoeschen.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionPlusEins.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionMinusEins.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and False)  # not implemented
+        self.ui.actionLoeschen.setEnabled(loeschen_enabled)
+        self.ui.actionPlusEins.setEnabled(plus_enabled)
+        self.ui.actionMinusEins.setEnabled(minus_enabled)
+        self.ui.actionAbfahrtAbwarten.setEnabled(abwarten_enabled)
+        self.ui.actionAnkunftAbwarten.setEnabled(abwarten_enabled)
+        self.ui.actionAnschlussAufgeben.setEnabled(abwarten_enabled)
+        self.ui.actionZugEinblenden.setEnabled(einblenden_enabled)
+        self.ui.actionZugAusblenden.setEnabled(auswahl)
 
     def update_widgets(self):
         self.in_update = True
@@ -594,11 +700,278 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
             self.anschlussmatrix.update(self.planung)
 
     def grafik_update(self):
-        try:
-            self._axes.clear()
-            self.anschlussmatrix.plot(self._axes)
-        except AttributeError:
-            pass
+        self._axes.clear()
+        if self.anschlussmatrix is None:
+            return
+
+        self.anschlussmatrix.plot(self._axes)
 
     def on_resize(self, event):
         self.grafik_update()
+
+    def on_button_press(self, event):
+        """
+        matplotlib button-press event
+
+        aktualisiert die grafik, wenn zuvor ein pick-event stattgefunden hat.
+        wenn kein pick-event stattgefunden hat, wird die aktuelle trassenauswahl gelöscht.
+
+        :param event:
+        :return:
+        """
+
+        if self._pick_event:
+            self.grafik_update()
+            self.update_actions()
+        else:
+            pass
+
+        self._pick_event = False
+
+    def on_button_release(self, event):
+        """
+        matplotlib button-release event
+
+        hat im moment keine wirkung.
+
+        :param event:
+        :return:
+        """
+
+        pass
+
+    def format_zuginfo(self, ziel: ZugZielPlanung):
+        """
+        zug-trasseninfo formatieren
+
+
+        :return: (str)
+        """
+
+        zug = ziel.zug
+        name = zug.name
+        von = zug.fahrplan[0].gleis
+        nach = zug.fahrplan[-1].gleis
+
+        zt = []
+        try:
+            z1 = ziel.an.isoformat('minutes')
+            v1 = f"{ziel.verspaetung_an:+}"
+            zt.append(f"{z1}{v1}")
+        except AttributeError:
+            pass
+
+        try:
+            z2 = ziel.ab.isoformat('minutes')
+            v2 = f"{ziel.verspaetung_ab:+}"
+            zt.append(f"{z2}{v2}")
+        except AttributeError:
+            pass
+
+        fp = ziel.gleis + " " + " - ".join(zt)
+
+        s = f"{name} ({von} - {nach}): {fp}"
+        if zug.hinweistext:
+            s = s + " | " + zug.hinweistext
+        return s
+
+    def on_pick(self, event):
+        """
+        matplotlib pick-event
+
+        :param event:
+        :return:
+        """
+
+        self._pick_event = True
+        if isinstance(event.artist, AxesImage):
+            try:
+                i_an = round(event.mouseevent.xdata)
+                i_ab = round(event.mouseevent.ydata)
+            except AttributeError:
+                return
+            try:
+                zid_an = self.anschlussmatrix.zid_ankuenfte_index[i_an]
+                zid_ab = self.anschlussmatrix.zid_abfahrten_index[i_ab]
+            except IndexError:
+                return
+            zids = (zid_ab, zid_an)
+            self.anschlussmatrix.anschluss_auswahl = {zids}
+        elif isinstance(event.artist, Text):
+            try:
+                zids = event.artist.zids
+                self.anschlussmatrix.anschluss_auswahl = {zids}
+            except AttributeError:
+                return
+        else:
+            self.anschlussmatrix.anschluss_auswahl.clear()
+            zids = (-1, -1)
+
+        ziele = []
+        if zids[1] == zids[0]:
+            zids = (zids[0], -1)
+        try:
+            ziele.append(self.anschlussmatrix.ankunft_ziele[zids[0]])
+            ziele.append(self.anschlussmatrix.abfahrt_ziele[zids[1]])
+        except (IndexError, KeyError):
+            s = ""
+        else:
+            info = [self.format_zuginfo(ziel) for ziel in ziele]
+            s = "\n".join(info)
+        self.ui.zuginfoLabel.setText(s)
+
+    @pyqtSlot()
+    def action_ankunft_abwarten(self):
+        for zid_ab, zid_an in self.anschlussmatrix.anschluss_auswahl:
+            if zid_an < 0:
+                # mehrfache eingehende anschlüsse werden zur zeit nicht unterstützt
+                return
+            if zid_ab >= 0:
+                _zids_ab = {zid_ab}
+            else:
+                _zids_ab = self.anschlussmatrix.zid_abfahrten_set
+            for _zid_ab in _zids_ab:
+                try:
+                    i_ab = self.anschlussmatrix.zid_abfahrten_index.index(_zid_ab)
+                    i_an = self.anschlussmatrix.zid_ankuenfte_index.index(zid_an)
+                except ValueError:
+                    continue
+                else:
+                    if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in\
+                            {ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK}:
+                        self.abhaengigkeit_definieren(self.anschlussmatrix.abfahrt_ziele[_zid_ab],
+                                                      self.anschlussmatrix.ankunft_ziele[zid_an],
+                                                      self.anschlussmatrix.umsteigezeit, False)
+
+        self.daten_update()
+        self.grafik_update()
+
+    @pyqtSlot()
+    def action_abfahrt_abwarten(self):
+        for zid_ab, zid_an in self.anschlussmatrix.anschluss_auswahl:
+            if zid_an < 0:
+                # mehrfache eingehende anschlüsse werden zur zeit nicht unterstützt
+                return
+
+            # abfahrt des zubringers suchen
+            try:
+                _zid_an = self.anschlussmatrix.abfahrt_suchen(zid_an)
+                _zid_an = _zid_an[-1]
+                i_an = self.anschlussmatrix.zid_ankuenfte_index.index(_zid_an)
+            except (IndexError, ValueError):
+                continue
+
+            if zid_ab >= 0:
+                _zids_ab = {zid_ab}
+            else:
+                _zids_ab = self.anschlussmatrix.zid_abfahrten_set
+
+            for _zid_ab in _zids_ab:
+                try:
+                    i_ab = self.anschlussmatrix.zid_abfahrten_index.index(_zid_ab)
+                except ValueError:
+                    continue
+                else:
+                    if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in \
+                            {ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK}:
+                        self.abhaengigkeit_definieren(self.anschlussmatrix.abfahrt_ziele[_zid_ab],
+                                                      self.anschlussmatrix.abfahrt_ziele[_zid_an], 1, True)
+
+        self.daten_update()
+        self.grafik_update()
+
+    @pyqtSlot()
+    def action_anschluss_aufgeben(self):
+        auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
+        self.anschlussmatrix.anschluss_aufgabe.update(auswahl)
+        for zid_ab, zid_an in auswahl:
+            i_ab = self.anschlussmatrix.zid_abfahrten_index.index(zid_ab)
+            i_an = self.anschlussmatrix.zid_ankuenfte_index.index(zid_an)
+            if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in {ANSCHLUSS_ABWARTEN}:
+                self.planung.fdl_korrektur_setzen(None, self.anschlussmatrix.abfahrt_ziele[zid_ab])
+
+        self.daten_update()
+        self.grafik_update()
+
+    @pyqtSlot()
+    def action_anschluss_reset(self):
+        auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
+        self.anschlussmatrix.anschluss_aufgabe.difference_update(auswahl)
+        for zid_ab, zid_an in auswahl:
+            self.planung.fdl_korrektur_setzen(None, self.anschlussmatrix.abfahrt_ziele[zid_ab])
+
+        self.daten_update()
+        self.grafik_update()
+
+    @pyqtSlot()
+    def action_plus_eins(self):
+        auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
+        for zid_ab, zid_an in auswahl:
+            self.verspaetung_aendern(self.anschlussmatrix.abfahrt_ziele[zid_ab], 1, True)
+
+        self.daten_update()
+        self.grafik_update()
+
+    @pyqtSlot()
+    def action_minus_eins(self):
+        auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
+        for zid_ab, zid_an in auswahl:
+            self.verspaetung_aendern(self.anschlussmatrix.abfahrt_ziele[zid_ab], -1, True)
+
+        self.daten_update()
+        self.grafik_update()
+
+    @pyqtSlot()
+    def action_zug_ausblenden(self):
+        for zid_ab, zid_an in self.anschlussmatrix.anschluss_auswahl:
+            if zid_ab:
+                self.anschlussmatrix.abfahrten_ausblenden.add(zid_ab)
+            if zid_an:
+                self.anschlussmatrix.ankuenfte_ausblenden.add(zid_an)
+
+        self.anschlussmatrix.anschluss_auswahl.clear()
+        self.daten_update()
+        self.grafik_update()
+
+    @pyqtSlot()
+    def action_zug_einblenden(self):
+        self.anschlussmatrix.ankuenfte_ausblenden.clear()
+        self.anschlussmatrix.abfahrten_ausblenden.clear()
+        self.anschlussmatrix.anschluss_auswahl.clear()
+        self.daten_update()
+        self.grafik_update()
+
+    def verspaetung_aendern(self, ziel: ZugZielPlanung, verspaetung: int, relativ: bool = False):
+        korrektur = ziel.fdl_korrektur
+        neu = korrektur is None
+
+        if relativ and hasattr(korrektur, "wartezeit"):
+            korrektur.wartezeit += verspaetung
+        elif not isinstance(korrektur, FesteVerspaetung):
+            korrektur = FesteVerspaetung(self.planung)
+            korrektur.verspaetung = ziel.verspaetung_ab
+            neu = True
+
+        if hasattr(korrektur, "verspaetung"):
+            if relativ:
+                korrektur.verspaetung += verspaetung
+            else:
+                korrektur.verspaetung = verspaetung
+
+        if neu:
+            self.planung.fdl_korrektur_setzen(korrektur, ziel)
+
+        self.planung.zugverspaetung_korrigieren(ziel.zug)
+
+    def abhaengigkeit_definieren(self, ziel: ZugZielPlanung, referenz: ZugZielPlanung, wartezeit: int = 0,
+                                 abfahrt: bool = False):
+
+        if abfahrt:
+            korrektur = AbfahrtAbwarten(self.planung)
+        else:
+            korrektur = AnkunftAbwarten(self.planung)
+        korrektur.ursprung = referenz
+        korrektur.wartezeit = wartezeit
+
+        self.planung.fdl_korrektur_setzen(korrektur, ziel)
+        self.planung.zugverspaetung_korrigieren(ziel.zug)

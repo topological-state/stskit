@@ -20,5 +20,16 @@
         <file alias="slots.png">../icons/slots.png</file>
         <file alias="slots-dis.png">../icons/slots-dis.png</file>
         <file alias="equalizer-dis.png">../icons/equalizer-dis.png</file>
+        <file alias="chain--arrow-in.png">../icons/chain--arrow-in.png</file>
+        <file alias="chain--arrow.png">../icons/chain--arrow.png</file>
+        <file alias="chain--exclamation.png">../icons/chain--exclamation.png</file>
+        <file alias="chain-unchain.png">../icons/chain-unchain.png</file>
+        <file alias="train--minus.png">../icons/train--minus.png</file>
+        <file alias="train--plus.png">../icons/train--plus.png</file>
+        <file alias="clock--return.png">../icons/clock--return.png</file>
+        <file alias="chain--return.png">../icons/chain--return.png</file>
+        <file alias="chain--cross.png">../icons/chain--cross.png</file>
+        <file alias="flag-purple.png">../icons/flag-purple.png</file>
+        <file alias="train--return.png">../icons/train--return.png</file>
     </qresource>
 </RCC>
