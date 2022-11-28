@@ -724,7 +724,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
             self.grafik_update()
             self.update_actions()
         else:
-            pass
+            self.ui.zuginfoLabel.setText("")
 
         self._pick_event = False
 
@@ -740,40 +740,38 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         pass
 
-    def format_zuginfo(self, ziel: ZugZielPlanung):
+    @staticmethod
+    def format_zuginfo(ziel: ZugZielPlanung, an: bool = False, ab: bool = False):
         """
-        zug-trasseninfo formatieren
-
+        zuginfo formatieren
 
         :return: (str)
         """
 
         zug = ziel.zug
         name = zug.name
-        von = zug.fahrplan[0].gleis
-        nach = zug.fahrplan[-1].gleis
 
-        zt = []
-        try:
-            z1 = ziel.an.isoformat('minutes')
-            v1 = f"{ziel.verspaetung_an:+}"
-            zt.append(f"{z1}{v1}")
-        except AttributeError:
-            pass
-
-        try:
-            z2 = ziel.ab.isoformat('minutes')
-            v2 = f"{ziel.verspaetung_ab:+}"
-            zt.append(f"{z2}{v2}")
-        except AttributeError:
-            pass
-
-        fp = ziel.gleis + " " + " - ".join(zt)
-
-        s = f"{name} ({von} - {nach}): {fp}"
-        if zug.hinweistext:
-            s = s + " | " + zug.hinweistext
-        return s
+        if an:
+            try:
+                von = zug.fahrplan[0].gleis
+                z1 = ziel.an.isoformat('minutes')
+                v1 = f"{ziel.verspaetung_an:+}"
+                zt = f"{z1}{v1}"
+            except (AttributeError, IndexError):
+                pass
+            else:
+                return f"{name} von {von} an {ziel.gleis} {zt}"
+        elif ab:
+            try:
+                nach = zug.fahrplan[-1].gleis
+                z2 = ziel.ab.isoformat('minutes')
+                v2 = f"{ziel.verspaetung_ab:+}"
+                zt = f"{z2}{v2}"
+            except (AttributeError, IndexError):
+                pass
+            else:
+                return f"{name} nach {nach} ab {ziel.gleis} {zt}"
+        return ""
 
     def on_pick(self, event):
         """
@@ -807,17 +805,20 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
             self.anschlussmatrix.anschluss_auswahl.clear()
             zids = (-1, -1)
 
-        ziele = []
-        if zids[1] == zids[0]:
-            zids = (zids[0], -1)
+        info = []
         try:
-            ziele.append(self.anschlussmatrix.ankunft_ziele[zids[0]])
-            ziele.append(self.anschlussmatrix.abfahrt_ziele[zids[1]])
+            ziel_an = self.anschlussmatrix.ankunft_ziele[zids[1]]
+            info_an = self.format_zuginfo(ziel_an, True, False)
+            info.append(info_an)
         except (IndexError, KeyError):
-            s = ""
-        else:
-            info = [self.format_zuginfo(ziel) for ziel in ziele]
-            s = "\n".join(info)
+            pass
+        try:
+            ziel_ab = self.anschlussmatrix.abfahrt_ziele[zids[0]]
+            info_ab = self.format_zuginfo(ziel_ab, False, True)
+            info.append(info_ab)
+        except (IndexError, KeyError):
+            pass
+        s = "\n".join(info)
         self.ui.zuginfoLabel.setText(s)
 
     @pyqtSlot()
