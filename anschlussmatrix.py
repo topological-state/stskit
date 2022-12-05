@@ -555,14 +555,22 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
-        auswahl = display_mode and self.anschlussmatrix is not None and len(self.anschlussmatrix.anschluss_auswahl) > 0
-        loeschen_enabled = auswahl and np.any(np.isin(self.anschlussstatus, [ANSCHLUSS_ABWARTEN, ANSCHLUSS_AUFGEBEN]))
-        minus_enabled = auswahl and np.any(np.isin(self.anschlussstatus, [ANSCHLUSS_ABWARTEN]))
-        plus_enabled = auswahl and np.any(np.isin(self.anschlussstatus, [ANSCHLUSS_ABWARTEN, ANSCHLUSS_WARNUNG,
-                                                                         ANSCHLUSS_OK]))
-        abwarten_enabled = auswahl and np.any(np.isin(self.anschlussstatus, [ANSCHLUSS_WARNUNG, ANSCHLUSS_OK]))
-        einblenden_enabled = display_mode and (len(self.anschlussmatrix.abfahrten_ausblenden) or
-                                               len(self.anschlussmatrix.ankuenfte_ausblenden))
+
+        if self.anschlussmatrix is not None:
+            auswahl_matrix = self.anschlussmatrix._make_auswahl_matrix(self.anschlussmatrix.anschluss_auswahl)
+            auswahl_matrix[auswahl_matrix == 0] = np.nan
+            status_auswahl = self.anschlussmatrix.anschlussstatus * auswahl_matrix
+            auswahl = display_mode and ~np.all(np.isnan(status_auswahl))
+        else:
+            auswahl = False
+
+        loeschen_enabled = auswahl and np.any(np.isin(status_auswahl, [ANSCHLUSS_ABWARTEN, ANSCHLUSS_AUFGEBEN]))
+        minus_enabled = auswahl and np.any(np.isin(status_auswahl, [ANSCHLUSS_ABWARTEN]))
+        plus_enabled = auswahl and np.any(np.isin(status_auswahl, [ANSCHLUSS_ABWARTEN, ANSCHLUSS_WARNUNG, ANSCHLUSS_OK]))
+        abwarten_enabled = auswahl and np.any(np.isin(status_auswahl, [ANSCHLUSS_WARNUNG, ANSCHLUSS_OK]))
+        einblenden_enabled = display_mode and self.anschlussmatrix is not None and \
+                             (len(self.anschlussmatrix.abfahrten_ausblenden) or
+                            len(self.anschlussmatrix.ankuenfte_ausblenden))
 
         self.ui.actionSetup.setEnabled(display_mode)
         self.ui.actionAnzeige.setEnabled(not display_mode)
@@ -846,6 +854,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.daten_update()
         self.grafik_update()
+        self.update_actions()
 
     @pyqtSlot()
     def action_abfahrt_abwarten(self):
@@ -880,9 +889,11 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.daten_update()
         self.grafik_update()
+        self.update_actions()
 
     @pyqtSlot()
     def action_anschluss_aufgeben(self):
+        # todo : ANSCHLUSS_OK sollte nicht aufgegeben werden
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         self.anschlussmatrix.anschluss_aufgabe.update(auswahl)
         for zid_ab, zid_an in auswahl:
@@ -893,6 +904,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.daten_update()
         self.grafik_update()
+        self.update_actions()
 
     @pyqtSlot()
     def action_anschluss_reset(self):
@@ -903,6 +915,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.daten_update()
         self.grafik_update()
+        self.update_actions()
 
     @pyqtSlot()
     def action_plus_eins(self):
@@ -912,6 +925,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.daten_update()
         self.grafik_update()
+        self.update_actions()
 
     @pyqtSlot()
     def action_minus_eins(self):
@@ -921,6 +935,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.daten_update()
         self.grafik_update()
+        self.update_actions()
 
     @pyqtSlot()
     def action_zug_ausblenden(self):
@@ -933,6 +948,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.anschlussmatrix.anschluss_auswahl.clear()
         self.daten_update()
         self.grafik_update()
+        self.update_actions()
 
     @pyqtSlot()
     def action_zug_einblenden(self):
@@ -941,6 +957,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.anschlussmatrix.anschluss_auswahl.clear()
         self.daten_update()
         self.grafik_update()
+        self.update_actions()
 
     def verspaetung_aendern(self, ziel: ZugZielPlanung, verspaetung: int, relativ: bool = False):
         korrektur = ziel.fdl_korrektur
