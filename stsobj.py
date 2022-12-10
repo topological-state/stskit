@@ -627,6 +627,28 @@ class FahrplanZeile:
         self.fluegelzug: Optional[ZugDetails] = None
         self.kuppelzug: Optional[ZugDetails] = None
 
+    def __hash__(self) -> int:
+        """
+        zugziel-hash
+
+        der hash basiert auf den eindeutigen, unveränderlichen attributen zug.zid und plan.
+
+        :return: hash-wert
+        """
+        return hash((self.zug.zid, self.plan))
+
+    def __eq__(self, other: 'FahrplanZeile') -> bool:
+        """
+        gleichheit von zwei fahrplanzeilen feststellen.
+
+        gleichheit bedeutet: gleicher zug und gleiches plangleis.
+        jedes plangleis kommt im sts-fahrplan nur einmal vor.
+
+        :param other: zu vergleichendes FahrplanZeile-objekt
+        :return: True, wenn zug und plangleis übereinstimmen, sonst False
+        """
+        return self.zug.zid == other.zug.zid and self.plan == other.plan
+
     def __str__(self):
         if self.gleis == self.plan:
             return f"Gleis {self.gleis} an {self.an} ab {self.ab} {self.flags}"

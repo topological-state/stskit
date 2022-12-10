@@ -1,17 +1,26 @@
 import datetime
 import logging
 import numpy as np
-from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, NamedTuple, Optional, Set, Tuple, Union
+import weakref
 
 import networkx as nx
+import trio
 
 from stsobj import ZugDetails, FahrplanZeile, Ereignis
 from stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
+from stsplugin import PluginClient, TaskDone
 from auswertung import Auswertung
 
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+
+
+class ZugZielNode(NamedTuple):
+    typ: str
+    zid: int
+    plangleis: str
 
 
 class VerspaetungsKorrektur:
@@ -588,6 +597,40 @@ class ZugZielPlanung(FahrplanZeile):
         self.angekommen: Union[bool, datetime.datetime] = False
         self.abgefahren: Union[bool, datetime.datetime] = False
 
+    def __hash__(self) -> int:
+        """
+        zugziel-hash
+
+        der hash basiert auf den eindeutigen, unveränderlichen attributen zug.zid und plan.
+
+        :return: hash-wert
+        """
+        return hash((self.zug.zid, self.plan, self.zielnr))
+
+    def __eq__(self, other: 'ZugZielPlanung') -> bool:
+        """
+        gleichheit von zwei fahrplanzeilen feststellen.
+
+        gleichheit bedeutet: gleicher zug und gleiches plangleis.
+        jedes plangleis kommt im sts-fahrplan nur einmal vor.
+
+        :param other: zu vergleichendes FahrplanZeile-objekt
+        :return: True, wenn zug und plangleis übereinstimmen, sonst False
+        """
+        return self.zug.zid == other.zug.zid and self.zielnr == other.zielnr and self.plan == other.plan
+
+    def __str__(self):
+        if self.gleis == self.plan:
+            return f"Ziel {self.zug.zid}-{self.zielnr}: " \
+                   f"Gleis {self.gleis} an {self.an} ab {self.ab} {self.flags}"
+        else:
+            return f"Ziel {self.zug.zid}-{self.zielnr}: " \
+                   f"Gleis {self.gleis} (statt {self.plan}) an {self.an} ab {self.ab} {self.flags}"
+
+    def __repr__(self):
+        return f"ZugZielPlanung({self.zug.zid}-{self.zielnr}," \
+               f"{self.gleis}, {self.plan}, {self.an}, {self.ab}, {self.flags})"
+
     def assign_fahrplan_zeile(self, zeile: FahrplanZeile):
         """
         objekt aus fahrplanzeile initialisieren.
@@ -725,6 +768,9 @@ class Planung:
         self.zugbaum_ungerichtet = nx.Graph()
         self.zugsortierung: List[int] = []
         self.zugstamm: Dict[int, Set[int]] = {}
+        self.zielgraph = nx.DiGraph()
+        self.zielsortierung: List[Tuple[str, int, str]] = []
+        self.zielindex_plan: Dict[Tuple[int, str], Dict[str, ZugZielPlanung]] = {}
         self.auswertung: Optional[Auswertung] = None
         self.simzeit_minuten: int = 0
 
@@ -788,6 +834,7 @@ class Planung:
                     for zeile in zug.fahrplan:
                         zeile.abgefahren = zeile.abgefahren or True
 
+        self._zielgraph_erstellen()
         self._folgezuege_aufloesen()
         self._zugbaum_analysieren()
         self.korrekturen_definieren()
@@ -802,6 +849,9 @@ class Planung:
         - zugliste
 
         muss jedesmal ausgeführt werden, wenn die zusammensetzung von self.zugbaum verändert wurde.
+
+        für die analyse muss der zugbaum inklusive folgezug-verbindungen komplett sein.
+        hierzu sollte die _zielgraph_erstellen-methode verwendet werden.
 
         :return: None
         """
@@ -819,64 +869,157 @@ class Planung:
         """
         folgezüge aus den zugflags auflösen.
 
-        folgezüge werden im stammzug referenziert.
-        die funktion arbeitet iterativ, bis alle folgezüge aufgelöst sind.
+        setzt die ersatzzug/kuppelzug/fluegelzug-attribute gemäss verbindungsangaben im zugbaum.
+        die verbindungsangaben werden von _zielgraph_erstellen gesetzt.
 
         :return: None
         """
 
-        zids = list(self.zugbaum)
-
-        while zids:
-            zid = zids.pop(0)
+        for zid1, zid2, d in self.zugbaum.edges(data=True):
             try:
-                zug = self.zugbaum.nodes[zid]['obj']
+                zug1: ZugDetailsPlanung = self.zugbaum.nodes[zid1]['obj']
+                ziel1: ZugZielPlanung = zug1.find_fahrplan_zielnr(d['zielnr'])
             except KeyError:
                 continue
+            try:
+                zug2: Optional[ZugDetailsPlanung] = self.zugbaum.nodes[zid2]['obj']
+            except KeyError:
+                zug2 = None
 
-            if zug.folgezuege_aufgeloest:
+            if d['flag'] == 'E':
+                ziel1.ersatzzug = zug2
+            elif d['flag'] == 'K':
+                ziel1.kuppelzug = zug2
+            elif d['flag'] == 'F':
+                ziel1.fluegelzug = zug2
+
+    @staticmethod
+    def _zugziel_node(ziel: ZugZielPlanung, plangleis: Optional[str] = None, zid: Optional[int] = None,
+                      typ: Optional[str] = None) -> ZugZielNode:
+
+        if typ is None:
+            if ziel.einfahrt:
+                typ = 'E'
+            elif ziel.ausfahrt:
+                typ = 'A'
+            elif ziel.zielnr > int(ziel.zielnr / 1000) * 1000:
+                typ = 'B'
+            elif ziel.durchfahrt():
+                typ = 'D'
+            else:
+                typ = 'H'
+
+        if plangleis is None:
+            plangleis = ziel.plan
+
+        if zid is None:
+            zid = ziel.zug.zid
+
+        return ZugZielNode(typ, zid, plangleis)
+
+    def _zielgraph_erstellen(self):
+        """
+        zielgraph erstellen/aktualisieren
+
+        der zielgraph enthaelt die zielpunkte aller zuege.
+        die punkte sind gemaess anordnung im fahrplan sowie planmaessigen und betrieblichen abghaengigkeiten verbunden.
+        der zielbaum wird insbesondere verwendet, um eine topologische sortierung der fahrplanziele
+        fuer die verspaetungsberechnung zu erstellen.
+
+        der zielbaum muss ein directed acyclic graph sein.
+        modifikationen, die zyklen verursachen wuerden, muessen abgewiesen werden.
+
+        node-attribute
+        --------------
+
+        obj: ZugZielPlanung-objekt
+        zid: zug-id
+        nr: zielnr
+        plan: plangleis
+        typ: zielpunkttyp:
+            'H': planmaessiger halt
+            'D': durchfahrt
+            'E': einfahrt
+            'A': ausfahrt
+            'B': betriebshalt (vom fdl einfuegter halt)
+            'S': signalhalt (ungeplanter halt zwischen zwei zielpunkten)   --- im moment nicht verwendet
+        Van: ankunftsverspaetung in minuten
+        Vab: abfahrtsverspaetung in minuten
+
+        edge-attribute
+        --------------
+
+        typ: verbindungstyp
+            'P': planmaessige fahrt
+            'E': ersatzzug
+            'F': fluegelung
+            'K': kupplung
+            'R': rangierfahrt (planmaessige fahrt im gleichen bahnhof)   --- von dieser methode nicht erkannt
+            'A': ankunft/abfahrt abwarten
+            'X': anschluss aufgeben
+
+        :return:
+        """
+
+        for zid2, zug in list(self.zugbaum.nodes(data='obj')):
+            if zug is None:
                 continue
-            folgezuege_aufgeloest = True
 
-            for planzeile in zug.fahrplan:
-                if set(planzeile.flags).intersection({'E', 'F', 'K'}):
-                    if zid2 := planzeile.ersatz_zid():
-                        try:
-                            zug2 = self.zugbaum.nodes[zid2]['obj']
-                        except KeyError:
-                            planzeile.ersatzzug = None
-                            folgezuege_aufgeloest = False
-                        else:
-                            planzeile.ersatzzug = zug2
-                            zug2.stammzug = zug
-                            zids.append(zid2)
-                        self.zugbaum.add_edge(zid, zid2, flag='E', zielnr=planzeile.zielnr)
+            ziel1 = None
+            zzid1 = None
 
-                    if zid2 := planzeile.fluegel_zid():
-                        try:
-                            zug2 = self.zugbaum.nodes[zid2]['obj']
-                        except KeyError:
-                            planzeile.fluegelzug = None
-                            folgezuege_aufgeloest = False
-                        else:
-                            planzeile.fluegelzug = zug2
-                            zug2.stammzug = zug
-                            zids.append(zid2)
-                        self.zugbaum.add_edge(zid, zid2, flag='F', zielnr=planzeile.zielnr)
+            for ziel2 in zug.fahrplan:
+                zzid2 = self._zugziel_node(ziel2)
 
-                    if zid2 := planzeile.kuppel_zid():
-                        try:
-                            zug2 = self.zugbaum.nodes[zid2]['obj']
-                        except KeyError:
-                            planzeile.kuppelzug = None
-                            folgezuege_aufgeloest = False
-                        else:
-                            planzeile.kuppelzug = zug2
-                            zug2.stammzug = zug
-                            zids.append(zid2)
-                        self.zugbaum.add_edge(zid, zid2, flag='K', zielnr=planzeile.zielnr)
+                try:
+                    plan_an = time_to_minutes(ziel2.an)
+                except AttributeError:
+                    plan_an = None
+                try:
+                    plan_ab = time_to_minutes(ziel2.ab)
+                except AttributeError:
+                    plan_ab = plan_an
+                if plan_an is None:
+                    plan_an = plan_ab
 
-            zug.folgezuege_aufgeloest = folgezuege_aufgeloest
+                # t_an, t_ab, v_an, v_ab sind nur defaultwerte!
+                self.zielgraph.add_node(zzid2, typ=zzid2[0], obj=ziel2,
+                                        zid=ziel2.zug.zid, zielnr=ziel2.zielnr, plan=ziel2.plan,
+                                        p_an=plan_an, p_ab=plan_ab,
+                                        t_an=plan_an + zug.verspaetung, t_ab=plan_ab + zug.verspaetung,
+                                        v_an=zug.verspaetung, v_ab=zug.verspaetung)
+
+                d = weakref.WeakValueDictionary({zzid2[0]: ziel2})
+                try:
+                    self.zielindex_plan[(zid2, ziel2.plan)].update(d)
+                except KeyError:
+                    self.zielindex_plan[(zid2, ziel2.plan)] = d
+
+                if ziel1:
+                    self.zielgraph.add_edge(zzid1, zzid2, typ='P')
+                if zid := ziel2.ersatz_zid():
+                    self.zielgraph.add_edge(zzid2, self._zugziel_node(ziel2, zid=zid, typ='H'), typ='E')
+                    self.zugbaum.add_edge(zid2, zid, flag='E', zielnr=ziel2.zielnr)
+                if zid := ziel2.kuppel_zid():
+                    self.zielgraph.add_edge(zzid2, self._zugziel_node(ziel2, zid=zid, typ='H'), typ='K')
+                    self.zugbaum.add_edge(zid2, zid, flag='K', zielnr=ziel2.zielnr)
+                if zid := ziel2.fluegel_zid():
+                    self.zielgraph.add_edge(zzid2, self._zugziel_node(ziel2, zid=zid, typ='H'), typ='F')
+                    self.zugbaum.add_edge(zid2, zid, flag='F', zielnr=ziel2.zielnr)
+                if ziel2.fdl_korrektur is not None:
+                    try:
+                        ursprung: ZugZielPlanung = ziel2.fdl_korrektur.ursprung
+                        self.zielgraph.add_edge(self._zugziel_node(ursprung), zzid2, typ='A')
+                    except AttributeError:
+                        pass
+
+                ziel1 = ziel2
+                zzid1 = zzid2
+
+        try:
+            self.zielsortierung = nx.topological_sort(self.zielgraph)
+        except nx.NetworkXUnfeasible:
+            logger.error("fehler beim sortieren des zielgraphen")
 
     def einfahrten_korrigieren(self):
         """
@@ -923,50 +1066,31 @@ class Planung:
                         except (AttributeError, ValueError):
                             pass
 
-    def verspaetungen_korrigieren(self, simzeit_minuten: int):
+    def verspaetungen_korrigieren(self):
         """
         verspätungsangaben aller züge nachführen
 
-        die methode ruft die zugverspaetung_korrigieren methode für jeden stammzug (zug ohne vorgänger) auf.
-        folgezüge werden rekursiv durch die autokorrektur behandelt.
-
-        :return:
+        :simzeit_minuten: akuelle simulationszeit in minuten seit mitternacht
+        :return: None
         """
 
-        self.simzeit_minuten = simzeit_minuten
+        for node in self.zielsortierung:
+            data = self.zielgraph.nodes[node]
+            ziel: ZugZielPlanung = data['obj']
+            zug: ZugDetailsPlanung = ziel.zug
 
-        zids = list(filter(lambda z: self.zugliste[z].stammzug is None, self.zugliste.keys()))
-        while zids:
-            zid = zids.pop(0)
-            try:
-                zug = self.zugliste[zid]
-            except KeyError:
-                continue
-            else:
-                self.zugverspaetung_korrigieren(zug)
-
-    def zugverspaetung_korrigieren(self, zug: ZugDetailsPlanung):
-        """
-        geschätzte verspätung an jedem punkt im fahrplan berechnen
-
-        passierte wegpunkte werden nicht mehr verändert.
-        am aktuellen ziel wird die aktuelle verspätung eingetragen
-        (ankunftsverspätung, wenn das ziel noch nicht erreicht wurde, sonst die abfahrtsverspätung).
-
-        die verspätungen an den folgenden wegpunkten werden nach auto- und fdl-korrektur geschätzt.
-
-        :param zug: ZugDetailsPlanung mit aktuellem fahrplan und aktueller zielangabe.
-            es ist wichtig, dass die angekommen- und abgefahren-attribute korrekt gesetzt sind!
-        :return:
-        """
-
-        verspaetung = zug.verspaetung
-        logger.debug(f"korrektur {zug.name} ({zug.verspaetung})")
-
-        for ziel in zug.fahrplan:
             if not ziel.angekommen:
-                ziel.verspaetung_an = verspaetung
+                v = [pred_data['v_ab'] for pred, pred_data in self.zielgraph.pred[node].items()]
+                # beim aktuellen ziel verspaetung von zug uebernehmen
+                if ziel.einfahrt or zug.plangleis == ziel.plan or len(v) == 0:
+                    v.append(zug.verspaetung)
+                    ziel.verspaetung_an = zug.verspaetung
+                v_an = max(v)
+            else:
+                v_an = ziel.verspaetung_an
+            data['v_an'] = v_an
 
+            # bei noch nicht abgefahrenen zielen verspaetung korrigieren
             if not ziel.abgefahren:
                 if ziel.fdl_korrektur is not None:
                     ziel.fdl_korrektur.anwenden(zug, ziel)
@@ -974,12 +1098,25 @@ class Planung:
                     ziel.auto_korrektur.anwenden(zug, ziel)
                 else:
                     ziel.verspaetung_ab = ziel.verspaetung_an
-                verspaetung = ziel.verspaetung_ab
-            else:
-                try:
-                    ziel.auto_korrektur.weiterleiten(zug, ziel)
-                except AttributeError:
-                    pass
+
+            data['v_ab'] = ziel.verspaetung_ab
+
+    def zugverspaetung_korrigieren(self, zug: ZugDetailsPlanung):
+        """
+        verspätungsangaben einer zugfamilie nachführen
+
+        diese methode führt die verspätungsangaben des angegebenen zugs und der verknüpften züge nach.
+
+        aktuell ist die methode nicht implementiert und ruft verspaetungen_korrigieren auf,
+        die alle züge nachführt.
+        es ist fraglich, ob es effizienter ist, die zugfamilien einzeln zu korrigieren,
+        da die bestimmung der familien auch einen aufwand bedeutet.
+
+        :param zug:
+        :return:
+        """
+
+        self.verspaetungen_korrigieren()
 
     def korrekturen_definieren(self):
         for zug in self.zuege():
@@ -1179,3 +1316,42 @@ class Planung:
         elif ereignis.art == 'rothalt' or ereignis.art == 'wurdegruen':
             zug.verspaetung = ereignis.verspaetung
             neues_ziel.verspaetung_an = ereignis.verspaetung
+
+
+async def test() -> Planung:
+    """
+    testprogramm
+
+    das testprogramm fragt alle daten einmalig vom simulator ab und gibt ein planungsobjekt zurueck.
+
+    :return: Planung-instanz
+    """
+
+    client = PluginClient(name='stskit-planung', autor='tester', version='0.0', text='planungsobjekt abfragen')
+    await client.connect()
+
+    try:
+        async with client._stream:
+            async with trio.open_nursery() as nursery:
+                await nursery.start(client.receiver)
+                await client.register()
+                await client.request_simzeit()
+                await client.request_zugliste()
+                await client.request_zugdetails()
+                await client.request_zugfahrplan()
+                await client.resolve_zugflags()
+
+                _planung = Planung()
+                _planung.zuege_uebernehmen(client.zugliste.values())
+                _planung.simzeit_minuten = time_to_minutes(client.calc_simzeit())
+
+                raise TaskDone()
+
+    except TaskDone:
+        pass
+
+    return _planung
+
+
+if __name__ == '__main__':
+    planung_obj, simzeit = trio.run(test)

@@ -110,9 +110,10 @@ class DatenZentrale:
             self.auswertung = Auswertung(self.anlage)
             self.planung.auswertung = self.auswertung
 
+        self.planung.simzeit_minuten = time_to_minutes(self.client.calc_simzeit())
         self.planung.zuege_uebernehmen(self.client.zugliste.values())
         self.planung.einfahrten_korrigieren()
-        self.planung.verspaetungen_korrigieren(time_to_minutes(self.client.calc_simzeit()))
+        self.planung.verspaetungen_korrigieren()
 
         self.auswertung.zuege_uebernehmen(self.client.zugliste.values())
 
