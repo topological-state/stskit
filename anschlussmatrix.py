@@ -309,7 +309,7 @@ class Anschlussmatrix:
                     except KeyError:
                         freigabe = False
                     for korrektur in ziel_ab.fdl_korrektur:
-                        if isinstance(korrektur, ZugAbwarten) and korrektur.ursprung.zug.zid == zid_an:
+                        if isinstance(korrektur, ZugAbwarten) and korrektur.ursprung.zid == zid_an:
                             abwarten = True
                             break
                     else:

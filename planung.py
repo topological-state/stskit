@@ -916,7 +916,7 @@ class Planung:
                     if self.zielgraph.nodes[zzid2]['obj'] is not None:
                         ziel1 = ziel2
                         zzid1 = zzid2
-                        # continue
+                        continue
                 except KeyError:
                     pass
 
@@ -944,24 +944,47 @@ class Planung:
                     self.zielindex_plan[(zid2, ziel2.plan)] = d
 
                 if ziel1:
+                    if zzid1 == zzid2:
+                        print("P edge", zzid1, zzid2)
                     self.zielgraph.add_edge(zzid1, zzid2, typ='P')
                 if zid := ziel2.ersatz_zid():
-                    self.zielgraph.add_edge(zzid2, ZugZielNode.neu(ziel2, zid=zid, typ='H'), typ='E')
+                    zzid = ZugZielNode.neu(ziel2, zid=zid, typ='H')
+                    if zzid2 == zzid:
+                        print("E edge", zzid2, zzid)
+                    self.zielgraph.add_edge(zzid2, zzid, typ='E')
                     self.zugbaum.add_edge(zid2, zid, flag='E', zielnr=ziel2.zielnr)
                 if zid := ziel2.kuppel_zid():
-                    self.zielgraph.add_edge(zzid2, ZugZielNode.neu(ziel2, zid=zid, typ='H'), typ='K')
+                    zzid = ZugZielNode.neu(ziel2, zid=zid, typ='H')
+                    if zzid2 == zzid:
+                        print("K edge", zzid2, zzid)
+                    self.zielgraph.add_edge(zzid2, zzid, typ='K')
                     self.zugbaum.add_edge(zid2, zid, flag='K', zielnr=ziel2.zielnr)
                 if zid := ziel2.fluegel_zid():
-                    self.zielgraph.add_edge(zzid2, ZugZielNode.neu(ziel2, zid=zid, typ='H'), typ='F')
+                    zzid = ZugZielNode.neu(ziel2, zid=zid, typ='H')
+                    if zzid2 == zzid:
+                        print("F edge", zzid2, zzid)
+                    self.zielgraph.add_edge(zzid2, zzid, typ='F')
                     self.zugbaum.add_edge(zid2, zid, flag='F', zielnr=ziel2.zielnr)
 
                 ziel1 = ziel2
                 zzid1 = zzid2
 
+        self._zielgraph_sortieren()
+
+    def _zielgraph_sortieren(self):
         try:
             self.zielsortierung = list(nx.topological_sort(self.zielgraph))
-        except nx.NetworkXUnfeasible:
+        except nx.NetworkXUnfeasible as e:
             logger.error("fehler beim sortieren des zielgraphen")
+            logger.exception(e)
+            try:
+                cycle = nx.find_cycle(self.zielgraph)
+            except nx.NetworkXNoCycle:
+                pass
+            else:
+                msg = ", ".join((str(edge) for edge in cycle))
+                logger.error("schleife gefunden: " + msg)
+            raise
 
     def einfahrten_korrigieren(self):
         """
@@ -1197,7 +1220,7 @@ class Planung:
                 self.zielgraph.remove_edge(u, v)
 
         try:
-            self.zielsortierung = list(nx.topological_sort(self.zielgraph))
+            self._zielgraph_sortieren()
         except nx.NetworkXUnfeasible:
             logger.error(f"Sortierfehler beim Hinzufügen der Abhängigkeit {korrektur}")
             self.zielgraph.remove_edge(zzid1, zzid2)
@@ -1226,7 +1249,7 @@ class Planung:
             self.zielgraph.remove_edge(u, v)
 
         try:
-            self.zielsortierung = list(nx.topological_sort(self.zielgraph))
+            self._zielgraph_sortieren()
         except nx.NetworkXUnfeasible:
             logger.error(f"Sortierfehler beim Löschen der Abhängigkeit {korrektur}")
 
