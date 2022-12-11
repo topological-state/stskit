@@ -18,7 +18,8 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
 from anlage import Anlage
-from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, AnkunftAbwarten, AbfahrtAbwarten, FesteVerspaetung
+from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, AnkunftAbwarten, AbfahrtAbwarten, FesteVerspaetung, \
+    ZugAbwarten
 from slotgrafik import ZugFarbschema
 from stsobj import time_to_minutes
 from zentrale import DatenZentrale
@@ -307,13 +308,15 @@ class Anschlussmatrix:
                         freigabe = startzeit >= self.eff_ankunftszeiten[zid_an] + min_umsteigezeit
                     except KeyError:
                         freigabe = False
+                    for korrektur in ziel_ab.fdl_korrektur:
+                        if isinstance(korrektur, ZugAbwarten) and korrektur.ursprung.zug.zid == zid_an:
+                            abwarten = True
+                            break
+                    else:
+                        abwarten = False
                     if freigabe:
                         status = ANSCHLUSS_ERFOLGT
-                    elif isinstance(ziel_ab.fdl_korrektur, AnkunftAbwarten) and \
-                            ziel_ab.fdl_korrektur.ursprung.zug.zid == zid_an:
-                        status = ANSCHLUSS_ABWARTEN
-                    elif isinstance(ziel_ab.fdl_korrektur, AbfahrtAbwarten) and \
-                             ziel_ab.fdl_korrektur.ursprung.zug.zid == zid_an:
+                    elif abwarten:
                         status = ANSCHLUSS_ABWARTEN
                     elif eff_umsteigezeit < min_umsteigezeit:
                         status = ANSCHLUSS_WARNUNG
@@ -833,7 +836,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
     def action_ankunft_abwarten(self):
         for zid_ab, zid_an in self.anschlussmatrix.anschluss_auswahl:
             if zid_an < 0:
-                # mehrfache eingehende anschlüsse werden zur zeit nicht unterstützt
+                # todo : mehrfache eingehende anschlüsse werden zur zeit nicht unterstützt
                 return
             if zid_ab >= 0:
                 _zids_ab = {zid_ab}
@@ -960,23 +963,25 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.update_actions()
 
     def verspaetung_aendern(self, ziel: ZugZielPlanung, verspaetung: int, relativ: bool = False):
-        korrektur = ziel.fdl_korrektur
-        neu = korrektur is None
-
-        if relativ and hasattr(korrektur, "wartezeit"):
-            korrektur.wartezeit += verspaetung
-        elif not isinstance(korrektur, FesteVerspaetung):
-            korrektur = FesteVerspaetung(self.planung)
-            korrektur.verspaetung = ziel.verspaetung_ab
-            neu = True
-
-        if hasattr(korrektur, "verspaetung"):
-            if relativ:
-                korrektur.verspaetung += verspaetung
-            else:
-                korrektur.verspaetung = verspaetung
+        neu = True
+        for korrektur in ziel.fdl_korrektur:
+            if hasattr(korrektur, "wartezeit"):
+                if relativ:
+                    korrektur.wartezeit += verspaetung
+                    neu = False
+            elif hasattr(korrektur, "verspaetung"):
+                neu = False
+                if relativ:
+                    korrektur.verspaetung += verspaetung
+                else:
+                    korrektur.verspaetung = verspaetung
 
         if neu:
+            korrektur = FesteVerspaetung(self.planung)
+            if relativ:
+                korrektur.verspaetung = ziel.verspaetung_ab + verspaetung
+            else:
+                korrektur.verspaetung = verspaetung
             self.planung.fdl_korrektur_setzen(korrektur, ziel)
 
         self.planung.zugverspaetung_korrigieren(ziel.zug)

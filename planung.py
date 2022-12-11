@@ -1,3 +1,4 @@
+import copy
 import datetime
 import logging
 import numpy as np
@@ -22,6 +23,46 @@ class ZugZielNode(NamedTuple):
     zid: int
     plangleis: str
 
+    @classmethod
+    def neu(cls, ziel: 'ZugZielPlanung' = None, plangleis: Optional[str] = None, zid: Optional[int] = None,
+            typ: Optional[str] = None) -> 'ZugZielNode':
+        """
+        knoten für zugziel-graph erstellen
+
+        der knoten ist ein eindeutiger schlüssel des zugziels vom typ ZugZielNode.
+        zwei ZugZielNodes, die mit denselben argumenten definiert werden, werden als gleich erachtet.
+
+        der schlüssel kann aus einem ZugZielPlanung oder den einzelnen komponenten erstellt werden.
+        zur bedeutung der typenflags, siehe die beschreibung der _zielgraph_erstellen-methode.
+
+        :param ziel: zielobjekt, zu dem ein schlüssel generiert werden soll.
+            wenn das ziel nicht angegeben wird, müssen alle andere keywords deklariert werden.
+        :param plangleis: überschreibt das plangleis von ziel
+        :param zid: überschreibt das zid von ziel
+        :param typ: überschreibt den typ von ziel
+        :return: ZugZielNode
+        """
+
+        if typ is None:
+            if ziel.einfahrt:
+                typ = 'E'
+            elif ziel.ausfahrt:
+                typ = 'A'
+            elif ziel.zielnr > int(ziel.zielnr / 1000) * 1000:
+                typ = 'B'
+            elif ziel.durchfahrt():
+                typ = 'D'
+            else:
+                typ = 'H'
+
+        if plangleis is None:
+            plangleis = ziel.plan
+
+        if zid is None:
+            zid = ziel.zug.zid
+
+        return cls(typ, zid, plangleis)
+
 
 class VerspaetungsKorrektur:
     """
@@ -34,33 +75,28 @@ class VerspaetungsKorrektur:
     über das _planung-attribut hat die klasse zugriff auf die ganze zugliste.
     sie darf jedoch nur das angegebene ziel sowie allfällige verknüpfte züge direkt ändern.
 
-    wenn ein fahrplanziel abgearbeitet wurde, wird statt `anwenden` die `weiterleiten`-methode aufgerufen,
-    um die verspätungskorrektur von folgezügen durchzuführen.
     """
     def __init__(self, planung: 'Planung'):
         super().__init__()
         self._planung = planung
+        self.display_name = "Korrektur"
 
-    def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
+    def __str__(self):
+        return self.display_name
+
+    def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         """
         verspätungskorrektur anwenden
 
-        :param zug:
-        :param ziel:
-        :return:
+        die methode erhält den zielgraphen mit schlüssel und zieldaten.
+        die methode berechnet die v_ab- und t_ab-attribute.
+        diese sind anfangs undefiniert.
+        alle anderen attribute sind aktuell und dürfen zur berechnung verwendet werden.
+
+        todo: die vorgeschichte kann aus dem graphen ausgelesen werden.
         """
 
-        ziel.verspaetung_ab = ziel.verspaetung_an
-
-    def weiterleiten(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
-        """
-        verspätungskorrektur von folgezügen aufrufen wenn nötig
-
-        :param zug:
-        :param ziel:
-        :return:
-        """
-        pass
+        node_data['v_ab'] = node_data['v_an']
 
 
 class FesteVerspaetung(VerspaetungsKorrektur):
@@ -70,17 +106,19 @@ class FesteVerspaetung(VerspaetungsKorrektur):
     kann bei vorzeitiger abfahrt auch negativ sein.
 
     diese klasse ist für manuelle eingriffe des fahrdienstleiters gedacht.
+    die aktuelle betriebslage wird nicht berücksichtigt.
     """
 
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
         self.verspaetung: int = 0
+        self.display_name = "Fest"
 
     def __str__(self):
-        return f"Fix({self.verspaetung})"
+        return f"{self.display_name}({self.verspaetung})"
 
-    def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
-        ziel.verspaetung_ab = self.verspaetung
+    def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
+        node_data['v_ab'] = self.verspaetung
 
 
 class Signalhalt(FesteVerspaetung):
@@ -92,8 +130,10 @@ class Signalhalt(FesteVerspaetung):
     die wirkung auf den fahrplan ist dieselbe wie von FesteVerspaetung.
     der andere name und objekt-string dient der unterscheidung.
     """
-    def __str__(self):
-        return f"Signal({self.verspaetung})"
+
+    def __init__(self, planung: 'Planung'):
+        super().__init__(planung)
+        self.display_name = "Signal"
 
 
 class Einfahrtszeit(VerspaetungsKorrektur):
@@ -104,25 +144,14 @@ class Einfahrtszeit(VerspaetungsKorrektur):
     in diesem fall erhöht diese korrektur die verspätung, so dass die einfahrtszeit der aktuellen uhrzeit entspricht.
     """
 
-    def __str__(self):
-        return f"Einfahrt"
+    def __init__(self, planung: 'Planung'):
+        super().__init__(planung)
+        self.display_name = "Einfahrt"
 
-    def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
-        try:
-            plan_an = time_to_minutes(ziel.an)
-        except AttributeError:
-            logger.debug(f"zug {zug.name} hat keine ankunft in zeile {ziel}")
-            ziel.verspaetung_ab = ziel.verspaetung_an
-            return
-
-        try:
-            plan_ab = time_to_minutes(ziel.ab)
-        except AttributeError:
-            plan_ab = plan_an
-
-        ankunft = plan_an + ziel.verspaetung_an
+    def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
+        ankunft = node_data['p_an'] + node_data['v_an']
         abfahrt = max(ankunft, self._planung.simzeit_minuten)
-        ziel.verspaetung_ab = abfahrt - plan_ab
+        node_data['v_ab'] = abfahrt - node_data['p_ab']
 
 
 class PlanmaessigeAbfahrt(VerspaetungsKorrektur):
@@ -133,31 +162,62 @@ class PlanmaessigeAbfahrt(VerspaetungsKorrektur):
     die verspätung wird soweit möglich reduziert, ohne die mindestaufenthaltsdauer zu unterschreiten.
     """
 
-    def __str__(self):
-        return f"Plan"
+    def __init__(self, planung: 'Planung'):
+        super().__init__(planung)
+        self.display_name = "Plan"
 
-    def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
-        try:
-            plan_an = time_to_minutes(ziel.an)
-        except AttributeError:
-            logger.debug(f"zug {zug.name} hat keine ankunft in zeile {ziel}")
-            ziel.verspaetung_ab = ziel.verspaetung_an
-            return
-
-        try:
-            plan_ab = time_to_minutes(ziel.ab)
-        except AttributeError:
-            plan_ab = plan_an + ziel.mindestaufenthalt
-
-        ankunft = plan_an + ziel.verspaetung_an
-        aufenthalt = max(plan_ab - ankunft, ziel.mindestaufenthalt)
-        abfahrt = ankunft + aufenthalt
-        ziel.verspaetung_ab = abfahrt - plan_ab
+    def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
+        ankunft = node_data['p_an'] + node_data['v_an']
+        v_ab = max(0, node_data['d_min'] + ankunft - node_data['p_ab'])
+        node_data['v_ab'] = v_ab
 
 
-class AnkunftAbwarten(VerspaetungsKorrektur):
+class ZugAbwarten(VerspaetungsKorrektur):
     """
     wartet auf einen anderen zug.
+
+    die abfahrtsverspätung des von dieser korrektur kontrollierten fahrplanziels
+    richtet sich nach einem anderen zug.
+
+    diese klasse ist eine abstrakte klasse für AnkunftAbwarten und AbfahrtAbwarten.
+
+    attribute
+    --------
+
+    - ursprung: fahrplanziel des abzuwartenden zuges
+    - wartezeit: wartezeit nach ankunft des abzuwartenden zuges
+    """
+
+    def __init__(self, planung: 'Planung'):
+        super().__init__(planung)
+        self.display_name = "Zug"
+        self._ursprung: Optional[ZugZielNode] = None
+        self.wartezeit: int = 0
+
+    def __str__(self):
+        try:
+            zug_name = self._planung.zielgraph.nodes[self._ursprung]['obj'].zug.name
+        except AttributeError:
+            zug_name = self._ursprung.zid
+        except KeyError:
+            zug_name = "-----"
+        return f"{self.display_name}({zug_name}, {self._ursprung.plangleis}, {self.wartezeit})"
+
+    @property
+    def ursprung(self) -> ZugZielNode:
+        return self._ursprung
+
+    @ursprung.setter
+    def ursprung(self, value):
+        if isinstance(value, ZugZielNode):
+            self._ursprung = value
+        else:
+            self._ursprung = ZugZielNode.neu(ziel=value)
+
+
+class AnkunftAbwarten(ZugAbwarten):
+    """
+    wartet auf die ankunft eines anderen zuges.
 
     die abfahrtsverspätung des von dieser korrektur kontrollierten fahrplanziels
     richtet sich nach der effektiven ankunftszeit des anderen zuges
@@ -175,35 +235,19 @@ class AnkunftAbwarten(VerspaetungsKorrektur):
 
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
-        self.ursprung: Optional[ZugZielPlanung] = None
-        self.wartezeit: int = 0
+        self.display_name = "Ankunft"
 
-    def __str__(self):
-        return f"Ankunft({self.ursprung.zug.name}, {self.wartezeit})"
-
-    def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
-        try:
-            plan_an = time_to_minutes(ziel.an)
-        except AttributeError:
-            plan_an = None
-
-        try:
-            plan_ab = time_to_minutes(ziel.ab)
-        except AttributeError:
-            plan_ab = plan_an + ziel.mindestaufenthalt
-
-        if plan_an is None:
-            plan_an = plan_ab
-
-        ankunft = plan_an + ziel.verspaetung_an
-        aufenthalt = max(plan_ab - ankunft, ziel.mindestaufenthalt)
-        anschluss_an = time_to_minutes(self.ursprung.an) + self.ursprung.verspaetung_an
+    def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
+        ankunft = node_data['p_an'] + node_data['v_an']
+        aufenthalt = max(node_data['p_ab'] - ankunft, node_data['d_min'])
+        anschluss = graph.nodes[self.ursprung]
+        anschluss_an = anschluss['p_an'] + anschluss['v_an']
         anschluss_ab = anschluss_an + self.wartezeit
         abfahrt = max(ankunft + aufenthalt, anschluss_ab)
-        ziel.verspaetung_ab = abfahrt - plan_ab
+        node_data['v_ab'] = max(node_data['v_ab'], abfahrt - node_data['p_ab'])
 
 
-class AbfahrtAbwarten(VerspaetungsKorrektur):
+class AbfahrtAbwarten(ZugAbwarten):
     """
     wartet, bis ein anderer zug abgefahren ist.
 
@@ -222,76 +266,44 @@ class AbfahrtAbwarten(VerspaetungsKorrektur):
 
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
-        self.ursprung: Optional[ZugZielPlanung] = None
-        self.wartezeit: int = 0
+        self.display_name = "Abfahrt"
 
-    def __str__(self):
-        return f"Abfahrt({self.ursprung.zug.name}, {self.wartezeit})"
-
-    def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
-        try:
-            plan_an = time_to_minutes(ziel.an)
-        except AttributeError:
-            plan_an = None
-
-        try:
-            plan_ab = time_to_minutes(ziel.ab)
-        except AttributeError:
-            plan_ab = plan_an + ziel.mindestaufenthalt
-
-        if plan_an is None:
-            plan_an = plan_ab
-
-        ankunft = plan_an + ziel.verspaetung_an
-        aufenthalt = max(plan_ab - ankunft, ziel.mindestaufenthalt)
-        anschluss_ab = time_to_minutes(self.ursprung.ab) + self.ursprung.verspaetung_ab
+    def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
+        ankunft = node_data['p_an'] + node_data['v_an']
+        aufenthalt = max(node_data['p_ab'] - ankunft, node_data['d_min'])
+        anschluss = graph.nodes[self.ursprung]
+        anschluss_ab = anschluss['p_ab'] + anschluss['v_ab']
         anschluss_ab = anschluss_ab + self.wartezeit
         abfahrt = max(ankunft + aufenthalt, anschluss_ab)
-        ziel.verspaetung_ab = abfahrt - plan_ab
+        node_data['v_ab'] = max(node_data['v_ab'], abfahrt - node_data['p_ab'])
 
 
-class Ersatzzug(VerspaetungsKorrektur):
+class FlagKorrektur(VerspaetungsKorrektur):
+    def __init__(self, planung: 'Planung'):
+        super().__init__(planung)
+        self.display_name = "Flag"
+
+
+class Ersatzzug(FlagKorrektur):
     """
     abfahrt frühestens wenn nummernwechsel abgeschlossen ist
 
     das erste fahrplanziel des ersatzzuges muss it einer AnschlussAbwarten-korrektur markiert sein.
     """
 
-    def __str__(self):
-        return f"Ersatz"
+    def __init__(self, planung: 'Planung'):
+        super().__init__(planung)
+        self.display_name = "Ersatz"
 
-    def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
-        try:
-            plan_an = time_to_minutes(ziel.an)
-        except AttributeError:
-            logger.debug(f"zug {zug.name} hat keine ankunft in zeile {ziel}")
-            ziel.verspaetung_ab = ziel.verspaetung_an
-            return
-
-        try:
-            plan_ab = time_to_minutes(ziel.ersatzzug.fahrplan[0].an)
-        except (AttributeError, IndexError):
-            try:
-                plan_ab = time_to_minutes(ziel.ab)
-            except AttributeError:
-                plan_ab = plan_an + ziel.mindestaufenthalt
-
-        ankunft = plan_an + ziel.verspaetung_an
-        aufenthalt = max(plan_ab - ankunft, ziel.mindestaufenthalt)
+    def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
+        ankunft = node_data['p_an'] + node_data['v_an']
+        aufenthalt = max(node_data['p_ab'] - ankunft, node_data['d_min'])
         abfahrt = ankunft + aufenthalt
-        ziel.verspaetung_ab = abfahrt - plan_ab
-        ziel.ab = minutes_to_time(abfahrt - ziel.verspaetung_ab)
-
-        if ziel.ersatzzug:
-            ziel.ersatzzug.verspaetung = ziel.verspaetung_ab
-            self._planung.zugverspaetung_korrigieren(ziel.ersatzzug)
-
-    def weiterleiten(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
-        if ziel.ersatzzug:
-            self._planung.zugverspaetung_korrigieren(ziel.ersatzzug)
+        node_data['v_ab'] = abfahrt - node_data['p_ab']
+        node_data['p_ab'] = abfahrt - node_data['v_ab']
 
 
-class Kupplung(VerspaetungsKorrektur):
+class Kupplung(FlagKorrektur):
     """
     zwei züge kuppeln
 
@@ -300,78 +312,28 @@ class Kupplung(VerspaetungsKorrektur):
     bemerkung: der zug mit dem kuppel-flag verschwindet. der verlinkte zug fährt weiter.
     """
 
-    def __str__(self):
-        return f"Kupplung"
+    def __init__(self, planung: 'Planung'):
+        super().__init__(planung)
+        self.display_name = "Kupplung"
 
-    def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
-        try:
-            plan_an = time_to_minutes(ziel.an)
-        except AttributeError:
-            logger.warning(f"zug {zug} hat keine ankunft in zeile {ziel}")
-            ziel.verspaetung_ab = ziel.verspaetung_an
-            return
-
-        try:
-            plan_ab = time_to_minutes(ziel.ab)
-        except (AttributeError, IndexError):
-            plan_ab = plan_an + ziel.mindestaufenthalt
-
-        # zuerst die verspaetung des kuppelnden zuges berechnen
-        try:
-            self._planung.zugverspaetung_korrigieren(ziel.kuppelzug)
-            kuppel_index = ziel.kuppelzug.find_fahrplan_index(plan=ziel.plan)
-            kuppel_ziel = ziel.kuppelzug.fahrplan[kuppel_index]
-            kuppel_verspaetung = kuppel_ziel.verspaetung_an
-            kuppel_an = time_to_minutes(kuppel_ziel.an) + kuppel_verspaetung
-        except (AttributeError, IndexError):
-            kuppel_an = 0
-
-        while abs(kuppel_an - (plan_an + ziel.verspaetung_an)) < 2:
-            ziel.verspaetung_an += 1
-
-        ankunft = plan_an + ziel.verspaetung_an
-        aufenthalt = max(plan_ab - ankunft, ziel.mindestaufenthalt)
-        abfahrt = max(ankunft + aufenthalt, kuppel_an)
-        ziel.verspaetung_ab = abfahrt - plan_ab
-
-        if ziel.kuppelzug:
-            self._planung.zugverspaetung_korrigieren(ziel.kuppelzug)
-
-    def weiterleiten(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
-        if ziel.kuppelzug:
-            self._planung.zugverspaetung_korrigieren(ziel.kuppelzug)
-
-
-class Fluegelung(VerspaetungsKorrektur):
-    def __str__(self):
-        return f"Flügelung"
-
-    def anwenden(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
-        try:
-            plan_an = time_to_minutes(ziel.an)
-        except AttributeError:
-            logger.warning(f"zug {zug} hat keine ankunft in zeile {ziel}")
-            ziel.verspaetung_ab = ziel.verspaetung_an
-            return
-
-        try:
-            plan_ab = time_to_minutes(ziel.ab)
-        except (AttributeError, IndexError):
-            plan_ab = plan_an + ziel.mindestaufenthalt
-
-        ankunft = plan_an + ziel.verspaetung_an
-        aufenthalt = max(plan_ab - ankunft, ziel.mindestaufenthalt)
+    def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
+        # todo : abfahrtszeit mit gekuppeltem zug abstimmen
+        ankunft = node_data['p_an'] + node_data['v_an']
+        aufenthalt = max(node_data['p_ab'] - ankunft, node_data['d_min'])
         abfahrt = ankunft + aufenthalt
-        ziel.verspaetung_ab = abfahrt - plan_ab
+        node_data['v_ab'] = abfahrt - node_data['p_ab']
 
-        if ziel.fluegelzug:
-            ziel.fluegelzug.verspaetung = ziel.verspaetung_an
-            ziel.fluegelzug.fahrplan[0].verspaetung_an = ziel.verspaetung_an
-            self._planung.zugverspaetung_korrigieren(ziel.fluegelzug)
 
-    def weiterleiten(self, zug: 'ZugDetailsPlanung', ziel: 'ZugZielPlanung'):
-        if ziel.fluegelzug:
-            self._planung.zugverspaetung_korrigieren(ziel.fluegelzug)
+class Fluegelung(FlagKorrektur):
+    def __init__(self, planung: 'Planung'):
+        super().__init__(planung)
+        self.display_name = "Flügelung"
+
+    def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
+        ankunft = node_data['p_an'] + node_data['v_an']
+        aufenthalt = max(node_data['p_ab'] - ankunft, node_data['d_min'])
+        abfahrt = ankunft + aufenthalt
+        node_data['v_ab'] = abfahrt - node_data['p_ab']
 
 
 class ZugDetailsPlanung(ZugDetails):
@@ -593,7 +555,7 @@ class ZugZielPlanung(FahrplanZeile):
         self.verspaetung_ab: int = 0
         self.mindestaufenthalt: int = 0
         self.auto_korrektur: Optional[VerspaetungsKorrektur] = None
-        self.fdl_korrektur: Optional[VerspaetungsKorrektur] = None
+        self.fdl_korrektur: Set[VerspaetungsKorrektur] = set()
         self.angekommen: Union[bool, datetime.datetime] = False
         self.abgefahren: Union[bool, datetime.datetime] = False
 
@@ -893,30 +855,6 @@ class Planung:
             elif d['flag'] == 'F':
                 ziel1.fluegelzug = zug2
 
-    @staticmethod
-    def _zugziel_node(ziel: ZugZielPlanung, plangleis: Optional[str] = None, zid: Optional[int] = None,
-                      typ: Optional[str] = None) -> ZugZielNode:
-
-        if typ is None:
-            if ziel.einfahrt:
-                typ = 'E'
-            elif ziel.ausfahrt:
-                typ = 'A'
-            elif ziel.zielnr > int(ziel.zielnr / 1000) * 1000:
-                typ = 'B'
-            elif ziel.durchfahrt():
-                typ = 'D'
-            else:
-                typ = 'H'
-
-        if plangleis is None:
-            plangleis = ziel.plan
-
-        if zid is None:
-            zid = ziel.zug.zid
-
-        return ZugZielNode(typ, zid, plangleis)
-
     def _zielgraph_erstellen(self):
         """
         zielgraph erstellen/aktualisieren
@@ -924,10 +862,14 @@ class Planung:
         der zielgraph enthaelt die zielpunkte aller zuege.
         die punkte sind gemaess anordnung im fahrplan sowie planmaessigen und betrieblichen abghaengigkeiten verbunden.
         der zielbaum wird insbesondere verwendet, um eine topologische sortierung der fahrplanziele
-        fuer die verspaetungsberechnung zu erstellen.
+        für die verspätungsberechnung zu erstellen.
 
         der zielbaum muss ein directed acyclic graph sein.
-        modifikationen, die zyklen verursachen wuerden, muessen abgewiesen werden.
+        modifikationen, die zyklen verursachen würden, müssen abgewiesen werden.
+
+        diese methode fügt nur neue knoten und ihre kanten zum graphen hinzu.
+        bestehende knoten werden nicht verändert.
+        um den graphen neu aufzubauen, sollte er vorher gelöscht werden.
 
         node-attribute
         --------------
@@ -969,7 +911,14 @@ class Planung:
             zzid1 = None
 
             for ziel2 in zug.fahrplan:
-                zzid2 = self._zugziel_node(ziel2)
+                zzid2 = ZugZielNode.neu(ziel2)
+                try:
+                    if self.zielgraph.nodes[zzid2]['obj'] is not None:
+                        ziel1 = ziel2
+                        zzid1 = zzid2
+                        # continue
+                except KeyError:
+                    pass
 
                 try:
                     plan_an = time_to_minutes(ziel2.an)
@@ -982,7 +931,6 @@ class Planung:
                 if plan_an is None:
                     plan_an = plan_ab
 
-                # t_an, t_ab, v_an, v_ab sind nur defaultwerte!
                 self.zielgraph.add_node(zzid2, typ=zzid2[0], obj=ziel2,
                                         zid=ziel2.zug.zid, zielnr=ziel2.zielnr, plan=ziel2.plan,
                                         p_an=plan_an, p_ab=plan_ab,
@@ -998,26 +946,20 @@ class Planung:
                 if ziel1:
                     self.zielgraph.add_edge(zzid1, zzid2, typ='P')
                 if zid := ziel2.ersatz_zid():
-                    self.zielgraph.add_edge(zzid2, self._zugziel_node(ziel2, zid=zid, typ='H'), typ='E')
+                    self.zielgraph.add_edge(zzid2, ZugZielNode.neu(ziel2, zid=zid, typ='H'), typ='E')
                     self.zugbaum.add_edge(zid2, zid, flag='E', zielnr=ziel2.zielnr)
                 if zid := ziel2.kuppel_zid():
-                    self.zielgraph.add_edge(zzid2, self._zugziel_node(ziel2, zid=zid, typ='H'), typ='K')
+                    self.zielgraph.add_edge(zzid2, ZugZielNode.neu(ziel2, zid=zid, typ='H'), typ='K')
                     self.zugbaum.add_edge(zid2, zid, flag='K', zielnr=ziel2.zielnr)
                 if zid := ziel2.fluegel_zid():
-                    self.zielgraph.add_edge(zzid2, self._zugziel_node(ziel2, zid=zid, typ='H'), typ='F')
+                    self.zielgraph.add_edge(zzid2, ZugZielNode.neu(ziel2, zid=zid, typ='H'), typ='F')
                     self.zugbaum.add_edge(zid2, zid, flag='F', zielnr=ziel2.zielnr)
-                if ziel2.fdl_korrektur is not None:
-                    try:
-                        ursprung: ZugZielPlanung = ziel2.fdl_korrektur.ursprung
-                        self.zielgraph.add_edge(self._zugziel_node(ursprung), zzid2, typ='A')
-                    except AttributeError:
-                        pass
 
                 ziel1 = ziel2
                 zzid1 = zzid2
 
         try:
-            self.zielsortierung = nx.topological_sort(self.zielgraph)
+            self.zielsortierung = list(nx.topological_sort(self.zielgraph))
         except nx.NetworkXUnfeasible:
             logger.error("fehler beim sortieren des zielgraphen")
 
@@ -1070,36 +1012,50 @@ class Planung:
         """
         verspätungsangaben aller züge nachführen
 
-        :simzeit_minuten: akuelle simulationszeit in minuten seit mitternacht
         :return: None
         """
 
         for node in self.zielsortierung:
             data = self.zielgraph.nodes[node]
-            ziel: ZugZielPlanung = data['obj']
+            try:
+                ziel: ZugZielPlanung = data['obj']
+            except KeyError:
+                continue
             zug: ZugDetailsPlanung = ziel.zug
+            alt = copy.copy(data)
 
+            # v_an definiert!
             if not ziel.angekommen:
-                v = [pred_data['v_ab'] for pred, pred_data in self.zielgraph.pred[node].items()]
                 # beim aktuellen ziel verspaetung von zug uebernehmen
-                if ziel.einfahrt or zug.plangleis == ziel.plan or len(v) == 0:
-                    v.append(zug.verspaetung)
-                    ziel.verspaetung_an = zug.verspaetung
-                v_an = max(v)
-            else:
-                v_an = ziel.verspaetung_an
-            data['v_an'] = v_an
+                if ziel.einfahrt or zug.plangleis == ziel.plan:
+                    data['v_an'] = zug.verspaetung
 
             # bei noch nicht abgefahrenen zielen verspaetung korrigieren
             if not ziel.abgefahren:
-                if ziel.fdl_korrektur is not None:
-                    ziel.fdl_korrektur.anwenden(zug, ziel)
-                elif ziel.auto_korrektur is not None:
-                    ziel.auto_korrektur.anwenden(zug, ziel)
-                else:
-                    ziel.verspaetung_ab = ziel.verspaetung_an
+                data['v_ab'] = data['v_an']
+                data['t_an'] = data['p_an'] + data['v_an']
+                data['t_ab'] = data['p_ab'] + data['v_ab']
+                data['d_min'] = ziel.mindestaufenthalt
+                if ziel.auto_korrektur is not None:
+                    try:
+                        ziel.auto_korrektur.anwenden(self.zielgraph, node, data)
+                    except KeyError as e:
+                        logger.exception(e)
+                for korr in ziel.fdl_korrektur:
+                    try:
+                        korr.anwenden(self.zielgraph, node, data)
+                    except KeyError as e:
+                        logger.exception(e)
 
-            data['v_ab'] = ziel.verspaetung_ab
+            ziel.verspaetung_an = data['v_an']
+            ziel.verspaetung_ab = data['v_ab']
+            if data['p_an'] != alt['p_an'] or data['p_ab'] != alt['p_ab']:
+                ziel.an = minutes_to_time(data['p_an'])
+                ziel.ab = minutes_to_time(data['p_ab'])
+            for succ in self.zielgraph.succ[node]:
+                succ_data = self.zielgraph.nodes[succ]
+                succ_data['v_an'] = data['v_ab']
+                succ_data['v_ab'] = data['v_ab']
 
     def zugverspaetung_korrigieren(self, zug: ZugDetailsPlanung):
         """
@@ -1212,26 +1168,67 @@ class Planung:
         mit dieser methode kann der fahrdienstleiter eine manuelle verspätungskorrektur auf eine fahrplanzeile anwenden,
         z.b. eine feste abgangsverspätung setzen oder eine abhängigkeit von einem kreuzenden zug festlegen.
 
-        beim setzen einer fdl-korrektur werden alle nachfolgenden gelöscht!
-        beim löschen (auf None setzen) bleiben sie erhalten.
+        beim löschen werden alle korrekturen auf diesem ziel gelöscht!
 
         :param korrektur: von VerspaetungsKorrektur abgeleitetes korrekturobjekt.
             in frage kommen normalerweise FesteVerspaetung, AnkunftAbwarten oder AbfahrtAbwarten.
-            bei None wird die korrektur gelöscht.
+            bei None werden alle korrekturen auf diesem ziel gelöscht.
         :param ziel: fahrplanziel auf die die korrektur angewendet wird.
             dies kann ein ZugDetailsPlanung-objekt aus der zugliste dieser klasse sein
             oder ein gleisname oder fahrplan-index.
             in den letzteren beiden fällen, muss auch der zug oder zid angegeben werden.
         :return: None
+        :raise ValueError: die gewünschte korrektur ist nicht möglich.
         """
 
-        zug = ziel.zug
-        ziel_index = zug.find_fahrplan_index(plan=ziel.plan)
+        zzid2 = ZugZielNode.neu(ziel)
+        try:
+            zzid1 = korrektur.ursprung
+        except AttributeError:
+            zzid1 = None
+        else:
+            self.zielgraph.add_edge(zzid1, zzid2, typ='A')
 
-        ziel.fdl_korrektur = korrektur
-        if korrektur:
-            for z in zug.fahrplan[ziel_index + 1:]:
-                z.fdl_korrektur = None
+        if korrektur is None:
+            ziel.fdl_korrektur.clear()
+            edges = [(u, v) for u, v, typ in self.zielgraph.in_edges(zzid2, data='typ', default='?')
+                     if typ in {'A', 'X'}]
+            for u, v in edges:
+                self.zielgraph.remove_edge(u, v)
+
+        try:
+            self.zielsortierung = list(nx.topological_sort(self.zielgraph))
+        except nx.NetworkXUnfeasible:
+            logger.error(f"Sortierfehler beim Hinzufügen der Abhängigkeit {korrektur}")
+            self.zielgraph.remove_edge(zzid1, zzid2)
+        else:
+            ziel.fdl_korrektur.add(korrektur)
+
+    def fdl_korrektur_loeschen(self, korrektur: VerspaetungsKorrektur, ziel: Union[int, str, ZugZielPlanung]):
+        """
+        fahrdienstleiter-korrektur löschen
+
+        entfernt eine spezifische fdl-korrektur von einem fahrziel.
+        das korrekturobjekt muss im fdl_korrektur-attribut des fahrziels enthalten sein.
+        ggf. vorhandene weitere korrekturen werden nicht berührt.
+
+        :param korrektur:
+        :param ziel:
+        :return:
+        """
+
+        ziel.fdl_korrektur.discard(korrektur)
+
+        zzid2 = ZugZielNode.neu(ziel)
+        edges = [(u, v) for u, v, typ in self.zielgraph.in_edges(zzid2, data='typ', default='?')
+                 if typ in {'A', 'X'}]
+        for u, v in edges:
+            self.zielgraph.remove_edge(u, v)
+
+        try:
+            self.zielsortierung = list(nx.topological_sort(self.zielgraph))
+        except nx.NetworkXUnfeasible:
+            logger.error(f"Sortierfehler beim Löschen der Abhängigkeit {korrektur}")
 
     def ereignis_uebernehmen(self, ereignis: Ereignis):
         """

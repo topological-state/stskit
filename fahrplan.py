@@ -304,8 +304,8 @@ class FahrplanModell(QtCore.QAbstractTableModel):
                 abh = []
                 if zeile.auto_korrektur:
                     abh.append(str(zeile.auto_korrektur))
-                if zeile.fdl_korrektur:
-                    abh.append(str(zeile.fdl_korrektur))
+                for korrektur in zeile.fdl_korrektur:
+                    abh.append(str(korrektur))
                 return ", ".join(abh)
             else:
                 return None

@@ -755,7 +755,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         except IndexError:
             pass
         else:
-            slot.ziel.fdl_korrektur = None
+            self.planung.fdl_korrektur_setzen(None, slot.ziel)
             self.planung.zugverspaetung_korrigieren(slot.zug)
             self.daten_update()
             self.grafik_update()
@@ -811,23 +811,25 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.update_actions()
 
     def verspaetung_aendern(self, slot: Slot, verspaetung: int, relativ: bool = False):
-        korrektur = slot.ziel.fdl_korrektur
-        neu = korrektur is None
-
-        if relativ and hasattr(korrektur, "wartezeit"):
-            korrektur.wartezeit += verspaetung
-        elif not isinstance(korrektur, FesteVerspaetung):
-            korrektur = FesteVerspaetung(self.planung)
-            korrektur.verspaetung = slot.ziel.verspaetung_ab
-            neu = True
-
-        if hasattr(korrektur, "verspaetung"):
-            if relativ:
-                korrektur.verspaetung += verspaetung
-            else:
-                korrektur.verspaetung = verspaetung
+        neu = True
+        for korrektur in slot.ziel.fdl_korrektur:
+            if hasattr(korrektur, "wartezeit"):
+                if relativ:
+                    korrektur.wartezeit += verspaetung
+                    neu = False
+            elif hasattr(korrektur, "verspaetung"):
+                neu = False
+                if relativ:
+                    korrektur.verspaetung += verspaetung
+                else:
+                    korrektur.verspaetung = verspaetung
 
         if neu:
+            korrektur = FesteVerspaetung(self.planung)
+            if relativ:
+                korrektur.verspaetung = slot.ziel.verspaetung_ab + verspaetung
+            else:
+                korrektur.verspaetung = verspaetung
             self.planung.fdl_korrektur_setzen(korrektur, slot.ziel)
 
         self.planung.zugverspaetung_korrigieren(slot.zug)

@@ -11,10 +11,9 @@ from matplotlib.lines import Line2D
 import numpy as np
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 
-import planung
 from auswertung import Auswertung
 from anlage import Anlage
-from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
+from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, AnkunftAbwarten, AbfahrtAbwarten
 from slotgrafik import hour_minutes_formatter, ZugFarbschema
 from stsplugin import PluginClient
 from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
@@ -610,7 +609,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         except IndexError:
             pass
         else:
-            trasse.start.fdl_korrektur = None
+            self.planung.fdl_korrektur_setzen(None, trasse.start)
             self.planung.zugverspaetung_korrigieren(trasse.zug)
             self.update_zuglauf(trasse.zug)
 
@@ -638,23 +637,25 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.update_actions()
 
     def verspaetung_aendern(self, trasse: Trasse, verspaetung: int, relativ: bool = False):
-        korrektur = trasse.start.fdl_korrektur
-        neu = korrektur is None
-
-        if relativ and hasattr(korrektur, "wartezeit"):
-            korrektur.wartezeit += verspaetung
-        elif not isinstance(korrektur, planung.FesteVerspaetung):
-            korrektur = planung.FesteVerspaetung(self.planung)
-            korrektur.verspaetung = trasse.start.verspaetung_ab
-            neu = True
-
-        if hasattr(korrektur, "verspaetung"):
-            if relativ:
-                korrektur.verspaetung += verspaetung
-            else:
-                korrektur.verspaetung = verspaetung
+        neu = True
+        for korrektur in trasse.start.fdl_korrektur:
+            if hasattr(korrektur, "wartezeit"):
+                if relativ:
+                    korrektur.wartezeit += verspaetung
+                    neu = False
+            elif hasattr(korrektur, "verspaetung"):
+                neu = False
+                if relativ:
+                    korrektur.verspaetung += verspaetung
+                else:
+                    korrektur.verspaetung = verspaetung
 
         if neu:
+            korrektur = FesteVerspaetung(self.planung)
+            if relativ:
+                korrektur.verspaetung = trasse.start.verspaetung_ab + verspaetung
+            else:
+                korrektur.verspaetung = verspaetung
             self.planung.fdl_korrektur_setzen(korrektur, trasse.start)
 
         self.planung.zugverspaetung_korrigieren(trasse.zug)
@@ -663,9 +664,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     def abhaengigkeit_definieren(self, trasse: Trasse, referenz: ZugZielPlanung, wartezeit: int = 0,
                                  abfahrt: bool = False):
         if abfahrt:
-            korrektur = planung.AbfahrtAbwarten(self.planung)
+            korrektur = AbfahrtAbwarten(self.planung)
         else:
-            korrektur = planung.AnkunftAbwarten(self.planung)
+            korrektur = AnkunftAbwarten(self.planung)
         korrektur.ursprung = referenz
         korrektur.wartezeit = wartezeit
 
