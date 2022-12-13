@@ -296,6 +296,15 @@ class Ersatzzug(FlagKorrektur):
         self.display_name = "Ersatz"
 
     def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
+        try:
+            ziel: ZugZielPlanung = node_data['obj']
+            ersatz_zzid = ZugZielNode.neu(ziel, zid=ziel.ersatz_zid())
+            ersatz_ziel: ZugZielPlanung = graph.nodes[ersatz_zzid]['obj']
+        except KeyError as e:
+            logger.exception(e)
+        else:
+            node_data['p_ab'] = max(time_to_minutes(ersatz_ziel.an), node_data['p_an'])
+
         ankunft = node_data['p_an'] + node_data['v_an']
         aufenthalt = max(node_data['p_ab'] - ankunft, node_data['d_min'])
         abfahrt = ankunft + aufenthalt
@@ -945,26 +954,30 @@ class Planung:
 
                 if ziel1:
                     if zzid1 == zzid2:
-                        print("P edge", zzid1, zzid2)
-                    self.zielgraph.add_edge(zzid1, zzid2, typ='P')
+                        logger.warning("P edge", zzid1, zzid2)
+                    else:
+                        self.zielgraph.add_edge(zzid1, zzid2, typ='P')
                 if zid := ziel2.ersatz_zid():
                     zzid = ZugZielNode.neu(ziel2, zid=zid, typ='H')
                     if zzid2 == zzid:
-                        print("E edge", zzid2, zzid)
-                    self.zielgraph.add_edge(zzid2, zzid, typ='E')
-                    self.zugbaum.add_edge(zid2, zid, flag='E', zielnr=ziel2.zielnr)
+                        logger.warning("E edge", zzid2, zzid)
+                    else:
+                        self.zielgraph.add_edge(zzid2, zzid, typ='E')
+                        self.zugbaum.add_edge(zid2, zid, flag='E', zielnr=ziel2.zielnr)
                 if zid := ziel2.kuppel_zid():
                     zzid = ZugZielNode.neu(ziel2, zid=zid, typ='H')
                     if zzid2 == zzid:
-                        print("K edge", zzid2, zzid)
-                    self.zielgraph.add_edge(zzid2, zzid, typ='K')
-                    self.zugbaum.add_edge(zid2, zid, flag='K', zielnr=ziel2.zielnr)
+                        logger.warning("K edge", zzid2, zzid)
+                    else:
+                        self.zielgraph.add_edge(zzid2, zzid, typ='K')
+                        self.zugbaum.add_edge(zid2, zid, flag='K', zielnr=ziel2.zielnr)
                 if zid := ziel2.fluegel_zid():
                     zzid = ZugZielNode.neu(ziel2, zid=zid, typ='H')
                     if zzid2 == zzid:
-                        print("F edge", zzid2, zzid)
-                    self.zielgraph.add_edge(zzid2, zzid, typ='F')
-                    self.zugbaum.add_edge(zid2, zid, flag='F', zielnr=ziel2.zielnr)
+                        logger.warning("F edge", zzid2, zzid)
+                    else:
+                        self.zielgraph.add_edge(zzid2, zzid, typ='F')
+                        self.zugbaum.add_edge(zid2, zid, flag='F', zielnr=ziel2.zielnr)
 
                 ziel1 = ziel2
                 zzid1 = zzid2
@@ -1050,7 +1063,7 @@ class Planung:
             # v_an definiert!
             if not ziel.angekommen:
                 # beim aktuellen ziel verspaetung von zug uebernehmen
-                if ziel.einfahrt or zug.plangleis == ziel.plan:
+                if ziel.einfahrt or (zug.sichtbar and zug.plangleis == ziel.plan):
                     data['v_an'] = zug.verspaetung
 
             # bei noch nicht abgefahrenen zielen verspaetung korrigieren
@@ -1077,8 +1090,9 @@ class Planung:
                 ziel.ab = minutes_to_time(data['p_ab'])
             for succ in self.zielgraph.succ[node]:
                 succ_data = self.zielgraph.nodes[succ]
-                succ_data['v_an'] = data['v_ab']
-                succ_data['v_ab'] = data['v_ab']
+                succ_ziel: ZugZielPlanung = succ_data['obj']
+                succ_ziel.verspaetung_an = succ_data['v_an'] = data['v_ab']
+                succ_ziel.verspaetung_ab = succ_data['v_ab'] = data['v_ab']
 
     def zugverspaetung_korrigieren(self, zug: ZugDetailsPlanung):
         """
