@@ -64,6 +64,18 @@ class ZugZielNode(NamedTuple):
         return cls(typ, zid, plangleis)
 
 
+def graph_pred_filter_flag(graph: nx.DiGraph, node: ZugZielNode, typ: str) -> Iterable[ZugZielNode]:
+    for zzid in graph.predecessors(node):
+        if graph.edges[zzid, node]['typ'] == typ:
+            yield zzid
+
+
+def graph_succ_filter_flag(graph: nx.DiGraph, node: ZugZielNode, typ: str) -> Iterable[ZugZielNode]:
+    for zzid in graph.successors(node):
+        if graph.edges[node, zzid]['typ'] == typ:
+            yield zzid
+
+
 class VerspaetungsKorrektur:
     """
     basisklasse für die anpassung der verspätungszeit eines fahrplanziels
@@ -244,7 +256,7 @@ class AnkunftAbwarten(ZugAbwarten):
         anschluss_an = anschluss['p_an'] + anschluss['v_an']
         anschluss_ab = anschluss_an + self.wartezeit
         abfahrt = max(ankunft + aufenthalt, anschluss_ab)
-        node_data['v_ab'] = max(node_data['v_ab'], abfahrt - node_data['p_ab'])
+        node_data['v_ab'] = abfahrt - node_data['p_ab']
 
 
 class AbfahrtAbwarten(ZugAbwarten):
@@ -296,20 +308,22 @@ class Ersatzzug(FlagKorrektur):
         self.display_name = "Ersatz"
 
     def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
-        try:
-            ziel: ZugZielPlanung = node_data['obj']
-            ersatz_zzid = ZugZielNode.neu(ziel, zid=ziel.ersatz_zid())
-            ersatz_ziel: ZugZielPlanung = graph.nodes[ersatz_zzid]['obj']
-        except KeyError as e:
-            logger.exception(e)
-        else:
-            node_data['p_ab'] = max(time_to_minutes(ersatz_ziel.an), node_data['p_an'])
+        ersatz_an = 0
+        for ersatz_zzid in graph_succ_filter_flag(graph, node, 'E'):
+            ersatz_data = graph.nodes[ersatz_zzid]
+            ersatz_an = max(ersatz_data['p_an'], ersatz_an)
+            node_data['p_ab'] = max(ersatz_an, node_data['p_an'])
 
         ankunft = node_data['p_an'] + node_data['v_an']
         aufenthalt = max(node_data['p_ab'] - ankunft, node_data['d_min'])
         abfahrt = ankunft + aufenthalt
         node_data['v_ab'] = abfahrt - node_data['p_ab']
         node_data['p_ab'] = abfahrt - node_data['v_ab']
+
+        for ersatz_zzid in graph_succ_filter_flag(graph, node, 'E'):
+            folge_data = graph.nodes[ersatz_zzid]
+            folge_data['v_an'] = abfahrt - folge_data['p_an']
+            folge_data['v_ab'] = abfahrt - folge_data['p_ab']
 
 
 class Kupplung(FlagKorrektur):
@@ -326,11 +340,24 @@ class Kupplung(FlagKorrektur):
         self.display_name = "Kupplung"
 
     def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
-        # todo : abfahrtszeit mit gekuppeltem zug abstimmen
         ankunft = node_data['p_an'] + node_data['v_an']
+        for kuppel_zzid in graph_succ_filter_flag(graph, node, 'K'):
+            kuppel_data = graph.nodes[kuppel_zzid]
+            node_data['p_ab'] = max(kuppel_data['p_ab'], node_data['p_ab'])
+            ankunft = max(kuppel_data['plan_an'] + kuppel_data['v_an'], ankunft)
+
         aufenthalt = max(node_data['p_ab'] - ankunft, node_data['d_min'])
         abfahrt = ankunft + aufenthalt
         node_data['v_ab'] = abfahrt - node_data['p_ab']
+
+        for kuppel_zzid in graph_succ_filter_flag(graph, node, 'K'):
+            kuppel_data = graph.nodes[kuppel_zzid]
+            kuppel_data['v_ab'] = abfahrt - kuppel_data['p_ab']
+            try:
+                kuppel_ziel: ZugZielPlanung = kuppel_data['obj']
+                kuppel_ziel.verspaetung_ab = node_data['v_ab']
+            except KeyError:
+                pass
 
 
 class Fluegelung(FlagKorrektur):
@@ -343,6 +370,19 @@ class Fluegelung(FlagKorrektur):
         aufenthalt = max(node_data['p_ab'] - ankunft, node_data['d_min'])
         abfahrt = ankunft + aufenthalt
         node_data['v_ab'] = abfahrt - node_data['p_ab']
+
+        for folge_zzid in graph_succ_filter_flag(graph, node, 'F'):
+            folge_data = graph.nodes[folge_zzid]
+            folge_data['v_an'] = node_data['v_an']
+            folge_abfahrt = max(folge_data['p_ab'], abfahrt + 2)
+            folge_data['v_ab'] = folge_abfahrt - folge_data['p_ab']
+
+            try:
+                folge_ziel: ZugZielPlanung = folge_data['obj']
+                folge_ziel.verspaetung_an = node_data['v_an']
+                folge_ziel.verspaetung_ab = node_data['v_ab']
+            except KeyError:
+                pass
 
 
 class ZugDetailsPlanung(ZugDetails):
@@ -1089,10 +1129,11 @@ class Planung:
                 ziel.an = minutes_to_time(data['p_an'])
                 ziel.ab = minutes_to_time(data['p_ab'])
             for succ in self.zielgraph.succ[node]:
-                succ_data = self.zielgraph.nodes[succ]
-                succ_ziel: ZugZielPlanung = succ_data['obj']
-                succ_ziel.verspaetung_an = succ_data['v_an'] = data['v_ab']
-                succ_ziel.verspaetung_ab = succ_data['v_ab'] = data['v_ab']
+                if self.zielgraph.edges[node, succ]['typ'] in {'P'}:
+                    succ_data = self.zielgraph.nodes[succ]
+                    succ_ziel: ZugZielPlanung = succ_data['obj']
+                    succ_ziel.verspaetung_an = succ_data['v_an'] = data['v_ab']
+                    succ_ziel.verspaetung_ab = succ_data['v_ab'] = data['v_ab']
 
     def zugverspaetung_korrigieren(self, zug: ZugDetailsPlanung):
         """
@@ -1146,7 +1187,7 @@ class Planung:
             anschluss = AnkunftAbwarten(self)
             anschluss.ursprung = ziel
             try:
-                ziel.ersatzzug.fahrplan[0].auto_korrektur = anschluss
+                ziel.ersatzzug.fahrplan[0].auto_korrektur = None  # anschluss
             except (AttributeError, IndexError):
                 result = False
         elif ziel.kuppel_zid():
@@ -1156,7 +1197,7 @@ class Planung:
             anschluss.ursprung = ziel
             try:
                 kuppel_ziel = ziel.kuppelzug.find_fahrplanzeile(plan=ziel.plan)
-                kuppel_ziel.auto_korrektur = anschluss
+                kuppel_ziel.auto_korrektur = None  # anschluss
             except (AttributeError, IndexError):
                 result = False
         elif ziel.fluegel_zid():
@@ -1166,7 +1207,7 @@ class Planung:
             anschluss.ursprung = ziel
             anschluss.wartezeit = 2
             try:
-                ziel.fluegelzug.fahrplan[0].auto_korrektur = anschluss
+                ziel.fluegelzug.fahrplan[0].auto_korrektur = None  # anschluss
             except (AttributeError, IndexError):
                 result = False
         elif ziel.auto_korrektur is None:
