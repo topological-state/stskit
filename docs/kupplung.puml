@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object Stammzug {
+    Kupplung-Flag
+    --
+    an = Ankunft erster Zug
+    ab = Kupplungszeit
+}
+
+object "Stammzug vorheriger Halt" as StammzugPred
+
+object Folgezug {
+    Anschluss 1
+    --
+    an = Ankunft zweiter Zug
+    ab = Kupplungszeit und Abfahrt
+}
+
+object "Folgezug vorheriger Halt" as FolgezugPred
+
+object "Folgezug nächster Halt" as FolgezugSucc
+
+object "Zubringerzug 1" as A1
+
+object "Anschlusszug 2" as A2 {
+Anschluss 2
+}
+
+object "Anschlusszug 3" as A3 {
+Anschluss 3
+}
+
+StammzugPred "ab" --> "an" Stammzug: P
+Stammzug "ab" --> "ab" Folgezug: K
+FolgezugPred "ab" --> "an,ab" Folgezug: P
+Folgezug "ab" --> "an" FolgezugSucc: P
+FolgezugPred -[dotted]-> Stammzug: Reihenfolge!
+
+A1 -[dashed]-> "ab" Folgezug: A
+Folgezug -[dashed]-> A2: A
+Stammzug -[dashed]-> A3: A
+
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object Stammzug {
+    Flügelung-Flag
+    --
+    v_ab = Abfahrt erster Zug
+}
+
+object "Stammzug nächster Halt" as StammzugSucc
+
+object Folgezug {
+    Anschluss 1
+    --
+    v_an = Ankunft Stammzug
+    v_ab = Abfahrt zweiter Zug
+}
+
+object "Folgezug nächster Halt" as FolgezugSucc
+
+object "Zubringerzug 1" as A1
+
+object "Anschlusszug 2" as A2 {
+Anschluss 2
+}
+
+object "Anschlusszug 3" as A3 {
+Anschluss 3
+}
+
+Stammzug --> Folgezug: F
+Stammzug --> StammzugSucc: P
+Folgezug --> FolgezugSucc: P
+
+A1 "*" -[dashed]-> Folgezug: A
+Folgezug -[dashed]-> "*" A2: A
+Stammzug -[dashed]-> "*" A3: A
+
+@enduml
