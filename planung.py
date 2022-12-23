@@ -398,7 +398,7 @@ class Kupplung(FlagKorrektur):
         aufenthalt = max(stamm_data['p_ab'] - ankunft, stamm_data['d_min'])
         abfahrt = ankunft + aufenthalt
         stamm_data['v_ab'] = abfahrt - stamm_data['p_ab']
-        print("Kupplung Stamm", stamm, stamm_data)
+        # print("Kupplung Stamm", stamm, stamm_data)
 
     def weiterleiten(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any],
                      kuppel_node: ZugZielNode, kuppel_data: Dict[str, Any]):
@@ -412,7 +412,7 @@ class Kupplung(FlagKorrektur):
 
         stamm_data['v_ab'] = kuppelzeit - stamm_data['p_ab']
         kuppel_data['v_ab'] = kuppelzeit - kuppel_data['p_ab']
-        print("Kupplung Folge", kuppel_node, kuppel_data)
+        # print("Kupplung Folge", kuppel_node, kuppel_data)
 
 
 class Fluegelung(FlagKorrektur):
@@ -1199,8 +1199,11 @@ class Planung:
                 else:
                     data['v_an'] = 0
 
-                data['p_an'] = time_to_minutes(ziel.an)
-                data['p_ab'] = time_to_minutes(ziel.ab)
+                try:
+                    data['p_an'] = time_to_minutes(ziel.an)
+                    data['p_ab'] = time_to_minutes(ziel.ab)
+                except AttributeError as e:
+                    continue
                 data['d_min'] = ziel.mindestaufenthalt
                 data['v_ab'] = data['v_an']
 
@@ -1208,6 +1211,8 @@ class Planung:
             data = self.zielgraph.nodes[node]
             try:
                 ziel: ZugZielPlanung = data['obj']
+                if data['p_an'] is None or data['p_ab'] is None:
+                    continue
             except KeyError:
                 continue
             alt = copy.copy(data)
@@ -1219,6 +1224,9 @@ class Planung:
                         ziel.auto_korrektur.anwenden(self.zielgraph, node, data)
                     except KeyError as e:
                         logger.exception(e)
+                else:
+                    data['v_ab'] = data['v_an']
+
                 for korr in ziel.fdl_korrektur:
                     try:
                         korr.anwenden(self.zielgraph, node, data)
@@ -1232,9 +1240,11 @@ class Planung:
                 except KeyError:
                     continue
                 else:
-                    if edge_data['typ'] in {'P', 'E', 'F', 'K'}:
-                        # succ_data['v_ab'] = \
-                        succ_data['v_an'] = max(succ_data['v_an'], data['v_ab'])
+                    if edge_data['typ'] in {'P', 'E', 'F'}:
+                        try:
+                            succ_data['v_an'] = max(succ_data['v_an'], data['v_ab'])
+                        except KeyError:
+                            succ_data['v_an'] = data['v_ab']
 
                 try:
                     edge_obj: VerspaetungsKorrektur = edge_data['obj']
@@ -1305,12 +1315,15 @@ class Planung:
         elif ziel.durchfahrt():
             pass
         elif zid := ziel.ersatz_zid():
+            typ = 'E'
             ziel.auto_korrektur = Ersatzzug(self)
             ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, 1)
         elif zid := ziel.kuppel_zid():
+            typ = 'K'
             ziel.auto_korrektur = Kupplung(self)
             ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, 1)
         elif zid := ziel.fluegel_zid():
+            typ = 'F'
             ziel.auto_korrektur = Fluegelung(self)
             ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, 1)
         elif ziel.auto_korrektur is None:
@@ -1319,13 +1332,13 @@ class Planung:
         if zid:
             zzid1 = ZugZielNode.neu(ziel)
             zzid2 = ZugZielNode.neu(ziel, zid=zid)
-            self.zielgraph.add_edge(zzid1, zzid2, obj=ziel.auto_korrektur)
+            self.zielgraph.add_edge(zzid1, zzid2, typ=typ, obj=ziel.auto_korrektur)
 
             abschluss = FlagKorrektur(self)
             try:
                 ziel2: ZugZielPlanung = self.zielgraph.nodes[zzid2]['obj']
                 ziel2.auto_korrektur = abschluss
-                if ziel.ab is None:
+                if typ in {'E', 'K'}:
                     an1 = minutes_to_time(time_to_minutes(ziel.an) + ziel.mindestaufenthalt)
                     ziel.ab = max(ziel2.an, an1)
             except KeyError:
@@ -1379,17 +1392,18 @@ class Planung:
 
         zzid2 = ZugZielNode.neu(ziel)
         try:
-            zzid1 = korrektur.ursprung
+            zzid1 = ZugZielNode.neu(korrektur.ursprung)
         except AttributeError:
             zzid1 = None
         else:
-            self.zielgraph.add_edge(zzid1, zzid2, typ='A')
+            self.zielgraph.add_edge(zzid1, zzid2, typ='A', obj=korrektur)
 
         if korrektur is None:
             ziel.fdl_korrektur.clear()
             edges = [(u, v) for u, v, typ in self.zielgraph.in_edges(zzid2, data='typ', default='?')
                      if typ in {'A', 'X'}]
             for u, v in edges:
+                print("remove edge", u, v)
                 self.zielgraph.remove_edge(u, v)
 
         try:
@@ -1398,7 +1412,8 @@ class Planung:
             logger.error(f"Sortierfehler beim Hinzufügen der Abhängigkeit {korrektur}")
             self.zielgraph.remove_edge(zzid1, zzid2)
         else:
-            ziel.fdl_korrektur.add(korrektur)
+            if korrektur:
+                ziel.fdl_korrektur.add(korrektur)
 
     def fdl_korrektur_loeschen(self, korrektur: VerspaetungsKorrektur, ziel: Union[int, str, ZugZielPlanung]):
         """
