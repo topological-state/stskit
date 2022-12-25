@@ -352,7 +352,7 @@ class Ersatzzug(FlagKorrektur):
         aufenthalt = max(stamm_data['p_ab'] - ankunft, stamm_data['d_min'])
         abfahrt = ankunft + aufenthalt
         stamm_data['v_ab'] = abfahrt - stamm_data['p_ab']
-        # print("Ersatz", stamm, stamm_data)
+        # print("Ersatz Stamm", stamm, stamm_data)
 
     def weiterleiten(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any],
                      folge: ZugZielNode, folge_data: Dict[str, Any]):
@@ -368,7 +368,12 @@ class Ersatzzug(FlagKorrektur):
         """
 
         ersatz_zeit = stamm_data['p_ab'] + stamm_data['v_ab']
-        folge_data['v_an'] = max(folge_data['v_an'], ersatz_zeit - folge_data['p_an'])
+        v_an = folge_data.get('v_an', stamm_data['v_ab'])
+        try:
+            folge_data['v_an'] = max(v_an, ersatz_zeit - folge_data['p_an'])
+        except KeyError:
+            folge_data['v_an'] = v_an
+        # print("Ersatz Folge", folge, folge_data)
 
 
 class Kupplung(FlagKorrektur):
@@ -403,15 +408,21 @@ class Kupplung(FlagKorrektur):
     def weiterleiten(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any],
                      kuppel_node: ZugZielNode, kuppel_data: Dict[str, Any]):
 
-        ankunft2 = kuppel_data['p_an'] + kuppel_data['v_an']
-        aufenthalt2 = max(kuppel_data['p_ab'] - ankunft2, kuppel_data['d_min'])
-        bereitschaft2 = ankunft2 + aufenthalt2
+        try:
+            ankunft2 = kuppel_data['p_an'] + kuppel_data['v_an']
+            aufenthalt2 = max(kuppel_data['p_ab'] - ankunft2, kuppel_data['d_min'])
+            bereitschaft2 = ankunft2 + aufenthalt2
+        except KeyError:
+            bereitschaft2 = 0
 
         bereitschaft1 = stamm_data['p_ab'] + stamm_data['v_ab']
         kuppelzeit = max(bereitschaft1, bereitschaft2)
 
         stamm_data['v_ab'] = kuppelzeit - stamm_data['p_ab']
-        kuppel_data['v_ab'] = kuppelzeit - kuppel_data['p_ab']
+        try:
+            kuppel_data['v_ab'] = kuppelzeit - kuppel_data['p_ab']
+        except KeyError:
+            kuppel_data['v_ab'] = stamm_data['v_ab']
         # print("Kupplung Folge", kuppel_node, kuppel_data)
 
 
@@ -449,10 +460,17 @@ class Fluegelung(FlagKorrektur):
         :return:
         """
 
-        folge_data['v_an'] = max(folge_data['v_an'], stamm_data['v_an'])
-        stamm_abfahrt = stamm_data['p_ab'] + stamm_data['v_ab']
-        folge_abfahrt = max(folge_data['p_ab'], stamm_abfahrt + 2)
-        folge_data['v_ab'] = folge_abfahrt - folge_data['p_ab']
+        try:
+            folge_data['v_an'] = max(folge_data['v_an'], stamm_data['v_an'])
+        except KeyError:
+            folge_data['v_an'] = stamm_data['v_an']
+
+        abfahrt = stamm_data['p_ab'] + stamm_data['v_ab'] + 2
+        try:
+            abfahrt = max(folge_data['p_ab'], abfahrt)
+            folge_data['v_ab'] = abfahrt - folge_data['p_ab']
+        except KeyError:
+            folge_data['v_ab'] = folge_data['v_an']
         # print("Fluegelung Folge", folge, folge_data)
 
 
