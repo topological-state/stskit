@@ -7,8 +7,8 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Uni
 import networkx as nx
 import numpy as np
 
-from stsobj import ZugDetails, FahrplanZeile, Ereignis, time_to_minutes, time_to_seconds, minutes_to_time
-from anlage import Anlage, JSONEncoder
+from stskit.stsobj import ZugDetails, FahrplanZeile, Ereignis, time_to_minutes, time_to_seconds, minutes_to_time
+from stskit.anlage import Anlage, JSONEncoder
 
 
 logger = logging.getLogger(__name__)

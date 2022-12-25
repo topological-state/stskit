@@ -3,11 +3,11 @@ import os
 from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 import weakref
 
-from stsobj import Ereignis, time_to_minutes
-from stsplugin import PluginClient
-from anlage import Anlage
-from auswertung import Auswertung
-from planung import Planung
+from stskit.stsobj import Ereignis, time_to_minutes
+from stskit.stsplugin import PluginClient
+from stskit.anlage import Anlage
+from stskit.auswertung import Auswertung
+from stskit.planung import Planung
 
 logger = logging.getLogger(__name__)
 

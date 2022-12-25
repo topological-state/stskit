@@ -8,10 +8,10 @@ import weakref
 import networkx as nx
 import trio
 
-from stsobj import ZugDetails, FahrplanZeile, Ereignis
-from stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
-from stsplugin import PluginClient, TaskDone
-from auswertung import Auswertung
+from stskit.stsobj import ZugDetails, FahrplanZeile, Ereignis
+from stskit.stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
+from stskit.stsplugin import PluginClient, TaskDone
+from stskit.auswertung import Auswertung
 
 
 logger = logging.getLogger(__name__)

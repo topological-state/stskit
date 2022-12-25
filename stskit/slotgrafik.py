@@ -16,9 +16,9 @@ import matplotlib as mpl
 import networkx as nx
 import numpy as np
 
-from anlage import Anlage
-from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
-from stsobj import FahrplanZeile, ZugDetails, time_to_minutes
+from stskit.anlage import Anlage
+from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung
+from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

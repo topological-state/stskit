@@ -9,10 +9,10 @@ from PyQt5 import Qt, QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QTableView, QLabel
 from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
-from zentrale import  DatenZentrale
-from planung import Planung, ZugDetailsPlanung, ZugZielPlanung
-from stsobj import ZugDetails, time_to_minutes, format_verspaetung
-from slotgrafik import hour_minutes_formatter, ZugFarbschema
+from stskit.zentrale import DatenZentrale
+from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung
+from stskit.stsobj import ZugDetails, time_to_minutes, format_verspaetung
+from stskit.slotgrafik import hour_minutes_formatter, ZugFarbschema
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

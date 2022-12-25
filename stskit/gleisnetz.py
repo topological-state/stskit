@@ -17,10 +17,10 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 import networkx as nx
 
-from stsplugin import PluginClient
-from anlage import Anlage
-from auswertung import Auswertung
-from zentrale import DatenZentrale
+from stskit.stsplugin import PluginClient
+from stskit.anlage import Anlage
+from stskit.auswertung import Auswertung
+from stskit.zentrale import DatenZentrale
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

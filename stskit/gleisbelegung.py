@@ -12,16 +12,16 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
 
-from auswertung import Auswertung
-from anlage import Anlage
-from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, AbfahrtAbwarten, AnkunftAbwarten
-from stsplugin import PluginClient
-from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
-from slotgrafik import hour_minutes_formatter, Slot, ZugFarbschema, Gleisbelegung, SlotWarnung, gleis_sektor_sortkey, \
+from stskit.auswertung import Auswertung
+from stskit.anlage import Anlage
+from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, AbfahrtAbwarten, AnkunftAbwarten
+from stskit.stsplugin import PluginClient
+from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
+from stskit.slotgrafik import hour_minutes_formatter, Slot, ZugFarbschema, Gleisbelegung, SlotWarnung, gleis_sektor_sortkey, \
     WARNUNG_VERBINDUNG, WARNUNG_STATUS
-from zentrale import DatenZentrale
+from stskit.zentrale import DatenZentrale
 
-from qt.ui_gleisbelegung import Ui_GleisbelegungWindow
+from stskit.qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

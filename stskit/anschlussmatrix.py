@@ -17,14 +17,14 @@ import numpy as np
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
-from anlage import Anlage
-from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, AnkunftAbwarten, AbfahrtAbwarten, FesteVerspaetung, \
-    ZugAbwarten
-from slotgrafik import ZugFarbschema
-from stsobj import time_to_minutes
-from zentrale import DatenZentrale
+from stskit.anlage import Anlage
+from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, \
+    FesteVerspaetung, ZugAbwarten, AnkunftAbwarten, AbfahrtAbwarten
+from stskit.slotgrafik import ZugFarbschema
+from stskit.stsobj import time_to_minutes
+from stskit.zentrale import DatenZentrale
 
-from qt.ui_anschlussmatrix import Ui_AnschlussmatrixWindow
+from stskit.qt.ui_anschlussmatrix import Ui_AnschlussmatrixWindow
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

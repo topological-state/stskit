@@ -20,14 +20,14 @@ from PyQt5.QtCore import pyqtSlot
 import trio
 import qtrio
 
-from stsplugin import PluginClient, TaskDone
-from zentrale import DatenZentrale
-from anschlussmatrix import AnschlussmatrixWindow
-from bildfahrplan import BildFahrplanWindow
-from gleisbelegung import GleisbelegungWindow
-from gleisnetz import GleisnetzWindow
-from qticker import TickerWindow
-from fahrplan import FahrplanWindow
+from stskit.stsplugin import PluginClient, TaskDone
+from stskit.zentrale import DatenZentrale
+from stskit.anschlussmatrix import AnschlussmatrixWindow
+from stskit.bildfahrplan import BildFahrplanWindow
+from stskit.gleisbelegung import GleisbelegungWindow
+from stskit.gleisnetz import GleisnetzWindow
+from stskit.qticker import TickerWindow
+from stskit.fahrplan import FahrplanWindow
 
 logger = logging.getLogger(__name__)
 
@@ -271,7 +271,7 @@ def parse_args(arguments: Sequence[str]) -> argparse.Namespace:
     return parser.parse_args(arguments)
 
 
-async def main():
+async def main_window():
     arguments = parse_args(QtWidgets.QApplication.instance().arguments())
     setup_logging(filename=arguments.log_file, level=arguments.log_level, log_comm=arguments.log_comm)
 
@@ -302,5 +302,9 @@ async def main():
         pass
 
 
+def main():
+    qtrio.run(main_window)
+
+
 if __name__ == "__main__":
-    qtrio.run(main)
+    main()

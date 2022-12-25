@@ -191,4 +191,4 @@ class Ui_GleisbelegungWindow(object):
         self.actionBelegteGleise.setToolTip(_translate("GleisbelegungWindow", "Nur belegte Gleise anzeigen (B)"))
         self.actionBelegteGleise.setShortcut(_translate("GleisbelegungWindow", "B"))
 
-import resources_rc
+import stskit.resources_rc

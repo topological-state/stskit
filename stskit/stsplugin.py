@@ -41,7 +41,7 @@ from typing import Any, Callable, Dict, List, Iterable, Mapping, Optional, Set, 
 import untangle
 import xml.sax
 
-from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis
+from stskit.stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis
 
 
 logger = logging.getLogger(__name__)

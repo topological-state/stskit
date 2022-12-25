@@ -11,15 +11,15 @@ from matplotlib.lines import Line2D
 import numpy as np
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 
-from auswertung import Auswertung
-from anlage import Anlage
-from planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, AnkunftAbwarten, AbfahrtAbwarten
-from slotgrafik import hour_minutes_formatter, ZugFarbschema
-from stsplugin import PluginClient
-from stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
-from zentrale import DatenZentrale
+from stskit.auswertung import Auswertung
+from stskit.anlage import Anlage
+from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, AnkunftAbwarten, AbfahrtAbwarten
+from stskit.slotgrafik import hour_minutes_formatter, ZugFarbschema
+from stskit.stsplugin import PluginClient
+from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
+from stskit.zentrale import DatenZentrale
 
-from qt.ui_bildfahrplan import Ui_BildfahrplanWindow
+from stskit.qt.ui_bildfahrplan import Ui_BildfahrplanWindow
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

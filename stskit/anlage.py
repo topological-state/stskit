@@ -12,8 +12,8 @@ import networkx as nx
 import numpy as np
 import trio
 
-from stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, time_to_seconds
-from stsplugin import PluginClient, TaskDone
+from stskit.stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, time_to_seconds
+from stskit.stsplugin import PluginClient, TaskDone
 
 
 logger = logging.getLogger(__name__)

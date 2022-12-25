@@ -14,11 +14,8 @@ from typing import Any, Dict, List, Optional, Set, Union
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QModelIndex
 
-from stsplugin import PluginClient
-from anlage import Anlage
-from auswertung import Auswertung
-from stsobj import Ereignis
-from zentrale import DatenZentrale
+from stskit.stsobj import Ereignis
+from stskit.zentrale import DatenZentrale
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
