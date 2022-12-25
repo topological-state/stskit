@@ -592,39 +592,46 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
     def _plot_abhaengigkeiten(self, slots, x_pos, x_labels, x_labels_pos, colors):
         for x1, c, slot1 in zip(x_pos, colors, slots):
-            try:
-                slot2 = self.belegung.slots[Slot.build_key(slot1.ziel.fdl_korrektur.ursprung)]
-                x2 = x_labels_pos[x_labels.index(slot2.gleis)]
-            except (AttributeError, KeyError, ValueError):
-                continue
+            for korr in slot1.ziel.fdl_korrektur:
+                y1 = slot1.zeit + slot1.dauer
+                y2 = slot1.zeit
+                x2 = x1
 
-            y1 = slot1.zeit + slot1.dauer
-            if isinstance(slot1.ziel.fdl_korrektur, AnkunftAbwarten):
-                y2 = slot2.zeit
-            elif isinstance(slot1.ziel.fdl_korrektur, AbfahrtAbwarten):
-                y2 = slot2.zeit + slot2.dauer
-            else:
-                continue
+                try:
+                    ref = korr.ursprung
+                    ziel = self.planung.zielgraph.nodes[ref]['obj']
+                    slot2 = self.belegung.slots[Slot.build_key(ziel)]
+                    x2 = x_labels_pos[x_labels.index(slot2.gleis)]
+                    if isinstance(korr, AnkunftAbwarten):
+                        y2 = slot2.zeit
+                    elif isinstance(korr, AbfahrtAbwarten):
+                        y2 = slot2.zeit + slot2.dauer
+                except (AttributeError, KeyError, ValueError):
+                    slot2 = None
+                    try:
+                        y2 = y1 - korr.verspaetung
+                    except AttributeError:
+                        pass
 
-            if x1 < x2:
-                x1 += 0.25
-                x2 -= 0.25
-            else:
-                x1 -= 0.25
-                x2 += 0.25
+                if x1 < x2:
+                    x1 += 0.25
+                    x2 -= 0.25
+                else:
+                    x1 -= 0.25
+                    x2 += 0.25
 
-            if y1 < y2:
-                y1 += 0.1
-                y2 -= 0.1
-            else:
-                y1 -= 0.1
-                y2 += 0.2
+                if y1 < y2:
+                    y1 += 0.1
+                    y2 -= 0.1
+                else:
+                    y1 -= 0.1
+                    y2 += 0.2
 
-            arrow = mpl.patches.FancyArrowPatch((x2, y2), (x1, y1), arrowstyle='-|>', mutation_scale=10,
-                                                color='#7f7f7f', picker=True)
-            arrow.ziel_slot = slot1
-            arrow.ref_slot = slot2
-            self._axes.add_patch(arrow)
+                arrow = mpl.patches.FancyArrowPatch((x2, y2), (x1, y1), arrowstyle='-|>', mutation_scale=10,
+                                                    color='#7f7f7f', picker=True)
+                arrow.ziel_slot = slot1
+                arrow.ref_slot = slot2
+                self._axes.add_patch(arrow)
 
     def _plot_warnungen(self, x_labels, x_labels_pos, kwargs):
         for warnung in self.belegung.warnungen.values():
