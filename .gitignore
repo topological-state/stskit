@@ -5,6 +5,8 @@ patch/
 research/
 varianten/
 icons/
+buiuld/
+dist/
 
 playground.py
 *.log

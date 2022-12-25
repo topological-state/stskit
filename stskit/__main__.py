@@ -111,12 +111,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
         try:
             p = Path(__file__).parent / r"mplstyle" / r"dark.mplstyle"
+            print(p)
             matplotlib.style.use(p)
         except OSError:
             pass
 
         try:
             p = Path(__file__).parent / r"qt" / r"dark.css"
+            print(p)
             ss = p.read_text(encoding="utf8")
             app = QtWidgets.QApplication.instance()
             app.setStyleSheet(ss)
