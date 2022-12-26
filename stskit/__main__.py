@@ -10,6 +10,7 @@ ausserdem unterhält es die kommunikation mit dem simulator und leitet ereigniss
 import argparse
 import functools
 import logging
+import os
 import weakref
 from pathlib import Path
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
@@ -20,7 +21,7 @@ from PyQt5.QtCore import pyqtSlot
 import trio
 import qtrio
 
-from stskit.stsplugin import PluginClient, TaskDone
+from stskit.stsplugin import PluginClient, TaskDone, DEFAULT_HOST, DEFAULT_PORT
 from stskit.zentrale import DatenZentrale
 from stskit.anschlussmatrix import AnschlussmatrixWindow
 from stskit.bildfahrplan import BildFahrplanWindow
@@ -79,7 +80,7 @@ def setup_logging(filename: Optional[str] = "", level: Optional[str] = "ERROR", 
     logging.getLogger('matplotlib').setLevel(max(numeric_level, logging.WARNING))
     logging.getLogger('PyQt5.uic.uiparser').setLevel(max(numeric_level, logging.WARNING))
     if not log_comm:
-        logging.getLogger('stsplugin').setLevel(logging.WARNING)
+        logging.getLogger('stskit.stsplugin').setLevel(logging.WARNING)
 
 
 class WindowManager:
@@ -101,24 +102,33 @@ class WindowManager:
 
 
 class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, config_path: Optional[os.PathLike] = None):
         super().__init__()
         self.closed = trio.Event()
 
-        self.config_path = Path.home() / r".stskit"
-        self.config_path.mkdir(exist_ok=True)
+        try:
+            p = Path(config_path)
+            if not p.is_dir():
+                p = None
+        except TypeError:
+            p = None
+
+        if p:
+            self.config_path = p
+        else:
+            self.config_path = Path.home() / r".stskit"
+            self.config_path.mkdir(exist_ok=True)
+
         self.zentrale = DatenZentrale(config_path=self.config_path)
 
         try:
             p = Path(__file__).parent / r"mplstyle" / r"dark.mplstyle"
-            print(p)
             matplotlib.style.use(p)
         except OSError:
             pass
 
         try:
             p = Path(__file__).parent / r"qt" / r"dark.css"
-            print(p)
             ss = p.read_text(encoding="utf8")
             app = QtWidgets.QApplication.instance()
             app.setStyleSheet(ss)
@@ -259,16 +269,19 @@ def parse_args(arguments: Sequence[str]) -> argparse.Namespace:
         """
     )
 
-    # parser.add_argument("-d", "--data-dir")
-    # parser.add_argument("-h", "--host")
-    # parser.add_argument("-p", "--port")
+    parser.add_argument("--data-dir",
+                        help="daten- und konfigurationsverzeichnis. default: $HOME/.stskit")
+    parser.add_argument("--host", default=DEFAULT_HOST,
+                        help=f"hostname oder ip-adresse des stellwerksim-simulators. default: {DEFAULT_HOST}")
+    parser.add_argument("--port", type=int, default=DEFAULT_PORT,
+                        help=f"netzwerkport des stellwerksim-simulators. default: {DEFAULT_PORT}")
     parser.add_argument("--log-level", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], default="ERROR",
-                        help="minimale stufe für protokoll-meldungen.")
+                        help="minimale stufe für protokoll-meldungen. default: ERROR")
     parser.add_argument("--log-file", default="stskit.log",
-                        help="protokolldatei.")
+                        help="protokolldatei. default: stskit.log im arbeitsverzeichnis")
     parser.add_argument("--log-comm", action="store_true",
                         help="ganze kommunikation mit server protokollieren. "
-                             "log-level DEBUG muss dafür ausgewählt sein.")
+                             "log-level DEBUG muss dafür ausgewählt sein. default: aus")
 
     return parser.parse_args(arguments)
 
@@ -277,12 +290,12 @@ async def main_window():
     arguments = parse_args(QtWidgets.QApplication.instance().arguments())
     setup_logging(filename=arguments.log_file, level=arguments.log_level, log_comm=arguments.log_comm)
 
-    window = MainWindow()
+    window = MainWindow(arguments.data_dir)
 
     client = PluginClient(name='sts-charts', autor='bummler', version='0.6',
                           text='sts-charts: grafische fahrpläne und gleisbelegungen')
 
-    await client.connect()
+    await client.connect(host=arguments.host, port=arguments.port)
     window.zentrale.client = client
 
     try:

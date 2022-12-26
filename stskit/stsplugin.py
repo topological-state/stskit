@@ -48,6 +48,10 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
+DEFAULT_HOST = 'localhost'
+DEFAULT_PORT = 3691
+
+
 def check_status(status: untangle.Element):
     if int(status.status['code']) >= 400:
         raise ValueError(f"error {status.status['code']}: {status.status.cdata}")
@@ -117,7 +121,7 @@ class PluginClient:
         self.server_datetime: datetime.datetime = datetime.datetime.now()
         self.time_offset: datetime.timedelta = self.server_datetime - self.client_datetime
 
-    async def connect(self, host='localhost', port=3691):
+    async def connect(self, host=DEFAULT_HOST, port=DEFAULT_PORT):
         self._stream = await trio.open_tcp_stream(host, port)
         self.connected.set()
 
