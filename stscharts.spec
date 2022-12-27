@@ -10,7 +10,7 @@ added_files = [
     ]
 
 a = Analysis(
-    ['stskit_main.py'],
+    ['stscharts.py'],
     pathex=[],
     binaries=[],
     datas = added_files,
@@ -31,7 +31,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='stskit_main',
+    name='stscharts',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -51,5 +51,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='stskit_main',
+    name='stscharts',
 )

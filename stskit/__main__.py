@@ -292,8 +292,8 @@ async def main_window():
 
     window = MainWindow(arguments.data_dir)
 
-    client = PluginClient(name='sts-charts', autor='bummler', version='0.6',
-                          text='sts-charts: grafische fahrpläne und gleisbelegungen')
+    client = PluginClient(name='sts-charts', autor='bummler', version='0.7',
+                          text='sts-charts: grafische fahrpläne und auswertung')
 
     await client.connect(host=arguments.host, port=arguments.port)
     window.zentrale.client = client
