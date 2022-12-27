@@ -5,7 +5,7 @@ datenstrukturen und fenster für anschlussmatrix
 """
 import itertools
 import logging
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Type, Union
 
 import matplotlib as mpl
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -19,7 +19,7 @@ from PyQt5.QtCore import pyqtSlot
 
 from stskit.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, \
-    FesteVerspaetung, ZugAbwarten, AnkunftAbwarten, AbfahrtAbwarten
+    FesteVerspaetung, ZugAbwarten, AnkunftAbwarten, AbfahrtAbwarten, ZugNichtAbwarten
 from stskit.slotgrafik import ZugFarbschema
 from stskit.stsobj import time_to_minutes
 from stskit.zentrale import DatenZentrale
@@ -308,7 +308,7 @@ class Anschlussmatrix:
                         freigabe = startzeit >= self.eff_ankunftszeiten[zid_an] + min_umsteigezeit
                     except KeyError:
                         freigabe = False
-                    for korrektur in ziel_ab.fdl_korrektur:
+                    for korrektur in ziel_ab.fdl_korrektur.values():
                         if isinstance(korrektur, ZugAbwarten) and korrektur.ursprung.zid == zid_an:
                             abwarten = True
                             break
@@ -851,9 +851,10 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                 else:
                     if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in\
                             {ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK}:
-                        self.abhaengigkeit_definieren(self.anschlussmatrix.abfahrt_ziele[_zid_ab],
+                        self.abhaengigkeit_definieren(AnkunftAbwarten,
+                                                      self.anschlussmatrix.abfahrt_ziele[_zid_ab],
                                                       self.anschlussmatrix.ankunft_ziele[zid_an],
-                                                      self.anschlussmatrix.umsteigezeit, False)
+                                                      self.anschlussmatrix.umsteigezeit)
 
         self.daten_update()
         self.grafik_update()
@@ -887,8 +888,9 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                 else:
                     if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in \
                             {ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK}:
-                        self.abhaengigkeit_definieren(self.anschlussmatrix.abfahrt_ziele[_zid_ab],
-                                                      self.anschlussmatrix.abfahrt_ziele[_zid_an], 1, True)
+                        self.abhaengigkeit_definieren(AbfahrtAbwarten,
+                                                      self.anschlussmatrix.abfahrt_ziele[_zid_ab],
+                                                      self.anschlussmatrix.abfahrt_ziele[_zid_an], 1)
 
         self.daten_update()
         self.grafik_update()
@@ -896,14 +898,15 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def action_anschluss_aufgeben(self):
-        # todo : ANSCHLUSS_OK sollte nicht aufgegeben werden
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         self.anschlussmatrix.anschluss_aufgabe.update(auswahl)
         for zid_ab, zid_an in auswahl:
             i_ab = self.anschlussmatrix.zid_abfahrten_index.index(zid_ab)
             i_an = self.anschlussmatrix.zid_ankuenfte_index.index(zid_an)
             if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in {ANSCHLUSS_ABWARTEN}:
-                self.planung.fdl_korrektur_setzen(None, self.anschlussmatrix.abfahrt_ziele[zid_ab])
+                self.abhaengigkeit_definieren(ZugNichtAbwarten,
+                                              self.anschlussmatrix.abfahrt_ziele[zid_ab],
+                                              self.anschlussmatrix.ankunft_ziele[zid_an])
 
         self.daten_update()
         self.grafik_update()
@@ -914,8 +917,10 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         self.anschlussmatrix.anschluss_aufgabe.difference_update(auswahl)
         for zid_ab, zid_an in auswahl:
-            self.planung.fdl_korrektur_setzen(None, self.anschlussmatrix.abfahrt_ziele[zid_ab])
+            self.planung.fdl_korrektur_loeschen(self.anschlussmatrix.abfahrt_ziele[zid_ab],
+                                                self.anschlussmatrix.ankunft_ziele[zid_an])
 
+        self.planung.verspaetungen_korrigieren()
         self.daten_update()
         self.grafik_update()
         self.update_actions()
@@ -964,7 +969,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
     def verspaetung_aendern(self, ziel: ZugZielPlanung, verspaetung: int, relativ: bool = False):
         neu = True
-        for korrektur in ziel.fdl_korrektur:
+        for korrektur in ziel.fdl_korrektur.values():
             if hasattr(korrektur, "wartezeit"):
                 if relativ:
                     korrektur.wartezeit += verspaetung
@@ -986,13 +991,12 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.planung.zugverspaetung_korrigieren(ziel.zug)
 
-    def abhaengigkeit_definieren(self, ziel: ZugZielPlanung, referenz: ZugZielPlanung, wartezeit: int = 0,
-                                 abfahrt: bool = False):
+    def abhaengigkeit_definieren(self, klasse: Type[ZugAbwarten],
+                                 ziel: ZugZielPlanung, referenz: ZugZielPlanung,
+                                 wartezeit: int = 0):
 
-        if abfahrt:
-            korrektur = AbfahrtAbwarten(self.planung)
-        else:
-            korrektur = AnkunftAbwarten(self.planung)
+        korrektur = klasse(self.planung)
+        korrektur.node = ziel
         korrektur.ursprung = referenz
         korrektur.wartezeit = wartezeit
 

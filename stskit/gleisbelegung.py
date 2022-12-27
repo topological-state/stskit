@@ -1,6 +1,6 @@
 import itertools
 import logging
-from typing import AbstractSet, Any, Dict, Generator, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
+from typing import AbstractSet, Any, Dict, Generator, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Type, Union
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -14,7 +14,8 @@ import numpy as np
 
 from stskit.auswertung import Auswertung
 from stskit.anlage import Anlage
-from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, AbfahrtAbwarten, AnkunftAbwarten
+from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, \
+    AbfahrtAbwarten, AnkunftAbwarten, ZugAbwarten, ZugNichtAbwarten
 from stskit.stsplugin import PluginClient
 from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
 from stskit.slotgrafik import hour_minutes_formatter, Slot, ZugFarbschema, Gleisbelegung, SlotWarnung, gleis_sektor_sortkey, \
@@ -592,46 +593,49 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
     def _plot_abhaengigkeiten(self, slots, x_pos, x_labels, x_labels_pos, colors):
         for x1, c, slot1 in zip(x_pos, colors, slots):
-            for korr in slot1.ziel.fdl_korrektur:
-                y1 = slot1.zeit + slot1.dauer
-                y2 = slot1.zeit
-                x2 = x1
+            for korr in slot1.ziel.fdl_korrektur.values():
+                if isinstance(korr, AbfahrtAbwarten) or \
+                        isinstance(korr, AnkunftAbwarten) or \
+                        isinstance(korr, FesteVerspaetung):
+                    y1 = slot1.zeit + slot1.dauer
+                    y2 = slot1.zeit
+                    x2 = x1
 
-                try:
-                    ref = korr.ursprung
-                    ziel = self.planung.zielgraph.nodes[ref]['obj']
-                    slot2 = self.belegung.slots[Slot.build_key(ziel)]
-                    x2 = x_labels_pos[x_labels.index(slot2.gleis)]
-                    if isinstance(korr, AnkunftAbwarten):
-                        y2 = slot2.zeit
-                    elif isinstance(korr, AbfahrtAbwarten):
-                        y2 = slot2.zeit + slot2.dauer
-                except (AttributeError, KeyError, ValueError):
-                    slot2 = None
                     try:
-                        y2 = y1 - korr.verspaetung
-                    except AttributeError:
-                        pass
+                        ref = korr.ursprung
+                        ziel = self.planung.zielgraph.nodes[ref]['obj']
+                        slot2 = self.belegung.slots[Slot.build_key(ziel)]
+                        x2 = x_labels_pos[x_labels.index(slot2.gleis)]
+                        if isinstance(korr, AnkunftAbwarten):
+                            y2 = slot2.zeit
+                        elif isinstance(korr, AbfahrtAbwarten):
+                            y2 = slot2.zeit + slot2.dauer
+                    except (AttributeError, KeyError, ValueError):
+                        slot2 = None
+                        try:
+                            y2 = y1 - korr.verspaetung
+                        except AttributeError:
+                            pass
 
-                if x1 < x2:
-                    x1 += 0.25
-                    x2 -= 0.25
-                else:
-                    x1 -= 0.25
-                    x2 += 0.25
+                    if x1 < x2:
+                        x1 += 0.25
+                        x2 -= 0.25
+                    else:
+                        x1 -= 0.25
+                        x2 += 0.25
 
-                if y1 < y2:
-                    y1 += 0.1
-                    y2 -= 0.1
-                else:
-                    y1 -= 0.1
-                    y2 += 0.2
+                    if y1 < y2:
+                        y1 += 0.1
+                        y2 -= 0.1
+                    else:
+                        y1 -= 0.1
+                        y2 += 0.2
 
-                arrow = mpl.patches.FancyArrowPatch((x2, y2), (x1, y1), arrowstyle='-|>', mutation_scale=10,
-                                                    color='#7f7f7f', picker=True)
-                arrow.ziel_slot = slot1
-                arrow.ref_slot = slot2
-                self._axes.add_patch(arrow)
+                    arrow = mpl.patches.FancyArrowPatch((x2, y2), (x1, y1), arrowstyle='-|>', mutation_scale=10,
+                                                        color='#7f7f7f', picker=True)
+                    arrow.ziel_slot = slot1
+                    arrow.ref_slot = slot2
+                    self._axes.add_patch(arrow)
 
     def _plot_warnungen(self, x_labels, x_labels_pos, kwargs):
         for warnung in self.belegung.warnungen.values():
@@ -762,7 +766,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         except IndexError:
             pass
         else:
-            self.planung.fdl_korrektur_setzen(None, slot.ziel)
+            self.planung.fdl_korrektur_loeschen(slot.ziel)
             self.planung.zugverspaetung_korrigieren(slot.zug)
             self.daten_update()
             self.grafik_update()
@@ -771,7 +775,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def action_abfahrt_abwarten(self):
         try:
-            self.abhaengigkeit_definieren(self._slot_auswahl[0], self._slot_auswahl[1].ziel, 1, abfahrt=True)
+            self.abhaengigkeit_definieren(AbfahrtAbwarten, self._slot_auswahl[0], self._slot_auswahl[1].ziel, 1)
         except IndexError:
             return
 
@@ -782,7 +786,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def action_ankunft_abwarten(self):
         try:
-            self.abhaengigkeit_definieren(self._slot_auswahl[0], self._slot_auswahl[1].ziel, 1, abfahrt=False)
+            self.abhaengigkeit_definieren(AnkunftAbwarten, self._slot_auswahl[0], self._slot_auswahl[1].ziel, 1)
         except IndexError:
             return
 
@@ -819,7 +823,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
     def verspaetung_aendern(self, slot: Slot, verspaetung: int, relativ: bool = False):
         neu = True
-        for korrektur in slot.ziel.fdl_korrektur:
+        for korrektur in slot.ziel.fdl_korrektur.values():
             if hasattr(korrektur, "wartezeit"):
                 if relativ:
                     korrektur.wartezeit += verspaetung
@@ -842,13 +846,12 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.planung.zugverspaetung_korrigieren(slot.zug)
         self.daten_update()
 
-    def abhaengigkeit_definieren(self, slot: Slot, referenz: ZugZielPlanung, wartezeit: int = 0,
-                                 abfahrt: bool = False):
+    def abhaengigkeit_definieren(self, klasse: Type[ZugAbwarten],
+                                 slot: Slot, referenz: ZugZielPlanung,
+                                 wartezeit: int = 0):
 
-        if abfahrt:
-            korrektur = AbfahrtAbwarten(self.planung)
-        else:
-            korrektur = AnkunftAbwarten(self.planung)
+        korrektur = klasse(self.planung)
+        korrektur.node = slot.ziel
         korrektur.ursprung = referenz
         korrektur.wartezeit = wartezeit
 

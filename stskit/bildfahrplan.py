@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass, field
 import logging
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Type, Union
 
 import matplotlib as mpl
 from PyQt5.QtCore import pyqtSlot
@@ -13,7 +13,8 @@ from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 
 from stskit.auswertung import Auswertung
 from stskit.anlage import Anlage
-from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, AnkunftAbwarten, AbfahrtAbwarten
+from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, \
+    AnkunftAbwarten, AbfahrtAbwarten, ZugAbwarten, ZugNichtAbwarten
 from stskit.slotgrafik import hour_minutes_formatter, ZugFarbschema
 from stskit.stsplugin import PluginClient
 from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
@@ -108,8 +109,12 @@ class Trasse:
                 'linestyle': self.linestyle,
                 'marker': self.marker}
 
-        if self.start.fdl_korrektur:
-            args['marker'] = 's'
+        for korr in self.start.fdl_korrektur.values():
+            if isinstance(korr, AbfahrtAbwarten) or \
+                    isinstance(korr, AnkunftAbwarten) or \
+                    isinstance(korr, FesteVerspaetung):
+                args['marker'] = 's'
+                break
         try:
             args['markevery'] = [not self.start.durchfahrt(), not self.ziel.durchfahrt()]
         except AttributeError:
@@ -609,7 +614,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         except IndexError:
             pass
         else:
-            self.planung.fdl_korrektur_setzen(None, trasse.start)
+            self.planung.fdl_korrektur_loeschen(trasse.start)
             self.planung.zugverspaetung_korrigieren(trasse.zug)
             self.update_zuglauf(trasse.zug)
 
@@ -619,7 +624,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def action_abfahrt_abwarten(self):
         try:
-            self.abhaengigkeit_definieren(self._trasse_auswahl[0], self._trasse_auswahl[1].start, 1, abfahrt=True)
+            self.abhaengigkeit_definieren(AbfahrtAbwarten, self._trasse_auswahl[0], self._trasse_auswahl[1].start, 1)
         except IndexError:
             return
 
@@ -629,7 +634,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def action_ankunft_abwarten(self):
         try:
-            self.abhaengigkeit_definieren(self._trasse_auswahl[0], self._trasse_auswahl[1].ziel, 1, abfahrt=False)
+            self.abhaengigkeit_definieren(AnkunftAbwarten, self._trasse_auswahl[0], self._trasse_auswahl[1].ziel, 1)
         except IndexError:
             return
 
@@ -638,7 +643,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     def verspaetung_aendern(self, trasse: Trasse, verspaetung: int, relativ: bool = False):
         neu = True
-        for korrektur in trasse.start.fdl_korrektur:
+        for korrektur in trasse.start.fdl_korrektur.values():
             if hasattr(korrektur, "wartezeit"):
                 if relativ:
                     korrektur.wartezeit += verspaetung
@@ -661,12 +666,12 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.planung.zugverspaetung_korrigieren(trasse.zug)
         self.update_zuglauf(trasse.zug)
 
-    def abhaengigkeit_definieren(self, trasse: Trasse, referenz: ZugZielPlanung, wartezeit: int = 0,
-                                 abfahrt: bool = False):
-        if abfahrt:
-            korrektur = AbfahrtAbwarten(self.planung)
-        else:
-            korrektur = AnkunftAbwarten(self.planung)
+    def abhaengigkeit_definieren(self, klasse: Type[ZugAbwarten],
+                                 trasse: Trasse, referenz: ZugZielPlanung,
+                                 wartezeit: int = 0):
+
+        korrektur = klasse(self.planung)
+        korrektur.node = trasse.start
         korrektur.ursprung = referenz
         korrektur.wartezeit = wartezeit
 

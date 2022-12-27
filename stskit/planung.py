@@ -2,7 +2,7 @@ import copy
 import datetime
 import logging
 import numpy as np
-from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, NamedTuple, Optional, Set, Tuple, Union
+from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, NamedTuple, Optional, Set, Tuple, Type, Union
 import weakref
 
 import networkx as nx
@@ -91,10 +91,27 @@ class VerspaetungsKorrektur:
     def __init__(self, planung: 'Planung'):
         super().__init__()
         self._planung = planung
+        self.edge_typ = ""
         self.display_name = "Default"
+        self._node: ZugZielNode = None
 
     def __str__(self):
         return self.display_name
+
+    @property
+    def node(self) -> ZugZielNode:
+        return self._node
+
+    @node.setter
+    def node(self, node: Union[ZugZielNode, 'ZugZielPlanung']):
+        if isinstance(node, ZugZielNode):
+            self._node = node
+        else:
+            self._node = ZugZielNode.neu(node)
+
+    @property
+    def relation(self) -> Tuple[ZugZielNode, ...]:
+        return self._node,
 
     def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         """
@@ -233,8 +250,9 @@ class ZugAbwarten(VerspaetungsKorrektur):
 
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
+        self.edge_typ = "A"
         self.display_name = "Zug"
-        self._ursprung: Optional[ZugZielNode] = None
+        self._ursprung: ZugZielNode = None
         self.wartezeit: int = 0
 
     def __str__(self):
@@ -256,6 +274,43 @@ class ZugAbwarten(VerspaetungsKorrektur):
             self._ursprung = value
         else:
             self._ursprung = ZugZielNode.neu(ziel=value)
+
+    @property
+    def relation(self) -> Tuple[ZugZielNode, ...]:
+        return self._ursprung, self.node
+
+    def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
+        """
+        default-verarbeitung für abhängigkeiten
+
+        die default-verarbeitung verändert keine verspätungsparameter.
+        die verarbeitung wird in abgeleiteten objekten definiert.
+
+        :param graph:
+        :param node:
+        :param node_data:
+        :return:
+        """
+
+        pass
+
+    def weiterleiten(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any],
+                     folge: ZugZielNode, folge_data: Dict[str, Any]):
+        """
+        default-verarbeitung für abhängigkeiten
+
+        die default-verarbeitung verändert keine verspätungsparameter.
+        die verarbeitung wird in abgeleiteten objekten definiert.
+
+        :param graph:
+        :param stamm:
+        :param stamm_data:
+        :param folge:
+        :param folge_data:
+        :return:
+        """
+
+        pass
 
 
 class AnkunftAbwarten(ZugAbwarten):
@@ -321,6 +376,20 @@ class AbfahrtAbwarten(ZugAbwarten):
         node_data['v_ab'] = max(node_data['v_ab'], abfahrt - node_data['p_ab'])
 
 
+class ZugNichtAbwarten(ZugAbwarten):
+    """
+    wartet nicht auf einen anderen zug.
+
+    diese klasse dient als markierung, dass der zug einen anschluss nicht abwartet.
+    sie hat keine auswirkung auf die verspätung.
+    """
+
+    def __init__(self, planung: 'Planung'):
+        super().__init__(planung)
+        self.edge_typ = "X"
+        self.display_name = "Nicht warten"
+
+
 class FlagKorrektur(VerspaetungsKorrektur):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
@@ -336,6 +405,7 @@ class Ersatzzug(FlagKorrektur):
 
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
+        self.edge_typ = "E"
         self.display_name = "Ersatz"
 
     def anwenden(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any]):
@@ -387,6 +457,7 @@ class Kupplung(FlagKorrektur):
 
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
+        self.edge_typ = "K"
         self.display_name = "Kupplung"
 
     def anwenden(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any]):
@@ -429,6 +500,7 @@ class Kupplung(FlagKorrektur):
 class Fluegelung(FlagKorrektur):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
+        self.edge_typ = "F"
         self.display_name = "Flügelung"
 
     def anwenden(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any]):
@@ -693,7 +765,7 @@ class ZugZielPlanung(FahrplanZeile):
         self.verspaetung_ab: int = 0
         self.mindestaufenthalt: int = 0
         self.auto_korrektur: Optional[VerspaetungsKorrektur] = None
-        self.fdl_korrektur: Set[VerspaetungsKorrektur] = set()
+        self.fdl_korrektur: Dict[Tuple[ZugZielNode, ...], VerspaetungsKorrektur] = {}
         self.angekommen: Union[bool, datetime.datetime] = False
         self.abgefahren: Union[bool, datetime.datetime] = False
 
@@ -1245,7 +1317,7 @@ class Planung:
                 else:
                     data['v_ab'] = data['v_an']
 
-                for korr in ziel.fdl_korrektur:
+                for korr in ziel.fdl_korrektur.values():
                     try:
                         korr.anwenden(self.zielgraph, node, data)
                     except KeyError as e:
@@ -1333,15 +1405,12 @@ class Planung:
         elif ziel.durchfahrt():
             pass
         elif zid := ziel.ersatz_zid():
-            typ = 'E'
             ziel.auto_korrektur = Ersatzzug(self)
             ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, 1)
         elif zid := ziel.kuppel_zid():
-            typ = 'K'
             ziel.auto_korrektur = Kupplung(self)
             ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, 1)
         elif zid := ziel.fluegel_zid():
-            typ = 'F'
             ziel.auto_korrektur = Fluegelung(self)
             ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, 1)
         elif ziel.auto_korrektur is None:
@@ -1350,6 +1419,7 @@ class Planung:
         if zid:
             zzid1 = ZugZielNode.neu(ziel)
             zzid2 = ZugZielNode.neu(ziel, zid=zid)
+            typ = ziel.auto_korrektur.edge_typ
             self.zielgraph.add_edge(zzid1, zzid2, typ=typ, obj=ziel.auto_korrektur)
 
             abschluss = FlagKorrektur(self)
@@ -1388,76 +1458,103 @@ class Planung:
         except KeyError:
             return None
 
-    def fdl_korrektur_setzen(self, korrektur: Optional[VerspaetungsKorrektur], ziel: Union[int, str, ZugZielPlanung]):
+    def fdl_korrektur_setzen(self, korrektur: VerspaetungsKorrektur, ziel: Union[ZugZielPlanung, ZugZielNode]):
         """
         fahrdienstleiter-korrektur setzen
 
         mit dieser methode kann der fahrdienstleiter eine manuelle verspätungskorrektur auf eine fahrplanzeile anwenden,
         z.b. eine feste abgangsverspätung setzen oder eine abhängigkeit von einem kreuzenden zug festlegen.
 
-        beim löschen werden alle korrekturen auf diesem ziel gelöscht!
+        es kann nur eine korrektur pro relation (knoten und kanten im zielgraphen) definiert werden.
+        eine bestehende korrektur wird überschrieben.
 
         :param korrektur: von VerspaetungsKorrektur abgeleitetes korrekturobjekt.
             in frage kommen normalerweise FesteVerspaetung, AnkunftAbwarten oder AbfahrtAbwarten.
-            bei None werden alle korrekturen auf diesem ziel gelöscht.
-        :param ziel: fahrplanziel auf die die korrektur angewendet wird.
-            dies kann ein ZugDetailsPlanung-objekt aus der zugliste dieser klasse sein
-            oder ein gleisname oder fahrplan-index.
-            in den letzteren beiden fällen, muss auch der zug oder zid angegeben werden.
+        :param ziel: fahrplanziel, auf das die korrektur angewendet wird.
+            dies kann ein ZugDetailsPlanung-objekt aus der zugliste
+            oder ein ZugZielNode aus dem zielgraph sein.
         :return: None
         :raise ValueError: die gewünschte korrektur ist nicht möglich.
         """
 
-        zzid2 = ZugZielNode.neu(ziel)
-        try:
-            zzid1 = ZugZielNode.neu(korrektur.ursprung)
-        except AttributeError:
-            zzid1 = None
-        else:
-            self.zielgraph.add_edge(zzid1, zzid2, typ='A', obj=korrektur)
-
-        if korrektur is None:
-            ziel.fdl_korrektur.clear()
-            edges = [(u, v) for u, v, typ in self.zielgraph.in_edges(zzid2, data='typ', default='?')
-                     if typ in {'A', 'X'}]
-            for u, v in edges:
-                print("remove edge", u, v)
-                self.zielgraph.remove_edge(u, v)
+        korrektur.node = ziel
 
         try:
-            self._zielgraph_sortieren()
-        except nx.NetworkXUnfeasible:
-            logger.error(f"Sortierfehler beim Hinzufügen der Abhängigkeit {korrektur}")
-            self.zielgraph.remove_edge(zzid1, zzid2)
+            self.zielgraph.add_edge(*korrektur.relation, typ='A', obj=korrektur)
+        except TypeError:
+            pass
         else:
-            if korrektur:
-                ziel.fdl_korrektur.add(korrektur)
+            try:
+                self._zielgraph_sortieren()
+            except nx.NetworkXUnfeasible:
+                logger.error(f"Sortierfehler beim Hinzufügen der Abhängigkeit {korrektur}")
+                self.zielgraph.remove_edge(*korrektur.relation)
 
-    def fdl_korrektur_loeschen(self, korrektur: VerspaetungsKorrektur, ziel: Union[int, str, ZugZielPlanung]):
+        ziel.fdl_korrektur[korrektur.relation] = korrektur
+
+    def fdl_korrektur_loeschen(self, ziel: Union[ZugZielPlanung, ZugZielNode],
+                               ursprung: Optional[Union[ZugZielPlanung, ZugZielNode]] = None,
+                               alle: bool = False):
         """
-        fahrdienstleiter-korrektur löschen
+        fahrdienstleiter-korrekturen löschen
 
-        entfernt eine spezifische fdl-korrektur von einem fahrziel.
+        entfernt eine oder alle fdl-korrekturen von einem fahrziel.
         das korrekturobjekt muss im fdl_korrektur-attribut des fahrziels enthalten sein.
         ggf. vorhandene weitere korrekturen werden nicht berührt.
 
-        :param korrektur:
-        :param ziel:
-        :return:
+        bei None werden alle korrekturen auf diesem ziel gelöscht.
+
+        :param ziel: fahrplanziel, auf das die korrektur angewendet wird.
+            dies kann ein ZugDetailsPlanung-objekt aus der zugliste
+            oder ein ZugZielNode aus dem zielgraph sein.
+        :param ursprung: referenz-fahrplanziel, von dem die korrektur abhängt.
+            wenn dieser parameter None oder default ist,
+            wird die feste verspätung auf dem ziel gelöscht,
+            ansonsten (nur) die bezeichnete abhängigkeit.
+        :param alle: bei True werden alle korrekturen auf ziel gelöscht,
+            sonst nur diejenige, die durch ziel und ursprung bezeichnet wird.
+            bei True hat der parameter ursprung keine bedeutung.
+        :return: None
         """
 
-        ziel.fdl_korrektur.discard(korrektur)
+        if isinstance(ziel, ZugZielNode):
+            zzid2 = ziel
+            ziel = self.zielgraph.nodes[zzid2]['obj']
+        else:
+            zzid2 = ZugZielNode.neu(ziel)
 
-        zzid2 = ZugZielNode.neu(ziel)
-        edges = [(u, v) for u, v, typ in self.zielgraph.in_edges(zzid2, data='typ', default='?')
-                 if typ in {'A', 'X'}]
+        if isinstance(ursprung, ZugZielNode):
+            zzid1 = ursprung
+            relation = (zzid1, zzid2)
+        elif isinstance(ursprung, ZugZielPlanung):
+            zzid1 = ZugZielNode.neu(ursprung)
+            relation = (zzid1, zzid2)
+        else:
+            relation = (zzid2,)
+
+        edges = []
+        if alle:
+            ziel.fdl_korrektur.clear()
+            edges = [(u, v) for u, v, typ in self.zielgraph.in_edges(zzid2, data='typ', default='?')
+                     if typ in {'A', 'X'}]
+        else:
+            try:
+                del ziel.fdl_korrektur[relation]
+            except KeyError as e:
+                logger.exception(msg="KeyError in fdl_korrektur_loeschen", exc_info=e)
+            if len(relation) == 2:
+                edges = [relation]
+
         for u, v in edges:
-            self.zielgraph.remove_edge(u, v)
+            try:
+                self.zielgraph.remove_edge(u, v)
+            except nx.NetworkXError:
+                pass
 
         try:
             self._zielgraph_sortieren()
         except nx.NetworkXUnfeasible:
-            logger.error(f"Sortierfehler beim Löschen der Abhängigkeit {korrektur}")
+            logger.error(f"Sortierfehler beim Löschen der Abhängigkeit {relation}")
 
     def ereignis_uebernehmen(self, ereignis: Ereignis):
         """
