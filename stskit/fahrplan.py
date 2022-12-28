@@ -176,6 +176,11 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
                     return QtCore.Qt.Checked
                 else:
                     return QtCore.Qt.Unchecked
+            elif col == 'Status':
+                if zug.sichtbar:
+                    return QtCore.Qt.Checked
+                else:
+                    return QtCore.Qt.Unchecked
 
         elif role == QtCore.Qt.ForegroundRole:
             if zug.sichtbar:
@@ -183,7 +188,6 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
                 farbe = QtGui.QColor(*rgb)
             elif zug.gleis:
                 rgb = self.farbschema.zugfarbe_rgb(zug)
-                rgb = [round(v * 0.75) for v in rgb]
                 farbe = QtGui.QColor(*rgb)
             else:
                 farbe = QtGui.QColor("gray")
