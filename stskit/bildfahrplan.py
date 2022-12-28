@@ -1,3 +1,4 @@
+import itertools
 import math
 from dataclasses import dataclass, field
 import logging
@@ -86,7 +87,7 @@ class Trasse:
     richtung: int
     start: ZugZielPlanung
     ziel: ZugZielPlanung
-    koord: List[Tuple[float]]
+    koord: List[Tuple[float, float]]
     halt: bool = False
     color: str = "b"
     fontstyle: str = "normal"
@@ -201,6 +202,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
         trasse_auswahl = len(self._trasse_auswahl) >= 1
         trasse_paar = len(self._trasse_auswahl) >= 2
+        if trasse_paar:
+            trasse_nachbar, _ = self.nachbartrasse_ziel(self._trasse_auswahl[0], self._trasse_auswahl[1])
+        else:
+            trasse_nachbar = -1
 
         self.ui.actionSetup.setEnabled(display_mode)
         self.ui.actionAnzeige.setEnabled(not display_mode and len(self._strecke) >= 2)
@@ -208,8 +213,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionLoeschen.setEnabled(display_mode and trasse_auswahl)
         self.ui.actionPlusEins.setEnabled(display_mode and trasse_auswahl)
         self.ui.actionMinusEins.setEnabled(display_mode and trasse_auswahl)
-        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and trasse_paar)
-        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and trasse_paar)
+        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and trasse_nachbar == 0)
+        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and trasse_nachbar == 1)
 
     def update_combos(self):
         name = self._strecken_name
@@ -610,35 +615,53 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def action_loeschen(self):
         try:
-            trasse = self._trasse_auswahl[0]
-        except IndexError:
+            ziel1 = self._trasse_auswahl[0].start
+        except (IndexError, AttributeError, KeyError):
             pass
         else:
-            self.planung.fdl_korrektur_loeschen(trasse.start)
-            self.planung.zugverspaetung_korrigieren(trasse.zug)
-            self.update_zuglauf(trasse.zug)
+            try:
+                _, ziel2 = self.nachbartrasse_ziel(self._trasse_auswahl[0], self._trasse_auswahl[1])
+            except (IndexError, AttributeError, KeyError, ValueError):
+                ziel2 = None
 
-        self.grafik_update()
+            self.planung.fdl_korrektur_loeschen(ziel1, ziel2, alle=len(self._trasse_auswahl) == 1)
+            self.planung.zugverspaetung_korrigieren(ziel1.zug)
+            self.grafik_update()
         self.update_actions()
+
+    def nachbartrasse_ziel(self, trasse: Trasse, nachbar: Trasse) -> Tuple[int, ZugZielPlanung]:
+        bf1 = self.anlage.bahnsteigzuordnung[trasse.start.plan]
+        bf2s = self.anlage.bahnsteigzuordnung[nachbar.start.plan]
+        bf2z = self.anlage.bahnsteigzuordnung[nachbar.ziel.plan]
+        if bf1 == bf2s:
+            return 0, nachbar.start
+        elif bf1 == bf2z:
+            return 1, nachbar.ziel
+        else:
+            raise ValueError("Trassen sind nicht benachbart")
 
     @pyqtSlot()
     def action_abfahrt_abwarten(self):
         try:
-            self.abhaengigkeit_definieren(AbfahrtAbwarten, self._trasse_auswahl[0], self._trasse_auswahl[1].start, 1)
-        except IndexError:
-            return
-
-        self.grafik_update()
+            i, z = self.nachbartrasse_ziel(self._trasse_auswahl[0], self._trasse_auswahl[1])
+            if i == 0:
+                self.abhaengigkeit_definieren(AbfahrtAbwarten, self._trasse_auswahl[0], z, 1)
+        except (IndexError, ValueError):
+            pass
+        else:
+            self.grafik_update()
         self.update_actions()
 
     @pyqtSlot()
     def action_ankunft_abwarten(self):
         try:
-            self.abhaengigkeit_definieren(AnkunftAbwarten, self._trasse_auswahl[0], self._trasse_auswahl[1].ziel, 1)
-        except IndexError:
-            return
-
-        self.grafik_update()
+            i, z = self.nachbartrasse_ziel(self._trasse_auswahl[0], self._trasse_auswahl[1])
+            if i == 1:
+                self.abhaengigkeit_definieren(AnkunftAbwarten, self._trasse_auswahl[0], z, 1)
+        except (IndexError, ValueError):
+            pass
+        else:
+            self.grafik_update()
         self.update_actions()
 
     def verspaetung_aendern(self, trasse: Trasse, verspaetung: int, relativ: bool = False):

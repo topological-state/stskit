@@ -762,12 +762,16 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def action_loeschen(self):
         try:
-            slot = self._slot_auswahl[0]
-        except IndexError:
+            ziel2 = self._slot_auswahl[1].ziel
+        except (IndexError, AttributeError):
+            ziel2 = None
+        try:
+            ziel1 = self._slot_auswahl[0].ziel
+        except (IndexError, AttributeError):
             pass
         else:
-            self.planung.fdl_korrektur_loeschen(slot.ziel)
-            self.planung.zugverspaetung_korrigieren(slot.zug)
+            self.planung.fdl_korrektur_loeschen(ziel1, ziel2, alle=len(self._slot_auswahl) == 1)
+            self.planung.zugverspaetung_korrigieren(ziel1.zug)
             self.daten_update()
             self.grafik_update()
         self.update_actions()
