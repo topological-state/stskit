@@ -130,6 +130,7 @@ class VerspaetungsKorrektur:
         """
 
         node_data['v_ab'] = max(node_data['v_an'], node_data['v_ab'])
+        logger.debug(f"VerspaetungsKorrektur anwenden: {node}, {node_data}")
 
     def weiterleiten(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any],
                      folge: ZugZielNode, folge_data: Dict[str, Any]):
@@ -155,6 +156,7 @@ class VerspaetungsKorrektur:
         """
 
         folge_data['v_an'] = max(folge_data['v_an'], stamm_data['v_ab'])
+        logger.debug(f"VerspaetungsKorrektur weiterleiten: {folge}, {folge_data}")
 
 
 class FesteVerspaetung(VerspaetungsKorrektur):
@@ -179,6 +181,7 @@ class FesteVerspaetung(VerspaetungsKorrektur):
 
     def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         node_data['v_ab'] = self.verspaetung
+        logger.debug(f"FesteVerspaetung anwenden: {node}, {node_data}")
 
 
 class Signalhalt(FesteVerspaetung):
@@ -212,6 +215,7 @@ class Einfahrtszeit(VerspaetungsKorrektur):
         ankunft = node_data['p_an'] + node_data['v_an']
         abfahrt = max(ankunft, self._planung.simzeit_minuten)
         node_data['v_ab'] = abfahrt - node_data['p_ab']
+        logger.debug(f"Einfahrtszeit anwenden: {node}, {node_data}")
 
 
 class PlanmaessigeAbfahrt(VerspaetungsKorrektur):
@@ -230,6 +234,7 @@ class PlanmaessigeAbfahrt(VerspaetungsKorrektur):
         ankunft = node_data['p_an'] + node_data['v_an']
         v_ab = max(0, node_data['d_min'] + ankunft - node_data['p_ab'])
         node_data['v_ab'] = v_ab
+        logger.debug(f"PlanmaessigeAbfahrt anwenden: {node}, {node_data}")
 
 
 class ZugAbwarten(VerspaetungsKorrektur):
@@ -292,7 +297,7 @@ class ZugAbwarten(VerspaetungsKorrektur):
         :return:
         """
 
-        pass
+        logger.debug(f"ZugAbwarten anwenden: {node}, {node_data}")
 
     def weiterleiten(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any],
                      folge: ZugZielNode, folge_data: Dict[str, Any]):
@@ -310,7 +315,7 @@ class ZugAbwarten(VerspaetungsKorrektur):
         :return:
         """
 
-        pass
+        logger.debug(f"ZugAbwarten weiterleiten: {folge}, {folge_data}")
 
 
 class AnkunftAbwarten(ZugAbwarten):
@@ -343,6 +348,7 @@ class AnkunftAbwarten(ZugAbwarten):
         anschluss_ab = anschluss_an + self.wartezeit
         abfahrt = max(ankunft + aufenthalt, anschluss_ab)
         node_data['v_ab'] = max(node_data['v_ab'], abfahrt - node_data['p_ab'])
+        logger.debug(f"AnkunftAbwarten anwenden: {node}, {node_data}")
 
 
 class AbfahrtAbwarten(ZugAbwarten):
@@ -374,6 +380,7 @@ class AbfahrtAbwarten(ZugAbwarten):
         anschluss_ab = anschluss_ab + self.wartezeit
         abfahrt = max(ankunft + aufenthalt, anschluss_ab)
         node_data['v_ab'] = max(node_data['v_ab'], abfahrt - node_data['p_ab'])
+        logger.debug(f"AbfahrtAbwarten anwenden: {node}, {node_data}")
 
 
 class ZugNichtAbwarten(ZugAbwarten):
@@ -394,6 +401,21 @@ class FlagKorrektur(VerspaetungsKorrektur):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
         self.display_name = "Flag"
+
+    def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
+        """
+        default-verarbeitung für abhängigkeiten
+
+        die default-verarbeitung verändert keine verspätungsparameter.
+        die verarbeitung wird in abgeleiteten objekten definiert.
+
+        :param graph:
+        :param node:
+        :param node_data:
+        :return:
+        """
+
+        logger.debug(f"FlagKorrektur anwenden: {node}, {node_data}")
 
 
 class Ersatzzug(FlagKorrektur):
@@ -422,7 +444,7 @@ class Ersatzzug(FlagKorrektur):
         aufenthalt = max(stamm_data['p_ab'] - ankunft, stamm_data['d_min'])
         abfahrt = ankunft + aufenthalt
         stamm_data['v_ab'] = abfahrt - stamm_data['p_ab']
-        # print("Ersatz Stamm", stamm, stamm_data)
+        logger.debug(f"Ersatzzug anwenden: {stamm}, {stamm_data}")
 
     def weiterleiten(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any],
                      folge: ZugZielNode, folge_data: Dict[str, Any]):
@@ -443,7 +465,7 @@ class Ersatzzug(FlagKorrektur):
             folge_data['v_an'] = max(v_an, ersatz_zeit - folge_data['p_an'])
         except KeyError:
             folge_data['v_an'] = v_an
-        # print("Ersatz Folge", folge, folge_data)
+        logger.debug(f"Ersatzzug weiterleiten: {folge}, {folge_data}")
 
 
 class Kupplung(FlagKorrektur):
@@ -474,7 +496,7 @@ class Kupplung(FlagKorrektur):
         aufenthalt = max(stamm_data['p_ab'] - ankunft, stamm_data['d_min'])
         abfahrt = ankunft + aufenthalt
         stamm_data['v_ab'] = abfahrt - stamm_data['p_ab']
-        # print("Kupplung Stamm", stamm, stamm_data)
+        logger.debug(f"Kupplung anwenden: {stamm}, {stamm_data}")
 
     def weiterleiten(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any],
                      kuppel_node: ZugZielNode, kuppel_data: Dict[str, Any]):
@@ -494,7 +516,7 @@ class Kupplung(FlagKorrektur):
             kuppel_data['v_ab'] = kuppelzeit - kuppel_data['p_ab']
         except KeyError:
             kuppel_data['v_ab'] = stamm_data['v_ab']
-        # print("Kupplung Folge", kuppel_node, kuppel_data)
+        logger.debug(f"Kupplung weiterleiten: {kuppel_node}, {kuppel_data}")
 
 
 class Fluegelung(FlagKorrektur):
@@ -517,7 +539,7 @@ class Fluegelung(FlagKorrektur):
         aufenthalt = max(stamm_data['p_ab'] - ankunft, stamm_data['d_min'])
         abfahrt = ankunft + aufenthalt
         stamm_data['v_ab'] = abfahrt - stamm_data['p_ab']
-        # print("Fluegelung Stamm", stamm, stamm_data)
+        logger.debug(f"Fluegelung anwenden: {stamm}, {stamm_data}")
 
     def weiterleiten(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any],
                      folge: ZugZielNode, folge_data: Dict[str, Any]):
@@ -543,7 +565,7 @@ class Fluegelung(FlagKorrektur):
             folge_data['v_ab'] = abfahrt - folge_data['p_ab']
         except KeyError:
             folge_data['v_ab'] = folge_data['v_an']
-        # print("Fluegelung Folge", folge, folge_data)
+        logger.debug(f"Fluegelung weiterleiten: {folge}, {folge_data}")
 
 
 class ZugDetailsPlanung(ZugDetails):
@@ -1541,7 +1563,8 @@ class Planung:
             try:
                 del ziel.fdl_korrektur[relation]
             except KeyError as e:
-                logger.exception(msg="KeyError in fdl_korrektur_loeschen", exc_info=e)
+                logger.exception(msg=f"KeyError in fdl_korrektur_loeschen: "
+                                     f"relation {relation}, korrekturen {ziel.fdl_korrektur}", exc_info=e)
             if len(relation) == 2:
                 edges = [relation]
 
