@@ -203,7 +203,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         trasse_auswahl = len(self._trasse_auswahl) >= 1
         trasse_paar = len(self._trasse_auswahl) >= 2
         if trasse_paar:
-            trasse_nachbar, _ = self.nachbartrasse_ziel(self._trasse_auswahl[0], self._trasse_auswahl[1])
+            try:
+                trasse_nachbar, _ = self.nachbartrasse_ziel(self._trasse_auswahl[0], self._trasse_auswahl[1])
+            except ValueError:
+                trasse_nachbar = -1
         else:
             trasse_nachbar = -1
 
