@@ -449,7 +449,7 @@ class Ersatzzug(FlagKorrektur):
     def weiterleiten(self, graph: nx.DiGraph, stamm: ZugZielNode, stamm_data: Dict[str, Any],
                      folge: ZugZielNode, folge_data: Dict[str, Any]):
         """
-        ankunftsverspätung am folgeziel berechnen
+        ankunfts- und abfahrtsverspätung am folgeziel berechnen
 
         :param graph:
         :param stamm:
@@ -465,6 +465,13 @@ class Ersatzzug(FlagKorrektur):
             folge_data['v_an'] = max(v_an, ersatz_zeit - folge_data['p_an'])
         except KeyError:
             folge_data['v_an'] = v_an
+
+        try:
+            abfahrt = max(folge_data['p_ab'], ersatz_zeit)
+            folge_data['v_ab'] = abfahrt - folge_data['p_ab']
+        except KeyError:
+            folge_data['v_ab'] = folge_data['v_an']
+
         logger.debug(f"Ersatzzug weiterleiten: {folge}, {folge_data}")
 
 
