@@ -779,7 +779,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def action_abfahrt_abwarten(self):
         try:
-            self.abhaengigkeit_definieren(AbfahrtAbwarten, self._slot_auswahl[0], self._slot_auswahl[1].ziel, 1)
+            self.abhaengigkeit_definieren(AbfahrtAbwarten, self._slot_auswahl[0], self._slot_auswahl[1].ziel)
         except IndexError:
             return
 
@@ -790,7 +790,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def action_ankunft_abwarten(self):
         try:
-            self.abhaengigkeit_definieren(AnkunftAbwarten, self._slot_auswahl[0], self._slot_auswahl[1].ziel, 1)
+            self.abhaengigkeit_definieren(AnkunftAbwarten, self._slot_auswahl[0], self._slot_auswahl[1].ziel)
         except IndexError:
             return
 
@@ -852,12 +852,13 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
     def abhaengigkeit_definieren(self, klasse: Type[ZugAbwarten],
                                  slot: Slot, referenz: ZugZielPlanung,
-                                 wartezeit: int = 0):
+                                 wartezeit: Optional[int] = None):
 
         korrektur = klasse(self.planung)
         korrektur.node = slot.ziel
         korrektur.ursprung = referenz
-        korrektur.wartezeit = wartezeit
+        if wartezeit is not None:
+            korrektur.wartezeit = wartezeit
 
         self.planung.fdl_korrektur_setzen(korrektur, slot.ziel)
         self.planung.zugverspaetung_korrigieren(slot.zug)

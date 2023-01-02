@@ -1,10 +1,11 @@
 import copy
+from dataclasses import dataclass
 import datetime
 import logging
-import numpy as np
 from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, NamedTuple, Optional, Set, Tuple, Type, Union
 import weakref
 
+import numpy as np
 import networkx as nx
 import trio
 
@@ -339,6 +340,7 @@ class AnkunftAbwarten(ZugAbwarten):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
         self.display_name = "Ankunft"
+        self.wartezeit = planung.params.wartezeit_ankunft_abwarten
 
     def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         ankunft = node_data['p_an'] + node_data['v_an']
@@ -371,6 +373,7 @@ class AbfahrtAbwarten(ZugAbwarten):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
         self.display_name = "Abfahrt"
+        self.wartezeit = planung.params.wartezeit_abfahrt_abwarten
 
     def anwenden(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         ankunft = node_data['p_an'] + node_data['v_an']
@@ -913,6 +916,18 @@ class ZugZielPlanung(FahrplanZeile):
             return 'Gleis'
 
 
+@dataclass
+class PlanungParams:
+    mindestaufenthalt_lokwechsel: int = 5
+    mindestaufenthalt_lokumlauf: int = 2
+    mindestaufenthalt_richtungswechsel: int = 2
+    mindestaufenthalt_ersatz: int = 1
+    mindestaufenthalt_kupplung: int = 1
+    mindestaufenthalt_fluegelung: int = 1
+    wartezeit_ankunft_abwarten: int = 0
+    wartezeit_abfahrt_abwarten: int = 2
+
+
 class Planung:
     """
     zug-planung und disposition
@@ -974,6 +989,7 @@ class Planung:
         self.zielindex_plan: Dict[Tuple[int, str], Dict[str, ZugZielPlanung]] = {}
         self.auswertung: Optional[Auswertung] = None
         self.simzeit_minuten: int = 0
+        self.params = PlanungParams()
 
     def zuege(self) -> Iterable[ZugDetailsPlanung]:
         """
@@ -1420,11 +1436,11 @@ class Planung:
         result = True
 
         if ziel.richtungswechsel():
-            ziel.mindestaufenthalt = 2
+            ziel.mindestaufenthalt = self.params.mindestaufenthalt_richtungswechsel
         elif ziel.lokumlauf():
-            ziel.mindestaufenthalt = 2
+            ziel.mindestaufenthalt = self.params.mindestaufenthalt_lokumlauf
         elif ziel.lokwechsel():
-            ziel.mindestaufenthalt = 5
+            ziel.mindestaufenthalt = self.params.mindestaufenthalt_lokwechsel
 
         zid = None
         if ziel.einfahrt:
@@ -1435,13 +1451,13 @@ class Planung:
             pass
         elif zid := ziel.ersatz_zid():
             ziel.auto_korrektur = Ersatzzug(self)
-            ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, 1)
+            ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, self.params.mindestaufenthalt_ersatz)
         elif zid := ziel.kuppel_zid():
             ziel.auto_korrektur = Kupplung(self)
-            ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, 1)
+            ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, self.params.mindestaufenthalt_kupplung)
         elif zid := ziel.fluegel_zid():
             ziel.auto_korrektur = Fluegelung(self)
-            ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, 1)
+            ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, self.params.mindestaufenthalt_fluegelung)
         elif ziel.auto_korrektur is None:
             ziel.auto_korrektur = PlanmaessigeAbfahrt(self)
 

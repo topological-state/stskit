@@ -648,7 +648,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         try:
             i, z = self.nachbartrasse_ziel(self._trasse_auswahl[0], self._trasse_auswahl[1])
             if i == 0:
-                self.abhaengigkeit_definieren(AbfahrtAbwarten, self._trasse_auswahl[0], z, 1)
+                self.abhaengigkeit_definieren(AbfahrtAbwarten, self._trasse_auswahl[0], z)
         except (IndexError, ValueError):
             pass
         else:
@@ -660,7 +660,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         try:
             i, z = self.nachbartrasse_ziel(self._trasse_auswahl[0], self._trasse_auswahl[1])
             if i == 1:
-                self.abhaengigkeit_definieren(AnkunftAbwarten, self._trasse_auswahl[0], z, 1)
+                self.abhaengigkeit_definieren(AnkunftAbwarten, self._trasse_auswahl[0], z)
         except (IndexError, ValueError):
             pass
         else:
@@ -694,12 +694,13 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     def abhaengigkeit_definieren(self, klasse: Type[ZugAbwarten],
                                  trasse: Trasse, referenz: ZugZielPlanung,
-                                 wartezeit: int = 0):
+                                 wartezeit: Optional[int] = None):
 
         korrektur = klasse(self.planung)
         korrektur.node = trasse.start
         korrektur.ursprung = referenz
-        korrektur.wartezeit = wartezeit
+        if wartezeit is not None:
+            korrektur.wartezeit = wartezeit
 
         self.planung.fdl_korrektur_setzen(korrektur, trasse.start)
         self.planung.zugverspaetung_korrigieren(trasse.zug)

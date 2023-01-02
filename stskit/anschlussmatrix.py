@@ -890,7 +890,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                             {ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK}:
                         self.abhaengigkeit_definieren(AbfahrtAbwarten,
                                                       self.anschlussmatrix.abfahrt_ziele[_zid_ab],
-                                                      self.anschlussmatrix.abfahrt_ziele[_zid_an], 1)
+                                                      self.anschlussmatrix.abfahrt_ziele[_zid_an])
 
         self.daten_update()
         self.grafik_update()
@@ -993,12 +993,13 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
     def abhaengigkeit_definieren(self, klasse: Type[ZugAbwarten],
                                  ziel: ZugZielPlanung, referenz: ZugZielPlanung,
-                                 wartezeit: int = 0):
+                                 wartezeit: Optional[int] = None):
 
         korrektur = klasse(self.planung)
         korrektur.node = ziel
         korrektur.ursprung = referenz
-        korrektur.wartezeit = wartezeit
+        if wartezeit is not None:
+            korrektur.wartezeit = wartezeit
 
         self.planung.fdl_korrektur_setzen(korrektur, ziel)
         self.planung.zugverspaetung_korrigieren(ziel.zug)
