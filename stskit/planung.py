@@ -650,6 +650,7 @@ class ZugDetailsPlanung(ZugDetails):
         - ein- und ausfahrtsgleise werden als separate fahrplanzeile am anfang bzw. ende der liste eingefügt
           und mit den attributen einfahrt bzw. ausfahrt markiert.
           ankunfts- und abfahrtszeiten werden dem benachbarten fahrplanziel gleichgesetzt.
+          versteckte ein- und ausfahrtsgleise werden entfernt.
         - der text 'Gleis', wenn der zug im stellwerk beginnt oder endet, wird aus dem von/nach entfernt.
           das gleis befindet sich bereits im fahrplan, es wird keine zusätzliche ein-/ausfahrt-zeile eingefügt.
 
@@ -663,28 +664,43 @@ class ZugDetailsPlanung(ZugDetails):
         self.hinweistext = zug.hinweistext
 
         self.fahrplan = []
+        zug_fahrplan = zug.fahrplan
+
+        # einfahrt
         if not zug.sichtbar and self.von and not zug.von.startswith("Gleis"):
             ziel = ZugZielPlanung(self)
+            self.fahrplan.append(ziel)
+            ziel.einfahrt = True
+            ziel.variable_zeit = True
             ziel.plan = ziel.gleis = self.von
             try:
                 ziel.ab = ziel.an = zug.fahrplan[0].an
+                if zug.fahrplan[0].plan == ziel.plan:
+                    ziel.variable_zeit = False
+                    zug_fahrplan = zug.fahrplan[1:]
             except IndexError:
                 pass
-            ziel.einfahrt = True
-            self.fahrplan.append(ziel)
-        for zeile in zug.fahrplan:
+
+        # bahnsteige
+        for zeile in zug_fahrplan:
             ziel = ZugZielPlanung(self)
             ziel.assign_fahrplan_zeile(zeile)
             self.fahrplan.append(ziel)
+
+        # ausfahrt
         if self.nach and not zug.nach.startswith("Gleis"):
-            ziel = ZugZielPlanung(self)
+            ziel = self.fahrplan[-1]
+            if ziel.plan != zug.nach:
+                ziel = ZugZielPlanung(self)
+                self.fahrplan.append(ziel)
+                ziel.variable_zeit = True
+
             ziel.plan = ziel.gleis = self.nach
             try:
                 ziel.ab = ziel.an = zug.fahrplan[-1].ab
             except IndexError:
                 pass
             ziel.ausfahrt = True
-            self.fahrplan.append(ziel)
 
         for n, z in enumerate(self.fahrplan):
             z.zielnr = n * 1000
@@ -779,12 +795,37 @@ class ZugZielPlanung(FahrplanZeile):
     attribute
     ---------
 
-    - zielnr: definiert die reihenfolge von fahrzielen.
-              bei originalen fahrzielen entspricht sie fahrplan-index multipliziert mit 1000.
-              bei eingefügten betriebshalten ist sie nicht durch 1000 teilbar.
-              die zielnummer wird als schlüssel in der gleisbelegung verwendet.
-              sie wird vom ZugDetailsPlanung-objekt gesetzt
-              und ändert sich über die lebensdauer des zugobjekts nicht.
+    zielnr: definiert die reihenfolge von fahrzielen.
+            bei originalen fahrzielen entspricht sie fahrplan-index multipliziert mit 1000.
+            bei eingefügten betriebshalten ist sie nicht durch 1000 teilbar.
+            die zielnummer wird als schlüssel in der gleisbelegung verwendet.
+            sie wird vom ZugDetailsPlanung-objekt gesetzt
+            und ändert sich über die lebensdauer des zugobjekts nicht.
+
+    einfahrt: zeigt an, ob das fahrziel die einfahrt beschreibt.
+
+    ausfahrt: zeigt an, ob das fahrziel die ausfahrt beschreibt.
+
+    variable_zeit: zeigt bei ein- und ausfahrten an, dass die ankunfts- und abfahrtszeiten geschätzt werden
+        (methode `einfahrten_korrigieren`).
+
+    verspaetung_an: ankunftsverspätung in minuten.
+        die verspätung ist effektiv, wenn `angekommen` True ist, sonst geschätzt.
+
+    verspaetung_ab: abfahrtsverspätung in minuten.
+        die verspätung ist effektiv, wenn `abgefahren` True ist, sonst geschätzt.
+
+    mindestaufenthalt: mindestaufenthaltsdauer an diesem fahrziel in minuten.
+        wird von `korrekturen_definieren` bestimmt.
+
+    auto_korrektur: automatische verspätungskorrektur.
+        wird von `korrekturen_definieren` bestimmt.
+
+    fdl_korrektur: vom fdl definierte korrekturen und abhängigkeiten.
+
+    angekommen: zeigt an, ob der zug an dem ziel bereits angekommen ist.
+
+    abgefahren: zeigt an, ob der zug an dem ziel bereits abgefahren ist.
     """
 
     def __init__(self, zug: ZugDetails):
@@ -793,6 +834,7 @@ class ZugZielPlanung(FahrplanZeile):
         self.zielnr: Optional[int] = None
         self.einfahrt: bool = False
         self.ausfahrt: bool = False
+        self.variable_zeit: bool = False
         self.verspaetung_an: int = 0
         self.verspaetung_ab: int = 0
         self.mindestaufenthalt: int = 0
@@ -1288,7 +1330,7 @@ class Planung:
             except IndexError:
                 pass
             else:
-                if einfahrt.einfahrt and einfahrt.gleis and ziel1.gleis:
+                if einfahrt.einfahrt and einfahrt.variable_zeit and einfahrt.gleis and ziel1.gleis:
                     fahrzeit = self.auswertung.fahrzeit_schaetzen(zug.name, einfahrt.gleis, ziel1.gleis)
                     if not np.isnan(fahrzeit):
                         try:
@@ -1303,7 +1345,7 @@ class Planung:
             except IndexError:
                 pass
             else:
-                if ausfahrt.ausfahrt:
+                if ausfahrt.ausfahrt and ausfahrt.variable_zeit:
                     fahrzeit = self.auswertung.fahrzeit_schaetzen(zug.name, ziel2.gleis, ausfahrt.gleis)
                     if not np.isnan(fahrzeit):
                         try:

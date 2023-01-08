@@ -772,10 +772,15 @@ class Anlage:
         gruppiert bahnsteige zu bahnhöfen und ein-/ausfahrten zu anschlüssen.
 
         bahnsteige werden nach nachbarn gemäss anlageninfo gruppiert.
-        der gruppenname wird aus gemäss der regionsabhängigen f_bahnhofname-funktion gebildet
+        der gruppenname wird von der regionsabhängigen f_bahnhofname-funktion bestimmt
         (per default die alphabetischen zeichen bis zum ersten nicht-alphabetischen zeichen).
         falls dieses verfahren jedoch zu mehrdeutigen bezeichnungen führen würde,
         wird der alphabetisch erste gleisnamen übernommen.
+
+        bahnsteige, deren namen auch als anschlussgleis vorkommt, werden nicht in die liste aufgenommen.
+        gewisse stellwerke enthalten solche versteckte bahnsteige, damit züge, die keinen halt im stellwerk haben,
+        einen fahrplan haben können.
+        dies muss bei der fahrplanverarbeitung berücksichtigt werden.
 
         einfahrten und ausfahrten werden nach dem namen gruppiert,
         der durch die regionsabhängige f_anschlussname gebildet wird.
@@ -790,30 +795,41 @@ class Anlage:
         anschlusstypen = {Knoten.TYP_NUMMER["Einfahrt"], Knoten.TYP_NUMMER["Ausfahrt"]}
         bahnsteigtypen = {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}
 
-        def filter_edge(n1, n2):
+        # ein- und ausfahrten, die auf den gleichen anschlussnamen abbilden, bilden einen anschluss
+        anschlussgleise = set((n for n, t in self.signal_graph.nodes(data='typ') if t in anschlusstypen))
+        anschluss_dict = {k: self.f_anschlussname(k) for k in anschlussgleise}
+
+        def _kein_anschluss_node(n1) -> bool:
+            """
+            nodes, die keine anschlussgleise sind, filtern
+
+            :param n1: bahnsteigname
+            :return: bool
+            """
+            return n1 not in anschlussgleise
+
+        def _bahnhof_edge(n1, n2):
             try:
                 return self.bahnsteig_graph[n1][n2]["typ"] == "bahnhof"
             except KeyError:
                 return False
 
         # durch nachbarbeziehung verbundene bahnsteige bilden einen bahnhof
-        subgraph = nx.subgraph_view(self.bahnsteig_graph, filter_edge=filter_edge)
+        subgraph = nx.subgraph_view(self.bahnsteig_graph, filter_edge=_bahnhof_edge, filter_node=_kein_anschluss_node)
         subgraph = subgraph.to_undirected()
         gruppen = {sorted(g)[0]: g for g in nx.connected_components(subgraph)}
         # gleisbezeichnung abtrennen
-        nice_names = {k: self.f_bahnhofname(k) for k in gruppen}
+        bahnhof_dict = {k: self.f_bahnhofname(k) for k in gruppen}
         # mehrdeutige bahnhofsnamen identifizieren und durch gleichbezeichnung ersetzen
-        counts_nice = collections.Counter(nice_names.values())
-        counts_safe = {sn: counts_nice[nice_names[sn]] for sn in gruppen.keys()}
-        self.bahnsteiggruppen = {nice_names[sn] if counts_safe[sn] == 1 else sn: g for sn, g in gruppen.items()}
+        counts_nice = collections.Counter(bahnhof_dict.values())
+        counts_safe = {sn: counts_nice[bahnhof_dict[sn]] for sn in gruppen.keys()}
+        self.bahnsteiggruppen = {bahnhof_dict[sn] if counts_safe[sn] == 1 else sn: g for sn, g in gruppen.items()}
 
-        # ein- und ausfahrten, die auf den gleichen anschlussnamen abbilden, bilden einen anschluss
-        nodes = [n for n, t in self.signal_graph.nodes(data='typ') if t in anschlusstypen]
-        nice_names = {k: self.f_anschlussname(k) for k in nodes}
         # anschlüsse, die den gleichen namen wie ein bahnhof haben, umbenennen
-        nice_names = {k: v if v not in self.bahnsteiggruppen else v + "+" for k, v in nice_names.items()}
-        unique_names = set(nice_names.values())
-        self.anschlussgruppen = {k: set([n for n in nodes if self.f_anschlussname(n) == k]) for k in unique_names}
+        anschluss_dict = {k: v if v not in self.bahnsteiggruppen else v + "+" for k, v in anschluss_dict.items()}
+        anschluss_set = set(anschluss_dict.values())
+        self.anschlussgruppen = {k: set([n for n in anschlussgleise if self.f_anschlussname(n) == k])
+                                 for k in anschluss_set}
 
         self.auto = True
         self._update_gruppen_dict()
@@ -1011,6 +1027,10 @@ class Anlage:
             result.append(float(distanz))
 
         return result
+
+    @staticmethod
+    def _merge_gruppen(auto_gruppe: Dict[str, Set[str]], config_gruppe: Dict[str, Set[str]]) -> Dict[str, Set[str]]:
+        return config_gruppe
 
     def load_config(self, path: os.PathLike, load_graphs=False, ignore_version=False):
         """
