@@ -1,0 +1,235 @@
+{
+    "_aid": 480,
+    "_build": 5847,
+    "_name": "G\u00fcrbetal",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BNAH": {
+            "__class__": "Set",
+            "data": [
+                "BNAH402",
+                "BNAH302"
+            ]
+        },
+        "Thun": {
+            "__class__": "Set",
+            "data": [
+                "Thun"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BNFI": {
+            "__class__": "Set",
+            "data": [
+                "BNFI 3",
+                "BNFI 5",
+                "BNFI 4",
+                "BNFI 2"
+            ]
+        },
+        "BNWE": {
+            "__class__": "Set",
+            "data": [
+                "BNWE 1",
+                "BNWE 2"
+            ]
+        },
+        "BP": {
+            "__class__": "Set",
+            "data": [
+                "BP 1",
+                "BP 3",
+                "BP 2"
+            ]
+        },
+        "BPST": {
+            "__class__": "Set",
+            "data": [
+                "BPST"
+            ]
+        },
+        "BWA": {
+            "__class__": "Set",
+            "data": [
+                "BWA 1",
+                "BWA 2"
+            ]
+        },
+        "GAS": {
+            "__class__": "Set",
+            "data": [
+                "GAS 2",
+                "GAS 1"
+            ]
+        },
+        "KD": {
+            "__class__": "Set",
+            "data": [
+                "KD 2",
+                "KD 1"
+            ]
+        },
+        "KOE": {
+            "__class__": "Set",
+            "data": [
+                "KOE 2",
+                "KOE 1"
+            ]
+        },
+        "KS": {
+            "__class__": "Set",
+            "data": [
+                "KS 1",
+                "KS 2"
+            ]
+        },
+        "KSN": {
+            "__class__": "Set",
+            "data": [
+                "KSN"
+            ]
+        },
+        "LBF": {
+            "__class__": "Set",
+            "data": [
+                "LBF"
+            ]
+        },
+        "LH": {
+            "__class__": "Set",
+            "data": [
+                "LH 1"
+            ]
+        },
+        "MHN": {
+            "__class__": "Set",
+            "data": [
+                "MHN 1",
+                "MHN 2"
+            ]
+        },
+        "MOOS": {
+            "__class__": "Set",
+            "data": [
+                "MOOS"
+            ]
+        },
+        "NS": {
+            "__class__": "Set",
+            "data": [
+                "NS 3",
+                "NS 2"
+            ]
+        },
+        "SBR": {
+            "__class__": "Set",
+            "data": [
+                "SBR"
+            ]
+        },
+        "SCBG": {
+            "__class__": "Set",
+            "data": [
+                "SCBG 2",
+                "SCBG 1"
+            ]
+        },
+        "SF": {
+            "__class__": "Set",
+            "data": [
+                "SF 1"
+            ]
+        },
+        "THU": {
+            "__class__": "Set",
+            "data": [
+                "THU 1"
+            ]
+        },
+        "TO": {
+            "__class__": "Set",
+            "data": [
+                "TO 1",
+                "TO 2"
+            ]
+        },
+        "UE": {
+            "__class__": "Set",
+            "data": [
+                "UE 2",
+                "UE 3",
+                "UE 4"
+            ]
+        },
+        "UEA": {
+            "__class__": "Set",
+            "data": [
+                "UEA 1",
+                "UEA 2"
+            ]
+        },
+        "WBB": {
+            "__class__": "Set",
+            "data": [
+                "WBB 2",
+                "WBB 1"
+            ]
+        }
+    },
+    "sektoren": {},
+    "strecken": {
+        "BNAH-Thun": [
+            "BNAH",
+            "BNFI",
+            "BNWE",
+            "WBB",
+            "KSN",
+            "KS",
+            "BPST",
+            "BP",
+            "TO",
+            "KD",
+            "THU",
+            "BWA",
+            "SF",
+            "UE",
+            "UEA",
+            "Thun"
+        ],
+        "Thun-BNAH": [
+            "Thun",
+            "UEA",
+            "UE",
+            "SF",
+            "BWA",
+            "THU",
+            "KD",
+            "TO",
+            "BP",
+            "BPST",
+            "KS",
+            "KSN",
+            "WBB",
+            "BNWE",
+            "BNFI",
+            "BNAH"
+        ],
+        "BNAH-SCBG": [
+            "BNAH",
+            "BNFI",
+            "LBF",
+            "KOE",
+            "MOOS",
+            "GAS",
+            "NS",
+            "MHN",
+            "SBR",
+            "LH",
+            "SCBG"        
+        ]
+    }
+}
+

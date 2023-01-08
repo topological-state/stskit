@@ -1,0 +1,370 @@
+{
+    "_aid": 444,
+    "_build": 5847,
+    "_name": "Pal\u00e9zieux - Romont",
+    "_region": "Westschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung"
+            ]
+        },
+        "CVN": {
+            "__class__": "Set",
+            "data": [
+                "CVN 804",
+                "CVN 904"
+            ]
+        },
+        "Ch\u00e2tel-St-Denis": {
+            "__class__": "Set",
+            "data": [
+                "Ch\u00e2tel-St-Denis"
+            ]
+        },
+        "LUY": {
+            "__class__": "Set",
+            "data": [
+                "LUY 926",
+                "LUY 826"
+            ]
+        },
+        "Montbovon": {
+            "__class__": "Set",
+            "data": [
+                "Montbovon"
+            ]
+        },
+        "Payerne": {
+            "__class__": "Set",
+            "data": [
+                "Payerne"
+            ]
+        },
+        "Tanklager": {
+            "__class__": "Set",
+            "data": [
+                "Tanklager"
+            ]
+        },
+        "VV": {
+            "__class__": "Set",
+            "data": [
+                "VV 301"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BROF": {
+            "__class__": "Set",
+            "data": [
+                "BROF 1",
+                "BROF 2"
+            ]
+        },
+        "BROV": {
+            "__class__": "Set",
+            "data": [
+                "BROV"
+            ]
+        },
+        "BUL": {
+            "__class__": "Set",
+            "data": [
+                "BUL 1",
+                "BUL 2",
+                "BUL 3",
+                "BUL 1 kurz",
+                "BUL 5",
+                "BUL 4",
+                "BUL 7"
+            ]
+        },
+        "CHAT": {
+            "__class__": "Set",
+            "data": [
+                "CHAT 1",
+                "CHAT 2"
+            ]
+        },
+        "CHX": {
+            "__class__": "Set",
+            "data": [
+                "CHX"
+            ]
+        },
+        "ECU": {
+            "__class__": "Set",
+            "data": [
+                "ECU 1",
+                "ECU 2"
+            ]
+        },
+        "GM": {
+            "__class__": "Set",
+            "data": [
+                "GM 2",
+                "GM 1"
+            ]
+        },
+        "GRV": {
+            "__class__": "Set",
+            "data": [
+                "GRV 2",
+                "GRV 3"
+            ]
+        },
+        "GRY": {
+            "__class__": "Set",
+            "data": [
+                "GRY 2",
+                "GRY 1"
+            ]
+        },
+        "HEN": {
+            "__class__": "Set",
+            "data": [
+                "HEN"
+            ]
+        },
+        "LUC": {
+            "__class__": "Set",
+            "data": [
+                "LUC 1",
+                "LUC 2"
+            ]
+        },
+        "MD": {
+            "__class__": "Set",
+            "data": [
+                "MD 1",
+                "MD 2"
+            ]
+        },
+        "MRL": {
+            "__class__": "Set",
+            "data": [
+                "MRL"
+            ]
+        },
+        "OR": {
+            "__class__": "Set",
+            "data": [
+                "OR"
+            ]
+        },
+        "PAL": {
+            "__class__": "Set",
+            "data": [
+                "PAL 2",
+                "PAL 4",
+                "PAL 5",
+                "PAL 3B",
+                "PAL 3C",
+                "PAL 1"
+            ]
+        },
+        "PALV": {
+            "__class__": "Set",
+            "data": [
+                "PALV"
+            ]
+        },
+        "PAQ": {
+            "__class__": "Set",
+            "data": [
+                "PAQ"
+            ]
+        },
+        "PUI": {
+            "__class__": "Set",
+            "data": [
+                "PUI 2",
+                "PUI 1",
+                "PUI 3",
+                "PUI 8"
+            ]
+        },
+        "ROM": {
+            "__class__": "Set",
+            "data": [
+                "ROM 5",
+                "ROM 1",
+                "ROM 4G",
+                "ROM 5G",
+                "ROM 4",
+                "ROM 2",
+                "ROM 3",
+                "ROM 6",
+                "ROM 27",
+                "ROM 50",
+                "ROM 51",
+                "ROM 60"
+            ]
+        },
+        "SALE": {
+            "__class__": "Set",
+            "data": [
+                "SALE 2",
+                "SALE 1"
+            ]
+        },
+        "TDT": {
+            "__class__": "Set",
+            "data": [
+                "TDT"
+            ]
+        },
+        "TOUV": {
+            "__class__": "Set",
+            "data": [
+                "TOUV"
+            ]
+        },
+        "VAUL": {
+            "__class__": "Set",
+            "data": [
+                "VAUL 1",
+                "VAUL 2"
+            ]
+        },
+        "VD": {
+            "__class__": "Set",
+            "data": [
+                "VD 1",
+                "VD 2"
+            ]
+        },
+        "VUI": {
+            "__class__": "Set",
+            "data": [
+                "VUI 2",
+                "VUI 1"
+            ]
+        }
+    },
+    "sektoren": {
+        "BUL 1": {
+            "__class__": "Set",
+            "data": [
+                "BUL 1",
+                "BUL 1 kurz"
+            ]
+        },
+        "PAL 3": {
+            "__class__": "Set",
+            "data": [
+                "PAL 3B",
+                "PAL 3C"
+            ]
+        },
+        "ROM 4": {
+            "__class__": "Set",
+            "data": [
+                "ROM 4",
+                "ROM 4G"
+            ]
+        },
+        "ROM 5": {
+            "__class__": "Set",
+            "data": [
+                "ROM 5G",
+                "ROM 5"
+            ]
+        }
+    },
+    "strecken": {
+        "CVN-LUY": [
+            "CVN",
+            "GRV",
+            "PUI",
+            "MRL",
+            "PAL",
+            "PALV",
+            "OR",
+            "VD",
+            "ROM",
+            "LUY"
+        ],
+        "Ch\u00e2tel-St-Denis-Montbovon": [
+            "Ch\u00e2tel",
+            "BUL",
+            "TDT",
+            "PAQ",
+            "GRY",
+            "Montbovon"
+        ],
+        "Ch\u00e2tel-St-Denis-Broc-Fabrique": [
+            "Ch\u00e2tel",
+            "BUL",
+            "TOUV",
+            "BROV",
+            "BROF"
+        ],
+        "ROM-Montbovon": [
+            "ROM",
+            "VUI",
+            "SALE",
+            "VAUL",
+            "BUL",
+            "TDT",
+            "PAQ",
+            "GRY",
+            "Montbovon"
+        ],
+        "PAL-Payerne": [
+            "PAL",
+            "PALV",
+            "CHAT",
+            "ECU",
+            "MD",
+            "LUC",
+            "HEN",
+            "GM",
+            "Payerne"
+        ],
+        "CVN-Payerne": [
+            "CVN",
+            "GRV",
+            "PUI",
+            "MRL",
+            "PAL",
+            "PALV",
+            "CHAT",
+            "ECU",
+            "MD",
+            "LUC",
+            "HEN",
+            "GM",
+            "Payerne"
+        ],
+        "VV-LUY": [
+            "VV",
+            "PUI",
+            "MRL",
+            "PAL",
+            "PALV",
+            "OR",
+            "VD",
+            "ROM",
+            "LUY"
+        ],
+        "VV-Payerne": [
+            "VV",
+            "PUI",
+            "MRL",
+            "PAL",
+            "PALV",
+            "CHAT",
+            "ECU",
+            "MD",
+            "LUC",
+            "HEN",
+            "GM",
+            "Payerne"
+        ]
+    }
+}

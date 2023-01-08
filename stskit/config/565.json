@@ -1,0 +1,205 @@
+{
+    "_aid": 565,
+    "_build": 5847,
+    "_name": "Yverdon-les-Bains",
+    "_region": "Westschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BY": {
+            "__class__": "Set",
+            "data": [
+                "BY 506",
+                "BY 606"
+            ]
+        },
+        "D-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "D-Gruppe"
+            ]
+        },
+        "DAIL E/A": {
+            "__class__": "Set",
+            "data": ["DAIL 45"]
+        },
+        "ECL E/A": {
+            "__class__": "Set",
+            "data": [
+                "ECL 37",
+                "ECL 38"
+            ]
+        },
+        "Estavayer": {
+            "__class__": "Set",
+            "data": [
+                "Estavayer"
+            ]
+        },
+        "GOR": {
+            "__class__": "Set",
+            "data": [
+                "GOR 213",
+                "GOR 113"
+            ]
+        },
+        "LSA": {
+            "__class__": "Set",
+            "data": [
+                "LSA 213",
+                "LSA 113"
+            ]
+        },
+        "ONB Industrie": {
+            "__class__": "Set",
+            "data": [
+                "ONB Industrie"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BAV": {
+            "__class__": "Set",
+            "data": [
+                "BAV"
+            ]
+        },
+        "CC": {
+            "__class__": "Set",
+            "data": [
+                "CC"
+            ]
+        },
+        "CHP": {
+            "__class__": "Set",
+            "data": [
+                "CHP"
+            ]
+        },
+        "CHS": {
+            "__class__": "Set",
+            "data": [
+                "CHS 2",
+                "CHS 1"
+            ]
+        },
+        "CHV": {
+            "__class__": "Set",
+            "data": [
+                "CHV 2",
+                "CHV 3",
+                "CHV 1"
+            ]
+        },
+        "COS": {
+            "__class__": "Set",
+            "data": [
+                "COS 2",
+                "COS 1",
+                "COS 3"
+            ]
+        },
+        "DAIL": {
+            "__class__": "Set",
+            "data": [
+                "DAIL 4",
+                "DAIL 3"
+            ]
+        },
+        "ECL": {
+            "__class__": "Set",
+            "data": [
+                "ECL 2",
+                "ECL 1",
+                "ECL 36"
+            ]
+        },
+        "EP": {
+            "__class__": "Set",
+            "data": [
+                "EP 1",
+                "EP 2"
+            ]
+        },
+        "ESP": {
+            "__class__": "Set",
+            "data": [
+                "ESP"
+            ]
+        },
+        "GRS": {
+            "__class__": "Set",
+            "data": [
+                "GRS 2",
+                "GRS 1",
+                "GRS 3"
+            ]
+        },
+        "ONB": {
+            "__class__": "Set",
+            "data": [
+                "ONB 5",
+                "ONB 3",
+                "ONB 4"
+            ]
+        },
+        "YND": {
+            "__class__": "Set",
+            "data": [
+                "YND 3",
+                "YND 2"
+            ]
+        },
+        "YV": {
+            "__class__": "Set",
+            "data": [
+                "YV 2",
+                "YV 3",
+                "YV 1",
+                "YV 43",
+                "YV 4",
+                "YV 14"
+            ]
+        }
+    },
+    "sektoren": {},
+    "strecken": {
+        "BY-GOR": [
+            "BY",
+            "COS",
+            "ECL",
+            "BAV",
+            "ESP",
+            "EP",
+            "YV",
+            "GRS",
+            "ONB",
+            "CC",
+            "GOR"
+        ],
+        "BY-LSA": [
+            "BY",
+            "COS",
+            "ECL",
+            "LSA"
+        ],
+        "Estavayer-GOR": [
+            "Estavayer",
+            "CHS",
+            "YND",
+            "CHP",
+            "YV",
+            "GRS",
+            "ONB",
+            "CC",
+            "GOR"
+        ],
+        "Estavayer-YV": [
+            "Estavayer",
+            "CHS",
+            "YND",
+            "CHP",
+            "YV"
+        ]
+    }
+}

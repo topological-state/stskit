@@ -1,0 +1,171 @@
+{
+    "_aid": 102,
+    "_build": 5847,
+    "_name": "Hamm Pbf",
+    "_region": "M\u00fcnsterland",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstell": {
+            "__class__": "Set",
+            "data": [
+                "Abstell1",
+                "Abstell2",
+                "Abstell3"
+            ]
+        },
+        "Bockum-H\u00f6vel": {
+            "__class__": "Set",
+            "data": [
+                "Bockum-H\u00f6vel"
+            ]
+        },
+        "Kamen": {
+            "__class__": "Set",
+            "data": [
+                "Kamen"
+            ]
+        },
+        "L\u00fcnen G\u00fcterbahn": {
+            "__class__": "Set",
+            "data": [
+                "L\u00fcnen G\u00fcterbahn"
+            ]
+        },
+        "Neubeckum": {
+            "__class__": "Set",
+            "data": [
+                "Neubeckum",
+            ]
+        },
+        "Neubeckum G\u00fcterbahn": {
+            "__class__": "Set",
+            "data": [
+                "Neubeckum G\u00fcterbahn"
+            ]
+        },
+        "Rbf": {
+            "__class__": "Set",
+            "data": [
+                "Rbf S\u00fcd 1",
+                "Rbf S\u00fcd 2",
+                "Rbf Nord",
+                "Rbf S\u00fcd"
+            ]
+        },
+        "Soest": {
+            "__class__": "Set",
+            "data": [
+                "Soest"
+            ]
+        },
+        "Unna": {
+            "__class__": "Set",
+            "data": [
+                "Unna"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Pbf": {
+            "__class__": "Set",
+            "data": [
+                "5B",
+                "13",
+                "7",
+                "4",
+                "5",
+                "2B",
+                "10UN",
+                "5A",
+                "10",
+                "1",
+                "11",
+                "700",
+                "9",
+                "8",
+                "6",
+                "3",
+                "12",
+                "2",
+                "715",
+                "2A",
+                "716",
+                "40",
+                "36",
+                "37",
+                "757",
+                "756",
+                "752",
+                "781"
+            ]
+        },
+        "G\u00fc": {
+            "__class__": "Set",
+            "data": [
+                "G\u00fc2",
+                "G\u00fc1",
+                "G\u00fc4",
+                "G\u00fc3"
+            ]
+        }
+    },
+    "sektoren": {
+        "10": {
+            "__class__": "Set",
+            "data": [
+                "10UN",
+                "10"
+            ]
+        },
+        "2": {
+            "__class__": "Set",
+            "data": [
+                "2",
+                "2A",
+                "2B"
+            ]
+        },
+        "5": {
+            "__class__": "Set",
+            "data": [
+                "5B",
+                "5",
+                "5A"
+            ]
+        }
+    },
+    "strecken": {
+        "Kamen-Neubeckum": [
+            "Kamen",
+            "Pbf",
+            "Neubeckum"
+        ],
+        "Kamen-Bockum-H\u00f6vel": [
+            "Kamen",
+            "Pbf",
+            "Bockum-H\u00f6vel"
+        ],
+        "Unna-Neubeckum": [
+            "Unna",
+            "Pbf",
+            "Neubeckum"
+        ],
+        "Unna-Bockum-H\u00f6vel": [
+            "Unna",
+            "Pbf",
+            "Bockum-H\u00f6vel"
+        ],
+        "Soest-Neubeckum": [
+            "Kamen",
+            "Pbf",
+            "Neubeckum"
+        ],
+        "Soest-Bockum-H\u00f6vel": [
+            "Kamen",
+            "Pbf",
+            "Bockum-H\u00f6vel"
+        ]
+    }
+}
+

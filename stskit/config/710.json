@@ -1,0 +1,214 @@
+{
+    "_aid": 710,
+    "_build": 5847,
+    "_name": "RhB / Klosters",
+    "_region": "Ostschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellfeld": {
+            "__class__": "Set",
+            "data": [
+                "Abstellfeld"
+            ]
+        },
+        "B\u00fcel": {
+            "__class__": "Set",
+            "data": [
+                "B\u00fcel"
+            ]
+        },
+        "Depot": {
+            "__class__": "Set",
+            "data": [
+                "Depot"
+            ]
+        },
+        "Filisur": {
+            "__class__": "Set",
+            "data": [
+                "Filisur"
+            ]
+        },
+        "Schiers": {
+            "__class__": "Set",
+            "data": [
+                "Schiers"
+            ]
+        },
+        "Selfranga": {
+            "__class__": "Set",
+            "data": [
+                "Selfranga"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "CAPA": {
+            "__class__": "Set",
+            "data": [
+                "CAPA"
+            ]
+        },
+        "CDUE": {
+            "__class__": "Set",
+            "data": [
+                "CDUE"
+            ]
+        },
+        "DAD": {
+            "__class__": "Set",
+            "data": [
+                "DAD"
+            ]
+        },
+        "DAF": {
+            "__class__": "Set",
+            "data": [
+                "DAF"
+            ]
+        },
+        "DAGL": {
+            "__class__": "Set",
+            "data": [
+                "DAGL"
+            ]
+        },
+        "DALT": {
+            "__class__": "Set",
+            "data": [
+                "DALT"
+            ]
+        },
+        "DAM": {
+            "__class__": "Set",
+            "data": [
+                "DAM"
+            ]
+        },
+        "DAV": {
+            "__class__": "Set",
+            "data": [
+                "DAV 2",
+                "DAV 5",
+                "DAV 1",
+                "DAV 4",
+                "DAV 3",
+                "DAV 11",
+                "DAV 51",
+                "DAV 50"
+            ]
+        },
+        "DAW": {
+            "__class__": "Set",
+            "data": [
+                "DAW"
+            ]
+        },
+        "FID": {
+            "__class__": "Set",
+            "data": [
+                "FID"
+            ]
+        },
+        "FURN": {
+            "__class__": "Set",
+            "data": [
+                "FURN"
+            ]
+        },
+        "FUWI": {
+            "__class__": "Set",
+            "data": [
+                "FUWI"
+            ]
+        },
+        "JAZ": {
+            "__class__": "Set",
+            "data": [
+                "JAZ"
+            ]
+        },
+        "KLO": {
+            "__class__": "Set",
+            "data": [
+                "KLO 1",
+                "KLO 4",
+                "KLO 2",
+                "KLO 3"
+            ]
+        },
+        "KLOD": {
+            "__class__": "Set",
+            "data": [
+                "KLOD"
+            ]
+        },
+        "KUEB": {
+            "__class__": "Set",
+            "data": [
+                "KUEB 1",
+                "KUEB 3",
+                "KUEB 2"
+            ]
+        },
+        "SAAS": {
+            "__class__": "Set",
+            "data": [
+                "SAAS"
+            ]
+        },
+        "SERN": {
+            "__class__": "Set",
+            "data": [
+                "SERN"
+            ]
+        },
+        "WIES": {
+            "__class__": "Set",
+            "data": [
+                "WIES"
+            ]
+        }
+    },
+    "sektoren": {},
+    "strecken": {
+        "Schiers-Filisur": [
+            "Schiers",
+            "FUWI",
+            "FURN",
+            "JAZ",
+            "FID",
+            "KUEB",
+            "CAPA",
+            "SAAS",
+            "SERN",
+            "KLOD",
+            "KLO",
+            "CDUE",
+            "DALT",
+            "DAW",
+            "DAD",
+            "DAV",
+            "DAF",
+            "DAGL",
+            "DAM",
+            "WIES",
+            "Filisur"
+        ],
+        "Schiers-Selfranga": [
+            "Schiers",
+            "FUWI",
+            "FURN",
+            "JAZ",
+            "FID",
+            "KUEB",
+            "CAPA",
+            "SAAS",
+            "SERN",
+            "KLOD",
+            "KLO",
+            "Selfranga"
+        ]
+    }
+}

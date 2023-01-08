@@ -654,10 +654,15 @@ class Anlage:
             self.gleise_gruppieren()
 
         if not self.config_loaded:
+            config_path = Path(config_path)
+            default_path = Path(__file__).parent.parent / "config"
             try:
+                logger.info(f"konfiguration laden von {config_path}")
                 self.load_config(config_path)
             except OSError:
-                logger.exception("fehler beim laden der anlagenkonfiguration")
+                logger.warning("fehler beim laden der anlagenkonfiguration")
+                logger.info(f"defaultkonfiguration laden von {default_path}")
+                self.load_config(default_path)
             except ValueError as e:
                 logger.exception("fehlerhafte anlagenkonfiguration")
             self.config_loaded = True

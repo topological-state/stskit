@@ -1,0 +1,220 @@
+{
+    "_aid": 696,
+    "_build": 5847,
+    "_name": "Chiasso",
+    "_region": "Tessin",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung"
+            ]
+        },
+        "Chiasso SMN 304": {
+            "__class__": "Set",
+            "data": [
+                "Chiasso SMN 304"
+            ]
+        },
+        "Chiasso SMN 821": {
+            "__class__": "Set",
+            "data": [
+                "Chiasso SMN 821"
+            ]
+        },
+        "Chiasso SMN T": {
+            "__class__": "Set",
+            "data": [
+                "Chiasso SMN T"
+            ]
+        },
+        "Como": {
+            "__class__": "Set",
+            "data": [
+                "Como"
+            ]
+        },
+        "GAGC": {
+            "__class__": "Set",
+            "data": [
+                "GAGC504",
+                "GAGC604"
+            ]
+        },
+        "KV": {
+            "__class__": "Set",
+            "data": [
+                "KV-Terminal"
+            ]
+        },
+        "Lokdepot": {
+            "__class__": "Set",
+            "data": [
+                "Lokdepot SBB"
+            ]
+        },
+        "MDE": {
+            "__class__": "Set",
+            "data": [
+                "MDE294",
+                "MDE194"
+            ]
+        },
+        "Monte Olimpino": {
+            "__class__": "Set",
+            "data": [
+                "Monte Olimpino"
+            ]
+        },
+        "S-Bahn-Depot": {
+            "__class__": "Set",
+            "data": [
+                "S-Bahn-Depot"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BAL": {
+            "__class__": "Set",
+            "data": [
+                "BAL2",
+                "BAL3",
+                "BAL1"
+            ]
+        },
+        "CAP": {
+            "__class__": "Set",
+            "data": [
+                "CAP2",
+                "CAP3",
+                "CAP1"
+            ]
+        },
+        "CHI": {
+            "__class__": "Set",
+            "data": [
+                "CHI10",
+                "CHI1 lang",
+                "CHI1",
+                "CHI963",
+                "CHI996",
+                "CHI8",
+                "CHI5",
+                "CHI997",
+                "CHI212",
+                "CHI9",
+                "CHI992",
+                "CHI13",
+                "CHI7",
+                "CHI4",
+                "CHI3",
+                "CHI2"
+            ]
+        },
+        "MAR": {
+            "__class__": "Set",
+            "data": [
+                "MAR2",
+                "MAR3",
+                "MAR4"
+            ]
+        },
+        "MEN": {
+            "__class__": "Set",
+            "data": [
+                "MEN3a",
+                "MEN12",
+                "MEN2",
+                "MEN5a",
+                "MEN4a",
+                "MEN3",
+                "MEN5",
+                "MEN4",
+                "MEN1"
+            ]
+        },
+        "MSM": {
+            "__class__": "Set",
+            "data": [
+                "MSM"
+            ]
+        },
+        "STAF": {
+            "__class__": "Set",
+            "data": [
+                "STAF2",
+                "STAF1"
+            ]
+        },
+        "STAO": {
+            "__class__": "Set",
+            "data": [
+                "STAO1",
+                "STAO2",
+                "STAO3"
+            ]
+        }
+    },
+    "sektoren": {
+        "CHI1": {
+            "__class__": "Set",
+            "data": [
+                "CHI1",
+                "CHI1 lang"
+            ]
+        },
+        "MEN3": {
+            "__class__": "Set",
+            "data": [
+                "MEN3a",
+                "MEN3"
+            ]
+        },
+        "MEN4": {
+            "__class__": "Set",
+            "data": [
+                "MEN4a",
+                "MEN4"
+            ]
+        },
+        "MEN5": {
+            "__class__": "Set",
+            "data": [
+                "MEN5a",
+                "MEN5"
+            ]
+        }
+    },
+    "strecken": {
+        "MDE-Como": [
+            "MDE",
+            "MAR",
+            "CAP",
+            "MSM",
+            "MEN",
+            "CHI",
+            "Como"
+        ],
+        "MDE-GAGC": [
+            "MDE",
+            "MAR",
+            "CAP",
+            "MSM",
+            "MEN",
+            "STAO",
+            "STAF",
+            "GAGC"
+        ],
+        "MDE-Monte Olimpino": [
+            "MDE",
+            "MAR",
+            "CAP",
+            "MSM",
+            "MEN",
+            "CHI",
+            "Monte Olimpino"
+        ]
+    }
+}

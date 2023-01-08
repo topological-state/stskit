@@ -1,0 +1,183 @@
+{
+    "_aid": 463,
+    "_build": 5847,
+    "_name": "Effretikon",
+    "_region": "Z\u00fcrich und Umgebung",
+    "_version": 2,
+    "anschlussgruppen": {
+        "DUE": {
+            "__class__": "Set",
+            "data": [
+                "DUE 391",
+                "DUE 491"
+            ]
+        },
+        "EF97": {
+            "__class__": "Set",
+            "data": [
+                "EF97"
+            ]
+        },
+        "Illnau": {
+            "__class__": "Set",
+            "data": [
+                "Illnau"
+            ]
+        },
+        "KE": {
+            "__class__": "Set",
+            "data": [
+                "KE 118",
+                "KE 218"
+            ]
+        },
+        "OP": {
+            "__class__": "Set",
+            "data": [
+                "OP 608",
+                "OP 508"
+            ]
+        },
+        "STET": {
+            "__class__": "Set",
+            "data": [
+                "STET 181",
+                "STET 281"
+            ]
+        },
+        "ZOER 308/408": {
+            "__class__": "Set",
+            "data": [
+                "ZOER 308",
+                "ZOER 408"
+            ]
+        },
+        "ZOER 108/208": {
+            "__class__": "Set",
+            "data": [
+                "ZOER 208",
+                "ZOER 108"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BSD": {
+            "__class__": "Set",
+            "data": [
+                "BSD2",
+                "BSD3",
+                "BSD61",
+                "BSD1",
+                "BSD4"
+            ]
+        },
+        "DTL": {
+            "__class__": "Set",
+            "data": [
+                "DTL1",
+                "DTL2",
+                "DTL3"
+            ]
+        },
+        "EF": {
+            "__class__": "Set",
+            "data": [
+                "EF4",
+                "EF3",
+                "EF2",
+                "EF6",
+                "EF5",
+                "EF1",
+                "EF91",
+                "EF94"
+            ]
+        },
+        "KL": {
+            "__class__": "Set",
+            "data": [
+                "KL3",
+                "KL2",
+                "KL4"
+            ]
+        },
+        "KLB": {
+            "__class__": "Set",
+            "data": [
+                "KLB"
+            ]
+        },
+        "WS": {
+            "__class__": "Set",
+            "data": [
+                "WS4",
+                "WS3",
+                "WS5",
+                "WS6"
+            ]
+        },
+        "ZFH": {
+            "__class__": "Set",
+            "data": [
+                "ZFH1",
+                "ZFH4",
+                "ZFH3",
+                "ZFH2"
+            ]
+        }
+    },
+    "sektoren": {},
+    "strecken": {
+        "Illnau-OP": [
+            "Illnau",
+            "EF",
+            "BSD",
+            "ZFH",
+            "KL",
+            "KLB",
+            "OP"
+        ],
+        "Illnau-STET": [
+            "Illnau",
+            "EF",
+            "DTL",
+            "STET"
+        ],
+        "Illnau-ZOER 308/408": [
+            "Illnau",
+            "EF",
+            "DTL",
+            "WS",
+            "ZOER 308/408"
+        ],
+        "KE-OP": [
+            "KE",
+            "EF",
+            "BSD",
+            "ZFH",
+            "KL",
+            "KLB",
+            "OP"
+        ],
+        "KE-STET": [
+            "KE",
+            "EF",
+            "DTL",
+            "STET"
+        ],
+        "KE-ZOER 108/208": [
+            "KE",
+            "EF",
+            "BSD",
+            "ZFH",
+            "ZOER 108/208"
+        ],
+        "KE-ZOER 308/408": [
+            "KE",
+            "EF",
+            "DTL",
+            "WS",
+            "ZOER 308/408"
+        ]
+    }
+}

@@ -1,0 +1,348 @@
+{
+    "_aid": 500,
+    "_build": 5847,
+    "_name": "Basel RB",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "A": {
+            "__class__": "Set",
+            "data": [
+                "A33"
+            ]
+        },
+        "Abst": {
+            "__class__": "Set",
+            "data": [
+                "Abst B"
+            ]
+        },
+        "B+": {
+            "__class__": "Set",
+            "data": []
+        },
+        "BIRS": {
+            "__class__": "Set",
+            "data": [
+                "BIRS 551"
+            ]
+        },
+        "BS": {
+            "__class__": "Set",
+            "data": [
+                "BS 302",
+                "BS 202",
+                "BS 102"
+            ]
+        },
+        "BSGB": {
+            "__class__": "Set",
+            "data": [
+                "BSGB 902",
+                "BSGB 802"
+            ]
+        },
+        "Berg F": {
+            "__class__": "Set",
+            "data": [
+                "Berg F17-32",
+                "Berg F1-16"
+            ]
+        },
+        "Berg B": {
+            "__class__": "Set",
+            "data": [
+                "Berg B23-38",
+                "Berg B7-22"
+            ]
+        },
+        "D": {
+            "__class__": "Set",
+            "data": [
+                "D84"
+            ]
+        },
+        "Depot": {
+            "__class__": "Set",
+            "data": [
+                "Depot"
+            ]
+        },
+        "FRE": {
+            "__class__": "Set",
+            "data": [
+                "FRE 209",
+                "FRE 109"
+            ]
+        },
+        "GELN": {
+            "__class__": "Set",
+            "data": [
+                "GELN 602",
+                "GELN 702"
+            ]
+        },
+        "Gruppe C": {
+            "__class__": "Set",
+            "data": [
+                "Gruppe C"
+            ]
+        },
+        "Gruppe R": {
+            "__class__": "Set",
+            "data": [
+                "Gruppe R"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "LST": {
+            "__class__": "Set",
+            "data": [
+                "LST 804",
+                "LST 704"
+            ]
+        },
+        "Lok": {
+            "__class__": "Set",
+            "data": [
+                "Lok West",
+                "Lok Ost"
+            ]
+        },
+        "Lok Pratteln": {
+            "__class__": "Set",
+            "data": [
+                "Lok Pratteln"
+            ]
+        },
+        "RF": {
+            "__class__": "Set",
+            "data": [
+                "RF 175",
+                "RF 275"
+            ]
+        },
+        "Schweizerhalle": {
+            "__class__": "Set",
+            "data": [
+                "Schweizerhalle"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "A": {
+            "__class__": "Set",
+            "data": [
+                "A 8",
+                "A 6",
+                "A 2",
+                "A 1",
+                "A 13",
+                "A 45",
+                "A 10",
+                "A 46",
+                "A 36",
+                "A 37",
+                "A 39"
+            ]
+        },
+        "B": {
+            "__class__": "Set",
+            "data": [
+                "B 2",
+                "B 4"
+            ]
+        },
+        "C": {
+            "__class__": "Set",
+            "data": [
+                "C 79"
+            ]
+        },
+        "D": {
+            "__class__": "Set",
+            "data": [
+                "D 64",
+                "D 66",
+                "D 62",
+                "D 63",
+                "D 72",
+                "D 67",
+                "D 61",
+                "D 80"
+            ]
+        },
+        "E": {
+            "__class__": "Set",
+            "data": [
+                "E 4",
+                "E 11",
+                "E 14",
+                "E 1",
+                "E 13",
+                "E 15",
+                "E 7",
+                "E 3",
+                "E 9",
+                "E 2",
+                "E 19",
+                "E 34",
+                "E 35",
+                "E 88"
+            ]
+        },
+        "F": {
+            "__class__": "Set",
+            "data": [
+                "F 35",
+                "F 40"
+            ]
+        },
+        "G": {
+            "__class__": "Set",
+            "data": [
+                "G 56",
+                "G 72",
+                "G 80",
+                "G 75",
+                "G 66",
+                "G 67",
+                "G 62",
+                "G 71",
+                "G 55",
+                "G 68",
+                "G 83"
+            ]
+        },
+        "K": {
+            "__class__": "Set",
+            "data": [
+                "K 6"
+            ]
+        },
+        "KAU": {
+            "__class__": "Set",
+            "data": [
+                "KAU 5G",
+                "KAU 4",
+                "KAU 5",
+                "KAU 3",
+                "KAU 4G"
+            ]
+        },
+        "MU": {
+            "__class__": "Set",
+            "data": [
+                "MU 2",
+                "MU 3",
+                "MU 4",
+                "MU 1"
+            ]
+        },
+        "P": {
+            "__class__": "Set",
+            "data": [
+                "P 05"
+            ]
+        },
+        "PR": {
+            "__class__": "Set",
+            "data": [
+                "PR 1",
+                "PR 5",
+                "PR 7",
+                "PR 2",
+                "PR 4",
+                "PR 460",
+                "PR 471"
+            ]
+        },
+        "PRSR": {
+            "__class__": "Set",
+            "data": [
+                "PRSR"
+            ]
+        },
+        "T": {
+            "__class__": "Set",
+            "data": [
+                "T 30"
+            ]
+        }
+    },
+    "sektoren": {
+        "KAU 4": {
+            "__class__": "Set",
+            "data": [
+                "KAU 4",
+                "KAU 4G"
+            ]
+        },
+        "KAU 5": {
+            "__class__": "Set",
+            "data": [
+                "KAU 5",
+                "KAU 5G"
+            ]
+        }
+    },
+    "strecken": {
+        "BS-FRE": [
+            "BS",
+            "MU",
+            "PR",
+            "FRE"
+        ],
+        "BS-LST": [
+            "BS",
+            "MU",
+            "LST"
+        ],
+        "BS-RF": [
+            "BS",
+            "MU",
+            "PR",
+            "PRSR",
+            "KAU",
+            "RF"
+        ],
+        "BSGB-FRE": [
+            "BSGB",
+            "A",
+            "D",
+            "PR",
+            "FRE"
+        ],
+        "BSGB-RF": [
+            "BSGB",
+            "A",
+            "D",
+            "PR",
+            "PRSR",
+            "KAU",
+            "RF"
+        ],
+        "GELN-FRE": [
+            "GELN",
+            "A",
+            "D",
+            "PR",
+            "FRE"
+        ],
+        "GELN-RF": [
+            "GELN",
+            "A",
+            "D",
+            "PR",
+            "PRSR",
+            "KAU",
+            "RF"
+        ]
+    }
+}

@@ -1,0 +1,150 @@
+{
+    "_aid": 704,
+    "_build": 5847,
+    "_name": "Z\u00fcrich VB",
+    "_region": "Z\u00fcrich und Umgebung",
+    "_version": 2,
+    "anschlussgruppen": {
+        "E Ost+": {
+            "__class__": "Set",
+            "data": [
+                "E Ost"
+            ]
+        },
+        "O Ost+": {
+            "__class__": "Set",
+            "data": [
+                "O Ost"
+            ]
+        },
+        "ZAS": {
+            "__class__": "Set",
+            "data": [
+                "ZAS 603",
+                "ZAS 215",
+                "ZAS 694",
+                "ZAS 242",
+                "ZAS 703",
+                "ZAS 396",
+                "ZAS 142"
+            ]
+        },
+        "ZHER": {
+            "__class__": "Set",
+            "data": [
+                "ZHER"
+            ]
+        },
+        "ZUE": {
+            "__class__": "Set",
+            "data": [
+                "ZUE O",
+                "ZUE 791",
+                "ZUE 691",
+                "ZUE 600",
+                "ZUE F16",
+                "ZUE P11",
+                "ZUE 700",
+                "ZUE P24",
+                "ZUE M"
+            ]
+        },
+        "ZWIE": {
+            "__class__": "Set",
+            "data": [
+                "ZWIE 141",
+                "ZWIE 241"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "E 1": {
+            "__class__": "Set",
+            "data": [
+                "E 2",
+                "E 3",
+                "E 1"
+            ]
+        },
+        "E 13": {
+            "__class__": "Set",
+            "data": [
+                "E 13"
+            ]
+        },
+        "F": {
+            "__class__": "Set",
+            "data": [
+                "F 16"
+            ]
+        },
+        "HBf": {
+            "__class__": "Set",
+            "data": [
+                "791",
+                "691"
+            ]
+        },
+        "M": {
+            "__class__": "Set",
+            "data": [
+                "M 1",
+                "M 2",
+                "M 3"
+            ]
+        },
+        "O 1": {
+            "__class__": "Set",
+            "data": [
+                "O 2",
+                "O 1",
+                "O 3",
+                "O 4"
+            ]
+        },
+        "O Ost": {
+            "__class__": "Set",
+            "data": [
+                "O Ost"
+            ]
+        },
+        "P": {
+            "__class__": "Set",
+            "data": [
+                "P 31"
+            ]
+        },
+        "R": {
+            "__class__": "Set",
+            "data": [
+                "R 4",
+                "R 1",
+                "R 53",
+                "R 2",
+                "R 3",
+                "R 22",
+                "R 23",
+                "R 21",
+                "R 54",
+                "R 55"
+            ]
+        },
+        "Z": {
+            "__class__": "Set",
+            "data": [
+                "Z 23",
+                "Z 22"
+            ]
+        },
+        "ZHDB": {
+            "__class__": "Set",
+            "data": [
+                "ZHDB 6",
+                "ZHDB 5"
+            ]
+        }
+    },
+    "sektoren": {},
+    "strecken": {}
+}

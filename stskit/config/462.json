@@ -1,0 +1,102 @@
+{
+    "_aid": 462,
+    "_build": 5847,
+    "_name": "Oerlikon",
+    "_region": "Z\u00fcrich und Umgebung",
+    "_version": 2,
+    "anschlussgruppen": {
+        "GLB": {
+            "__class__": "Set",
+            "data": [
+                "GLB 806",
+                "GLB 906"
+            ]
+        },
+        "KL": {
+            "__class__": "Set",
+            "data": [
+                "KL 608",
+                "KL 508"
+            ]
+        },
+        "WS": {
+            "__class__": "Set",
+            "data": [
+                "WS 408",
+                "WS 308"
+            ]
+        },
+        "ZAS": {
+            "__class__": "Set",
+            "data": [
+                "ZAS 852"
+            ]
+        },
+        "ZFH": {
+            "__class__": "Set",
+            "data": [
+                "ZFH 208",
+                "ZFH 108"
+            ]
+        },
+        "ZHDB": {
+            "__class__": "Set",
+            "data": [
+                "ZHDB 802",
+                "ZHDB 902"
+            ]
+        },
+        "ZSEB": {
+            "__class__": "Set",
+            "data": [
+                "ZSEB 956",
+                "ZSEB 856"
+            ]
+        },
+        "ZUE x35": {
+            "__class__": "Set",
+            "data": [
+                "ZUE 235",
+                "ZUE 135"
+            ]
+        },
+        "ZUE x02": {
+            "__class__": "Set",
+            "data": [
+                "ZUE 402",
+                "ZUE 302"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "OP": {
+            "__class__": "Set",
+            "data": [
+                "OP"
+            ]
+        },
+        "ZOER": {
+            "__class__": "Set",
+            "data": [
+                "ZOER2",
+                "ZOER4",
+                "ZOER5",
+                "ZOER7",
+                "ZOER8",
+                "ZOER1",
+                "ZOER3",
+                "ZOER6"
+            ]
+        },
+        "ZWIP": {
+            "__class__": "Set",
+            "data": [
+                "ZWIP1",
+                "ZWIP2"
+            ]
+        }
+    },
+    "sektoren": {},
+    "strecken": {}
+}

@@ -1,0 +1,223 @@
+{
+    "_aid": 484,
+    "_build": 5847,
+    "_name": "Bern",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BNWM": {
+            "__class__": "Set",
+            "data": [
+                "BNWM 868",
+                "BNWM 802",
+                "BNWM 968",
+                "BNWM 702"
+            ]
+        },
+        "Gl 51x": {
+            "__class__": "Set",
+            "data": [
+                "Gl 511-512",
+                "Gl 518-520",
+                "Gl 515-517"
+            ]
+        },
+        "Gl 75x": {
+            "__class__": "Set",
+            "data": [
+                "Gl 752-757"
+            ]
+        },
+        "HOL": {
+            "__class__": "Set",
+            "data": [
+                "HOL 101",
+                "HOL 201"
+            ]
+        },
+        "MATA": {
+            "__class__": "Set",
+            "data": [
+                "MATA 607",
+                "MATA 507"
+            ]
+        },
+        "OST": {
+            "__class__": "Set",
+            "data": [
+                "OST 305",
+                "OST 405",
+                "OST 805"
+            ]
+        },
+        "T-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "T-Gruppe"
+            ]
+        },
+        "ZOL": {
+            "__class__": "Set",
+            "data": [
+                "ZOL 708",
+                "ZOL 108",
+                "ZOL 208"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BN": {
+            "__class__": "Set",
+            "data": [
+                "BN 4",
+                "BN 1",
+                "BN 6",
+                "BN 7",
+                "BN 9",
+                "BN 33",
+                "BN 10",
+                "BN 5",
+                "BN 22",
+                "BN 12",
+                "BN 21",
+                "BN 10 kurz",
+                "BN 11",
+                "BN 3",
+                "BN 32",
+                "BN 2",
+                "BN 34",
+                "BN 13",
+                "BN 31",
+                "BN 8",
+                "BN 49",
+                "BN 741",
+                "BN 724",
+                "BN 728",
+                "BN 740",
+                "BN 50",
+                "BN 760",
+                "BN 514",
+                "BN 513",
+                "BN 628",
+                "BN 841",
+                "BN 842",
+                "BN 925"
+            ]
+        },
+        "BN VL": {
+            "__class__": "Set",
+            "data": [
+                "BN VL 703",
+                "BN VL 803"
+            ]
+        },
+        "BNWD": {
+            "__class__": "Set",
+            "data": [
+                "BNWD 3",
+                "BNWD 2",
+                "BNWD 1",
+                "BNWD 7",
+                "BNWD 6",
+                "BNWD 5"
+            ]
+        }
+    },
+    "sektoren": {
+        "BN 1": {
+            "__class__": "Set",
+            "data": [
+                "BN 1",
+                "BN 21"
+            ]
+        },
+        "BN 2": {
+            "__class__": "Set",
+            "data": [
+                "BN 2",
+                "BN 22"
+            ]
+        },
+        "BN 9": {
+            "__class__": "Set",
+            "data": [
+                "BN 9",
+                "BN 49"
+            ]
+        },
+        "BN 10": {
+            "__class__": "Set",
+            "data": [
+                "BN 10 kurz",
+                "BN 10",
+                "BN 50"
+            ]
+        },
+        "BN 11": {
+            "__class__": "Set",
+            "data": [
+                "BN 11",
+                "BN 31"
+            ]
+        },
+        "BN 12": {
+            "__class__": "Set",
+            "data": [
+                "BN 12",
+                "BN 32"
+            ]
+        },
+        "BN 13": {
+            "__class__": "Set",
+            "data": [
+                "BN 13",
+                "BN 33"
+            ]
+        }
+    },
+    "strecken": {
+        "BNWM-MATA": [
+            "BNWM",
+            "BN",
+            "BNWD",
+            "BN VL",
+            "MATA"
+        ],
+        "BNWM-OST": [
+            "BNWM",
+            "BN",
+            "BNWD",
+            "OST"
+        ],
+        "BNWM-ZOL": [
+            "BNWM",
+            "BN",
+            "BNWD",
+            "ZOL"
+        ],
+        "HOL-MATA": [
+            "HOL",
+            "BN",
+            "BNWD",
+            "MATA"
+        ],
+        "HOL-OST": [
+            "HOL",
+            "BN",
+            "BNWD",
+            "OST"
+        ],
+        "HOL-ZOL": [
+            "HOL",
+            "BN",
+            "BNWD",
+            "ZOL"
+        ],
+        "ZOL-OST": [
+            "ZOL",
+            "BN VL",
+            "OST"
+        ]
+    }
+}
