@@ -8,7 +8,6 @@ import logging
 from typing import Any, Dict, List, Optional, Set, Union
 
 import numpy as np
-import pandas as pd
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 from PyQt5.QtCore import pyqtSlot
 import matplotlib as mpl
