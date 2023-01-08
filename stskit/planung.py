@@ -1350,7 +1350,6 @@ class Planung:
                     continue
             except KeyError:
                 continue
-            alt = copy.copy(data)
 
             # bei noch nicht abgefahrenen zielen verspaetung korrigieren
             if not ziel.abgefahren:
@@ -1371,28 +1370,29 @@ class Planung:
             for succ in self.zielgraph.succ[node]:
                 try:
                     succ_data = self.zielgraph.nodes[succ]
+                    succ_obj: ZugZielPlanung = succ_data['obj']
                     edge_data = self.zielgraph[node][succ]
                 except KeyError:
                     continue
-                else:
+
+                if not succ_obj.angekommen:
                     if edge_data['typ'] in {'P', 'E', 'F'}:
                         try:
                             succ_data['v_an'] = max(succ_data['v_an'], data['v_ab'])
                         except KeyError:
                             succ_data['v_an'] = data['v_ab']
 
-                try:
-                    edge_obj: VerspaetungsKorrektur = edge_data['obj']
-                except KeyError:
-                    continue
-                else:
-                    edge_obj.weiterleiten(self.zielgraph, node, data, succ, succ_data)
+                    try:
+                        edge_obj: VerspaetungsKorrektur = edge_data['obj']
+                    except KeyError:
+                        continue
+                    else:
+                        edge_obj.weiterleiten(self.zielgraph, node, data, succ, succ_data)
 
-            ziel.verspaetung_an = data['v_an']
-            ziel.verspaetung_ab = data['v_ab']
-            if data['p_an'] != alt['p_an'] or data['p_ab'] != alt['p_ab']:
-                ziel.an = minutes_to_time(data['p_an'])
-                ziel.ab = minutes_to_time(data['p_ab'])
+            if not ziel.angekommen:
+                ziel.verspaetung_an = data['v_an']
+            if not ziel.abgefahren:
+                ziel.verspaetung_ab = data['v_ab']
 
     def zugverspaetung_korrigieren(self, zug: ZugDetailsPlanung):
         """
@@ -1657,7 +1657,7 @@ class Planung:
             except IndexError:
                 pass
             else:
-                if ausfahrt.ausfahrt:
+                if ausfahrt.ausfahrt and not zug.ausgefahren:
                     ausfahrt.verspaetung_an = ausfahrt.verspaetung_ab = ereignis.verspaetung
                     ausfahrt.angekommen = ausfahrt.abgefahren = ereignis.zeit
                     zug.ausgefahren = True
@@ -1678,8 +1678,11 @@ class Planung:
                 if ereignis.verspaetung > 0:
                     altes_ziel.auto_korrektur = Signalhalt(self)
                     altes_ziel.auto_korrektur.verspaetung = ereignis.verspaetung
-            else:
-                altes_ziel.verspaetung_ab = ereignis.verspaetung
+            elif not altes_ziel.abgefahren:
+                try:
+                    altes_ziel.verspaetung_ab = time_to_minutes(ereignis.zeit) - time_to_minutes(altes_ziel.ab)
+                except AttributeError:
+                    pass
                 altes_ziel.abgefahren = ereignis.zeit
 
         elif ereignis.art == 'rothalt' or ereignis.art == 'wurdegruen':
