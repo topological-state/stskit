@@ -1,0 +1,282 @@
+{
+    "_aid": 356,
+    "_build": 5847,
+    "_name": "Hannover Hbf",
+    "_region": "Bremen-Niedersachsen",
+    "_version": 2,
+    "anschlussgruppen": {
+        "441-443": {
+            "__class__": "Set",
+            "data": [
+                "441-443"
+            ]
+        },
+        "475-478": {
+            "__class__": "Set",
+            "data": [
+                "475-478"
+            ]
+        },
+        "Celle Fern": {
+            "__class__": "Set",
+            "data": [
+                "Celle Fern"
+            ]
+        },
+        "Celle Nah": {
+            "__class__": "Set",
+            "data": [
+                "Celle Nah"
+            ]
+        },
+        "Hainholz": {
+            "__class__": "Set",
+            "data": [
+                "Hainholz"
+            ]
+        },
+        "Laatzen 1": {
+            "__class__": "Set",
+            "data": [
+                "Laatzen 1"
+            ]
+        },
+        "Laatzen 2": {
+            "__class__": "Set",
+            "data": [
+                "Laatzen 2"
+            ]
+        },
+        "Lehrte Fern": {
+            "__class__": "Set",
+            "data": [
+                "Lehrte Fern"
+            ]
+        },
+        "Lehrte Nah": {
+            "__class__": "Set",
+            "data": [
+                "Lehrte Nah"
+            ]
+        },
+        "Nordhafen": {
+            "__class__": "Set",
+            "data": [
+                "Nordhafen"
+            ]
+        },
+        "Pferdeturm": {
+            "__class__": "Set",
+            "data": [
+                "Pferdeturm"
+            ]
+        },
+        "Seelze": {
+            "__class__": "Set",
+            "data": [
+                "Seelze"
+            ]
+        },
+        "Wunstorf Nah": {
+            "__class__": "Set",
+            "data": [
+                "Wunstorf Nah"
+            ]
+        },
+        "Wunstorf Fern": {
+            "__class__": "Set",
+            "data": [
+                "Wunstorf Fern"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Hbf": {
+            "__class__": "Set",
+            "data": [
+                "8B",
+                "9A",
+                "1",
+                "4A",
+                "8A",
+                "13B",
+                "9B",
+                "12B",
+                "11B",
+                "14A",
+                "14B",
+                "3A",
+                "10B",
+                "12A",
+                "2",
+                "10A",
+                "7A",
+                "40",
+                "80",
+                "13A",
+                "11A",
+                "7B",
+                "4B",
+                "3B",
+                "101",
+                "401"
+            ]
+        },
+        "801/802": {
+            "__class__": "Set",
+            "data": [
+                "802",
+                "801"
+            ]
+        },
+        "Karl-Wiechert-Allee": {
+            "__class__": "Set",
+            "data": [
+                "K1",
+                "K2"
+            ]
+        },
+        "Kleefeld": {
+            "__class__": "Set",
+            "data": [
+                "Kleefeld"
+            ]
+        },
+        "Ledeburg": {
+            "__class__": "Set",
+            "data": [
+                "Lb3",
+                "Lb2",
+                "Lb1"
+            ]
+        },
+        "Leinhausen": {
+            "__class__": "Set",
+            "data": [
+                "Le1",
+                "Le2"
+            ]
+        },
+        "Nordstadt": {
+            "__class__": "Set",
+            "data": [
+                "Nordstadt"
+            ]
+        }
+    },
+    "sektoren": {
+        "10": {
+            "__class__": "Set",
+            "data": [
+                "10B",
+                "10A"
+            ]
+        },
+        "11": {
+            "__class__": "Set",
+            "data": [
+                "11A",
+                "11B"
+            ]
+        },
+        "12": {
+            "__class__": "Set",
+            "data": [
+                "12B",
+                "12A"
+            ]
+        },
+        "13": {
+            "__class__": "Set",
+            "data": [
+                "13B",
+                "13A"
+            ]
+        },
+        "14": {
+            "__class__": "Set",
+            "data": [
+                "14B",
+                "14A"
+            ]
+        },
+        "3": {
+            "__class__": "Set",
+            "data": [
+                "3A",
+                "3B"
+            ]
+        },
+        "4": {
+            "__class__": "Set",
+            "data": [
+                "4A",
+                "4B"
+            ]
+        },
+        "7": {
+            "__class__": "Set",
+            "data": [
+                "7B",
+                "7A"
+            ]
+        },
+        "8": {
+            "__class__": "Set",
+            "data": [
+                "8B",
+                "8A"
+            ]
+        },
+        "9": {
+            "__class__": "Set",
+            "data": [
+                "9B",
+                "9A"
+            ]
+        }
+    },
+    "strecken": {
+        "Laatzen 2-Celle Fern": [
+            "Laatzen 2",
+            "Hbf",
+            "Celle Fern"
+        ],
+        "Laatzen 2-Wunstorf Fern": [
+            "Laatzen 2",
+            "Hbf",
+            "Wunstorf Fern"
+        ],
+        "Lehrte Fern-Celle Fern": [
+            "Lehrte Fern",
+            "Hbf",
+            "Celle Fern"
+        ],
+        "Lehrte Fern-Wunstorf Fern": [
+            "Lehrte Fern",
+            "Hbf",
+            "Wunstorf Fern"
+        ],
+        "Laatzen 1-Celle Nah": [
+            "Laatzen 1",
+            "Hbf",
+            "Nordstadt",
+            "Ledeburg",
+            "Celle Nah"
+        ],
+        "Laatzen 1-Wunstorf Nah": [
+            "Laatzen 1",
+            "Hbf",
+            "Nordstadt",
+            "Leinhausen",
+            "Wunstorf Nah"
+        ],
+        "Lehrte Nah-Hbf": [
+            "Lehrte Nah",
+            "Karl-Wiechert-Allee",
+            "Kleefeld",
+            "Hbf"
+        ]
+    }
+}

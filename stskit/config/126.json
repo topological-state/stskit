@@ -1,0 +1,197 @@
+{
+    "_aid": 126,
+    "_build": 5847,
+    "_name": "RBS / Worblaufen",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "D": {
+            "__class__": "Set",
+            "data": [
+                "D2",
+                "D3"
+            ]
+        },
+        "Depot 1": {
+            "__class__": "Set",
+            "data": [
+                "Depot 1"
+            ]
+        },
+        "RBS": {
+            "__class__": "Set",
+            "data": [
+                "RBS Werkstatt"
+            ]
+        },
+        "Zollikofen": {
+            "__class__": "Set",
+            "data": [
+                "Zollikofen 200",
+                "Zollikofen 100"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "A OBZO": {
+            "__class__": "Set",
+            "data": [
+                "A OBZO"
+            ]
+        },
+        "BNFE": {
+            "__class__": "Set",
+            "data": [
+                "BNFE2",
+                "BNFE1"
+            ]
+        },
+        "BNTI": {
+            "__class__": "Set",
+            "data": [
+                "BNTI2",
+                "BNTI1"
+            ]
+        },
+        "BOLI": {
+            "__class__": "Set",
+            "data": [
+                "BOLI2",
+                "BOLI1"
+            ]
+        },
+        "BOUT": {
+            "__class__": "Set",
+            "data": [
+                "BOUT1",
+                "BOUT2"
+            ]
+        },
+        "BRBS": {
+            "__class__": "Set",
+            "data": [
+                "BRBS21",
+                "BRBS22",
+                "BRBS24",
+                "BRBS23"
+            ]
+        },
+        "DEI": {
+            "__class__": "Set",
+            "data": [
+                "DEI"
+            ]
+        },
+        "DEI31": {
+            "__class__": "Set",
+            "data": [
+                "DEI32",
+                "DEI31"
+            ]
+        },
+        "E OBZO": {
+            "__class__": "Set",
+            "data": [
+                "E OBZO"
+            ]
+        },
+        "ITT": {
+            "__class__": "Set",
+            "data": [
+                "ITT2",
+                "ITT1"
+            ]
+        },
+        "PAPI": {
+            "__class__": "Set",
+            "data": [
+                "PAPI2",
+                "PAPI1"
+            ]
+        },
+        "STBA": {
+            "__class__": "Set",
+            "data": [
+                "STBA"
+            ]
+        },
+        "STTL": {
+            "__class__": "Set",
+            "data": [
+                "STTL2",
+                "STTL1"
+            ]
+        },
+        "UNZO": {
+            "__class__": "Set",
+            "data": [
+                "UNZO"
+            ]
+        },
+        "VECH": {
+            "__class__": "Set",
+            "data": [
+                "VECH"
+            ]
+        },
+        "WBDO": {
+            "__class__": "Set",
+            "data": [
+                "WBDO4",
+                "WBDO5"
+            ]
+        },
+        "WBL": {
+            "__class__": "Set",
+            "data": [
+                "WBL1",
+                "WBL2",
+                "WBL4",
+                "WBL3",
+                "WBL6",
+                "WBL5"
+            ]
+        },
+        "WOBO": {
+            "__class__": "Set",
+            "data": [
+                "WOBO"
+            ]
+        }
+    },
+    "sektoren": {},
+    "strecken": {
+       "BRBS-UNZO": [
+            "BRBS",
+            "BNFE",
+            "BNTI",
+            "WBL",
+            "STBA",
+            "UNZO"
+        ],
+        "BRBS-Zollikofen": [
+            "BRBS",
+            "BNFE",
+            "BNTI",
+            "WBL",
+            "Zollikofen"
+        ],
+        "BRBS-WBDO": [
+            "BRBS",
+            "BNFE",
+            "BNTI",
+            "WBL",
+            "PAPI",
+            "ITT",
+            "BOLI",
+            "DEI31",
+            "DEI",
+            "STTL",
+            "BOUT",
+            "VECH",
+            "WOBO",
+            "WBDO"
+        ]
+    }
+}

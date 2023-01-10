@@ -1,0 +1,187 @@
+{
+    "_aid": 846,
+    "_build": 5847,
+    "_name": "Nyon",
+    "_region": "Westschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Eysins": {
+            "__class__": "Set",
+            "data": [
+                "Eysins"
+            ]
+        },
+        "GE": {
+            "__class__": "Set",
+            "data": [
+                "GE 240",
+                "GE 340",
+                "GE 140"
+            ]
+        },
+        "LON": {
+            "__class__": "Set",
+            "data": [
+                "LON 206",
+                "LON 106"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "ALL": {
+            "__class__": "Set",
+            "data": [
+                "ALL3",
+                "ALL2",
+                "ALL1"
+            ]
+        },
+        "CHY": {
+            "__class__": "Set",
+            "data": [
+                "CHY1",
+                "CHY2"
+            ]
+        },
+        "COP": {
+            "__class__": "Set",
+            "data": [
+                "COP3",
+                "COP2",
+                "COP1"
+            ]
+        },
+        "CRGD": {
+            "__class__": "Set",
+            "data": [
+                "CRGD1",
+                "CRGD2"
+            ]
+        },
+        "ETOY": {
+            "__class__": "Set",
+            "data": [
+                "ETOY"
+            ]
+        },
+        "GDBE": {
+            "__class__": "Set",
+            "data": [
+                "GDBE"
+            ]
+        },
+        "GIBU": {
+            "__class__": "Set",
+            "data": [
+                "GIBU1",
+                "GIBU3",
+                "GIBU2"
+            ]
+        },
+        "GLA": {
+            "__class__": "Set",
+            "data": [
+                "GLA1",
+                "GLA2",
+                "GLA3"
+            ]
+        },
+        "MIES": {
+            "__class__": "Set",
+            "data": [
+                "MIES1",
+                "MIES2"
+            ]
+        },
+        "MOR": {
+            "__class__": "Set",
+            "data": [
+                "MOR4",
+                "MOR2",
+                "MOR1",
+                "MOR3"
+            ]
+        },
+        "NY": {
+            "__class__": "Set",
+            "data": [
+                "NY2",
+                "NY3",
+                "NY1"
+            ]
+        },
+        "PTC": {
+            "__class__": "Set",
+            "data": [
+                "PTC"
+            ]
+        },
+        "ROL": {
+            "__class__": "Set",
+            "data": [
+                "ROL2",
+                "ROL1"
+            ]
+        },
+        "STJ": {
+            "__class__": "Set",
+            "data": [
+                "STJ"
+            ]
+        },
+        "STP": {
+            "__class__": "Set",
+            "data": [
+                "STP1",
+                "STP3",
+                "STP2"
+            ]
+        },
+        "TAN": {
+            "__class__": "Set",
+            "data": [
+                "TAN"
+            ]
+        },
+        "TUI": {
+            "__class__": "Set",
+            "data": [
+                "TUI"
+            ]
+        },
+        "VSX": {
+            "__class__": "Set",
+            "data": [
+                "VSX2",
+                "VSX3",
+                "VSX1"
+            ]
+        }
+    },
+    "sektoren": {},
+    "strecken": {
+        "GE-LON": [
+            "GE",
+            "CHY",
+            "TUI",
+            "GDBE",
+            "CRGD",
+            "VSX",
+            "PTC",
+            "MIES",
+            "TAN",
+            "COP",
+            "NY",
+            "GLA",
+            "GIBU",
+            "ROL",
+            "ALL",
+            "ETOY",
+            "STP",
+            "MOR",
+            "STJ",
+            "LON"
+        ]
+    }
+}
