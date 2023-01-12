@@ -655,14 +655,17 @@ class Anlage:
 
         if not self.config_loaded:
             config_path = Path(config_path)
-            default_path = Path(__file__).parent.parent / "config"
+            default_path = Path(__file__).parent / "config"
             try:
                 logger.info(f"konfiguration laden von {config_path}")
                 self.load_config(config_path)
             except OSError:
-                logger.warning("fehler beim laden der anlagenkonfiguration")
+                logger.warning("keine anlagenkonfiguration gefunden")
                 logger.info(f"defaultkonfiguration laden von {default_path}")
-                self.load_config(default_path)
+                try:
+                    self.load_config(default_path)
+                except OSError:
+                    logger.warning("keine defaultkonfiguration gefunden")
             except ValueError as e:
                 logger.exception("fehlerhafte anlagenkonfiguration")
             self.config_loaded = True
