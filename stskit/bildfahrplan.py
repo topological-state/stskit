@@ -683,9 +683,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.update_actions()
 
     def nachbartrasse_ziel(self, trasse: Trasse, nachbar: Trasse) -> Tuple[int, ZugZielPlanung]:
-        bf1 = self.anlage.bahnsteigzuordnung[trasse.start.plan]
-        bf2s = self.anlage.bahnsteigzuordnung[nachbar.start.plan]
-        bf2z = self.anlage.bahnsteigzuordnung[nachbar.ziel.plan]
+        bf1 = self.anlage.gleiszuordnung[trasse.start.plan]
+        bf2s = self.anlage.gleiszuordnung[nachbar.start.plan]
+        bf2z = self.anlage.gleiszuordnung[nachbar.ziel.plan]
         if bf1 == bf2s:
             return 0, nachbar.start
         elif bf1 == bf2z:
