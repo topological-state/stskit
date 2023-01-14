@@ -633,6 +633,7 @@ class Anlage:
 
         # strecken-name -> gruppen-namen
         self.strecken: Dict[str, Tuple[str]] = {}
+        self.hauptstrecke: str = ""
 
         self._verbindungsstrecke_cache: Dict[Tuple[str, str], List[str]] = {}
 
@@ -1113,6 +1114,10 @@ class Anlage:
             self.strecken = d['strecken']
         except KeyError:
             logger.info("fehlende streckenkonfiguration")
+        try:
+            self.hauptstrecke = d['hauptstrecke']
+        except KeyError:
+            logger.info("keine hauptstrecke konfiguriert")
 
         self._update_gruppen_dict()
         self.config_loaded = True
@@ -1162,7 +1167,8 @@ class Anlage:
              'anschlussgruppen': self.anschlussgruppen,
              'sektoren': self.sektoren.get_config(),
              'anschlusslage': self.anschlusslage,
-             'strecken': self.strecken}
+             'strecken': self.strecken,
+             'hauptstrecke': self.hauptstrecke}
 
         if graphs:
             if self.signal_graph:

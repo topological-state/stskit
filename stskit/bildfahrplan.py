@@ -180,6 +180,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.display_canvas.mpl_connect("pick_event", self.on_pick)
         self.display_canvas.mpl_connect("resize_event", self.on_resize)
 
+        self.default_strecke_waehlen()
         self.update_actions()
 
     @property
@@ -225,16 +226,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         via = self._strecke_via
         nach = self._strecke_nach
 
-        try:
-            laengste_strecke = max(self.anlage.strecken.values(), key=len)
-        except ValueError:
-            laengste_strecke = []
-        if not von and len(laengste_strecke) >= 2:
-            von = laengste_strecke[0]
-        if not nach and len(laengste_strecke) >= 2:
-            nach = laengste_strecke[-1]
-
         gruppen_liste = sorted((gr for gr in self.anlage.gleisgruppen.keys()))
+        strecken_liste = sorted(self.anlage.strecken.keys())
+
         self.ui.von_combo.clear()
         self.ui.von_combo.addItems(gruppen_liste)
         self.ui.via_combo.clear()
@@ -243,7 +237,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.nach_combo.addItems(gruppen_liste)
         self.ui.vordefiniert_combo.clear()
         self.ui.vordefiniert_combo.addItems([""])
-        self.ui.vordefiniert_combo.addItems(self.anlage.strecken.keys())
+        self.ui.vordefiniert_combo.addItems(strecken_liste)
 
         if von:
             self.ui.von_combo.setCurrentText(von)
@@ -254,13 +248,53 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         if name:
             self.ui.vordefiniert_combo.setCurrentText(name)
 
+    def default_strecke_waehlen(self):
+        strecken = [(name, len(strecke)) for name, strecke in self.anlage.strecken.items()]
+        try:
+            laengste_strecke = max(strecken, key=lambda x: x[1])
+            laengste_strecke = laengste_strecke[0]
+        except (ValueError, IndexError):
+            laengste_strecke = ""
+
+        try:
+            self._strecken_name = self.anlage.hauptstrecke
+            strecke = self.anlage.strecken[self.anlage.hauptstrecke]
+        except KeyError:
+            self._strecken_name = ""
+            try:
+                strecke = self.anlage.strecken[laengste_strecke]
+            except KeyError:
+                strecke = []
+
+        self._strecke_von = strecke[0]
+        self._strecke_nach = strecke[-1]
+        self._strecke_via = ""
+
+        self.update_combos()
+
     @pyqtSlot()
     def strecke_selection_changed(self):
-        self._strecken_name = self.ui.vordefiniert_combo.currentText()
-        self._strecke_von = self.ui.von_combo.currentText()
-        self._strecke_via = self.ui.via_combo.currentText()
-        self._strecke_nach = self.ui.nach_combo.currentText()
-        self.update_strecke()
+        name = self.ui.vordefiniert_combo.currentText()
+        von = self.ui.von_combo.currentText()
+        via = self.ui.via_combo.currentText()
+        nach = self.ui.nach_combo.currentText()
+
+        changed = name != self._strecken_name or \
+            von != self._strecke_von or \
+            nach != self._strecke_nach or \
+            via != self._strecke_via
+
+        if changed:
+            self._strecken_name = name
+            self._strecke_von = von
+            self._strecke_via = via
+            self._strecke_nach = nach
+            self.update_strecke()
+
+            enable_detailwahl = not bool(name)
+            self.ui.von_combo.setEnabled(enable_detailwahl)
+            self.ui.via_combo.setEnabled(enable_detailwahl)
+            self.ui.nach_combo.setEnabled(enable_detailwahl)
 
     @pyqtSlot()
     def settings_button_clicked(self):
