@@ -660,12 +660,12 @@ class Anlage:
                 logger.info(f"konfiguration laden von {config_path}")
                 self.load_config(config_path)
             except OSError:
-                logger.warning("keine anlagenkonfiguration gefunden")
-                logger.info(f"defaultkonfiguration laden von {default_path}")
+                logger.warning("keine benutzerspezifische anlagenkonfiguration gefunden")
+                logger.info(f"beispielkonfiguration laden von {default_path}")
                 try:
                     self.load_config(default_path)
                 except OSError:
-                    logger.warning("keine defaultkonfiguration gefunden")
+                    logger.warning("keine beispielkonfiguration gefunden")
             except ValueError as e:
                 logger.exception("fehlerhafte anlagenkonfiguration")
             self.config_loaded = True
@@ -1035,6 +1035,28 @@ class Anlage:
     def _merge_gruppen(auto_gruppe: Dict[str, Set[str]], config_gruppe: Dict[str, Set[str]]) -> Dict[str, Set[str]]:
         return config_gruppe
 
+    def kompatibilitaet_pruefen(self, config_dict: Dict):
+        """
+        anlagenkompatibilität prüfen
+
+        prüft, ob eine gegebene anlagenkonfiguration kompatibel mit der aktuellen anlage ist.
+        die konfiguration wird als kompatibel bewertet, wenn alle konfigurierten gleise in der anlage vorkommen.
+        """
+
+        fehler = False
+        for gruppe, anschluesse in config_dict['anschlussgruppen'].items():
+            for anschluss in anschluesse:
+                if anschluss not in self.anschlusszuordnung:
+                    logger.error(f"anschluss {anschluss} nicht in der anlage")
+                    fehler = True
+        for gruppe, bahnsteige in config_dict['bahnsteiggruppen'].items():
+            for bahnsteig in bahnsteige:
+                if bahnsteig not in self.bahnsteigzuordnung:
+                    logger.error(f"bahnsteige {bahnsteig} nicht in der anlage")
+                    fehler = True
+        if fehler:
+            raise ValueError("konfiguration ist nicht mit der anlage kompatibel")
+
     def load_config(self, path: os.PathLike, load_graphs=False, ignore_version=False):
         """
 
@@ -1057,8 +1079,11 @@ class Anlage:
             assert d['_aid'] == self.anlage.aid
             if self.anlage.build != d['_build']:
                 logger.warning(f"unterschiedliche build-nummern (file: {d['_build']}, sim: {self.anlage.build})")
-                return
-
+                try:
+                    self.kompatibilitaet_pruefen(d)
+                except ValueError:
+                    print(f"inkompatible konfigurationsdatei - auto-konfiguration")
+                    logger.error(f"inkompatible konfigurationsdatei - auto-konfiguration")
             if '_version' not in d:
                 d['_version'] = 1
                 logger.warning(f"konfigurationsdatei ohne versionsangabe. nehme 1 an.")

@@ -6,7 +6,8 @@ block_cipher = None
 added_files = [
     ('stskit/mplstyle/dark.mplstyle', 'stskit/mplstyle' ),
     ('stskit/qt/*.ui', 'stskit/qt'),
-    ('stskit/qt/*.css', 'stskit/qt')
+    ('stskit/qt/*.css', 'stskit/qt'),
+    ('stskit/config/*.json', 'stskit/config')
     ]
 
 a = Analysis(
