@@ -292,8 +292,22 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.update_zuglauf(zug)
 
     def update_strecke(self):
+        """
+        streckenauswahl von einstellungen übernehmen.
+
+        die einstellungen stehen in _strecken_name, _strecke_von, etc.
+        wenn _strecken_name gesetzt ist, werden die anderen attribute nicht beachtet.
+
+        die methode aktualisert die streckenliste auf der einstellungsseite und den fenstertitel,
+        aktualisiert die werkzeugleiste,
+        stösst aber keine neuberechnung der grafik an.
+
+        :return: None
+        """
+
         if self._strecken_name in self.anlage.strecken:
             strecke = self.anlage.strecken[self._strecken_name]
+            titel = f"Bildfahrplan {self._strecken_name}"
         elif self._strecke_von and self._strecke_nach:
             if self._strecke_via:
                 von_gleis = self._strecke_von
@@ -307,8 +321,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                 von_gleis = self._strecke_von
                 nach_gleis = self._strecke_nach
                 strecke = self.anlage.verbindungsstrecke(von_gleis, nach_gleis)
+            titel = f"Bildfahrplan {self._strecke_von}-{self._strecke_nach}"
         else:
             strecke = []
+            titel = "Bildfahrplan (keine Strecke ausgewählt)"
 
         self.ui.strecke_list.clear()
         self.ui.strecke_list.addItems(strecke)
@@ -318,7 +334,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self._strecke = strecke
             self._distanz = [v / 60 for v in sd]
 
-        self.setWindowTitle(f"Bildfahrplan {self._strecke_von}-{self._strecke_nach}")
+        self.setWindowTitle(titel)
         self.update_actions()
 
     def update_zuglauf(self, zug: ZugDetailsPlanung):
