@@ -1,0 +1,260 @@
+{
+    "_aid": 494,
+    "_build": 5847,
+    "_name": "Olten",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "ABO": {
+            "__class__": "Set",
+            "data": [
+                "ABO 141",
+                "ABO 241"
+            ]
+        },
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung"
+            ]
+        },
+        "Baudienst": {
+            "__class__": "Set",
+            "data": [
+                "Baudienst"
+            ]
+        },
+        "DU 3/4": {
+            "__class__": "Set",
+            "data": [
+                "DU 301",
+                "DU 401"
+            ]
+        },
+        "DU 5/6": {
+            "__class__": "Set",
+            "data": [
+                "DU 601",
+                "DU 501"
+            ]
+        },
+        "EG": {
+            "__class__": "Set",
+            "data": [
+                "EG 651",
+                "EG 551"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "LF": {
+            "__class__": "Set",
+            "data": [
+                "LF 633"
+            ]
+        },
+        "OLRB": {
+            "__class__": "Set",
+            "data": [
+                "OLRB 589",
+                "OLRB 569"
+            ]
+        },
+        "P": {
+            "__class__": "Set",
+            "data": [
+                "P West",
+                "P Ost"
+            ]
+        },
+        "RTR": {
+            "__class__": "Set",
+            "data": [
+                "RTR 341",
+                "RTR 441"
+            ]
+        },
+        "TK": {
+            "__class__": "Set",
+            "data": [
+                "TK 130",
+                "TK 230"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "HAE": {
+            "__class__": "Set",
+            "data": [
+                "HAE2",
+                "HAE3",
+                "HAE4",
+                "HAE21",
+                "HAE22",
+                "HAE23"
+            ]
+        },
+        "HRK": {
+            "__class__": "Set",
+            "data": [
+                "HRK41",
+                "HRK42",
+                "HRK43",
+                "HRK44",
+                "HRK P West"
+            ]
+        },
+        "OL": {
+            "__class__": "Set",
+            "data": [
+                "OL1AB",
+                "OL1CD",
+                "OL2AB",
+                "OL2CD",
+                "OL3AB",
+                "OL3CD",
+                "OL4AB",
+                "OL4CD",
+                "OL7",
+                "OL8",
+                "OL9",
+                "OL10",
+                "OL11",
+                "OL12"
+            ]
+        },
+        "OLH": {
+            "__class__": "Set",
+            "data": [
+                "OLH2",
+                "OLH3",
+                "OLH4"
+            ]
+        },
+        "OLRB": {
+            "__class__": "Set",
+            "data": [
+                "OLRB330",
+                "OLRB331"
+            ]
+        },
+        "OLVL": {
+            "__class__": "Set",
+            "data": [
+                "OLVL285",
+                "OLVL286"
+            ]
+        },
+        "WBOL": {
+            "__class__": "Set",
+            "data": [
+                "WBOL1",
+                "WBOL2",
+                "WBOL3",
+                "WBOL4",
+                "WBOL41"
+            ]
+        }
+    },
+    "sektoren": {
+        "OL1": {
+            "__class__": "Set",
+            "data": [
+                "OL1CD",
+                "OL1AB"
+            ]
+        },
+        "OL2": {
+            "__class__": "Set",
+            "data": [
+                "OL2CD",
+                "OL2AB"
+            ]
+        },
+        "OL3": {
+            "__class__": "Set",
+            "data": [
+                "OL3CD",
+                "OL3AB"
+            ]
+        },
+        "OL4": {
+            "__class__": "Set",
+            "data": [
+                "OL4CD",
+                "OL4AB"
+            ]
+        }
+    },
+    "hauptstrecke": "EG-DU",
+    "strecken": {
+        "ABO-DU": [
+            "ABO",
+            "OL",
+            "DU 3/4"
+        ],
+        "ABO-TK": [
+            "ABO",
+            "OL",
+            "TK"
+        ],
+        "EG-DU": [
+            "EG",
+            "HRK",
+            "HAE",
+            "WBOL",
+            "OLH",
+            "OL",
+            "DU 5/6"
+        ],
+        "EG-LF": [
+            "EG",
+            "HRK",
+            "HAE",
+            "WBOL",
+            "WBOL",
+            "OLH",
+            "OL",
+            "LF"
+        ],
+        "EG-TK": [
+            "EG",
+            "HRK",
+            "HAE",
+            "WBOL",
+            "OLH",
+            "OL",
+            "TK"
+        ],
+        "RTR-DU": [
+            "RTR",
+            "OL",
+            "DU 3/4"
+        ],
+        "RTR-TK": [
+            "RTR",
+            "OL",
+            "TK"
+        ],
+        "TK-ABO": [
+            "TK",
+            "OL",
+            "ABO"
+        ],
+        "TK-DU": [
+            "TK",
+            "OLVL",
+            "DU 5/6"
+        ],
+        "DU-TK": [
+            "DU 5/6",
+            "OLVL",
+            "TK"
+        ]
+    }
+}

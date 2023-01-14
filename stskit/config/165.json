@@ -1,0 +1,121 @@
+{
+    "_aid": 165,
+    "_build": 5840,
+    "_name": "T\u00f6sstal",
+    "_region": "Z\u00fcrich und Umgebung",
+    "_version": 2,
+    "anschlussgruppen": {
+        "B\u00e4retswil": {
+            "__class__": "Set",
+            "data": [
+                "B\u00e4retswil"
+            ]
+        },
+        "Rikon": {
+            "__class__": "Set",
+            "data": [
+                "Rikon"
+            ]
+        },
+        "R\u00fcti": {
+            "__class__": "Set",
+            "data": [
+                "R\u00fcti ZH"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BMA": {
+            "__class__": "Set",
+            "data": [
+                "BMA1",
+                "BMA2"
+            ]
+        },
+        "DVZO": {
+            "__class__": "Set",
+            "data": [
+                "DVZO"
+            ]
+        },
+        "FI": {
+            "__class__": "Set",
+            "data": [
+                "FI1",
+                "FI2"
+            ]
+        },
+        "GIB": {
+            "__class__": "Set",
+            "data": [
+                "GIB"
+            ]
+        },
+        "RMZ": {
+            "__class__": "Set",
+            "data": [
+                "RMZ"
+            ]
+        },
+        "SD": {
+            "__class__": "Set",
+            "data": [
+                "SD2",
+                "SD1"
+            ]
+        },
+        "STG": {
+            "__class__": "Set",
+            "data": [
+                "STG"
+            ]
+        },
+        "TD": {
+            "__class__": "Set",
+            "data": [
+                "TD2",
+                "TD1"
+            ]
+        },
+        "TU": {
+            "__class__": "Set",
+            "data": [
+                "TU2",
+                "TU1"
+            ]
+        },
+        "WD": {
+            "__class__": "Set",
+            "data": [
+                "WD2",
+                "WD1"
+            ]
+        },
+        "WILA": {
+            "__class__": "Set",
+            "data": [
+                "WILA2",
+                "WILA1"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "Rikon-Rüti",
+    "strecken": {
+        "Rikon-Rüti": [
+            "Rikon",
+            "RMZ",
+            "TU",
+            "WILA",
+            "SD",
+            "BMA",
+            "STG",
+            "FI",
+            "GIB",
+            "WD",
+            "TD",
+            "R\u00fcti"
+        ]
+    }
+}

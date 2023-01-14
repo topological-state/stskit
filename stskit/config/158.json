@@ -1,0 +1,236 @@
+{
+    "_aid": 158,
+    "_build": 5840,
+    "_name": "Mainz Hbf",
+    "_region": "Rheinland-Pfalz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "36-38": {
+            "__class__": "Set",
+            "data": [
+                "36-38S",
+                "36-38N"
+            ]
+        },
+        "Abzw. Kostheim": {
+            "__class__": "Set",
+            "data": [
+                "Abzw. Kostheim"
+            ]
+        },
+        "Alzey": {
+            "__class__": "Set",
+            "data": [
+                "Alzey"
+            ]
+        },
+        "Bingen": {
+            "__class__": "Set",
+            "data": [
+                "Bingen"
+            ]
+        },
+        "Bischofsheim": {
+            "__class__": "Set",
+            "data": [
+                "Bischofsheim"
+            ]
+        },
+        "Gl. 39-45": {
+            "__class__": "Set",
+            "data": [
+                "Gl. 39-45"
+            ]
+        },
+        "Gl. 59-63": {
+            "__class__": "Set",
+            "data": [
+                "Gl. 59-63"
+            ]
+        },
+        "Industrie / Hafen": {
+            "__class__": "Set",
+            "data": [
+                "Industrie / Hafen"
+            ]
+        },
+        "Oppenheim": {
+            "__class__": "Set",
+            "data": [
+                "Oppenheim"
+            ]
+        },
+        "PA": {
+            "__class__": "Set",
+            "data": [
+                "PA Ineos"
+            ]
+        },
+        "Tankstelle": {
+            "__class__": "Set",
+            "data": [
+                "Tankstelle"
+            ]
+        },
+        "Wiesbaden Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Wiesbaden Hbf"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "MZ": {
+            "__class__": "Set",
+            "data": [
+                "MZ8",
+                "MZ11",
+                "MZ1B",
+                "MZ5B",
+                "MZ12",
+                "MZ13",
+                "MZ3A",
+                "MZ6B",
+                "MZ2A",
+                "MZ3B",
+                "MZ4A",
+                "MZ1A",
+                "MZ5A",
+                "MZ2B",
+                "MZ4B",
+                "MZ6A",
+                "MZ119",
+                "MZ158",
+                "MZ57",
+                "MZ58",
+                "MZ95"
+            ]
+        },
+        "MZB": {
+            "__class__": "Set",
+            "data": [
+                "MZB801",
+                "MZB802"
+            ]
+        },
+        "MZM": {
+            "__class__": "Set",
+            "data": [
+                "MZM605",
+                "MZM603",
+                "MZM604",
+                "MZM601",
+                "MZM602"
+            ]
+        },
+        "MZN": {
+            "__class__": "Set",
+            "data": [
+                "MZN702",
+                "MZN",
+                "MZN701"
+            ]
+        },
+        "MZS": {
+            "__class__": "Set",
+            "data": [
+                "MZS402",
+                "MZS403",
+                "MZS401",
+                "MZS404"
+            ]
+        }
+    },
+    "sektoren": {
+        "MZ1": {
+            "__class__": "Set",
+            "data": [
+                "MZ1A",
+                "MZ1B"
+            ]
+        },
+        "MZ2": {
+            "__class__": "Set",
+            "data": [
+                "MZ2A",
+                "MZ2B"
+            ]
+        },
+        "MZ3": {
+            "__class__": "Set",
+            "data": [
+                "MZ3B",
+                "MZ3A"
+            ]
+        },
+        "MZ4": {
+            "__class__": "Set",
+            "data": [
+                "MZ4B",
+                "MZ4A"
+            ]
+        },
+        "MZ5": {
+            "__class__": "Set",
+            "data": [
+                "MZ5A",
+                "MZ5B"
+            ]
+        },
+        "MZ6": {
+            "__class__": "Set",
+            "data": [
+                "MZ6B",
+                "MZ6A"
+            ]
+        }
+    },
+    "hauptstrecke": "Oppenheim-Bingen",
+    "strecken": {
+        "Bischofsheim-Abzw. Kostheim": [
+            "Bischofsheim",
+            "MZS",
+            "MZ",
+            "MZN",
+            "Abzw. Kostheim"
+        ],
+        "Bischofsheim-Bingen": [
+            "Bischofsheim",
+            "MZS",
+            "MZ",
+            "MZM",
+            "MZB",
+            "Bingen"
+        ],
+        "Bischofsheim-Wiesbaden Hbf": [
+            "Bischofsheim",
+            "MZS",
+            "MZ",
+            "MZN",
+            "Wiesbaden Hbf"
+        ],
+        "Oppenheim-Abzw. Kostheim": [
+            "Oppenheim",
+            "MZS",
+            "MZ",
+            "MZN",
+            "Abzw. Kostheim"
+        ],
+        "Oppenheim-Bingen": [
+            "Oppenheim",
+            "MZS",
+            "MZ",
+            "MZM",
+            "MZB",
+            "Bingen"
+        ],
+        "Oppenheim-Wiesbaden Hbf": [
+            "Oppenheim",
+            "MZS",
+            "MZ",
+            "MZN",
+            "Wiesbaden Hbf"
+        ]
+    }
+}

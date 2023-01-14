@@ -1,0 +1,214 @@
+{
+    "_aid": 374,
+    "_build": 5840,
+    "_name": "Seeland Ost",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Aarberg": {
+            "__class__": "Set",
+            "data": [
+                "Aarberg"
+            ]
+        },
+        "BI": {
+            "__class__": "Set",
+            "data": [
+                "BI 228",
+                "BI 128"
+            ]
+        },
+        "LGUT": {
+            "__class__": "Set",
+            "data": [
+                "LGUT 108",
+                "LGUT 708",
+                "LGUT 208"
+            ]
+        },
+        "LY61": {
+            "__class__": "Set",
+            "data": [
+                "LY61"
+            ]
+        },
+        "MAT": {
+            "__class__": "Set",
+            "data": [
+                "MAT 394",
+                "MAT 494"
+            ]
+        },
+        "Oberzollikofen": {
+            "__class__": "Set",
+            "data": [
+                "Oberzollikofen"
+            ]
+        },
+        "R\u00fcti": {
+            "__class__": "Set",
+            "data": [
+                "R\u00fcti bei B\u00fcren"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BGG": {
+            "__class__": "Set",
+            "data": [
+                "BGG3",
+                "BGG1",
+                "BGG2"
+            ]
+        },
+        "BUER": {
+            "__class__": "Set",
+            "data": [
+                "BUER"
+            ]
+        },
+        "BUS": {
+            "__class__": "Set",
+            "data": [
+                "BUS1",
+                "BUS3",
+                "BUS2"
+            ]
+        },
+        "DON": {
+            "__class__": "Set",
+            "data": [
+                "DON"
+            ]
+        },
+        "LY": {
+            "__class__": "Set",
+            "data": [
+                "LY4",
+                "LY34",
+                "LY5",
+                "LY53",
+                "LY52",
+                "LY1",
+                "LY54",
+                "LY56",
+                "LY6",
+                "LY55",
+                "LY2",
+                "LY64",
+                "LY3"
+            ]
+        },
+        "MUEB": {
+            "__class__": "Set",
+            "data": [
+                "MUEB1",
+                "MUEB2"
+            ]
+        },
+        "SCHB": {
+            "__class__": "Set",
+            "data": [
+                "SCHB2",
+                "SCHB3",
+                "SCHB4"
+            ]
+        },
+        "SCUE": {
+            "__class__": "Set",
+            "data": [
+                "SCUE3",
+                "SCUE2"
+            ]
+        },
+        "STU": {
+            "__class__": "Set",
+            "data": [
+                "STU"
+            ]
+        },
+        "SUB": {
+            "__class__": "Set",
+            "data": [
+                "SUB4",
+                "SUB3",
+                "SUB2"
+            ]
+        },
+        "ZOL": {
+            "__class__": "Set",
+            "data": [
+                "ZOL3 lang",
+                "ZOL3",
+                "ZOL4",
+                "ZOL2 lang",
+                "ZOL2",
+                "ZOL1",
+                "ZOL1 lang"
+            ]
+        }
+    },
+    "sektoren": {
+        "ZOL1": {
+            "__class__": "Set",
+            "data": [
+                "ZOL1",
+                "ZOL1 lang"
+            ]
+        },
+        "ZOL2": {
+            "__class__": "Set",
+            "data": [
+                "ZOL2",
+                "ZOL2 lang"
+            ]
+        },
+        "ZOL3": {
+            "__class__": "Set",
+            "data": [
+                "ZOL3",
+                "ZOL3 lang"
+            ]
+        },
+        "ZOL4": {
+            "__class__": "Set",
+            "data": [
+                "ZOL4",
+                "ZOL4 lang"
+            ]
+        }
+    },
+    "hauptstrecke": "LGUT-BI",
+    "strecken": {
+        "LGUT-BI": [
+            "LGUT",
+            "ZOL",
+            "MUEB",
+            "SCUE",
+            "SUB",
+            "LY",
+            "BUS",
+            "STU",
+            "BGG",
+            "BI"
+        ],
+        "LGUT-MAT": [
+            "LGUT",
+            "ZOL",
+            "SCHB",
+            "MAT"
+        ],
+        "LGUT-BUER": [
+            "LGUT",
+            "ZOL",
+            "MUEB",
+            "SCUE",
+            "SUB",
+            "LY",
+            "BUS",
+            "DON",
+            "BUER"
+        ]
+    }
+}

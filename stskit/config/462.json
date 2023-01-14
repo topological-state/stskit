@@ -53,14 +53,14 @@
                 "ZSEB 856"
             ]
         },
-        "ZUE x35": {
+        "ZUE 1/2": {
             "__class__": "Set",
             "data": [
                 "ZUE 235",
                 "ZUE 135"
             ]
         },
-        "ZUE x02": {
+        "ZUE 3/4": {
             "__class__": "Set",
             "data": [
                 "ZUE 402",
@@ -98,5 +98,49 @@
         }
     },
     "sektoren": {},
-    "strecken": {}
+    "hauptstrecke": "ZFH-ZWIP",
+    "strecken": {
+        "ZFH-ZWIP": [
+            "ZFH",
+            "ZOER",
+            "ZWIP",
+            "ZUE 3/4"
+        ],
+        "ZFH-ZLOE": [
+            "ZFH",
+            "ZOER",
+            "ZUE 1/2"
+        ],
+        "ZFH-ZHDB": [
+            "ZFH",
+            "ZOER",
+            "ZHDB"
+        ],
+        "WS-ZLOE": [
+            "WS",
+            "ZOER",
+            "ZUE 1/2"
+        ],
+        "KL-ZHDB": [
+            "KL",
+            "ZOER",
+            "ZHDB"
+        ],
+        "GLB-ZWIP": [
+            "GLB",
+            "ZOER",
+            "ZWIP",
+            "ZUE 3/4"
+        ],
+        "GLB-ZLOE": [
+            "GLB",
+            "ZOER",
+            "ZUE 1/2"
+        ],
+        "GLB-ZHDB": [
+            "GLB",
+            "ZOER",
+            "ZHDB"
+        ]
+    }
 }

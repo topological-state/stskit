@@ -1,0 +1,168 @@
+{
+    "_aid": 106,
+    "_build": 5840,
+    "_name": "Thun",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Brenzikofen": {
+            "__class__": "Set",
+            "data": [
+                "Brenzikofen"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Spiez": {
+            "__class__": "Set",
+            "data": [
+                "Spiez 308",
+                "Spiez 408"
+            ]
+        },
+        "TH 159": {
+            "__class__": "Set",
+            "data": [
+                "TH 159"
+            ]
+        },
+        "TH 759": {
+            "__class__": "Set",
+            "data": [
+                "TH 759"
+            ]
+        },
+        "TH 150": {
+            "__class__": "Set",
+            "data": [
+                "TH 150"
+            ]
+        },
+        "TH 149": {
+            "__class__": "Set",
+            "data": [
+                "TH 149"
+            ]
+        },
+        "Uetendorf": {
+            "__class__": "Set",
+            "data": [
+                "Uetendorf"
+            ]
+        },
+        "Uttigen": {
+            "__class__": "Set",
+            "data": [
+                "Uttigen 422",
+                "Uttigen 322"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "EIN": {
+            "__class__": "Set",
+            "data": [
+                "EIN 2",
+                "EIN 1"
+            ]
+        },
+        "GW": {
+            "__class__": "Set",
+            "data": [
+                "GW 1",
+                "GW 2",
+                "GW 3"
+            ]
+        },
+        "HMB": {
+            "__class__": "Set",
+            "data": [
+                "HMB3",
+                "HMB2"
+            ]
+        },
+        "LAED": {
+            "__class__": "Set",
+            "data": [
+                "LAED"
+            ]
+        },
+        "STEF": {
+            "__class__": "Set",
+            "data": [
+                "STEF3",
+                "STEF2"
+            ]
+        },
+        "SWB": {
+            "__class__": "Set",
+            "data": [
+                "SWB"
+            ]
+        },
+        "TH": {
+            "__class__": "Set",
+            "data": [
+                "TH 216",
+                "TH 1",
+                "TH 146",
+                "TH 239",
+                "TH 142",
+                "TH 143",
+                "TH 2",
+                "TH 3",
+                "TH 5",
+                "TH 141",
+                "TH 240",
+                "TH 16",
+                "TH 144",
+                "TH 4",
+                "TH 145",
+                "TH 18",
+                "TH 233"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "Uttigen-Spiez",
+    "strecken": {
+        "Uttigen-Spiez": [
+            "Uttigen",
+            "TH",
+            "GW",
+            "EIN",
+            "Spiez"
+        ],
+        "Brenzikofen-Spiez": [
+            "Brenzikofen",
+            "HMB",
+            "LAED",
+            "STEF",
+            "SWB",
+            "TH",
+            "GW",
+            "EIN",
+            "Spiez"
+        ],
+        "Brenzikofen-TH": [
+            "Brenzikofen",
+            "HMB",
+            "LAED",
+            "STEF",
+            "SWB",
+            "TH"
+        ],
+        "Uetendorf-Spiez": [
+            "Uetendorf",
+            "TH",
+            "GW",
+            "EIN",
+            "Spiez"
+        ]
+    }
+}

@@ -1,0 +1,357 @@
+{
+    "_aid": 47,
+    "_build": 5840,
+    "_name": "M\u00fchlacker",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abst": {
+            "__class__": "Set",
+            "data": [
+                "Abst."
+            ]
+        },
+        "Bruchsal": {
+            "__class__": "Set",
+            "data": [
+                "Bruchsal"
+            ]
+        },
+        "Bruchsal Güter": {
+            "__class__": "Set",
+            "data": [
+                "Bruchsal G\u00fcter"
+            ]
+        },
+        "Eppingen": {
+            "__class__": "Set",
+            "data": [
+                "Eppingen"
+            ]
+        },
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Gbf"
+            ]
+        },
+        "Gr\u00f6tzingen": {
+            "__class__": "Set",
+            "data": [
+                "Gr\u00f6tzingen"
+            ]
+        },
+        "G\u00fcter": {
+            "__class__": "Set",
+            "data": [
+                "G\u00fcter"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Mosolf": {
+            "__class__": "Set",
+            "data": [
+                "Mosolf"
+            ]
+        },
+        "Pforzheim": {
+            "__class__": "Set",
+            "data": [
+                "Pforzheim"
+            ]
+        },
+        "Vaihingen": {
+            "__class__": "Set",
+            "data": [
+                "Vaihingen"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "RBBC": {
+            "__class__": "Set",
+            "data": [
+                "RBBC1",
+                "RBBC2"
+            ]
+        },
+        "RBRE": {
+            "__class__": "Set",
+            "data": [
+                "RBRE"
+            ]
+        },
+        "RBRF": {
+            "__class__": "Set",
+            "data": [
+                "RBRF"
+            ]
+        },
+        "RBT": {
+            "__class__": "Set",
+            "data": [
+                "RBT6",
+                "RBT1",
+                "RBT7",
+                "RBT2",
+                "RBT5",
+                "RBT3",
+                "RBT4",
+                "RBT Wende"
+            ]
+        },
+        "RBTD": {
+            "__class__": "Set",
+            "data": [
+                "RBTD"
+            ]
+        },
+        "RBTI": {
+            "__class__": "Set",
+            "data": [
+                "RBTI"
+            ]
+        },
+        "RBTK": {
+            "__class__": "Set",
+            "data": [
+                "RBTK"
+            ]
+        },
+        "RBTM": {
+            "__class__": "Set",
+            "data": [
+                "RBTM"
+            ]
+        },
+        "RBTN": {
+            "__class__": "Set",
+            "data": [
+                "RBTN"
+            ]
+        },
+        "RBTR": {
+            "__class__": "Set",
+            "data": [
+                "RBTR"
+            ]
+        },
+        "RBTS": {
+            "__class__": "Set",
+            "data": [
+                "RBTS"
+            ]
+        },
+        "RBTW": {
+            "__class__": "Set",
+            "data": [
+                "RBTW"
+            ]
+        },
+        "RGO": {
+            "__class__": "Set",
+            "data": [
+                "RGO"
+            ]
+        },
+        "RGOE": {
+            "__class__": "Set",
+            "data": [
+                "RGOE1",
+                "RGOE2"
+            ]
+        },
+        "RGOI": {
+            "__class__": "Set",
+            "data": [
+                "RGOI"
+            ]
+        },
+        "RGOS": {
+            "__class__": "Set",
+            "data": [
+                "RGOS"
+            ]
+        },
+        "RHI": {
+            "__class__": "Set",
+            "data": [
+                "RHI"
+            ]
+        },
+        "RHIO": {
+            "__class__": "Set",
+            "data": [
+                "RHIO"
+            ]
+        },
+        "RHSM": {
+            "__class__": "Set",
+            "data": [
+                "RHSM"
+            ]
+        },
+        "TEZ": {
+            "__class__": "Set",
+            "data": [
+                "TEZ"
+            ]
+        },
+        "TIL": {
+            "__class__": "Set",
+            "data": [
+                "TIL1",
+                "TIL2"
+            ]
+        },
+        "TKNK": {
+            "__class__": "Set",
+            "data": [
+                "TKNK"
+            ]
+        },
+        "TM": {
+            "__class__": "Set",
+            "data": [
+                "TM3",
+                "TM2",
+                "TM6",
+                "TM1",
+                "TM4",
+                "TM5",
+                "TM12",
+                "TM31",
+                "TM32",
+                "TM11",
+                "TM38",
+                "TM50",
+                "TM70",
+                "TM72",
+                "TM71",
+                "TM80"
+            ]
+        },
+        "TMBS": {
+            "__class__": "Set",
+            "data": [
+                "TMBS2",
+                "TMBS1"
+            ]
+        },
+        "TMRO": {
+            "__class__": "Set",
+            "data": [
+                "TMRO"
+            ]
+        },
+        "TMW": {
+            "__class__": "Set",
+            "data": [
+                "TMW1",
+                "TMW2",
+                "TMW41",
+                "TMW3"
+            ]
+        },
+        "TOED": {
+            "__class__": "Set",
+            "data": [
+                "TOED"
+            ]
+        },
+        "TOET": {
+            "__class__": "Set",
+            "data": [
+                "TOET"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "Bruchsal-Vaihingen",
+    "strecken": {
+        "Bruchsal-Vaihingen": [
+            "Bruchsal",
+            "RBRE",
+            "RBRF",
+            "RHIO",
+            "RHI",
+            "RHSM",
+            "RGOS",
+            "RGO",
+            "RBTD",
+            "RBT",
+            "RBTN",
+            "RBTI",
+            "TKNK",
+            "TOED",
+            "TMW",
+            "TOET",
+            "TM",
+            "TMRO",
+            "TIL",
+            "Vaihingen"
+        ],
+        "Bruchsal-Eppingen": [
+            "Bruchsal",
+            "RBRE",
+            "RBRF",
+            "RHIO",
+            "RHI",
+            "RHSM",
+            "RGOS",
+            "RGO",
+            "RBTD",
+            "RBT",
+            "RBTM",
+            "RBTW",
+            "RBTS",
+            "RBTK",
+            "RGOE",
+            "RGOI",
+            "RBBC",
+            "Eppingen"
+        ],
+        "Gr\u00f6tzingen-Eppingen": [
+            "Gr\u00f6tzingen",
+            "RBTR",
+            "RBT",
+            "RBTM",
+            "RBTW",
+            "RBTS",
+            "RBTK",
+            "RGOE",
+            "RGOI",
+            "RBBC",
+            "Eppingen"
+        ],
+        "Gr\u00f6tzingen-Vaihingen": [
+            "Gr\u00f6tzingen",
+            "RBTR",
+            "RBT",
+            "RBTN",
+            "RBTI",
+            "TKNK",
+            "TOED",
+            "TMW",
+            "TOET",
+            "TM",
+            "TMRO",
+            "TIL",
+            "Vaihingen"
+        ],
+        "Pforzheim-Vaihingen": [
+            "Pforzheim",
+            "TEZ",
+            "TM",
+            "TMRO",
+            "TIL",
+            "Vaihingen"
+        ]
+    }
+}

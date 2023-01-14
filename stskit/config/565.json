@@ -163,6 +163,7 @@
         }
     },
     "sektoren": {},
+    "hauptstrecke": "BY-GOR",
     "strecken": {
         "BY-GOR": [
             "BY",

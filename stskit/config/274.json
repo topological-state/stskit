@@ -1,0 +1,215 @@
+{
+    "_aid": 274,
+    "_build": 5840,
+    "_name": "Frankfurt Hbf",
+    "_region": "Rhein-Main",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstell 16x": {
+            "__class__": "Set",
+            "data": [
+                "Abstell 161",
+                "Abstell 160"
+            ]
+        },
+        "Abstell 38x": {
+            "__class__": "Set",
+            "data": [
+                "Abstell 389",
+                "Abstell 387",
+                "Abstell 388"
+            ]
+        },
+        "Abstell 55x": {
+            "__class__": "Set",
+            "data": [
+                "Abstell 555"
+            ]
+        },
+        "Abzw Gutleuthof": {
+            "__class__": "Set",
+            "data": [
+                "Abzw Gutleuthof"
+            ]
+        },
+        "Au\u00dfenbahnhof": {
+            "__class__": "Set",
+            "data": [
+                "Au\u00dfenbahnhof"
+            ]
+        },
+        "EOW 110": {
+            "__class__": "Set",
+            "data": [
+                "EOW 110"
+            ]
+        },
+        "Frankfurt S\u00fcd": {
+            "__class__": "Set",
+            "data": [
+                "Frankfurt S\u00fcd B",
+                "Frankfurt S\u00fcd A"
+            ]
+        },
+        "Galluswarte": {
+            "__class__": "Set",
+            "data": [
+                "Galluswarte"
+            ]
+        },
+        "Hoch-Tief 1/2": {
+            "__class__": "Set",
+            "data": [
+                "Hoch-Tief 2",
+                "Hoch-Tief 1"
+            ]
+        },
+        "Hoch-Tief 3/4": {
+            "__class__": "Set",
+            "data": [
+                "Hoch-Tief 4",
+                "Hoch-Tief 3"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Hbf": {
+            "__class__": "Set",
+            "data": [
+                "22",
+                "16",
+                "4",
+                "24",
+                "15",
+                "6",
+                "5",
+                "7",
+                "12",
+                "19",
+                "3",
+                "10",
+                "9",
+                "21",
+                "17",
+                "14",
+                "20",
+                "1",
+                "11",
+                "1a",
+                "13",
+                "2",
+                "8",
+                "23",
+                "18"
+            ]
+        },
+        "109": {
+            "__class__": "Set",
+            "data": [
+                "130",
+                "110",
+                "140",
+                "109",
+                "120"
+            ]
+        },
+        "122": {
+            "__class__": "Set",
+            "data": [
+                "172",
+                "122",
+                "169",
+                "171"
+            ]
+        },
+        "125": {
+            "__class__": "Set",
+            "data": [
+                "125"
+            ]
+        },
+        "134": {
+            "__class__": "Set",
+            "data": [
+                "261",
+                "256",
+                "258",
+                "134",
+                "136",
+                "257",
+                "135"
+            ]
+        },
+        "360": {
+            "__class__": "Set",
+            "data": [
+                "451",
+                "371",
+                "375",
+                "360",
+                "441",
+                "374",
+                "372",
+                "373"
+            ]
+        },
+        "379": {
+            "__class__": "Set",
+            "data": [
+                "379",
+                "499"
+            ]
+        },
+        "380": {
+            "__class__": "Set",
+            "data": [
+                "390",
+                "392",
+                "382",
+                "381",
+                "380",
+                "393",
+                "391"
+            ]
+        },
+        "435": {
+            "__class__": "Set",
+            "data": [
+                "496",
+                "495",
+                "444",
+                "464",
+                "435",
+                "577",
+                "484",
+                "436",
+                "437",
+                "474",
+                "438",
+                "567",
+                "547"
+            ]
+        },
+        "541": {
+            "__class__": "Set",
+            "data": [
+                "543",
+                "544",
+                "542",
+                "545",
+                "541",
+                "546"
+            ]
+        },
+        "554": {
+            "__class__": "Set",
+            "data": [
+                "565",
+                "554"
+            ]
+        }
+    },
+    "sektoren": {},
+    "strecken": {}
+}

@@ -187,6 +187,7 @@
             ]
         }
     },
+    "hauptstrecke": "MDE-Como",
     "strecken": {
         "MDE-Como": [
             "MDE",

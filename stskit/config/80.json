@@ -1,0 +1,229 @@
+{
+    "_aid": 80,
+    "_build": 5845,
+    "_name": "Osnabr\u00fcck Hbf",
+    "_region": "M\u00fcnsterland",
+    "_version": 2,
+    "anschlussgruppen": {
+        "": {
+            "__class__": "Set",
+            "data": [
+                "951-970"
+            ]
+        },
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW"
+            ]
+        },
+        "B\u00fcnde": {
+            "__class__": "Set",
+            "data": [
+                "B\u00fcnde"
+            ]
+        },
+        "Diepholz": {
+            "__class__": "Set",
+            "data": [
+                "Diepholz"
+            ]
+        },
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Gbf 2",
+                "Gbf 1",
+                "Gbf 3"
+            ]
+        },
+        "Hafen": {
+            "__class__": "Set",
+            "data": [
+                "Hafen"
+            ]
+        },
+        "H\u00f6rne": {
+            "__class__": "Set",
+            "data": [
+                "H\u00f6rne 3",
+                "H\u00f6rne 2",
+                "H\u00f6rne 1"
+            ]
+        },
+        "Kl\u00f6ckner": {
+            "__class__": "Set",
+            "data": [
+                "Kl\u00f6ckner"
+            ]
+        },
+        "Oldenburg": {
+            "__class__": "Set",
+            "data": [
+                "Oldenburg"
+            ]
+        },
+        "Railion": {
+            "__class__": "Set",
+            "data": [
+                "Railion"
+            ]
+        },
+        "Rheine": {
+            "__class__": "Set",
+            "data": [
+                "Rheine"
+            ]
+        },
+        "Schoeller": {
+            "__class__": "Set",
+            "data": [
+                "Schoeller"
+            ]
+        },
+        "Stadt": {
+            "__class__": "Set",
+            "data": [
+                "Stadt 2",
+                "Stadt 1"
+            ]
+        },
+        "Stadtwerke": {
+            "__class__": "Set",
+            "data": [
+                "Stadtwerke"
+            ]
+        },
+        "UW": {
+            "__class__": "Set",
+            "data": [
+                "UW"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Bremer": {
+            "__class__": "Set",
+            "data": [
+                "Bremer"
+            ]
+        },
+        "HLRI": {
+            "__class__": "Set",
+            "data": [
+                "HLRI1",
+                "HLRI2",
+                "HLRI3"
+            ]
+        },
+        "HOHT": {
+            "__class__": "Set",
+            "data": [
+                "HOHT"
+            ]
+        },
+        "Klus": {
+            "__class__": "Set",
+            "data": [
+                "Klus"
+            ]
+        },
+        "M\u00fcnster": {
+            "__class__": "Set",
+            "data": [
+                "M\u00fcnster"
+            ]
+        },
+        "Osnabr\u00fcck oben": {
+            "__class__": "Set",
+            "data": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "7",
+                "8"
+            ]
+        },
+        "Osnabr\u00fcck 8x": {
+            "__class__": "Set",
+            "data": [
+                "80",
+                "81",
+                "82",
+                "83",
+                "111",
+                "112"
+            ]
+        },
+        "Osnabr\u00fcck unten": {
+            "__class__": "Set",
+            "data": [
+                "11",
+                "12",
+                "13",
+                "14",
+                "17",
+                "18",
+                "524",
+                "525"
+            ]
+        },
+        "Osnabr\u00fcck 15x": {
+            "__class__": "Set",
+            "data": [
+                "149",
+                "150",
+                "152",
+                "158"
+            ]
+        },
+        "Schinkel": {
+            "__class__": "Set",
+            "data": [
+                "Schinkel"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "Rheine-B\u00fcnde",
+    "strecken": {
+        "H\u00f6rne-B\u00fcnde": [
+            "H\u00f6rne",
+            "Osnabr\u00fcck oben",
+            "Schinkel",
+            "HLRI",
+            "B\u00fcnde"
+        ],
+        "H\u00f6rne-Diepholz": [
+            "H\u00f6rne",
+            "Osnabr\u00fcck oben",
+            "Osnabr\u00fcck 8x",
+            "Diepholz"
+        ],
+        "Oldenburg-B\u00fcnde": [
+            "Oldenburg",
+            "HOHT",
+            "Osnabr\u00fcck unten",
+            "Osnabr\u00fcck 15x",
+            "HLRI",
+            "B\u00fcnde"
+        ],
+        "Oldenburg-Diepholz": [
+            "Oldenburg",
+            "HOHT",
+            "Osnabr\u00fcck",
+            "Diepholz"
+        ],
+        "Rheine-B\u00fcnde": [
+            "Rheine",
+            "HOHT",
+            "Osnabr\u00fcck unten",
+            "Osnabr\u00fcck 15x",
+            "HLRI",
+            "B\u00fcnde"
+        ]
+    }
+}

@@ -1,0 +1,231 @@
+{
+    "_aid": 401,
+    "_build": 5840,
+    "_name": "R\u00fcsselsheim",
+    "_region": "Rhein-Main",
+    "_version": 2,
+    "anschlussgruppen": {
+        "FF-Stadion": {
+            "__class__": "Set",
+            "data": [
+                "FF-Stadion"
+            ]
+        },
+        "Flughafen Fern": {
+            "__class__": "Set",
+            "data": [
+                "Flughafen Fern"
+            ]
+        },
+        "Flughafen Regio": {
+            "__class__": "Set",
+            "data": [
+                "Flughafen Regio"
+            ]
+        },
+        "Limburg SFS": {
+            "__class__": "Set",
+            "data": [
+                "Limburg SFS"
+            ]
+        },
+        "Mz-Bischofsheim": {
+            "__class__": "Set",
+            "data": [
+                "Mz-Bischofsheim"
+            ]
+        },
+        "Opelwerk": {
+            "__class__": "Set",
+            "data": [
+                "Opelwerk"
+            ]
+        },
+        "Wiesbaden": {
+            "__class__": "Set",
+            "data": [
+                "Wiesbaden"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "FBRM": {
+            "__class__": "Set",
+            "data": [
+                "FBRM"
+            ]
+        },
+        "FBRS": {
+            "__class__": "Set",
+            "data": [
+                "FBRS"
+            ]
+        },
+        "FCX": {
+            "__class__": "Set",
+            "data": [
+                "FCX"
+            ]
+        },
+        "FIDS": {
+            "__class__": "Set",
+            "data": [
+                "FIDS"
+            ]
+        },
+        "FKCH": {
+            "__class__": "Set",
+            "data": [
+                "FKCH303",
+                "FKCH304"
+            ]
+        },
+        "FKCH BBf": {
+            "__class__": "Set",
+            "data": [
+                "FKCH306",
+                "FKCH305",
+                "FKCH301",
+                "FKCH302"
+            ]
+        },
+        "FMOH": {
+            "__class__": "Set",
+            "data": [
+                "FMOH"
+            ]
+        },
+        "FMOW": {
+            "__class__": "Set",
+            "data": [
+                "FMOW"
+            ]
+        },
+        "FRA": {
+            "__class__": "Set",
+            "data": [
+                "FRA3",
+                "FRA1",
+                "FRA1L",
+                "FRA3L",
+                "FRA2"
+            ]
+        },
+        "FRUE": {
+            "__class__": "Set",
+            "data": [
+                "FRUE2L",
+                "FRUE2",
+                "FRUE1",
+                "FRUE3L",
+                "FRUE3"
+            ]
+        },
+        "FRUO": {
+            "__class__": "Set",
+            "data": [
+                "FRUO28",
+                "FRUO28L",
+                "FRUO129",
+                "FRUO25",
+                "FRUO24",
+                "FRUO29L",
+                "FRUO128",
+                "FRUO31",
+                "FRUO22",
+                "FRUO27",
+                "FRUO29",
+                "FRUO32",
+                "FRUO23",
+                "FRUO30"
+            ]
+        }
+    },
+    "sektoren": {
+        "FRA1": {
+            "__class__": "Set",
+            "data": [
+                "FRA1",
+                "FRA1L"
+            ]
+        },
+        "FRA3": {
+            "__class__": "Set",
+            "data": [
+                "FRA3L",
+                "FRA3"
+            ]
+        },
+        "FRUE2": {
+            "__class__": "Set",
+            "data": [
+                "FRUE2L",
+                "FRUE2"
+            ]
+        },
+        "FRUE3": {
+            "__class__": "Set",
+            "data": [
+                "FRUE3L",
+                "FRUE3"
+            ]
+        },
+        "FRUO28": {
+            "__class__": "Set",
+            "data": [
+                "FRUO28",
+                "FRUO28L"
+            ]
+        },
+        "FRUO29": {
+            "__class__": "Set",
+            "data": [
+                "FRUO29L",
+                "FRUO29"
+            ]
+        }
+    },
+    "hauptstrecke": "Bischofsheim-Flughafen Regio",
+    "strecken": {
+        "Bischofsheim-Flughafen Regio": [
+            "Mz-Bischofsheim",
+            "FRUO",
+            "FRUE",
+            "FRA",
+            "FMOW",
+            "FBRS",
+            "FKCH BBf",
+            "FKCH",
+            "Flughafen Regio"
+        ],
+        "Bischofsheim-Stadion": [
+            "Mz-Bischofsheim",
+            "FRUO",
+            "FRUE",
+            "FRA",
+            "FMOW",
+            "FBRS",
+            "FKCH BBf",
+            "FKCH",
+            "FF-Stadion"
+        ],
+        "Bischofsheim-Flughafen Fern": [
+            "Mz-Bischofsheim",
+            "FRUO",
+            "FRUE",
+            "FRA",
+            "FMOW",
+            "FMOH",
+            "Flughafen Fern"
+        ],
+        "Limburg SFS-Flughafen Fern": [
+            "Limburg SFS",
+            "FIDS",
+            "FBRM",
+            "FCX",
+            "FMOH",
+            "Flughafen Fern"
+        ]
+    }
+}

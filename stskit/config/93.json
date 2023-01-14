@@ -1,0 +1,268 @@
+{
+    "_aid": 93,
+    "_build": 5840,
+    "_name": "S-Bahn Stammstrecke",
+    "_region": "Rhein-Main",
+    "_version": 2,
+    "anschlussgruppen": {
+        "391-392": {
+            "__class__": "Set",
+            "data": [
+                "391-392"
+            ]
+        },
+        "FF Galluswarte": {
+            "__class__": "Set",
+            "data": [
+                "FF Galluswarte"
+            ]
+        },
+        "FF HochTief": {
+            "__class__": "Set",
+            "data": [
+                "FF HochTief"
+            ]
+        },
+        "FF-S\u00fcd Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "FF-S\u00fcd Abstellung"
+            ]
+        },
+        "Hanau": {
+            "__class__": "Set",
+            "data": [
+                "Hanau"
+            ]
+        },
+        "Neu Isenburg": {
+            "__class__": "Set",
+            "data": [
+                "Neu Isenburg ",
+                "Neu Isenburg"
+            ]
+        },
+        "Offenbach (Main) Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Offenbach (Main) Hbf"
+            ]
+        },
+        "Offenbach Bieber": {
+            "__class__": "Set",
+            "data": [
+                "Offenbach Bieber"
+            ]
+        },
+        "S\u00fcd": {
+            "__class__": "Set",
+            "data": [
+                "S\u00fcd"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "FFS": {
+            "__class__": "Set",
+            "data": [
+                "FFS 603",
+                "FFS 602",
+                "FFS 601",
+                "FFS 604"
+            ]
+        },
+        "FFT": {
+            "__class__": "Set",
+            "data": [
+                "FFT 102",
+                "FFT 101",
+                "FFT 103",
+                "FFT 104"
+            ]
+        },
+        "FHAU": {
+            "__class__": "Set",
+            "data": [
+                "FHAU 2",
+                "FHAU 3"
+            ]
+        },
+        "FKON": {
+            "__class__": "Set",
+            "data": [
+                "FKON 3",
+                "FKON 2"
+            ]
+        },
+        "FLBF": {
+            "__class__": "Set",
+            "data": [
+                "FLBF 1",
+                "FLBF 2"
+            ]
+        },
+        "FLSS": {
+            "__class__": "Set",
+            "data": [
+                "FLSS 1",
+                "FLSS 2"
+            ]
+        },
+        "FMUL": {
+            "__class__": "Set",
+            "data": [
+                "FMUL 2",
+                "FMUL 1"
+            ]
+        },
+        "FOKL": {
+            "__class__": "Set",
+            "data": [
+                "FOKL 1",
+                "FOKL 2"
+            ]
+        },
+        "FOLM": {
+            "__class__": "Set",
+            "data": [
+                "FOLM 1",
+                "FOLM 2"
+            ]
+        },
+        "FOMP": {
+            "__class__": "Set",
+            "data": [
+                "FOMP 2",
+                "FOMP 1"
+            ]
+        },
+        "FOO": {
+            "__class__": "Set",
+            "data": [
+                "FOO 305",
+                "FOO 306L",
+                "FOO 306",
+                "FOO 304",
+                "FOO 390",
+                "FOO 394",
+                "FOO 393"
+            ]
+        },
+        "FOST": {
+            "__class__": "Set",
+            "data": [
+                "FOST 2",
+                "FOST 1"
+            ]
+        },
+        "FSTL": {
+            "__class__": "Set",
+            "data": [
+                "FSTL 2",
+                "FSTL 1"
+            ]
+        },
+        "FTA": {
+            "__class__": "Set",
+            "data": [
+                "FTA 1",
+                "FTA 2"
+            ]
+        }
+    },
+    "sektoren": {
+        "FOO 306": {
+            "__class__": "Set",
+            "data": [
+                "FOO 306L",
+                "FOO 306"
+            ]
+        }
+    },
+    "hauptstrecke": "HochTief-Offenbach Bieber",
+    "strecken": {
+        "HochTief-Offenbach Bieber": [
+            "FF HochTief",
+            "FFT",
+            "FTA",
+            "FHAU",
+            "FKON",
+            "FOST",
+            "FMUL",
+            "FOKL",
+            "FOLM",
+            "FOMP",
+            "FOO",
+            "Offenbach Bieber"
+        ],
+        "HochTief-Hanau": [
+            "FF HochTief",
+            "FFT",
+            "FTA",
+            "FHAU",
+            "FKON",
+            "FOST",
+            "FMUL",
+            "FOKL",
+            "FOLM",
+            "FOMP",
+            "FOO",
+            "Hanau"
+        ],
+        "HochTief-Neu Isenburg": [
+            "FF HochTief",
+            "FFT",
+            "FTA",
+            "FHAU",
+            "FKON",
+            "FOST",
+            "FLBF",
+            "FFS",
+            "FSTL",
+            "FLSS",
+            "Neu Isenburg"
+        ],
+        "Galluswarte-Offenbach Bieber": [
+            "FF Galluswarte",
+            "FFT",
+            "FTA",
+            "FHAU",
+            "FKON",
+            "FOST",
+            "FMUL",
+            "FOKL",
+            "FOLM",
+            "FOMP",
+            "FOO",
+            "Offenbach Bieber"
+        ],
+        "Galluswarte-Hanau": [
+            "FF Galluswarte",
+            "FFT",
+            "FTA",
+            "FHAU",
+            "FKON",
+            "FOST",
+            "FMUL",
+            "FOKL",
+            "FOLM",
+            "FOMP",
+            "FOO",
+            "Hanau"
+        ],
+        "Galluswarte-Neu Isenburg": [
+            "FF Galluswarte",
+            "FFT",
+            "FTA",
+            "FHAU",
+            "FKON",
+            "FOST",
+            "FLBF",
+            "FFS",
+            "FSTL",
+            "FLSS",
+            "Neu Isenburg"
+        ]
+    }
+}

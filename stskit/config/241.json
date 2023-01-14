@@ -1,0 +1,130 @@
+{
+    "_aid": 241,
+    "_build": 5840,
+    "_name": "Airolo",
+    "_region": "Tessin",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BO x24": {
+            "__class__": "Set",
+            "data": [
+                "BO224",
+                "BO124"
+            ]
+        },
+        "BO x735": {
+            "__class__": "Set",
+            "data": [
+                "BO6735",
+                "BO7735"
+            ]
+        },
+        "GOE x80": {
+            "__class__": "Set",
+            "data": [
+                "GOE280",
+                "GOE180"
+            ]
+        },
+        "GOE x535": {
+            "__class__": "Set",
+            "data": [
+                "GOE7535",
+                "GOE6535"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "AI": {
+            "__class__": "Set",
+            "data": [
+                "AI6",
+                "AI483",
+                "AI82",
+                "AI34",
+                "AI1",
+                "AI5",
+                "AI51",
+                "AI2",
+                "AI484",
+                "AI3",
+                "AI4",
+                "AI50"
+            ]
+        },
+        "AP": {
+            "__class__": "Set",
+            "data": [
+                "AP2",
+                "AP4",
+                "AP1",
+                "AP3"
+            ]
+        },
+        "E/A Biasca": {
+            "__class__": "Set",
+            "data": [
+                "E/A Biasca"
+            ]
+        },
+        "E/A G\u00f6schenen": {
+            "__class__": "Set",
+            "data": [
+                "E/A G\u00f6schenen"
+            ]
+        },
+        "FA": {
+            "__class__": "Set",
+            "data": [
+                "FA3",
+                "FA1",
+                "FA2",
+                "FA30",
+                "FA21",
+                "FA4"
+            ]
+        },
+        "LAV": {
+            "__class__": "Set",
+            "data": [
+                "LAV2",
+                "LAV1",
+                "LAV3",
+                "LAV4"
+            ]
+        },
+        "RO": {
+            "__class__": "Set",
+            "data": [
+                "RO61",
+                "RO67",
+                "RO4",
+                "RO1",
+                "RO2",
+                "RO3"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "Bergstrecke",
+    "strecken": {
+        "Bergstrecke": [
+            "GOE x80",
+            "E/A G\u00f6schenen",
+            "AI",
+            "AP",
+            "RO",
+            "FA",
+            "LAV",
+            "E/A Biasca",
+            "BO x24"
+        ],
+        "Basistunnel": [
+            "GOE x535",
+            "E/A G\u00f6schenen",
+            "E/A Biasca",
+            "BO x735"
+        ]
+    }
+}

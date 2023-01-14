@@ -127,6 +127,7 @@
         }
     },
     "sektoren": {},
+    "hauptstrecke": "KE-ZFH-ZOER",
     "strecken": {
         "Illnau-OP": [
             "Illnau",
@@ -143,7 +144,7 @@
             "DTL",
             "STET"
         ],
-        "Illnau-ZOER 308/408": [
+        "Illnau-WS-ZOER": [
             "Illnau",
             "EF",
             "DTL",
@@ -165,14 +166,14 @@
             "DTL",
             "STET"
         ],
-        "KE-ZOER 108/208": [
+        "KE-ZFH-ZOER": [
             "KE",
             "EF",
             "BSD",
             "ZFH",
             "ZOER 108/208"
         ],
-        "KE-ZOER 308/408": [
+        "KE-WS-ZOER": [
             "KE",
             "EF",
             "DTL",

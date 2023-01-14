@@ -180,6 +180,7 @@
         }
     },
     "sektoren": {},
+    "hauptstrecke": "BNAH-Thun",
     "strecken": {
         "BNAH-Thun": [
             "BNAH",

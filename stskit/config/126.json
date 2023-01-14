@@ -161,6 +161,7 @@
         }
     },
     "sektoren": {},
+    "hauptstrecke": "BRBS-WBDO",
     "strecken": {
        "BRBS-UNZO": [
             "BRBS",

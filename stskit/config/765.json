@@ -1,0 +1,242 @@
+{
+    "_aid": 765,
+    "_build": 5847,
+    "_name": "Hauenstein",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Chemie": {
+            "__class__": "Set",
+            "data": [
+                "Chemie"
+            ]
+        },
+        "MU": {
+            "__class__": "Set",
+            "data": [
+                "MU 804",
+                "MU 704"
+            ]
+        },
+        "Museum": {
+            "__class__": "Set",
+            "data": [
+                "Museum"
+            ]
+        },
+        "M\u00f6bel": {
+            "__class__": "Set",
+            "data": [
+                "M\u00f6bel"
+            ]
+        },
+        "OL 633": {
+            "__class__": "Set",
+            "data": [
+                "OL 633"
+            ]
+        },
+        "OL x30": {
+            "__class__": "Set",
+            "data": [
+                "OL 230",
+                "OL 130"
+            ]
+        },
+        "PR": {
+            "__class__": "Set",
+            "data": [
+                "PR 209",
+                "PR 109"
+            ]
+        },
+        "Stahl": {
+            "__class__": "Set",
+            "data": [
+                "Stahl"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BUC": {
+            "__class__": "Set",
+            "data": [
+                "BUC"
+            ]
+        },
+        "DIE": {
+            "__class__": "Set",
+            "data": [
+                "DIE"
+            ]
+        },
+        "FRE": {
+            "__class__": "Set",
+            "data": [
+                "FRE 1",
+                "FRE 2",
+                "FRE 3",
+                "FRE 23",
+                "FRE 56"
+            ]
+        },
+        "GKD": {
+            "__class__": "Set",
+            "data": [
+                "GKD 3",
+                "GKD 2",
+                "GKD 4"
+            ]
+        },
+        "IT": {
+            "__class__": "Set",
+            "data": [
+                "IT"
+            ]
+        },
+        "LF": {
+            "__class__": "Set",
+            "data": [
+                "LF 1",
+                "LF 2"
+            ]
+        },
+        "LSN": {
+            "__class__": "Set",
+            "data": [
+                "LSN 3",
+                "LSN 36",
+                "LSN 37",
+                "LSN 2",
+                "LSN 1",
+                "LSN 62",
+                "LSN 63",
+                "LSN 61",
+                "LSN 56"
+            ]
+        },
+        "LST": {
+            "__class__": "Set",
+            "data": [
+                "LST 1",
+                "LST 3",
+                "LST 2"
+            ]
+        },
+        "MUOS": {
+            "__class__": "Set",
+            "data": [
+                "MUOS"
+            ]
+        },
+        "RLG": {
+            "__class__": "Set",
+            "data": [
+                "RLG"
+            ]
+        },
+        "SIS": {
+            "__class__": "Set",
+            "data": [
+                "SIS 4",
+                "SIS 2",
+                "SIS 1",
+                "SIS 3",
+                "SIS 83"
+            ]
+        },
+        "SOM": {
+            "__class__": "Set",
+            "data": [
+                "SOM"
+            ]
+        },
+        "TK": {
+            "__class__": "Set",
+            "data": [
+                "TK 3",
+                "TK 4",
+                "TK 2"
+            ]
+        },
+        "TRI": {
+            "__class__": "Set",
+            "data": [
+                "TRI"
+            ]
+        }
+    },
+    "sektoren": {
+        "LSN 1": {
+            "__class__": "Set",
+            "data": [
+                "LSN1",
+                "LSN61"
+            ]
+        },
+        "LSN 2": {
+            "__class__": "Set",
+            "data": [
+                "LSN2",
+                "LSN62"
+            ]
+        },
+        "LSN 3": {
+            "__class__": "Set",
+            "data": [
+                "LSN3",
+                "LSN63"
+            ]
+        }
+    },
+    "hauptstrecke": "MU-TK-OL",
+    "strecken": {
+        "MU-TK-OL": [
+            "MU",
+            "LST",
+            "LSN",
+            "IT",
+            "SIS",
+            "GKD",
+            "TK",
+            "OL x30"
+        ],
+        "PR-TK-OL": [
+            "PR",
+            "FRE",
+            "LST",
+            "LSN",
+            "IT",
+            "SIS",
+            "GKD",
+            "TK",
+            "OL x30"
+        ],
+        "SIS-LF-OL": [
+            "SIS",
+            "DIE",
+            "SOM",
+            "RLG",
+            "BUC",
+            "LF",
+            "TRI",
+            "OL 633"
+        ],
+        "PR-LF-OL": [
+            "PR",
+            "FRE",
+            "LST",
+            "LSN",
+            "IT",
+            "SIS",
+            "DIE",
+            "SOM",
+            "RLG",
+            "BUC",
+            "LF",
+            "TRI",
+            "OL 633"
+        ]
+    }
+}

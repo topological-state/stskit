@@ -292,6 +292,7 @@
             ]
         }
     },
+    "hauptstrecke": "BS-RF",
     "strecken": {
         "BS-FRE": [
             "BS",

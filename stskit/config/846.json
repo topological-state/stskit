@@ -160,6 +160,7 @@
         }
     },
     "sektoren": {},
+    "hauptstrecke": "GE-LON",
     "strecken": {
         "GE-LON": [
             "GE",
