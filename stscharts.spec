@@ -1,5 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+from pathlib import Path, PurePosixPath
 
 block_cipher = None
 
@@ -8,6 +9,65 @@ added_files = [
     ('stskit/qt/*.ui', 'stskit/qt'),
     ('stskit/qt/*.css', 'stskit/qt'),
     ('stskit/config/*.json', 'stskit/config')
+    ]
+
+excluded_binaries = set([
+    'd3dcompiler_47.dll',
+    'libcrypto-1_1-x64.dll',
+    'libeay32.dll',
+    'libEGL.dll',
+    'libGLESv2.dll',
+    'libssl-1_1-x64.dll',
+    'opengl32sw.dll',
+    'Qt5Bluetooth.dll',
+    'Qt5DBus.dll',
+    'Qt5Designer.dll',
+    'Qt5Location.dll',
+    'Qt5Multimedia.dll',
+    'Qt5Network.dll',
+    'Qt5Nfc.dll',
+    'Qt5OpenGL.dll',
+    'Qt5PositioningQuick.dll',
+    'Qt5PrintSupport.dll',
+    'Qt5Qml.dll',
+    'Qt5QmlModels.dll',
+    'Qt5QmlWorkerScript.dll',
+    'Qt5Quick3DAssetImport.dll',
+    'Qt5Quick3D.dll',
+    'Qt5Quick3DRender.dll',
+    'Qt5Quick3DRuntimeRender.dll',
+    'Qt5Quick3DUtils.dll',
+    'Qt5QuickControls2.dll',
+    'Qt5Quick.dll',
+    'Qt5QuickParticles.dll',
+    'Qt5QuickTemplates2.dll',
+    'Qt5QuickTest.dll',
+    'Qt5QuickWidgets.dll',
+    'Qt5RemoteObjects.dll',
+    'Qt5Sensors.dll',
+    'Qt5SerialPort.dll',
+    'Qt5Sql.dll',
+    'Qt5Svg.dll',
+    'Qt5TextToSpeech.dll',
+    'Qt5WebChannel.dll',
+    'Qt5WebSockets.dll',
+    'Qt5WebView.dll',
+    'Qt5Xml.dll',
+    'Qt5XmlPatterns.dll',
+    'ssleay32.dll'])
+
+excluded_dirs = [
+    'PyQt5/Qt5/qml',
+    'PyQt5/Qt5/plugins/audio',
+    'PyQt5/Qt5/plugins/bearer',
+    'PyQt5/Qt5/plugins/geoservices',
+    'PyQt5/Qt5/plugins/mediaservice',
+    'PyQt5/Qt5/plugins/playlistformats',
+    'PyQt5/Qt5/plugins/printsupport',
+    'PyQt5/Qt5/plugins/sensorgestures',
+    'PyQt5/Qt5/plugins/sensors',
+    'PyQt5/Qt5/plugins/sqldrivers',
+    'PyQt5/Qt5/translations'
     ]
 
 a = Analysis(
@@ -26,6 +86,21 @@ a = Analysis(
     noarchive=False,
 )
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+
+def is_excluded(item):
+    p = Path(item[0])
+    if p.stem in excluded_binaries:
+        print("exclude", p)
+        return True
+    for dir in excluded_dirs:
+        q = PurePosixPath(dir)
+        if p.is_relative_to(q):
+            print("exclude", p)
+            return True
+    return False
+
+a.binaries = TOC([x for x in a.binaries if not is_excluded(x)])
+a.datas = TOC([x for x in a.datas if not is_excluded(x)])
 
 exe = EXE(
     pyz,
