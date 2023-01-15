@@ -1,0 +1,143 @@
+{
+    "_aid": 486,
+    "_build": 5840,
+    "_name": "Aarau",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BG": {
+            "__class__": "Set",
+            "data": [
+                "BG 724",
+                "BG 824"
+            ]
+        },
+        "DK": {
+            "__class__": "Set",
+            "data": [
+                "DK 352",
+                "DK 452"
+            ]
+        },
+        "GB": {
+            "__class__": "Set",
+            "data": [
+                "GB West",
+                "GB Ost"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "LB": {
+            "__class__": "Set",
+            "data": [
+                "LB 433",
+                "LB 333"
+            ]
+        },
+        "SCOE": {
+            "__class__": "Set",
+            "data": [
+                "SCOE 852",
+                "SCOE 752"
+            ]
+        },
+        "Zementfabrik": {
+            "__class__": "Set",
+            "data": [
+                "Zementfabrik"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "AA": {
+            "__class__": "Set",
+            "data": [
+                "AA4",
+                "AA0",
+                "AA1",
+                "AA6",
+                "AA3",
+                "AA2",
+                "AA5"
+            ]
+        },
+        "AA GB": {
+            "__class__": "Set",
+            "data": [
+                "AA166",
+                "AA259",
+                "AA260"
+            ]
+        },
+        "HDB": {
+            "__class__": "Set",
+            "data": [
+                "HDB"
+            ]
+        },
+        "RU": {
+            "__class__": "Set",
+            "data": [
+                "RU2",
+                "RU3",
+                "RU4",
+                "RU1"
+            ]
+        },
+        "SBAD": {
+            "__class__": "Set",
+            "data": [
+                "SBAD"
+            ]
+        },
+        "WI": {
+            "__class__": "Set",
+            "data": [
+                "WI3",
+                "WI2",
+                "WI5",
+                "WI6"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "SCOE-BG",
+    "strecken": {
+        "DK-BG": [
+            "DK",
+            "AA",
+            "RU",
+            "WI",
+            "HDB",
+            "SBAD",
+            "BG"
+        ],
+        "DK-LB": [
+            "DK",
+            "AA",
+            "RU",
+            "LB"
+        ],
+        "SCOE-BG": [
+            "SCOE",
+            "AA",
+            "RU",
+            "WI",
+            "HDB",
+            "SBAD",
+            "BG"
+        ],
+        "SCOE-LB": [
+            "SCOE",
+            "AA",
+            "RU",
+            "LB"
+        ]
+    }
+}

@@ -1,0 +1,188 @@
+{
+    "_aid": 303,
+    "_build": 5845,
+    "_name": "Burgdorf",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellgl": {
+            "__class__": "Set",
+            "data": [
+                "Abstellgl."
+            ]
+        },
+        "BDFS": {
+            "__class__": "Set",
+            "data": [
+                "BDFS 222",
+                "BDFS 122"
+            ]
+        },
+        "Kirchberg": {
+            "__class__": "Set",
+            "data": [
+                "Kirchberg-A."
+            ]
+        },
+        "LGUT": {
+            "__class__": "Set",
+            "data": [
+                "LGUT 507",
+                "LGUT 607"
+            ]
+        },
+        "RTW": {
+            "__class__": "Set",
+            "data": [
+                "RTW 375",
+                "RTW 475"
+            ]
+        },
+        "SCHB": {
+            "__class__": "Set",
+            "data": [
+                "SCHB 394",
+                "SCHB 494"
+            ]
+        },
+        "WANZ": {
+            "__class__": "Set",
+            "data": [
+                "WANZ 630",
+                "WANZ 530"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BDF": {
+            "__class__": "Set",
+            "data": [
+                "BDF 11",
+                "BDF 5A",
+                "BDF 2C",
+                "BDF 3C",
+                "BDF 1C",
+                "BDF 4C",
+                "BDF 5C",
+                "BDF 2A",
+                "BDF 3A",
+                "BDF 4A",
+                "BDF 1A"
+            ]
+        },
+        "BDFB": {
+            "__class__": "Set",
+            "data": [
+                "BDFB"
+            ]
+        },
+        "HBK": {
+            "__class__": "Set",
+            "data": [
+                "HBK 2",
+                "HBK 1",
+                "HBK 3"
+            ]
+        },
+        "HERS": {
+            "__class__": "Set",
+            "data": [
+                "HERS"
+            ]
+        },
+        "LYS": {
+            "__class__": "Set",
+            "data": [
+                "LYS"
+            ]
+        },
+        "MATA": {
+            "__class__": "Set",
+            "data": [
+                "MATA813",
+                "MATA713",
+                "MATA492",
+                "MATA613",
+                "MATA513",
+                "MATA392"
+            ]
+        },
+        "WY": {
+            "__class__": "Set",
+            "data": [
+                "WY"
+            ]
+        }
+    },
+    "sektoren": {
+        "BDF 1": {
+            "__class__": "Set",
+            "data": [
+                "BDF 1C",
+                "BDF 1A"
+            ]
+        },
+        "BDF 2": {
+            "__class__": "Set",
+            "data": [
+                "BDF 2A",
+                "BDF 2C"
+            ]
+        },
+        "BDF 3": {
+            "__class__": "Set",
+            "data": [
+                "BDF 3A",
+                "BDF 3C"
+            ]
+        },
+        "BDF 4": {
+            "__class__": "Set",
+            "data": [
+                "BDF 4C",
+                "BDF 4A"
+            ]
+        },
+        "BDF 5": {
+            "__class__": "Set",
+            "data": [
+                "BDF 5C",
+                "BDF 5A"
+            ]
+        }
+    },
+    "hauptstrecke": "LGUT-RTW",
+    "strecken": {
+        "LGUT-RTW": [
+            "LGUT",
+            "MATA",
+            "HBK",
+            "LYS",
+            "BDF",
+            "WY",
+            "RTW"
+        ],
+        "LGUT-WANZ": [
+            "LGUT",
+            "MATA",
+            "HERS",
+            "WANZ"
+        ],
+        "SCHB-RTW": [
+            "SCHB",
+            "MATA",
+            "HBK",
+            "LYS",
+            "BDF",
+            "WY",
+            "RTW"
+        ],
+        "SCHB-WANZ": [
+            "SCHB",
+            "MATA",
+            "HERS",
+            "WANZ"
+        ]
+    }
+}

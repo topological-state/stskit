@@ -1,0 +1,253 @@
+{
+    "_aid": 497,
+    "_build": 5845,
+    "_name": "Basel SBB",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BSSJ 1-4": {
+            "__class__": "Set",
+            "data": [
+                "1-4 N",
+                "1-4 S"
+            ]
+        },
+        "A-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "A-Gruppe"
+            ]
+        },
+        "BAD": {
+            "__class__": "Set",
+            "data": [
+                "BAD 163",
+                "BAD 263",
+                "BAD 363",
+                "BAD 463"
+            ]
+        },
+        "BSRB 6/7": {
+            "__class__": "Set",
+            "data": [
+                "BSRB 602",
+                "BSRB 702"
+            ]
+        },
+        "BSRB 8/9": {
+            "__class__": "Set",
+            "data": [
+                "BSRB 802",
+                "BSRB 902"
+            ]
+        },
+        "Container": {
+            "__class__": "Set",
+            "data": [
+                "Container"
+            ]
+        },
+        "E-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "E-Gruppe"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "J-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "J-Gruppe"
+            ]
+        },
+        "K-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "K-Gruppe"
+            ]
+        },
+        "MU": {
+            "__class__": "Set",
+            "data": [
+                "MU 102",
+                "MU 202",
+                "MU 302"
+            ]
+        },
+        "RUC 5/6": {
+            "__class__": "Set",
+            "data": [
+                "RUC 521",
+                "RUC 621"
+            ]
+        },
+        "RUC 0": {
+            "__class__": "Set",
+            "data": [
+                "RUC 063"
+            ]
+        },
+        "STL": {
+            "__class__": "Set",
+            "data": [
+                "STL 257",
+                "STL 157"
+            ]
+        },
+        "Waschanlage": {
+            "__class__": "Set",
+            "data": [
+                "Waschanlage"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BAL": {
+            "__class__": "Set",
+            "data": [
+                "BAL 30",
+                "BAL 35",
+                "BAL 33",
+                "BAL 31",
+                "BAL A17"
+            ]
+        },
+        "BS": {
+            "__class__": "Set",
+            "data": [
+                "BS 6",
+                "BS 5l",
+                "BS 8",
+                "BS 12",
+                "BS 15",
+                "BS 17",
+                "BS 7",
+                "BS A78",
+                "BS 1",
+                "BS 16",
+                "BS 3",
+                "BS 11",
+                "BS 13",
+                "BS 4",
+                "BS 5",
+                "BS 4l",
+                "BS 2",
+                "BS 14",
+                "BS 10",
+                "BS A79",
+                "BS 9",
+                "BS 19",
+                "BS 18",
+                "BS A24"
+            ]
+        },
+        "BSGB": {
+            "__class__": "Set",
+            "data": [
+                "BSGB D2",
+                "BSGB C52",
+                "BSGB C20",
+                "BSGB C51",
+                "BSGB L83",
+                "BSGB E11",
+                "BSGB L74",
+                "BSGB L97",
+                "BSGB L75",
+                "BSGB D1",
+                "BSGB L65",
+                "BSGB L67",
+                "BSGB E81",
+                "BSGB D72",
+                "BSGB J96",
+                "BSGB D71",
+                "BSGB D73"
+            ]
+        },
+        "BSJA": {
+            "__class__": "Set",
+            "data": [
+                "BSJA"
+            ]
+        },
+        "BSNO": {
+            "__class__": "Set",
+            "data": [
+                "BSNO"
+            ]
+        },
+        "BSSJ": {
+            "__class__": "Set",
+            "data": [
+                "BSSJ 5",
+                "BSSJ 6",
+                "BSSJ 8",
+                "BSSJ 7",
+                "BSSJ 26",
+                "BSSJ 86"
+            ]
+        },
+        "GELN": {
+            "__class__": "Set",
+            "data": [
+                "GELN"
+            ]
+        }
+    },
+    "sektoren": {
+        "BS 4": {
+            "__class__": "Set",
+            "data": [
+                "BS 4",
+                "BS 4l"
+            ]
+        },
+        "BS 5": {
+            "__class__": "Set",
+            "data": [
+                "BS 5",
+                "BS 5l"
+            ]
+        }
+    },
+    "hauptstrecke": "BAD-MU",
+    "strecken": {
+        "BAD-BSRB": [
+            "BAD",
+            "GELN",
+            "BSRB 6/7"
+        ],
+        "BAD-MU": [
+            "BAD",
+            "GELN",
+            "BS",
+            "BSNO",
+            "MU"
+        ],
+        "STL-BSRB": [
+            "STL",
+            "BSSJ",
+            "BS",
+            "BSGB",
+            "BSRB 8/9"
+        ],
+        "STL-MU": [
+            "STL",
+            "BSSJ",
+            "BS",
+            "BSNO",
+            "MU"
+        ],
+        "STL-RUC": [
+            "STL",
+            "BSSJ",
+            "BS",
+            "RUC"
+        ]
+    }
+}

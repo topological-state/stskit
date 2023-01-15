@@ -1,0 +1,256 @@
+{
+    "_aid": 347,
+    "_build": 5847,
+    "_name": "Como",
+    "_region": "Italien Nord",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellung Borghi": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung Borghi"
+            ]
+        },
+        "Carnate": {
+            "__class__": "Set",
+            "data": [
+                "Carnate"
+            ]
+        },
+        "Chiasso": {
+            "__class__": "Set",
+            "data": [
+                "Chiasso"
+            ]
+        },
+        "Chiasso Rbf": {
+            "__class__": "Set",
+            "data": [
+                "Chiasso Rbf"
+            ]
+        },
+        "Desio": {
+            "__class__": "Set",
+            "data": [
+                "Desio"
+            ]
+        },
+        "Ecoplast": {
+            "__class__": "Set",
+            "data": [
+                "Ecoplast"
+            ]
+        },
+        "Grandate-Breccia": {
+            "__class__": "Set",
+            "data": [
+                "Grandate-Breccia"
+            ]
+        },
+        "Industrie/Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Industrie/Abstellung"
+            ]
+        },
+        "Merone": {
+            "__class__": "Set",
+            "data": [
+                "Merone"
+            ]
+        },
+        "Rail": {
+            "__class__": "Set",
+            "data": [
+                "Rail Cargo Terminal"
+            ]
+        },
+        "Saronno": {
+            "__class__": "Set",
+            "data": [
+                "Saronno"
+            ]
+        },
+        "Seveso": {
+            "__class__": "Set",
+            "data": [
+                "Seveso"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "AC": {
+            "__class__": "Set",
+            "data": [
+                "AC5",
+                "AC3",
+                "AC4",
+                "AC2",
+                "AC1"
+            ]
+        },
+        "Albate Trecallo": {
+            "__class__": "Set",
+            "data": [
+                "Albate Trecallo"
+            ]
+        },
+        "Borghi": {
+            "__class__": "Set",
+            "data": [
+                "Borghi1",
+                "Borghi2"
+            ]
+        },
+        "CA": {
+            "__class__": "Set",
+            "data": [
+                "CA1",
+                "CA2",
+                "CA3",
+                "CA4",
+                "CA5"
+            ]
+        },
+        "CL": {
+            "__class__": "Set",
+            "data": [
+                "CL1",
+                "CL3",
+                "CL4",
+                "CL2"
+            ]
+        },
+        "CO": {
+            "__class__": "Set",
+            "data": [
+                "CO1",
+                "CO2",
+                "CO3",
+                "CO4",
+                "CO11"
+            ]
+        },
+        "CU": {
+            "__class__": "Set",
+            "data": [
+                "CU1",
+                "CU2"
+            ]
+        },
+        "Camerlata": {
+            "__class__": "Set",
+            "data": [
+                "Camerlata3",
+                "Camerlata1",
+                "Camerlata2"
+            ]
+        },
+        "Cant\u00f9-Cermenate": {
+            "__class__": "Set",
+            "data": [
+                "Cant\u00f9-Cermenate"
+            ]
+        },
+        "Cucciago": {
+            "__class__": "Set",
+            "data": [
+                "Cucciago"
+            ]
+        },
+        "Ford": {
+            "__class__": "Set",
+            "data": [
+                "Ford2",
+                "Ford3",
+                "Ford1"
+            ]
+        },
+        "Lago": {
+            "__class__": "Set",
+            "data": [
+                "Lago3",
+                "Lago2",
+                "Lago1"
+            ]
+        },
+        "RCT": {
+            "__class__": "Set",
+            "data": [
+                "RCT2",
+                "RCT1",
+                "RCT3",
+                "RCT4",
+                "RCT5"
+            ]
+        },
+        "SE FS": {
+            "__class__": "Set",
+            "data": [
+                "SE FS"
+            ]
+        },
+        "SE": {
+            "__class__": "Set",
+            "data": [
+                "SE5",
+                "SE6",
+                "SE3",
+                "SE7",
+                "SE1",
+                "SE4",
+                "SE2"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "Chiasso-Desio",
+    "strecken": {
+        "Chiasso-Desio": [
+            "Chiasso",
+            "CO",
+            "AC",
+            "Cucciago",
+            "Cant\u00f9-Cermenate",
+            "CA",
+            "CL",
+            "SE",
+            "RCT",
+            "Desio"
+        ],
+        "Chiasso Rbf-Desio": [
+            "Chiasso Rbf",
+            "Cucciago",
+            "Cant\u00f9-Cermenate",
+            "CA",
+            "CL",
+            "SE",
+            "RCT",
+            "Desio"
+        ],
+        "AC-Merone": [
+            "AC",
+            "Albate Trecallo",
+            "CU",
+            "Merone"
+        ],
+        "Grandate-Lago": [
+            "Grandate-Breccia",
+            "Camerlata",
+            "Borghi",
+            "Lago"
+        ],
+        "Saronno-Carnate": [
+            "Saronno",
+            "SE",
+            "Carnate"
+        ],
+        "Saronno-Desio": [
+            "Saronno",
+            "SE",
+            "RCT",
+            "Desio"
+        ]
+    }
+}

@@ -1,0 +1,414 @@
+{
+    "_aid": 253,
+    "_build": 5840,
+    "_name": "Drau-/M\u00f6lltal",
+    "_region": "\u00d6sterreich Mitte",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Bad Gastein": {
+            "__class__": "Set",
+            "data": [
+                "Bad Gastein"
+            ]
+        },
+        "Hasslacher": {
+            "__class__": "Set",
+            "data": [
+                "Hasslacher"
+            ]
+        },
+        "Lienz": {
+            "__class__": "Set",
+            "data": [
+                "812",
+                "322",
+                "308 A",
+                "308 B"
+            ]
+        },
+        "Lienz A": {
+            "__class__": "Set",
+            "data": [
+                "1Li",
+                "1H",
+                "1R"
+            ]
+        },
+        "Mallnitz": {
+            "__class__": "Set",
+            "data": [
+                "307-309",
+                "307"
+            ]
+        },
+        "Spittal": {
+            "__class__": "Set",
+            "data": [
+                "Spittal"
+            ]
+        },
+        "Thal": {
+            "__class__": "Set",
+            "data": [
+                "Thal"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Bs": {
+            "__class__": "Set",
+            "data": [
+                "Bs 101",
+                "Bs 301",
+                "Bs 302",
+                "Bs 306",
+                "Bs 304",
+                "Bs 303"
+            ]
+        },
+        "De": {
+            "__class__": "Set",
+            "data": [
+                "De 203",
+                "De 201"
+            ]
+        },
+        "De H1": {
+            "__class__": "Set",
+            "data": [
+                "De H1"
+            ]
+        },
+        "Doe": {
+            "__class__": "Set",
+            "data": [
+                "Doe 203",
+                "Doe 301",
+                "Doe 201"
+            ]
+        },
+        "Doe H1": {
+            "__class__": "Set",
+            "data": [
+                "Doe H1"
+            ]
+        },
+        "Gre": {
+            "__class__": "Set",
+            "data": [
+                "Gre 203",
+                "Gre 201"
+            ]
+        },
+        "Kel": {
+            "__class__": "Set",
+            "data": [
+                "Kel 203",
+                "Kel 201"
+            ]
+        },
+        "Kel H1": {
+            "__class__": "Set",
+            "data": [
+                "Kel H1"
+            ]
+        },
+        "Kl": {
+            "__class__": "Set",
+            "data": [
+                "Kl 201",
+                "Kl 202"
+            ]
+        },
+        "Kl H1": {
+            "__class__": "Set",
+            "data": [
+                "Kl H1"
+            ]
+        },
+        "Kl S1": {
+            "__class__": "Set",
+            "data": [
+                "Kl S1"
+            ]
+        },
+        "Kl U2": {
+            "__class__": "Set",
+            "data": [
+                "Kl U2"
+            ]
+        },
+        "Lie": {
+            "__class__": "Set",
+            "data": [
+                "Lie 304 B",
+                "Lie 331",
+                "Lie 333",
+                "Lie 302",
+                "Lie 303",
+                "Lie 304 D",
+                "Lie 101",
+                "Lie 310",
+                "Lie 306 A",
+                "Lie 306 B",
+                "Lie 401",
+                "Lie 312",
+                "Lie 301",
+                "Lie 201",
+                "Lie 304 C",
+                "Lie 304 A",
+                "Lie 332",
+                "Lie 106"
+            ]
+        },
+        "Lie A1": {
+            "__class__": "Set",
+            "data": [
+                "Lie A1"
+            ]
+        },
+        "Lie A2": {
+            "__class__": "Set",
+            "data": [
+                "Lie A2"
+            ]
+        },
+        "Lie H1": {
+            "__class__": "Set",
+            "data": [
+                "Lie H1"
+            ]
+        },
+        "Ma": {
+            "__class__": "Set",
+            "data": [
+                "Ma 206",
+                "Ma 306 A",
+                "Ma 204",
+                "Ma Wende R",
+                "Ma 305",
+                "Ma 304",
+                "Ma 121",
+                "Ma 306 B",
+                "Ma 203",
+                "Ma 201",
+                "Ma 512",
+                "Ma 306",
+                "Ma 205",
+                "Ma 202",
+                "Ma 4b",
+                "Ma 122",
+                "Ma 304 B"
+            ]
+        },
+        "Ma H1": {
+            "__class__": "Set",
+            "data": [
+                "Ma H1"
+            ]
+        },
+        "Ma S1": {
+            "__class__": "Set",
+            "data": [
+                "Ma S1"
+            ]
+        },
+        "Ma S3": {
+            "__class__": "Set",
+            "data": [
+                "Ma S3"
+            ]
+        },
+        "Ma U2": {
+            "__class__": "Set",
+            "data": [
+                "Ma U2"
+            ]
+        },
+        "Mth": {
+            "__class__": "Set",
+            "data": [
+                "Mth"
+            ]
+        },
+        "Od": {
+            "__class__": "Set",
+            "data": [
+                "Od 201",
+                "Od 203"
+            ]
+        },
+        "Od H1": {
+            "__class__": "Set",
+            "data": [
+                "Od H1"
+            ]
+        },
+        "Pk": {
+            "__class__": "Set",
+            "data": [
+                "Pk 202",
+                "Pk 103",
+                "Pk 201",
+                "Pk 203"
+            ]
+        },
+        "Pk S1": {
+            "__class__": "Set",
+            "data": [
+                "Pk S1"
+            ]
+        },
+        "Ssn": {
+            "__class__": "Set",
+            "data": [
+                "Ssn 201",
+                "Ssn 202",
+                "Ssn 203",
+                "Ssn Wende R",
+                "Ssn Wende L"
+            ]
+        },
+        "Ssn H1": {
+            "__class__": "Set",
+            "data": [
+                "Ssn H1"
+            ]
+        },
+        "Std": {
+            "__class__": "Set",
+            "data": [
+                "Std 203",
+                "Std 201"
+            ]
+        },
+        "Uz": {
+            "__class__": "Set",
+            "data": [
+                "Uz 201",
+                "Uz 203 G",
+                "Uz 202",
+                "Uz 203"
+            ]
+        },
+        "Uz W1": {
+            "__class__": "Set",
+            "data": [
+                "Uz W1"
+            ]
+        },
+        "Uzs": {
+            "__class__": "Set",
+            "data": [
+                "Uzs"
+            ]
+        }
+    },
+    "sektoren": {
+        "Lie 301": {
+            "__class__": "Set",
+            "data": [
+                "Lie 301",
+                "Lie 331"
+            ]
+        },
+        "Lie 302": {
+            "__class__": "Set",
+            "data": [
+                "Lie 302",
+                "Lie 332"
+            ]
+        },
+        "Lie 303": {
+            "__class__": "Set",
+            "data": [
+                "Lie 303",
+                "Lie 333"
+            ]
+        },
+        "Lie 304": {
+            "__class__": "Set",
+            "data": [
+                "Lie 304 B",
+                "Lie 304 C",
+                "Lie 304 D",
+                "Lie 304 A"
+            ]
+        },
+        "Lie 306": {
+            "__class__": "Set",
+            "data": [
+                "Lie 306 A",
+                "Lie 306 B"
+            ]
+        },
+        "Ma 304": {
+            "__class__": "Set",
+            "data": [
+                "Ma 304",
+                "Ma 304 B"
+            ]
+        },
+        "Ma 306": {
+            "__class__": "Set",
+            "data": [
+                "Ma 306",
+                "Ma 306 A",
+                "Ma 306 B"
+            ]
+        },
+        "Uz 203": {
+            "__class__": "Set",
+            "data": [
+                "Uz 203 G",
+                "Uz 203"
+            ]
+        }
+    },
+    "hauptstrecke": "Bad Gastein-Spittal",
+    "strecken": {
+        "Bad Gastein-Spittal": [
+            "Bad Gastein",
+            "Bs",
+            "Mth",
+            "Ma",
+            "Ma S1",
+            "Ma U2",
+            "Ma S3",
+            "Ma H1",
+            "Pk",
+            "Pk S1",
+            "Kl",
+            "Kl S1",
+            "Kl U2",
+            "Kl H1",
+            "Uz",
+            "Uz W1",
+            "Uzs",
+            "Spittal"
+        ],
+        "Thal-Spittal": [
+            "Thal",
+            "Lie",
+            "Lie H1",
+            "Lie A1",
+            "Lie A2",
+            "Doe",
+            "Doe H1",
+            "Od",
+            "Od H1",
+            "De",
+            "De H1",
+            "Gre",
+            "Std",
+            "Kel",
+            "Kel H1",
+            "Ssn",
+            "Ssn H1",
+            "Uz W1",
+            "Uzs",
+            "Spittal"
+        ]
+    }
+}

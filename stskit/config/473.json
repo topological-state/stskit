@@ -1,0 +1,309 @@
+{
+    "_aid": 473,
+    "_build": 5845,
+    "_name": "Baden",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellgleise": {
+            "__class__": "Set",
+            "data": [
+                "Abstellgleise"
+            ]
+        },
+        "BD 80": {
+            "__class__": "Set",
+            "data": [
+                "BD 80",
+                "BD 84"
+            ]
+        },
+        "Brugg": {
+            "__class__": "Set",
+            "data": [
+                "Brugg 129",
+                "Brugg 229"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Killwangen": {
+            "__class__": "Set",
+            "data": [
+                "Killwangen 611",
+                "Killwangen 711"
+            ]
+        },
+        "Leibstadt": {
+            "__class__": "Set",
+            "data": [
+                "Leibstadt"
+            ]
+        },
+        "Mellingen": {
+            "__class__": "Set",
+            "data": [
+                "Mellingen"
+            ]
+        },
+        "Rekingen": {
+            "__class__": "Set",
+            "data": [
+                "Rekingen"
+            ]
+        },
+        "Waldshut": {
+            "__class__": "Set",
+            "data": [
+                "Waldshut (D)"
+            ]
+        },
+        "W\u00fcrenlos": {
+            "__class__": "Set",
+            "data": [
+                "W\u00fcrenlos"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BD": {
+            "__class__": "Set",
+            "data": [
+                "BD 1",
+                "BD 1k",
+                "BD 2",
+                "BD 2k",
+                "BD 3",
+                "BD 3k",
+                "BD 4",
+                "BD 5"
+            ]
+        },
+        "BDO": {
+            "__class__": "Set",
+            "data": [
+                "BDO"
+            ]
+        },
+        "DOE": {
+            "__class__": "Set",
+            "data": [
+                "DOE 1",
+                "DOE 2"
+            ]
+        },
+        "DW": {
+            "__class__": "Set",
+            "data": [
+                "DW"
+            ]
+        },
+        "KB": {
+            "__class__": "Set",
+            "data": [
+                "KB 1",
+                "KB 2",
+                "KB 3",
+                "KB 4"
+            ]
+        },
+        "KBD": {
+            "__class__": "Set",
+            "data": [
+                "KBD"
+            ]
+        },
+        "KBGR": {
+            "__class__": "Set",
+            "data": [
+                "KBGR"
+            ]
+        },
+        "KLI": {
+            "__class__": "Set",
+            "data": [
+                "KLI"
+            ]
+        },
+        "NHOF": {
+            "__class__": "Set",
+            "data": [
+                "NHOF"
+            ]
+        },
+        "RIET": {
+            "__class__": "Set",
+            "data": [
+                "RIET"
+            ]
+        },
+        "SIG": {
+            "__class__": "Set",
+            "data": [
+                "SIG 1"
+            ]
+        },
+        "SIIN": {
+            "__class__": "Set",
+            "data": [
+                "SIIN"
+            ]
+        },
+        "TG": {
+            "__class__": "Set",
+            "data": [
+                "TG 1",
+                "TG 2",
+                "TG 3",
+                "TG 4"
+            ]
+        },
+        "WE": {
+            "__class__": "Set",
+            "data": [
+                "WE 1",
+                "WE 2",
+                "WE 3",
+                "WE 4",
+                "WE 5"
+            ]
+        },
+        "ZZ": {
+            "__class__": "Set",
+            "data": [
+                "ZZ 1",
+                "ZZ 2"
+            ]
+        }
+    },
+    "sektoren": {
+        "BD 1": {
+            "__class__": "Set",
+            "data": [
+                "BD 1k",
+                "BD 1"
+            ]
+        },
+        "BD 2": {
+            "__class__": "Set",
+            "data": [
+                "BD 2k",
+                "BD 2"
+            ]
+        },
+        "BD 3": {
+            "__class__": "Set",
+            "data": [
+                "BD 3k",
+                "BD 3"
+            ]
+        }
+    },
+    "hauptstrecke": "Killwangen-Rekingen",
+    "strecken": {
+        "Killwangen-Brugg": [
+            "Killwangen",
+            "NHOF",
+            "WE",
+            "BD",
+            "TG",
+            "Brugg"
+        ],
+        "Killwangen-Rekingen": [
+            "Killwangen",
+            "NHOF",
+            "WE",
+            "BD",
+            "TG",
+            "SIIN",
+            "SIG",
+            "DOE",
+            "KLI",
+            "KB",
+            "KBD",
+            "RIET",
+            "ZZ",
+            "Rekingen"
+        ],
+        "Killwangen-Waldshut": [
+            "Killwangen",
+            "NHOF",
+            "WE",
+            "BD",
+            "TG",
+            "SIIN",
+            "SIG",
+            "DOE",
+            "KLI",
+            "KB",
+            "KBGR",
+            "Waldshut"
+        ],
+        "Baden-Rekingen": [
+            "BD",
+            "TG",
+            "SIIN",
+            "SIG",
+            "DOE",
+            "KLI",
+            "KB",
+            "KBD",
+            "RIET",
+            "ZZ",
+            "Rekingen"
+        ],
+        "Baden-Waldshut": [
+            "BD",
+            "TG",
+            "SIIN",
+            "SIG",
+            "DOE",
+            "KLI",
+            "KB",
+            "KBGR",
+            "Waldshut"
+        ],
+        "Leibstadt-Rekingen": [
+            "Leibstadt",
+            "KB",
+            "KBD",
+            "RIET",
+            "ZZ",
+            "Rekingen"
+        ],
+        "W\u00fcrenlos-Brugg": [
+            "W\u00fcrenlos",
+            "WE",
+            "BD",
+            "TG",
+            "Brugg"
+        ],
+        "W\u00fcrenlos-Mellingen": [
+            "W\u00fcrenlos",
+            "WE",
+            "BDO",
+            "DW",
+            "Mellingen"
+        ],
+        "W\u00fcrenlos-Rekingen": [
+            "W\u00fcrenlos",
+            "WE",
+            "BD",
+            "TG",
+            "SIIN",
+            "SIG",
+            "DOE",
+            "KLI",
+            "KB",
+            "KBD",
+            "RIET",
+            "ZZ",
+            "Rekingen"
+        ]
+    }
+}

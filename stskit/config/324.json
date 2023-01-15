@@ -1,0 +1,233 @@
+{
+    "_aid": 324,
+    "_build": 5840,
+    "_name": "Frankfurt Flughafen",
+    "_region": "Rhein-Main",
+    "_version": 2,
+    "anschlussgruppen": {
+        "FF S\u00fcd": {
+            "__class__": "Set",
+            "data": [
+                "FF S\u00fcd"
+            ]
+        },
+        "Gro\u00df Gerau": {
+            "__class__": "Set",
+            "data": [
+                "Gro\u00df Gerau"
+            ]
+        },
+        "Kelsterbach": {
+            "__class__": "Set",
+            "data": [
+                "Kelsterbach"
+            ]
+        },
+        "Kelsterbach S": {
+            "__class__": "Set",
+            "data": [
+                "Kelsterbach S"
+            ]
+        },
+        "Niederrad": {
+            "__class__": "Set",
+            "data": [
+                "Niederrad"
+            ]
+        },
+        "Niederrad S": {
+            "__class__": "Set",
+            "data": [
+                "Niederrad S"
+            ]
+        },
+        "R\u00fcsselsheim SFS": {
+            "__class__": "Set",
+            "data": [
+                "R\u00fcsselsheim SFS"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "FFGG": {
+            "__class__": "Set",
+            "data": [
+                "FFGG1L",
+                "FFGG2L",
+                "FFGG1",
+                "FFGG2"
+            ]
+        },
+        "FFLF": {
+            "__class__": "Set",
+            "data": [
+                "FFLF5",
+                "FFLF4",
+                "FFLF6",
+                "FFLF7"
+            ]
+        },
+        "FFLU": {
+            "__class__": "Set",
+            "data": [
+                "FFLU1",
+                "FFLU2L",
+                "FFLU3",
+                "FFLU3L",
+                "FFLU2",
+                "FFLU1L"
+            ]
+        },
+        "FSP": {
+            "__class__": "Set",
+            "data": [
+                "FSP60",
+                "FSP7",
+                "FSP6",
+                "FSP4",
+                "FSP6L",
+                "FSP7L",
+                "FSP3",
+                "FSP5",
+                "FSP2",
+                "FSP1"
+            ]
+        },
+        "FSP500": {
+            "__class__": "Set",
+            "data": [
+                "FSP570",
+                "FSP503",
+                "FSP573",
+                "FSP502",
+                "FSP206"
+            ]
+        },
+        "FSP300": {
+            "__class__": "Set",
+            "data": [
+                "FSP304",
+                "FSP26",
+                "FSP305"
+            ]
+        },
+        "FZEP": {
+            "__class__": "Set",
+            "data": [
+                "FZEP1",
+                "FZEP2",
+                "FZEP83",
+                "FZEP84"
+            ]
+        },
+        "FZEP60": {
+            "__class__": "Set",
+            "data": [
+                "FZEP60",
+                "FZEP62",
+                "FZEP61"
+            ]
+        }
+    },
+    "sektoren": {
+        "FFGG1": {
+            "__class__": "Set",
+            "data": [
+                "FFGG1L",
+                "FFGG1"
+            ]
+        },
+        "FFGG2": {
+            "__class__": "Set",
+            "data": [
+                "FFGG2L",
+                "FFGG2"
+            ]
+        },
+        "FFLU1": {
+            "__class__": "Set",
+            "data": [
+                "FFLU1L",
+                "FFLU1"
+            ]
+        },
+        "FFLU2": {
+            "__class__": "Set",
+            "data": [
+                "FFLU2",
+                "FFLU2L"
+            ]
+        },
+        "FFLU3": {
+            "__class__": "Set",
+            "data": [
+                "FFLU3L",
+                "FFLU3"
+            ]
+        },
+        "FSP6": {
+            "__class__": "Set",
+            "data": [
+                "FSP6",
+                "FSP6L"
+            ]
+        },
+        "FSP7": {
+            "__class__": "Set",
+            "data": [
+                "FSP7L",
+                "FSP7"
+            ]
+        }
+    },
+    "hauptstrecke": "Rüsselsheim-Niederrad",
+    "strecken": {
+        "Groß Gerau-Niederrad": [
+            "Groß Gerau",
+            "FZEP",
+            "FSP",
+            "Niederrad"
+        ],
+        "Groß Gerau-FF Süd": [
+            "Groß Gerau",
+            "FZEP",
+            "FSP",
+            "FF Süd"
+        ],
+        "Kelsterbach-FF Süd": [
+            "Kelsterbach",
+            "FSP",
+            "FF Süd"
+        ],
+        "Kelsterbach-Niederrad": [
+            "Kelsterbach",
+            "FSP",
+            "Niederrad"
+        ],
+        "Kelsterbach S-Niederrad S": [
+            "Kelsterbach S",
+            "FFLU",
+            "FSP",
+            "Niederrad S"
+        ],
+        "R\u00fcsselsheim-FF Süd": [
+            "R\u00fcsselsheim SFS",
+            "FFLF",
+            "FSP",
+            "FF Süd"
+        ],
+        "R\u00fcsselsheim-Niederrad": [
+            "R\u00fcsselsheim SFS",
+            "FFLF",
+            "FSP",
+            "Niederrad"
+        ],
+        "R\u00fcsselsheim-Groß Gerau": [
+            "R\u00fcsselsheim SFS",
+            "FFLF",
+            "FZEP",
+            "Groß Gerau"
+        ]
+    }
+}

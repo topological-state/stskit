@@ -1,0 +1,168 @@
+{
+    "_aid": 317,
+    "_build": 5847,
+    "_name": "Langenthal",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "GB": {
+            "__class__": "Set",
+            "data": [
+                "GB West"
+            ]
+        },
+        "INKV": {
+            "__class__": "Set",
+            "data": [
+                "INKV"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Langenthal S\u00fcd": {
+            "__class__": "Set",
+            "data": [
+                "Langenthal S\u00fcd"
+            ]
+        },
+        "MATA": {
+            "__class__": "Set",
+            "data": [
+                "MATA 530",
+                "MATA 630"
+            ]
+        },
+        "ROG": {
+            "__class__": "Set",
+            "data": [
+                "ROG 455",
+                "ROG 355"
+            ]
+        },
+        "RTR": {
+            "__class__": "Set",
+            "data": [
+                "RTR 860",
+                "RTR 760"
+            ]
+        },
+        "WY": {
+            "__class__": "Set",
+            "data": [
+                "WY 475",
+                "WY 375"
+            ]
+        },
+        "asm": {
+            "__class__": "Set",
+            "data": [
+                "asm"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "GB": {
+            "__class__": "Set",
+            "data": [
+                "J5",
+                "P4",
+                "K4",
+                "K6",
+                "J6",
+                "K5"
+            ]
+        },
+        "HB": {
+            "__class__": "Set",
+            "data": [
+                "HB1",
+                "HB2",
+                "HB3",
+                "HB4",
+                "HB5"
+            ]
+        },
+        "LTH": {
+            "__class__": "Set",
+            "data": [
+                "LTH1",
+                "LTH2",
+                "LTH3",
+                "LTH4",
+                "LTH5",
+                "LTH11",
+                "LTH12",
+                "LTH13",
+                "LTH14"
+            ]
+        },
+        "LTHL": {
+            "__class__": "Set",
+            "data": [
+                "LTHL"
+            ]
+        },
+        "OENT": {
+            "__class__": "Set",
+            "data": [
+                "OENT"
+            ]
+        },
+        "RTW": {
+            "__class__": "Set",
+            "data": [
+                "RTW1",
+                "RTW2",
+                "RTW3"
+            ]
+        },
+        "WANZ": {
+            "__class__": "Set",
+            "data": [
+                "WANZ535",
+                "WANZ635",
+                "WANZ770"
+            ]
+        }
+    },
+    "hauptstrecke": "WY-ROG",
+    "sektoren": {},
+    "strecken": {
+        "INKV-RTR": [
+            "INKV",
+            "WANZ",
+            "LTHL",
+            "RTR"
+        ],
+        "MATA-RTR": [
+            "MATA",
+            "OENT",
+            "WANZ",
+            "LTHL",
+            "RTR"
+        ],
+        "WY-ROG": [
+            "WY",
+            "RTW",
+            "HB",
+            "GB",
+            "LTH",
+            "ROG"
+        ],
+        "WY/OENT-LTHL/ROG": [
+            "WY",
+            "OENT",
+            "RTW",
+            "HB",
+            "GB",
+            "LTH",
+            "LTHL",
+            "ROG"
+        ]
+    }
+}

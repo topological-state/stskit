@@ -1,0 +1,205 @@
+{
+    "_aid": 491,
+    "_build": 5840,
+    "_name": "Frick",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BASF": {
+            "__class__": "Set",
+            "data": [
+                "BASF Kaisten"
+            ]
+        },
+        "Baustelle": {
+            "__class__": "Set",
+            "data": [
+                "Baustelle B\u00f6zbergtunnel"
+            ]
+        },
+        "Brauerei": {
+            "__class__": "Set",
+            "data": [
+                "Brauerei"
+            ]
+        },
+        "Chemiefabrik": {
+            "__class__": "Set",
+            "data": [
+                "Chemiefabrik"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "KAU": {
+            "__class__": "Set",
+            "data": [
+                "KAU 275",
+                "KAU 175"
+            ]
+        },
+        "KKW": {
+            "__class__": "Set",
+            "data": [
+                "KKW Leibstadt"
+            ]
+        },
+        "Koblenz": {
+            "__class__": "Set",
+            "data": [
+                "Koblenz"
+            ]
+        },
+        "Kraftwerk": {
+            "__class__": "Set",
+            "data": [
+                "Kraftwerk"
+            ]
+        },
+        "Milit\u00e4rmuseum": {
+            "__class__": "Set",
+            "data": [
+                "Milit\u00e4rmuseum"
+            ]
+        },
+        "SDO": {
+            "__class__": "Set",
+            "data": [
+                "SDO 241",
+                "SDO 141"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "EFG": {
+            "__class__": "Set",
+            "data": [
+                "EFG4",
+                "EFG2",
+                "EFG1",
+                "EFG3"
+            ]
+        },
+        "EK": {
+            "__class__": "Set",
+            "data": [
+                "EK"
+            ]
+        },
+        "FCK": {
+            "__class__": "Set",
+            "data": [
+                "FCK2",
+                "FCK1",
+                "FCK4",
+                "FCK3"
+            ]
+        },
+        "HNS": {
+            "__class__": "Set",
+            "data": [
+                "HNS3",
+                "HNS2",
+                "HNS1"
+            ]
+        },
+        "LFG": {
+            "__class__": "Set",
+            "data": [
+                "LFG4",
+                "LFG3",
+                "LFG W2",
+                "LFG1",
+                "LFG W1",
+                "LFG2"
+            ]
+        },
+        "MOE": {
+            "__class__": "Set",
+            "data": [
+                "MOE40",
+                "MOE2",
+                "MOE3",
+                "MOE4",
+                "MOE1"
+            ]
+        },
+        "MPF": {
+            "__class__": "Set",
+            "data": [
+                "MPF"
+            ]
+        },
+        "RF": {
+            "__class__": "Set",
+            "data": [
+                "RF40",
+                "RF3",
+                "RF5",
+                "RF1",
+                "RF51",
+                "RF2",
+                "RF4",
+                "RF41",
+                "RF11"
+            ]
+        },
+        "RFAU": {
+            "__class__": "Set",
+            "data": [
+                "RFAU"
+            ]
+        },
+        "SLN": {
+            "__class__": "Set",
+            "data": [
+                "SLN2",
+                "SLN1"
+            ]
+        },
+        "STS": {
+            "__class__": "Set",
+            "data": [
+                "STS5",
+                "STS2",
+                "STS51",
+                "STS3",
+                "STS4",
+                "STS6"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "KAU-SDO",
+    "strecken": {
+        "KAU-Koblenz": [
+            "KAU",
+            "RFAU",
+            "RF",
+            "MOE",
+            "MPF",
+            "STS",
+            "SLN",
+            "LFG",
+            "Koblenz"
+        ],
+        "KAU-SDO": [
+            "KAU",
+            "RFAU",
+            "RF",
+            "MOE",
+            "MPF",
+            "STS",
+            "EK",
+            "FCK",
+            "HNS",
+            "EFG",
+            "SDO"
+        ]
+    }
+}

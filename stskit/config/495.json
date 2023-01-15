@@ -1,0 +1,135 @@
+{
+    "_aid": 495,
+    "_build": 5845,
+    "_name": "Luzern",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "321": {
+            "__class__": "Set",
+            "data": [
+                "321"
+            ]
+        },
+        "Abstellgleis": {
+            "__class__": "Set",
+            "data": [
+                "Abstellgleis"
+            ]
+        },
+        "Abstellung zb": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung zb"
+            ]
+        },
+        "Depot": {
+            "__class__": "Set",
+            "data": [
+                "Depot"
+            ]
+        },
+        "Ebikon": {
+            "__class__": "Set",
+            "data": [
+                "Ebikon 363"
+            ]
+        },
+        "Emmenbr\u00fccke": {
+            "__class__": "Set",
+            "data": [
+                "Emmenbr\u00fccke 191",
+                "Emmenbr\u00fccke 291"
+            ]
+        },
+        "GB SBB": {
+            "__class__": "Set",
+            "data": [
+                "GB SBB"
+            ]
+        },
+        "Horw": {
+            "__class__": "Set",
+            "data": [
+                "Horw 802",
+                "Horw 702"
+            ]
+        },
+        "Littau": {
+            "__class__": "Set",
+            "data": [
+                "Littau"
+            ]
+        },
+        "Verkehrshaus": {
+            "__class__": "Set",
+            "data": [
+                "Verkehrshaus 504"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "ALD": {
+            "__class__": "Set",
+            "data": [
+                "ALD"
+            ]
+        },
+        "GB": {
+            "__class__": "Set",
+            "data": [
+                "GB SBB"
+            ]
+        },
+        "LZ": {
+            "__class__": "Set",
+            "data": [
+                "LZ 815",
+                "LZ 7",
+                "LZ 813",
+                "LZ 812",
+                "LZ 8",
+                "LZ 11",
+                "LZ 10",
+                "LZ 3",
+                "LZ 2",
+                "LZ 814",
+                "LZ 9",
+                "LZ 4",
+                "LZ 302",
+                "LZ 5",
+                "LZ 6",
+                "LZ 834"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "Emmenbrücke-Luzern",
+    "strecken": {
+        "Ebikon-Luzern": [
+            "Ebikon",
+            "GTS",
+            "LZ"
+        ],
+        "Emmenbr\u00fccke-Depot": [
+            "Emmenbr\u00fccke",
+            "GTS",
+            "LZ"
+        ],
+        "Verkehrshaus-Luzern": [
+            "Verkehrshaus",
+            "LZ"
+        ],
+        "Littau-Luzern": [
+            "Littau",
+            "GTS",
+            "LZ"
+        ],
+        "Horw-LZ": [
+            "Horw",
+            "ALD",
+            "LZ"
+        ]
+    }
+}

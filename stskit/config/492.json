@@ -1,0 +1,203 @@
+{
+    "_aid": 492,
+    "_build": 5845,
+    "_name": "Winterthur",
+    "_region": "Z\u00fcrich und Umgebung",
+    "_version": 2,
+    "anschlussgruppen": {
+        "EF": {
+            "__class__": "Set",
+            "data": [
+                "EF 118",
+                "EF 218"
+            ]
+        },
+        "Gr\u00fcze": {
+            "__class__": "Set",
+            "data": [
+                "Gr\u00fcze 436",
+                "Gr\u00fcze 336"
+            ]
+        },
+        "Hettlingen+": {
+            "__class__": "Set",
+            "data": []
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "OWT": {
+            "__class__": "Set",
+            "data": [
+                "OWT 130",
+                "OWT 230"
+            ]
+        },
+        "WWUE": {
+            "__class__": "Set",
+            "data": [
+                "WWUE 603"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Hettlingen": {
+            "__class__": "Set",
+            "data": [
+                "Hettlingen"
+            ]
+        },
+        "KE": {
+            "__class__": "Set",
+            "data": [
+                "KE2",
+                "KE3"
+            ]
+        },
+        "W": {
+            "__class__": "Set",
+            "data": [
+                "W2",
+                "W5L",
+                "W9L",
+                "W7R",
+                "W5R",
+                "W3",
+                "W1",
+                "W4",
+                "W8L",
+                "W9R",
+                "W7L",
+                "W6R",
+                "W4R",
+                "W9",
+                "W6L",
+                "W7",
+                "W5",
+                "W8R",
+                "W3L",
+                "W3R",
+                "W6",
+                "W4L",
+                "W8"
+            ]
+        },
+        "W100": {
+            "__class__": "Set",
+            "data": [
+                "W104",
+                "W42",
+                "W105",
+                "W106",
+                "W103"
+            ]
+        },
+        "W500": {
+            "__class__": "Set",
+            "data": [
+                "W546",
+                "W514",
+                "W543",
+                "W539",
+                "W538"
+            ]
+        },
+        "W57": {
+            "__class__": "Set",
+            "data": [
+                "W57"
+            ]
+        },
+        "WTOE": {
+            "__class__": "Set",
+            "data": [
+                "WTOE2",
+                "WTOE3",
+                "WTOE4"
+            ]
+        }
+    },
+    "sektoren": {
+        "W3": {
+            "__class__": "Set",
+            "data": [
+                "W3",
+                "W3R",
+                "W3L"
+            ]
+        },
+        "W4": {
+            "__class__": "Set",
+            "data": [
+                "W4R",
+                "W4L",
+                "W4"
+            ]
+        },
+        "W5": {
+            "__class__": "Set",
+            "data": [
+                "W5R",
+                "W5",
+                "W5L"
+            ]
+        },
+        "W6": {
+            "__class__": "Set",
+            "data": [
+                "W6",
+                "W6R",
+                "W6L"
+            ]
+        },
+        "W7": {
+            "__class__": "Set",
+            "data": [
+                "W7R",
+                "W7L",
+                "W7"
+            ]
+        },
+        "W8": {
+            "__class__": "Set",
+            "data": [
+                "W8R",
+                "W8L",
+                "W8"
+            ]
+        },
+        "W9": {
+            "__class__": "Set",
+            "data": [
+                "W9R",
+                "W9",
+                "W9L"
+            ]
+        }
+    },
+    "hauptstrecke": "EF-Grüze",
+    "strecken": {
+        "EF-Gr\u00fcze": [
+            "EF",
+            "KE",
+            "W",
+            "Gr\u00fcze"
+        ],
+        "EF-OWT": [
+            "EF",
+            "KE",
+            "W",
+            "OWT"
+        ],
+        "WWUE-Hettlingen": [
+            "WWUE",
+            "WTOE",
+            "W",
+            "Hettlingen"
+        ]
+    }
+}

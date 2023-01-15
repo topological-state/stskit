@@ -1,0 +1,120 @@
+{
+    "_aid": 485,
+    "_build": 5847,
+    "_name": "Z\u00fcrich HB",
+    "_region": "Z\u00fcrich und Umgebung",
+    "_version": 2,
+    "anschlussgruppen": {
+        "": {
+            "__class__": "Set",
+            "data": [
+                "151",
+                "791",
+                "201",
+                "691",
+                "101"
+            ]
+        },
+        "Depot F": {
+            "__class__": "Set",
+            "data": [
+                "Depot F"
+            ]
+        },
+        "F16": {
+            "__class__": "Set",
+            "data": [
+                "F16"
+            ]
+        },
+        "Feld M": {
+            "__class__": "Set",
+            "data": [
+                "Feld M"
+            ]
+        },
+        "Feld O": {
+            "__class__": "Set",
+            "data": [
+                "Feld O"
+            ]
+        },
+        "P": {
+            "__class__": "Set",
+            "data": [
+                "P11",
+                "P24"
+            ]
+        },
+        "ZHDB": {
+            "__class__": "Set",
+            "data": [
+                "ZHDB 600",
+                "ZHDB 700"
+            ]
+        },
+        "ZHDB L": {
+            "__class__": "Set",
+            "data": [
+                "ZHDB L11",
+                "ZHDB L12"
+            ]
+        },
+        "ZOER": {
+            "__class__": "Set",
+            "data": [
+                "ZOER 235",
+                "ZOER 135"
+            ]
+        },
+        "ZWIP": {
+            "__class__": "Set",
+            "data": [
+                "ZWIP 302",
+                "ZWIP 402"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "ZLOE": {
+            "__class__": "Set",
+            "data": [
+                "ZLOE31",
+                "ZLOE33",
+                "ZLOE34",
+                "ZLOE32"
+            ]
+        },
+        "ZUE": {
+            "__class__": "Set",
+            "data": [
+                "ZUE 5",
+                "ZUE 10",
+                "ZUE 7",
+                "ZUE 6",
+                "ZUE 14",
+                "ZUE 15",
+                "ZUE 3",
+                "ZUE 8",
+                "ZUE 9",
+                "ZUE 18",
+                "ZUE 4",
+                "ZUE 16",
+                "ZUE X",
+                "ZUE 11",
+                "ZUE 12",
+                "ZUE 13",
+                "ZUE 17"
+            ]
+        }
+    },
+    "sektoren": {},
+    "strecken": {
+        "ZOER-P": [
+            "ZOER",
+            "ZUE",
+            "P"
+        ]
+    }
+}

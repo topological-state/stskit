@@ -1,0 +1,195 @@
+{
+    "_aid": 470,
+    "_build": 5840,
+    "_name": "Hamburg Hbf",
+    "_region": "Hamburg - Schleswig-Holstein",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abst": {
+            "__class__": "Set",
+            "data": [
+                "Abst 1",
+                "Abst 2",
+                "Abst 3"
+            ]
+        },
+        "Altona": {
+            "__class__": "Set",
+            "data": [
+                "Altona"
+            ]
+        },
+        "Bad Oldesloe": {
+            "__class__": "Set",
+            "data": [
+                "Bad Oldesloe"
+            ]
+        },
+        "Harburg": {
+            "__class__": "Set",
+            "data": [
+                "Harburg Fern",
+                "Harburg G\u00fcter",
+                "Harburg Tunnel"
+            ]
+        },
+        "Hbf S": {
+            "__class__": "Set",
+            "data": [
+                "Hbf S Nord",
+                "Hbf S S\u00fcd"
+            ]
+        },
+        "Rothenburgsort": {
+            "__class__": "Set",
+            "data": [
+                "Rothenburgsort"
+            ]
+        },
+        "Rothenburgsort Ericus": {
+            "__class__": "Set",
+            "data": [
+                "Rothenburgsort Ericus"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Hbf": {
+            "__class__": "Set",
+            "data": [
+                "5a",
+                "5b",
+                "6a",
+                "6b",
+                "7a",
+                "7b",
+                "8a",
+                "8b",
+                "10 lang",
+                "11a",
+                "11b",
+                "11b lang",
+                "12a",
+                "12b",
+                "13a",
+                "13b",
+                "14a",
+                "14b",
+                "35",
+                "36"
+            ]
+        },
+        "Anckelmannsplatz": {
+            "__class__": "Set",
+            "data": [
+                "Anckelmannsplatz"
+            ]
+        },
+        "Berliner Tor": {
+            "__class__": "Set",
+            "data": [
+                "Berliner Tor"
+            ]
+        },
+        "Dammtor": {
+            "__class__": "Set",
+            "data": [
+                "Dammtor"
+            ]
+        },
+        "Ericus": {
+            "__class__": "Set",
+            "data": [
+                "Ericus"
+            ]
+        },
+        "Hasselbrook": {
+            "__class__": "Set",
+            "data": [
+                "Hasselbrook"
+            ]
+        }
+    },
+    "sektoren": {
+        "11": {
+            "__class__": "Set",
+            "data": [
+                "11a",
+                "11b",
+                "11b lang"
+            ]
+        },
+        "12": {
+            "__class__": "Set",
+            "data": [
+                "12b",
+                "12a"
+            ]
+        },
+        "13": {
+            "__class__": "Set",
+            "data": [
+                "13b",
+                "13a"
+            ]
+        },
+        "14": {
+            "__class__": "Set",
+            "data": [
+                "14a",
+                "14b"
+            ]
+        },
+        "5": {
+            "__class__": "Set",
+            "data": [
+                "5b",
+                "5a"
+            ]
+        },
+        "6": {
+            "__class__": "Set",
+            "data": [
+                "6a",
+                "6b"
+            ]
+        },
+        "7": {
+            "__class__": "Set",
+            "data": [
+                "7b",
+                "7a"
+            ]
+        },
+        "8": {
+            "__class__": "Set",
+            "data": [
+                "8a",
+                "8b"
+            ]
+        }
+    },
+    "hauptstrecke": "Altona-Bad Oldesloe",
+    "strecken": {
+        "Altona-Bad Oldesloe": [
+            "Altona",
+            "Dammtor",
+            "Hbf",
+            "Hasselbrook",
+            "Bad Oldesloe"
+        ],
+        "Altona-Rothenburgsort": [
+            "Altona",
+            "Dammtor",
+            "Hbf",
+            "Rothenburgsort"
+        ],
+        "Altona-Harburg": [
+            "Altona",
+            "Dammtor",
+            "Hbf",
+            "Harburg"
+        ]
+    }
+}

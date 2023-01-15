@@ -1,0 +1,170 @@
+{
+    "_aid": 483,
+    "_build": 5847,
+    "_name": "Brugg",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Autoimport": {
+            "__class__": "Set",
+            "data": [
+                "Autoimport"
+            ]
+        },
+        "C-Feld": {
+            "__class__": "Set",
+            "data": [
+                "C-Feld"
+            ]
+        },
+        "Containerverladung": {
+            "__class__": "Set",
+            "data": [
+                "Containerverladung"
+            ]
+        },
+        "D-Feld": {
+            "__class__": "Set",
+            "data": [
+                "D-Feld"
+            ]
+        },
+        "E-Feld": {
+            "__class__": "Set",
+            "data": [
+                "E-Feld"
+            ]
+        },
+        "Effingen": {
+            "__class__": "Set",
+            "data": [
+                "Effingen 141",
+                "Effingen 241"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Kabelwerke": {
+            "__class__": "Set",
+            "data": [
+                "Kabelwerke Brugg"
+            ]
+        },
+        "LUPF27": {
+            "__class__": "Set",
+            "data": [
+                "LUPF27"
+            ]
+        },
+        "Othmarsingen": {
+            "__class__": "Set",
+            "data": [
+                "Othmarsingen 604",
+                "Othmarsingen 504"
+            ]
+        },
+        "Turgi": {
+            "__class__": "Set",
+            "data": [
+                "Turgi 229",
+                "Turgi 129"
+            ]
+        },
+        "Wildegg": {
+            "__class__": "Set",
+            "data": [
+                "Wildegg 724",
+                "Wildegg 824"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BG": {
+            "__class__": "Set",
+            "data": [
+                "BG1",
+                "BG2",
+                "BG5",
+                "BG3",
+                "BG4",
+                "BG7",
+                "BG6",
+                "BG40",
+                "BG41",
+                "BG51",
+                "BG60"
+            ]
+        },
+        "BIRR": {
+            "__class__": "Set",
+            "data": [
+                "BIRR"
+            ]
+        },
+        "LRZ": {
+            "__class__": "Set",
+            "data": [
+                "LRZ"
+            ]
+        },
+        "LUPF": {
+            "__class__": "Set",
+            "data": [
+                "LUPF5",
+                "LUPF4",
+                "LUPF6",
+                "LUPF7",
+                "LUPF94"
+            ]
+        },
+        "SDO": {
+            "__class__": "Set",
+            "data": [
+                "SDO2",
+                "SDO1",
+                "SDO3"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "Effingen-Othmarsingen",
+    "strecken": {
+        "Effingen-Othmarsingen": [
+            "Effingen",
+            "SDO",
+            "LUPF",
+            "BIRR",
+            "Othmarsingen"
+        ],
+        "Effingen-Turgi": [
+            "Effingen",
+            "SDO",
+            "BG",
+            "Turgi"
+        ],
+        "Othmarsingen-Effingen": [
+            "Othmarsingen",
+            "BIRR",
+            "LUPF",
+            "SDO",
+            "Effingen"
+        ],
+        "Othmarsingen-Turgi": [
+            "Othmarsingen",
+            "BIRR",
+            "LUPF",
+            "BG",
+            "Turgi"
+        ],
+        "Wildegg-Turgi": [
+            "Wildegg",
+            "BG",
+            "Turgi"
+        ]
+    }
+}

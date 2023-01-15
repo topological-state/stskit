@@ -1,0 +1,181 @@
+{
+    "_aid": 478,
+    "_build": 5840,
+    "_name": "Heitersberg",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Dottikon": {
+            "__class__": "Set",
+            "data": [
+                "Dottikon 167",
+                "Dottikon 267"
+            ]
+        },
+        "D\u00e4ttwil": {
+            "__class__": "Set",
+            "data": [
+                "D\u00e4ttwil"
+            ]
+        },
+        "Hunzenschwil": {
+            "__class__": "Set",
+            "data": [
+                "Hunzenschwil"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Killwangen": {
+            "__class__": "Set",
+            "data": [
+                "Killwangen 421",
+                "Killwangen 321"
+            ]
+        },
+        "Lupfig": {
+            "__class__": "Set",
+            "data": [
+                "Lupfig 604",
+                "Lupfig 504"
+            ]
+        },
+        "RU": {
+            "__class__": "Set",
+            "data": [
+                "RU 333",
+                "RU 433"
+            ]
+        },
+        "Seon": {
+            "__class__": "Set",
+            "data": [
+                "Seon"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "HDK": {
+            "__class__": "Set",
+            "data": [
+                "HDK3",
+                "HDK1",
+                "HDK2"
+            ]
+        },
+        "LB": {
+            "__class__": "Set",
+            "data": [
+                "LB2",
+                "LB4",
+                "LB1",
+                "LB6",
+                "LB5",
+                "LB3",
+                "LB11",
+                "LB41",
+                "LB43",
+                "LB42",
+                "LB44"
+            ]
+        },
+        "MAEG": {
+            "__class__": "Set",
+            "data": [
+                "MAEG5",
+                "MAEG2",
+                "MAEG3",
+                "MAEG4"
+            ]
+        },
+        "MEL": {
+            "__class__": "Set",
+            "data": [
+                "MEL3",
+                "MEL2"
+            ]
+        },
+        "MELH": {
+            "__class__": "Set",
+            "data": [
+                "MELH"
+            ]
+        },
+        "OTH": {
+            "__class__": "Set",
+            "data": [
+                "OTH3",
+                "OTH5",
+                "OTH4",
+                "OTH2",
+                "OTH6"
+            ]
+        }
+    },
+    "hauptstrecke": "Rupperswil-Killwangen",
+    "strecken": {
+        "Dottikon-Killwangen": [
+            "Dottikon",
+            "HDK",
+            "OTH",
+            "MAEG",
+            "MELH",
+            "Killwangen"
+        ],
+        "Dottikon-Lupfig": [
+            "Dottikon",
+            "HDK",
+            "OTH",
+            "Lupfig"
+        ],
+        "Dottikon-Dättwil": [
+            "Dottikon",
+            "HDK",
+            "OTH",
+            "MAEG",
+            "MEL",
+            "D\u00e4ttwil"
+        ],
+        "Hunzenschwil-Killwangen": [
+            "Hunzenschwil",
+            "LB",
+            "OTH",
+            "MAEG",
+            "MELH",
+            "Killwangen"
+        ],
+        "Hunzenschwil-Lupfig": [
+            "Hunzenschwil",
+            "LB",
+            "OTH",
+            "Lupfig"
+        ],
+        "Rupperswil-Killwangen": [
+            "RU",
+            "LB",
+            "OTH",
+            "MAEG",
+            "MELH",
+            "Killwangen"
+        ],
+        "Rupperswil-Lupfig": [
+            "RU",
+            "LB",
+            "OTH",
+            "Lupfig"
+        ],
+        "Rupperswil-Dättwil": [
+            "RU",
+            "LB",
+            "OTH",
+            "MAEG",
+            "MEL",
+            "Dättwil"
+        ]
+    }
+}
