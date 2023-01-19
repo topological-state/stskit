@@ -830,10 +830,14 @@ class Anlage:
         self.bahnsteiggruppen = {bahnhof_dict[sn] if counts_safe[sn] == 1 else sn: g for sn, g in gruppen.items()}
 
         # anschlüsse, die den gleichen namen wie ein bahnhof haben, umbenennen
-        anschluss_dict = {k: v if v not in self.bahnsteiggruppen else v + "+" for k, v in anschluss_dict.items()}
-        anschluss_set = set(anschluss_dict.values())
-        self.anschlussgruppen = {k: set([n for n in anschlussgleise if self.f_anschlussname(n) == k])
-                                 for k in anschluss_set}
+        self.anschlussgruppen = {}
+        for gleis, gruppe in anschluss_dict.items():
+            if gruppe in self.bahnsteiggruppen:
+                gruppe += "+"
+            try:
+                self.anschlussgruppen[gruppe].add(gleis)
+            except KeyError:
+                self.anschlussgruppen[gruppe] = {gleis}
 
         self.auto = True
         self._update_gruppen_dict()
