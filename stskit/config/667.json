@@ -1,0 +1,214 @@
+{
+    "_aid": 667,
+    "_build": 5845,
+    "_name": "Biel",
+    "_region": "Westschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BGG": {
+            "__class__": "Set",
+            "data": [
+                "BGG 128",
+                "BGG 228"
+            ]
+        },
+        "BI 96": {
+            "__class__": "Set",
+            "data": [
+                "BI 96"
+            ]
+        },
+        "BIRB A61": {
+            "__class__": "Set",
+            "data": [
+                "BIRB A61"
+            ]
+        },
+        "BIRB": {
+            "__class__": "Set",
+            "data": [
+                "BIRB 500",
+                "BIRB 396",
+                "BIRB 495",
+                "BIRB 600"
+            ]
+        },
+        "Depot Ost": {
+            "__class__": "Set",
+            "data": [
+                "Depot Ost"
+            ]
+        },
+        "Grenchen Nord": {
+            "__class__": "Set",
+            "data": [
+                "Grenchen Nord"
+            ]
+        },
+        "LD": {
+            "__class__": "Set",
+            "data": [
+                "LD 811",
+                "LD 711"
+            ]
+        },
+        "Mahlenwald": {
+            "__class__": "Set",
+            "data": [
+                "Mahlenwald"
+            ]
+        },
+        "SEL": {
+            "__class__": "Set",
+            "data": [
+                "SEL 581",
+                "SEL 681"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BET": {
+            "__class__": "Set",
+            "data": [
+                "BET"
+            ]
+        },
+        "BI": {
+            "__class__": "Set",
+            "data": [
+                "BI1",
+                "BI6",
+                "BI10",
+                "BI9",
+                "BI5",
+                "BI2",
+                "BI3",
+                "BI4",
+                "BI8",
+                "BI7",
+                "BI97",
+                "BI81"
+            ]
+        },
+        "BIBD": {
+            "__class__": "Set",
+            "data": [
+                "BIBD"
+            ]
+        },
+        "BIM": {
+            "__class__": "Set",
+            "data": [
+                "BIM"
+            ]
+        },
+        "GS": {
+            "__class__": "Set",
+            "data": [
+                "GS3",
+                "GS1",
+                "GS2"
+            ]
+        },
+        "LEN": {
+            "__class__": "Set",
+            "data": [
+                "LEN2",
+                "LEN1",
+                "LEN3"
+            ]
+        },
+        "LIG": {
+            "__class__": "Set",
+            "data": [
+                "LIG"
+            ]
+        },
+        "NV": {
+            "__class__": "Set",
+            "data": [
+                "NV"
+            ]
+        },
+        "PIE": {
+            "__class__": "Set",
+            "data": [
+                "PIE"
+            ]
+        },
+        "RB West": {
+            "__class__": "Set",
+            "data": [
+                "RB West"
+            ]
+        },
+        "TUE": {
+            "__class__": "Set",
+            "data": [
+                "TUE1",
+                "TUE2"
+            ]
+        },
+        "TWN": {
+            "__class__": "Set",
+            "data": [
+                "TWN3",
+                "TWN2"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "LD-SEL",
+    "strecken": {
+        "BI-Grenchen Nord": [
+            "BI",
+            "BIM",
+            "BIBD",
+            "PIE",
+            "LEN",
+            "Grenchen Nord"
+        ],
+        "LD-BGG": [
+            "LD",
+            "NV",
+            "LIG",
+            "TWN",
+            "TUE",
+            "BI",
+            "BGG"
+        ],
+        "LD-Grenchen Nord": [
+            "LD",
+            "NV",
+            "LIG",
+            "TWN",
+            "TUE",
+            "BI",
+            "BIM",
+            "BIBD",
+            "PIE",
+            "LEN",
+            "Grenchen Nord"
+        ],
+        "LD-SEL": [
+            "LD",
+            "NV",
+            "LIG",
+            "TWN",
+            "TUE",
+            "BI",
+            "BIM",
+            "BIBD",
+            "PIE",
+            "LEN",
+            "GS",
+            "BET",
+            "SEL"
+        ]
+    },
+    "streckenmarkierung": [
+        ["LIG", "TWN", "E"],
+        ["LEN", "Grenchen Nord", "E"]
+    ]
+}

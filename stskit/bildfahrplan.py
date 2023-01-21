@@ -504,6 +504,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         off = self._axes.transData.inverted().transform([(0, 0), (0, -5)])
         off_y = (off[1] - off[0])[1]
 
+        self._strecken_markieren(x_labels, x_labels_pos)
+
         label_args = {'ha': 'center',
                       'va': 'center',
                       'fontsize': 'small',
@@ -567,6 +569,36 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         args['alpha'] = 0.5
         args['linewidth'] = 2
         self._axes.plot(pos_x, pos_y, **args)
+
+    def _strecken_markieren(self, x_labels, x_labels_pos):
+        """
+        strecken mit einer schraffur markieren
+
+        :param x_labels: liste von gleisnamen
+        :param x_labels_pos: liste von x-koordinaten der gleise
+        :param kwargs: kwargs-dict, der für die axes.bar-methode vorgesehen ist.
+        :return: None
+        """
+
+        try:
+            markierungen = self.anlage.streckenmarkierung
+        except AttributeError:
+            markierungen = {}
+
+        ylim = self._axes.get_ylim()
+        h = max(ylim) - min(ylim)
+        for strecke, art in markierungen.items():
+            try:
+                x1 = x_labels_pos[x_labels.index(strecke[0])]
+                x2 = x_labels_pos[x_labels.index(strecke[1])]
+                xy = (x1, min(ylim))
+                w = x2 - x1
+            except ValueError:
+                continue
+
+            color = mpl.rcParams['grid.color']
+            r = mpl.patches.Rectangle(xy, w, h, color=color, alpha=0.25, linewidth=None)
+            self._axes.add_patch(r)
 
     def on_resize(self, event):
         """

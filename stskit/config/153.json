@@ -1,0 +1,346 @@
+{
+    "_aid": 153,
+    "_build": 5847,
+    "_name": "Schwarzach-St.Veit",
+    "_region": "\u00d6sterreich Mitte",
+    "_version": 2,
+    "anschlussgruppen": {
+        "7a": {
+            "__class__": "Set",
+            "data": [
+                "7a"
+            ]
+        },
+        "451": {
+            "__class__": "Set",
+            "data": [
+                "451"
+            ]
+        },
+        "121": {
+            "__class__": "Set",
+            "data": [
+                "121"
+            ]
+        },
+        "608": {
+            "__class__": "Set",
+            "data": [
+                "608"
+            ]
+        },
+        "7": {
+            "__class__": "Set",
+            "data": [
+                "7"
+            ]
+        },
+        "333": {
+            "__class__": "Set",
+            "data": [
+                "333"
+            ]
+        },
+        "335": {
+            "__class__": "Set",
+            "data": [
+                "335"
+            ]
+        },
+        "Bischofshofen": {
+            "__class__": "Set",
+            "data": [
+                "Bischofshofen"
+            ]
+        },
+        "Bruck-Fusch": {
+            "__class__": "Set",
+            "data": [
+                "Bruck-Fusch"
+            ]
+        },
+        "B\u00f6ckstein": {
+            "__class__": "Set",
+            "data": [
+                "B\u00f6ckstein"
+            ]
+        },
+        "SAG": {
+            "__class__": "Set",
+            "data": [
+                "SAG"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Bag": {
+            "__class__": "Set",
+            "data": [
+                "Bag 204",
+                "Bag 203",
+                "Bag 202",
+                "Bag 201"
+            ]
+        },
+        "Bo H1": {
+            "__class__": "Set",
+            "data": [
+                "Bo H1"
+            ]
+        },
+        "Bo U2": {
+            "__class__": "Set",
+            "data": [
+                "Bo U2"
+            ]
+        },
+        "Dg": {
+            "__class__": "Set",
+            "data": [
+                "Dg 201",
+                "Dg 203",
+                "Dg 202",
+                "Dg 204"
+            ]
+        },
+        "Hg": {
+            "__class__": "Set",
+            "data": [
+                "Hg 102",
+                "Hg 101",
+                "Hg 203",
+                "Hg 202",
+                "Hg 201"
+            ]
+        },
+        "Hg Z1": {
+            "__class__": "Set",
+            "data": [
+                "Hg Z1"
+            ]
+        },
+        "Hg Z2": {
+            "__class__": "Set",
+            "data": [
+                "Hg Z2"
+            ]
+        },
+        "Hg Z4": {
+            "__class__": "Set",
+            "data": [
+                "Hg Z4"
+            ]
+        },
+        "Jp": {
+            "__class__": "Set",
+            "data": [
+                "Jp 205",
+                "Jp 204",
+                "Jp 201",
+                "Jp 203",
+                "Jp 202",
+                "Jp Wende"
+            ]
+        },
+        "Ld": {
+            "__class__": "Set",
+            "data": [
+                "Ld 302",
+                "Ld 304",
+                "Ld 301"
+            ]
+        },
+        "Ld H1": {
+            "__class__": "Set",
+            "data": [
+                "Ld H1"
+            ]
+        },
+        "Lfs": {
+            "__class__": "Set",
+            "data": [
+                "Lfs"
+            ]
+        },
+        "Lof": {
+            "__class__": "Set",
+            "data": [
+                "Lof 203",
+                "Lof 202",
+                "Lof 201"
+            ]
+        },
+        "Lof Z1": {
+            "__class__": "Set",
+            "data": [
+                "Lof Z1"
+            ]
+        },
+        "Swa": {
+            "__class__": "Set",
+            "data": [
+                "Swa 402",
+                "Swa 404",
+                "Swa 502",
+                "Swa 405",
+                "Swa 409",
+                "Swa 121",
+                "Swa 503",
+                "Swa 408",
+                "Swa 401",
+                "Swa 411",
+                "Swa 406",
+                "Swa 403",
+                "Swa 419",
+                "Swa 415",
+                "Swa 315",
+                "Swa 504",
+                "Swa 410",
+                "Swa 501",
+                "Swa 407",
+                "Swa 413",
+                "Swa 505",
+                "Swa 593",
+                "Swa 132",
+                "Swa 417",
+                "Swa 101",
+                "Swa 129",
+                "Swa 123",
+                "Swa 125",
+                "Swa 127",
+                "Swa 451",
+                "Swa 749",
+                "Swa 781",
+                "Swa 783",
+                "Swa 782",
+                "Swa 785",
+                "Swa 784",
+                "Swa 789"
+            ]
+        },
+        "Ta": {
+            "__class__": "Set",
+            "data": [
+                "Ta 701",
+                "Ta 702",
+                "Ta 703"
+            ]
+        },
+        "Ta H1": {
+            "__class__": "Set",
+            "data": [
+                "Ta H1"
+            ]
+        }
+    },
+    "hauptstrecke": "Bischofshofen-B\u00f6ckstein",
+    "sektoren": {
+        "Swa 401": {
+            "__class__": "Set",
+            "data": [
+                "Swa 401",
+                "Swa 501"
+            ]
+        },
+        "Swa 402": {
+            "__class__": "Set",
+            "data": [
+                "Swa 402",
+                "Swa 502"
+            ]
+        },
+        "Swa 403": {
+            "__class__": "Set",
+            "data": [
+                "Swa 403",
+                "Swa 503"
+            ]
+        },
+        "Swa 404": {
+            "__class__": "Set",
+            "data": [
+                "Swa 404",
+                "Swa 504",
+                "Swa 604"
+            ]
+        },
+        "Swa 405": {
+            "__class__": "Set",
+            "data": [
+                "Swa 405",
+                "Swa 505",
+                "Swa 605"
+            ]
+        },
+        "Swa 415": {
+            "__class__": "Set",
+            "data": [
+                "Swa 315",
+                "Swa 415",
+                "Swa 615"
+            ]
+        }
+    },
+    "strecken": {
+        "Bischofshofen-Bruck-Fusch": [
+            "Bischofshofen",
+            "Bo H1",
+            "Jp",
+            "Swa",
+            "Ld",
+            "Ld H1",
+            "Ta",
+            "Ta H1",
+            "Bruck-Fusch"
+        ],
+        "Bischofshofen-B\u00f6ckstein": [
+            "Bischofshofen",
+            "Bo H1",
+            "Jp",
+            "Swa",
+            "Lof",
+            "Lfs",
+            "Lof Z1",
+            "Dg",
+            "Hg",
+            "Hg Z1",
+            "Hg Z2",
+            "Hg Z4",
+            "Bag",
+            "B\u00f6ckstein"
+        ],
+        "Bruck-Fusch-Bischofshofen": [
+            "Bruck-Fusch",
+            "Ta H1",
+            "Ta",
+            "Ld H1",
+            "Ld",
+            "Swa",
+            "Jp",
+            "Bo H1",
+            "Bischofshofen"
+        ],
+        "B\u00f6ckstein-Bischofshofen": [
+            "B\u00f6ckstein",
+            "Bag",
+            "Hg Z4",
+            "Hg Z2",
+            "Hg Z1",
+            "Hg",
+            "Dg",
+            "Lof Z1",
+            "Lfs",
+            "Lof",
+            "Swa",
+            "Jp",
+            "Bo H1",
+            "Bischofshofen"
+        ]
+    },
+    "streckenmarkierung": [
+        ["Lfs", "Lof Z1", "E"],
+        ["Hg Z1", "Hg Z2", "E"],
+        ["Hg Z4", "Bag", "E"]
+    ]
+}

@@ -1,0 +1,268 @@
+{
+    "_aid": 443,
+    "_build": 5847,
+    "_name": "Oerlikon Nord-West",
+    "_region": "Z\u00fcrich und Umgebung",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BUD Industrie": {
+            "__class__": "Set",
+            "data": [
+                "BUD Industrie"
+            ]
+        },
+        "B\u00fclach": {
+            "__class__": "Set",
+            "data": [
+                "B\u00fclach 810",
+                "B\u00fclach 910"
+            ]
+        },
+        "Dielsdorf": {
+            "__class__": "Set",
+            "data": [
+                "Dielsdorf"
+            ]
+        },
+        "Killwangen": {
+            "__class__": "Set",
+            "data": [
+                "Killwangen"
+            ]
+        },
+        "Oerlikon 856": {
+            "__class__": "Set",
+            "data": [
+                "Oerlikon 856"
+            ]
+        },
+        "Oerlikon": {
+            "__class__": "Set",
+            "data": [
+                "Oerlikon 906",
+                "Oerlikon 806"
+            ]
+        },
+        "Opfikon": {
+            "__class__": "Set",
+            "data": [
+                "Opfikon"
+            ]
+        },
+        "REG Industrie": {
+            "__class__": "Set",
+            "data": [
+                "REG Industrie"
+            ]
+        },
+        "Tanklager NG": {
+            "__class__": "Set",
+            "data": [
+                "Tanklager NG"
+            ]
+        },
+        "Tanklager GLB": {
+            "__class__": "Set",
+            "data": [
+                "Tanklager GLB"
+            ]
+        },
+        "Wettingen": {
+            "__class__": "Set",
+            "data": [
+                "Wettingen"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BUD": {
+            "__class__": "Set",
+            "data": [
+                "BUD2",
+                "BUD1"
+            ]
+        },
+        "BUD4x": {
+            "__class__": "Set",
+            "data": [
+                "BUD43",
+                "BUD41",
+                "BUD42"
+            ]
+        },
+        "BUD5x": {
+            "__class__": "Set",
+            "data": [
+                "BUD52",
+                "BUD51"
+            ]
+        },
+        "GLB": {
+            "__class__": "Set",
+            "data": [
+                "GLB2",
+                "GLB4",
+                "GLB3"
+            ]
+        },
+        "GLB5x": {
+            "__class__": "Set",
+            "data": [
+                "GLB54",
+                "GLB57"
+            ]
+        },
+        "GLB8x": {
+            "__class__": "Set",
+            "data": [
+                "GLB86",
+                "GLB85"
+            ]
+        },
+        "NG": {
+            "__class__": "Set",
+            "data": [
+                "NG5",
+                "NG4",
+                "NG6",
+                "NG2",
+                "NG3"
+            ]
+        },
+        "OF": {
+            "__class__": "Set",
+            "data": [
+                "OF2",
+                "OF1"
+            ]
+        },
+        "OF2x": {
+            "__class__": "Set",
+            "data": [
+                "OF21",
+                "OF22"
+            ]
+        },
+        "OFR": {
+            "__class__": "Set",
+            "data": [
+                "OFR"
+            ]
+        },
+        "OGL": {
+            "__class__": "Set",
+            "data": [
+                "OGL1",
+                "OGL3",
+                "OGL2"
+            ]
+        },
+        "REG": {
+            "__class__": "Set",
+            "data": [
+                "REG2",
+                "REG4",
+                "REG5",
+                "REG3"
+            ]
+        },
+        "RUEM": {
+            "__class__": "Set",
+            "data": [
+                "RUEM2",
+                "RUEM3",
+                "RUEM4"
+            ]
+        },
+        "WUER": {
+            "__class__": "Set",
+            "data": [
+                "WUER2",
+                "WUER3"
+            ]
+        },
+        "ZAF": {
+            "__class__": "Set",
+            "data": [
+                "ZAF"
+            ]
+        },
+        "ZSEB": {
+            "__class__": "Set",
+            "data": [
+                "ZSEB1",
+                "ZSEB2",
+                "ZSEB3",
+                "ZSEB4"
+            ]
+        }
+    },
+    "hauptstrecke": "B\u00fclach-Wettingen",
+    "sektoren": {},
+    "strecken": {
+        "B\u00fclach-Oerlikon": [
+            "NG",
+            "OGL",
+            "RUEM",
+            "GLB8x",
+            "GLB5x",
+            "GLB",
+            "Oerlikon"
+        ],
+        "B\u00fclach-Wettingen": [
+            "B\u00fclach",
+            "NG",
+            "NG",
+            "OGL",
+            "RUEM",
+            "GLB8x",
+            "GLB5x",
+            "GLB",
+            "ZSEB",
+            "ZAF",
+            "REG",
+            "BUD",
+            "BUD4x",
+            "BUD5x",
+            "OFR",
+            "OF2x",
+            "OF",
+            "WUER",
+            "Wettingen"
+        ],
+        "Oerlikon-Wettingen": [
+            "Oerlikon 856",
+            "ZSEB",
+            "ZAF",
+            "REG",
+            "BUD",
+            "BUD4x",
+            "BUD5x",
+            "OFR",
+            "OF2x",
+            "OF",
+            "WUER",
+            "Wettingen"
+        ],
+        "Opfikon-Wettingen": [
+            "Opfikon",
+            "ZAF",
+            "REG",
+            "BUD",
+            "BUD4x",
+            "BUD5x",
+            "OFR",
+            "OF2x",
+            "OF",
+            "WUER",
+            "Wettingen"
+        ]
+    },
+    "streckenmarkierung": [
+        ["OF", "WUER", "E"],
+        ["OFR", "BUD5x", "E"],
+        ["BUD", "REG", "E"],
+        ["GLB", "ZSEB", "E"]
+    ]
+}

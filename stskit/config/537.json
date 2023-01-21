@@ -1,0 +1,117 @@
+{
+    "_aid": 537,
+    "_build": 5840,
+    "_name": "Walensee",
+    "_region": "Ostschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "FMS Industrie": {
+            "__class__": "Set",
+            "data": [
+                "FMS Industrie"
+            ]
+        },
+        "Mels Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Mels Industrie"
+            ]
+        },
+        "Sargans": {
+            "__class__": "Set",
+            "data": [
+                "Sargans 101",
+                "Sargans 201"
+            ]
+        },
+        "Ziegelbr\u00fccke": {
+            "__class__": "Set",
+            "data": [
+                "Ziegelbr\u00fccke 231",
+                "Ziegelbr\u00fccke 131"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "FMS": {
+            "__class__": "Set",
+            "data": [
+                "FMS2",
+                "FMS4",
+                "FMS3"
+            ]
+        },
+        "MELS": {
+            "__class__": "Set",
+            "data": [
+                "MELS2",
+                "MELS3",
+                "MELS4"
+            ]
+        },
+        "MG": {
+            "__class__": "Set",
+            "data": [
+                "MG"
+            ]
+        },
+        "MH": {
+            "__class__": "Set",
+            "data": [
+                "MH1",
+                "MH2"
+            ]
+        },
+        "MOLS": {
+            "__class__": "Set",
+            "data": [
+                "MOLS"
+            ]
+        },
+        "UNT": {
+            "__class__": "Set",
+            "data": [
+                "UNT1",
+                "UNT4",
+                "UNT2",
+                "UNT3"
+            ]
+        },
+        "WAL": {
+            "__class__": "Set",
+            "data": [
+                "WAL4",
+                "WAL2",
+                "WAL3"
+            ]
+        },
+        "WN": {
+            "__class__": "Set",
+            "data": [
+                "WN3",
+                "WN4",
+                "WN2"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "Ziegelbr\u00fccke-Sargans",
+    "strecken": {
+        "Ziegelbr\u00fccke-Sargans": [
+            "Ziegelbr\u00fccke",
+            "WN",
+            "MH",
+            "MG",
+            "UNT",
+            "MOLS",
+            "WAL",
+            "FMS",
+            "MELS",
+            "Sargans"
+        ]
+    },
+    "streckenmarkierung": [
+        ["MH", "MG", "E"]
+    ]
+}

@@ -1,0 +1,322 @@
+{
+    "_aid": 460,
+    "_build": 5847,
+    "_name": "Rastatt",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Baden-Baden": {
+            "__class__": "Set",
+            "data": [
+                "Baden-Baden (Rheintal)",
+                "Baden-Baden (Fernbahn)"
+            ]
+        },
+        "Daimler": {
+            "__class__": "Set",
+            "data": [
+                "Daimler Benz"
+            ]
+        },
+        "Ettlingen Stadt": {
+            "__class__": "Set",
+            "data": [
+                "Ettlingen Stadt (AVG)"
+            ]
+        },
+        "Fa. Epple": {
+            "__class__": "Set",
+            "data": [
+                "Fa. Epple"
+            ]
+        },
+        "Fa. St\u00fcrmlinger": {
+            "__class__": "Set",
+            "data": [
+                "Fa. St\u00fcrmlinger"
+            ]
+        },
+        "Gernsbach": {
+            "__class__": "Set",
+            "data": [
+                "Gernsbach (AVG)"
+            ]
+        },
+        "Gl.10": {
+            "__class__": "Set",
+            "data": [
+                "Gl.10"
+            ]
+        },
+        "Gl.14": {
+            "__class__": "Set",
+            "data": [
+                "Gl.14"
+            ]
+        },
+        "Gl.14-32": {
+            "__class__": "Set",
+            "data": [
+                "Gl.14-32"
+            ]
+        },
+        "Gl.42-43": {
+            "__class__": "Set",
+            "data": [
+                "Gl.42-43"
+            ]
+        },
+        "Gl.44": {
+            "__class__": "Set",
+            "data": [
+                "Gl.44"
+            ]
+        },
+        "Gl.5": {
+            "__class__": "Set",
+            "data": [
+                "Gl.5"
+            ]
+        },
+        "Hbf Abzw Brunnenst\u00fcck": {
+            "__class__": "Set",
+            "data": [
+                "Hbf Abzw Brunnenst\u00fcck"
+            ]
+        },
+        "Hbf Abzw Dammerstock": {
+            "__class__": "Set",
+            "data": [
+                "Hbf Abzw Dammerstock"
+            ]
+        },
+        "Spedition": {
+            "__class__": "Set",
+            "data": [
+                "Spedition"
+            ]
+        },
+        "Wintersdorf": {
+            "__class__": "Set",
+            "data": [
+                "Wintersdorf (AVG)"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Durmersheim": {
+            "__class__": "Set",
+            "data": [
+                "Durmersheim"
+            ]
+        },
+        "ESig": {
+            "__class__": "Set",
+            "data": [
+                "ESig RRA"
+            ]
+        },
+        "Ettlingen": {
+            "__class__": "Set",
+            "data": [
+                "Ettlingen"
+            ]
+        },
+        "Industriestammgleis": {
+            "__class__": "Set",
+            "data": [
+                "Industriestammgleis"
+            ]
+        },
+        "RBIE": {
+            "__class__": "Set",
+            "data": [
+                "RBIE"
+            ]
+        },
+        "RBRH": {
+            "__class__": "Set",
+            "data": [
+                "RBRH"
+            ]
+        },
+        "RDRM": {
+            "__class__": "Set",
+            "data": [
+                "RDRM Wende R",
+                "RDRM 3 Bstg.",
+                "RDRM 6",
+                "RDRM 1 Bstg.",
+                "RDRM 1",
+                "RDRM 2 Bstg.",
+                "RDRM 4",
+                "RDRM 3",
+                "RDRM Wende L",
+                "RDRM 4 kurz",
+                "RDRM 2"
+            ]
+        },
+        "RDUN": {
+            "__class__": "Set",
+            "data": [
+                "RDUN"
+            ]
+        },
+        "RETL": {
+            "__class__": "Set",
+            "data": [
+                "RETL 3",
+                "RETL 1",
+                "RETL 23",
+                "RETL 12",
+                "RETL 11",
+                "RETL 3 Lang",
+                "RETL 10",
+                "RETL 10a",
+                "RETL 22"
+            ]
+        },
+        "RFM": {
+            "__class__": "Set",
+            "data": [
+                "RFM 2",
+                "RFM",
+                "RFM 1"
+            ]
+        },
+        "RMS": {
+            "__class__": "Set",
+            "data": [
+                "RMS"
+            ]
+        },
+        "RMU": {
+            "__class__": "Set",
+            "data": [
+                "RMU 201",
+                "RMU 202",
+                "RMU 203a",
+                "RMU",
+                "RMU 203"
+            ]
+        },
+        "ROH": {
+            "__class__": "Set",
+            "data": [
+                "ROH 103",
+                "ROH 101",
+                "ROH 102"
+            ]
+        },
+        "RRA": {
+            "__class__": "Set",
+            "data": [
+                "RRA 13",
+                "RRA 6",
+                "RRA 4",
+                "RRA 45",
+                "RRA 11",
+                "RRA 3",
+                "RRA 12",
+                "RRA 2",
+                "RRA 9",
+                "RRA 1",
+                "RRA 32",
+                "RRA 33",
+                "RRA 31",
+                "RRA 46",
+                "RRA 8",
+                "RRA 5"
+            ]
+        },
+        "RRAB": {
+            "__class__": "Set",
+            "data": [
+                "RRAB"
+            ]
+        },
+        "RRAS": {
+            "__class__": "Set",
+            "data": [
+                "RRAS"
+            ]
+        }
+    },
+    "hauptstrecke": "",
+    "sektoren": {
+        "RDRM 1": {
+            "__class__": "Set",
+            "data": [
+                "RDRM 1 Bstg.",
+                "RDRM 1"
+            ]
+        },
+        "RDRM 2": {
+            "__class__": "Set",
+            "data": [
+                "RDRM 2 Bstg.",
+                "RDRM 2"
+            ]
+        },
+        "RDRM 3": {
+            "__class__": "Set",
+            "data": [
+                "RDRM 3",
+                "RDRM 3 Bstg."
+            ]
+        },
+        "RDRM 4": {
+            "__class__": "Set",
+            "data": [
+                "RDRM 4 kurz",
+                "RDRM 4"
+            ]
+        },
+        "RETL 10": {
+            "__class__": "Set",
+            "data": [
+                "RETL 10",
+                "RETL 10a"
+            ]
+        },
+        "RETL 3": {
+            "__class__": "Set",
+            "data": [
+                "RETL 3",
+                "RETL 3 Lang"
+            ]
+        },
+        "RMU 203": {
+            "__class__": "Set",
+            "data": [
+                "RMU 203a",
+                "RMU 203"
+            ]
+        }
+    },
+    "hauptstrecke": "Hbf Abzw Brunnenst\u00fcck-Baden-Baden",
+    "strecken": {
+        "Hbf Abzw Brunnenst\u00fcck-Baden-Baden": [
+            "Hbf Abzw Brunnenst\u00fcck",
+            "RETL",
+            "RBRH",
+            "RMS",
+            "RMU",
+            "RRA",
+            "RRAS",
+            "Baden-Baden"
+        ],
+        "Hbf Abzw Dammerstock-Baden-Baden": [
+            "Hbf Abzw Dammerstock",
+            "RFM",
+            "RDUN",
+            "RDRM",
+            "RBIE",
+            "ROH",
+            "RRA",
+            "RRAS",
+            "Baden-Baden"
+        ]
+    }
+}

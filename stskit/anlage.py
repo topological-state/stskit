@@ -620,6 +620,7 @@ class Anlage:
         self.sektoren = Sektoren()
         # set von gleisnamen
         self.gleissperrungen: Set[str] = set([])
+        self.streckenmarkierung: Dict[Tuple[str, str], str] = {}
 
         # lage des anschlusses auf dem gleisbild
         # gruppenname -> "links", "mitte", "rechts", "oben", "unten"
@@ -1122,6 +1123,16 @@ class Anlage:
             self.hauptstrecke = d['hauptstrecke']
         except KeyError:
             logger.info("keine hauptstrecke konfiguriert")
+        try:
+            markierungen = d['streckenmarkierung']
+        except KeyError:
+            logger.info("keine streckenmarkierungen konfiguriert")
+        else:
+            for markierung in markierungen:
+                try:
+                    self.streckenmarkierung[(markierung[0], markierung[1])] = markierung[2]
+                except IndexError:
+                    pass
 
         self._update_gruppen_dict()
         self.config_loaded = True
@@ -1162,6 +1173,8 @@ class Anlage:
         :return: dictionary mit konfiguration- und diagnostik-daten.
         """
 
+        streckenmarkierung = [[b[0], b[1], m] for b, m in self.streckenmarkierung.items()]
+
         d = {'_aid': self.anlage.aid,
              '_region': self.anlage.region,
              '_name': self.anlage.name,
@@ -1172,7 +1185,8 @@ class Anlage:
              'sektoren': self.sektoren.get_config(),
              'anschlusslage': self.anschlusslage,
              'strecken': self.strecken,
-             'hauptstrecke': self.hauptstrecke}
+             'hauptstrecke': self.hauptstrecke,
+             'streckenmarkierung': streckenmarkierung}
 
         if graphs:
             if self.signal_graph:

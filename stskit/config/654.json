@@ -1,0 +1,298 @@
+{
+    "_aid": 654,
+    "_build": 5847,
+    "_name": "Emmental",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Armee": {
+            "__class__": "Set",
+            "data": [
+                "Armee"
+            ]
+        },
+        "BEBECO": {
+            "__class__": "Set",
+            "data": [
+                "BEBECO"
+            ]
+        },
+        "Bowil": {
+            "__class__": "Set",
+            "data": [
+                "Bowil"
+            ]
+        },
+        "Burgdorf": {
+            "__class__": "Set",
+            "data": [
+                "Burgdorf 122",
+                "Burgdorf 222"
+            ]
+        },
+        "Heimberg": {
+            "__class__": "Set",
+            "data": [
+                "Heimberg"
+            ]
+        },
+        "KF+": {
+            "__class__": "Set",
+            "data": [
+                "KF51-54",
+                "KF86-87"
+            ]
+        },
+        "Sumiswald": {
+            "__class__": "Set",
+            "data": [
+                "Sumiswald ETB"
+            ]
+        },
+        "Tanklager": {
+            "__class__": "Set",
+            "data": [
+                "Tanklager"
+            ]
+        },
+        "UA": {
+            "__class__": "Set",
+            "data": [
+                "UA OBB"
+            ]
+        },
+        "Worb": {
+            "__class__": "Set",
+            "data": [
+                "Worb SBB"
+            ]
+        },
+        "Zollbr\u00fcck": {
+            "__class__": "Set",
+            "data": [
+                "Zollbr\u00fcck"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BDFS": {
+            "__class__": "Set",
+            "data": [
+                "BDFS2",
+                "BDFS1"
+            ]
+        },
+        "BIG": {
+            "__class__": "Set",
+            "data": [
+                "BIG3",
+                "BIG2"
+            ]
+        },
+        "BIGE": {
+            "__class__": "Set",
+            "data": [
+                "BIGE"
+            ]
+        },
+        "BK": {
+            "__class__": "Set",
+            "data": [
+                "BK11",
+                "BK1",
+                "BK2",
+                "BK3"
+            ]
+        },
+        "GH": {
+            "__class__": "Set",
+            "data": [
+                "GH2",
+                "GH3"
+            ]
+        },
+        "GRMA": {
+            "__class__": "Set",
+            "data": [
+                "GRMA2",
+                "GRMA1"
+            ]
+        },
+        "HA": {
+            "__class__": "Set",
+            "data": [
+                "HA3",
+                "HA4",
+                "HA5",
+                "HA2",
+                "HA1"
+            ]
+        },
+        "KF": {
+            "__class__": "Set",
+            "data": [
+                "KF6",
+                "KF5",
+                "KF4",
+                "KF3",
+                "KF2"
+            ]
+        },
+        "LUGO": {
+            "__class__": "Set",
+            "data": [
+                "LUGO3",
+                "LUGO2",
+                "LUGO1"
+            ]
+        },
+        "OBB": {
+            "__class__": "Set",
+            "data": [
+                "OBB4",
+                "OBB3",
+                "OBB1",
+                "OBB2"
+            ]
+        },
+        "OD": {
+            "__class__": "Set",
+            "data": [
+                "OD1",
+                "OD2"
+            ]
+        },
+        "RAM": {
+            "__class__": "Set",
+            "data": [
+                "RAM4",
+                "RAM2",
+                "RAM1",
+                "RAM3"
+            ]
+        },
+        "SHIE": {
+            "__class__": "Set",
+            "data": [
+                "SHIE2",
+                "SHIE1"
+            ]
+        },
+        "STAL": {
+            "__class__": "Set",
+            "data": [
+                "STAL"
+            ]
+        },
+        "SWG": {
+            "__class__": "Set",
+            "data": [
+                "SWG1"
+            ]
+        },
+        "TI": {
+            "__class__": "Set",
+            "data": [
+                "TI2",
+                "TI1"
+            ]
+        },
+        "WALK": {
+            "__class__": "Set",
+            "data": [
+                "WALK1",
+                "WALK2"
+            ]
+        },
+        "ZAE": {
+            "__class__": "Set",
+            "data": [
+                "ZAE2",
+                "ZAE1"
+            ]
+        }
+    },
+    "hauptstrecke": "Burgdorf-Heimberg",
+    "sektoren": {},
+    "strecken": {
+        "Bowil-Worb": [
+            "Bowil",
+            "ZAE",
+            "KF",
+            "TI",
+            "Worb"
+        ],
+        "Burgdorf-Heimberg": [
+            "Burgdorf",
+            "BDFS",
+            "OBB",
+            "HA",
+            "SHIE",
+            "BIGE",
+            "WALK",
+            "BIG",
+            "GH",
+            "KF",
+            "STAL",
+            "OD",
+            "BK",
+            "Heimberg"
+        ],
+        "Burgdorf-Zollbr\u00fcck": [
+            "Burgdorf",
+            "BDFS",
+            "OBB",
+            "HA",
+            "LUGO",
+            "RAM",
+            "Zollbr\u00fcck"
+        ],
+        "Heimberg-Burgdorf": [
+            "Heimberg",
+            "BK",
+            "OD",
+            "STAL",
+            "KF",
+            "GH",
+            "BIG",
+            "WALK",
+            "BIGE",
+            "SHIE",
+            "HA",
+            "OBB",
+            "BDFS",
+            "Burgdorf"
+        ],
+        "Sumiswald-Zollbr\u00fcck": [
+            "Sumiswald",
+            "SWG",
+            "GRMA",
+            "RAM",
+            "Zollbr\u00fcck"
+        ],
+        "Worb-Bowil": [
+            "Worb",
+            "TI",
+            "KF",
+            "ZAE",
+            "Bowil"
+        ],
+        "Zollbr\u00fcck-Burgdorf": [
+            "Zollbr\u00fcck",
+            "RAM",
+            "LUGO",
+            "HA",
+            "OBB",
+            "BDFS",
+            "Burgdorf"
+        ],
+        "Zollbr\u00fcck-Sumiswald": [
+            "Zollbr\u00fcck",
+            "RAM",
+            "GRMA",
+            "SWG",
+            "Sumiswald"
+        ]
+    }
+}

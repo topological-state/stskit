@@ -1,0 +1,225 @@
+{
+    "_aid": 387,
+    "_build": 5847,
+    "_name": "Zug",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellfeld": {
+            "__class__": "Set",
+            "data": [
+                "Abstellfeld"
+            ]
+        },
+        "Rotkreuz": {
+            "__class__": "Set",
+            "data": [
+                "Rotkreuz 446",
+                "Rotkreuz 346"
+            ]
+        },
+        "Steinhausen": {
+            "__class__": "Set",
+            "data": [
+                "Steinhausen"
+            ]
+        },
+        "TW": {
+            "__class__": "Set",
+            "data": [
+                "TW 311",
+                "TW 411"
+            ]
+        },
+        "Walchwil": {
+            "__class__": "Set",
+            "data": [
+                "Walchwil"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BAA": {
+            "__class__": "Set",
+            "data": [
+                "BAA1",
+                "BAA2",
+                "BAA3"
+            ]
+        },
+        "BAAL": {
+            "__class__": "Set",
+            "data": [
+                "BAAL1",
+                "BAAL3",
+                "BAAL2"
+            ]
+        },
+        "BAAN": {
+            "__class__": "Set",
+            "data": [
+                "BAAN"
+            ]
+        },
+        "CHAA": {
+            "__class__": "Set",
+            "data": [
+                "CHAA"
+            ]
+        },
+        "CHAM": {
+            "__class__": "Set",
+            "data": [
+                "CHAM1",
+                "CHAM2",
+                "CHAM3"
+            ]
+        },
+        "HGO": {
+            "__class__": "Set",
+            "data": [
+                "HGO3",
+                "HGO4",
+                "HGO2"
+            ]
+        },
+        "HUCH": {
+            "__class__": "Set",
+            "data": [
+                "HUCH"
+            ]
+        },
+        "HUZY": {
+            "__class__": "Set",
+            "data": [
+                "HUZY"
+            ]
+        },
+        "KMUE": {
+            "__class__": "Set",
+            "data": [
+                "KMUE"
+            ]
+        },
+        "ORDD": {
+            "__class__": "Set",
+            "data": [
+                "ORDD"
+            ]
+        },
+        "SBG": {
+            "__class__": "Set",
+            "data": [
+                "SBG4",
+                "SBG2",
+                "SBG3"
+            ]
+        },
+        "ZG": {
+            "__class__": "Set",
+            "data": [
+                "ZG4",
+                "ZG6",
+                "ZG3",
+                "ZG1",
+                "ZG7",
+                "ZG5",
+                "ZG2"
+            ]
+        },
+        "ZGCA": {
+            "__class__": "Set",
+            "data": [
+                "ZGCA"
+            ]
+        },
+        "ZGFR": {
+            "__class__": "Set",
+            "data": [
+                "ZGFR"
+            ]
+        },
+        "ZGO": {
+            "__class__": "Set",
+            "data": [
+                "ZGO2",
+                "ZGO1",
+                "ZGO91"
+            ]
+        },
+        "ZGPP": {
+            "__class__": "Set",
+            "data": [
+                "ZGPP"
+            ]
+        },
+        "ZGSE": {
+            "__class__": "Set",
+            "data": [
+                "ZGSE"
+            ]
+        }
+    },
+    "hauptstrecke": "TW-Walchwil",
+    "sektoren": {},
+    "strecken": {
+        "TW-Rotkreuz": [
+            "TW",
+            "ORDD",
+            "HGO",
+            "SBG",
+            "BAA",
+            "BAAN",
+            "BAAL",
+            "ZG",
+            "ZGSE",
+            "KMUE",
+            "CHAA",
+            "CHAM",
+            "HUZY",
+            "HUCH",
+            "Rotkreuz"
+        ],
+        "TW-Walchwil": [
+            "TW",
+            "ORDD",
+            "HGO",
+            "SBG",
+            "BAA",
+            "BAAN",
+            "BAAL",
+            "ZG",
+            "ZGPP",
+            "ZGCA",
+            "ZGFR",
+            "ZGO",
+            "Walchwil"
+        ],
+        "ZG-Rotkreuz": [
+            "ZG",
+            "ZGSE",
+            "KMUE",
+            "CHAA",
+            "CHAM",
+            "HUZY",
+            "HUCH",
+            "Rotkreuz"
+        ],
+        "ZG-Walchwil": [
+            "ZG",
+            "ZGPP",
+            "ZGCA",
+            "ZGFR",
+            "ZGO",
+            "Walchwil"
+        ]
+    },
+    "streckenmarkierung": [
+        ["HGO", "SBG", "E"],
+        ["SBG", "BAA", "E"],
+        ["ZG", "ZGO", "E"],
+        ["ZGO", "Walchwil", "E"]
+    ]
+
+}
