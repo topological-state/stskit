@@ -17,16 +17,16 @@
                 "Hasslacher"
             ]
         },
-        "Lienz": {
+        "Lie Abstellung": {
             "__class__": "Set",
             "data": [
-                "812",
-                "322",
                 "308 A",
-                "308 B"
+                "308 B",
+                "322",
+                "812"
             ]
         },
-        "Lienz A": {
+        "Lie A": {
             "__class__": "Set",
             "data": [
                 "1Li",
@@ -34,7 +34,7 @@
                 "1R"
             ]
         },
-        "Mallnitz": {
+        "Ma Abstellung": {
             "__class__": "Set",
             "data": [
                 "307-309",
@@ -85,7 +85,8 @@
             "data": [
                 "Doe 203",
                 "Doe 301",
-                "Doe 201"
+                "Doe 201",
+                "Doe 5"
             ]
         },
         "Doe H1": {
@@ -142,24 +143,26 @@
         "Lie": {
             "__class__": "Set",
             "data": [
-                "Lie 304 B",
-                "Lie 331",
-                "Lie 333",
+                "Lie 101",
+                "Lie 106",
+                "Lie 201",
+                "Lie 301",
                 "Lie 302",
                 "Lie 303",
+                "Lie 304 A",
+                "Lie 304 B",
+                "Lie 304 C",
                 "Lie 304 D",
-                "Lie 101",
-                "Lie 310",
                 "Lie 306 A",
                 "Lie 306 B",
-                "Lie 401",
+                "Lie 308",
+                "Lie 310",
                 "Lie 312",
-                "Lie 301",
-                "Lie 201",
-                "Lie 304 C",
-                "Lie 304 A",
+                "Lie 331",
                 "Lie 332",
-                "Lie 106"
+                "Lie 333",
+                "Lie 401",
+                "Lie W10"
             ]
         },
         "Lie A1": {
@@ -266,6 +269,7 @@
                 "Ssn 201",
                 "Ssn 202",
                 "Ssn 203",
+                "Ssn 5",
                 "Ssn Wende R",
                 "Ssn Wende L"
             ]
