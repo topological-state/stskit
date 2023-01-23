@@ -1383,6 +1383,9 @@ class Planung:
                     continue
                 data['d_min'] = ziel.mindestaufenthalt
                 data['v_ab'] = data['v_an']
+            else:
+                data['v_an'] = ziel.verspaetung_an
+                data['v_ab'] = ziel.verspaetung_ab
 
         for node in self.zielsortierung:
             data = self.zielgraph.nodes[node]
@@ -1427,7 +1430,7 @@ class Planung:
                     try:
                         edge_obj: VerspaetungsKorrektur = edge_data['obj']
                     except KeyError:
-                        continue
+                        succ_data['v_an'] = data['v_ab']
                     else:
                         edge_obj.weiterleiten(self.zielgraph, node, data, succ, succ_data)
 
