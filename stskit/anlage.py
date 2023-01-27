@@ -121,9 +121,9 @@ def default_anschlussname(gleis: str) -> str:
     anschlussname aus gleisnamen ableiten.
 
     es wird angenommen, dass der bahnhofname aus den alphabetischen zeichen am anfang des gleisnamens besteht.
-    wenn der gleisname keine alphabetischen zeichen enthält, wird ein leerer string zurückgegeben.
 
-    wenn eine zeichenfolge aus EINZEL_ANSCHLUESSE im gleisnamen vorkommt, wird der gleisname unverändert zurückgegeben.
+    wenn der gleisname keine alphabetischen zeichen enthält
+    oder eine zeichenfolge aus EINZEL_ANSCHLUESSE im gleisnamen vorkommt, wird der gleisname unverändert zurückgegeben.
 
     :param gleis: gleisname
     :return: anschlussname
@@ -132,7 +132,11 @@ def default_anschlussname(gleis: str) -> str:
     if ist_einzel_anschluss(gleis):
         return gleis
     else:
-        return re.match(ALPHA_PREFIX_PATTERN, gleis).group(0).strip()
+        anschluss = re.match(ALPHA_PREFIX_PATTERN, gleis).group(0).strip()
+        if anschluss:
+            return anschluss
+        else:
+            return gleis
 
 
 def dict_union(*gr: Dict[str, Set[Any]]) -> Dict[str, Set[Any]]:
