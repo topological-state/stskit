@@ -1,0 +1,424 @@
+{
+    "_aid": 395,
+    "_build": 5847,
+    "_name": "Klagenfurt Hbf",
+    "_region": "\u00d6sterreich Mitte",
+    "_version": 2,
+    "anschlussgruppen": {
+        "208": {
+            "__class__": "Set",
+            "data": [
+                "208"
+            ]
+        },
+        "337": {
+            "__class__": "Set",
+            "data": [
+                "337"
+            ]
+        },
+        "508": {
+            "__class__": "Set",
+            "data": [
+                "508"
+            ]
+        },
+        "526": {
+            "__class__": "Set",
+            "data": [
+                "526"
+            ]
+        },
+        "711": {
+            "__class__": "Set",
+            "data": [
+                "711"
+            ]
+        },
+        "AB Viktring": {
+            "__class__": "Set",
+            "data": [
+                "AB Viktring"
+            ]
+        },
+        "Flughafen DB Schenker": {
+            "__class__": "Set",
+            "data": [
+                "Flughafen DB Schenker"
+            ]
+        },
+        "Funder Werk III": {
+            "__class__": "Set",
+            "data": [
+                "Funder Werk III"
+            ]
+        },
+        "Gebr\u00fcder Weiss": {
+            "__class__": "Set",
+            "data": [
+                "Gebr\u00fcder Weiss"
+            ]
+        },
+        "Grafenstein": {
+            "__class__": "Set",
+            "data": [
+                "Grafenstein"
+            ]
+        },
+        "Ladegl.": {
+            "__class__": "Set",
+            "data": [
+                "Ladegl."
+            ]
+        },
+        "Lagerhaus": {
+            "__class__": "Set",
+            "data": [
+                "Lagerhaus"
+            ]
+        },
+        "Laudonkaserne": {
+            "__class__": "Set",
+            "data": [
+                "Laudonkaserne"
+            ]
+        },
+        "PR-St\u00fctzpunkt": {
+            "__class__": "Set",
+            "data": [
+                "PR-St\u00fctzpunkt"
+            ]
+        },
+        "Spar": {
+            "__class__": "Set",
+            "data": [
+                "Spar"
+            ]
+        },
+        "St.Veit a.d.Glan": {
+            "__class__": "Set",
+            "data": [
+                "St.Veit a.d.Glan"
+            ]
+        },
+        "Villach Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Villach Hbf"
+            ]
+        },
+        "Weizelsdorf": {
+            "__class__": "Set",
+            "data": [
+                "Weizelsdorf"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "AB Lobbe": {
+            "__class__": "Set",
+            "data": [
+                "AB Lobbe"
+            ]
+        },
+        "Foe": {
+            "__class__": "Set",
+            "data": [
+                "Foe 303",
+                "Foe 301",
+                "Foe 302",
+                "Foe 304",
+                "Foe 201"
+            ]
+        },
+        "Gra H1": {
+            "__class__": "Set",
+            "data": [
+                "Gra H1"
+            ]
+        },
+        "Krd": {
+            "__class__": "Set",
+            "data": [
+                "Krd 303",
+                "Krd 302",
+                "Krd 301"
+            ]
+        },
+        "Krd H1": {
+            "__class__": "Set",
+            "data": [
+                "Krd H1"
+            ]
+        },
+        "Kt": {
+            "__class__": "Set",
+            "data": [
+                "Kt 522",
+                "Kt 509",
+                "Kt 407",
+                "Kt 503",
+                "Kt 502",
+                "Kt 511",
+                "Kt 515w",
+                "Kt 513w",
+                "Kt 525",
+                "Kt 513",
+                "Kt 902",
+                "Kt 505",
+                "Kt 504",
+                "Kt 523",
+                "Kt 524",
+                "Kt 602",
+                "Kt 302",
+                "Kt 517",
+                "Kt 609",
+                "Kt 507",
+                "Kt 301",
+                "Kt 521",
+                "Kt 506",
+                "Kt 527",
+                "Kt 501",
+                "Kt 515o",
+                "Kt 515",
+                "Kt 303",
+                "Kt 629",
+                "Kt 513o",
+                "Kt 901"
+            ]
+        },
+        "Kt H1": {
+            "__class__": "Set",
+            "data": [
+                "Kt H1"
+            ]
+        },
+        "Kt H2": {
+            "__class__": "Set",
+            "data": [
+                "Kt H2"
+            ]
+        },
+        "Ktf": {
+            "__class__": "Set",
+            "data": [
+                "Ktf 333",
+                "Ktf 331",
+                "Ktf 132",
+                "Ktf 131",
+                "Ktf 335",
+                "Ktf 337",
+                "Ktf 332"
+            ]
+        },
+        "Kto": {
+            "__class__": "Set",
+            "data": [
+                "Kto 207",
+                "Kto 203",
+                "Kto 103",
+                "Kto 201",
+                "Kto 204",
+                "Kto 102",
+                "Kto 205",
+                "Kto 202",
+                "Kto 101"
+            ]
+        },
+        "Kts": {
+            "__class__": "Set",
+            "data": [
+                "Kts"
+            ]
+        },
+        "Mal": {
+            "__class__": "Set",
+            "data": [
+                "Mal 201",
+                "Mal 203",
+                "Mal 102",
+                "Mal 204 G",
+                "Mal 101",
+                "Mal 202",
+                "Mal 104",
+                "Mal 204"
+            ]
+        },
+        "Mal H1": {
+            "__class__": "Set",
+            "data": [
+                "Mal H1"
+            ]
+        },
+        "Pow": {
+            "__class__": "Set",
+            "data": [
+                "Pow 202",
+                "Pow 201"
+            ]
+        },
+        "Pow H1": {
+            "__class__": "Set",
+            "data": [
+                "Pow H1"
+            ]
+        },
+        "Vel": {
+            "__class__": "Set",
+            "data": [
+                "Vel 501",
+                "Vel 504",
+                "Vel 502"
+            ]
+        },
+        "Vel H1": {
+            "__class__": "Set",
+            "data": [
+                "Vel H1"
+            ]
+        },
+        "Vik": {
+            "__class__": "Set",
+            "data": [
+                "Vik 909",
+                "Vik 709"
+            ]
+        },
+        "Vps S1": {
+            "__class__": "Set",
+            "data": [
+                "Vps S1"
+            ]
+        },
+        "Wende AB": {
+            "__class__": "Set",
+            "data": [
+                "Wende AB"
+            ]
+        }
+    },
+    "hauptstrecke": "Villach Hbf-St.Veit a.d.Glan",
+    "sektoren": {
+        "Foe 201": {
+            "__class__": "Set",
+            "data": [
+                "Foe 201",
+                "Foe 301"
+            ]
+        },
+        "Kt 501": {
+            "__class__": "Set",
+            "data": [
+                "Kt 521",
+                "Kt 501"
+            ]
+        },
+        "Kt 502": {
+            "__class__": "Set",
+            "data": [
+                "Kt 522",
+                "Kt 502"
+            ]
+        },
+        "Kt 503": {
+            "__class__": "Set",
+            "data": [
+                "Kt 523",
+                "Kt 503"
+            ]
+        },
+        "Kt 505": {
+            "__class__": "Set",
+            "data": [
+                "Kt 505",
+                "Kt 525"
+            ]
+        },
+        "Kt 507": {
+            "__class__": "Set",
+            "data": [
+                "Kt 507",
+                "Kt 527"
+            ]
+        },
+        "Kt 513": {
+            "__class__": "Set",
+            "data": [
+                "Kt 513o",
+                "Kt 513",
+                "Kt 513w"
+            ]
+        },
+        "Kt 515": {
+            "__class__": "Set",
+            "data": [
+                "Kt 515w",
+                "Kt 515o",
+                "Kt 515"
+            ]
+        },
+        "Mal 204": {
+            "__class__": "Set",
+            "data": [
+                "Mal 204",
+                "Mal 204 G"
+            ]
+        }
+    },
+    "strecken": {
+        "Villach Hbf-Grafenstein": [
+            "Villach Hbf",
+            "Foe",
+            "Vel H1",
+            "Vel",
+            "Pow H1",
+            "Pow",
+            "Krd H1",
+            "Krd",
+            "Kt H2",
+            "Kt H1",
+            "Kt",
+            "Gra H1",
+            "Grafenstein"
+        ],
+        "Villach Hbf-St.Veit a.d.Glan": [
+            "Villach Hbf",
+            "Foe",
+            "Vel H1",
+            "Vel",
+            "Pow H1",
+            "Pow",
+            "Krd H1",
+            "Krd",
+            "Kt H2",
+            "Kt H1",
+            "Kt",
+            "Kto",
+            "Mal H1",
+            "Mal",
+            "Vps S1",
+            "St.Veit a.d.Glan"
+        ],
+        "Weizelsdorf-Grafenstein": [
+            "Weizelsdorf",
+            "Vik",
+            "Kts",
+            "Kt",
+            "Gra H1",
+            "Grafenstein"
+        ],
+        "Weizelsdorf-St.Veit a.d.Glan": [
+            "Weizelsdorf",
+            "Vik",
+            "Kts",
+            "Kt",
+            "Kto",
+            "Mal H1",
+            "Mal",
+            "Vps S1",
+            "St.Veit a.d.Glan"
+        ]
+    },
+    "streckenmarkierung": []
+}

@@ -1,0 +1,603 @@
+{
+    "_aid": 887,
+    "_build": 5847,
+    "_name": "Villach Hbf",
+    "_region": "\u00d6sterreich Mitte",
+    "_version": 2,
+    "anschlussgruppen": {
+        "206o": {
+            "__class__": "Set",
+            "data": [
+                "206o"
+            ]
+        },
+        "206w": {
+            "__class__": "Set",
+            "data": [
+                "206w"
+            ]
+        },
+        "214": {
+            "__class__": "Set",
+            "data": [
+                "214"
+            ]
+        },
+        "281": {
+            "__class__": "Set",
+            "data": [
+                "281"
+            ]
+        },
+        "291": {
+            "__class__": "Set",
+            "data": [
+                "291"
+            ]
+        },
+        "292": {
+            "__class__": "Set",
+            "data": [
+                "292"
+            ]
+        },
+        "386": {
+            "__class__": "Set",
+            "data": [
+                "386"
+            ]
+        },
+        "388": {
+            "__class__": "Set",
+            "data": [
+                "388"
+            ]
+        },
+        "411": {
+            "__class__": "Set",
+            "data": [
+                "411"
+            ]
+        },
+        "713": {
+            "__class__": "Set",
+            "data": [
+                "713"
+            ]
+        },
+        "743": {
+            "__class__": "Set",
+            "data": [
+                "743"
+            ]
+        },
+        "801": {
+            "__class__": "Set",
+            "data": [
+                "801"
+            ]
+        },
+        "802": {
+            "__class__": "Set",
+            "data": [
+                "802"
+            ]
+        },
+        "843": {
+            "__class__": "Set",
+            "data": [
+                "843"
+            ]
+        },
+        "844": {
+            "__class__": "Set",
+            "data": [
+                "844"
+            ]
+        },
+        "F\u00f6derlach": {
+            "__class__": "Set",
+            "data": [
+                "F\u00f6derlach"
+            ]
+        },
+        "Gummern": {
+            "__class__": "Set",
+            "data": [
+                "Gummern"
+            ]
+        },
+        "Industriepark": {
+            "__class__": "Set",
+            "data": [
+                "Industriepark"
+            ]
+        },
+        "Sattendorf": {
+            "__class__": "Set",
+            "data": [
+                "Sattendorf"
+            ]
+        },
+        "Treibacher": {
+            "__class__": "Set",
+            "data": [
+                "Treibacher"
+            ]
+        },
+        "Villach Gvbf": {
+            "__class__": "Set",
+            "data": [
+                "Villach S\u00fcd Gvbf 4",
+                "Villach S\u00fcd Gvbf 1",
+                "Villach S\u00fcd Gvbf 2"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Foe H1": {
+            "__class__": "Set",
+            "data": [
+                "Foe H1"
+            ]
+        },
+        "Gu Z2": {
+            "__class__": "Set",
+            "data": [
+                "Gu Z2"
+            ]
+        },
+        "Ru": {
+            "__class__": "Set",
+            "data": [
+                "Ru 514 G",
+                "Ru 518",
+                "Ru 516 G",
+                "Ru 504",
+                "Ru 516",
+                "Ru 514"
+            ]
+        },
+        "Ru H1": {
+            "__class__": "Set",
+            "data": [
+                "Ru H1"
+            ]
+        },
+        "Vb": {
+            "__class__": "Set",
+            "data": [
+                "Vb 227",
+                "Vb 144",
+                "Vb 222",
+                "Vb 132",
+                "Vb 383",
+                "Vb 383 RJ",
+                "Vb 205o",
+                "Vb 266",
+                "Vb 383 ET",
+                "Vb 203",
+                "Vb 263",
+                "Vb 202",
+                "Vb 382",
+                "Vb 207",
+                "Vb 205w",
+                "Vb 381",
+                "Vb 229",
+                "Vb 251",
+                "Vb 210 (l)",
+                "Vb 282",
+                "Vb 212w",
+                "Vb 275",
+                "Vb 276",
+                "Vb 206w",
+                "Vb 212o",
+                "Vb 204",
+                "Vb 201",
+                "Vb 210",
+                "Vb 216w",
+                "Vb 216o",
+                "Vb 320",
+                "Vb 205",
+                "Vb 265",
+                "Vb 208",
+                "Vb 202 (l)",
+                "Vb 206o",
+                "Vb 212",
+                "Vb 131",
+                "Vb 224",
+                "Vb 201 (l)",
+                "Vb 228",
+                "Vb 223",
+                "Vb 216",
+                "Vb 268",
+                "Vb 221",
+                "Vb 134",
+                "Vb 230"
+            ]
+        },
+        "Vba": {
+            "__class__": "Set",
+            "data": [
+                "Vba 346",
+                "Vba 334",
+                "Vba 332k",
+                "Vba 331",
+                "Vba 333",
+                "Vba 332",
+                "Vba 337",
+                "Vba 336",
+                "Vba 104",
+                "Vba 331k"
+            ]
+        },
+        "Vbd": {
+            "__class__": "Set",
+            "data": [
+                "Vbd"
+            ]
+        },
+        "Vbo": {
+            "__class__": "Set",
+            "data": [
+                "Vbo 371o",
+                "Vbo 356",
+                "Vbo 371w",
+                "Vbo 353o",
+                "Vbo 101",
+                "Vbo 353w",
+                "Vbo 352",
+                "Vbo 357o",
+                "Vbo 354w",
+                "Vbo 315",
+                "Vbo 359",
+                "Vbo 359o",
+                "Vbo 401",
+                "Vbo 352o",
+                "Vbo 362",
+                "Vbo 122",
+                "Vbo 102",
+                "Vbo 355o",
+                "Vbo 355",
+                "Vbo 354o",
+                "Vbo 311",
+                "Vbo 351",
+                "Vbo 313",
+                "Vbo 351o",
+                "Vbo 356o",
+                "Vbo 352w",
+                "Vbo 360",
+                "Vbo 361",
+                "Vbo 357",
+                "Vbo 359w",
+                "Vbo 355w",
+                "Vbo 358o",
+                "Vbo 371",
+                "Vbo 353",
+                "Vbo 354",
+                "Vbo 124",
+                "Vbo 121",
+                "Vbo 120",
+                "Vbo 351w",
+                "Vbo 358w",
+                "Vbo 358",
+                "Vbo 357w",
+                "Vbo 356w"
+            ]
+        },
+        "Vf": {
+            "__class__": "Set",
+            "data": [
+                "Vf 723",
+                "Vf 711",
+                "Vf 902",
+                "Vf 728",
+                "Vf 721",
+                "Vf 734",
+                "Vf 721 G",
+                "Vf 726",
+                "Vf 844",
+                "Vf 732",
+                "Vf 712",
+                "Vf 843",
+                "Vf 904",
+                "Vf 721 (l)",
+                "Vf 722 (l)",
+                "Vf 724",
+                "Vf 901",
+                "Vf 730",
+                "Vf 714",
+                "Vf 722 G",
+                "Vf 722"
+            ]
+        },
+        "Wasch": {
+            "__class__": "Set",
+            "data": [
+                "Wasch 2",
+                "Wasch 1",
+                "Wasch 3"
+            ]
+        }
+    },
+    "hauptstrecke": "Villach Gvbf-F\u00f6derlach",
+    "sektoren": {
+        "Ru 514": {
+            "__class__": "Set",
+            "data": [
+                "Ru 514",
+                "Ru 514 G"
+            ]
+        },
+        "Ru 516": {
+            "__class__": "Set",
+            "data": [
+                "Ru 516",
+                "Ru 516 G"
+            ]
+        },
+        "Vb 201": {
+            "__class__": "Set",
+            "data": [
+                "Vb 201",
+                "Vb 221",
+                "Vb 201 (l)"
+            ]
+        },
+        "Vb 202": {
+            "__class__": "Set",
+            "data": [
+                "Vb 202 (l)",
+                "Vb 202",
+                "Vb 222"
+            ]
+        },
+        "Vb 203": {
+            "__class__": "Set",
+            "data": [
+                "Vb 223",
+                "Vb 203"
+            ]
+        },
+        "Vb 204": {
+            "__class__": "Set",
+            "data": [
+                "Vb 224",
+                "Vb 204"
+            ]
+        },
+        "Vb 205": {
+            "__class__": "Set",
+            "data": [
+                "Vb 205",
+                "Vb 205w",
+                "Vb 205o"
+            ]
+        },
+        "Vb 207": {
+            "__class__": "Set",
+            "data": [
+                "Vb 207",
+                "Vb 227"
+            ]
+        },
+        "Vb 208": {
+            "__class__": "Set",
+            "data": [
+                "Vb 208",
+                "Vb 228"
+            ]
+        },
+        "Vb 210": {
+            "__class__": "Set",
+            "data": [
+                "Vb 210",
+                "Vb 230",
+                "Vb 210 (l)"
+            ]
+        },
+        "Vb 212": {
+            "__class__": "Set",
+            "data": [
+                "Vb 212o",
+                "Vb 212w",
+                "Vb 212"
+            ]
+        },
+        "Vb 216": {
+            "__class__": "Set",
+            "data": [
+                "Vb 216w",
+                "Vb 216",
+                "Vb 216o"
+            ]
+        },
+        "Vb 383": {
+            "__class__": "Set",
+            "data": [
+                "Vb 383",
+                "Vb 383 RJ",
+                "Vb 383 ET"
+            ]
+        },
+        "Vba 331": {
+            "__class__": "Set",
+            "data": [
+                "Vba 331k",
+                "Vba 331"
+            ]
+        },
+        "Vba 332": {
+            "__class__": "Set",
+            "data": [
+                "Vba 332k",
+                "Vba 332"
+            ]
+        },
+        "Vbo 351": {
+            "__class__": "Set",
+            "data": [
+                "Vbo 351o",
+                "Vbo 351w",
+                "Vbo 351"
+            ]
+        },
+        "Vbo 352": {
+            "__class__": "Set",
+            "data": [
+                "Vbo 352w",
+                "Vbo 352o",
+                "Vbo 352"
+            ]
+        },
+        "Vbo 353": {
+            "__class__": "Set",
+            "data": [
+                "Vbo 353",
+                "Vbo 353w",
+                "Vbo 353o"
+            ]
+        },
+        "Vbo 354": {
+            "__class__": "Set",
+            "data": [
+                "Vbo 354w",
+                "Vbo 354o",
+                "Vbo 354"
+            ]
+        },
+        "Vbo 355": {
+            "__class__": "Set",
+            "data": [
+                "Vbo 355o",
+                "Vbo 355",
+                "Vbo 355w"
+            ]
+        },
+        "Vbo 356": {
+            "__class__": "Set",
+            "data": [
+                "Vbo 356o",
+                "Vbo 356",
+                "Vbo 356w"
+            ]
+        },
+        "Vbo 357": {
+            "__class__": "Set",
+            "data": [
+                "Vbo 357w",
+                "Vbo 357",
+                "Vbo 357o"
+            ]
+        },
+        "Vbo 358": {
+            "__class__": "Set",
+            "data": [
+                "Vbo 358",
+                "Vbo 358w",
+                "Vbo 358o"
+            ]
+        },
+        "Vbo 359": {
+            "__class__": "Set",
+            "data": [
+                "Vbo 359o",
+                "Vbo 359",
+                "Vbo 359w"
+            ]
+        },
+        "Vbo 371": {
+            "__class__": "Set",
+            "data": [
+                "Vbo 371w",
+                "Vbo 371o",
+                "Vbo 371"
+            ]
+        },
+        "Vf 721": {
+            "__class__": "Set",
+            "data": [
+                "Vf 721",
+                "Vf 721 (l)",
+                "Vf 721 G"
+            ]
+        },
+        "Vf 722": {
+            "__class__": "Set",
+            "data": [
+                "Vf 722",
+                "Vf 722 (l)",
+                "Vf 722 G"
+            ]
+        }
+    },
+    "strecken": {
+        "F\u00f6derlach-Gummern": [
+            "F\u00f6derlach",
+            "Foe H1",
+            "Vbo",
+            "Vb",
+            "Gu Z2",
+            "Gummern"
+        ],
+        "F\u00f6derlach-Villach Gvbf": [
+            "F\u00f6derlach",
+            "Foe H1",
+            "Vbo",
+            "Vb",
+            "Vbd",
+            "Vf",
+            "Villach Gvbf"
+        ],
+        "Gummern-F\u00f6derlach": [
+            "Gummern",
+            "Gu Z2",
+            "Vb",
+            "Vbo",
+            "Foe H1",
+            "F\u00f6derlach"
+        ],
+        "Gummern-Sattendorf": [
+            "Gummern",
+            "Gu Z2",
+            "Vb",
+            "Vbo",
+            "Ru",
+            "Sattendorf"
+        ],
+        "Gummern-Villach Gvbf": [
+            "Gummern",
+            "Gu Z2",
+            "Vbd",
+            "Vf",
+            "Villach Gvbf"
+        ],
+        "Villach Gvbf-F\u00f6derlach": [
+            "Villach Gvbf",
+            "Vf",
+            "Vbd",
+            "Vb",
+            "Vbo",
+            "Foe H1",
+            "F\u00f6derlach"
+        ],
+        "Villach Gvbf-Gummern": [
+            "Villach Gvbf",
+            "Vf",
+            "Vbd",
+            "Gu Z2",
+            "Gummern"
+        ],
+        "Villach Gvbf-Sattendorf": [
+            "Villach Gvbf",
+            "Vf",
+            "Vbd",
+            "Vb",
+            "Vbo",
+            "Ru",
+            "Sattendorf"
+        ]
+    },
+    "streckenmarkierung": []
+}

@@ -1,0 +1,320 @@
+{
+    "_aid": 866,
+    "_build": 5847,
+    "_name": "Spittal-Millst.",
+    "_region": "\u00d6sterreich Mitte",
+    "_version": 2,
+    "anschlussgruppen": {
+        "205o": {
+            "__class__": "Set",
+            "data": [
+                "205o"
+            ]
+        },
+        "205w": {
+            "__class__": "Set",
+            "data": [
+                "205w"
+            ]
+        },
+        "409": {
+            "__class__": "Set",
+            "data": [
+                "409"
+            ]
+        },
+        "422": {
+            "__class__": "Set",
+            "data": [
+                "422"
+            ]
+        },
+        "816": {
+            "__class__": "Set",
+            "data": [
+                "816"
+            ]
+        },
+        "Bauhof": {
+            "__class__": "Set",
+            "data": [
+                "Bauhof"
+            ]
+        },
+        "Filli Stahl": {
+            "__class__": "Set",
+            "data": [
+                "Filli Stahl"
+            ]
+        },
+        "Knauf": {
+            "__class__": "Set",
+            "data": [
+                "Knauf"
+            ]
+        },
+        "Omya": {
+            "__class__": "Set",
+            "data": [
+                "Omya 1",
+                "Omya 2"
+            ]
+        },
+        "Pusarnitz": {
+            "__class__": "Set",
+            "data": [
+                "Pusarnitz"
+            ]
+        },
+        "Seppele": {
+            "__class__": "Set",
+            "data": [
+                "Seppele"
+            ]
+        },
+        "Villach Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Villach Hbf"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Evonik": {
+            "__class__": "Set",
+            "data": [
+                "Evonik"
+            ]
+        },
+        "Gu": {
+            "__class__": "Set",
+            "data": [
+                "Gu 605 (k)",
+                "Gu W6",
+                "Gu 602",
+                "Gu 605",
+                "Gu 604 (k)",
+                "Gu 603",
+                "Gu 501",
+                "Gu 603 (k)",
+                "Gu 604",
+                "Gu 601",
+                "Gu 502"
+            ]
+        },
+        "Pf": {
+            "__class__": "Set",
+            "data": [
+                "Pf 201",
+                "Pf 203",
+                "Pf 204",
+                "Pf 102",
+                "Pf 202",
+                "Pf 101"
+            ]
+        },
+        "Pf A1": {
+            "__class__": "Set",
+            "data": [
+                "Pf A1"
+            ]
+        },
+        "Pf H2A": {
+            "__class__": "Set",
+            "data": [
+                "Pf H2A"
+            ]
+        },
+        "Pf H3": {
+            "__class__": "Set",
+            "data": [
+                "Pf H3"
+            ]
+        },
+        "Pf Hst": {
+            "__class__": "Set",
+            "data": [
+                "Pf 301",
+                "Pf 402",
+                "Pf 401",
+                "Pf 302"
+            ]
+        },
+        "Ro": {
+            "__class__": "Set",
+            "data": [
+                "Ro 201",
+                "Ro 203",
+                "Ro 202"
+            ]
+        },
+        "Ro H1": {
+            "__class__": "Set",
+            "data": [
+                "Ro H1"
+            ]
+        },
+        "Ro H2": {
+            "__class__": "Set",
+            "data": [
+                "Ro H2"
+            ]
+        },
+        "Stt": {
+            "__class__": "Set",
+            "data": [
+                "Stt 403 (k)",
+                "Stt 706",
+                "Stt 410",
+                "Stt 406",
+                "Stt 410m",
+                "Stt 305",
+                "Stt 414",
+                "Stt 412o",
+                "Stt 410o",
+                "Stt 401 (k)",
+                "Stt 414w",
+                "Stt 101",
+                "Stt 105",
+                "Stt 106",
+                "Stt 412w",
+                "Stt 505",
+                "Stt 408",
+                "Stt 414o",
+                "Stt 403",
+                "Stt 402",
+                "Stt 606",
+                "Stt 404 (k)",
+                "Stt 412",
+                "Stt 102",
+                "Stt 414m",
+                "Stt 405",
+                "Stt 412m",
+                "Stt 401",
+                "Stt 702",
+                "Stt 402 (k)",
+                "Stt 701",
+                "Stt 404",
+                "Stt 410w"
+            ]
+        }
+    },
+    "hauptstrecke": "Pusarnitz-Villach",
+    "sektoren": {
+        "Gu 603": {
+            "__class__": "Set",
+            "data": [
+                "Gu 603 (k)",
+                "Gu 603"
+            ]
+        },
+        "Gu 604": {
+            "__class__": "Set",
+            "data": [
+                "Gu 604",
+                "Gu 604 (k)"
+            ]
+        },
+        "Gu 605": {
+            "__class__": "Set",
+            "data": [
+                "Gu 605 (k)",
+                "Gu 605"
+            ]
+        },
+        "Pf 301": {
+            "__class__": "Set",
+            "data": [
+                "Pf 301",
+                "Pf 401"
+            ]
+        },
+        "Pf 302": {
+            "__class__": "Set",
+            "data": [
+                "Pf 402",
+                "Pf 302"
+            ]
+        },
+        "Stt 401": {
+            "__class__": "Set",
+            "data": [
+                "Stt 401",
+                "Stt 401 (k)"
+            ]
+        },
+        "Stt 402": {
+            "__class__": "Set",
+            "data": [
+                "Stt 402 (k)",
+                "Stt 402"
+            ]
+        },
+        "Stt 403": {
+            "__class__": "Set",
+            "data": [
+                "Stt 403 (k)",
+                "Stt 403"
+            ]
+        },
+        "Stt 404": {
+            "__class__": "Set",
+            "data": [
+                "Stt 404",
+                "Stt 404 (k)"
+            ]
+        },
+        "Stt 405": {
+            "__class__": "Set",
+            "data": [
+                "Stt 405",
+                "Stt 505"
+            ]
+        },
+        "Stt 410": {
+            "__class__": "Set",
+            "data": [
+                "Stt 410m",
+                "Stt 410",
+                "Stt 410w",
+                "Stt 410o"
+            ]
+        },
+        "Stt 412": {
+            "__class__": "Set",
+            "data": [
+                "Stt 412w",
+                "Stt 412o",
+                "Stt 412m",
+                "Stt 412"
+            ]
+        },
+        "Stt 414": {
+            "__class__": "Set",
+            "data": [
+                "Stt 414",
+                "Stt 414w",
+                "Stt 414m",
+                "Stt 414o"
+            ]
+        }
+    },
+    "strecken": {
+        "Pusarnitz-Villach": [
+            "Pusarnitz",
+            "Stt",
+            "Ro",
+            "Ro H1",
+            "Ro H2",
+            "Pf",
+            "Pf Hst",
+            "Pf A1",
+            "Pf H2A",
+            "Pf H3",
+            "Gu",
+            "Villach Hbf"
+        ]
+    },
+    "streckenmarkierung": []
+}

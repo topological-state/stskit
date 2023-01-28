@@ -1,0 +1,555 @@
+{
+    "_aid": 1028,
+    "_build": 5847,
+    "_name": "Bischofshofen",
+    "_region": "\u00d6sterreich Mitte",
+    "_version": 2,
+    "anschlussgruppen": {
+        "106N": {
+            "__class__": "Set",
+            "data": [
+                "106N"
+            ]
+        },
+        "106S": {
+            "__class__": "Set",
+            "data": [
+                "106S"
+            ]
+        },
+        "118": {
+            "__class__": "Set",
+            "data": [
+                "118"
+            ]
+        },
+        "454": {
+            "__class__": "Set",
+            "data": [
+                "454"
+            ]
+        },
+        "504": {
+            "__class__": "Set",
+            "data": [
+                "504"
+            ]
+        },
+        "519": {
+            "__class__": "Set",
+            "data": [
+                "519"
+            ]
+        },
+        "5b": {
+            "__class__": "Set",
+            "data": [
+                "5b"
+            ]
+        },
+        "6a": {
+            "__class__": "Set",
+            "data": [
+                "6a"
+            ]
+        },
+        "727": {
+            "__class__": "Set",
+            "data": [
+                "727"
+            ]
+        },
+        "899": {
+            "__class__": "Set",
+            "data": [
+                "899"
+            ]
+        },
+        "AustroCel": {
+            "__class__": "Set",
+            "data": [
+                "AustroCel"
+            ]
+        },
+        "BILLA": {
+            "__class__": "Set",
+            "data": [
+                "BILLA"
+            ]
+        },
+        "H\u00fcttau": {
+            "__class__": "Set",
+            "data": [
+                "H\u00fcttau"
+            ]
+        },
+        "L4": {
+            "__class__": "Set",
+            "data": [
+                "L4"
+            ]
+        },
+        "Salzburg Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Salzburg Hbf"
+            ]
+        },
+        "Sb Gnigl 202": {
+            "__class__": "Set",
+            "data": [
+                "Sb Gnigl 202"
+            ]
+        },
+        "Sb Gnigl-Einfgr.": {
+            "__class__": "Set",
+            "data": [
+                "Sb Gnigl-Einfgr."
+            ]
+        },
+        "Sb Gnigl-Vbf": {
+            "__class__": "Set",
+            "data": [
+                "Sb Gnigl-Vbf"
+            ]
+        },
+        "Schleppbahn": {
+            "__class__": "Set",
+            "data": [
+                "Schleppbahn"
+            ]
+        },
+        "St. Johann": {
+            "__class__": "Set",
+            "data": [
+                "St. Johann"
+            ]
+        },
+        "Sulzau Lst": {
+            "__class__": "Set",
+            "data": [
+                "Sulzau Lst"
+            ]
+        },
+        "Tagger": {
+            "__class__": "Set",
+            "data": [
+                "Tagger"
+            ]
+        },
+        "Tenneck Lst": {
+            "__class__": "Set",
+            "data": [
+                "Tenneck Lst"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Aj": {
+            "__class__": "Set",
+            "data": [
+                "Aj 301",
+                "Aj 303",
+                "Aj 304",
+                "Aj 302"
+            ]
+        },
+        "Aj H1": {
+            "__class__": "Set",
+            "data": [
+                "Aj H1"
+            ]
+        },
+        "Aj H2": {
+            "__class__": "Set",
+            "data": [
+                "Aj H2"
+            ]
+        },
+        "Aj H3A": {
+            "__class__": "Set",
+            "data": [
+                "Aj H3A"
+            ]
+        },
+        "Aj H4": {
+            "__class__": "Set",
+            "data": [
+                "Aj H4"
+            ]
+        },
+        "Aj H5": {
+            "__class__": "Set",
+            "data": [
+                "Aj H5"
+            ]
+        },
+        "Aj U5": {
+            "__class__": "Set",
+            "data": [
+                "Aj U5"
+            ]
+        },
+        "Bo": {
+            "__class__": "Set",
+            "data": [
+                "Bo 302 (l)",
+                "Bo 303 (l)",
+                "Bo 304",
+                "Bo 102",
+                "Bo 307",
+                "Bo 409",
+                "Bo 302",
+                "Bo 407",
+                "Bo 401 (l)",
+                "Bo 313",
+                "Bo 373",
+                "Bo 105",
+                "Bo 305 (l)",
+                "Bo 305",
+                "Bo 404",
+                "Bo 205",
+                "Bo 402 (l)",
+                "Bo 401",
+                "Bo 311",
+                "Bo 303",
+                "Bo 304 (l)",
+                "Bo 402",
+                "Bo 301 (l)",
+                "Bo 371",
+                "Bo 405 (l)",
+                "Bo 301",
+                "Bo 309",
+                "Bo 403 (l)",
+                "Bo 404 (l)",
+                "Bo 207",
+                "Bo 403",
+                "Bo 405",
+                "Bo 101"
+            ]
+        },
+        "Bob": {
+            "__class__": "Set",
+            "data": [
+                "Bob 513",
+                "Bob 517",
+                "Bob 707",
+                "Bob 727",
+                "Bob 507",
+                "Bob 503 (k)",
+                "Bob 501",
+                "Bob 505 (k)",
+                "Bob 507 (k)",
+                "Bob 505",
+                "Bob 607",
+                "Bob 602",
+                "Bob 513 (k)",
+                "Bob 502",
+                "Bob 509",
+                "Bob 509 (k)",
+                "Bob 503",
+                "Bob 515"
+            ]
+        },
+        "Gg": {
+            "__class__": "Set",
+            "data": [
+                "Gg 205",
+                "Gg 202",
+                "Gg 303",
+                "Gg 302 (l)",
+                "Gg 302",
+                "Gg 201 (l)",
+                "Gg 306",
+                "Gg 201",
+                "Gg 602",
+                "Gg 203",
+                "Gg 206",
+                "Gg 204",
+                "Gg 202 (l)"
+            ]
+        },
+        "Gg K2": {
+            "__class__": "Set",
+            "data": [
+                "Gg K2"
+            ]
+        },
+        "Gg U2": {
+            "__class__": "Set",
+            "data": [
+                "Gg U2"
+            ]
+        },
+        "Gg U4": {
+            "__class__": "Set",
+            "data": [
+                "Gg U4"
+            ]
+        },
+        "Hl": {
+            "__class__": "Set",
+            "data": [
+                "Hl 202",
+                "Hl 6a",
+                "Hl 101",
+                "Hl 201 (l)",
+                "Hl 402",
+                "Hl 116",
+                "Hl 201",
+                "Hl 204",
+                "Hl 203",
+                "Hl 202 (l)",
+                "Hl 401",
+                "Hl 203 (l)",
+                "Hl 206",
+                "Hl 106S"
+            ]
+        },
+        "Hl H1A": {
+            "__class__": "Set",
+            "data": [
+                "Hl H1A"
+            ]
+        },
+        "Hl H2A": {
+            "__class__": "Set",
+            "data": [
+                "Hl H2A"
+            ]
+        },
+        "Hl H3": {
+            "__class__": "Set",
+            "data": [
+                "Hl H3"
+            ]
+        },
+        "Hl H5": {
+            "__class__": "Set",
+            "data": [
+                "Hl H5"
+            ]
+        },
+        "Hl U3": {
+            "__class__": "Set",
+            "data": [
+                "Hl U3"
+            ]
+        },
+        "Ph": {
+            "__class__": "Set",
+            "data": [
+                "Ph 761",
+                "Ph 763 Bstg",
+                "Ph 763"
+            ]
+        },
+        "Rf": {
+            "__class__": "Set",
+            "data": [
+                "Rf 202",
+                "Rf 204",
+                "Rf 203",
+                "Rf 201"
+            ]
+        },
+        "Rf H1": {
+            "__class__": "Set",
+            "data": [
+                "Rf H1"
+            ]
+        },
+        "Sbm H1": {
+            "__class__": "Set",
+            "data": [
+                "Sbm H1"
+            ]
+        },
+        "Sr": {
+            "__class__": "Set",
+            "data": [
+                "Sr 722",
+                "Sr 721"
+            ]
+        },
+        "Sr H2": {
+            "__class__": "Set",
+            "data": [
+                "Sr H2"
+            ]
+        },
+        "Sre": {
+            "__class__": "Set",
+            "data": [
+                "Sre 741",
+                "Sre 742"
+            ]
+        },
+        "Wende Sulzau": {
+            "__class__": "Set",
+            "data": [
+                "Wende Sulzau"
+            ]
+        }
+    },
+    "hauptstrecke": "Salzburg Hbf-St. Johann",
+    "sektoren": {
+        "Bo 301": {
+            "__class__": "Set",
+            "data": [
+                "Bo 401 (l)",
+                "Bo 301",
+                "Bo 401",
+                "Bo 301 (l)"
+            ]
+        },
+        "Bo 302": {
+            "__class__": "Set",
+            "data": [
+                "Bo 302 (l)",
+                "Bo 302",
+                "Bo 402",
+                "Bo 402 (l)"
+            ]
+        },
+        "Bo 303": {
+            "__class__": "Set",
+            "data": [
+                "Bo 303 (l)",
+                "Bo 303",
+                "Bo 403 (l)",
+                "Bo 403"
+            ]
+        },
+        "Bo 304": {
+            "__class__": "Set",
+            "data": [
+                "Bo 404",
+                "Bo 404 (l)",
+                "Bo 304 (l)",
+                "Bo 304"
+            ]
+        },
+        "Bo 305": {
+            "__class__": "Set",
+            "data": [
+                "Bo 405 (l)",
+                "Bo 305 (l)",
+                "Bo 305",
+                "Bo 405"
+            ]
+        },
+        "Bob 503": {
+            "__class__": "Set",
+            "data": [
+                "Bob 503 (k)",
+                "Bob 503"
+            ]
+        },
+        "Bob 505": {
+            "__class__": "Set",
+            "data": [
+                "Bob 505",
+                "Bob 505 (k)"
+            ]
+        },
+        "Bob 507": {
+            "__class__": "Set",
+            "data": [
+                "Bob 507",
+                "Bob 507 (k)"
+            ]
+        },
+        "Bob 509": {
+            "__class__": "Set",
+            "data": [
+                "Bob 509",
+                "Bob 509 (k)"
+            ]
+        },
+        "Bob 513": {
+            "__class__": "Set",
+            "data": [
+                "Bob 513 (k)",
+                "Bob 513"
+            ]
+        },
+        "Gg 201": {
+            "__class__": "Set",
+            "data": [
+                "Gg 201 (l)",
+                "Gg 201"
+            ]
+        },
+        "Gg 202": {
+            "__class__": "Set",
+            "data": [
+                "Gg 202",
+                "Gg 302 (l)",
+                "Gg 302",
+                "Gg 202 (l)"
+            ]
+        },
+        "Hl 201": {
+            "__class__": "Set",
+            "data": [
+                "Hl 201",
+                "Hl 201 (l)"
+            ]
+        },
+        "Hl 202": {
+            "__class__": "Set",
+            "data": [
+                "Hl 202",
+                "Hl 202 (l)"
+            ]
+        },
+        "Hl 203": {
+            "__class__": "Set",
+            "data": [
+                "Hl 203 (l)",
+                "Hl 203"
+            ]
+        },
+        "Ph 763": {
+            "__class__": "Set",
+            "data": [
+                "Ph 763 Bstg",
+                "Ph 763"
+            ]
+        }
+    },
+    "strecken": {
+        "Salzburg Hbf-St. Johann": [
+            "Salzburg Hbf",
+            "Sbm H1",
+            "Sr",
+            "Sre",
+            "Sr H2",
+            "Aj",
+            "Aj H1",
+            "Aj H2",
+            "Aj U5",
+            "Aj H3A",
+            "Aj H4",
+            "Aj H5",
+            "Hl",
+            "Hl H1A",
+            "Hl H2A",
+            "Hl H3",
+            "Hl U3",
+            "Hl H5",
+            "Gg",
+            "Gg U2",
+            "Wende Sulzau",
+            "Gg K2",
+            "Rf",
+            "Rf H1",
+            "Bo",
+            "Bob",
+            "St. Johann"
+        ]
+    },
+    "streckenmarkierung": []
+}

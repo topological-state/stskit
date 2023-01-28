@@ -1,0 +1,411 @@
+{
+    "_aid": 208,
+    "_build": 5847,
+    "_name": "St.Veit a.d.Glan",
+    "_region": "\u00d6sterreich Mitte",
+    "_version": 2,
+    "anschlussgruppen": {
+        "205": {
+            "__class__": "Set",
+            "data": [
+                "205"
+            ]
+        },
+        "4a": {
+            "__class__": "Set",
+            "data": [
+                "4a"
+            ]
+        },
+        "800": {
+            "__class__": "Set",
+            "data": [
+                "800"
+            ]
+        },
+        "Br\u00fcckl": {
+            "__class__": "Set",
+            "data": [
+                "Br\u00fcckl"
+            ]
+        },
+        "Depotbf": {
+            "__class__": "Set",
+            "data": [
+                "Depotbf"
+            ]
+        },
+        "Ladegl": {
+            "__class__": "Set",
+            "data": [
+                "Ladegl."
+            ]
+        },
+        "Maria Saal": {
+            "__class__": "Set",
+            "data": [
+                "Maria Saal"
+            ]
+        },
+        "Neumarkt in S.": {
+            "__class__": "Set",
+            "data": [
+                "Neumarkt in S."
+            ]
+        },
+        "TIAG": {
+            "__class__": "Set",
+            "data": [
+                "TIAG I",
+                "TIAG II"
+            ]
+        },
+        "Tilly": {
+            "__class__": "Set",
+            "data": [
+                "Tilly Holz"
+            ]
+        },
+        "Villach Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Villach Hbf"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "AB Bistum Gurk": {
+            "__class__": "Set",
+            "data": [
+                "AB Bistum Gurk"
+            ]
+        },
+        "AB Has.": {
+            "__class__": "Set",
+            "data": [
+                "AB Has."
+            ]
+        },
+        "Fel": {
+            "__class__": "Set",
+            "data": [
+                "Fel 203",
+                "Fel 201",
+                "Fel 201 G",
+                "Fel 202",
+                "Fel 202 G",
+                "Fel 5a",
+                "Fel Wende Ost",
+                "Fel Wende West"
+            ]
+        },
+        "Fel H1": {
+            "__class__": "Set",
+            "data": [
+                "Fel H1"
+            ]
+        },
+        "Fi": {
+            "__class__": "Set",
+            "data": [
+                "Fi 102",
+                "Fi Wende",
+                "Fi 304",
+                "Fi 303",
+                "Fi 301",
+                "Fi 324",
+                "Fi 302",
+                "Fi 306",
+                "Fi 324k"
+            ]
+        },
+        "Fi H1": {
+            "__class__": "Set",
+            "data": [
+                "Fi H1",
+                "Fi  H1"
+            ]
+        },
+        "Gla": {
+            "__class__": "Set",
+            "data": [
+                "Gla 201 G",
+                "Gla 201",
+                "Gla 203",
+                "Gla 205"
+            ]
+        },
+        "Gla H1": {
+            "__class__": "Set",
+            "data": [
+                "Gla H1"
+            ]
+        },
+        "Hirt Lst": {
+            "__class__": "Set",
+            "data": [
+                "Hirt Lst"
+            ]
+        },
+        "Lad": {
+            "__class__": "Set",
+            "data": [
+                "Lad 101",
+                "Lad 102",
+                "Lad 206",
+                "Lad 201",
+                "Lad 202",
+                "Lad 203 G",
+                "Lad 204",
+                "Lad 203"
+            ]
+        },
+        "Lad H1": {
+            "__class__": "Set",
+            "data": [
+                "Lad H1"
+            ]
+        },
+        "Lif": {
+            "__class__": "Set",
+            "data": [
+                "Lif 202",
+                "Lif 203",
+                "Lif 201"
+            ]
+        },
+        "Lif H1": {
+            "__class__": "Set",
+            "data": [
+                "Lif H1"
+            ]
+        },
+        "Oi": {
+            "__class__": "Set",
+            "data": [
+                "Oi 203",
+                "Oi 201",
+                "Oi 202"
+            ]
+        },
+        "Oi H1": {
+            "__class__": "Set",
+            "data": [
+                "Oi H1"
+            ]
+        },
+        "Saf": {
+            "__class__": "Set",
+            "data": [
+                "Saf 203",
+                "Saf 201"
+            ]
+        },
+        "Saf H1": {
+            "__class__": "Set",
+            "data": [
+                "Saf H1"
+            ]
+        },
+        "Sms": {
+            "__class__": "Set",
+            "data": [
+                "Sms 202",
+                "Sms 201"
+            ]
+        },
+        "Sos": {
+            "__class__": "Set",
+            "data": [
+                "Sos 202",
+                "Sos 201"
+            ]
+        },
+        "Stv": {
+            "__class__": "Set",
+            "data": [
+                "Stv"
+            ]
+        },
+        "Tr": {
+            "__class__": "Set",
+            "data": [
+                "Tr 104",
+                "Tr 101",
+                "Tr 102",
+                "Tr 1W",
+                "Tr 205o",
+                "Tr 204o",
+                "Tr 306",
+                "Tr 205w",
+                "Tr 202",
+                "Tr 204w",
+                "Tr 203",
+                "Tr 204",
+                "Tr 201",
+                "Tr 206",
+                "Tr 402",
+                "Tr 401"
+            ]
+        },
+        "Tr H1": {
+            "__class__": "Set",
+            "data": [
+                "Tr H1"
+            ]
+        },
+        "Tr H2": {
+            "__class__": "Set",
+            "data": [
+                "Tr H2"
+            ]
+        },
+        "Vps": {
+            "__class__": "Set",
+            "data": [
+                "Vps 102",
+                "Vps 101",
+                "Vps 210",
+                "Vps 202",
+                "Vps 206",
+                "Vps 208",
+                "Vps 201",
+                "Vps 205",
+                "Vps 203",
+                "Vps 209",
+                "Vps 211",
+                "Vps 207",
+                "Vps 311",
+                "Vps Wende West"
+            ]
+        },
+        "Vps H1": {
+            "__class__": "Set",
+            "data": [
+                "Vps H1"
+            ]
+        },
+        "Vs": {
+            "__class__": "Set",
+            "data": [
+                "Vs 501 G",
+                "Vs 507",
+                "Vs 503",
+                "Vs 501",
+                "Vs 505",
+                "Vs 601",
+                "Vs 701"
+            ]
+        },
+        "Vs H2": {
+            "__class__": "Set",
+            "data": [
+                "Vs H2"
+            ]
+        }
+    },
+    "hauptstrecke": "Neumarkt-Villach",
+    "sektoren": {
+        "Fel 201": {
+            "__class__": "Set",
+            "data": [
+                "Fel 201",
+                "Fel 201 G"
+            ]
+        },
+        "Fel 202": {
+            "__class__": "Set",
+            "data": [
+                "Fel 202",
+                "Fel 202 G"
+            ]
+        },
+        "Fi 324": {
+            "__class__": "Set",
+            "data": [
+                "Fi 324k",
+                "Fi 324"
+            ]
+        },
+        "Gla 201": {
+            "__class__": "Set",
+            "data": [
+                "Gla 201 G",
+                "Gla 201"
+            ]
+        },
+        "Lad 203": {
+            "__class__": "Set",
+            "data": [
+                "Lad 203",
+                "Lad 203 G"
+            ]
+        },
+        "Tr 204": {
+            "__class__": "Set",
+            "data": [
+                "Tr 204o",
+                "Tr 204w",
+                "Tr 204"
+            ]
+        },
+        "Tr 205": {
+            "__class__": "Set",
+            "data": [
+                "Tr 205o",
+                "Tr 205w"
+            ]
+        },
+        "Vs 501": {
+            "__class__": "Set",
+            "data": [
+                "Vs 501",
+                "Vs 501 G"
+            ]
+        }
+    },
+    "strecken": {
+        "Neumarkt-Maria Saal": [
+            "Neumarkt in S.",
+            "Fi",
+            "Fi H1",
+            "Tr",
+            "Tr H1",
+            "Tr H2",
+            "Lad",
+            "Lad H1",
+            "Vps",
+            "Stv",
+            "Vps H1",
+            "Maria Saal"
+        ],
+        "Neumarkt-Villach": [
+            "Neumarkt in S.",
+            "Fi",
+            "Fi H1",
+            "Tr",
+            "Tr H1",
+            "Tr H2",
+            "Lad",
+            "Lad H1",
+            "Vps",
+            "Vs",
+            "Vs H2",
+            "Lif",
+            "Lif H1",
+            "Gla",
+            "Gla H1",
+            "Sms",
+            "Fel",
+            "Fel H1",
+            "Sos",
+            "Oi",
+            "Oi H1",
+            "Saf",
+            "Saf H1",
+            "Villach Hbf"
+        ]
+    },
+    "streckenmarkierung": []
+}
