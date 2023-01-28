@@ -232,6 +232,9 @@ class MainWindow(QtWidgets.QMainWindow):
         if event.isAccepted():
             try:
                 self.zentrale.anlage.save_config(self.config_path)
+                if logger.isEnabledFor(logging.DEBUG):
+                    p = Path(self.config_path) / f"{self.zentrale.anlage.anlage.aid}.zielgraph.json"
+                    self.zentrale.planung.zielgraph_speichern(p)
             except (AttributeError, OSError) as e:
                 logger.error(e)
 

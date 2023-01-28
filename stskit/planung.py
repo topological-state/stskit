@@ -1,7 +1,8 @@
-import copy
 from dataclasses import dataclass
 import datetime
+import json
 import logging
+import os
 from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, NamedTuple, Optional, Set, Tuple, Type, Union
 import weakref
 
@@ -970,6 +971,33 @@ class PlanungParams:
     wartezeit_abfahrt_abwarten: int = 2
 
 
+class JSONEncoder(json.JSONEncoder):
+    """
+    translate non-standard objects to JSON objects.
+
+    currently implemented: Set.
+
+    ~~~~~~{.py}
+    encoded = json.dumps(data, cls=JSONEncoder)
+    decoded = json.loads(encoded, object_hook=json_object_hook)
+    ~~~~~~
+    """
+
+    def default(self, obj):
+        if isinstance(obj, Set):
+            return dict(__class__='Set', data=list(obj))
+        elif isinstance(obj, frozenset):
+            return dict(__class__='frozenset', data=list(obj))
+        elif isinstance(obj, nx.Graph):
+            return "networkx.Graph"
+        elif isinstance(obj, VerspaetungsKorrektur):
+            return str(obj)
+        elif isinstance(obj, ZugZielPlanung):
+            return str(obj)
+        else:
+            return super().default(obj)
+
+
 class Planung:
     """
     zug-planung und disposition
@@ -1308,6 +1336,11 @@ class Planung:
                 msg = ", ".join((str(edge) for edge in cycle))
                 logger.error("schleife gefunden: " + msg)
             raise
+
+    def zielgraph_speichern(self, pfad: os.PathLike):
+        d = dict(nx.node_link_data(self.zielgraph))
+        with open(pfad, "w") as fp:
+            json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
 
     def einfahrten_korrigieren(self):
         """
