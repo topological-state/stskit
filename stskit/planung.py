@@ -21,13 +21,22 @@ logger.addHandler(logging.NullHandler())
 
 
 class ZugZielNode(NamedTuple):
-    typ: str
+    """
+    knotenobjekt für zugziel-graph
+
+    der knoten ist ein eindeutiger schlüssel des zugziels
+    und besteht aus einem tupel von zid, plangleis und zielnummer.
+    um einen knoten im zielgraph zu finden, muss zuerst ein ZugZielNode als schlüssel für den graphen erstellt werden.
+    die zielnummer ist nötig, damit ein gleis mehrmals befahren werden kann.
+    """
+
     zid: int
+    zielnr: int
     plangleis: str
 
     @classmethod
     def neu(cls, ziel: 'ZugZielPlanung' = None, plangleis: Optional[str] = None, zid: Optional[int] = None,
-            typ: Optional[str] = None) -> 'ZugZielNode':
+            zielnr: Optional[int] = None) -> 'ZugZielNode':
         """
         knoten für zugziel-graph erstellen
 
@@ -36,26 +45,15 @@ class ZugZielNode(NamedTuple):
 
         der schlüssel kann aus einem ZugZielPlanung oder den einzelnen komponenten erstellt werden.
         zur bedeutung der typenflags, siehe die beschreibung der _zielgraph_erstellen-methode.
+        die zielnummer dient der disambiguation bei mehrfach befahrenen gleisen.
 
         :param ziel: zielobjekt, zu dem ein schlüssel generiert werden soll.
             wenn das ziel nicht angegeben wird, müssen alle andere keywords deklariert werden.
         :param plangleis: überschreibt das plangleis von ziel
         :param zid: überschreibt das zid von ziel
-        :param typ: überschreibt den typ von ziel
+        :param zielnr: überschreibt zielnr von ziel
         :return: ZugZielNode
         """
-
-        if typ is None:
-            if ziel.einfahrt:
-                typ = 'E'
-            elif ziel.ausfahrt:
-                typ = 'A'
-            elif ziel.zielnr > int(ziel.zielnr / 1000) * 1000:
-                typ = 'B'
-            elif ziel.durchfahrt():
-                typ = 'D'
-            else:
-                typ = 'H'
 
         if plangleis is None:
             plangleis = ziel.plan
@@ -63,7 +61,56 @@ class ZugZielNode(NamedTuple):
         if zid is None:
             zid = ziel.zug.zid
 
-        return cls(typ, zid, plangleis)
+        if zielnr is None:
+            zielnr = ziel.zielnr
+
+        return cls(zid, zielnr, plangleis)
+
+    @staticmethod
+    def zieltyp(ziel: 'ZugZielPlanung'):
+        if ziel.einfahrt:
+            typ = 'E'
+        elif ziel.ausfahrt:
+            typ = 'A'
+        elif ziel.zielnr > int(ziel.zielnr / 1000) * 1000:
+            typ = 'B'
+        elif ziel.durchfahrt():
+            typ = 'D'
+        else:
+            typ = 'H'
+        return typ
+
+    @classmethod
+    def init_zieldata(cls, ziel: 'ZugZielPlanung') -> Dict:
+        """
+        erstellt den data-dictionary eines knotens im zielbaum
+
+        :param ziel: ZugZielPlanung-objekt
+        :return: dict
+        """
+        try:
+            plan_an = time_to_minutes(ziel.an)
+        except AttributeError:
+            plan_an = None
+        try:
+            plan_ab = time_to_minutes(ziel.ab)
+        except AttributeError:
+            plan_ab = plan_an
+        if plan_an is None:
+            plan_an = plan_ab
+
+        data = {'typ': cls.zieltyp(ziel),
+                'obj': ziel,
+                'zid': ziel.zug.zid,
+                'zielnr': ziel.zielnr,
+                'plan': ziel.plan,
+                'd_min': ziel.mindestaufenthalt,
+                'p_an': plan_an,
+                'p_ab': plan_ab,
+                'v_an': ziel.verspaetung_an,
+                'v_ab': ziel.verspaetung_ab}
+
+        return data
 
 
 def graph_pred_filter_flag(graph: nx.DiGraph, node: ZugZielNode, typ: str) -> Iterable[ZugZielNode]:
@@ -1248,21 +1295,8 @@ class Planung:
                 except KeyError:
                     pass
 
-                try:
-                    plan_an = time_to_minutes(ziel2.an)
-                except AttributeError:
-                    plan_an = None
-                try:
-                    plan_ab = time_to_minutes(ziel2.ab)
-                except AttributeError:
-                    plan_ab = plan_an
-                if plan_an is None:
-                    plan_an = plan_ab
-
-                self.zielgraph.add_node(zzid2, typ=zzid2[0], obj=ziel2,
-                                        zid=ziel2.zug.zid, zielnr=ziel2.zielnr, plan=ziel2.plan,
-                                        p_an=plan_an, p_ab=plan_ab, d_min=ziel2.mindestaufenthalt,
-                                        v_an=zug.verspaetung, v_ab=zug.verspaetung)
+                data = zzid2.init_zieldata(ziel2)
+                self.zielgraph.add_node(zzid2, **data)
 
                 d = weakref.WeakValueDictionary({zzid2[0]: ziel2})
                 try:
@@ -1275,22 +1309,30 @@ class Planung:
                         logger.warning("P edge", zzid1, zzid2)
                     else:
                         self.zielgraph.add_edge(zzid1, zzid2, typ='P')
+
                 if zid := ziel2.ersatz_zid():
-                    zzid = ZugZielNode.neu(ziel2, zid=zid, typ='H')
+                    zzid = ZugZielNode.neu(ziel2, zid=zid, zielnr=0)
                     if zzid2 == zzid:
                         logger.warning("E edge", zzid2, zzid)
                     else:
                         self.zielgraph.add_edge(zzid2, zzid, typ='E')
                         self.zugbaum.add_edge(zid2, zid, flag='E', zielnr=ziel2.zielnr)
                 if zid := ziel2.kuppel_zid():
-                    zzid = ZugZielNode.neu(ziel2, zid=zid, typ='H')
-                    if zzid2 == zzid:
-                        logger.warning("K edge", zzid2, zzid)
+                    try:
+                        zug: ZugDetailsPlanung = self.zugbaum.nodes[zid]['obj']
+                        ziel: ZugZielPlanung = zug.find_fahrplanzeile(plan=ziel2.plan)
+                        zielnr = ziel.zielnr
+                    except (KeyError, AttributeError):
+                        logger.warning(f"kupplungsziel von {zzid2} nicht gefunden")
                     else:
-                        self.zielgraph.add_edge(zzid2, zzid, typ='K')
-                        self.zugbaum.add_edge(zid2, zid, flag='K', zielnr=ziel2.zielnr)
+                        zzid = ZugZielNode.neu(ziel2, zid=zid, zielnr=zielnr)
+                        if zzid2 == zzid:
+                            logger.warning("K edge", zzid2, zzid)
+                        else:
+                            self.zielgraph.add_edge(zzid2, zzid, typ='K')
+                            self.zugbaum.add_edge(zid2, zid, flag='K', zielnr=ziel2.zielnr)
                 if zid := ziel2.fluegel_zid():
-                    zzid = ZugZielNode.neu(ziel2, zid=zid, typ='H')
+                    zzid = ZugZielNode.neu(ziel2, zid=zid, zielnr=0)
                     if zzid2 == zzid:
                         logger.warning("F edge", zzid2, zzid)
                     else:
@@ -1541,19 +1583,19 @@ class Planung:
 
         if zid:
             zzid1 = ZugZielNode.neu(ziel)
-            zzid2 = ZugZielNode.neu(ziel, zid=zid)
-            typ = ziel.auto_korrektur.edge_typ
-            self.zielgraph.add_edge(zzid1, zzid2, typ=typ, obj=ziel.auto_korrektur)
-
-            abschluss = FlagKorrektur(self)
             try:
-                ziel2: ZugZielPlanung = self.zielgraph.nodes[zzid2]['obj']
-                ziel2.auto_korrektur = abschluss
+                zug2: ZugDetailsPlanung = self.zugbaum.nodes[zid]['obj']
+                ziel2: ZugZielPlanung = zug2.find_fahrplanzeile(plan=ziel.plan)
+                zzid2 = ZugZielNode.neu(ziel2)
+            except (AttributeError, KeyError):
+                result = False
+            else:
+                typ = ziel.auto_korrektur.edge_typ
+                self.zielgraph.add_edge(zzid1, zzid2, typ=typ, obj=ziel.auto_korrektur)
+                ziel2.auto_korrektur = FlagKorrektur(self)
                 if typ in {'E', 'K'}:
                     an1 = minutes_to_time(time_to_minutes(ziel.an) + ziel.mindestaufenthalt)
                     ziel.ab = max(ziel2.an, an1)
-            except KeyError:
-                result = False
 
         return result
 
