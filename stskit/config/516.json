@@ -1,0 +1,316 @@
+{
+    "_aid": 516,
+    "_build": 5847,
+    "_name": "Kreuzlingen",
+    "_region": "Ostschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "KODB": {
+            "__class__": "Set",
+            "data": [
+                "KODB 600",
+                "KODB 558"
+            ]
+        },
+        "Kehlhof": {
+            "__class__": "Set",
+            "data": [
+                "Kehlhof"
+            ]
+        },
+        "Mammern": {
+            "__class__": "Set",
+            "data": [
+                "Mammern"
+            ]
+        },
+        "Romanshorn": {
+            "__class__": "Set",
+            "data": [
+                "Romanshorn"
+            ]
+        },
+        "Umschlagplatz": {
+            "__class__": "Set",
+            "data": [
+                "Umschlagplatz"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "A BERG": {
+            "__class__": "Set",
+            "data": [
+                "A BERG"
+            ]
+        },
+        "A STK": {
+            "__class__": "Set",
+            "data": [
+                "A STK"
+            ]
+        },
+        "A UTW": {
+            "__class__": "Set",
+            "data": [
+                "A UTW"
+            ]
+        },
+        "ALN": {
+            "__class__": "Set",
+            "data": [
+                "ALN 1",
+                "ALN 2"
+            ]
+        },
+        "BER": {
+            "__class__": "Set",
+            "data": [
+                "BER 2",
+                "BER 1"
+            ]
+        },
+        "BERG": {
+            "__class__": "Set",
+            "data": [
+                "BERG 1",
+                "BERG 2"
+            ]
+        },
+        "BOT": {
+            "__class__": "Set",
+            "data": [
+                "BOT"
+            ]
+        },
+        "ERM": {
+            "__class__": "Set",
+            "data": [
+                "ERM 2",
+                "ERM 1"
+            ]
+        },
+        "GUET": {
+            "__class__": "Set",
+            "data": [
+                "GUET 3",
+                "GUET 2"
+            ]
+        },
+        "KR": {
+            "__class__": "Set",
+            "data": [
+                "KR 4",
+                "KR 1B",
+                "KR 2",
+                "KR 3",
+                "KR 1A",
+                "KR 41"
+            ]
+        },
+        "KRB": {
+            "__class__": "Set",
+            "data": [
+                "KRB 2",
+                "KRB 1"
+            ]
+        },
+        "KRH": {
+            "__class__": "Set",
+            "data": [
+                "KRH 2",
+                "KRH 3",
+                "KRH 1",
+                "KRH 30"
+            ]
+        },
+        "KURZ": {
+            "__class__": "Set",
+            "data": [
+                "KURZ"
+            ]
+        },
+        "KWL": {
+            "__class__": "Set",
+            "data": [
+                "KWL"
+            ]
+        },
+        "LDS": {
+            "__class__": "Set",
+            "data": [
+                "LDS"
+            ]
+        },
+        "LENG": {
+            "__class__": "Set",
+            "data": [
+                "LENG 2",
+                "LENG 1"
+            ]
+        },
+        "MANN": {
+            "__class__": "Set",
+            "data": [
+                "MANN"
+            ]
+        },
+        "MSCH": {
+            "__class__": "Set",
+            "data": [
+                "MSCH 2",
+                "MSCH 1"
+            ]
+        },
+        "MSPI": {
+            "__class__": "Set",
+            "data": [
+                "MSPI"
+            ]
+        },
+        "SHAU": {
+            "__class__": "Set",
+            "data": [
+                "SHAU 2",
+                "SHAU 3"
+            ]
+        },
+        "STK": {
+            "__class__": "Set",
+            "data": [
+                "STK 1",
+                "STK 2"
+            ]
+        },
+        "TAEG": {
+            "__class__": "Set",
+            "data": [
+                "TAEG 2",
+                "TAEG 1"
+            ]
+        },
+        "TAEM": {
+            "__class__": "Set",
+            "data": [
+                "TAEM"
+            ]
+        },
+        "TRIB": {
+            "__class__": "Set",
+            "data": [
+                "TRIB"
+            ]
+        },
+        "UTW": {
+            "__class__": "Set",
+            "data": [
+                "UTW 2",
+                "UTW 1"
+            ]
+        }
+    },
+    "hauptstrecke": "Kehlhof-KODB",
+    "sektoren": {
+        "KR 1": {
+            "__class__": "Set",
+            "data": [
+                "KR 1A",
+                "KR 1B"
+            ]
+        }
+    },
+    "strecken": {
+        "KODB-Romanshorn": [
+            "KODB",
+            "KRH",
+            "KURZ",
+            "BOT",
+            "MSCH",
+            "MSPI",
+            "LDS",
+            "ALN",
+            "GUET",
+            "KWL",
+            "UTW",
+            "A UTW",
+            "Romanshorn"
+        ],
+        "Kehlhof-KODB": [
+            "Kehlhof",
+            "A BERG",
+            "BERG",
+            "SHAU",
+            "LENG",
+            "KRB",
+            "TAEM",
+            "KR",
+            "KODB"
+        ],
+        "Kehlhof-Romanshorn": [
+            "Kehlhof",
+            "A BERG",
+            "BERG",
+            "SHAU",
+            "LENG",
+            "KRB",
+            "TAEM",
+            "KR",
+            "KRH",
+            "KURZ",
+            "BOT",
+            "MSCH",
+            "MSPI",
+            "LDS",
+            "ALN",
+            "GUET",
+            "KWL",
+            "UTW",
+            "A UTW",
+            "Romanshorn"
+        ],
+        "Mammern-KODB": [
+            "Mammern",
+            "A STK",
+            "STK",
+            "BER",
+            "MANN",
+            "ERM",
+            "TRIB",
+            "TAEG",
+            "KR",
+            "KODB"
+        ],
+        "Mammern-Romanshorn": [
+            "Mammern",
+            "A STK",
+            "STK",
+            "BER",
+            "MANN",
+            "ERM",
+            "TRIB",
+            "TAEG",
+            "KR",
+            "KRH",
+            "KURZ",
+            "BOT",
+            "MSCH",
+            "MSPI",
+            "LDS",
+            "ALN",
+            "GUET",
+            "KWL",
+            "UTW",
+            "A UTW",
+            "Romanshorn"
+        ]
+    },
+    "streckenmarkierung": [
+        ["SHAU", "LENG", "E"],
+        ["LENG", "KRB", "E"],
+        ["GUET", "KWL", "E"],
+        ["KWL", "UTW", "E"],
+        ["UTW", "A UTW", "E"],
+        ["A UTW", "Romanshorn", "E"]
+    ]
+}

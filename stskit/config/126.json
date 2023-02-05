@@ -80,12 +80,7 @@
         "DEI": {
             "__class__": "Set",
             "data": [
-                "DEI"
-            ]
-        },
-        "DEI31": {
-            "__class__": "Set",
-            "data": [
+                "DEI",
                 "DEI32",
                 "DEI31"
             ]
@@ -186,7 +181,6 @@
             "PAPI",
             "ITT",
             "BOLI",
-            "DEI31",
             "DEI",
             "STTL",
             "BOUT",

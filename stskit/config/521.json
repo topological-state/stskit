@@ -1,0 +1,137 @@
+{
+    "_aid": 521,
+    "_build": 5847,
+    "_name": "St. Gallen",
+    "_region": "Ostschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "M\u00f6rschwil": {
+            "__class__": "Set",
+            "data": [
+                "M\u00f6rschwil 377",
+                "M\u00f6rschwil 477"
+            ]
+        },
+        "SG Haggen": {
+            "__class__": "Set",
+            "data": [
+                "SG Haggen"
+            ]
+        },
+        "SG Abstellfeld": {
+            "__class__": "Set",
+            "data": [
+                "SG Abstellfeld"
+            ]
+        },
+        "SGF Industrie": {
+            "__class__": "Set",
+            "data": [
+                "SGF Industrie"
+            ]
+        },
+        "Winkeln": {
+            "__class__": "Set",
+            "data": [
+                "Winkeln 285",
+                "Winkeln 185"
+            ]
+        },
+        "Wittenbach": {
+            "__class__": "Set",
+            "data": [
+                "Wittenbach"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "SG": {
+            "__class__": "Set",
+            "data": [
+                "SG1",
+                "SG4L",
+                "SG2",
+                "SG4R",
+                "SG7",
+                "SG6",
+                "SG3",
+                "SG5L",
+                "SG5R",
+                "SG701",
+                "SG702",
+                "SG703",
+                "SG85",
+                "SG84",
+                "SG80"
+            ]
+        },
+        "SGBR": {
+            "__class__": "Set",
+            "data": [
+                "SGBR"
+            ]
+        },
+        "SGF": {
+            "__class__": "Set",
+            "data": [
+                "SGF5",
+                "SGF6",
+                "SGF1",
+                "SGF8",
+                "SGF43",
+                "SGF44",
+                "SGF3",
+                "SGF4",
+                "SGF2",
+                "SGF7"
+            ]
+        }
+    },
+    "hauptstrecke": "Winkeln-M\u00f6rschwil",
+    "sektoren": {
+        "SG4": {
+            "__class__": "Set",
+            "data": [
+                "SG4L",
+                "SG4R"
+            ]
+        },
+        "SG5": {
+            "__class__": "Set",
+            "data": [
+                "SG5L",
+                "SG5R"
+            ]
+        }
+    },
+    "strecken": {
+        "Winkeln-M\u00f6rschwil": [
+            "Winkeln",
+            "SGBR",
+            "SG",
+            "SGF",
+            "M\u00f6rschwil"
+        ],
+        "Winkeln-Wittenbach": [
+            "Winkeln",
+            "SGBR",
+            "SG",
+            "SGF",
+            "Wittenbach"
+        ],
+        "SG Haggen-M\u00f6rschwil": [
+            "SG Haggen",
+            "SG",
+            "SGF",
+            "M\u00f6rschwil"
+        ],
+        "SG Haggen-Wittenbach": [
+            "SG Haggen",
+            "SG",
+            "SGF",
+            "Wittenbach"
+        ]
+    },
+    "streckenmarkierung": []
+}

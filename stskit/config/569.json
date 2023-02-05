@@ -1,0 +1,293 @@
+{
+    "_aid": 569,
+    "_build": 5847,
+    "_name": "Schaffhausen",
+    "_region": "Ostschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Anschl. Herblingen": {
+            "__class__": "Set",
+            "data": [
+                "Anschl. Herblingen"
+            ]
+        },
+        "B-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "B-Gruppe"
+            ]
+        },
+        "Beringen": {
+            "__class__": "Set",
+            "data": [
+                "Beringen DB"
+            ]
+        },
+        "Bietingen": {
+            "__class__": "Set",
+            "data": [
+                "Bietingen"
+            ]
+        },
+        "GB": {
+            "__class__": "Set",
+            "data": [
+                "GB-Ost",
+                "GB-West"
+            ]
+        },
+        "Hemishofen": {
+            "__class__": "Set",
+            "data": [
+                "Hemishofen"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Neuhausen": {
+            "__class__": "Set",
+            "data": [
+                "Neuhausen 955",
+                "Neuhausen 855"
+            ]
+        },
+        "Steckborn": {
+            "__class__": "Set",
+            "data": [
+                "Steckborn"
+            ]
+        },
+        "Thalheim": {
+            "__class__": "Set",
+            "data": [
+                "Thalheim"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "A MAM": {
+            "__class__": "Set",
+            "data": [
+                "A MAM"
+            ]
+        },
+        "A OSS": {
+            "__class__": "Set",
+            "data": [
+                "A OSS"
+            ]
+        },
+        "DSH": {
+            "__class__": "Set",
+            "data": [
+                "DSH2",
+                "DSH1"
+            ]
+        },
+        "E Thalheim": {
+            "__class__": "Set",
+            "data": [
+                "E Thalheim"
+            ]
+        },
+        "E": {
+            "__class__": "Set",
+            "data": [
+                "E3",
+                "E1",
+                "E4",
+                "E2"
+            ]
+        },
+        "EW": {
+            "__class__": "Set",
+            "data": [
+                "EW3",
+                "EW4",
+                "EW5",
+                "EW2"
+            ]
+        },
+        "EZ": {
+            "__class__": "Set",
+            "data": [
+                "EZ1",
+                "EZ2"
+            ]
+        },
+        "FT": {
+            "__class__": "Set",
+            "data": [
+                "FT2",
+                "FT1"
+            ]
+        },
+        "HERB": {
+            "__class__": "Set",
+            "data": [
+                "HERB"
+            ]
+        },
+        "LAN": {
+            "__class__": "Set",
+            "data": [
+                "LAN"
+            ]
+        },
+        "MAM": {
+            "__class__": "Set",
+            "data": [
+                "MAM2",
+                "MAM1"
+            ]
+        },
+        "OSS": {
+            "__class__": "Set",
+            "data": [
+                "OSS3",
+                "OSS2"
+            ]
+        },
+        "R": {
+            "__class__": "Set",
+            "data": [
+                "R3",
+                "R5",
+                "R1",
+                "R4",
+                "R6",
+                "R2"
+            ]
+        },
+        "SCHN": {
+            "__class__": "Set",
+            "data": [
+                "SCHN"
+            ]
+        },
+        "SCHT": {
+            "__class__": "Set",
+            "data": [
+                "SCHT2",
+                "SCHT3"
+            ]
+        },
+        "SH": {
+            "__class__": "Set",
+            "data": [
+                "SH2AB",
+                "SH5",
+                "SH2CD",
+                "SH1AB",
+                "SH1CD",
+                "SH6",
+                "SH3",
+                "SH4"
+            ]
+        },
+        "STKT": {
+            "__class__": "Set",
+            "data": [
+                "STKT"
+            ]
+        },
+        "STKW": {
+            "__class__": "Set",
+            "data": [
+                "STKW1",
+                "STKW2"
+            ]
+        },
+        "STM": {
+            "__class__": "Set",
+            "data": [
+                "STM2",
+                "STM1"
+            ]
+        },
+        "STR": {
+            "__class__": "Set",
+            "data": [
+                "STR3",
+                "STR1",
+                "STR2"
+            ]
+        },
+        "THA": {
+            "__class__": "Set",
+            "data": [
+                "THA2",
+                "THA1",
+                "THA3"
+            ]
+        }
+    },
+    "hauptstrecke": "Neuhausen-Bietingen",
+    "sektoren": {
+        "SH1": {
+            "__class__": "Set",
+            "data": [
+                "SH1CD",
+                "SH1AB"
+            ]
+        },
+        "SH2": {
+            "__class__": "Set",
+            "data": [
+                "SH2AB",
+                "SH2CD"
+            ]
+        }
+    },
+    "strecken": {
+        "Beringen-Bietingen": [
+            "Beringen",
+            "SH",
+            "HERB",
+            "THA",
+            "Bietingen"
+        ],
+        "Neuhausen-Bietingen": [
+            "Neuhausen",
+            "SH",
+            "HERB",
+            "THA",
+            "Bietingen"
+        ],
+        "Neuhausen-Steckborn": [
+            "Neuhausen",
+            "SH",
+            "FT",
+            "LAN",
+            "SCHT",
+            "STKW",
+            "STKT",
+            "DSH",
+            "SCHN",
+            "EW",
+            "STR",
+            "EZ",
+            "MAM",
+            "A MAM",
+            "Steckborn"
+        ],
+        "Thalheim-Steckborn": [
+            "Thalheim",
+            "A OSS",
+            "OSS",
+            "STM",
+            "EW",
+            "STR",
+            "EZ",
+            "MAM",
+            "A MAM",
+            "Steckborn"
+        ]
+    },
+    "streckenmarkierung": []
+}

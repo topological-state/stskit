@@ -1,0 +1,142 @@
+{
+    "_aid": 575,
+    "_build": 5845,
+    "_name": "Rorschach",
+    "_region": "Ostschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "RHB": {
+            "__class__": "Set",
+            "data": [
+                "RHB"
+            ]
+        },
+        "Romanshorn": {
+            "__class__": "Set",
+            "data": [
+                "Romanshorn"
+            ]
+        },
+        "SGF": {
+            "__class__": "Set",
+            "data": [
+                "SGF 477",
+                "SGF 377"
+            ]
+        },
+        "STA": {
+            "__class__": "Set",
+            "data": [
+                "STA 364",
+                "STA 464"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "ARB": {
+            "__class__": "Set",
+            "data": [
+                "ARB1",
+                "ARB2",
+                "ARB3"
+            ]
+        },
+        "ARBS": {
+            "__class__": "Set",
+            "data": [
+                "ARBS"
+            ]
+        },
+        "EGN": {
+            "__class__": "Set",
+            "data": [
+                "EGN"
+            ]
+        },
+        "GOL": {
+            "__class__": "Set",
+            "data": [
+                "GOL2",
+                "GOL1"
+            ]
+        },
+        "HN": {
+            "__class__": "Set",
+            "data": [
+                "HN2",
+                "HN1"
+            ]
+        },
+        "MOER": {
+            "__class__": "Set",
+            "data": [
+                "MOER"
+            ]
+        },
+        "RS": {
+            "__class__": "Set",
+            "data": [
+                "RS4",
+                "RS5",
+                "RS2",
+                "RS1",
+                "RS3",
+                "RS6",
+                "RS37",
+                "RS32",
+                "RS31",
+                "RS36",
+                "RS33",
+                "RS34"
+            ]
+        },
+        "RSHF": {
+            "__class__": "Set",
+            "data": [
+                "RSHF"
+            ]
+        },
+        "RSST": {
+            "__class__": "Set",
+            "data": [
+                "RSST"
+            ]
+        },
+        "STCH": {
+            "__class__": "Set",
+            "data": [
+                "STCH"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "SGF-STA",
+    "strecken": {
+        "Romanshorn-STA": [
+            "Romanshorn",
+            "EGN",
+            "ARBS",
+            "ARB",
+            "STCH",
+            "HN",
+            "RSHF",
+            "RS",
+            "STA"
+        ],
+        "SGF-STA": [
+            "SGF",
+            "MOER",
+            "GOL",
+            "RSST",
+            "RS",
+            "STA"
+        ]
+    }
+}

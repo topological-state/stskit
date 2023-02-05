@@ -1,0 +1,168 @@
+{
+    "_aid": 547,
+    "_build": 5840,
+    "_name": "RhB / Sagliains",
+    "_region": "Ostschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung"
+            ]
+        },
+        "Depot": {
+            "__class__": "Set",
+            "data": [
+                "Depot"
+            ]
+        },
+        "Klosters Platz": {
+            "__class__": "Set",
+            "data": [
+                "Klosters Platz"
+            ]
+        },
+        "S-chanf": {
+            "__class__": "Set",
+            "data": [
+                "S-chanf"
+            ]
+        },
+        "Umlad": {
+            "__class__": "Set",
+            "data": [
+                "Umlad"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "ADZ": {
+            "__class__": "Set",
+            "data": [
+                "ADZ"
+            ]
+        },
+        "CARO": {
+            "__class__": "Set",
+            "data": [
+                "CARO"
+            ]
+        },
+        "CIN": {
+            "__class__": "Set",
+            "data": [
+                "CIN"
+            ]
+        },
+        "FTAN": {
+            "__class__": "Set",
+            "data": [
+                "FTAN"
+            ]
+        },
+        "GUA": {
+            "__class__": "Set",
+            "data": [
+                "GUA"
+            ]
+        },
+        "LAVI": {
+            "__class__": "Set",
+            "data": [
+                "LAVI 1",
+                "LAVI 2"
+            ]
+        },
+        "SAGL": {
+            "__class__": "Set",
+            "data": [
+                "SAGL 4",
+                "SAGL 3",
+                "SAGL 2",
+                "SAGL 1",
+                "SAGL 72"
+            ]
+        },
+        "SCTA": {
+            "__class__": "Set",
+            "data": [
+                "SCTA 3",
+                "SCTA 1",
+                "SCTA 4",
+                "SCTA 2"
+            ]
+        },
+        "SELF": {
+            "__class__": "Set",
+            "data": [
+                "SELF 33",
+                "SELF 1",
+                "SELF 2"
+            ]
+        },
+        "SUS": {
+            "__class__": "Set",
+            "data": [
+                "SUS"
+            ]
+        },
+        "ZEZ": {
+            "__class__": "Set",
+            "data": [
+                "ZEZ 1",
+                "ZEZ 2",
+                "ZEZ 3"
+            ]
+        }
+    },
+    "hauptstrecke": "Klosters-Scuol",
+    "strecken": {
+        "Klosters-S-chanf": [
+            "Klosters Platz",
+            "SELF",
+            "SUS",
+            "ZEZ",
+            "CARO",
+            "CIN",
+            "S-chanf"
+        ],
+        "Klosters-Scuol": [
+            "Klosters Platz",
+            "SELF",
+            "SAGL",
+            "LAVI",
+            "GUA",
+            "ADZ",
+            "FTAN",
+            "SCTA"
+        ],
+        "S-Chanf-Scuol": [
+            "S-chanf",
+            "CIN",
+            "CARO",
+            "ZEZ",
+            "SUS",
+            "SAGL",
+            "LAVI",
+            "GUA",
+            "ADZ",
+            "FTAN",
+            "SCTA"
+        ],
+        "Scuol-S-Chanf": [
+            "SCTA",
+            "FTAN",
+            "ADZ",
+            "GUA",
+            "LAVI",
+            "SAGL",
+            "SUS",
+            "ZEZ",
+            "CARO",
+            "CIN",
+            "S-chanf"
+        ]
+    }
+}

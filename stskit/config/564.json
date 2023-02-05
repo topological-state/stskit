@@ -1,0 +1,287 @@
+{
+    "_aid": 564,
+    "_build": 5847,
+    "_name": "RhB / Samedan",
+    "_region": "Ostschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstell": {
+            "__class__": "Set",
+            "data": [
+                "Abstell"
+            ]
+        },
+        "Abstell BB": {
+            "__class__": "Set",
+            "data": [
+                "Abstell BB"
+            ]
+        },
+        "Cinuos-chel-Brail": {
+            "__class__": "Set",
+            "data": [
+                "Cinuos-chel-Brail"
+            ]
+        },
+        "Depot": {
+            "__class__": "Set",
+            "data": [
+                "Depot"
+            ]
+        },
+        "GUZO": {
+            "__class__": "Set",
+            "data": [
+                "GUZO"
+            ]
+        },
+        "Stuls": {
+            "__class__": "Set",
+            "data": [
+                "Stuls"
+            ]
+        },
+        "Surovas": {
+            "__class__": "Set",
+            "data": [
+                "Surovas"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BEBR": {
+            "__class__": "Set",
+            "data": [
+                "BEBR 1",
+                "BEBR 2",
+                "BEBR 3"
+            ]
+        },
+        "BEV": {
+            "__class__": "Set",
+            "data": [
+                "BEV 3",
+                "BEV 2",
+                "BEV 4"
+            ]
+        },
+        "CELE": {
+            "__class__": "Set",
+            "data": [
+                "CELE",
+                "CELE 22",
+                "CELE 23"
+            ]
+        },
+        "CELS": {
+            "__class__": "Set",
+            "data": [
+                "CELS"
+            ]
+        },
+        "LAPU": {
+            "__class__": "Set",
+            "data": [
+                "LAPU"
+            ]
+        },
+        "MADU": {
+            "__class__": "Set",
+            "data": [
+                "MADU"
+            ]
+        },
+        "MUOT": {
+            "__class__": "Set",
+            "data": [
+                "MUOT"
+            ]
+        },
+        "PORE": {
+            "__class__": "Set",
+            "data": [
+                "PORE 4",
+                "PORE 5",
+                "PORE 1",
+                "PORE 23",
+                "PORE 3",
+                "PORE 2",
+                "PORE 12",
+                "PORE 52",
+                "PORE 51"
+            ]
+        },
+        "PRED": {
+            "__class__": "Set",
+            "data": [
+                "PRED 2",
+                "PRED 1",
+                "PRED 11",
+                "PRED 501"
+            ]
+        },
+        "PTM": {
+            "__class__": "Set",
+            "data": [
+                "PTM"
+            ]
+        },
+        "PTMS": {
+            "__class__": "Set",
+            "data": [
+                "PTMS"
+            ]
+        },
+        "SAME": {
+            "__class__": "Set",
+            "data": [
+                "SAME 3",
+                "SAME 4",
+                "SAME 2",
+                "SAME 5",
+                "SAME 51",
+                "SAME 1",
+                "SAME 40",
+                "SAME 6",
+                "SAME 73",
+                "SAME 61"
+            ]
+        },
+        "SCAN": {
+            "__class__": "Set",
+            "data": [
+                "SCAN"
+            ]
+        },
+        "SMOR": {
+            "__class__": "Set",
+            "data": [
+                "SMOR 37",
+                "SMOR 201",
+                "SMOR 102",
+                "SMOR 202",
+                "SMOR 16",
+                "SMOR 38",
+                "SMOR 6",
+                "SMOR 1",
+                "SMOR 5",
+                "SMOR 32",
+                "SMOR 7",
+                "SMOR 4",
+                "SMOR 8",
+                "SMOR 101",
+                "SMOR 11",
+                "SMOR 3",
+                "SMOR 31",
+                "SMOR 2"
+            ]
+        },
+        "SPIN": {
+            "__class__": "Set",
+            "data": [
+                "SPIN",
+                "SPIN 301"
+            ]
+        },
+        "ZUOZ": {
+            "__class__": "Set",
+            "data": [
+                "ZUOZ"
+            ]
+        }
+    },
+    "hauptstrecke": "Stuls-St. Moritz",
+    "sektoren": {
+        "SMOR 1": {
+            "__class__": "Set",
+            "data": [
+                "SMOR 1",
+                "SMOR 31"
+            ]
+        },
+        "SMOR 2": {
+            "__class__": "Set",
+            "data": [
+                "SMOR 2",
+                "SMOR 32"
+            ]
+        },
+        "SMOR 7": {
+            "__class__": "Set",
+            "data": [
+                "SMOR 7",
+                "SMOR 37"
+            ]
+        },
+        "SMOR 8": {
+            "__class__": "Set",
+            "data": [
+                "SMOR 8",
+                "SMOR 38"
+            ]
+        },
+        "SAME 1": {
+            "__class__": "Set",
+            "data": [
+                "SAME 1",
+                "SAME 51"
+            ]
+        }
+    },
+    "strecken": {
+        "Cinuos-chel-Surovas": [
+            "Cinuos-chel-Brail",
+            "SCAN",
+            "ZUOZ",
+            "MADU",
+            "LAPU",
+            "BEV",
+            "SAME",
+            "PTM",
+            "PORE",
+            "Surovas"
+        ],
+        "Cinuos-chel-St. Moritz": [
+            "Cinuos-chel-Brail",
+            "SCAN",
+            "ZUOZ",
+            "MADU",
+            "LAPU",
+            "BEV",
+            "SAME",
+            "CELE",
+            "SMOR"
+        ],
+        "Stuls-St. Moritz": [
+            "Stuls",
+            "BEBR",
+            "MUOT",
+            "PRED",
+            "SPIN",
+            "BEV",
+            "SAME",
+            "CELE",
+            "SMOR"
+        ],
+        "Stuls-Surovas": [
+            "Stuls",
+            "BEBR",
+            "MUOT",
+            "PRED",
+            "SPIN",
+            "BEV",
+            "SAME",
+            "PTM",
+            "PORE",
+            "Surovas"
+        ],
+        "Surovas-St. Moritz": [
+            "Surovas",
+            "PORE",
+            "CELS",
+            "SMOR"
+        ]
+    },
+    "streckenmarkierung": []
+}

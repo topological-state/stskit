@@ -1,0 +1,252 @@
+{
+    "_aid": 570,
+    "_build": 5840,
+    "_name": "RhB / Thusis",
+    "_region": "Ostschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung"
+            ]
+        },
+        "Berg\u00fcn": {
+            "__class__": "Set",
+            "data": [
+                "Berg\u00fcn"
+            ]
+        },
+        "CH": {
+            "__class__": "Set",
+            "data": [
+                "CH 215",
+                "CH 115"
+            ]
+        },
+        "Davos": {
+            "__class__": "Set",
+            "data": [
+                "Davos Wiesen"
+            ]
+        },
+        "Ems": {
+            "__class__": "Set",
+            "data": [
+                "Ems Chemie"
+            ]
+        },
+        "Heineken": {
+            "__class__": "Set",
+            "data": [
+                "Heineken"
+            ]
+        },
+        "Kuoni": {
+            "__class__": "Set",
+            "data": [
+                "Kuoni"
+            ]
+        },
+        "Trin": {
+            "__class__": "Set",
+            "data": [
+                "Trin"
+            ]
+        },
+        "Verlad": {
+            "__class__": "Set",
+            "data": [
+                "Verlad"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "ALV": {
+            "__class__": "Set",
+            "data": [
+                "ALV"
+            ]
+        },
+        "BONA": {
+            "__class__": "Set",
+            "data": [
+                "BONA 2",
+                "BONA 1"
+            ]
+        },
+        "CAZI": {
+            "__class__": "Set",
+            "data": [
+                "CAZI",
+                "CAZI lang"
+            ]
+        },
+        "DE": {
+            "__class__": "Set",
+            "data": [
+                "DE 2",
+                "DE 1"
+            ]
+        },
+        "EMSW": {
+            "__class__": "Set",
+            "data": [
+                "EMSW"
+            ]
+        },
+        "FBG": {
+            "__class__": "Set",
+            "data": [
+                "FBG 3",
+                "FBG 4",
+                "FBG 2",
+                "FBG 2 lang",
+                "FBG 3 lang"
+            ]
+        },
+        "FILI": {
+            "__class__": "Set",
+            "data": [
+                "FILI 3",
+                "FILI 1",
+                "FILI 4",
+                "FILI 2"
+            ]
+        },
+        "REIT": {
+            "__class__": "Set",
+            "data": [
+                "REIT 3",
+                "REIT 2",
+                "REIT 5",
+                "REIT 4"
+            ]
+        },
+        "RHAE": {
+            "__class__": "Set",
+            "data": [
+                "RHAE 1",
+                "RHAE 2"
+            ]
+        },
+        "RORE": {
+            "__class__": "Set",
+            "data": [
+                "RORE",
+                "RORE lang"
+            ]
+        },
+        "ROTH": {
+            "__class__": "Set",
+            "data": [
+                "ROTH",
+                "ROTH lang"
+            ]
+        },
+        "SOLI": {
+            "__class__": "Set",
+            "data": [
+                "SOLI"
+            ]
+        },
+        "STGL": {
+            "__class__": "Set",
+            "data": [
+                "STGL"
+            ]
+        },
+        "SURA": {
+            "__class__": "Set",
+            "data": [
+                "SURA 2",
+                "SURA 1"
+            ]
+        },
+        "THS": {
+            "__class__": "Set",
+            "data": [
+                "THS 4",
+                "THS 1 lang",
+                "THS 2",
+                "THS 1",
+                "THS 5",
+                "THS 3"
+            ]
+        },
+        "TICA": {
+            "__class__": "Set",
+            "data": [
+                "TICA"
+            ]
+        }
+    },
+    "sektoren": {
+        "CAZI": {
+            "__class__": "Set",
+            "data": [
+                "CAZI",
+                "CAZI lang"
+            ]
+        },
+        "FBG2": {
+            "__class__": "Set",
+            "data": [
+                "FBG 2",
+                "FBG 2 lang"
+            ]
+        },
+        "FBG3": {
+            "__class__": "Set",
+            "data": [
+                "FBG 3",
+                "FBG 3 lang"
+            ]
+        },
+        "RORE": {
+            "__class__": "Set",
+            "data": [
+                "RORE",
+                "RORE lang"
+            ]
+        },
+        "ROTH": {
+            "__class__": "Set",
+            "data": [
+                "ROTH",
+                "ROTH lang"
+            ]
+        },
+        "THS1": {
+            "__class__": "Set",
+            "data": [
+                "THS 1",
+                "THS 1 lang"
+            ]
+        }
+    },
+    "hauptstrecke": "CH-Bergün",
+    "strecken": {
+        "CH-Bergün": [
+            "CH",
+            "FBG",
+            "DE",
+            "EMSW",
+            "REIT",
+            "BONA",
+            "RHAE",
+            "ROTH",
+            "RORE",
+            "CAZI",
+            "THS",
+            "SOLI",
+            "TICA",
+            "SURA",
+            "ALV",
+            "FILI",
+            "STGL",
+            "Berg\u00fcn"
+        ]
+    }
+}

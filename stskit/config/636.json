@@ -1,0 +1,178 @@
+{
+    "_aid": 636,
+    "_build": 5847,
+    "_name": "RhB / Landquart",
+    "_region": "Ostschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstell": {
+            "__class__": "Set",
+            "data": [
+                "Abstell"
+            ]
+        },
+        "Chur": {
+            "__class__": "Set",
+            "data": [
+                "Chur"
+            ]
+        },
+        "Depot": {
+            "__class__": "Set",
+            "data": [
+                "Depot"
+            ]
+        },
+        "Fuchsenwinkel": {
+            "__class__": "Set",
+            "data": [
+                "Fuchsenwinkel"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Valser": {
+            "__class__": "Set",
+            "data": [
+                "Valser"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "GRUS": {
+            "__class__": "Set",
+            "data": [
+                "GRUS 1",
+                "GRUS 2"
+            ]
+        },
+        "HALD": {
+            "__class__": "Set",
+            "data": [
+                "HALD 1 lang",
+                "HALD 2",
+                "HALD 1"
+            ]
+        },
+        "IGIS": {
+            "__class__": "Set",
+            "data": [
+                "IGIS"
+            ]
+        },
+        "LQ": {
+            "__class__": "Set",
+            "data": [
+                "LQ B1",
+                "LQ 7 lang",
+                "LQ J11",
+                "LQ 5",
+                "LQ 6 lang",
+                "LQ 8",
+                "LQ 6",
+                "LQ 8 lang",
+                "LQ 7"
+            ]
+        },
+        "LQRI": {
+            "__class__": "Set",
+            "data": [
+                "LQRI"
+            ]
+        },
+        "MALA": {
+            "__class__": "Set",
+            "data": [
+                "MALA 1",
+                "MALA 2"
+            ]
+        },
+        "SCRS": {
+            "__class__": "Set",
+            "data": [
+                "SCRS 3",
+                "SCRS 1",
+                "SCRS 2"
+            ]
+        },
+        "SEEV": {
+            "__class__": "Set",
+            "data": [
+                "SEEV"
+            ]
+        },
+        "UVAZ": {
+            "__class__": "Set",
+            "data": [
+                "UVAZ 1",
+                "UVAZ 2",
+                "UVAZ 3",
+                "UVAZ 5"
+            ]
+        },
+        "ZALT": {
+            "__class__": "Set",
+            "data": [
+                "ZALT 1",
+                "ZALT 2"
+            ]
+        },
+        "ZIZ": {
+            "__class__": "Set",
+            "data": [
+                "ZIZ"
+            ]
+        }
+    },
+    "hauptstrecke": "Chur-Fuchsenwinkel",
+    "sektoren": {
+        "HALD 1": {
+            "__class__": "Set",
+            "data": [
+                "HALD 1 lang",
+                "HALD 1"
+            ]
+        },
+        "LQ 6": {
+            "__class__": "Set",
+            "data": [
+                "LQ 6",
+                "LQ 6 lang"
+            ]
+        },
+        "LQ 7": {
+            "__class__": "Set",
+            "data": [
+                "LQ 7",
+                "LQ 7 lang"
+            ]
+        },
+        "LQ 8": {
+            "__class__": "Set",
+            "data": [
+                "LQ 8",
+                "LQ 8 lang"
+            ]
+        }
+    },
+    "strecken": {
+        "Chur-Fuchsenwinkel": [
+            "Chur",
+            "HALD",
+            "UVAZ",
+            "Industrie",
+            "LQ",
+            "MALA",
+            "SEEV",
+            "GRUS",
+            "SCRS",
+            "Fuchsenwinkel"
+        ]
+    },
+    "streckenmarkierung": []
+}

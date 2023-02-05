@@ -1,0 +1,177 @@
+{
+    "_aid": 519,
+    "_build": 5847,
+    "_name": "Wil SG",
+    "_region": "Ostschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung"
+            ]
+        },
+        "Arnegg": {
+            "__class__": "Set",
+            "data": [
+                "Arnegg"
+            ]
+        },
+        "Bazenheid": {
+            "__class__": "Set",
+            "data": [
+                "Bazenheid"
+            ]
+        },
+        "Bettwiesen": {
+            "__class__": "Set",
+            "data": [
+                "Bettwiesen"
+            ]
+        },
+        "Depot": {
+            "__class__": "Set",
+            "data": [
+                "Depot"
+            ]
+        },
+        "Eschlikon": {
+            "__class__": "Set",
+            "data": [
+                "Eschlikon"
+            ]
+        },
+        "GSS Verladeanlage": {
+            "__class__": "Set",
+            "data": [
+                "GSS Verladeanlage"
+            ]
+        },
+        "SCHZ Tanklager": {
+            "__class__": "Set",
+            "data": [
+                "SCHZ Tanklager"
+            ]
+        },
+        "SCHZ Kieswerk": {
+            "__class__": "Set",
+            "data": [
+                "SCHZ Kieswerk"
+            ]
+        },
+        "St. Gallen": {
+            "__class__": "Set",
+            "data": [
+                "St. Gallen 185",
+                "St. Gallen 285"
+            ]
+        },
+        "WIL Industrie": {
+            "__class__": "Set",
+            "data": [
+                "WIL Industrie"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "ALG": {
+            "__class__": "Set",
+            "data": [
+                "ALG"
+            ]
+        },
+        "FLA": {
+            "__class__": "Set",
+            "data": [
+                "FLA 2",
+                "FLA 3",
+                "FLA 1"
+            ]
+        },
+        "GSS": {
+            "__class__": "Set",
+            "data": [
+                "GSS 1",
+                "GSS 4",
+                "GSS 5",
+                "GSS 3",
+                "GSS 3K"
+            ]
+        },
+        "SCHZ": {
+            "__class__": "Set",
+            "data": [
+                "SCHZ 3",
+                "SCHZ 2",
+                "SCHZ 4"
+            ]
+        },
+        "SGWI": {
+            "__class__": "Set",
+            "data": [
+                "SGWI 1",
+                "SGWI 2"
+            ]
+        },
+        "SIR": {
+            "__class__": "Set",
+            "data": [
+                "SIR 2",
+                "SIR 1"
+            ]
+        },
+        "UZW": {
+            "__class__": "Set",
+            "data": [
+                "UZW 3",
+                "UZW 4",
+                "UZW 2"
+            ]
+        },
+        "WIL": {
+            "__class__": "Set",
+            "data": [
+                "WIL 3",
+                "WIL 2",
+                "WIL 5",
+                "WIL 1",
+                "WIL 6",
+                "WIL 4",
+                "WIL 504",
+                "WIL 503"
+            ]
+        }
+    },
+    "hauptstrecke": "Eschlikon-St. Gallen",
+    "sektoren": {
+        "GSS 3": {
+            "__class__": "Set",
+            "data": [
+                "GSS 3K",
+                "GSS 3"
+            ]
+        }
+    },
+    "strecken": {
+        "Arnegg-St": [
+            "Arnegg",
+            "GSS",
+            "SGWI",
+            "St"
+        ],
+        "Eschlikon-St. Gallen": [
+            "Eschlikon",
+            "SIR",
+            "WIL",
+            "SCHZ",
+            "ALG",
+            "UZW",
+            "FLA",
+            "GSS",
+            "SGWI",
+            "St. Gallen"
+        ]
+    },
+    "streckenmarkierung": []
+}
