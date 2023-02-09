@@ -175,33 +175,36 @@ class VerspaetungsKorrektur:
         entsprechend einem regulären ziel, ohne die verspätung aufzuholen.
         """
 
-        def ankunft_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
-            ankunft = None
-            for pred in graph.pred[node]:
-                try:
-                    pred_data = graph.nodes[pred]
-                    pred_v_ab = pred_data['v_ab']
-                    pred_v_an = pred_data['v_an']
-                    pred_p_ab = pred_data['p_ab']
-                    edge_data = graph[node][pred]
-                    edge_typ = edge_data['typ']
-                except KeyError:
-                    continue
-                else:
-                    if edge_typ in {'P', 'E'}:
-                        # ankunft basiert auf v_ab des vorgaengers
-                        ankunft = max(0 or ankunft, node_data['p_an'] + pred_v_ab)
-                    elif edge_typ in {'F'}:
-                        # ankunft abasiert auf v_an des vorgaengers
-                        ankunft = max(0 or ankunft, node_data['p_an'] + pred_v_an)
-                    elif edge_typ in {'K'}:
-                        # ankunft des kuppelziels haengt nicht vom kuppelnden zug ab
-                        pass
+        ankunft = None
+        for pred in graph.pred[node]:
+            try:
+                pred_data = graph.nodes[pred]
+                pred_v_ab = pred_data['v_ab']
+                pred_v_an = pred_data['v_an']
+                pred_p_an = pred_data['p_an']
+                pred_p_ab = pred_data['p_ab']
+                edge_data = graph[pred][node]
+                edge_typ = edge_data['typ']
+            except KeyError:
+                continue
+            else:
+                if edge_typ == 'P':
+                    # gleiche verspaetung wie vorgaenger
+                    ankunft = max(ankunft or 0, node_data['p_an'] + pred_v_ab)
+                elif edge_typ == 'E':
+                    # ankunft ist gleich abfahrt des vorgaengers
+                    ankunft = max(ankunft or 0, pred_p_ab + pred_v_ab)
+                elif edge_typ == 'F':
+                    # ankunft ist gleich ankunft des vorgaengers
+                    ankunft = max(ankunft or 0, pred_p_an + pred_v_an)
+                elif edge_typ == 'K':
+                    # ankunft des kuppelziels haengt nicht vom kuppelnden zug ab
+                    pass
 
-            if ankunft is not None:
-                node_data['v_an'] = ankunft - node_data['p_an']
+        if ankunft is not None:
+            node_data['v_an'] = ankunft - node_data['p_an']
 
-            logger.debug(f"{self.__class__.__name__}.ankunft_berechnen: {node}, {node_data}")
+        logger.debug(f"{self.__class__.__name__}.ankunft_berechnen: {node}, {node_data}")
 
     def abfahrt_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         """
@@ -499,7 +502,10 @@ class ErsatzUrsprung(FlagUrsprung):
     """
     abfahrt frühestens wenn nummernwechsel abgeschlossen ist
 
-    das erste fahrplanziel des ersatzzuges muss it einer AnschlussAbwarten-korrektur markiert sein.
+    p_an: planmaessige ankunftszeit am bahnsteig
+    p_ab: zeit des nummernwechsels. muss gleich sein wie p_an des folgeziels.
+
+    das erste fahrplanziel des ersatzzuges muss it einer ErsatzZiel-korrektur markiert sein.
     """
 
     def __init__(self, planung: 'Planung'):
@@ -508,9 +514,14 @@ class ErsatzUrsprung(FlagUrsprung):
         self.display_name = "Ersatz (Ursprung)"
 
     def abfahrt_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
-        # abfahrtszeit = zeit des nummernwechsels
-        # todo : p_ab = p_an + 1
-        node_data['v_ab'] = node_data['v_an']
+        """
+        abfahrtszeit = zeit des nummernwechsels
+        """
+
+        ankunft = node_data['p_an'] + node_data['v_an']
+        aufenthalt = max(node_data['p_ab'] - ankunft, node_data['d_min'])
+        abfahrt = ankunft + aufenthalt
+        node_data['v_ab'] = abfahrt - node_data['p_ab']
 
         logger.debug(f"{self.__class__.__name__}.abfahrt_berechnen: {node}, {node_data}")
 
@@ -519,7 +530,10 @@ class ErsatzZiel(FlagZiel):
     """
     abfahrt frühestens wenn nummernwechsel abgeschlossen ist
 
-    das erste fahrplanziel des ersatzzuges muss it einer AnschlussAbwarten-korrektur markiert sein.
+    p_an: zeit des nummernwechsels. muss gleich sein wie p_ab des stammziels.
+    p_ab: planmaessige abfahrtszeit
+
+    funkioniert in verbindung mit ErsatzUrsprung.
     """
 
     def __init__(self, planung: 'Planung'):
@@ -558,7 +572,7 @@ class FluegelungZiel(FlagZiel):
             logger.warning(f"{self.__class__.__name__}.abfahrt_berechnen: {node}, {node_data} - keine ursprungsdaten!")
             return
 
-        abfahrt = max(pred_p_ab + pred_v_ab, node['p_ab'])
+        abfahrt = max(pred_p_ab + pred_v_ab, node_data['p_ab'])
         node_data['v_ab'] = abfahrt - node_data['p_ab']
 
         logger.debug(f"{self.__class__.__name__}.abfahrt_berechnen: {node}, {node_data}")
@@ -1427,13 +1441,12 @@ class Planung:
                 else:
                     data['v_an'] = 0
 
-                # wird in zielgraph_erstellen gesetzt - sollte also nicht noetig sein!
-                # try:
-                #     data['p_an'] = time_to_minutes(ziel.an)
-                #     data['p_ab'] = time_to_minutes(ziel.ab)
-                # except AttributeError as e:
-                #     logger.warning(msg="fehlende fahrplanzeit - sollte nicht vorkommen", exc_info=e)
-                #     continue
+                # graph-daten aktualisieren
+                try:
+                    data['p_an'] = time_to_minutes(ziel.an)
+                    data['p_ab'] = time_to_minutes(ziel.ab)
+                except AttributeError:
+                    pass
                 data['d_min'] = ziel.mindestaufenthalt
                 data['v_ab'] = data['v_an']
             else:
@@ -1456,7 +1469,7 @@ class Planung:
                     except KeyError as e:
                         logger.exception(e)
                 else:
-                    logger.warning("keine autokorrektur fuer ziel ", ziel)
+                    logger.warning(f"keine autokorrektur fuer ziel {ziel}")
 
                 for korr in ziel.fdl_korrektur.values():
                     try:
@@ -1508,11 +1521,12 @@ class Planung:
                 zug.korrekturen_definiert = zug.folgezuege_aufgeloest and result
 
     def zug_korrekturen_definieren(self, zug: ZugDetailsPlanung) -> bool:
-        result = True
         for ziel in zug.fahrplan:
-            ziel_result = self.ziel_korrekturen_definieren(ziel)
-            result = result and ziel_result
-        return result
+            result = self.ziel_korrekturen_definieren(ziel)
+            if not result:
+                return False
+
+        return True
 
     def ziel_korrekturen_definieren(self, ziel: ZugZielPlanung) -> bool:
         """
@@ -1534,11 +1548,13 @@ class Planung:
 
         zid = None
         if ziel.auto_korrektur is not None:
+            # folgekorrektur nicht ueberschreiben
+            # todo : gibt es zuege, die am flagziel gleich noch eine korrektur brauchen?
             pass
         elif ziel.einfahrt:
             ziel.auto_korrektur = Einfahrtszeit(self)
         elif ziel.ausfahrt:
-            pass
+            ziel.auto_korrektur = Durchfahrt(self)
         elif ziel.durchfahrt():
             ziel.auto_korrektur = Durchfahrt(self)
         elif zid := ziel.ersatz_zid():
@@ -1553,7 +1569,7 @@ class Planung:
             ziel.auto_korrektur = FluegelungUrsprung(self)
             folge_korrektur = FluegelungZiel(self)
             ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, self.params.mindestaufenthalt_fluegelung)
-        elif ziel.auto_korrektur is None:
+        else:
             ziel.auto_korrektur = Planhalt(self)
 
         if zid:
@@ -1566,12 +1582,12 @@ class Planung:
                 result = False
             else:
                 typ = ziel.auto_korrektur.edge_typ
-                self.zielgraph.add_edge(zzid1, zzid2, typ=typ, obj=ziel.auto_korrektur)
+                self.zielgraph.add_edge(zzid1, zzid2, typ=typ)
                 folge_korrektur.ursprung = zzid1
                 ziel2.auto_korrektur = folge_korrektur
-                # if typ in {'E', 'K'}:
-                #     an1 = minutes_to_time(time_to_minutes(ziel.an) + ziel.mindestaufenthalt)
-                #     ziel.ab = max(ziel2.an, an1)
+                if typ in {'E', 'K'}:
+                    an1 = minutes_to_time(time_to_minutes(ziel.an) + ziel.mindestaufenthalt)
+                    ziel.ab = max(ziel2.an, an1)
 
         return result
 
