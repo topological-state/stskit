@@ -1,0 +1,187 @@
+{
+    "_aid": 556,
+    "_build": 5845,
+    "_name": "Arth-Goldau",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung"
+            ]
+        },
+        "Fl\u00fcelen": {
+            "__class__": "Set",
+            "data": [
+                "Fl\u00fcelen 997",
+                "Fl\u00fcelen 897"
+            ]
+        },
+        "Immensee": {
+            "__class__": "Set",
+            "data": [
+                "Immensee 203",
+                "Immensee 103"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Industrie BRU": {
+            "__class__": "Set",
+            "data": [
+                "Industrie BRU"
+            ]
+        },
+        "Steinerberg": {
+            "__class__": "Set",
+            "data": [
+                "Steinerberg"
+            ]
+        },
+        "Zug Oberwil": {
+            "__class__": "Set",
+            "data": [
+                "Zug Oberwil"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BRU": {
+            "__class__": "Set",
+            "data": [
+                "BRU3",
+                "BRU2",
+                "BRU4",
+                "BRU43",
+                "BRU52",
+                "BRU5",
+                "BRU33"
+            ]
+        },
+        "GD": {
+            "__class__": "Set",
+            "data": [
+                "GD6",
+                "GD8",
+                "GD9",
+                "GD3",
+                "GD5",
+                "GD4",
+                "GD2",
+                "GD11",
+                "GD68",
+                "GD67",
+                "GD69",
+                "GD24",
+                "GD23",
+                "GD25",
+                "GD22",
+                "GD26",
+                "GD58",
+                "GD71",
+                "GD72"
+            ]
+        },
+        "Kies": {
+            "__class__": "Set",
+            "data": [
+                "Kies2",
+                "Kies3",
+                "Kies1"
+            ]
+        },
+        "SCHW": {
+            "__class__": "Set",
+            "data": [
+                "SCHW2",
+                "SCHW4",
+                "SCHW1",
+                "SCHW3"
+            ]
+        },
+        "SK": {
+            "__class__": "Set",
+            "data": [
+                "SK"
+            ]
+        },
+        "STN": {
+            "__class__": "Set",
+            "data": [
+                "STN"
+            ]
+        },
+        "WCHO": {
+            "__class__": "Set",
+            "data": [
+                "WCHO"
+            ]
+        },
+        "WCHW": {
+            "__class__": "Set",
+            "data": [
+                "WCHW3",
+                "WCHW2"
+            ]
+        }
+    },
+    "sektoren": {
+        "GD8": {
+            "__class__": "Set",
+            "data": [
+                "GD8",
+                "GD69"
+            ]
+        },
+        "GD9": {
+            "__class__": "Set",
+            "data": [
+                "GD9",
+                "GD71"
+            ]
+        },
+        "BRU3": {
+            "__class__": "Set",
+            "data": [
+                "BRU3",
+                "BRU43"
+            ]
+        },
+        "BRU2": {
+            "__class__": "Set",
+            "data": [
+                "BRU2",
+                "BRU52"
+            ]
+        }
+    },
+    "hauptstrecke": "Zug-Fl\u00fcelen",
+    "strecken": {
+        "Immensee-Fl\u00fcelen": [
+            "Immensee",
+            "GD",
+            "STN",
+            "SCHW",
+            "BRU",
+            "SK",
+            "Fl\u00fcelen"
+        ],
+        "Zug-Fl\u00fcelen": [
+            "Zug",
+            "WCHO",
+            "WCHW",
+            "GD",
+            "STN",
+            "SCHW",
+            "BRU",
+            "SK",
+            "Fl\u00fcelen"
+        ]
+    }
+}

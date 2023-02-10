@@ -1,0 +1,165 @@
+{
+    "_aid": 504,
+    "_build": 5847,
+    "_name": "Oberaargau",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "ABO Industrie": {
+            "__class__": "Set",
+            "data": [
+                "ABO Industrie"
+            ]
+        },
+        "Langenthal": {
+            "__class__": "Set",
+            "data": [
+                "Langenthal 355",
+                "Langenthal 455"
+            ]
+        },
+        "Olten (ABO)": {
+            "__class__": "Set",
+            "data": [
+                "Olten 241",
+                "Olten 141"
+            ]
+        },
+        "Olten (RTR)": {
+            "__class__": "Set",
+            "data": [
+                "Olten 341",
+                "Olten 441"
+            ]
+        },
+        "RTR Industrie": {
+            "__class__": "Set",
+            "data": [
+                "RTR Industrie"
+            ]
+        },
+        "Wanzwil": {
+            "__class__": "Set",
+            "data": [
+                "Wanzwil 760",
+                "Wanzwil 860"
+            ]
+        },
+        "Zofingen": {
+            "__class__": "Set",
+            "data": [
+                "Zofingen 145",
+                "Zofingen 245"
+            ]
+        }
+    },
+    "anschlusslage": {
+        "ABO Industrie": "mitte",
+        "Langenthal": "links",
+        "Olten (ABO)": "rechts",
+        "Olten (RTR)": "rechts",
+        "RTR Industrie": "mitte",
+        "Wanzwil": "links",
+        "Zofingen": "links"
+    },
+    "bahnsteiggruppen": {
+        "ABO": {
+            "__class__": "Set",
+            "data": [
+                "ABO 2",
+                "ABO 4",
+                "ABO 3",
+                "ABO 1"
+            ]
+        },
+        "ABO VL": {
+            "__class__": "Set",
+            "data": [
+                "ABO VL"
+            ]
+        },
+        "MGT": {
+            "__class__": "Set",
+            "data": [
+                "MGT 1",
+                "MGT 2",
+                "MGT 3"
+            ]
+        },
+        "MUBR": {
+            "__class__": "Set",
+            "data": [
+                "MUBR"
+            ]
+        },
+        "ROG": {
+            "__class__": "Set",
+            "data": [
+                "ROG 3",
+                "ROG 4"
+            ]
+        },
+        "RTR": {
+            "__class__": "Set",
+            "data": [
+                "RTR 1",
+                "RTR 2",
+                "RTR 4",
+                "RTR 3"
+            ]
+        },
+        "RTR 64": {
+            "__class__": "Set",
+            "data": [
+                "RTR 643",
+                "RTR 642",
+                "RTR 646",
+                "RTR 644",
+                "RTR 645",
+                "RTR 641"
+            ]
+        }
+    },
+    "hauptstrecke": "Langenthal-Olten",
+    "sektoren": {},
+    "strecken": {
+        "Langenthal-Olten": [
+            "Langenthal",
+            "ROG",
+            "MGT",
+            "RTR",
+            "ABO",
+            "Olten (ABO)"
+        ],
+        "Langenthal-Zofingen": [
+            "Langenthal",
+            "ROG",
+            "MGT",
+            "RTR",
+            "ABO VL",
+            "Zofingen"
+        ],
+        "Wanzwil-Olten": [
+            "Wanzwil",
+            "MUBR",
+            "RTR",
+            "Olten (RTR)"
+        ],
+        "Wanzwil-Zofingen": [
+            "Wanzwil",
+            "MUBR",
+            "RTR",
+            "ABO VL",
+            "Zofingen"
+        ],
+        "Zofingen-Olten": [
+            "Zofingen",
+            "ABO",
+            "Olten (ABO)"
+        ]
+    },
+    "streckenmarkierung": [
+    	["Zofingen", "ABO VL", "E"],
+    	["ABO VL", "RTR", "E"]
+    ]
+}

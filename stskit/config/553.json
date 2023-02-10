@@ -1,0 +1,204 @@
+{
+    "_aid": 553,
+    "_build": 5847,
+    "_name": "Neuch\u00e2tel",
+    "_region": "Westschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "B-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "B-West",
+                "B-Ost"
+            ]
+        },
+        "Chambrelien": {
+            "__class__": "Set",
+            "data": [
+                "Chambrelien"
+            ]
+        },
+        "D-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "D-West",
+                "D-Ost"
+            ]
+        },
+        "F-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "F-Gruppe"
+            ]
+        },
+        "Ins": {
+            "__class__": "Set",
+            "data": [
+                "Ins"
+            ]
+        },
+        "ONB": {
+            "__class__": "Set",
+            "data": [
+                "ONB 113",
+                "ONB 213"
+            ]
+        },
+        "Raffinerie": {
+            "__class__": "Set",
+            "data": [
+                "Raffinerie"
+            ]
+        },
+        "TWN": {
+            "__class__": "Set",
+            "data": [
+                "TWN 711",
+                "TWN 811"
+            ]
+        },
+        "Travers": {
+            "__class__": "Set",
+            "data": [
+                "Travers"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "AUV": {
+            "__class__": "Set",
+            "data": [
+                "AUV2",
+                "AUV3",
+                "AUV1"
+            ]
+        },
+        "BDR": {
+            "__class__": "Set",
+            "data": [
+                "BDR2",
+                "BDR3",
+                "BDR1"
+            ]
+        },
+        "BV": {
+            "__class__": "Set",
+            "data": [
+                "BV1",
+                "BV2"
+            ]
+        },
+        "CLB": {
+            "__class__": "Set",
+            "data": [
+                "CLB1",
+                "CLB3",
+                "CLB2"
+            ]
+        },
+        "CORN": {
+            "__class__": "Set",
+            "data": [
+                "CORN2",
+                "CORN1",
+                "A3",
+                "A1",
+                "A2",
+                "A4",
+                "A17"
+            ]
+        },
+        "CRNE": {
+            "__class__": "Set",
+            "data": [
+                "CRNE1",
+                "CRNE2"
+            ]
+        },
+        "GOR": {
+            "__class__": "Set",
+            "data": [
+                "GOR2",
+                "GOR1",
+                "GOR3"
+            ]
+        },
+        "LD": {
+            "__class__": "Set",
+            "data": [
+                "LD2",
+                "LD3",
+                "LD1"
+            ]
+        },
+        "NE": {
+            "__class__": "Set",
+            "data": [
+                "NE3",
+                "NE4",
+                "NE1AB",
+                "NE1CD",
+                "NE6",
+                "NE5",
+                "NE7",
+                "NE2",
+                "A12",
+                "B2",
+                "B1",
+                "D4",
+                "D5",
+                "F1"
+            ]
+        },
+        "NESE": {
+            "__class__": "Set",
+            "data": [
+                "NESE2",
+                "NESE1"
+            ]
+        },
+        "SBL": {
+            "__class__": "Set",
+            "data": [
+                "SBL2",
+                "SBL1"
+            ]
+        },
+        "VAU": {
+            "__class__": "Set",
+            "data": [
+                "VAU1",
+                "VAU2"
+            ]
+        }
+    },
+    "sektoren": {
+        "NE1": {
+            "__class__": "Set",
+            "data": [
+                "NE1AB",
+                "NE1CD"
+            ]
+        }
+    },
+    "hauptstrecke": "ONB-TWN",
+    "strecken": {
+        "ONB-TWN": [
+            "ONB",
+            "VAU",
+            "GOR",
+            "BV",
+            "BDR",
+            "CLB",
+            "AUV",
+            "NESE",
+            "NE",
+            "SBL",
+            "CORN",
+            "CRNE",
+            "LD",
+            "TWN"
+        ]
+    }
+}

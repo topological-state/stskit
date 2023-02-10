@@ -1,0 +1,170 @@
+{
+    "_aid": 551,
+    "_build": 5840,
+    "_name": "Zofingen",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "ABO": {
+            "__class__": "Set",
+            "data": [
+                "ABO 245",
+                "ABO 145"
+            ]
+        },
+        "BRIT": {
+            "__class__": "Set",
+            "data": [
+                "BRIT 249",
+                "BRIT 149"
+            ]
+        },
+        "Coop": {
+            "__class__": "Set",
+            "data": [
+                "Coop"
+            ]
+        },
+        "Lenzburg": {
+            "__class__": "Set",
+            "data": [
+                "Lenzburg"
+            ]
+        },
+        "Logistik": {
+            "__class__": "Set",
+            "data": [
+                "Logistik Center"
+            ]
+        },
+        "Migros": {
+            "__class__": "Set",
+            "data": [
+                "Migros"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "HU": {
+            "__class__": "Set",
+            "data": [
+                "HU2",
+                "HU42",
+                "HU41",
+                "HU1"
+            ]
+        },
+        "KGD": {
+            "__class__": "Set",
+            "data": [
+                "KGD"
+            ]
+        },
+        "KK": {
+            "__class__": "Set",
+            "data": [
+                "KK1",
+                "KK2"
+            ]
+        },
+        "KKO": {
+            "__class__": "Set",
+            "data": [
+                "KKO"
+            ]
+        },
+        "OEF": {
+            "__class__": "Set",
+            "data": [
+                "OEF"
+            ]
+        },
+        "SAF": {
+            "__class__": "Set",
+            "data": [
+                "SAF2",
+                "SAF1"
+            ]
+        },
+        "SUHR": {
+            "__class__": "Set",
+            "data": [
+                "SUHR4",
+                "SUHR2",
+                "SUHR5",
+                "SUHR6",
+                "SUHR3"
+            ]
+        },
+        "WAST": {
+            "__class__": "Set",
+            "data": [
+                "WAST"
+            ]
+        },
+        "ZF": {
+            "__class__": "Set",
+            "data": [
+                "ZF2",
+                "ZF1",
+                "ZF5",
+                "ZF40",
+                "ZF1L",
+                "ZF4",
+                "ZF3"
+            ]
+        }
+    },
+    "sektoren": {
+        "ZF1": {
+            "__class__": "Set",
+            "data": [
+                "ZF1",
+                "ZF1L"
+            ]
+        },
+        "SUHR6": {
+            "__class__": "Set",
+            "data": [
+                "SUHR5",
+                "SUHR6"
+            ]
+        },
+        "HU1": {
+            "__class__": "Set",
+            "data": [
+                "HU1",
+                "HU41"
+            ]
+        },
+        "HU2": {
+            "__class__": "Set",
+            "data": [
+                "HU2",
+                "HU42"
+            ]
+        }
+    },
+    "hauptstrecke": "Brittnau-Lenzburg",
+    "strecken": {
+        "Brittnau-Aarburg-Oftringen": [
+            "BRIT",
+            "ZF",
+            "ABO"
+        ],
+        "Brittnau-Lenzburg": [
+            "BRIT",
+            "ZF",
+            "KGD",
+            "WAST",
+            "SAF",
+            "KKO",
+            "KK",
+            "OEF",
+            "SUHR",
+            "HU",
+            "Lenzburg"
+        ]
+    }
+}

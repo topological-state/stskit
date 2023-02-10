@@ -1,0 +1,420 @@
+{
+    "_aid": 554,
+    "_build": 5840,
+    "_name": "asm / Niederbipp",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Bewetec": {
+            "__class__": "Set",
+            "data": [
+                "Bewetec"
+            ]
+        },
+        "Coop": {
+            "__class__": "Set",
+            "data": [
+                "Coop"
+            ]
+        },
+        "Depot (LTHA)": {
+            "__class__": "Set",
+            "data": [
+                "Depot (LTHA)"
+            ]
+        },
+        "Depot (WIED)": {
+            "__class__": "Set",
+            "data": [
+                "Depot (WIED)"
+            ]
+        },
+        "LTH SBB": {
+            "__class__": "Set",
+            "data": [
+                "LTH SBB"
+            ]
+        },
+        "LTHA Abst.": {
+            "__class__": "Set",
+            "data": [
+                "LTHA Abst."
+            ]
+        },
+        "Landi": {
+            "__class__": "Set",
+            "data": [
+                "Landi"
+            ]
+        },
+        "Melchnau": {
+            "__class__": "Set",
+            "data": [
+                "Melchnau"
+            ]
+        },
+        "Motorex": {
+            "__class__": "Set",
+            "data": [
+                "Motorex"
+            ]
+        },
+        "NB Anschluesse": {
+            "__class__": "Set",
+            "data": [
+                "NB SBB",
+                "NB Depot",
+                "NB Abst"
+            ]
+        },
+        "Tanklager": {
+            "__class__": "Set",
+            "data": [
+                "Tanklager"
+            ]
+        },
+        "Verladung": {
+            "__class__": "Set",
+            "data": [
+                "Verladung"
+            ]
+        },
+        "Vigier": {
+            "__class__": "Set",
+            "data": [
+                "Vigier + KEBAG"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "AARS": {
+            "__class__": "Set",
+            "data": [
+                "AARS"
+            ]
+        },
+        "AARV": {
+            "__class__": "Set",
+            "data": [
+                "AARV"
+            ]
+        },
+        "AARW": {
+            "__class__": "Set",
+            "data": [
+                "AARW"
+            ]
+        },
+        "ATTI": {
+            "__class__": "Set",
+            "data": [
+                "ATTI 2",
+                "ATTI 1"
+            ]
+        },
+        "Abst. Wende": {
+            "__class__": "Set",
+            "data": [
+                "Abst. Wende"
+            ]
+        },
+        "BAN": {
+            "__class__": "Set",
+            "data": [
+                "BAN 1",
+                "BAN 2"
+            ]
+        },
+        "BDWE": {
+            "__class__": "Set",
+            "data": [
+                "BDWE 2",
+                "BDWE 1"
+            ]
+        },
+        "BULI": {
+            "__class__": "Set",
+            "data": [
+                "BULI"
+            ]
+        },
+        "FEBR": {
+            "__class__": "Set",
+            "data": [
+                "FEBR"
+            ]
+        },
+        "FLUM": {
+            "__class__": "Set",
+            "data": [
+                "FLUM"
+            ]
+        },
+        "HAMU": {
+            "__class__": "Set",
+            "data": [
+                "HAMU"
+            ]
+        },
+        "HZH": {
+            "__class__": "Set",
+            "data": [
+                "HZH"
+            ]
+        },
+        "KAHE": {
+            "__class__": "Set",
+            "data": [
+                "KAHE"
+            ]
+        },
+        "LTHA": {
+            "__class__": "Set",
+            "data": [
+                "LTHA 5A",
+                "LTHA 4A",
+                "LTHA 4B",
+                "LTHA 5B"
+            ]
+        },
+        "LTHG": {
+            "__class__": "Set",
+            "data": [
+                "LTHG"
+            ]
+        },
+        "LTIH": {
+            "__class__": "Set",
+            "data": [
+                "LTIH"
+            ]
+        },
+        "LTIN": {
+            "__class__": "Set",
+            "data": [
+                "LTIN",
+                "LAIA 2",
+                "LAIA 1",
+                "LTIN Wende"
+            ]
+        },
+        "NBD": {
+            "__class__": "Set",
+            "data": [
+                "NBD"
+            ]
+        },
+        "NIIN": {
+            "__class__": "Set",
+            "data": [
+                "NIIN"
+            ]
+        },
+        "NPAR": {
+            "__class__": "Set",
+            "data": [
+                "NPAR 11B",
+                "NPAR 12",
+                "NPAR 22",
+                "NPAR 11A"
+            ]
+        },
+        "OBBI": {
+            "__class__": "Set",
+            "data": [
+                "OBBI"
+            ]
+        },
+        "OEEN": {
+            "__class__": "Set",
+            "data": [
+                "OEEN 8",
+                "OEEN 7"
+            ]
+        },
+        "OPIN": {
+            "__class__": "Set",
+            "data": [
+                "OPIN",
+                "OPIN kurz"
+            ]
+        },
+        "RIHO": {
+            "__class__": "Set",
+            "data": [
+                "RIHO"
+            ]
+        },
+        "ROBU": {
+            "__class__": "Set",
+            "data": [
+                "ROBU"
+            ]
+        },
+        "ROGD": {
+            "__class__": "Set",
+            "data": [
+                "ROGD"
+            ]
+        },
+        "ROSC": {
+            "__class__": "Set",
+            "data": [
+                "ROSC"
+            ]
+        },
+        "SIGG": {
+            "__class__": "Set",
+            "data": [
+                "SIGG 1",
+                "SIGG 2"
+            ]
+        },
+        "SNAG": {
+            "__class__": "Set",
+            "data": [
+                "SNAG"
+            ]
+        },
+        "SOAS": {
+            "__class__": "Set",
+            "data": [
+                "SOAS 21B",
+                "SOAS 21"
+            ]
+        },
+        "SOBT": {
+            "__class__": "Set",
+            "data": [
+                "SOBT"
+            ]
+        },
+        "SOST": {
+            "__class__": "Set",
+            "data": [
+                "SOST"
+            ]
+        },
+        "STKA": {
+            "__class__": "Set",
+            "data": [
+                "STKA 0",
+                "STKA 1"
+            ]
+        },
+        "SURB": {
+            "__class__": "Set",
+            "data": [
+                "SURB"
+            ]
+        },
+        "SUZA": {
+            "__class__": "Set",
+            "data": [
+                "SUZA"
+            ]
+        },
+        "WIED": {
+            "__class__": "Set",
+            "data": [
+                "WIED Wende",
+                "WIED 2",
+                "WIED 1"
+            ]
+        },
+        "ZIE": {
+            "__class__": "Set",
+            "data": [
+                "ZIE"
+            ]
+        }
+    },
+    "sektoren": {
+        "LTHA 4": {
+            "__class__": "Set",
+            "data": [
+                "LTHA 4A",
+                "LTHA 4B"
+            ]
+        },
+        "LTHA 5": {
+            "__class__": "Set",
+            "data": [
+                "LTHA 5A",
+                "LTHA 5B"
+            ]
+        },
+        "NPAR 11": {
+            "__class__": "Set",
+            "data": [
+                "NPAR 11B",
+                "NPAR 11A"
+            ]
+        },
+        "OPIN": {
+            "__class__": "Set",
+            "data": [
+                "OPIN",
+                "OPIN kurz"
+            ]
+        },
+        "SOAS 21": {
+            "__class__": "Set",
+            "data": [
+                "SOAS 21B",
+                "SOAS 21"
+            ]
+        }
+    },
+    "hauptstrecke": "Langenthal-Oensingen",
+    "strecken": {
+        "Solothurn-Oensingen": [
+            "SOAS",
+            "SOBT",
+            "SOST",
+            "STKA",
+            "FEBR",
+            "BDWE",
+            "RIHO",
+            "FLUM",
+            "SIGG",
+            "ATTI",
+            "WIED",
+            "OBBI",
+            "OPIN",
+            "BULI",
+            "NPAR",
+            "NIIN",
+            "OEEN"
+        ],
+        "Langenthal-Oensingen": [
+            "LTHA",
+            "LTHG",
+            "HAMU",
+            "AARV",
+            "AARW",
+            "AARS",
+            "BAN",
+            "HZH",
+            "SNAG",
+            "NBD",
+            "NPAR",
+            "NIIN",
+            "OEEN"
+        ],
+        "Langenthal-Melchnau": [
+            "LTHA",
+            "LTHG",
+            "LTIN",
+            "KAHE",
+            "ROSC",
+            "ROGD",
+            "ROBU",
+            "SURB",
+            "SUZA",
+            "ZIE",
+            "Melchnau"
+        ]
+    }
+}
