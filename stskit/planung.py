@@ -1199,14 +1199,30 @@ class Planung:
         :return: None
         """
 
-        self.zugsortierung = list(nx.topological_sort(self.zugbaum))
+        # der zugbaum kann zyklen enthalten, z.b. wenn ein zug fluegelt und spaeter wieder kuppelt.
+        # damit die topologische sortierung trotzdem funktioniert, brechen wir die zyklen zuerst auf.
+        # der gefluegelte zug wird nach dem stammzug sortiert.
+
+        zb = self.zugbaum.copy()
+        edges_to_remove = []
+        for cycle in nx.simple_cycles(zb):
+            for edge in zip(cycle, cycle[1:] + cycle[0:1]):
+                if zb.edges[edge]['flag'] == 'K':
+                    edges_to_remove.append(edge)
+        zb.remove_edges_from(edges_to_remove)
+
+        try:
+            self.zugsortierung = list(nx.topological_sort(zb))
+        except nx.NetworkXUnfeasible as e:
+            logger.exception(e)
+            self.zugsortierung = []
+
         self.zugbaum_ungerichtet = self.zugbaum.to_undirected(as_view=True)
         for stamm in nx.connected_components(self.zugbaum_ungerichtet):
             for zid in stamm:
                 self.zugstamm[zid] = stamm
 
-        self.zugliste = {zid: data['obj'] for zid in self.zugsortierung
-                         if 'obj' in (data := self.zugbaum.nodes[zid])}
+        self.zugliste = {zid: obj for zid, obj in self.zugbaum.nodes(data='obj') if obj is not None}
 
     def _folgezuege_aufloesen(self):
         """
