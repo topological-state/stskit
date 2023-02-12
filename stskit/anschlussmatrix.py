@@ -19,7 +19,7 @@ from PyQt5.QtCore import pyqtSlot
 
 from stskit.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, \
-    FesteVerspaetung, ZugAbwarten, AnkunftAbwarten, AbfahrtAbwarten, ZugNichtAbwarten
+    FesteVerspaetung, ZugAbwarten, AnkunftAbwarten, AbfahrtAbwarten, ZugNichtAbwarten, ZugZielNode
 from stskit.slotgrafik import ZugFarbschema
 from stskit.stsobj import time_to_minutes
 from stskit.zentrale import DatenZentrale
@@ -234,16 +234,13 @@ class Anschlussmatrix:
             for ziel in self._fahrplan_filter(zug.fahrplan, True, False):
                 if not ziel.abgefahren and ziel.an is not None and time_to_minutes(ziel.an) < endzeit:
                     # keine ankunft, wenn zug aus nummernwechsel auf diesem gleis hervorgeht
-                    for stamm_zid, ziel_zid, stamm_data in planung.zugbaum.in_edges(zid, data=True):
+                    zzid = ZugZielNode.neu(ziel=ziel)
+                    for zzid1, zzid2, edge_data in planung.zielgraph.in_edges(zzid, data=True):
                         try:
-                            stamm_zug = planung.zugbaum.nodes[stamm_zid]['obj']
-                            stamm_ziel = stamm_zug.find_fahrplan_zielnr(stamm_data['zielnr'])
-                            if stamm_data['flag'] == 'E' and stamm_ziel.ersatzzug.zid == zid:
+                            if edge_data['typ'] in {'E', 'F'}:
                                 break
-                            elif stamm_data['flag'] == 'F' and stamm_ziel.fluegelzug.zid == zid:
-                                break
-                        except (AttributeError, KeyError, ValueError) as e:
-                            logger.warning("kann stammzug nicht finden: " + str(e))
+                        except KeyError:
+                            pass
                     else:
                         self.zid_ankuenfte_set.add(zid)
                         self.zuege[zid] = zug
