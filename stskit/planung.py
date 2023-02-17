@@ -1802,7 +1802,8 @@ class Planung:
             if not altes_ziel.angekommen:
                 altes_ziel.verspaetung_an = time_to_minutes(ereignis.zeit) - time_to_minutes(altes_ziel.an)
                 altes_ziel.angekommen = ereignis.zeit
-                if altes_ziel.durchfahrt():
+                # durchfahrten melden nur ankunftsereignis. bei fdl_korrektur erwarten wir einen signalhalt.
+                if altes_ziel.durchfahrt() and not altes_ziel.fdl_korrektur:
                     altes_ziel.verspaetung_ab = altes_ziel.verspaetung_an
                     altes_ziel.abgefahren = ereignis.zeit
                 # falls ein ereignis vergessen gegangen ist:
