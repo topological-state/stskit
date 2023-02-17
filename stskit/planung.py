@@ -193,7 +193,10 @@ class VerspaetungsKorrektur:
                     ankunft = max(ankunft or 0, node_data['p_an'] + pred_v_ab)
                 elif edge_typ == 'E':
                     # ankunft ist gleich abfahrt des vorgaengers
-                    ankunft = max(ankunft or 0, pred_p_ab + pred_v_ab)
+                    try:
+                        ankunft = max(ankunft or 0, pred_p_ab + pred_v_ab)
+                    except TypeError:
+                        logger.warning(f"ankunft berechnen: stammzug hat keine abfahrtszeit {pred_data}")
                 elif edge_typ == 'F':
                     # ankunft ist gleich ankunft des vorgaengers
                     ankunft = max(ankunft or 0, pred_p_an + pred_v_an)

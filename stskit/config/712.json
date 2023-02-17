@@ -1,0 +1,214 @@
+{
+    "_aid": 712,
+    "_build": 5847,
+    "_name": "Hamburg-Harburg",
+    "_region": "Hamburg - Schleswig-Holstein",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Buchholz": {
+            "__class__": "Set",
+            "data": [
+                "Buchholz"
+            ]
+        },
+        "Gleis 500": {
+            "__class__": "Set",
+            "data": [
+                "Gleis 500"
+            ]
+        },
+        "HH Hbf Fern": {
+            "__class__": "Set",
+            "data": [
+                "HH Hbf Tunnel",
+                "HH Hbf Fern"
+            ]
+        },
+        "HH Hbf G\u00fcter": {
+            "__class__": "Set",
+            "data": [
+                "HH Hbf G\u00fcter"
+            ]
+        },
+        "Hamburg S\u00fcd": {
+            "__class__": "Set",
+            "data": [
+                "Hamburg S\u00fcd"
+            ]
+        },
+        "Hamburg S\u00fcd N": {
+            "__class__": "Set",
+            "data": [
+                "Hamburg S\u00fcd N"
+            ]
+        },
+        "Hohe Schaar": {
+            "__class__": "Set",
+            "data": [
+                "Hohe Schaar"
+            ]
+        },
+        "Maschen Fern": {
+            "__class__": "Set",
+            "data": [
+                "Maschen Fern"
+            ]
+        },
+        "Maschen G\u00fcter": {
+            "__class__": "Set",
+            "data": [
+                "Maschen G\u00fcter"
+            ]
+        },
+        "Maschen Hafen": {
+            "__class__": "Set",
+            "data": [
+                "Maschen Hafen"
+            ]
+        },
+        "Peute": {
+            "__class__": "Set",
+            "data": [
+                "Peute"
+            ]
+        },
+        "Rothenburgsort": {
+            "__class__": "Set",
+            "data": [
+                "Rothenburgsort"
+            ]
+        },
+        "S-Bahn": {
+            "__class__": "Set",
+            "data": [
+                "S-Bahn"
+            ]
+        },
+        "Seehafen": {
+            "__class__": "Set",
+            "data": [
+                "Seehafen"
+            ]
+        },
+        "Stade": {
+            "__class__": "Set",
+            "data": [
+                "Stade"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "AHAR": {
+            "__class__": "Set",
+            "data": [
+                "500",
+                "2",
+                "3",
+                "7",
+                "5",
+                "8",
+                "10",
+                "4",
+                "9",
+                "6",
+                "1"
+            ]
+        },
+        "AHAR12x": {
+            "__class__": "Set",
+            "data": [
+                "180",
+                "126",
+                "128",
+                "182",
+                "127"
+            ]
+        },
+        "AHAR19x": {
+            "__class__": "Set",
+            "data": [
+                "191",
+                "192"
+            ]
+        },
+        "AHB": {
+            "__class__": "Set",
+            "data": [
+                "AHB6",
+                "AHB1",
+                "AHB2",
+                "AHB5"
+            ]
+        },
+        "AWLB": {
+            "__class__": "Set",
+            "data": [
+                "AWLB21",
+                "AWLB Pz",
+                "AWLB Gz",
+                "AWLB22",
+                "AWLB24",
+                "AWLB23"
+            ]
+        },
+        "AWLB4x": {
+            "__class__": "Set",
+            "data": [
+                "AWLB43",
+                "AWLB45",
+                "AWLB44",
+                "AWLB42"
+            ]
+        },
+        "E/A Hamburg Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Hamburg Hbf"
+            ]
+        },
+        "E/A Rothenburgsort": {
+            "__class__": "Set",
+            "data": [
+                "Rothenburgsort"
+            ]
+        }
+    },
+    "hauptstrecke": "Maschen Fern-HH Hbf Fern",
+    "sektoren": {},
+    "strecken": {
+        "Buchholz-HH Hbf Fern": [
+            "Buchholz",
+            "AHAR",
+            "AWLB",
+            "E/A Hamburg Hbf",
+            "HH Hbf Fern"
+        ],
+        "Maschen Fern-HH Hbf Fern": [
+            "Maschen Fern",
+            "AHAR",
+            "AWLB",
+            "E/A Hamburg Hbf",
+            "HH Hbf Fern"
+        ],
+        "Maschen G\u00fcter-Rothenburgsort": [
+            "Maschen G\u00fcter",
+            "AHAR",
+            "AWLB",
+            "Rothenburgsort"
+        ],
+        "Maschen Hafen-Hamburg S\u00fcd": [
+            "Maschen Hafen",
+            "AHAR",
+            "AWLB",
+            "Hamburg S\u00fcd"
+        ],
+        "Maschen Hafen-Stade": [
+            "Maschen Hafen",
+            "AHAR",
+            "AHB",
+            "Stade"
+        ]
+    },
+    "streckenmarkierung": []
+}
