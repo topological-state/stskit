@@ -141,6 +141,7 @@ class VerspaetungsKorrektur:
         super().__init__()
         self._planung = planung
         self.edge_typ = ""
+        self.rang: int = 0
         self.display_name = "Default"
         self._node: ZugZielNode = None
 
@@ -542,6 +543,7 @@ class ErsatzZiel(FlagZiel):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
         self.display_name = "Ersatz (Ziel)"
+        self.rang = 1
 
     def abfahrt_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         ankunft = node_data['p_an'] + node_data['v_an']
@@ -564,6 +566,7 @@ class FluegelungZiel(FlagZiel):
         super().__init__(planung)
         self.edge_typ = "P"
         self.display_name = "Flügelung (Ziel)"
+        self.rang = 2
 
     def abfahrt_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         try:
@@ -609,6 +612,7 @@ class KupplungZiel(FlagZiel):
         super().__init__(planung)
         self.edge_typ = "P"
         self.display_name = "Kupplung (Ziel)"
+        self.rang = 3
 
     def abfahrt_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         try:
@@ -1566,9 +1570,9 @@ class Planung:
             ziel.mindestaufenthalt = self.params.mindestaufenthalt_lokwechsel
 
         zid = None
+        folge_korrektur = None
         if ziel.auto_korrektur is not None:
             # folgekorrektur nicht ueberschreiben
-            # todo : gibt es zuege, die am flagziel gleich noch eine korrektur brauchen?
             pass
         elif ziel.einfahrt:
             ziel.auto_korrektur = Einfahrtszeit(self)
@@ -1591,7 +1595,7 @@ class Planung:
         else:
             ziel.auto_korrektur = Planhalt(self)
 
-        if zid:
+        if zid is not None and folge_korrektur is not None:
             zzid1 = ZugZielNode.neu(ziel)
             try:
                 zug2: ZugDetailsPlanung = self.zugbaum.nodes[zid]['obj']
@@ -1603,7 +1607,8 @@ class Planung:
                 typ = ziel.auto_korrektur.edge_typ
                 self.zielgraph.add_edge(zzid1, zzid2, typ=typ)
                 folge_korrektur.ursprung = zzid1
-                ziel2.auto_korrektur = folge_korrektur
+                if ziel2.auto_korrektur is not None and folge_korrektur.rang > ziel2.auto_korrektur.rang:
+                    ziel2.auto_korrektur = folge_korrektur
                 if typ in {'E', 'K'}:
                     an1 = minutes_to_time(time_to_minutes(ziel.an) + ziel.mindestaufenthalt)
                     ziel.ab = max(ziel2.an, an1)
