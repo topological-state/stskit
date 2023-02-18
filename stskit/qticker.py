@@ -1,7 +1,7 @@
 """
 ereignisticker (GUI)
 
-dieses modul implementiert ein fenster mit einem ereignisticker für das sts-charts hauptprogramm (main-modul).
+dieses modul implementiert ein fenster mit einem ereignisticker für das STSdispo hauptprogramm (main-modul).
 
 das fenster ist in der TickerWindow-klasse implementiert.
 die EreignisTabelle-klasse bereitet die simulationsdaten für das tabellenwidget auf.

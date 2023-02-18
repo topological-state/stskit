@@ -98,7 +98,7 @@ excluded_dirs = [
     ]
 
 a = Analysis(
-    ['stscharts.py'],
+    ['stsdispo.py'],
     pathex=[],
     binaries=[],
     datas = added_files,
@@ -134,7 +134,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='stscharts',
+    name='stsdispo',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -155,5 +155,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='stscharts',
+    name='stsdispo',
 )

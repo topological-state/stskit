@@ -1,10 +1,10 @@
 #!/env/python
 
 """
-grafisches hauptprogramm
+STSdispo hauptprogramm
 
-das charts programm ist ein starter für verschiedene grafische unterprogramme.
-ausserdem unterhält es die kommunikation mit dem simulator und leitet ereignisse and die unterprogramme weiter.
+das hauptprogramm ist ein starter für die verschiedenen STSdispo-module.
+es unterhält die kommunikation mit dem simulator und leitet ereignisse and die module weiter.
 """
 
 import argparse
@@ -137,40 +137,40 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.windows = WindowManager()
 
-        self.setWindowTitle("sts-charts")
+        self.setWindowTitle("STSdispo")
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)
         layout = QtWidgets.QVBoxLayout(self._main)
 
-        self.einfahrten_button = QtWidgets.QPushButton("einfahrten/ausfahrten", self)
+        self.einfahrten_button = QtWidgets.QPushButton("Einfahrten/Ausfahrten", self)
         self.einfahrten_button.clicked.connect(self.einfahrten_clicked)
         layout.addWidget(self.einfahrten_button)
 
-        self.gleisbelegung_button = QtWidgets.QPushButton("gleisbelegung", self)
+        self.gleisbelegung_button = QtWidgets.QPushButton("Gleisbelegung", self)
         self.gleisbelegung_button.clicked.connect(self.gleisbelegung_clicked)
         layout.addWidget(self.gleisbelegung_button)
 
-        self.bildfahrplan_button = QtWidgets.QPushButton("bildfahrplan", self)
+        self.bildfahrplan_button = QtWidgets.QPushButton("Bildfahrplan", self)
         self.bildfahrplan_button.clicked.connect(self.bildfahrplan_clicked)
         layout.addWidget(self.bildfahrplan_button)
         self.bildfahrplan_button.setEnabled(True)
 
-        self.matrix_button = QtWidgets.QPushButton("anschlussmatrix", self)
+        self.matrix_button = QtWidgets.QPushButton("Anschlussmatrix", self)
         self.matrix_button.clicked.connect(self.matrix_clicked)
         layout.addWidget(self.matrix_button)
         self.matrix_button.setEnabled(True)
 
-        self.fahrplan_button = QtWidgets.QPushButton("tabellenfahrplan", self)
+        self.fahrplan_button = QtWidgets.QPushButton("Tabellenfahrplan", self)
         self.fahrplan_button.clicked.connect(self.fahrplan_clicked)
         layout.addWidget(self.fahrplan_button)
         self.fahrplan_button.setEnabled(True)
 
-        self.netz_button = QtWidgets.QPushButton("gleisplan", self)
+        self.netz_button = QtWidgets.QPushButton("Gleisplan", self)
         self.netz_button.clicked.connect(self.netz_clicked)
         layout.addWidget(self.netz_button)
         self.netz_button.setEnabled(True)
 
-        self.ticker_button = QtWidgets.QPushButton("ticker", self)
+        self.ticker_button = QtWidgets.QPushButton("Ticker", self)
         self.ticker_button.clicked.connect(self.ticker_clicked)
         layout.addWidget(self.ticker_button)
         self.ticker_button.setEnabled(True)
@@ -268,22 +268,24 @@ class MainWindow(QtWidgets.QMainWindow):
 def parse_args(arguments: Sequence[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="""
-            charts plugin for stellwerksim (https://www.stellwerksim.de).
+            STSdispo plugin for Stellwerksim (https://www.stellwerksim.de).
         """
     )
 
+    default_config_path = Path.home() / r".stskit"
+
     parser.add_argument("--data-dir",
-                        help="daten- und konfigurationsverzeichnis. default: $HOME/.stskit")
+                        help=f"Daten- und Konfigurationsverzeichnis. Default: {default_config_path}")
     parser.add_argument("--host", default=DEFAULT_HOST,
-                        help=f"hostname oder ip-adresse des stellwerksim-simulators. default: {DEFAULT_HOST}")
+                        help=f"Hostname oder IP-Adresse des Stellwerksim-Simulators. Default: {DEFAULT_HOST}")
     parser.add_argument("--port", type=int, default=DEFAULT_PORT,
-                        help=f"netzwerkport des stellwerksim-simulators. default: {DEFAULT_PORT}")
+                        help=f"Netzwerkport des Stellwerksim-Simulators. Default: {DEFAULT_PORT}")
     parser.add_argument("--log-level", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], default="ERROR",
-                        help="minimale stufe für protokoll-meldungen. default: ERROR")
+                        help="Minimale Stufe für Protokollmeldungen. Default: ERROR")
     parser.add_argument("--log-file", default="stskit.log",
-                        help="protokolldatei. default: stskit.log im arbeitsverzeichnis")
+                        help="Protokolldatei. Default: stskit.log im Arbeitsverzeichnis")
     parser.add_argument("--log-comm", action="store_true",
-                        help="ganze kommunikation mit server protokollieren. "
+                        help="Ganze Kommunikation mit Server protokollieren. "
                              "log-level DEBUG muss dafür ausgewählt sein. default: aus")
 
     return parser.parse_args(arguments)
@@ -295,8 +297,8 @@ async def main_window():
 
     window = MainWindow(arguments.data_dir)
 
-    client = PluginClient(name='sts-charts', autor='bummler', version='0.7',
-                          text='sts-charts: grafische fahrpläne und auswertung')
+    client = PluginClient(name='STSdispo', autor='bummler', version='0.8',
+                          text='STSdispo: grafische fahrpläne, disposition und auswertung')
 
     await client.connect(host=arguments.host, port=arguments.port)
     window.zentrale.client = client
