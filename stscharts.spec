@@ -11,7 +11,7 @@ added_files = [
     ('stskit/config/*.json', 'stskit/config')
     ]
 
-excluded_binaries = set([
+excluded_files = set([
     'd3dcompiler_47.dll',
     'libcrypto-1_1-x64.dll',
     'libeay32.dll',
@@ -54,7 +54,33 @@ excluded_binaries = set([
     'Qt5WebView.dll',
     'Qt5Xml.dll',
     'Qt5XmlPatterns.dll',
-    'ssleay32.dll'])
+    'ssleay32.dll',
+    'QtBluetooth.pyd',
+    'QtDBus.pyd',
+    'QtDesigner.pyd',
+    'QtLocation.pyd',
+    'QtMultimedia.pyd',
+    'QtMultimediaWidgets.pyd',
+    'QtNetwork.pyd',
+    'QtNfc.pyd',
+    'QtOpenGL.pyd',
+    'QtPositioning.pyd',
+    'QtPrintSupport.pyd',
+    'QtQml.pyd',
+    'QtQuick3D.pyd',
+    'QtQuick.pyd',
+    'QtQuickWidgets.pyd',
+    'QtRemoteObjects.pyd',
+    'QtSensors.pyd',
+    'QtSerialPort.pyd',
+    'QtSql.pyd',
+    'QtSvg.pyd',
+    'QtTextToSpeech.pyd',
+    'QtWebChannel.pyd',
+    'QtWebSockets.pyd',
+    'QtWebView.pyd',
+    'QtXml.pyd',
+    'QtXmlPatterns.pyd'])
 
 excluded_dirs = [
     'PyQt5/Qt5/qml',
@@ -67,7 +93,8 @@ excluded_dirs = [
     'PyQt5/Qt5/plugins/sensorgestures',
     'PyQt5/Qt5/plugins/sensors',
     'PyQt5/Qt5/plugins/sqldrivers',
-    'PyQt5/Qt5/translations'
+    'PyQt5/Qt5/translations',
+    'PyQt5/uic/widget-plugins'
     ]
 
 a = Analysis(
@@ -89,7 +116,7 @@ pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 def is_excluded(item):
     p = Path(item[0])
-    if p.stem in excluded_binaries:
+    if p.name in excluded_files:
         print("exclude", p)
         return True
     for dir in excluded_dirs:
@@ -119,6 +146,7 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
 )
+
 coll = COLLECT(
     exe,
     a.binaries,
