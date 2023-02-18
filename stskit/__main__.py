@@ -143,37 +143,39 @@ class MainWindow(QtWidgets.QMainWindow):
         layout = QtWidgets.QVBoxLayout(self._main)
 
         self.einfahrten_button = QtWidgets.QPushButton("Einfahrten/Ausfahrten", self)
+        self.einfahrten_button.setEnabled(False)
         self.einfahrten_button.clicked.connect(self.einfahrten_clicked)
         layout.addWidget(self.einfahrten_button)
 
         self.gleisbelegung_button = QtWidgets.QPushButton("Gleisbelegung", self)
+        self.gleisbelegung_button.setEnabled(False)
         self.gleisbelegung_button.clicked.connect(self.gleisbelegung_clicked)
         layout.addWidget(self.gleisbelegung_button)
 
         self.bildfahrplan_button = QtWidgets.QPushButton("Bildfahrplan", self)
+        self.bildfahrplan_button.setEnabled(False)
         self.bildfahrplan_button.clicked.connect(self.bildfahrplan_clicked)
         layout.addWidget(self.bildfahrplan_button)
-        self.bildfahrplan_button.setEnabled(True)
 
         self.matrix_button = QtWidgets.QPushButton("Anschlussmatrix", self)
+        self.matrix_button.setEnabled(False)
         self.matrix_button.clicked.connect(self.matrix_clicked)
         layout.addWidget(self.matrix_button)
-        self.matrix_button.setEnabled(True)
 
         self.fahrplan_button = QtWidgets.QPushButton("Tabellenfahrplan", self)
+        self.fahrplan_button.setEnabled(False)
         self.fahrplan_button.clicked.connect(self.fahrplan_clicked)
         layout.addWidget(self.fahrplan_button)
-        self.fahrplan_button.setEnabled(True)
 
         self.netz_button = QtWidgets.QPushButton("Gleisplan", self)
+        self.netz_button.setEnabled(False)
         self.netz_button.clicked.connect(self.netz_clicked)
         layout.addWidget(self.netz_button)
-        self.netz_button.setEnabled(True)
 
         self.ticker_button = QtWidgets.QPushButton("Ticker", self)
+        self.ticker_button.setEnabled(False)
         self.ticker_button.clicked.connect(self.ticker_clicked)
         layout.addWidget(self.ticker_button)
-        self.ticker_button.setEnabled(True)
 
         self.update_interval: int = 30  # seconds
         self.enable_update: bool = True
@@ -256,6 +258,14 @@ class MainWindow(QtWidgets.QMainWindow):
                 break
             except trio.BusyResourceError:
                 pass
+            else:
+                self.einfahrten_button.setEnabled(self.enable_update)
+                self.gleisbelegung_button.setEnabled(self.enable_update)
+                self.bildfahrplan_button.setEnabled(self.enable_update)
+                self.matrix_button.setEnabled(self.enable_update)
+                self.fahrplan_button.setEnabled(self.enable_update)
+                self.netz_button.setEnabled(self.enable_update)
+                self.ticker_button.setEnabled(self.enable_update)
 
             await trio.sleep(self.update_interval)
 
