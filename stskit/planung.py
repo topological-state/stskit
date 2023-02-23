@@ -1607,7 +1607,7 @@ class Planung:
                 typ = ziel.auto_korrektur.edge_typ
                 self.zielgraph.add_edge(zzid1, zzid2, typ=typ)
                 folge_korrektur.ursprung = zzid1
-                if ziel2.auto_korrektur is not None and folge_korrektur.rang > ziel2.auto_korrektur.rang:
+                if ziel2.auto_korrektur is None or folge_korrektur.rang > ziel2.auto_korrektur.rang:
                     ziel2.auto_korrektur = folge_korrektur
                 if typ in {'E', 'K'}:
                     an1 = minutes_to_time(time_to_minutes(ziel.an) + ziel.mindestaufenthalt)
