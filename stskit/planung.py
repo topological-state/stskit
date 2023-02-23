@@ -1120,6 +1120,7 @@ class Planung:
         self.zielgraph = nx.DiGraph()
         self.zielsortierung: List[Tuple[str, int, str]] = []
         self.zielindex_plan: Dict[Tuple[int, str], Dict[str, ZugZielPlanung]] = {}
+        self._haengige_folgekorrekturen: Dict[ZugZielNode, Dict] = {}
         self.auswertung: Optional[Auswertung] = None
         self.simzeit_minuten: int = 0
         self.params = PlanungParams()
@@ -1542,6 +1543,7 @@ class Planung:
             if not zug.korrekturen_definiert:
                 result = self.zug_korrekturen_definieren(zug)
                 zug.korrekturen_definiert = zug.folgezuege_aufgeloest and result
+        self._folgekorrekturen_setzen()
 
     def zug_korrekturen_definieren(self, zug: ZugDetailsPlanung) -> bool:
         for ziel in zug.fahrplan:
@@ -1596,24 +1598,67 @@ class Planung:
             ziel.auto_korrektur = Planhalt(self)
 
         if zid is not None and folge_korrektur is not None:
-            zzid1 = ZugZielNode.neu(ziel)
-            try:
-                zug2: ZugDetailsPlanung = self.zugbaum.nodes[zid]['obj']
-                ziel2: ZugZielPlanung = zug2.find_fahrplanzeile(plan=ziel.plan)
-                zzid2 = ZugZielNode.neu(ziel2)
-            except (AttributeError, KeyError):
-                result = False
-            else:
-                typ = ziel.auto_korrektur.edge_typ
-                self.zielgraph.add_edge(zzid1, zzid2, typ=typ)
-                folge_korrektur.ursprung = zzid1
-                if ziel2.auto_korrektur is None or folge_korrektur.rang > ziel2.auto_korrektur.rang:
-                    ziel2.auto_korrektur = folge_korrektur
-                if typ in {'E', 'K'}:
-                    an1 = minutes_to_time(time_to_minutes(ziel.an) + ziel.mindestaufenthalt)
-                    ziel.ab = max(ziel2.an, an1)
+            self._folgekorrektur_setzen(ziel, zid, folge_korrektur)
 
         return result
+
+    def _folgekorrektur_setzen(self, stamm_ziel: ZugZielPlanung, folge_zid: int, folge_korrektur: FlagZiel,
+                               stamm_zzid: Optional[ZugZielNode] = None):
+        """
+        folgekorrektur auf das folgeziel setzen wenn möglich
+
+        es kommt bei langen zugketten vor, dass das folgeziel noch nicht aufgelöst werden kann.
+        dann wird die korrektur in _haengige_folgekorrekturen abgelegt und muss gesetzt werden,
+        sobald der zug in der planung auftaucht.
+
+        achtung! die methode verändert _haengige_folgekorrekturen.
+        sie darf deshalb nicht in einem generator davon aufgerufen werden!
+
+        :param stamm_ziel: zielobjekt, das das zugfolgeflag enthält.
+        :param folge_zid: zid des folgezuges
+        :param folge_korrektur: korrektur-objekt
+        :param stamm_zzid: zum stamm_ziel gehörender ZugZielNode.
+            nicht notwendig, beschleunigt jedoch die funktion, wenn schon bekannt.
+        :return: None
+        """
+
+        if stamm_zzid is None:
+            stamm_zzid = ZugZielNode.neu(stamm_ziel)
+
+        try:
+            zug2: ZugDetailsPlanung = self.zugbaum.nodes[folge_zid]['obj']
+            ziel2: ZugZielPlanung = zug2.find_fahrplanzeile(plan=stamm_ziel.plan)
+            zzid2 = ZugZielNode.neu(ziel2)
+        except (AttributeError, KeyError):
+            self._haengige_folgekorrekturen[stamm_zzid] = {"stamm_ziel": stamm_ziel,
+                                                          "stamm_zzid": stamm_zzid,
+                                                          "folge_zid": folge_zid,
+                                                          "folge_korrektur": folge_korrektur}
+        else:
+            typ = stamm_ziel.auto_korrektur.edge_typ
+            self.zielgraph.add_edge(stamm_zzid, zzid2, typ=typ)
+            folge_korrektur.ursprung = stamm_zzid
+            if ziel2.auto_korrektur is None or folge_korrektur.rang > ziel2.auto_korrektur.rang:
+                ziel2.auto_korrektur = folge_korrektur
+            if typ in {'E', 'K'}:
+                an1 = minutes_to_time(time_to_minutes(stamm_ziel.an) + stamm_ziel.mindestaufenthalt)
+                stamm_ziel.ab = max(ziel2.an, an1)
+            try:
+                del self._haengige_folgekorrekturen[stamm_zzid]
+            except KeyError:
+                pass
+
+    def _folgekorrekturen_setzen(self):
+        """
+        hängige folgekorrekturen setzen soweit möglich
+
+        geht die _haengige_folgekorrekturen durch und versucht sie wo möglich zu setzen
+
+        :return: None
+        """
+
+        for params in list(self._haengige_folgekorrekturen.values()):
+            self._folgekorrektur_setzen(**params)
 
     def zug_finden(self, zug: Union[int, str, ZugDetails]) -> Optional[ZugDetailsPlanung]:
         """
