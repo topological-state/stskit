@@ -215,7 +215,7 @@ class FahrplanModell(QtCore.QAbstractTableModel):
     """
     tabellenmodell für den zugfahrplan
 
-    die spalten sind 'Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Folgezug'.
+    die spalten sind 'Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Vorgang', 'Vermerke'.
     jede zeile entspricht einem fahrplanziel.
 
     der anzuzeigende zug wird durch set_zug gesetzt.
@@ -224,7 +224,7 @@ class FahrplanModell(QtCore.QAbstractTableModel):
         super().__init__()
 
         self.zug: Optional[ZugDetails] = None
-        self._columns: List[str] = ['Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Folgezug', 'Abhängigkeiten']
+        self._columns: List[str] = ['Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Vorgang', 'Vermerke']
 
     def set_zug(self, zug: Optional[ZugDetails]):
         """
@@ -295,19 +295,13 @@ class FahrplanModell(QtCore.QAbstractTableModel):
                     return ""
             elif col == 'Flags':
                 return str(zeile.flags)
-            elif col == 'Folgezug':
-                if zeile.ersatzzug:
-                    return zeile.ersatzzug.name
-                elif zeile.kuppelzug:
-                    return zeile.kuppelzug.name
-                elif zeile.fluegelzug:
-                    return zeile.fluegelzug.name
+            elif col == 'Vorgang':
+                if zeile.auto_korrektur:
+                    return str(zeile.auto_korrektur)
                 else:
                     return None
-            elif col == 'Abhängigkeiten':
+            elif col == 'Vermerke':
                 abh = []
-                if zeile.auto_korrektur:
-                    abh.append(str(zeile.auto_korrektur))
                 for korrektur in zeile.fdl_korrektur.values():
                     abh.append(str(korrektur))
                 return ", ".join(abh)

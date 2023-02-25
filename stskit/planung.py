@@ -138,7 +138,7 @@ class VerspaetungsKorrektur:
 
     """
     def __init__(self, planung: 'Planung'):
-        super().__init__()
+        # super().__init__()
         self._planung = planung
         self.edge_typ = ""
         self.rang: int = 0
@@ -254,7 +254,7 @@ class Planhalt(VerspaetungsKorrektur):
 
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
-        self.display_name = "Plan"
+        self.display_name = "Planhalt"
 
     def abfahrt_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         ankunft = node_data['p_an'] + node_data['v_an']
@@ -279,7 +279,7 @@ class FesteVerspaetung(VerspaetungsKorrektur):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
         self.verspaetung: int = 0
-        self.display_name = "Fest"
+        self.display_name = "Verspätung"
 
     def __str__(self):
         return f"{self.display_name}({self.verspaetung})"
@@ -301,7 +301,7 @@ class Signalhalt(FesteVerspaetung):
 
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
-        self.display_name = "Signal"
+        self.display_name = "Signalhalt"
 
 
 class Einfahrtszeit(VerspaetungsKorrektur):
@@ -326,7 +326,100 @@ class Einfahrtszeit(VerspaetungsKorrektur):
         logger.debug(f"{self.__class__.__name__}.abfahrt_berechnen: {node}, {node_data}")
 
 
-class ZugAbwarten(VerspaetungsKorrektur):
+class AbhaengigkeitsZiel:
+    """
+    verspätungsmixin fuer ursprungszug
+
+    die verspätung des von dieser korrektur kontrollierten fahrplanziels
+    richtet sich nach einem anderen zug.
+
+    diese klasse führt die properties ursprung und relation ein.
+
+    attribute
+    --------
+
+    - ursprung: fahrplanziel des verknuepften zuges
+    - ursprung_name: name des verknuepften zuges - fuer anzeige
+    - relation
+    """
+
+    def __init__(self, planung: 'Planung'):
+        super().__init__(planung)
+        self._ursprung: Optional[ZugZielNode] = None
+
+    @property
+    def ursprung(self) -> ZugZielNode:
+        return self._ursprung
+
+    @ursprung.setter
+    def ursprung(self, value):
+        if isinstance(value, ZugZielNode):
+            self._ursprung = value
+        else:
+            self._ursprung = ZugZielNode.neu(ziel=value)
+
+    @property
+    def ursprung_name(self) -> Union[str, int]:
+        try:
+            return self._planung.zielgraph.nodes[self._ursprung]['obj'].zug.name
+        except AttributeError:
+            return self._ursprung.zid
+        except KeyError:
+            pass
+        return "-----"
+
+    @property
+    def relation(self) -> Tuple[ZugZielNode, ...]:
+        return self._ursprung, self.node
+
+
+class AbhaengigkeitsUrsprung:
+    """
+    verspätungsmixin fuer zielzug
+
+    die verspätung des zuges wirkt sich auf einen anderen aus.
+
+    diese klasse führt die properties folge und relation ein.
+
+    attribute
+    --------
+
+    - folge: fahrplanziel des verknuepften zuges
+    - folge_name: name des verknuepften zuges - fuer anzeige
+    - relation
+    """
+
+    def __init__(self, planung: 'Planung'):
+        super().__init__(planung)
+        self._folge: Optional[ZugZielNode] = None
+
+    @property
+    def folge(self) -> ZugZielNode:
+        return self._folge
+
+    @folge.setter
+    def folge(self, value):
+        if isinstance(value, ZugZielNode):
+            self._folge = value
+        else:
+            self._folge = ZugZielNode.neu(ziel=value)
+
+    @property
+    def folge_name(self) -> Union[str, int]:
+        try:
+            return self._planung.zielgraph.nodes[self._folge]['obj'].zug.name
+        except AttributeError:
+            return self._folge.zid
+        except KeyError:
+            pass
+        return "-----"
+
+    @property
+    def relation(self) -> Tuple[ZugZielNode, ...]:
+        return self.node, self._folge
+
+
+class ZugAbwarten(VerspaetungsKorrektur, AbhaengigkeitsZiel):
     """
     wartet auf einen anderen zug.
 
@@ -346,32 +439,10 @@ class ZugAbwarten(VerspaetungsKorrektur):
         super().__init__(planung)
         self.edge_typ = "A"
         self.display_name = "Zug"
-        self._ursprung: ZugZielNode = None
         self.wartezeit: int = 0
 
     def __str__(self):
-        try:
-            zug_name = self._planung.zielgraph.nodes[self._ursprung]['obj'].zug.name
-        except AttributeError:
-            zug_name = self._ursprung.zid
-        except KeyError:
-            zug_name = "-----"
-        return f"{self.display_name}({zug_name}, {self._ursprung.plangleis}, {self.wartezeit})"
-
-    @property
-    def ursprung(self) -> ZugZielNode:
-        return self._ursprung
-
-    @ursprung.setter
-    def ursprung(self, value):
-        if isinstance(value, ZugZielNode):
-            self._ursprung = value
-        else:
-            self._ursprung = ZugZielNode.neu(ziel=value)
-
-    @property
-    def relation(self) -> Tuple[ZugZielNode, ...]:
-        return self._ursprung, self.node
+        return f"{self.display_name}({self.ursprung_name}, {self._ursprung.plangleis}, {self.wartezeit})"
 
     def ankunft_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         """
@@ -489,17 +560,22 @@ class FlagKorrektur(VerspaetungsKorrektur):
         self.display_name = "Flag"
 
 
-class FlagUrsprung(FlagKorrektur):
+class FlagUrsprung(FlagKorrektur, AbhaengigkeitsUrsprung):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
-        self.display_name = "Flag (Ursprung)"
+        self.display_name = "Flag"
+
+    def __str__(self):
+        return f"{self.display_name} → {self.folge_name}"
 
 
-class FlagZiel(FlagKorrektur):
+class FlagZiel(FlagKorrektur, AbhaengigkeitsZiel):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
-        self.display_name = "Flag (Ziel)"
-        self.ursprung: ZugZielNode = None
+        self.display_name = "Flagziel"
+
+    def __str__(self):
+        return f"{self.display_name} ← {self.ursprung_name}"
 
 
 class ErsatzUrsprung(FlagUrsprung):
@@ -515,7 +591,7 @@ class ErsatzUrsprung(FlagUrsprung):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
         self.edge_typ = "E"
-        self.display_name = "Ersatz (Ursprung)"
+        self.display_name = "Ersatz"
 
     def abfahrt_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         """
@@ -542,7 +618,7 @@ class ErsatzZiel(FlagZiel):
 
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
-        self.display_name = "Ersatz (Ziel)"
+        self.display_name = "Ersatz"
         self.rang = 1
 
     def abfahrt_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
@@ -558,14 +634,14 @@ class FluegelungUrsprung(FlagUrsprung):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
         self.edge_typ = "F"
-        self.display_name = "Flügelung (Ursprung)"
+        self.display_name = "Flügelung"
 
 
 class FluegelungZiel(FlagZiel):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
         self.edge_typ = "P"
-        self.display_name = "Flügelung (Ziel)"
+        self.display_name = "Flügelung"
         self.rang = 2
 
     def abfahrt_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
@@ -596,7 +672,7 @@ class KupplungUrsprung(FlagUrsprung):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
         self.edge_typ = "K"
-        self.display_name = "Kupplung (Ursprung)"
+        self.display_name = "Kupplung"
 
 
 class KupplungZiel(FlagZiel):
@@ -611,7 +687,7 @@ class KupplungZiel(FlagZiel):
     def __init__(self, planung: 'Planung'):
         super().__init__(planung)
         self.edge_typ = "P"
-        self.display_name = "Kupplung (Ziel)"
+        self.display_name = "Kupplung"
         self.rang = 3
 
     def abfahrt_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
@@ -1631,12 +1707,13 @@ class Planung:
             zzid2 = ZugZielNode.neu(ziel2)
         except (AttributeError, KeyError):
             self._haengige_folgekorrekturen[stamm_zzid] = {"stamm_ziel": stamm_ziel,
-                                                          "stamm_zzid": stamm_zzid,
-                                                          "folge_zid": folge_zid,
-                                                          "folge_korrektur": folge_korrektur}
+                                                           "stamm_zzid": stamm_zzid,
+                                                           "folge_zid": folge_zid,
+                                                           "folge_korrektur": folge_korrektur}
         else:
             typ = stamm_ziel.auto_korrektur.edge_typ
             self.zielgraph.add_edge(stamm_zzid, zzid2, typ=typ)
+            stamm_ziel.auto_korrektur.folge = zzid2
             folge_korrektur.ursprung = stamm_zzid
             if ziel2.auto_korrektur is None or folge_korrektur.rang > ziel2.auto_korrektur.rang:
                 ziel2.auto_korrektur = folge_korrektur
