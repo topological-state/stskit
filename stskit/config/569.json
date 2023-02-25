@@ -4,6 +4,7 @@
     "_name": "Schaffhausen",
     "_region": "Ostschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Anschl. Herblingen": {
             "__class__": "Set",

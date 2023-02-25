@@ -4,6 +4,7 @@
     "_name": "Emmental",
     "_region": "Bern - L\u00f6tschberg",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Armee": {
             "__class__": "Set",

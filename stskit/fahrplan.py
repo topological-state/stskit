@@ -12,7 +12,6 @@ from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 from stskit.zentrale import DatenZentrale
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stskit.stsobj import ZugDetails, time_to_minutes, format_verspaetung
-from stskit.slotgrafik import hour_minutes_formatter, ZugFarbschema
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -47,8 +46,7 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
         self._zugliste: Dict[int, ZugDetailsPlanung] = {}
         self._reihenfolge: List[int] = []
         self._columns: List[str] = ['Status', 'Einfahrt', 'Zug', 'Von', 'Nach', 'Gleis', 'Verspätung']
-        self.farbschema: ZugFarbschema = ZugFarbschema()
-        self.farbschema.init_schweiz()
+        self.zugschema = None
 
     def set_zugliste(self, zugliste: Dict[int, ZugDetailsPlanung]) -> None:
         """
@@ -184,10 +182,10 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
 
         elif role == QtCore.Qt.ForegroundRole:
             if zug.sichtbar:
-                rgb = self.farbschema.zugfarbe_rgb(zug)
+                rgb = self.zugschema.zugfarbe_rgb(zug)
                 farbe = QtGui.QColor(*rgb)
             elif zug.gleis:
-                rgb = self.farbschema.zugfarbe_rgb(zug)
+                rgb = self.zugschema.zugfarbe_rgb(zug)
                 farbe = QtGui.QColor(*rgb)
             else:
                 farbe = QtGui.QColor("gray")
@@ -365,6 +363,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.setWindowTitle("Tabellenfahrplan")
 
         self.zugliste_modell = ZuglisteModell()
+        self.zugliste_modell.zugschema = self.zentrale.anlage.zugschema
         self.zugliste_sort_filter = QSortFilterProxyModel(self)
         self.zugliste_sort_filter.setSourceModel(self.zugliste_modell)
         self.zugliste_sort_filter.setSortRole(QtCore.Qt.UserRole)

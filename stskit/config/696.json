@@ -4,6 +4,7 @@
     "_name": "Chiasso",
     "_region": "Tessin",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Abstellung": {
             "__class__": "Set",

@@ -4,6 +4,7 @@
     "_name": "Burgdorf",
     "_region": "Bern - L\u00f6tschberg",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Abstellgl": {
             "__class__": "Set",

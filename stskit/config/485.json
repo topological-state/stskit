@@ -4,6 +4,7 @@
     "_name": "Z\u00fcrich HB",
     "_region": "Z\u00fcrich und Umgebung",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "": {
             "__class__": "Set",

@@ -4,6 +4,7 @@
     "_name": "St. Gallen",
     "_region": "Ostschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "M\u00f6rschwil": {
             "__class__": "Set",

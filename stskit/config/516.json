@@ -4,6 +4,7 @@
     "_name": "Kreuzlingen",
     "_region": "Ostschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "KODB": {
             "__class__": "Set",

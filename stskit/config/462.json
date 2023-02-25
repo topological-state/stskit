@@ -4,6 +4,7 @@
     "_name": "Oerlikon",
     "_region": "Z\u00fcrich und Umgebung",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "GLB": {
             "__class__": "Set",

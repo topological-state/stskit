@@ -4,6 +4,7 @@
     "_name": "Yverdon-les-Bains",
     "_region": "Westschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "BY": {
             "__class__": "Set",

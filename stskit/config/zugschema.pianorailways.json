@@ -1,0 +1,42 @@
+{
+    "_version": 1,
+    "name": "PianoRailways",
+    "gattungen": [
+        ["ICE", 0, 0, "X"],
+        ["TGV", 0, 0, "X"],
+        ["Lok", 0, 0, "R"],
+        ["", 1, 4100, "X"],
+        ["", 4100, 9000, "F"],
+        ["", 9000, 9850, "X"],
+        ["", 9850, 9900, "F"],
+        ["", 9900, 11000, "X"],
+        ["", 11000, 27000, "F"],
+        ["", 27000, 28000, "O"],
+        ["", 28000, 29000, "D"],
+        ["", 29000, 30000, "K"],
+        ["", 30000, 36000, "D"],
+        ["", 36000, 37000, "K"],
+        ["", 37000, 40000, "D"],
+        ["", 40000, 43000, "K"],
+        ["", 43000, 45000, "O"],
+        ["", 45000, 50000, "G"],
+        ["", 50000, 50200, "E"],
+        ["", 50200, 87600, "G"],
+        ["", 87600, 88000, "X"],
+        ["", 88000, 96000, "G"],
+        ["", 96000, 97000, "K"],
+        ["", 97000, 100000, "O"]
+    ],
+    "kategorien": {
+        "X": ["Hochgeschwindigkeitszug", "tab:red"],
+        "F": ["Fernverkehr", "tab:orange"],
+        "N": ["Nahverkehr", "tab:orange"],
+        "S": ["S-Bahn", "tab:brown"],
+        "G": ["Güterzug", "tab:cyan"],
+        "E": ["Schneller Güterzug", "tab:olive"],
+        "K": ["Kombiverkehr", "tab:blue"],
+        "D": ["Dienstzug", "tab:green"],
+        "O": ["Sonderzug", "tab:pink"],
+        "R": ["Rangierverkehr", "tab:gray"]
+    }
+}

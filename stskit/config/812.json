@@ -1,0 +1,166 @@
+{
+    "_aid": 812,
+    "_build": 5847,
+    "_name": "L\u00f6tschberg Nord",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "zugschema": "schweiz",
+    "anschlussgruppen": {
+        "AlpTransit": {
+            "__class__": "Set",
+            "data": [
+                "AlpTransit"
+            ]
+        },
+        "FEB ": {
+            "__class__": "Set",
+            "data": [
+                "FEB 503"
+            ]
+        },
+        "Goppenstein": {
+            "__class__": "Set",
+            "data": [
+                "Goppenstein 138",
+                "Goppenstein 238"
+            ]
+        },
+        "HOND": {
+            "__class__": "Set",
+            "data": [
+                "HOND"
+            ]
+        },
+        "KA 13-27": {
+            "__class__": "Set",
+            "data": [
+                "KA 13-15",
+                "KA 25-27"
+            ]
+        },
+        "Spiez": {
+            "__class__": "Set",
+            "data": [
+                "Spiez 202",
+                "Spiez 102"
+            ]
+        },
+        "Visp": {
+            "__class__": "Set",
+            "data": [
+                "Visp 742",
+                "Visp 842"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BL": {
+            "__class__": "Set",
+            "data": [
+                "BL 1",
+                "BL 3",
+                "BL 2"
+            ]
+        },
+        "FEB": {
+            "__class__": "Set",
+            "data": [
+                "FEB 502",
+                "FEB 501"
+            ]
+        },
+        "FERD": {
+            "__class__": "Set",
+            "data": [
+                "FERD"
+            ]
+        },
+        "FR": {
+            "__class__": "Set",
+            "data": [
+                "FR 8",
+                "FR 2",
+                "FR 3",
+                "FR 7",
+                "FR 5",
+                "FR 1",
+                "FR 6",
+                "FR 4"
+            ]
+        },
+        "KA": {
+            "__class__": "Set",
+            "data": [
+                "KA 55",
+                "KA 56",
+                "KA 7",
+                "KA 4",
+                "KA 5",
+                "KA 57",
+                "KA 2",
+                "KA 6",
+                "KA 1",
+                "KA 3"
+            ]
+        },
+        "KG": {
+            "__class__": "Set",
+            "data": [
+                "KG 1",
+                "KG 2"
+            ]
+        },
+        "MUE": {
+            "__class__": "Set",
+            "data": [
+                "MUE 2",
+                "MUE 1"
+            ]
+        },
+        "REIK": {
+            "__class__": "Set",
+            "data": [
+                "REIK 2",
+                "REIK 1"
+            ]
+        },
+        "WENE": {
+            "__class__": "Set",
+            "data": [
+                "WENE"
+            ]
+        }
+    },
+    "hauptstrecke": "Spiez-Goppenstein",
+    "sektoren": {},
+    "strecken": {
+        "Spiez-Goppenstein": [
+            "Spiez",
+            "MUE",
+            "REIK",
+            "WENE",
+            "FR",
+            "KG",
+            "BL",
+            "FEB",
+            "KA",
+            "Goppenstein"
+        ],
+        "Spiez-Visp": [
+            "Spiez",
+            "MUE",
+            "REIK",
+            "WENE",
+            "FR",
+            "FERD",
+            "Visp"
+        ]
+    },
+    "streckenmarkierung": [
+    	["KG", "BL", "E"],
+    	["BL", "FEB", "E"],
+    	["KA", "Goppenstein", "E"],
+    	["FR", "FERD", "E"]
+    ]
+}

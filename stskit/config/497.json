@@ -4,6 +4,7 @@
     "_name": "Basel SBB",
     "_region": "Zentralschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "BSSJ 1-4": {
             "__class__": "Set",

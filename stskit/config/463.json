@@ -4,6 +4,7 @@
     "_name": "Effretikon",
     "_region": "Z\u00fcrich und Umgebung",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "DUE": {
             "__class__": "Set",

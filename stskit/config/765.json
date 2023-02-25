@@ -4,6 +4,7 @@
     "_name": "Hauenstein",
     "_region": "Zentralschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Chemie": {
             "__class__": "Set",

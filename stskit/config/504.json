@@ -4,6 +4,7 @@
     "_name": "Oberaargau",
     "_region": "Zentralschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "ABO Industrie": {
             "__class__": "Set",

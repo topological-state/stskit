@@ -8,6 +8,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
+import matplotlib as mpl
 import networkx as nx
 import numpy as np
 import trio
@@ -18,6 +19,14 @@ from stskit.stsplugin import PluginClient, TaskDone
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+
+REGIONEN_SCHEMA = {
+    "Bern - Lötschberg": "Schweiz",
+    "Ostschweiz": "Schweiz",
+    "Tessin": "Schweiz",
+    "Westschweiz": "Schweiz",
+    "Zentralschweiz": "Schweiz",
+    "Zürich und Umgebung": "Schweiz"}
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -553,6 +562,134 @@ class Sektoren:
                 self._sektoren[hauptgleis] = {sektor}
 
 
+class Zugschema:
+    """
+    Zugkategorien und Farbschema
+
+    Das Zugschema legt die Zuordnung von Zügen zu Kategorien sowie die Zuordnung von Kategorien zu Farben fest.
+    Beide Zuordnungsschritte sind konfigurierbar.
+    Die Zuordnung von Zügen zu einer bestimmten Kategorie basiert auf Gattung und Nummer.
+
+    Als Zugkategorien sollten nur die unter DEFAULT_KATEGORIEN vordefinierten verwendet werden,
+    da diesen eine spezielle Bedeutung zukommt (z.b. ob ein Zug in der Anschlussmatrix vorkommt).
+
+    Alle von matplotlib erkannten Farben wie auch RGB-Werte #RRGGBB können verwendet werden.
+    Eine Liste von Farben gibt es unter https://matplotlib.org/stable/gallery/color/named_colors.html.
+    """
+
+    DEFAULT_KATEGORIEN = {
+        "X": ["Hochgeschwindigkeitszug", "tab:red"],
+        "F": ["Fernverkehr", "tab:orange"],
+        "N": ["Nahverkehr", "tab:olive"],
+        "S": ["S-Bahn", "tab:brown"],
+        "G": ["Güterzug", "tab:blue"],
+        "E": ["Schneller Güterzug", "tab:cyan"],
+        "K": ["Kombiverkehr", "tab:purple"],
+        "D": ["Dienstzug", "tab:green"],
+        "O": ["Sonderzug", "tab:pink"],
+        "R": ["Übriger Verkehr", "tab:gray"]}
+
+    def __init__(self):
+        self.name: str = ""
+        self.pfad: Optional[Path] = None
+        self.gattungen: Dict[str, str] = {}
+        self.nummern: Dict[Tuple[int, int], str] = {}
+        self.kategorien: Dict[str, Dict[str, str]] = {}
+
+        d = {"kategorien": self.DEFAULT_KATEGORIEN}
+        self.set_config(d)
+
+    def set_config(self, config: Dict):
+        try:
+            for kat, schema in config['kategorien'].items():
+                try:
+                    self.kategorien[kat] = {"beschreibung": schema[0], "farbe": schema[1]}
+                except IndexError:
+                    pass
+        except KeyError:
+            pass
+
+        try:
+            for gattung in config['gattungen']:
+                try:
+                    if gattung[0]:
+                        self.gattungen[gattung[0]] = gattung[3]
+                    elif gattung[2] > gattung[1] > 0:
+                        self.nummern[(gattung[1], gattung[2])] = gattung[3]
+                except (IndexError, TypeError):
+                    pass
+        except KeyError:
+            pass
+
+    def get_config(self) -> Dict:
+        kategorien = {kat: [schema["beschreibung"], schema["farbe"]] for kat, schema in self.kategorien.items()}
+        gattungsnamen = [[name, 0, 0, kat] for name, kat in self.gattungen.items()]
+        gattungsnummern = [["", nummern[0], nummern[1], kat] for nummern, kat in self.nummern.items()]
+        config = {"kategorien": kategorien,
+                  "gattungen": gattungsnamen + gattungsnummern}
+        return config
+
+    def load_config(self, path: os.PathLike, default_path: os.PathLike, region: str):
+        if self.name:
+            name = self.name.lower()
+        else:
+            try:
+                name = REGIONEN_SCHEMA[region].lower()
+            except KeyError:
+                name = "deutschland"
+
+        p = Path(path) / f"zugschema.{name}.json"
+        try:
+            with open(p) as fp:
+                d = json.load(fp, object_hook=json_object_hook)
+            self.set_config(d)
+        except OSError:
+            try:
+                p = Path(default_path) / f"zugschema.{name}.json"
+                with open(p) as fp:
+                    d = json.load(fp, object_hook=json_object_hook)
+                self.set_config(d)
+            except OSError:
+                self.name = ""
+
+    def kategorie(self, zug: ZugDetails) -> str:
+        try:
+            return self.gattungen[zug.gattung]
+        except KeyError:
+            pass
+
+        nummer = zug.nummer
+        for t, f in self.nummern.items():
+            if t[0] <= nummer < t[1]:
+                return f
+        else:
+            return "R"
+
+    def zugfarbe(self, zug: ZugDetails) -> str:
+        """
+        matplotlib-farbcode eines zuges
+
+        :param zug:
+        :return: str
+        """
+
+        kat = self.kategorie(zug)
+        return self.kategorien[kat]["farbe"]
+
+    def zugfarbe_rgb(self, zug: ZugDetails) -> Tuple[int]:
+        """
+        rgb-farbcode eines zuges
+
+        :param zug:
+        :return: tupel (r,g,b)
+        """
+
+        farbe = self.zugfarbe(zug)
+        frgb = mpl.colors.to_rgb(farbe)
+        rgb = [round(255 * v) for v in frgb]
+        return tuple(rgb)
+
+
 class Anlage:
     """
     netzwerk-darstellungen der bahnanlage
@@ -640,6 +777,8 @@ class Anlage:
         self.strecken: Dict[str, Tuple[str]] = {}
         self.hauptstrecke: str = ""
 
+        self.zugschema = Zugschema()
+
         self._verbindungsstrecke_cache: Dict[Tuple[str, str], List[str]] = {}
 
     def update(self, client: PluginClient, config_path: os.PathLike):
@@ -674,6 +813,8 @@ class Anlage:
                     logger.warning("keine beispielkonfiguration gefunden")
             except ValueError as e:
                 logger.exception("fehlerhafte anlagenkonfiguration")
+
+            self.zugschema.load_config(config_path, default_path, self.anlage.region)
             self.config_loaded = True
 
         if len(self.gleis_graph) == 0 or len(self.bahnhof_graph) == 0 or len(self.gleis_graph_probleme) > 0:
@@ -1138,6 +1279,11 @@ class Anlage:
                 except IndexError:
                     pass
 
+        try:
+            self.zugschema.name = d['zugschema']
+        except KeyError:
+            pass
+
         self._update_gruppen_dict()
         self.config_loaded = True
 
@@ -1191,6 +1337,8 @@ class Anlage:
              'strecken': self.strecken,
              'hauptstrecke': self.hauptstrecke,
              'streckenmarkierung': streckenmarkierung}
+        if self.zugschema.name:
+            d['zugschema'] = self.zugschema.name
 
         if graphs:
             if self.signal_graph:

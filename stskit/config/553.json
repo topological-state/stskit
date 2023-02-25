@@ -4,6 +4,7 @@
     "_name": "Neuch\u00e2tel",
     "_region": "Westschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "B-Gruppe": {
             "__class__": "Set",

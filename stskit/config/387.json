@@ -4,6 +4,7 @@
     "_name": "Zug",
     "_region": "Zentralschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Abstellfeld": {
             "__class__": "Set",

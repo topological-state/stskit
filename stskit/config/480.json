@@ -4,6 +4,7 @@
     "_name": "G\u00fcrbetal",
     "_region": "Bern - L\u00f6tschberg",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "BNAH": {
             "__class__": "Set",

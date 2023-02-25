@@ -4,6 +4,7 @@
     "_name": "Z\u00fcrich VB",
     "_region": "Z\u00fcrich und Umgebung",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "E Ost+": {
             "__class__": "Set",

@@ -4,6 +4,7 @@
     "_name": "Aarau",
     "_region": "Zentralschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "BG": {
             "__class__": "Set",

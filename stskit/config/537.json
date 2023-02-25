@@ -4,6 +4,7 @@
     "_name": "Walensee",
     "_region": "Ostschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "FMS Industrie": {
             "__class__": "Set",

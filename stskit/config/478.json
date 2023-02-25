@@ -4,6 +4,7 @@
     "_name": "Heitersberg",
     "_region": "Zentralschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Dottikon": {
             "__class__": "Set",

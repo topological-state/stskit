@@ -4,6 +4,7 @@
     "_name": "Luzern",
     "_region": "Zentralschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "321": {
             "__class__": "Set",

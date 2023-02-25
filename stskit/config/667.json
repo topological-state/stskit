@@ -4,6 +4,7 @@
     "_name": "Biel",
     "_region": "Westschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "BGG": {
             "__class__": "Set",

@@ -4,6 +4,7 @@
     "_name": "T\u00f6sstal",
     "_region": "Z\u00fcrich und Umgebung",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "B\u00e4retswil": {
             "__class__": "Set",

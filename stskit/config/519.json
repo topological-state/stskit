@@ -4,6 +4,7 @@
     "_name": "Wil SG",
     "_region": "Ostschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Abstellung": {
             "__class__": "Set",

@@ -4,6 +4,7 @@
     "_name": "Olten",
     "_region": "Zentralschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "ABO": {
             "__class__": "Set",

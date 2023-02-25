@@ -16,7 +16,7 @@ from stskit.auswertung import Auswertung
 from stskit.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, \
     AnkunftAbwarten, AbfahrtAbwarten, ZugAbwarten, ZugNichtAbwarten
-from stskit.slotgrafik import hour_minutes_formatter, ZugFarbschema
+from stskit.slotgrafik import hour_minutes_formatter
 from stskit.stsplugin import PluginClient
 from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
 from stskit.zentrale import DatenZentrale
@@ -147,8 +147,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         self.zeitfenster_voraus = 55
         self.zeitfenster_zurueck = 5
-        self.farbschema = ZugFarbschema()
-        self.farbschema.init_schweiz()
 
         self.ui = Ui_BildfahrplanWindow()
         self.ui.setupUi(self)
@@ -377,7 +375,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     def _update_zuglauf_richtung(self, zug: ZugDetailsPlanung, richtung: int):
         richtung = +1 if richtung >= 0 else -1
-        color = self.farbschema.zugfarbe(zug)
+        color = self.anlage.zugschema.zugfarbe(zug)
         zuglauf = []
         strecke = self._strecke
         distanz = self._distanz

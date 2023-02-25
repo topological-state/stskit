@@ -4,6 +4,7 @@
     "_name": "Langenthal",
     "_region": "Bern - L\u00f6tschberg",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "GB": {
             "__class__": "Set",

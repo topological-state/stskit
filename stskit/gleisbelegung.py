@@ -18,7 +18,7 @@ from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVers
     AbfahrtAbwarten, AnkunftAbwarten, ZugAbwarten, ZugNichtAbwarten
 from stskit.stsplugin import PluginClient
 from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
-from stskit.slotgrafik import hour_minutes_formatter, Slot, ZugFarbschema, Gleisbelegung, SlotWarnung, gleis_sektor_sortkey, \
+from stskit.slotgrafik import hour_minutes_formatter, Slot, Gleisbelegung, SlotWarnung, gleis_sektor_sortkey, \
     WARNUNG_VERBINDUNG, WARNUNG_STATUS
 from stskit.zentrale import DatenZentrale
 
@@ -358,8 +358,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.zentrale = zentrale
         self.zentrale.planung_update.register(self.planung_update)
 
-        self.farbschema: ZugFarbschema = ZugFarbschema()
-        self.farbschema.init_schweiz()
         self.show_zufahrten: bool = False
         self.show_bahnsteige: bool = True
 
@@ -451,14 +449,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         :return: None
         """
-        if self.farbschema is None:
-            self.farbschema = ZugFarbschema()
-            regionen_schweiz = {"Bern - Lötschberg", "Ostschweiz", "Tessin", "Westschweiz", "Zentralschweiz",
-                                "Zürich und Umgebung"}
-            if self.anlage.anlage.region in regionen_schweiz:
-                self.farbschema.init_schweiz()
-            else:
-                self.farbschema.init_deutschland()
 
         self.daten_update()
         self.grafik_update()
@@ -508,7 +498,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         y_hgt = np.asarray([slot.dauer for slot in slots])
         labels = [slot.titel for slot in slots]
 
-        colors = {slot: self.farbschema.zugfarbe(slot.zug) for slot in slots}
+        colors = {slot: self.anlage.zugschema.zugfarbe(slot.zug) for slot in slots}
         if len(self._slot_auswahl) == 2:
             colors[self._slot_auswahl[0]] = 'yellow'
             colors[self._slot_auswahl[1]] = 'cyan'

@@ -20,7 +20,6 @@ from PyQt5.QtCore import pyqtSlot
 from stskit.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, \
     FesteVerspaetung, ZugAbwarten, AnkunftAbwarten, AbfahrtAbwarten, ZugNichtAbwarten, ZugZielNode
-from stskit.slotgrafik import ZugFarbschema
 from stskit.stsobj import time_to_minutes
 from stskit.zentrale import DatenZentrale
 
@@ -123,8 +122,6 @@ class Anschlussmatrix:
         self.anzeigematrix = np.zeros_like(self.anschlussstatus)
         self.ankunft_labels: Dict[int, str] = {}
         self.abfahrt_labels: Dict[int, str] = {}
-        self.farbschema: ZugFarbschema = ZugFarbschema()
-        self.farbschema.init_schweiz()
 
     def set_bahnhof(self, bahnhof: str):
         """
@@ -377,12 +374,12 @@ class Anschlussmatrix:
         ax.set_xlabel('ankunft')
         try:
             x_labels = [self.ankunft_labels[zid] for zid in self.zid_ankuenfte_index] + [''] * (a_an - n_an)
-            x_labels_colors = [self.farbschema.zugfarbe(self.zuege[zid])
+            x_labels_colors = [self.anlage.zugschema.zugfarbe(self.zuege[zid])
                                for zid in self.zid_ankuenfte_index] + ['w'] * (a_an - n_an)
             x_labels_weigths = ['bold' if self.zuege[zid].amgleis and self.zuege[zid].gleis in self.gleise else 'normal'
                                 for zid in self.zid_ankuenfte_index] + ['normal'] * (a_an - n_an)
             y_labels = [self.abfahrt_labels[zid] for zid in self.zid_abfahrten_index] + [''] * (a_ab - n_ab)
-            y_labels_colors = [self.farbschema.zugfarbe(self.zuege[zid])
+            y_labels_colors = [self.anlage.zugschema.zugfarbe(self.zuege[zid])
                                for zid in self.zid_abfahrten_index] + ['w'] * (a_ab - n_ab)
             y_labels_weigths = ['bold' if self.zuege[zid].amgleis and self.zuege[zid].gleis in self.gleise else 'normal'
                                 for zid in self.zid_abfahrten_index] + ['normal'] * (a_ab - n_ab)
@@ -696,12 +693,6 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
     def daten_update(self):
         if self.anschlussmatrix is None and self.anlage is not None:
             self.anschlussmatrix = Anschlussmatrix(self.anlage)
-            regionen_schweiz = {"Bern - Lötschberg", "Ostschweiz", "Tessin", "Westschweiz", "Zentralschweiz",
-                                "Zürich und Umgebung"}
-            if self.anlage.anlage.region in regionen_schweiz:
-                self.anschlussmatrix.farbschema.init_schweiz()
-            else:
-                self.anschlussmatrix.farbschema.init_deutschland()
             self.update_widgets()
 
         if self.anschlussmatrix:

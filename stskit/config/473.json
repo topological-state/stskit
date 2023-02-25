@@ -4,6 +4,7 @@
     "_name": "Baden",
     "_region": "Zentralschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Abstellgleise": {
             "__class__": "Set",

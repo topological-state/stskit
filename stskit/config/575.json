@@ -4,6 +4,7 @@
     "_name": "Rorschach",
     "_region": "Ostschweiz",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Industrie": {
             "__class__": "Set",
