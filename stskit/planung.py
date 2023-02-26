@@ -409,10 +409,12 @@ class AbhaengigkeitsUrsprung:
         try:
             return self._planung.zielgraph.nodes[self._folge]['obj'].zug.name
         except AttributeError:
-            return self._folge.zid
+            pass
         except KeyError:
             pass
-        return "-----"
+        except TypeError:
+            pass
+        return "(?)"
 
     @property
     def relation(self) -> Tuple[ZugZielNode, ...]:
