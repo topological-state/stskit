@@ -4,6 +4,7 @@
     "_name": "asm / Niederbipp",
     "_region": "Bern - L\u00f6tschberg",
     "_version": 2,
+    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Bewetec": {
             "__class__": "Set",

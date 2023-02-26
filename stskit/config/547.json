@@ -4,6 +4,7 @@
     "_name": "RhB / Sagliains",
     "_region": "Ostschweiz",
     "_version": 2,
+    "zugschema": "schweiz-rhb",
     "anschlussgruppen": {
         "Abstellung": {
             "__class__": "Set",

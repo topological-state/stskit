@@ -4,6 +4,7 @@
     "_name": "RhB / Klosters",
     "_region": "Ostschweiz",
     "_version": 2,
+    "zugschema": "schweiz-rhb",
     "anschlussgruppen": {
         "Abstellfeld": {
             "__class__": "Set",

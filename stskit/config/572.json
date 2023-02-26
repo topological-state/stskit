@@ -4,7 +4,7 @@
     "_name": "Calanda",
     "_region": "Ostschweiz",
     "_version": 2,
-    "zugschema": "schweiz",
+    "zugschema": "schweiz-rhb",
     "anschlussgruppen": {
         "Abstellung RhB": {
             "__class__": "Set",

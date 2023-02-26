@@ -4,6 +4,7 @@
     "_name": "RhB / Landquart",
     "_region": "Ostschweiz",
     "_version": 2,
+    "zugschema": "schweiz-rhb",
     "anschlussgruppen": {
         "Abstell": {
             "__class__": "Set",
