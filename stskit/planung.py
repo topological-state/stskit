@@ -1932,12 +1932,17 @@ class Planung:
 
         elif ereignis.art == 'ankunft':
             if not altes_ziel.angekommen:
-                altes_ziel.verspaetung_an = time_to_minutes(ereignis.zeit) - time_to_minutes(altes_ziel.an)
+                try:
+                    altes_ziel.verspaetung_an = time_to_minutes(ereignis.zeit) - time_to_minutes(altes_ziel.an)
+                except AttributeError:
+                    altes_ziel.verspaetung_an = ereignis.verspaetung
                 altes_ziel.angekommen = ereignis.zeit
+
                 # durchfahrten melden nur ankunftsereignis. bei fdl_korrektur erwarten wir einen signalhalt.
                 if altes_ziel.durchfahrt() and not altes_ziel.fdl_korrektur:
                     altes_ziel.verspaetung_ab = altes_ziel.verspaetung_an
                     altes_ziel.abgefahren = ereignis.zeit
+
                 # falls ein ereignis vergessen gegangen ist:
                 for ziel in zug.fahrplan[0:alter_index]:
                     ziel.angekommen = ziel.angekommen or True
