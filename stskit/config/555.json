@@ -1,0 +1,222 @@
+{
+    "_aid": 555,
+    "_build": 5847,
+    "_name": "Rotkreuz",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Brunnmatt": {
+            "__class__": "Set",
+            "data": [
+                "Brunnmatt 103",
+                "Brunnmatt 203"
+            ]
+        },
+        "Cham": {
+            "__class__": "Set",
+            "data": [
+                "Cham 346",
+                "Cham 446"
+            ]
+        },
+        "G\u00fctsch 363": {
+            "__class__": "Set",
+            "data": [
+                "G\u00fctsch 363"
+            ]
+        },
+        "G\u00fctsch 504": {
+            "__class__": "Set",
+            "data": [
+                "G\u00fctsch 504"
+            ]
+        },
+        "Oberr\u00fcti": {
+            "__class__": "Set",
+            "data": [
+                "Oberr\u00fcti 197",
+                "Oberr\u00fcti 297"
+            ]
+        },
+        "RK Industrie": {
+            "__class__": "Set",
+            "data": [
+                "RK Industrie"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BURN": {
+            "__class__": "Set",
+            "data": [
+                "BURN"
+            ]
+        },
+        "EBI": {
+            "__class__": "Set",
+            "data": [
+                "EBI4",
+                "EBI1",
+                "EBI2",
+                "EBI3"
+            ]
+        },
+        "GSK": {
+            "__class__": "Set",
+            "data": [
+                "GSK3",
+                "GSK2",
+                "GSK1"
+            ]
+        },
+        "GTS": {
+            "__class__": "Set",
+            "data": [
+                "GTS"
+            ]
+        },
+        "IM": {
+            "__class__": "Set",
+            "data": [
+                "IM4",
+                "IM3",
+                "IM2"
+            ]
+        },
+        "KUE": {
+            "__class__": "Set",
+            "data": [
+                "KUE2",
+                "KUE1"
+            ]
+        },
+        "LBD": {
+            "__class__": "Set",
+            "data": [
+                "LBD"
+            ]
+        },
+        "LZVH": {
+            "__class__": "Set",
+            "data": [
+                "LZVH2",
+                "LZVH1"
+            ]
+        },
+        "MEG": {
+            "__class__": "Set",
+            "data": [
+                "MEG2",
+                "MEG3"
+            ]
+        },
+        "MEGZ": {
+            "__class__": "Set",
+            "data": [
+                "MEGZ"
+            ]
+        },
+        "MERL": {
+            "__class__": "Set",
+            "data": [
+                "MERL"
+            ]
+        },
+        "RK": {
+            "__class__": "Set",
+            "data": [
+                "RKB1",
+                "RK5",
+                "RK7",
+                "RK6",
+                "RK3",
+                "RKB2",
+                "RK1",
+                "RK2",
+                "RK4"
+            ]
+        }
+    },
+    "hauptstrecke": "G\u00fctsch 363-Cham",
+    "sektoren": {},
+    "strecken": {
+        "G\u00fctsch 363-Brunnmatt": [
+            "G\u00fctsch 363",
+            "EBI",
+            "BURN",
+            "LBD",
+            "GSK",
+            "RK",
+            "IM",
+            "Brunnmatt"
+        ],
+        "G\u00fctsch 363-Cham": [
+            "G\u00fctsch 363",
+            "EBI",
+            "BURN",
+            "LBD",
+            "GSK",
+            "RK",
+            "Cham"
+        ],
+        "G\u00fctsch 504-Brunnmatt": [
+            "G\u00fctsch 504",
+            "LZVH",
+            "MEGZ",
+            "MEG",
+            "MERL",
+            "KUE",
+            "IM",
+            "Brunnmatt"
+        ],
+        "Oberr\u00fcti-Brunnmatt": [
+            "Oberr\u00fcti",
+            "RK",
+            "IM",
+            "Brunnmatt"
+        ],
+        "Oberr\u00fcti-Cham": [
+            "Oberr\u00fcti",
+            "RK",
+            "Cham"
+        ]
+    },
+    "streckenmarkierung": [
+        [
+            "G\u00fctsch 363",
+            "EBI",
+            "E"
+        ],
+        [
+            "G\u00fctsch 504",
+            "LZVH",
+            "E"
+        ],
+        [
+            "LZVH",
+            "MEGZ",
+            "E"
+        ],
+        [
+            "MEGZ",
+            "MEG",
+            "E"
+        ],
+        [
+            "MEG",
+            "MERL",
+            "E"
+        ],
+        [
+            "MERL",
+            "KUE",
+            "E"
+        ],
+        [
+            "KUE",
+            "IM",
+            "E"
+        ]
+    ]
+}

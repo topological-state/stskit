@@ -1,0 +1,261 @@
+{
+    "_aid": 968,
+    "_build": 5847,
+    "_name": "Giubiasco",
+    "_region": "Tessin",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BEL": {
+            "__class__": "Set",
+            "data": [
+                "BEL251",
+                "BEL151"
+            ]
+        },
+        "Bin": {
+            "__class__": "Set",
+            "data": [
+                "Bin 91-92"
+            ]
+        },
+        "CBT": {
+            "__class__": "Set",
+            "data": [
+                "CBT7035",
+                "CBT6035"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Luino": {
+            "__class__": "Set",
+            "data": [
+                "Luino"
+            ]
+        },
+        "TAV": {
+            "__class__": "Set",
+            "data": [
+                "TAV173",
+                "TAV273"
+            ]
+        },
+        "Zona": {
+            "__class__": "Set",
+            "data": [
+                "Zona tranvie"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "CAMO": {
+            "__class__": "Set",
+            "data": [
+                "CAMO"
+            ]
+        },
+        "CD": {
+            "__class__": "Set",
+            "data": [
+                "CD4",
+                "CD2",
+                "CD3",
+                "CD1",
+                "CD5",
+                "CD21",
+                "CD20",
+                "CD36",
+                "CD34",
+                "CD37",
+                "CD84",
+                "CD85"
+            ]
+        },
+        "GDA": {
+            "__class__": "Set",
+            "data": [
+                "GDA"
+            ]
+        },
+        "GER": {
+            "__class__": "Set",
+            "data": [
+                "GER"
+            ]
+        },
+        "GIU": {
+            "__class__": "Set",
+            "data": [
+                "GIU67",
+                "GIU71",
+                "GIU1",
+                "GIU5",
+                "GIU3",
+                "GIU77",
+                "GIU2",
+                "GIU4"
+            ]
+        },
+        "LO": {
+            "__class__": "Set",
+            "data": [
+                "LO3p",
+                "LO3",
+                "LO2p",
+                "LO1p",
+                "LO30",
+                "LO4",
+                "LO2",
+                "LO1",
+                "LO Wende"
+            ]
+        },
+        "MAG": {
+            "__class__": "Set",
+            "data": [
+                "MAG3",
+                "MAG2",
+                "MAG4"
+            ]
+        },
+        "MEZS": {
+            "__class__": "Set",
+            "data": [
+                "MEZS"
+            ]
+        },
+        "PINT": {
+            "__class__": "Set",
+            "data": [
+                "PINT2",
+                "PINT1"
+            ]
+        },
+        "QUA": {
+            "__class__": "Set",
+            "data": [
+                "QUA"
+            ]
+        },
+        "RIA": {
+            "__class__": "Set",
+            "data": [
+                "RIA"
+            ]
+        },
+        "RIAC": {
+            "__class__": "Set",
+            "data": [
+                "RIAC1",
+                "RIAC2"
+            ]
+        },
+        "RIB": {
+            "__class__": "Set",
+            "data": [
+                "RIB5",
+                "RIB1",
+                "RIB3",
+                "RIB4",
+                "RIB2"
+            ]
+        },
+        "RZO": {
+            "__class__": "Set",
+            "data": [
+                "RZO"
+            ]
+        },
+        "SAN": {
+            "__class__": "Set",
+            "data": [
+                "SAN"
+            ]
+        },
+        "SN": {
+            "__class__": "Set",
+            "data": [
+                "SN1",
+                "SN2"
+            ]
+        },
+        "TEN": {
+            "__class__": "Set",
+            "data": [
+                "TEN1",
+                "TEN2"
+            ]
+        }
+    },
+    "hauptstrecke": "BEL-TAV",
+    "sektoren": {
+        "LO1": {
+            "__class__": "Set",
+            "data": [
+                "LO1",
+                "LO1p"
+            ]
+        },
+        "LO2": {
+            "__class__": "Set",
+            "data": [
+                "LO2",
+                "LO2p"
+            ]
+        },
+        "LO3": {
+            "__class__": "Set",
+            "data": [
+                "LO3p",
+                "LO3"
+            ]
+        }
+    },
+    "strecken": {
+        "BEL-CBT": [
+            "BEL",
+            "GIU",
+            "SAN",
+            "CAMO",
+            "CBT"
+        ],
+        "BEL-Luino": [
+            "BEL",
+            "GIU",
+            "SAN",
+            "CD",
+            "QUA",
+            "MAG",
+            "SN",
+            "GER",
+            "RZO",
+            "PINT",
+            "Luino"
+        ],
+        "BEL-TAV": [
+            "BEL",
+            "GIU",
+            "SAN",
+            "RIB",
+            "MEZS",
+            "TAV"
+        ],
+        "BEL-LO": [
+        	"BEL",
+        	"GIU",
+        	"SAN",
+        	"CD",
+        	"RIAC",
+        	"RIA",
+        	"GDA",
+        	"TEN",
+        	"LO"
+        ]
+    },
+    "streckenmarkierung": []
+}

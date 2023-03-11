@@ -1,0 +1,127 @@
+{
+    "_aid": 410,
+    "_build": 5847,
+    "_name": "Brig",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BR H": {
+            "__class__": "Set",
+            "data": [
+                "BR H Ost",
+                "BR H West"
+            ]
+        },
+        "BR E": {
+            "__class__": "Set",
+            "data": [
+                "BR E West"
+            ]
+        },
+        "Cardinal": {
+            "__class__": "Set",
+            "data": [
+                "Cardinal"
+            ]
+        },
+        "Depot": {
+            "__class__": "Set",
+            "data": [
+                "Depot"
+            ]
+        },
+        "Domodossola": {
+            "__class__": "Set",
+            "data": [
+                "Domodossola 201",
+                "Domodossola 101"
+            ]
+        },
+        "Goppenstein": {
+            "__class__": "Set",
+            "data": [
+                "Goppenstein 170",
+                "Goppenstein 270"
+            ]
+        },
+        "Visp": {
+            "__class__": "Set",
+            "data": [
+                "Visp 192",
+                "Visp 292"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BR": {
+            "__class__": "Set",
+            "data": [
+                "BR 8",
+                "BR 2",
+                "BR 6",
+                "BR 5",
+                "BR 4",
+                "BR 3",
+                "BR 1",
+                "BR 9",
+                "BR 7",
+                "H 5",
+                "H 1",
+                "H 2",
+                "H 4",
+                "H 3",
+                "H 12"
+            ]
+        },
+        "IS": {
+            "__class__": "Set",
+            "data": [
+                "IS 1",
+                "IS 5",
+                "IS 2",
+                "IS 3"
+            ]
+        },
+        "Preglia": {
+            "__class__": "Set",
+            "data": [
+                "Preglia"
+            ]
+        },
+        "VAR": {
+            "__class__": "Set",
+            "data": [
+                "VAR 11",
+                "VAR 1",
+                "VAR 2",
+                "VAR 12",
+                "VAR 3"
+            ]
+        }
+    },
+    "hauptstrecke": "Visp-Domodossola",
+    "sektoren": {},
+    "strecken": {
+        "Goppenstein-Domodossola": [
+            "Goppenstein",
+            "BR",
+            "IS",
+            "VAR",
+            "Preglia",
+            "Domodossola"
+        ],
+        "Visp-Domodossola": [
+            "Visp",
+            "BR",
+            "IS",
+            "VAR",
+            "Preglia",
+            "Domodossola"
+        ]
+    },
+    "streckenmarkierung": [
+	    ["IS", "VAR", "E"],
+	    ["VAR", "Preglia", "E"]
+    ]
+}

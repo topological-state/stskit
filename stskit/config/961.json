@@ -1,0 +1,254 @@
+{
+    "_aid": 961,
+    "_build": 5840,
+    "_name": "Lugano",
+    "_region": "Tessin",
+    "_version": 2,
+    "zugschema": "schweiz",
+    "anschlussgruppen": {
+        "AlpTransit": {
+            "__class__": "Set",
+            "data": [
+                "AlpTransit"
+            ]
+        },
+        "CAMO": {
+            "__class__": "Set",
+            "data": [
+                "CAMO 6035",
+                "CAMO 7035"
+            ]
+        },
+        "Caff\u00e9": {
+            "__class__": "Set",
+            "data": [
+                "Caff\u00e9"
+            ]
+        },
+        "La Riseria": {
+            "__class__": "Set",
+            "data": [
+                "La Riseria"
+            ]
+        },
+        "MAR": {
+            "__class__": "Set",
+            "data": [
+                "MAR 194",
+                "MAR 294"
+            ]
+        },
+        "MEZ": {
+            "__class__": "Set",
+            "data": [
+                "MEZ 273",
+                "MEZ 173"
+            ]
+        },
+        "Planzer": {
+            "__class__": "Set",
+            "data": [
+                "Planzer"
+            ]
+        },
+        "Scalo merci": {
+            "__class__": "Set",
+            "data": [
+                "Scalo merci"
+            ]
+        },
+        "Sfrido": {
+            "__class__": "Set",
+            "data": [
+                "Sfrido"
+            ]
+        },
+        "Zona industriale": {
+            "__class__": "Set",
+            "data": [
+                "Zona industriale"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "E/A CAMO": {
+            "__class__": "Set",
+            "data": [
+                "A CAMO",
+                "E CAMO"
+            ]
+        },
+        "E/A MAR": {
+            "__class__": "Set",
+            "data": [
+                "E MAR"
+            ]
+        },
+        "E/A MEZ": {
+            "__class__": "Set",
+            "data": [
+                "E MEZ"
+            ]
+        },
+        "LAM": {
+            "__class__": "Set",
+            "data": [
+                "LAM"
+            ]
+        },
+        "LG": {
+            "__class__": "Set",
+            "data": [
+                "LG 1",
+                "LG 4G",
+                "LG 2",
+                "LG 4",
+                "LG 1G",
+                "LG 3",
+                "LG 324"
+            ]
+        },
+        "LGP": {
+            "__class__": "Set",
+            "data": [
+                "LGP"
+            ]
+        },
+        "LGV": {
+            "__class__": "Set",
+            "data": [
+                "LGV A73",
+                "LGV A74",
+                "LGV A2",
+                "LGV A22",
+                "LGV A3",
+                "LGV A7",
+                "LGV A8",
+                "LGV A9",
+                "LGV A4",
+                "LGV B3",
+                "LGV B2",
+                "LGV B1",
+                "LGV A65"
+            ]
+        },
+        "MDE": {
+            "__class__": "Set",
+            "data": [
+                "MDE 3",
+                "MDE 5",
+                "MDE 2",
+                "MDE 3G",
+                "MDE 4",
+                "MDE 4G"
+            ]
+        },
+        "SIGI": {
+            "__class__": "Set",
+            "data": [
+                "SIGI 1",
+                "SIGI 3",
+                "SIGI 2"
+            ]
+        },
+        "TAV": {
+            "__class__": "Set",
+            "data": [
+                "TAV 2",
+                "TAV 5k",
+                "TAV 3",
+                "TAV 1",
+                "TAV 4",
+                "TAV 4k",
+                "TAV 52",
+                "TAV 5",
+                "TAV 3G",
+                "TAV Wende"
+            ]
+        },
+        "VEZB": {
+            "__class__": "Set",
+            "data": [
+                "VEZB"
+            ]
+        }
+    },
+    "sektoren": {
+        "LG 1": {
+            "__class__": "Set",
+            "data": [
+                "LG 1G",
+                "LG 1"
+            ]
+        },
+        "LG 4": {
+            "__class__": "Set",
+            "data": [
+                "LG 4G",
+                "LG 4"
+            ]
+        },
+        "MDE 3": {
+            "__class__": "Set",
+            "data": [
+                "MDE 3",
+                "MDE 3G"
+            ]
+        },
+        "MDE 4": {
+            "__class__": "Set",
+            "data": [
+                "MDE 4G",
+                "MDE 4"
+            ]
+        },
+        "TAV 3": {
+            "__class__": "Set",
+            "data": [
+                "TAV 3G",
+                "TAV 3"
+            ]
+        },
+        "TAV 4": {
+            "__class__": "Set",
+            "data": [
+                "TAV 4",
+                "TAV 4k"
+            ]
+        },
+        "TAV 5": {
+            "__class__": "Set",
+            "data": [
+                "TAV 5k",
+                "TAV 5"
+            ]
+        }
+    },
+    "hauptstrecke": "MEZ-MAR",
+    "strecken": {
+        "CAMO-MAR": [
+            "CAMO",
+            "E/A CAMO",
+            "TAV",
+            "LAM",
+            "VEZB",
+            "LG",
+            "LGP",
+            "MDE",
+            "MAR"
+        ],
+        "MEZ-MAR": [
+            "MEZ",
+            "E/A MEZ",
+            "SIGI",
+            "TAV",
+            "LAM",
+            "VEZB",
+            "LG",
+            "LGP",
+            "MDE",
+            "MAR"
+        ]
+    }
+}

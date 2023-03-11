@@ -1,0 +1,187 @@
+{
+    "_aid": 962,
+    "_build": 5840,
+    "_name": "Bellinzona",
+    "_region": "Tessin",
+    "_version": 2,
+    "zugschema": "schweiz",
+    "anschlussgruppen": {
+        "CLA": {
+            "__class__": "Set",
+            "data": [
+                "CLA 146",
+                "CLA 246"
+            ]
+        },
+        "Coop": {
+            "__class__": "Set",
+            "data": [
+                "Coop distribuzione"
+            ]
+        },
+        "Deposito": {
+            "__class__": "Set",
+            "data": [
+                "Deposito"
+            ]
+        },
+        "GIU": {
+            "__class__": "Set",
+            "data": [
+                "GIU 151",
+                "GIU 251"
+            ]
+        },
+        "Officina FFS": {
+            "__class__": "Set",
+            "data": [
+                "Officina FFS"
+            ]
+        },
+        "Scalo merci": {
+            "__class__": "Set",
+            "data": [
+                "Scalo merci sud",
+                "Scalo merci nord"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BEL": {
+            "__class__": "Set",
+            "data": [
+                "BEL 4B",
+                "BEL 2D",
+                "BEL 3A",
+                "BEL 27",
+                "BEL 25",
+                "BEL 2B",
+                "BEL 745",
+                "BEL 746",
+                "BEL 7",
+                "BEL 724",
+                "BEL 6A",
+                "BEL 1C",
+                "BEL 1A",
+                "BEL 3C",
+                "BEL 4C",
+                "BEL 2A",
+                "BEL 1B",
+                "BEL 3D",
+                "BEL 1D",
+                "BEL 747",
+                "BEL 8",
+                "BEL 28",
+                "BEL 4A",
+                "BEL 6C",
+                "BEL 6B",
+                "BEL 2C",
+                "BEL 3B",
+                "BEL 720",
+                "BEL 26"
+            ]
+        },
+        "BEL Deposito": {
+            "__class__": "Set",
+            "data": [
+                "BEL Deposito"
+            ]
+        },
+        "BELD": {
+            "__class__": "Set",
+            "data": [
+                "BELD"
+            ]
+        },
+        "CAST": {
+            "__class__": "Set",
+            "data": [
+                "CAST 53",
+                "CAST 2",
+                "CAST 1",
+                "CAST 52",
+                "CAST 3"
+            ]
+        },
+        "SPAO": {
+            "__class__": "Set",
+            "data": [
+                "SPAO 661",
+                "SPAO 503",
+                "SPAO 506",
+                "SPAO D",
+                "SPAO 649",
+                "SPAO 505",
+                "SPAO 659",
+                "SPAO 650",
+                "SPAO 502",
+                "SPAO 693",
+                "SPAO 692",
+                "SPAO 652",
+                "SPAO 654",
+                "SPAO 501",
+                "SPAO 653",
+                "SPAO 660",
+                "SPAO 651",
+                "SPAO 504"
+            ]
+        }
+    },
+    "sektoren": {
+        "BEL 1": {
+            "__class__": "Set",
+            "data": [
+                "BEL 1B",
+                "BEL 1D",
+                "BEL 1A",
+                "BEL 1C"
+            ]
+        },
+        "BEL 2": {
+            "__class__": "Set",
+            "data": [
+                "BEL 2A",
+                "BEL 2C",
+                "BEL 2D",
+                "BEL 2B"
+            ]
+        },
+        "BEL 3": {
+            "__class__": "Set",
+            "data": [
+                "BEL 3D",
+                "BEL 3C",
+                "BEL 3A",
+                "BEL 3B"
+            ]
+        },
+        "BEL 4": {
+            "__class__": "Set",
+            "data": [
+                "BEL 4A",
+                "BEL 4C",
+                "BEL 4B"
+            ]
+        },
+        "BEL 6": {
+            "__class__": "Set",
+            "data": [
+                "BEL 6C",
+                "BEL 6B",
+                "BEL 6A"
+            ]
+        }
+    },
+    "hauptstrecke": "CLA-GIU",
+    "strecken": {
+        "CLA-GIU": [
+            "CLA",
+            "CAST",
+            "SPAO",
+            "BEL",
+            "BELD",
+            "GIU"
+        ]
+    }
+}

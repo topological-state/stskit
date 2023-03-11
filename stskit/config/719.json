@@ -1,0 +1,193 @@
+{
+    "_aid": 719,
+    "_build": 5847,
+    "_name": "L\u00fcneburg",
+    "_region": "Bremen-Niedersachsen",
+    "_version": 2,
+    "anschlussgruppen": {
+        "ALBG 15x": {
+            "__class__": "Set",
+            "data": [
+                "150",
+                "151-153"
+            ]
+        },
+        "Bleckede": {
+            "__class__": "Set",
+            "data": [
+                "Bleckede (OHE)"
+            ]
+        },
+        "B\u00fcchen": {
+            "__class__": "Set",
+            "data": [
+                "B\u00fcchen"
+            ]
+        },
+        "Dahlenburg": {
+            "__class__": "Set",
+            "data": [
+                "Dahlenburg"
+            ]
+        },
+        "Industriebahn": {
+            "__class__": "Set",
+            "data": [
+                "Industriebahn"
+            ]
+        },
+        "Maschen": {
+            "__class__": "Set",
+            "data": [
+                "Maschen"
+            ]
+        },
+        "Soltau": {
+            "__class__": "Set",
+            "data": [
+                "Soltau (OHE)"
+            ]
+        },
+        "Uelzen": {
+            "__class__": "Set",
+            "data": [
+                "Uelzen"
+            ]
+        },
+        "Winsen": {
+            "__class__": "Set",
+            "data": [
+                "Winsen OHE"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "ABAD": {
+            "__class__": "Set",
+            "data": [
+                "ABAD4",
+                "Bardowick",
+                "ABAD1",
+                "ABAD3",
+                "ABAD2"
+            ]
+        },
+        "ABIL": {
+            "__class__": "Set",
+            "data": [
+                "ABIL1",
+                "ABIL2",
+                "ABIL3"
+            ]
+        },
+        "ABVS": {
+            "__class__": "Set",
+            "data": [
+                "ABVS5",
+                "ABVS6",
+                "ABVS1",
+                "Bad Bevensen",
+                "ABVS2"
+            ]
+        },
+        "ADEV": {
+            "__class__": "Set",
+            "data": [
+                "ADEV1",
+                "ADEV3",
+                "ADEV2"
+            ]
+        },
+        "ALBG": {
+            "__class__": "Set",
+            "data": [
+                "ALBG101",
+                "ALBG204",
+                "ALBG121",
+                "ALBG302",
+                "ALBG201",
+                "ALBG120",
+                "ALBG301",
+                "ALBG132",
+                "ALBG139",
+                "ALBG126",
+                "ALBG102",
+                "ALBG203",
+                "ALBG61",
+                "ALBG202",
+                "ALBG131",
+                "ALBG140",
+                "ALBG205",
+                "ALBG233"
+            ]
+        },
+        "ARH": {
+            "__class__": "Set",
+            "data": [
+                "Radbruch",
+                "ARH3",
+                "ARH2",
+                "ARH1"
+            ]
+        },
+        "AWI": {
+            "__class__": "Set",
+            "data": [
+                "AWI5",
+                "AWI4",
+                "AWI2",
+                "AWI3",
+                "AWI1",
+                "AWI51"
+            ]
+        },
+        "Adendorf": {
+            "__class__": "Set",
+            "data": [
+                "Adendorf"
+            ]
+        },
+        "Echem": {
+            "__class__": "Set",
+            "data": [
+                "Echem"
+            ]
+        },
+        "J\u00e4ger": {
+            "__class__": "Set",
+            "data": [
+                "J\u00e4ger"
+            ]
+        },
+        "Tankstelle": {
+            "__class__": "Set",
+            "data": [
+                "Tankstelle"
+            ]
+        }
+    },
+    "hauptstrecke": "Maschen-Uelzen",
+    "sektoren": {},
+    "strecken": {
+        "ALBG-B\u00fcchen": [
+            "ALBG",
+            "J\u00e4ger",
+            "Adendorf",
+            "Echem",
+            "B\u00fcchen"
+        ],
+        "Maschen-Uelzen": [
+            "Maschen",
+            "AWI",
+            "ARH",
+            "ABAD",
+            "ALBG",
+            "ADEV",
+            "ABIL",
+            "ABVS",
+            "Uelzen"
+        ]
+    },
+    "streckenmarkierung": []
+}
