@@ -161,7 +161,28 @@ class VerspaetungsKorrektur:
 
     @property
     def relation(self) -> Tuple[ZugZielNode, ...]:
-        return self._node,
+        """
+        gibt die abhängigkeit (kante) im zielgraph an
+
+        wenn die klasse ein attribut ursprung enthält, ist die relation (ursprung, node).
+        wenn die klasse ein attribut folge enthält, ist die relation (node, folge).
+        ansonsten liefert das property (node), d.h. die korrektur hat keine abhängigkeit im zielgraph.
+
+        :return: tuple von ZugZielNode
+        """
+
+        r = []
+        try:
+            r.append(self.ursprung)
+        except AttributeError:
+            pass
+        r.append(self.node)
+        try:
+            r.append(self.folge)
+        except AttributeError:
+            pass
+        assert 0 < len(r) < 3
+        return tuple(r)
 
     def ankunft_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         """
@@ -333,14 +354,13 @@ class AbhaengigkeitsZiel:
     die verspätung des von dieser korrektur kontrollierten fahrplanziels
     richtet sich nach einem anderen zug.
 
-    diese klasse führt die properties ursprung und relation ein.
+    diese klasse führt das property ursprung ein.
 
     attribute
     --------
 
     - ursprung: fahrplanziel des verknuepften zuges
     - ursprung_name: name des verknuepften zuges - fuer anzeige
-    - relation
     """
 
     def __init__(self, planung: 'Planung'):
@@ -368,10 +388,6 @@ class AbhaengigkeitsZiel:
             pass
         return "-----"
 
-    @property
-    def relation(self) -> Tuple[ZugZielNode, ...]:
-        return self._ursprung, self.node
-
 
 class AbhaengigkeitsUrsprung:
     """
@@ -379,14 +395,13 @@ class AbhaengigkeitsUrsprung:
 
     die verspätung des zuges wirkt sich auf einen anderen aus.
 
-    diese klasse führt die properties folge und relation ein.
+    diese klasse führt das property folge ein.
 
     attribute
     --------
 
     - folge: fahrplanziel des verknuepften zuges
     - folge_name: name des verknuepften zuges - fuer anzeige
-    - relation
     """
 
     def __init__(self, planung: 'Planung'):
@@ -415,10 +430,6 @@ class AbhaengigkeitsUrsprung:
         except TypeError:
             pass
         return "(?)"
-
-    @property
-    def relation(self) -> Tuple[ZugZielNode, ...]:
-        return self.node, self._folge
 
 
 class ZugAbwarten(VerspaetungsKorrektur, AbhaengigkeitsZiel):
@@ -1786,8 +1797,8 @@ class Planung:
 
         try:
             self.zielgraph.add_edge(*korrektur.relation, typ='A', obj=korrektur)
-        except TypeError:
-            pass
+        except (AttributeError, TypeError) as e:
+            logger.error(msg=f"Fehler beim Hinzufügen der Abhängigkeit {korrektur}", exc_info=e)
         else:
             try:
                 self._zielgraph_sortieren()
