@@ -560,9 +560,7 @@ class PluginClient:
                     zug2 = await self.request_zug(zid2)
                     if zug2 is not None:
                         planzeile.ersatzzug = zug2
-                        if zug2.stammzug and zug2.stammzug.zid != zug.zid:
-                            logger.warning(f"mehrfacher stamm, zug {zug2}")
-                        zug2.stammzug = zug
+                        zug2.stamm_zids.add(zug.zid)
                         zug2.verspaetung = zug.verspaetung
                         zids.append(zid2)
                     else:
@@ -572,9 +570,7 @@ class PluginClient:
                     zug2 = await self.request_zug(zid2)
                     if zug2 is not None:
                         planzeile.fluegelzug = zug2
-                        if zug2.stammzug and zug2.stammzug.zid != zug.zid:
-                            logger.warning(f"mehrfacher stamm, zug {zug2}")
-                        zug2.stammzug = zug
+                        zug2.stamm_zids.add(zug.zid)
                         zug2.verspaetung = zug.verspaetung
                         zids.append(zid2)
                     else:
@@ -584,9 +580,7 @@ class PluginClient:
                     zug2 = await self.request_zug(zid2)
                     if zug2 is not None:
                         planzeile.kuppelzug = zug2
-                        if zug2.stammzug and zug2.stammzug.zid != zug.zid:
-                            logger.warning(f"mehrfacher stamm, zug {zug2}")
-                        zug2.stammzug = zug
+                        zug2.stamm_zids.add(zug.zid)
                         zids.append(zid2)
                     else:
                         logger.warning(f"keine antwort für zug {zid2}")

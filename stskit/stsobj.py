@@ -291,8 +291,8 @@ class ZugDetails:
         self.fahrplan: List['FahrplanZeile'] = []
         # index des aktuellen ziels. wird vom PluginClient aktualisiert
         self.ziel_index: Optional[int] = None
-        # zeigt an, ob der zug im flag eines anderen vorkommt. wird vom PluginClient aktualisiert
-        self.stammzug: Optional[ZugDetails] = None
+        # zids aller zuege, in deren flags dieser zug vorkommt. wird vom PluginClient aktualisiert
+        self.stamm_zids: Set[int] = set([])
 
     def __eq__(self, other: 'ZugDetails') -> bool:
         return self.zid.__eq__(other.zid)
