@@ -171,18 +171,13 @@ class VerspaetungsKorrektur:
         :return: tuple von ZugZielNode
         """
 
-        r = []
         try:
-            r.append(self.ursprung)
+            return self.ursprung, self.node
         except AttributeError:
-            pass
-        r.append(self.node)
-        try:
-            r.append(self.folge)
-        except AttributeError:
-            pass
-        assert 0 < len(r) < 3
-        return tuple(r)
+            try:
+                return self.node, self.folge
+            except AttributeError:
+                return self.node
 
     def ankunft_berechnen(self, graph: nx.DiGraph, node: ZugZielNode, node_data: Dict[str, Any]):
         """
