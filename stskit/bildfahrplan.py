@@ -595,7 +595,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                 continue
 
             color = mpl.rcParams['grid.color']
-            r = mpl.patches.Rectangle(xy, w, h, color=color, alpha=0.25, linewidth=None)
+            r = mpl.patches.Rectangle(xy, w, h, color=color, alpha=0.1, linewidth=None)
             self._axes.add_patch(r)
 
     def on_resize(self, event):
