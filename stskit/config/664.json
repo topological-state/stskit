@@ -1,0 +1,221 @@
+{
+    "_aid": 664,
+    "_build": 5851,
+    "_name": "Solothurn",
+    "_region": "Zentralschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Biberist": {
+            "__class__": "Set",
+            "data": [
+                "Biberist"
+            ]
+        },
+        "GS": {
+            "__class__": "Set",
+            "data": [
+                "GS 581",
+                "GS 681"
+            ]
+        },
+        "HRK": {
+            "__class__": "Set",
+            "data": [
+                "HRK 551",
+                "HRK 651"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Langendorf": {
+            "__class__": "Set",
+            "data": [
+                "Langendorf"
+            ]
+        },
+        "L\u00fcsslingen": {
+            "__class__": "Set",
+            "data": [
+                "L\u00fcsslingen"
+            ]
+        },
+        "Migros": {
+            "__class__": "Set",
+            "data": [
+                "Migros Nord",
+                "Migros S\u00fcd"
+            ]
+        },
+        "OeBB": {
+            "__class__": "Set",
+            "data": [
+                "OeBB"
+            ]
+        },
+        "Tanklager": {
+            "__class__": "Set",
+            "data": [
+                "Tanklager"
+            ]
+        },
+        "WANZ": {
+            "__class__": "Set",
+            "data": [
+                "WANZ 771",
+                "WANZ 871"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BELL": {
+            "__class__": "Set",
+            "data": [
+                "BELL2",
+                "BELL1"
+            ]
+        },
+        "DN": {
+            "__class__": "Set",
+            "data": [
+                "DN"
+            ]
+        },
+        "EG": {
+            "__class__": "Set",
+            "data": [
+                "EG2",
+                "EG1",
+                "EG43"
+            ]
+        },
+        "INKV": {
+            "__class__": "Set",
+            "data": [
+                "INKV"
+            ]
+        },
+        "LUT": {
+            "__class__": "Set",
+            "data": [
+                "LUT4",
+                "LUT3",
+                "LUT2",
+                "LUT1"
+            ]
+        },
+        "NB": {
+            "__class__": "Set",
+            "data": [
+                "NB2",
+                "NB3",
+                "NB4"
+            ]
+        },
+        "OB": {
+            "__class__": "Set",
+            "data": [
+                "OB3",
+                "OB4",
+                "OB2"
+            ]
+        },
+        "OEN": {
+            "__class__": "Set",
+            "data": [
+                "OEN5",
+                "OEN3",
+                "OEN4",
+                "OEN2"
+            ]
+        },
+        "SEL": {
+            "__class__": "Set",
+            "data": [
+                "SEL2",
+                "SEL1"
+            ]
+        },
+        "SO": {
+            "__class__": "Set",
+            "data": [
+                "SO958",
+                "SO955",
+                "SO3A",
+                "SO1",
+                "SO3B",
+                "SO5",
+                "SO954",
+                "SO2",
+                "SO6",
+                "SO956",
+                "SO957"
+            ]
+        },
+        "SOAD": {
+            "__class__": "Set",
+            "data": [
+                "SOAD"
+            ]
+        },
+        "SW": {
+            "__class__": "Set",
+            "data": [
+                "SW"
+            ]
+        },
+        "WAA": {
+            "__class__": "Set",
+            "data": [
+                "WAA2",
+                "WAA3",
+                "WAA1"
+            ]
+        }
+    },
+    "hauptstrecke": "GS-HRK",
+    "sektoren": {
+        "SO3": {
+            "__class__": "Set",
+            "data": [
+                "SO3A",
+                "SO3B"
+            ]
+        }
+    },
+    "strecken": {
+        "GS-HRK": [
+            "GS",
+            "SEL",
+            "BELL",
+            "SOAD",
+            "SW",
+            "SO",
+            "LUT",
+            "DN",
+            "WAA",
+            "NB",
+            "OEN",
+            "OB",
+            "EG",
+            "HRK"
+        ],
+        "GS-WANZ": [
+            "GS",
+            "SEL",
+            "BELL",
+            "SOAD",
+            "SW",
+            "SO",
+            "INKV",
+            "WANZ"
+        ]
+    },
+    "streckenmarkierung": [
+        ["SO", "INKV", "E"]
+    ]
+}

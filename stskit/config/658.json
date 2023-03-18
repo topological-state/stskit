@@ -1,0 +1,129 @@
+{
+    "_aid": 658,
+    "_build": 5851,
+    "_name": "Lausanne",
+    "_region": "Westschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "CU": {
+            "__class__": "Set",
+            "data": [
+                "CU 102",
+                "CU 202"
+            ]
+        },
+        "D-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "D-Gruppe"
+            ]
+        },
+        "GRV": {
+            "__class__": "Set",
+            "data": [
+                "GRV 805",
+                "GRV 905"
+            ]
+        },
+        "J-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "J-Gruppe"
+            ]
+        },
+        "LSSB": {
+            "__class__": "Set",
+            "data": [
+                "LSSB"
+            ]
+        },
+        "P-Gruppe": {
+            "__class__": "Set",
+            "data": [
+                "P-Gruppe"
+            ]
+        },
+        "REN": {
+            "__class__": "Set",
+            "data": [
+                "REN 812",
+                "REN 814",
+                "REN 811",
+                "REN 815",
+                "REN 813"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BOSS": {
+            "__class__": "Set",
+            "data": [
+                "BOSS"
+            ]
+        },
+        "CVN": {
+            "__class__": "Set",
+            "data": [
+                "CVN 2",
+                "CVN 1"
+            ]
+        },
+        "LS": {
+            "__class__": "Set",
+            "data": [
+                "LS 4",
+                "LS 2",
+                "LS 6",
+                "LS 5",
+                "LS 8",
+                "LS 3",
+                "LS 1",
+                "LS 9",
+                "LS 70",
+                "LS 7",
+                "LS T4",
+                "LS T3"
+            ]
+        },
+        "PRMA": {
+            "__class__": "Set",
+            "data": [
+                "PRMA"
+            ]
+        },
+        "PU": {
+            "__class__": "Set",
+            "data": [
+                "PU"
+            ]
+        },
+        "PUN": {
+            "__class__": "Set",
+            "data": [
+                "PUN"
+            ]
+        }
+    },
+    "hauptstrecke": "REN-GRV",
+    "sektoren": {},
+    "strecken": {
+        "REN-CU": [
+            "REN",
+            "PRMA",
+            "LS",
+            "PU",
+            "CU"
+        ],
+        "REN-GRV": [
+            "REN",
+            "PRMA",
+            "LS",
+            "PUN",
+            "CVN",
+            "BOSS",
+            "GRV"
+        ]
+    },
+    "streckenmarkierung": []
+}

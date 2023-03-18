@@ -1,0 +1,364 @@
+{
+    "_aid": 1254,
+    "_build": 5847,
+    "_name": "La Chaux-de-Fonds",
+    "_region": "Westschweiz",
+    "_version": 2,
+    "zugschema": "schweiz",
+    "anschlussgruppen": {
+        "Bienne": {
+            "__class__": "Set",
+            "data": [
+                "Bienne"
+            ]
+        },
+        "CFF": {
+            "__class__": "Set",
+            "data": [
+                "CFF"
+            ]
+        },
+        "CJ": {
+            "__class__": "Set",
+            "data": [
+                "CJ"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Logistics": {
+            "__class__": "Set",
+            "data": [
+                "Logistics"
+            ]
+        },
+        "Morteau": {
+            "__class__": "Set",
+            "data": [
+                "Morteau (F)"
+            ]
+        },
+        "Neuch\u00e2tel": {
+            "__class__": "Set",
+            "data": [
+                "Neuch\u00e2tel"
+            ]
+        },
+        "Tavannes": {
+            "__class__": "Set",
+            "data": [
+                "Tavannes"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "CF": {
+            "__class__": "Set",
+            "data": [
+                "CF7",
+                "CF4",
+                "CF6",
+                "CF3",
+                "CF5",
+                "CF63",
+                "CF64",
+                "CF66",
+                "CF65"
+            ]
+        },
+        "CFF": {
+            "__class__": "Set",
+            "data": [
+                "CFF1",
+                "CFF8"
+            ]
+        },
+        "CFO": {
+            "__class__": "Set",
+            "data": [
+                "CFO"
+            ]
+        },
+        "CHN": {
+            "__class__": "Set",
+            "data": [
+                "CHN3",
+                "CHN2",
+                "CHN1"
+            ]
+        },
+        "CO": {
+            "__class__": "Set",
+            "data": [
+                "CO"
+            ]
+        },
+        "COG": {
+            "__class__": "Set",
+            "data": [
+                "COG"
+            ]
+        },
+        "COL": {
+            "__class__": "Set",
+            "data": [
+                "COL"
+            ]
+        },
+        "CORM": {
+            "__class__": "Set",
+            "data": [
+                "CORM"
+            ]
+        },
+        "CP": {
+            "__class__": "Set",
+            "data": [
+                "CP2",
+                "CP1"
+            ]
+        },
+        "CRET": {
+            "__class__": "Set",
+            "data": [
+                "CRET"
+            ]
+        },
+        "CTY": {
+            "__class__": "Set",
+            "data": [
+                "CTY2",
+                "CTY3"
+            ]
+        },
+        "DEU": {
+            "__class__": "Set",
+            "data": [
+                "DEU"
+            ]
+        },
+        "FRIN": {
+            "__class__": "Set",
+            "data": [
+                "FRIN"
+            ]
+        },
+        "GEC": {
+            "__class__": "Set",
+            "data": [
+                "GEC2",
+                "GEC1"
+            ]
+        },
+        "HGV": {
+            "__class__": "Set",
+            "data": [
+                "HGV2",
+                "HGV1"
+            ]
+        },
+        "LHE": {
+            "__class__": "Set",
+            "data": [
+                "LHE"
+            ]
+        },
+        "LOC": {
+            "__class__": "Set",
+            "data": [
+                "LOC1",
+                "LOC2"
+            ]
+        },
+        "MAH": {
+            "__class__": "Set",
+            "data": [
+                "MAH1",
+                "MAH2"
+            ]
+        },
+        "RE": {
+            "__class__": "Set",
+            "data": [
+                "RE1",
+                "RE2"
+            ]
+        },
+        "REU": {
+            "__class__": "Set",
+            "data": [
+                "REU4",
+                "REU3",
+                "REU2",
+                "REU5"
+            ]
+        },
+        "SCB": {
+            "__class__": "Set",
+            "data": [
+                "SCB2B",
+                "SCB3A",
+                "SCB3B",
+                "SCB1B",
+                "SCB5",
+                "SCB1A",
+                "SCB2A"
+            ]
+        },
+        "STI": {
+            "__class__": "Set",
+            "data": [
+                "STI2",
+                "STI3",
+                "STI1",
+                "STI31"
+            ]
+        },
+        "SV": {
+            "__class__": "Set",
+            "data": [
+                "SV"
+            ]
+        },
+        "VT": {
+            "__class__": "Set",
+            "data": [
+                "VT"
+            ]
+        }
+    },
+    "sektoren": {
+        "SCB1": {
+            "__class__": "Set",
+            "data": [
+                "SCB1B",
+                "SCB1A"
+            ]
+        },
+        "SCB2": {
+            "__class__": "Set",
+            "data": [
+                "SCB2B",
+                "SCB2A"
+            ]
+        },
+        "SCB3": {
+            "__class__": "Set",
+            "data": [
+                "SCB3A",
+                "SCB3B"
+            ]
+        }
+    },
+    "hauptstrecke": "Neuch\u00e2tel-Bienne",
+    "strecken": {
+        "Neuch\u00e2tel-Bienne": [
+            "Neuch\u00e2tel",
+            "DEU",
+            "CP",
+            "CHN",
+            "GEC",
+            "HGV",
+            "CF",
+            "RE",
+            "SV",
+            "STI",
+            "VT",
+            "CORM",
+            "CTY",
+            "CO",
+            "COG",
+            "SCB",
+            "LHE",
+            "REU",
+            "FRIN",
+            "MAH",
+            "Bienne"
+        ],
+        "La Chaux-de-Fonds-Bienne": [
+            "CF",
+            "RE",
+            "SV",
+            "STI",
+            "VT",
+            "CORM",
+            "CTY",
+            "CO",
+            "COG",
+            "SCB",
+            "LHE",
+            "REU",
+            "FRIN",
+            "MAH",
+            "Bienne"
+        ],
+        "Morteau-Bienne": [
+            "Morteau",
+            "COL",
+            "LOC",
+            "CRET",
+            "CFO",
+            "CF",
+            "RE",
+            "SV",
+            "STI",
+            "VT",
+            "CORM",
+            "CTY",
+            "CO",
+            "COG",
+            "SCB",
+            "LHE",
+            "REU",
+            "FRIN",
+            "MAH",
+            "Bienne"
+        ],
+        "Tavannes-Bienne": [
+            "Tavannes",
+            "SCB",
+            "LHE",
+            "REU",
+            "FRIN",
+            "MAH",
+            "Bienne"
+        ],
+        "Morteau-La Chaux-de-Fonds": [
+            "Morteau",
+            "COL",
+            "LOC",
+            "CRET",
+            "CFO",
+            "CF"
+        ],
+        "La Chaux-de-Fonds-Neuch\u00e2tel": [
+            "CF",
+            "HGV",
+            "GEC",
+            "CHN",
+            "CP",
+            "DEU",
+            "Neuch\u00e2tel"
+        ],
+        "Morteau-Neuch\u00e2tel": [
+            "Morteau",
+            "COL",
+            "LOC",
+            "CRET",
+            "CFO",
+            "CF",
+            "HGV",
+            "GEC",
+            "CHN",
+            "CP",
+            "DEU",
+            "Neuch\u00e2tel"
+        ]
+    },
+    "streckenmarkierung": []
+}

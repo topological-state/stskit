@@ -1,0 +1,187 @@
+{
+    "_aid": 477,
+    "_build": 5847,
+    "_name": "Gen\u00e8ve",
+    "_region": "Westschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "ANN": {
+            "__class__": "Set",
+            "data": [
+                "ANN 286",
+                "ANN 186"
+            ]
+        },
+        "Depot C": {
+            "__class__": "Set",
+            "data": [
+                "Depot C"
+            ]
+        },
+        "Feld B": {
+            "__class__": "Set",
+            "data": [
+                "Feld B"
+            ]
+        },
+        "Feld C": {
+            "__class__": "Set",
+            "data": [
+                "Feld C"
+            ]
+        },
+        "Feld H": {
+            "__class__": "Set",
+            "data": [
+                "Feld H"
+            ]
+        },
+        "GEPR": {
+            "__class__": "Set",
+            "data": [
+                "GEPR 55",
+                "GEPR 53",
+                "GEPR 3",
+                "GEPR 4"
+            ]
+        },
+        "VMC": {
+            "__class__": "Set",
+            "data": [
+                "VMC 786",
+                "VMC 686"
+            ]
+        },
+        "VSX": {
+            "__class__": "Set",
+            "data": [
+                "VSX 240",
+                "VSX 340",
+                "VSX 140"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "CABA": {
+            "__class__": "Set",
+            "data": [
+                "CABA"
+            ]
+        },
+        "CHEB": {
+            "__class__": "Set",
+            "data": [
+                "CHEB"
+            ]
+        },
+        "CHHO": {
+            "__class__": "Set",
+            "data": [
+                "CHHO"
+            ]
+        },
+        "CHNE": {
+            "__class__": "Set",
+            "data": [
+                "CHNE"
+            ]
+        },
+        "GE": {
+            "__class__": "Set",
+            "data": [
+                "GE 5",
+                "GE 3",
+                "GE 6",
+                "GE 8",
+                "GE 4",
+                "GE 7",
+                "GE 1",
+                "GE 2"
+            ]
+        },
+        "GEAP": {
+            "__class__": "Set",
+            "data": [
+                "GEAP 2",
+                "GEAP 1",
+                "GEAP 4",
+                "GEAP 3"
+            ]
+        },
+        "GEBC": {
+            "__class__": "Set",
+            "data": [
+                "B 02",
+                "B 03",
+                "B 01",
+                "C 08"
+            ]
+        },
+        "GESE": {
+            "__class__": "Set",
+            "data": [
+                "GESE"
+            ]
+        },
+        "GEV": {
+            "__class__": "Set",
+            "data": [
+                "GEV 1",
+                "GEV 2"
+            ]
+        },
+        "LAPR": {
+            "__class__": "Set",
+            "data": [
+                "LAPR 2",
+                "LAPR 1"
+            ]
+        }
+    },
+    "hauptstrecke": "VSX-ANN",
+    "sektoren": {},
+    "strecken": {
+        "ANN-VSX": [
+            "ANN",
+            "CHEB",
+            "GEV",
+            "CHHO",
+            "CABA",
+            "LAPR",
+            "GE",
+            "GEBC",
+            "GESE",
+            "VSX"
+        ],
+        "GEAP-VSX": [
+            "GEAP",
+            "CHNE",
+            "GE",
+            "GEBC",
+            "GESE",
+            "VSX"
+        ],
+        "VMC-VSX": [
+            "VMC",
+            "CHNE",
+            "GE",
+            "GEBC",
+            "GESE",
+            "VSX"
+        ],
+        "VSX-ANN": [
+            "VSX",
+            "GESE",
+            "GE",
+            "LAPR",
+            "CABA",
+            "CHHO",
+            "GEV",
+            "CHEB",
+            "ANN"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweiz"
+}

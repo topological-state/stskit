@@ -1,0 +1,187 @@
+{
+    "_aid": 659,
+    "_build": 5851,
+    "_name": "Renens",
+    "_region": "Westschweiz",
+    "_version": 2,
+    "anschlussgruppen": {
+        "COS": {
+            "__class__": "Set",
+            "data": [
+                "COS 506",
+                "COS 606"
+            ]
+        },
+        "LS": {
+            "__class__": "Set",
+            "data": [
+                "LS 811",
+                "LS 815",
+                "LS 813",
+                "LS 812",
+                "LS 814"
+            ]
+        },
+        "LSSB": {
+            "__class__": "Set",
+            "data": [
+                "LSSB"
+            ]
+        },
+        "LTA": {
+            "__class__": "Set",
+            "data": [
+                "LTA West",
+                "LTA Ost"
+            ]
+        },
+        "LTB": {
+            "__class__": "Set",
+            "data": [
+                "LTB Ost",
+                "LTB West"
+            ]
+        },
+        "LTF": {
+            "__class__": "Set",
+            "data": [
+                "LTF"
+            ]
+        },
+        "MOR": {
+            "__class__": "Set",
+            "data": [
+                "MOR 106",
+                "MOR 206"
+            ]
+        },
+        "REN S": {
+            "__class__": "Set",
+            "data": [
+                "REN S"
+            ]
+        },
+        "REN T1": {
+            "__class__": "Set",
+            "data": [
+                "REN T1"
+            ]
+        },
+        "REN T2": {
+            "__class__": "Set",
+            "data": [
+                "REN T2"
+            ]
+        },
+        "VU 3-5": {
+            "__class__": "Set",
+            "data": [
+                "VU3-5",
+                "VU 3-5"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BY": {
+            "__class__": "Set",
+            "data": [
+                "BY 3",
+                "BY 4",
+                "BY 6",
+                "BY 5",
+                "BY 1G",
+                "BY 1"
+            ]
+        },
+        "DEN": {
+            "__class__": "Set",
+            "data": [
+                "DEN"
+            ]
+        },
+        "LON": {
+            "__class__": "Set",
+            "data": [
+                "LON"
+            ]
+        },
+        "LT": {
+            "__class__": "Set",
+            "data": [
+                "LT A3",
+                "LT L5",
+                "LT L7",
+                "LT N7",
+                "LT N8",
+                "LT S7",
+                "LT S8"
+            ]
+        },
+        "REN": {
+            "__class__": "Set",
+            "data": [
+                "REN 4",
+                "REN 5",
+                "REN 1",
+                "REN 6",
+                "REN 7",
+                "REN 2",
+                "REN 3"
+            ]
+        },
+        "VU": {
+            "__class__": "Set",
+            "data": [
+                "VU"
+            ]
+        }
+    },
+    "hauptstrecke": "MOR-LS",
+    "sektoren": {
+        "BY 1": {
+            "__class__": "Set",
+            "data": [
+                "BY 1G",
+                "BY 1"
+            ]
+        }
+    },
+    "strecken": {
+        "COS-LS": [
+            "COS",
+            "VU",
+            "BY",
+            "LT",
+            "REN",
+            "LS"
+        ],
+        "COS-MOR": [
+            "COS",
+            "VU",
+            "BY",
+            "LT",
+            "DEN",
+            "LON",
+            "MOR"
+        ],
+        "MOR-COS": [
+            "MOR",
+            "LON",
+            "DEN",
+            "LT",
+            "BY",
+            "VU",
+            "COS"
+        ],
+        "MOR-LS": [
+            "MOR",
+            "LON",
+            "DEN",
+            "LT",
+            "REN",
+            "LS"
+        ]
+    },
+    "streckenmarkierung": []
+}
