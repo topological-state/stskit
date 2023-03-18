@@ -913,6 +913,12 @@ class ZugDetailsPlanung(ZugDetails):
             # zug faehrt aus
             if not zug.plangleis:
                 self.ziel_index = -1
+        else:
+            # falls ein ereignis vergessen gegangen ist, vergangene ziele markieren
+            for ziel in self.fahrplan[0:max(0, self.ziel_index)]:
+                ziel.angekommen = ziel.angekommen or True
+            for ziel in self.fahrplan[0:max(0, self.ziel_index-1)]:
+                ziel.abgefahren = ziel.abgefahren or True
 
     def find_fahrplan_zielnr(self, zielnr: int) -> 'ZugZielPlanung':
         """
@@ -988,8 +994,8 @@ class ZugZielPlanung(FahrplanZeile):
         self.mindestaufenthalt: int = 0
         self.auto_korrektur: Optional[VerspaetungsKorrektur] = None
         self.fdl_korrektur: Dict[Tuple[ZugZielNode, ...], VerspaetungsKorrektur] = {}
-        self.angekommen: Union[bool, datetime.datetime] = False
-        self.abgefahren: Union[bool, datetime.datetime] = False
+        self._angekommen: Union[bool, datetime.datetime] = False
+        self._abgefahren: Union[bool, datetime.datetime] = False
 
     def __hash__(self) -> int:
         """
@@ -1104,6 +1110,43 @@ class ZugZielPlanung(FahrplanZeile):
             return 'Ausfahrt'
         else:
             return 'Gleis'
+
+    @property
+    def angekommen(self) -> Union[bool, datetime.datetime]:
+        """
+        (wann) ist der zug am ziel angekommen?
+
+        gibt, falls bekannt, die effektive ankunftszeit an.
+        wenn der zug angekommen ist, die zeit aber unbekannt, ist der wert True.
+        wenn eine abfahrt, aber keine ankunft erfasst ist, gibt das property den wert des abgefahren-property an.
+
+        solange der zug nicht angekommen ist, ist der wert False.
+
+        :return: ankunftszeit, abfahrtszeit oder boolean
+        """
+        return self._angekommen or self._abgefahren
+
+    @angekommen.setter
+    def angekommen(self, ankunft: Union[bool, datetime.datetime]):
+        self._angekommen = ankunft
+
+    @property
+    def abgefahren(self) -> Union[bool, datetime.datetime]:
+        """
+        (wann) ist der zug am ziel abgefahren?
+
+        gibt, falls bekannt, die effektive abfahrtszeit an.
+        wenn der zug abgefahren ist, die zeit aber unbekannt, ist der wert True.
+
+        solange der zug nicht abgefahren ist, ist der wert False.
+
+        :return: ankunftszeit, abfahrtszeit oder boolean
+        """
+        return self._abgefahren
+
+    @abgefahren.setter
+    def abgefahren(self, abfahrt: Union[bool, datetime.datetime]):
+        self._abgefahren = abfahrt
 
 
 @dataclass
