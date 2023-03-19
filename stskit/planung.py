@@ -915,10 +915,11 @@ class ZugDetailsPlanung(ZugDetails):
                 self.ziel_index = -1
         else:
             # falls ein ereignis vergessen gegangen ist, vergangene ziele markieren
-            for ziel in self.fahrplan[0:max(0, self.ziel_index)]:
-                ziel.angekommen = ziel.angekommen or True
-            for ziel in self.fahrplan[0:max(0, self.ziel_index-1)]:
-                ziel.abgefahren = ziel.abgefahren or True
+            if self.sichtbar:
+                for ziel in self.fahrplan[0:max(0, self.ziel_index)]:
+                    ziel.angekommen = ziel.angekommen or True
+                for ziel in self.fahrplan[0:max(0, self.ziel_index-1)]:
+                    ziel.abgefahren = ziel.abgefahren or True
 
     def find_fahrplan_zielnr(self, zielnr: int) -> 'ZugZielPlanung':
         """
