@@ -1,10 +1,9 @@
 {
     "_aid": 846,
-    "_build": 5847,
+    "_build": 5851,
     "_name": "Nyon",
     "_region": "Westschweiz",
     "_version": 2,
-    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Eysins": {
             "__class__": "Set",
@@ -16,8 +15,8 @@
             "__class__": "Set",
             "data": [
                 "GE 240",
-                "GE 340",
-                "GE 140"
+                "GE 140",
+                "GE 340"
             ]
         },
         "LON": {
@@ -33,37 +32,50 @@
         "ALL": {
             "__class__": "Set",
             "data": [
-                "ALL3",
-                "ALL2",
-                "ALL1"
+                "ALL 2G",
+                "ALL 3",
+                "ALL 3G",
+                "ALL 1G",
+                "ALL 1",
+                "ALL 2"
             ]
         },
         "CHY": {
             "__class__": "Set",
             "data": [
-                "CHY1",
-                "CHY2"
+                "CHY 2",
+                "CHY 4",
+                "CHY 3",
+                "CHY 1"
             ]
         },
         "COP": {
             "__class__": "Set",
             "data": [
-                "COP3",
-                "COP2",
-                "COP1"
+                "COP 2",
+                "COP 1",
+                "COP 3"
             ]
         },
         "CRGD": {
             "__class__": "Set",
             "data": [
-                "CRGD1",
-                "CRGD2"
+                "CRGD 2",
+                "CRGD 1"
             ]
         },
         "ETOY": {
             "__class__": "Set",
             "data": [
                 "ETOY"
+            ]
+        },
+        "FOU": {
+            "__class__": "Set",
+            "data": [
+                "FOU 33",
+                "FOU 31",
+                "FOU 32"
             ]
         },
         "GDBE": {
@@ -75,41 +87,46 @@
         "GIBU": {
             "__class__": "Set",
             "data": [
-                "GIBU1",
-                "GIBU3",
-                "GIBU2"
+                "GIBU 3",
+                "GIBU 1",
+                "GIBU 2"
             ]
         },
         "GLA": {
             "__class__": "Set",
             "data": [
-                "GLA1",
-                "GLA2",
-                "GLA3"
+                "GLA 3",
+                "GLA 1",
+                "GLA 2"
             ]
         },
         "MIES": {
             "__class__": "Set",
             "data": [
-                "MIES1",
-                "MIES2"
+                "MIES 1",
+                "MIES 2"
             ]
         },
         "MOR": {
             "__class__": "Set",
             "data": [
-                "MOR4",
-                "MOR2",
-                "MOR1",
-                "MOR3"
+                "MOR 4G",
+                "MOR 2",
+                "MOR 3",
+                "MOR 1G",
+                "MOR 1",
+                "MOR 4"
             ]
         },
         "NY": {
             "__class__": "Set",
             "data": [
-                "NY2",
-                "NY3",
-                "NY1"
+                "NY 1G",
+                "NY 3G",
+                "NY 3",
+                "NY 1",
+                "NY 2G",
+                "NY 2"
             ]
         },
         "PTC": {
@@ -121,8 +138,8 @@
         "ROL": {
             "__class__": "Set",
             "data": [
-                "ROL2",
-                "ROL1"
+                "ROL 1",
+                "ROL 2"
             ]
         },
         "STJ": {
@@ -134,9 +151,12 @@
         "STP": {
             "__class__": "Set",
             "data": [
-                "STP1",
-                "STP3",
-                "STP2"
+                "STP 3G",
+                "STP 2G",
+                "STP 1G",
+                "STP 2",
+                "STP 1",
+                "STP 3"
             ]
         },
         "TAN": {
@@ -154,19 +174,98 @@
         "VSX": {
             "__class__": "Set",
             "data": [
-                "VSX2",
-                "VSX3",
-                "VSX1"
+                "VSX 1",
+                "VSX 3",
+                "VSX 2"
             ]
         }
     },
-    "sektoren": {},
     "hauptstrecke": "GE-LON",
+    "sektoren": {
+        "ALL 1": {
+            "__class__": "Set",
+            "data": [
+                "ALL 1G",
+                "ALL 1"
+            ]
+        },
+        "ALL 2": {
+            "__class__": "Set",
+            "data": [
+                "ALL 2G",
+                "ALL 2"
+            ]
+        },
+        "ALL 3": {
+            "__class__": "Set",
+            "data": [
+                "ALL 3G",
+                "ALL 3"
+            ]
+        },
+        "MOR 1": {
+            "__class__": "Set",
+            "data": [
+                "MOR 1G",
+                "MOR 1"
+            ]
+        },
+        "MOR 4": {
+            "__class__": "Set",
+            "data": [
+                "MOR 4G",
+                "MOR 4"
+            ]
+        },
+        "NY 1": {
+            "__class__": "Set",
+            "data": [
+                "NY 1G",
+                "NY 1"
+            ]
+        },
+        "NY 2": {
+            "__class__": "Set",
+            "data": [
+                "NY 2",
+                "NY 2G"
+            ]
+        },
+        "NY 3": {
+            "__class__": "Set",
+            "data": [
+                "NY 3",
+                "NY 3G"
+            ]
+        },
+        "STP 1": {
+            "__class__": "Set",
+            "data": [
+                "STP 1",
+                "STP 1G"
+            ]
+        },
+        "STP 2": {
+            "__class__": "Set",
+            "data": [
+                "STP 2",
+                "STP 2G"
+            ]
+        },
+        "STP 3": {
+            "__class__": "Set",
+            "data": [
+                "STP 3G",
+                "STP 3"
+            ]
+        }
+    },
     "strecken": {
         "GE-LON": [
             "GE",
             "CHY",
             "TUI",
+            "VSX",
             "GDBE",
             "CRGD",
             "VSX",
@@ -174,6 +273,7 @@
             "MIES",
             "TAN",
             "COP",
+            "FOU",
             "NY",
             "GLA",
             "GIBU",
@@ -185,5 +285,6 @@
             "STJ",
             "LON"
         ]
-    }
+    },
+    "streckenmarkierung": []
 }

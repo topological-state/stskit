@@ -177,6 +177,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ticker_button.clicked.connect(self.ticker_clicked)
         layout.addWidget(self.ticker_button)
 
+        self.statusfeld = QtWidgets.QLineEdit("Initialisierung...")
+        self.statusfeld.setReadOnly(True)
+        layout.addWidget(self.statusfeld)
+
         self.update_interval: int = 30  # seconds
         self.enable_update: bool = True
 
@@ -252,6 +256,7 @@ class MainWindow(QtWidgets.QMainWindow):
         await self.zentrale.client.registered.wait()
         while self.enable_update:
             try:
+                self.statusfeld.setText("Datenübertragung...")
                 await self.zentrale.update()
             except (trio.EndOfChannel, trio.BrokenResourceError, trio.ClosedResourceError):
                 self.enable_update = False
@@ -267,7 +272,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.netz_button.setEnabled(self.enable_update)
                 self.ticker_button.setEnabled(self.enable_update)
 
+            self.statusfeld.setText("")
             await trio.sleep(self.update_interval)
+
+        self.statusfeld.setText("Keine Verbindung")
 
     async def ereignis_loop(self):
         await self.zentrale.client.registered.wait()

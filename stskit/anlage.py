@@ -1235,6 +1235,8 @@ class Anlage:
                 except ValueError:
                     print(f"inkompatible konfigurationsdatei - auto-konfiguration")
                     logger.error(f"inkompatible konfigurationsdatei - auto-konfiguration")
+                    return
+
             if '_version' not in d:
                 d['_version'] = 1
                 logger.warning(f"konfigurationsdatei ohne versionsangabe. nehme 1 an.")
