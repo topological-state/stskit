@@ -1,0 +1,296 @@
+{
+    "_aid": 382,
+    "_build": 5851,
+    "_name": "Mainz-Bischofsheim",
+    "_region": "Rhein-Main",
+    "_version": 2,
+    "anschlussgruppen": {
+        "502-503": {
+            "__class__": "Set",
+            "data": [
+                "502-503"
+            ]
+        },
+        "649-650": {
+            "__class__": "Set",
+            "data": [
+                "649-650"
+            ]
+        },
+        "82-87": {
+            "__class__": "Set",
+            "data": [
+                "82-87"
+            ]
+        },
+        "88-95": {
+            "__class__": "Set",
+            "data": [
+                "88-95"
+            ]
+        },
+        "96-501": {
+            "__class__": "Set",
+            "data": [
+                "96-501"
+            ]
+        },
+        "BW Ost": {
+            "__class__": "Set",
+            "data": [
+                "BW Ost"
+            ]
+        },
+        "BW West": {
+            "__class__": "Set",
+            "data": [
+                "BW West"
+            ]
+        },
+        "Frankfurt-H\u00f6chst": {
+            "__class__": "Set",
+            "data": [
+                "Frankfurt-H\u00f6chst"
+            ]
+        },
+        "Gro\u00df-Gerau": {
+            "__class__": "Set",
+            "data": [
+                "Gro\u00df-Gerau"
+            ]
+        },
+        "Hafen": {
+            "__class__": "Set",
+            "data": [
+                "Hafen"
+            ]
+        },
+        "Mainz Kaiserbr\u00fccke": {
+            "__class__": "Set",
+            "data": [
+                "Mainz Kaiserbr\u00fccke"
+            ]
+        },
+        "Mainz R. Theater": {
+            "__class__": "Set",
+            "data": [
+                "Mainz R. Theater"
+            ]
+        },
+        "R\u00fcsselsheim": {
+            "__class__": "Set",
+            "data": [
+                "R\u00fcsselsheim"
+            ]
+        },
+        "Wiesbaden": {
+            "__class__": "Set",
+            "data": [
+                "Wiesbaden"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Abzw. Kostheim": {
+            "__class__": "Set",
+            "data": [
+                "Abzw. Kostheim"
+            ]
+        },
+        "FHM": {
+            "__class__": "Set",
+            "data": [
+                "FHM1",
+                "FHM2",
+                "FHM3"
+            ]
+        },
+        "FMB": {
+            "__class__": "Set",
+            "data": [
+                "FMB73",
+                "FMB511",
+                "FMB75",
+                "FMB504",
+                "FMB60",
+                "FMB76",
+                "FMB643",
+                "FMB642",
+                "FMB506",
+                "FMB655",
+                "FMB70",
+                "FMB16",
+                "FMB13",
+                "FMB15",
+                "FMB507",
+                "FMB19",
+                "FMB505",
+                "FMB11",
+                "FMB17",
+                "FMB645",
+                "FMB14",
+                "FMB641",
+                "FMB10",
+                "FMB509",
+                "FMB12",
+                "FMB508",
+                "FMB81",
+                "FMB510",
+                "FMB648",
+                "FMB18",
+                "FMB652",
+                "FMB74",
+                "FMB646"
+            ]
+        },
+        "FMBP": {
+            "__class__": "Set",
+            "data": [
+                "FMBP1",
+                "FMBP3",
+                "FMBP2",
+                "FMBP4"
+            ]
+        },
+        "FMG": {
+            "__class__": "Set",
+            "data": [
+                "FMG2",
+                "FMG3",
+                "FMG1"
+            ]
+        },
+        "FMK": {
+            "__class__": "Set",
+            "data": [
+                "FMK2",
+                "FMK4L",
+                "FMK1L",
+                "FMK1",
+                "FMK2L",
+                "FMK3",
+                "FMK4",
+                "FMK3L"
+            ]
+        },
+        "FNU": {
+            "__class__": "Set",
+            "data": [
+                "FNU3",
+                "FNU2",
+                "FNU1"
+            ]
+        },
+        "Nauheim": {
+            "__class__": "Set",
+            "data": [
+                "Nauheim"
+            ]
+        }
+    },
+    "hauptstrecke": "Wiesbaden-Gro\u00df-Gerau",
+    "sektoren": {
+        "FMB60-76": {
+            "__class__": "Set",
+            "data": [
+                "FMB60",
+                "FMB76"
+            ]
+        },
+        "FMK1": {
+            "__class__": "Set",
+            "data": [
+                "FMK1",
+                "FMK1L"
+            ]
+        },
+        "FMK2": {
+            "__class__": "Set",
+            "data": [
+                "FMK2",
+                "FMK2L"
+            ]
+        },
+        "FMK3": {
+            "__class__": "Set",
+            "data": [
+                "FMK3",
+                "FMK3L"
+            ]
+        },
+        "FMK4": {
+            "__class__": "Set",
+            "data": [
+                "FMK4L",
+                "FMK4"
+            ]
+        }
+    },
+    "strecken": {
+        "Mainz Kaiserbr\u00fccke-Frankfurt-H\u00f6chst": [
+            "Mainz Kaiserbr\u00fccke",
+            "Abzw. Kostheim",
+            "FHM",
+            "Frankfurt-H\u00f6chst"
+        ],
+        "Mainz Kaiserbr\u00fccke-Gro\u00df-Gerau": [
+            "Mainz Kaiserbr\u00fccke",
+            "Abzw. Kostheim",
+            "FMBP",
+            "FMB",
+            "FNU",
+            "Nauheim",
+            "Gro\u00df-Gerau"
+        ],
+        "Mainz Kaiserbr\u00fccke-R\u00fcsselsheim": [
+            "Mainz Kaiserbr\u00fccke",
+            "Abzw. Kostheim",
+            "FMBP",
+            "FMB",
+            "R\u00fcsselsheim"
+        ],
+        "Mainz R. Theater-Gro\u00df-Gerau": [
+            "Mainz R. Theater",
+            "FMG",
+            "FMBP",
+            "FMB",
+            "FNU",
+            "Nauheim",
+            "Gro\u00df-Gerau"
+        ],
+        "Mainz R. Theater-R\u00fcsselsheim": [
+            "Mainz R. Theater",
+            "FMG",
+            "FMBP",
+            "FMB",
+            "R\u00fcsselsheim"
+        ],
+        "Wiesbaden-Frankfurt-H\u00f6chst": [
+            "Wiesbaden",
+            "FMK",
+            "Abzw. Kostheim",
+            "FHM",
+            "Frankfurt-H\u00f6chst"
+        ],
+        "Wiesbaden-Gro\u00df-Gerau": [
+            "Wiesbaden",
+            "FMK",
+            "Abzw. Kostheim",
+            "FMBP",
+            "FMB",
+            "FNU",
+            "Nauheim",
+            "Gro\u00df-Gerau"
+        ],
+        "Wiesbaden-R\u00fcsselsheim": [
+            "Wiesbaden",
+            "FMK",
+            "Abzw. Kostheim",
+            "FMBP",
+            "FMB",
+            "R\u00fcsselsheim"
+        ]
+    },
+    "streckenmarkierung": []
+}

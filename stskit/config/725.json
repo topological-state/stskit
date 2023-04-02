@@ -1,0 +1,171 @@
+{
+    "_aid": 725,
+    "_build": 5851,
+    "_name": "Uelzen",
+    "_region": "Bremen-Niedersachsen",
+    "_version": 2,
+    "anschlussgruppen": {
+        "11-15": {
+            "__class__": "Set",
+            "data": [
+                "11-15"
+            ]
+        },
+        "Abstell ME": {
+            "__class__": "Set",
+            "data": [
+                "Abstell ME"
+            ]
+        },
+        "Celle": {
+            "__class__": "Set",
+            "data": [
+                "Celle"
+            ]
+        },
+        "Hafen": {
+            "__class__": "Set",
+            "data": [
+                "Hafen"
+            ]
+        },
+        "L\u00fcneburg": {
+            "__class__": "Set",
+            "data": [
+                "L\u00fcneburg"
+            ]
+        },
+        "Salzwedel": {
+            "__class__": "Set",
+            "data": [
+                "Salzwedel"
+            ]
+        },
+        "Soltau": {
+            "__class__": "Set",
+            "data": [
+                "Soltau"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Fischerhof": {
+            "__class__": "Set",
+            "data": [
+                "Fischerhof"
+            ]
+        },
+        "HESD": {
+            "__class__": "Set",
+            "data": [
+                "HESD3",
+                "HESD1",
+                "HESD4",
+                "HESD2",
+                "Eschede"
+            ]
+        },
+        "HGAR": {
+            "__class__": "Set",
+            "data": [
+                "HGAR202",
+                "HGAR201",
+                "HGAR204",
+                "HGAR203"
+            ]
+        },
+        "HKSU": {
+            "__class__": "Set",
+            "data": [
+                "HKSU1",
+                "HKSU3",
+                "HKSU2",
+                "HKSU4"
+            ]
+        },
+        "HSUD": {
+            "__class__": "Set",
+            "data": [
+                "HSUD1",
+                "HSUD2",
+                "HSUD3"
+            ]
+        },
+        "HU": {
+            "__class__": "Set",
+            "data": [
+                "HU4",
+                "HU8",
+                "HU202",
+                "HU5",
+                "HU17",
+                "HU201",
+                "HU204",
+                "HU3",
+                "HU1",
+                "HU7",
+                "HU203",
+                "HU2",
+                "HU105",
+                "HU302",
+                "HU303",
+                "HU102",
+                "HU101",
+                "HU304",
+                "HU104",
+                "HU103",
+                "HU301",
+                "HU304k",
+                "HU42",
+                "HU801",
+                "HU811"
+            ]
+        },
+        "HUNL": {
+            "__class__": "Set",
+            "data": [
+                "HUNL4",
+                "HUNL1",
+                "HUNL2",
+                "HUNL3",
+                "HUNL5"
+            ]
+        },
+        "Tankstelle": {
+            "__class__": "Set",
+            "data": [
+                "Tankstelle"
+            ]
+        }
+    },
+    "hauptstrecke": "L\u00fcneburg-Celle",
+    "sektoren": {
+        "HU304": {
+            "__class__": "Set",
+            "data": [
+                "HU304",
+                "HU304k"
+            ]
+        }
+    },
+    "strecken": {
+        "L\u00fcneburg-Celle": [
+            "L\u00fcneburg",
+            "HU",
+            "HKSU",
+            "HSUD",
+            "HUNL",
+            "HESD",
+            "HGAR",
+            "Celle"
+        ],
+        "Soltau-Salzwedel": [
+            "Soltau",
+            "Fischerhof",
+            "HU",
+            "Salzwedel"
+        ]
+    },
+    "streckenmarkierung": []
+}

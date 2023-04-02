@@ -1,0 +1,237 @@
+{
+    "_aid": 675,
+    "_build": 5851,
+    "_name": "Stockholm",
+    "_region": "Sverige",
+    "_version": 2,
+    "zugschema": "schweden",
+    "anschlussgruppen": {
+        "Kallh\u00e4ll": {
+            "__class__": "Set",
+            "data": [
+                "Kallh\u00e4ll"
+            ]
+        },
+        "Tm": {
+            "__class__": "Set",
+            "data": [
+                "Tm N",
+                "Tm S"
+            ]
+        },
+        "Upplands F": {
+            "__class__": "Set",
+            "data": [
+                "Upplands F"
+            ]
+        },
+        "Upplands L": {
+            "__class__": "Set",
+            "data": [
+                "Upplands L"
+            ]
+        },
+        "Upplands G": {
+            "__class__": "Set",
+            "data": [
+                "Upplands G"
+            ]
+        },
+        "Upplands V": {
+            "__class__": "Set",
+            "data": [
+                "Upplands V"
+            ]
+        },
+        "V\u00e4rtan": {
+            "__class__": "Set",
+            "data": [
+                "V\u00e4rtan"
+            ]
+        },
+        "\u00c4lvsj\u00f6 F": {
+            "__class__": "Set",
+            "data": [
+                "\u00c4lvsj\u00f6 F"
+            ]
+        },
+        "\u00c4lvsj\u00f6 L": {
+            "__class__": "Set",
+            "data": [
+                "\u00c4lvsj\u00f6 L"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Cst": {
+            "__class__": "Set",
+            "data": [
+                "Cst 18b",
+                "Cst 17b",
+                "Cst 11",
+                "Cst 4",
+                "Cst 14",
+                "Cst 18a",
+                "Cst 10",
+                "Cst 16",
+                "Cst 2",
+                "Cst 3",
+                "Cst 5",
+                "Cst 12",
+                "Cst 17a",
+                "Cst 15",
+                "Cst 7",
+                "Cst 1",
+                "Cst 13",
+                "Cst 6",
+                "Cst 19b",
+                "Cst 19a"
+            ]
+        },
+        "Huv": {
+            "__class__": "Set",
+            "data": [
+                "Huv"
+            ]
+        },
+        "Ke": {
+            "__class__": "Set",
+            "data": [
+                "Ke 3",
+                "Ke 4",
+                "Ke 8",
+                "Ke 2",
+                "Ke 7",
+                "Ke 1",
+                "Ke 5",
+                "Ke 6"
+            ]
+        },
+        "Nbt": {
+            "__class__": "Set",
+            "data": [
+                "Nbt 11d",
+                "Nbt 19c",
+                "Nbt 18c",
+                "Nbt 10d",
+                "Nbt 17c",
+                "Nbt 7e",
+                "Nbt 11e"
+            ]
+        },
+        "Sci": {
+            "__class__": "Set",
+            "data": [
+                "Sci 4",
+                "Sci 3",
+                "Sci 1",
+                "Sci 2"
+            ]
+        },
+        "Sod": {
+            "__class__": "Set",
+            "data": [
+                "Sod 2",
+                "Sod 1"
+            ]
+        },
+        "Sst": {
+            "__class__": "Set",
+            "data": [
+                "Sst 4",
+                "Sst 3",
+                "Sst 1",
+                "Sst 2"
+            ]
+        },
+        "Tm": {
+            "__class__": "Set",
+            "data": [
+                "Tm",
+                "Tm 31",
+                "Tm 33r",
+                "Tm 6",
+                "Tm 32",
+                "Tm 5",
+                "Tm 7"
+            ]
+        },
+        "Tm\u00f6": {
+            "__class__": "Set",
+            "data": [
+                "Tm\u00f6"
+            ]
+        }
+    },
+    "hauptstrecke": "Upplands F-\u00c4lvsj\u00f6 F (Central)",
+    "sektoren": {
+        "Cst 17": {
+            "__class__": "Set",
+            "data": [
+                "Cst 17b",
+                "Cst 17a"
+            ]
+        },
+        "Cst 18": {
+            "__class__": "Set",
+            "data": [
+                "Cst 18b",
+                "Cst 18a"
+            ]
+        },
+        "Cst 19": {
+            "__class__": "Set",
+            "data": [
+                "Cst 19b",
+                "Cst 19a"
+            ]
+        },
+        "Nbt 11": {
+            "__class__": "Set",
+            "data": [
+                "Nbt 11d",
+                "Nbt 11e"
+            ]
+        }
+    },
+    "strecken": {
+        "Kallh\u00e4ll-\u00c4lvsj\u00f6 L (City)": [
+            "Kallh\u00e4ll",
+            "Huv",
+            "Tm\u00f6",
+            "Sod",
+            "Sci",
+            "Sst",
+            "\u00c4lvsj\u00f6 L"
+        ],
+        "Upplands L-\u00c4lvsj\u00f6 L (City)": [
+            "Upplands L",
+            "Tm\u00f6",
+            "Sod",
+            "Sci",
+            "Sst",
+            "\u00c4lvsj\u00f6 L"
+        ],
+        "Kallh\u00e4ll-\u00c4lvsj\u00f6 F (Central)": [
+            "Kallh\u00e4ll",
+            "Huv",
+            "Tm\u00f6",
+            "Ke",
+            "Nbt",
+            "Cst",
+            "Sst",
+            "\u00c4lvsj\u00f6 F"
+        ],
+        "Upplands F-\u00c4lvsj\u00f6 F (Central)": [
+            "Upplands F",
+            "Tm\u00f6",
+            "Ke",
+            "Nbt",
+            "Cst",
+            "Sst",
+            "\u00c4lvsj\u00f6 F"
+        ]
+    },
+    "streckenmarkierung": []
+}

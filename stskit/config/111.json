@@ -1,0 +1,132 @@
+{
+    "_aid": 111,
+    "_build": 5851,
+    "_name": "Hamburg-Altona",
+    "_region": "Hamburg - Schleswig-Holstein",
+    "_version": 2,
+    "anschlussgruppen": {
+        "ALA 2-5": {
+            "__class__": "Set",
+            "data": [
+                "ALA 2-5",
+                "ALA 201-403",
+                "ALA 31-37 N",
+                "ALA 31-37 S",
+                "ALA 6-22",
+                "ALA 97",
+                "ALA 98"
+            ]
+        },
+        "Abst Sch\u00e4ferkamp": {
+            "__class__": "Set",
+            "data": [
+                "Abst Sch\u00e4ferkamp"
+            ]
+        },
+        "Eidelstedt": {
+            "__class__": "Set",
+            "data": [
+                "Eidelstedt Fern",
+                "Eidelstedt G\u00fcter"
+            ]
+        },
+        "Eidelstedt INDU": {
+            "__class__": "Set",
+            "data": [
+                "Eidelstedt INDU"
+            ]
+        },
+        "Hamburg Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Hamburg Hbf"
+            ]
+        },
+        "S Altona": {
+            "__class__": "Set",
+            "data": [
+                "S Altona"
+            ]
+        },
+        "S Bahrendfeld": {
+            "__class__": "Set",
+            "data": [
+                "S Bahrenfeld"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "AA": {
+            "__class__": "Set",
+            "data": [
+                "AA130",
+                "AA7",
+                "AA5",
+                "AA9",
+                "AA8",
+                "AA10",
+                "AA6",
+                "AA11",
+                "AA12"
+            ]
+        },
+        "AA300": {
+            "__class__": "Set",
+            "data": [
+                "AA307",
+                "AA308",
+                "AA306",
+                "AA309"
+            ]
+        },
+        "AA400": {
+            "__class__": "Set",
+            "data": [
+                "AA484",
+                "AA492",
+                "AA52",
+                "AA482",
+                "AA74"
+            ]
+        },
+        "ALA": {
+            "__class__": "Set",
+            "data": [
+                "ALA30",
+                "ALA1",
+                "ALA200"
+            ]
+        },
+        "Eidelstedt": {
+            "__class__": "Set",
+            "data": [
+                "Eidelstedt"
+            ]
+        },
+        "Sternschanze": {
+            "__class__": "Set",
+            "data": [
+                "Sternschanze"
+            ]
+        },
+        "Tankstelle": {
+            "__class__": "Set",
+            "data": [
+                "Tankstelle"
+            ]
+        }
+    },
+    "hauptstrecke": "Hamburg Hbf-Eidelstedt",
+    "sektoren": {},
+    "strecken": {
+        "Hamburg Hbf-Eidelstedt": [
+            "Hamburg Hbf",
+            "Sternschanze",
+            "AA",
+            "ALA",
+            "Eidelstedt"
+        ]
+    },
+    "streckenmarkierung": []
+}

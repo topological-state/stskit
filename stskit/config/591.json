@@ -1,0 +1,258 @@
+{
+    "_aid": 591,
+    "_build": 5840,
+    "_name": "M\u00fcllheim",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abst": {
+            "__class__": "Set",
+            "data": [
+                "Abst"
+            ]
+        },
+        "Anschl.": {
+            "__class__": "Set",
+            "data": [
+                "Anschl."
+            ]
+        },
+        "Anschluss RHE": {
+            "__class__": "Set",
+            "data": [
+                "Anschluss RHE"
+            ]
+        },
+        "Freiburg": {
+            "__class__": "Set",
+            "data": [
+                "Freiburg"
+            ]
+        },
+        "Kandern": {
+            "__class__": "Set",
+            "data": [
+                "Kandern"
+            ]
+        },
+        "Mulhouse": {
+            "__class__": "Set",
+            "data": [
+                "Mulhouse"
+            ]
+        },
+        "Staufen": {
+            "__class__": "Set",
+            "data": [
+                "Staufen"
+            ]
+        },
+        "Weil a.R. Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Weil a.R. Gbf"
+            ]
+        },
+        "Weil a.R.": {
+            "__class__": "Set",
+            "data": [
+                "Weil a.R."
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "RAUG": {
+            "__class__": "Set",
+            "data": [
+                "RAUG"
+            ]
+        },
+        "RBEL": {
+            "__class__": "Set",
+            "data": [
+                "RBEL"
+            ]
+        },
+        "RBGG": {
+            "__class__": "Set",
+            "data": [
+                "RBGG"
+            ]
+        },
+        "RBKR": {
+            "__class__": "Set",
+            "data": [
+                "RBKR103",
+                "RBKR12",
+                "RBKR102",
+                "RBKR1",
+                "RBKR101",
+                "RBKR2",
+                "RBKR104"
+            ]
+        },
+        "REBR": {
+            "__class__": "Set",
+            "data": [
+                "REBR"
+            ]
+        },
+        "REF": {
+            "__class__": "Set",
+            "data": [
+                "REF602 G",
+                "REF601",
+                "REF603 G",
+                "REF604",
+                "REF611",
+                "REF602",
+                "REF603"
+            ]
+        },
+        "REI": {
+            "__class__": "Set",
+            "data": [
+                "REI"
+            ]
+        },
+        "RHE": {
+            "__class__": "Set",
+            "data": [
+                "RHE2",
+                "RHE1",
+                "RHE"
+            ]
+        },
+        "RHL": {
+            "__class__": "Set",
+            "data": [
+                "RHL707",
+                "RHL705",
+                "RHL706",
+                "RHL723",
+                "RHL708",
+                "RHL709",
+                "RHL"
+            ]
+        },
+        "RIT": {
+            "__class__": "Set",
+            "data": [
+                "RIT"
+            ]
+        },
+        "RKES": {
+            "__class__": "Set",
+            "data": [
+                "RKES"
+            ]
+        },
+        "RML": {
+            "__class__": "Set",
+            "data": [
+                "RML12",
+                "RML13",
+                "RML6",
+                "RML4",
+                "RML2",
+                "RML11",
+                "RML5",
+                "RML7",
+                "RML14",
+                "RML1"
+            ]
+        },
+        "RNBG": {
+            "__class__": "Set",
+            "data": [
+                "RNBG1",
+                "RNBG4",
+                "RNBG5"
+            ]
+        },
+        "RNO": {
+            "__class__": "Set",
+            "data": [
+                "RNO"
+            ]
+        },
+        "RRW": {
+            "__class__": "Set",
+            "data": [
+                "RRW402",
+                "RRW403",
+                "RRW401",
+                "RRW"
+            ]
+        },
+        "RSAL": {
+            "__class__": "Set",
+            "data": [
+                "RSAL"
+            ]
+        },
+        "RSG": {
+            "__class__": "Set",
+            "data": [
+                "RSG82",
+                "RSG81"
+            ]
+        }
+    },
+    "sektoren": {
+        "REF602": {
+            "__class__": "Set",
+            "data": [
+                "REF602",
+                "REF602 G"
+            ]
+        },
+        "REF603": {
+            "__class__": "Set",
+            "data": [
+                "REF603 G",
+                "REF603"
+            ]
+        }
+    },
+    "hauptstrecke":"Weil-Freiburg",
+    "strecken": {
+        "Mulhouse-Freiburg": [
+            "Mulhouse",
+            "RNBG",
+            "RML",
+            "RBGG",
+            "RHE",
+            "RBKR",
+            "RNO",
+            "RSAL",
+            "REBR",
+            "Freiburg"
+        ],
+        "Weil-Freiburg": [
+            "Weil a.R.",
+            "RHL",
+            "REI",
+            "REF",
+            "RIT",
+            "RKES",
+            "RRW",
+            "RBEL",
+            "RSG",
+            "RAUG",
+            "RML",
+            "RBGG",
+            "RHE",
+            "RBKR",
+            "RNO",
+            "RSAL",
+            "REBR",
+            "Freiburg"
+        ]
+    },
+    "streckenmarkierung": [
+        ["RRW", "RBEL", "E"],
+        ["RBEL", "RSG", "E"]
+    ]
+}

@@ -1,0 +1,270 @@
+{
+    "_aid": 366,
+    "_build": 5840,
+    "_name": "Frankfurt Fzf/Fsf",
+    "_region": "Rhein-Main",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstell A": {
+            "__class__": "Set",
+            "data": [
+                "Abstell A"
+            ]
+        },
+        "Abstell B": {
+            "__class__": "Set",
+            "data": [
+                "Abstell B"
+            ]
+        },
+        "Bad Homburg S": {
+            "__class__": "Set",
+            "data": [
+                "Bad Homburg S"
+            ]
+        },
+        "Bad Homburg": {
+            "__class__": "Set",
+            "data": [
+                "Bad Homburg"
+            ]
+        },
+        "Bad Vilbel": {
+            "__class__": "Set",
+            "data": [
+                "Bad Vilbel"
+            ]
+        },
+        "FF Süd": {
+            "__class__": "Set",
+            "data": [
+                "FF Süd"
+            ]
+        },
+        "FF Höchst": {
+            "__class__": "Set",
+            "data": [
+                "FF Höchst"
+            ]
+        },
+        "FF Flughafen S": {
+            "__class__": "Set",
+            "data": [
+                "FF Flughafen S"
+            ]
+        },
+        "FF Flughafen": {
+            "__class__": "Set",
+            "data": [
+                "FF Flughafen"
+            ]
+        },
+        "FF Süd (Forsthaus)": {
+            "__class__": "Set",
+            "data": [
+                "FF Süd (Forsthaus)"
+            ]
+        },
+        "FF Griesheim S": {
+            "__class__": "Set",
+            "data": [
+                "FF Griesheim S"
+            ]
+        },
+        "FF Griesheim (Niederrad)": {
+            "__class__": "Set",
+            "data": [
+                "FF-Griesheim (Niederrad)"
+            ]
+        },
+        "FF Griesheim (Außenbf)": {
+            "__class__": "Set",
+            "data": [
+                "FF-Griesheim (Außenbf)"
+            ]
+        },
+        "Hbf Hoch-Tief 1/2": {
+            "__class__": "Set",
+            "data": [
+                "Hbf Hoch-Tief 1",
+                "Hbf Hoch-Tief 2"
+            ]
+        },
+        "Hbf Außenbf": {
+            "__class__": "Set",
+            "data": [
+                "Hbf Au\u00dfenbf"
+            ]
+        },
+        "Hbf Galluswarte": {
+            "__class__": "Set",
+            "data": [
+                "Hbf Galluswarte"
+            ]
+        },
+        "Hbf Hoch-Tief 3/4": {
+            "__class__": "Set",
+            "data": [
+                "Hbf Hoch-Tief 3",
+                "Hbf Hoch-Tief 4"
+            ]
+        },
+        "Hbf Gutleuthof": {
+            "__class__": "Set",
+            "data": [
+                "Hbf Gutleuthof"
+            ]
+        },
+        "S-Bahn-Werkstatt": {
+            "__class__": "Set",
+            "data": [
+                "S-Bahn-Werkstatt"
+            ]
+        },
+        "Spitzkehre": {
+            "__class__": "Set",
+            "data": [
+                "Spitzkehre"
+            ]
+        },
+        "Stamm Galluswarte": {
+            "__class__": "Set",
+            "data": [
+                "Stamm Galluswarte"
+            ]
+        },
+        "Stamm Hoch-Tief": {
+            "__class__": "Set",
+            "data": [
+                "Stamm Hoch-Tief"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "FF H": {
+            "__class__": "Set",
+            "data": [
+                "FF H"
+            ]
+        },
+        "FFAU": {
+            "__class__": "Set",
+            "data": [
+                "FFAU725",
+                "FFAU726",
+                "FFAU2",
+                "FFAU1",
+                "FFAU4"
+            ]
+        },
+        "FFGA": {
+            "__class__": "Set",
+            "data": [
+                "FFGA"
+            ]
+        },
+        "FFME": {
+            "__class__": "Set",
+            "data": [
+                "FFME"
+            ]
+        },
+        "FFW": {
+            "__class__": "Set",
+            "data": [
+                "FFW1",
+                "FFW4L",
+                "FFW3",
+                "FFW4",
+                "FFW2",
+                "FFW5L",
+                "FFW7",
+                "FFW8",
+                "FFW6",
+                "FFW5",
+                "FFW42",
+                "FFW41"
+            ]
+        },
+        "FGUR": {
+            "__class__": "Set",
+            "data": [
+                "FGUR"
+            ]
+        },
+        "FKY": {
+            "__class__": "Set",
+            "data": [
+                "FKY"
+            ]
+        },
+        "FMLA": {
+            "__class__": "Set",
+            "data": [
+                "FMLA4",
+                "FMLA5",
+                "FMLA3",
+                "FMLA2"
+            ]
+        },
+        "FNI": {
+            "__class__": "Set",
+            "data": [
+                "FNI604",
+                "FNI607",
+                "FNI2",
+                "FNI1",
+                "FNI603",
+                "FNI608",
+                "FNI654",
+                "FNI658",
+                "FNI653"
+            ]
+        }
+    },
+    "sektoren": {
+        "FFW4": {
+            "__class__": "Set",
+            "data": [
+                "FFW4",
+                "FFW4L"
+            ]
+        },
+        "FFW5": {
+            "__class__": "Set",
+            "data": [
+                "FFW5",
+                "FFW5L"
+            ]
+        }
+    },
+    "hauptstrecke": "Grün: Flughafen-Hoch-Tief",
+    "strecken": {
+        "Weiss: Bad Homburg-Galluswarte": [
+            "Bad Homburg S",
+            "FFW",
+            "FFME",
+            "FFGA",
+            "Stamm Galluswarte"
+        ],
+        "Blau: Höchst-Hoch-Tief 4": [
+            "FF-Höchst",
+            "FMLA",
+            "FFH",
+            "Hbf Hoch-Tief 4"
+        ],
+        "Gelb: Flughafen-Stamm Hoch-Tief": [
+            "FF Flughafen S",
+            "FN",
+            "FKY",
+            "FF H",
+            "Stamm Hoch-Tief"
+        ],
+        "Grün: Flughafen-Hoch-Tief": [
+            "FF Flughafen",
+            "FN",
+            "Hbf Hoch-Tief 1"
+        ]
+    }
+}

@@ -1,0 +1,266 @@
+{
+    "_aid": 21,
+    "_build": 5851,
+    "_name": "Maschen Rbf",
+    "_region": "Bremen-Niedersachsen",
+    "_version": 2,
+    "anschlussgruppen": {
+        "1311-1316": {
+            "__class__": "Set",
+            "data": [
+                "1311-1316"
+            ]
+        },
+        "1337-1354": {
+            "__class__": "Set",
+            "data": [
+                "1337-1354"
+            ]
+        },
+        "1355-1368": {
+            "__class__": "Set",
+            "data": [
+                "1355-1368"
+            ]
+        },
+        "2411-2448": {
+            "__class__": "Set",
+            "data": [
+                "2411-2448"
+            ]
+        },
+        "2451-2486": {
+            "__class__": "Set",
+            "data": [
+                "2451-2486"
+            ]
+        },
+        "2487-2488": {
+            "__class__": "Set",
+            "data": [
+                "2487-2488"
+            ]
+        },
+        "2571-2584": {
+            "__class__": "Set",
+            "data": [
+                "2571-2584"
+            ]
+        },
+        "Berg": {
+            "__class__": "Set",
+            "data": [
+                "Berg SW",
+                "Berg NO"
+            ]
+        },
+        "Buchholz": {
+            "__class__": "Set",
+            "data": [
+                "Buchholz"
+            ]
+        },
+        "Harburg Fern": {
+            "__class__": "Set",
+            "data": [
+                "Harburg Fern"
+            ]
+        },
+        "Harburg G\u00fcter": {
+            "__class__": "Set",
+            "data": [
+                "Harburg G\u00fcter"
+            ]
+        },
+        "Harburg Hafen": {
+            "__class__": "Set",
+            "data": [
+                "Harburg Hafen"
+            ]
+        },
+        "Lok Ost": {
+            "__class__": "Set",
+            "data": [
+                "Lok Ost"
+            ]
+        },
+        "Lok West": {
+            "__class__": "Set",
+            "data": [
+                "Lok West"
+            ]
+        },
+        "L\u00fcneburg": {
+            "__class__": "Set",
+            "data": [
+                "L\u00fcneburg"
+            ]
+        },
+        "Schienenlager": {
+            "__class__": "Set",
+            "data": [
+                "Schienenlager"
+            ]
+        },
+        "Wagen Ost": {
+            "__class__": "Set",
+            "data": [
+                "Wagen Ost"
+            ]
+        },
+        "Wagen West": {
+            "__class__": "Set",
+            "data": [
+                "Wagen West"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Abzw Meckelfeld": {
+            "__class__": "Set",
+            "data": [
+                "Abzw Meckelfeld"
+            ]
+        },
+        "Ashausen": {
+            "__class__": "Set",
+            "data": [
+                "Ashausen"
+            ]
+        },
+        "Jesteburg": {
+            "__class__": "Set",
+            "data": [
+                "Jesteburg"
+            ]
+        },
+        "Meckelfeld": {
+            "__class__": "Set",
+            "data": [
+                "Meckelfeld"
+            ]
+        },
+        "Maschen Pbf": {
+            "__class__": "Set",
+            "data": [
+                "AMA4",
+                "AMA1",
+                "AMA3",
+                "AMA2"
+            ]
+        },
+        "Rbf Mitte": {
+            "__class__": "Set",
+            "data": [
+                "1253",
+                "2086",
+                "2088",
+                "1202",
+                "1244",
+                "1242",
+                "1243",
+                "1006",
+                "1204",
+                "2087",
+                "1254",
+                "1203",
+                "2010",
+                "1252"
+            ]
+        },
+        "Rbf Nord": {
+            "__class__": "Set",
+            "data": [
+                "2951",
+                "1112",
+                "1017",
+                "2953",
+                "2555",
+                "2490",
+                "1113",
+                "1115",
+                "2950",
+                "2990",
+                "2980",
+                "2952",
+                "1110",
+                "1111",
+                "2981",
+                "2948",
+                "1114"
+            ]
+        },
+        "Rbf S\u00fcd": {
+            "__class__": "Set",
+            "data": [
+                "1733",
+                "2044",
+                "1762",
+                "2042",
+                "2041",
+                "2043",
+                "1764",
+                "2040",
+                "1744",
+                "1732",
+                "2021k",
+                "2021",
+                "1765",
+                "1731",
+                "1738",
+                "1734",
+                "1763",
+                "1736",
+                "2045",
+                "1765k"
+            ]
+        },
+        "Stelle": {
+            "__class__": "Set",
+            "data": [
+                "Stelle"
+            ]
+        }
+    },
+    "hauptstrecke": "Harburg-L\u00fcneburg",
+    "sektoren": {
+        "1765": {
+            "__class__": "Set",
+            "data": [
+                "1765",
+                "1765k"
+            ]
+        },
+        "2021": {
+            "__class__": "Set",
+            "data": [
+                "2021k",
+                "2021"
+            ]
+        }
+    },
+    "strecken": {
+        "Harburg-Buchholz": [
+            "Harburg G\u00fcter",
+            "Abzw Meckelfeld",
+            "Rbf Nord",
+            "Rbf Mitte",
+            "Rbf S\u00fcd",
+            "Jesteburg",
+            "Buchholz"
+        ],
+        "Harburg-L\u00fcneburg": [
+            "Harburg Fern",
+            "Meckelfeld",
+            "Rbf Nord",
+            "Rbf Mitte",
+            "Pbf",
+            "Rbf S\u00fcd",
+            "Stelle",
+            "Ashausen",
+            "L\u00fcneburg"
+        ]
+    },
+    "streckenmarkierung": []
+}

@@ -1,0 +1,238 @@
+{
+    "_aid": 471,
+    "_build": 5851,
+    "_name": "Nienburg/Weser",
+    "_region": "Bremen-Niedersachsen",
+    "_version": 2,
+    "anschlussgruppen": {
+        "114-115": {
+            "__class__": "Set",
+            "data": [
+                "114-115"
+            ]
+        },
+        "BASF": {
+            "__class__": "Set",
+            "data": [
+                "BASF"
+            ]
+        },
+        "Fliegerhorst": {
+            "__class__": "Set",
+            "data": [
+                "Fliegerhorst"
+            ]
+        },
+        "Gleisbau": {
+            "__class__": "Set",
+            "data": [
+                "Gleisbau"
+            ]
+        },
+        "Hoya": {
+            "__class__": "Set",
+            "data": [
+                "Hoya"
+            ]
+        },
+        "Lagerhalle": {
+            "__class__": "Set",
+            "data": [
+                "Lagerhalle"
+            ]
+        },
+        "Leese-Stolzenau": {
+            "__class__": "Set",
+            "data": [
+                "Leese-Stolzenau",
+                "Leese Stolzenau"
+            ]
+        },
+        "Liebenau": {
+            "__class__": "Set",
+            "data": [
+                "Liebenau"
+            ]
+        },
+        "Verden (Aller)": {
+            "__class__": "Set",
+            "data": [
+                "Verden (Aller)"
+            ]
+        },
+        "Wunstorf": {
+            "__class__": "Set",
+            "data": [
+                "Wunstorf"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "HEIV": {
+            "__class__": "Set",
+            "data": [
+                "HEIV"
+            ]
+        },
+        "HETR": {
+            "__class__": "Set",
+            "data": [
+                "HETR 3",
+                "HETR 1",
+                "HETR 1 Gz",
+                "HETR 4III",
+                "HETR 3 Gz",
+                "HETR 2",
+                "HETR 4"
+            ]
+        },
+        "HHAG": {
+            "__class__": "Set",
+            "data": [
+                "HHAG 3",
+                "HHAG 2",
+                "HHAG 1"
+            ]
+        },
+        "HHGH": {
+            "__class__": "Set",
+            "data": [
+                "HHGH"
+            ]
+        },
+        "HLBU": {
+            "__class__": "Set",
+            "data": [
+                "HLBU 3",
+                "HLBU 2",
+                "HLBU 1"
+            ]
+        },
+        "HNBG": {
+            "__class__": "Set",
+            "data": [
+                "HNBG 2",
+                "HNBG 11",
+                "HNBG 6",
+                "HNBG 2 Gz",
+                "HNBG 5",
+                "HNBG 3 Gz",
+                "HNBG 1",
+                "HNBG 1 Gz",
+                "HNBG 9",
+                "HNBG Wende 3",
+                "HNBG 8",
+                "HNBG 7",
+                "HNBG Wende 4",
+                "HNBG 4",
+                "HNBG 10",
+                "HNBG 3",
+                "HNBG 12",
+                "HNBG 4 Gz",
+                "HNBG Wende 2"
+            ]
+        },
+        "HNRU": {
+            "__class__": "Set",
+            "data": [
+                "HNRU 3",
+                "HNRU 2",
+                "HNRU 1"
+            ]
+        },
+        "HPOG": {
+            "__class__": "Set",
+            "data": [
+                "HPOG 1 Gz",
+                "HPOG 1",
+                "HPOG 3",
+                "HPOG 2"
+            ]
+        },
+        "HROR": {
+            "__class__": "Set",
+            "data": [
+                "HROR 1",
+                "HROR 2",
+                "HROR 3",
+                "HROR 5"
+            ]
+        }
+    },
+    "hauptstrecke": "Verden (Aller)-Wunstorf",
+    "sektoren": {
+        "HETR 1": {
+            "__class__": "Set",
+            "data": [
+                "HETR 1 Gz",
+                "HETR 1"
+            ]
+        },
+        "HETR 3": {
+            "__class__": "Set",
+            "data": [
+                "HETR 3 Gz",
+                "HETR 3"
+            ]
+        },
+        "HETR 4": {
+            "__class__": "Set",
+            "data": [
+                "HETR 4III",
+                "HETR 4"
+            ]
+        },
+        "HNBG 1": {
+            "__class__": "Set",
+            "data": [
+                "HNBG 1 Gz",
+                "HNBG 1"
+            ]
+        },
+        "HNBG 2": {
+            "__class__": "Set",
+            "data": [
+                "HNBG 2",
+                "HNBG 2 Gz"
+            ]
+        },
+        "HNBG 3": {
+            "__class__": "Set",
+            "data": [
+                "HNBG 3",
+                "HNBG 3 Gz"
+            ]
+        },
+        "HNBG 4": {
+            "__class__": "Set",
+            "data": [
+                "HNBG 4 Gz",
+                "HNBG 4"
+            ]
+        },
+        "HPOG 1": {
+            "__class__": "Set",
+            "data": [
+                "HPOG 1 Gz",
+                "HPOG 1"
+            ]
+        }
+    },
+    "strecken": {
+        "Verden (Aller)-Wunstorf": [
+            "Verden (Aller)",
+            "HETR",
+            "HROR",
+            "HNBG",
+            "HLBU",
+            "HHAG",
+            "HHGH",
+            "HEIV",
+            "HNRU",
+            "HPOG",
+            "Wunstorf"
+        ]
+    },
+    "streckenmarkierung": []
+}

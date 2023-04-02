@@ -1,0 +1,215 @@
+{
+    "_aid": 380,
+    "_build": 5851,
+    "_name": "Buchholz - Tostedt",
+    "_region": "Bremen-Niedersachsen",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Hamburg": {
+            "__class__": "Set",
+            "data": [
+                "Hamburg"
+            ]
+        },
+        "Maschen Rbf": {
+            "__class__": "Set",
+            "data": [
+                "Maschen Rbf"
+            ]
+        },
+        "Rotenburg": {
+            "__class__": "Set",
+            "data": [
+                "Rotenburg",
+                "Rotenburg M"
+            ]
+        },
+        "Soltau": {
+            "__class__": "Set",
+            "data": [
+                "Soltau"
+            ]
+        },
+        "Zeven": {
+            "__class__": "Set",
+            "data": [
+                "Zeven (EVB)"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "ABLZ": {
+            "__class__": "Set",
+            "data": [
+                "7",
+                "3",
+                "6",
+                "28",
+                "27",
+                "1",
+                "13",
+                "11k",
+                "26",
+                "29",
+                "11"
+            ]
+        },
+        "ABLZ 60/70": {
+            "__class__": "Set",
+            "data": [
+                "65",
+                "63",
+                "77",
+                "73",
+                "64",
+                "76"
+            ]
+        },
+        "AHAN": {
+            "__class__": "Set",
+            "data": [
+                "AHAN2",
+                "AHAN1"
+            ]
+        },
+        "ASDN": {
+            "__class__": "Set",
+            "data": [
+                "ASDN2",
+                "ASDN1"
+            ]
+        },
+        "ATST": {
+            "__class__": "Set",
+            "data": [
+                "ATST434",
+                "ATST408",
+                "ATST431L",
+                "ATST431",
+                "ATST414",
+                "ATST432",
+                "ATST433",
+                "ATST434L",
+                "ATST433L"
+            ]
+        },
+        "B\u00fcsenbachtal": {
+            "__class__": "Set",
+            "data": [
+                "B\u00fcsenbachtal"
+            ]
+        },
+        "Hittfeld": {
+            "__class__": "Set",
+            "data": [
+                "Hittfeld"
+            ]
+        },
+        "Holm-Seppensen": {
+            "__class__": "Set",
+            "data": [
+                "Holm-Seppensen"
+            ]
+        },
+        "Klecken": {
+            "__class__": "Set",
+            "data": [
+                "Klecken"
+            ]
+        },
+        "Spr\u00f6tze": {
+            "__class__": "Set",
+            "data": [
+                "Spr\u00f6tze"
+            ]
+        },
+        "Suerhop": {
+            "__class__": "Set",
+            "data": [
+                "Suerhop"
+            ]
+        },
+        "Wintermoor": {
+            "__class__": "Set",
+            "data": [
+                "Wintermoor"
+            ]
+        }
+    },
+    "hauptstrecke": "Rotenburg-Hamburg",
+    "sektoren": {
+        "11": {
+            "__class__": "Set",
+            "data": [
+                "11",
+                "11k"
+            ]
+        },
+        "ATST431": {
+            "__class__": "Set",
+            "data": [
+                "ATST431L",
+                "ATST431"
+            ]
+        },
+        "ATST433": {
+            "__class__": "Set",
+            "data": [
+                "ATST433L",
+                "ATST433"
+            ]
+        },
+        "ATST434": {
+            "__class__": "Set",
+            "data": [
+                "ATST434L",
+                "ATST434"
+            ]
+        }
+    },
+    "strecken": {
+        "Rotenburg-Hamburg": [
+            "Rotenburg",
+            "ATST",
+            "Spr\u00f6tze",
+            "ABLZ 60/70",
+            "ABLZ",
+            "Klecken",
+            "Hittfeld",
+            "Hamburg"
+        ],
+        "Rotenburg-Maschen Rbf": [
+            "Rotenburg",
+            "ATST",
+            "Spr\u00f6tze",
+            "ABLZ 60/70",
+            "ABLZ",
+            "Maschen Rbf"
+        ],
+        "Soltau-Hamburg": [
+            "Soltau",
+            "ASDN",
+            "Wintermoor",
+            "AHAN",
+            "B\u00fcsenbachtal",
+            "Holm-Seppensen",
+            "Suerhop",
+            "ABLZ",
+            "Klecken",
+            "Hittfeld",
+            "Hamburg"
+        ],
+        "Soltau-Buchholz": [
+            "Soltau",
+            "ASDN",
+            "Wintermoor",
+            "AHAN",
+            "B\u00fcsenbachtal",
+            "Holm-Seppensen",
+            "Suerhop",
+            "ABLZ"
+        ]
+    },
+    "streckenmarkierung": []
+}

@@ -1,0 +1,280 @@
+{
+    "_aid": 709,
+    "_build": 5840,
+    "_name": "G\u00f6ppingen/Geislingen",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abst": {
+            "__class__": "Set",
+            "data": [
+                "Abst.2",
+                "Abst.1"
+            ]
+        },
+        "Abstellung TAM": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung TAM"
+            ]
+        },
+        "Anschlu\u00df": {
+            "__class__": "Set",
+            "data": [
+                "Anschlu\u00df"
+            ]
+        },
+        "Gerstetten": {
+            "__class__": "Set",
+            "data": [
+                "Gerstetten"
+            ]
+        },
+        "Gl. X": {
+            "__class__": "Set",
+            "data": [
+                "Gl. 31",
+                "Gl. 18",
+                "Gl. 30"
+            ]
+        },
+        "IG Ebersbach": {
+            "__class__": "Set",
+            "data": [
+                "IG Ebersbach"
+            ]
+        },
+        "IG Uhingen": {
+            "__class__": "Set",
+            "data": [
+                "IG Uhingen"
+            ]
+        },
+        "Leonard-Weiss": {
+            "__class__": "Set",
+            "data": [
+                "Leonard-Weiss"
+            ]
+        },
+        "Plochingen": {
+            "__class__": "Set",
+            "data": [
+                "Plochingen"
+            ]
+        },
+        "Salach": {
+            "__class__": "Set",
+            "data": [
+                "Salach"
+            ]
+        },
+        "Schrotthandel": {
+            "__class__": "Set",
+            "data": [
+                "Schrotthandel"
+            ]
+        },
+        "Stahlbau": {
+            "__class__": "Set",
+            "data": [
+                "Stahlbau"
+            ]
+        },
+        "St\u00e4dt. Industriegleis": {
+            "__class__": "Set",
+            "data": [
+                "St\u00e4dt. Industriegleis"
+            ]
+        },
+        "Ulm": {
+            "__class__": "Set",
+            "data": [
+                "Ulm"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Faurndau": {
+            "__class__": "Set",
+            "data": [
+                "Faurndau"
+            ]
+        },
+        "Gingen": {
+            "__class__": "Set",
+            "data": [
+                "Gingen"
+            ]
+        },
+        "Kuchen": {
+            "__class__": "Set",
+            "data": [
+                "Kuchen"
+            ]
+        },
+        "Lokalbahn": {
+            "__class__": "Set",
+            "data": [
+                "Lokalbahn"
+            ]
+        },
+        "Lonsee": {
+            "__class__": "Set",
+            "data": [
+                "Lonsee"
+            ]
+        },
+        "TAM": {
+            "__class__": "Set",
+            "data": [
+                "TAM 1",
+                "TAM 41",
+                "TAM 3",
+                "TAM 2",
+                "TAM 6a",
+                "TAM 1a",
+                "TAM 1k"
+            ]
+        },
+        "TEC": {
+            "__class__": "Set",
+            "data": [
+                "TEC 3",
+                "TEC 1",
+                "TEC 7",
+                "TEC 2"
+            ]
+        },
+        "TEF": {
+            "__class__": "Set",
+            "data": [
+                "TEF 4",
+                "TEF 3",
+                "TEF 2",
+                "TEF 1a",
+                "TEF 1b",
+                "TEF 4b",
+                "TEF 1"
+            ]
+        },
+        "TG": {
+            "__class__": "Set",
+            "data": [
+                "TG 32",
+                "TG 21",
+                "TG 2",
+                "TG 42",
+                "TG 4",
+                "TG 3",
+                "TG 22",
+                "TG 1",
+                "TG 6"
+            ]
+        },
+        "TGO": {
+            "__class__": "Set",
+            "data": [
+                "TGO 21",
+                "TGO 6a",
+                "TGO 2",
+                "TGO R1",
+                "TGO 5",
+                "TGO 7",
+                "TGO 6",
+                "TGO 8",
+                "TGO 17",
+                "TGO 3",
+                "TGO 9",
+                "TGO 1",
+                "TGO 4",
+                "TGO R2"
+            ]
+        },
+        "TGW": {
+            "__class__": "Set",
+            "data": [
+                "TGW 101",
+                "TGW 3",
+                "TGW 102",
+                "TGW 1",
+                "TGW 2",
+                "TGW 103"
+            ]
+        },
+        "TSD": {
+            "__class__": "Set",
+            "data": [
+                "TSD 2",
+                "TSD 4",
+                "TSD 3",
+                "TSD 1"
+            ]
+        },
+        "Uhingen": {
+            "__class__": "Set",
+            "data": [
+                "Uhingen"
+            ]
+        },
+        "Urspring": {
+            "__class__": "Set",
+            "data": [
+                "Urspring"
+            ]
+        }
+    },
+    "sektoren": {
+        "TAM 1": {
+            "__class__": "Set",
+            "data": [
+                "TAM 1",
+                "TAM 1a",
+                "TAM 1k"
+            ]
+        },
+        "TEF 1": {
+            "__class__": "Set",
+            "data": [
+                "TEF 1a",
+                "TEF 1b",
+                "TEF 1"
+            ]
+        },
+        "TEF 4": {
+            "__class__": "Set",
+            "data": [
+                "TEF 4b",
+                "TEF 4"
+            ]
+        },
+        "TGO 6": {
+            "__class__": "Set",
+            "data": [
+                "TGO 6",
+                "TGO 6a"
+            ]
+        }
+    },
+    "hauptstrecke": "Ulm-Plochingen",
+    "strecken": {
+        "Ulm-Plochingen": [
+            "Ulm",
+            "Lonsee",
+            "Urspring",
+            "TAM",
+            "TG",
+            "TGW",
+            "Kuchen",
+            "Gingen",
+            "TSD",
+            "Salach",
+            "TEF",
+            "TGO",
+            "Faurndau",
+            "Uhingen",
+            "TEC",
+            "Plochingen"
+        ]
+    }
+}
