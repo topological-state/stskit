@@ -91,6 +91,8 @@ class Anschlussmatrix:
         die zeit wird in minuten ab mitternacht gemessen.
         dient zur freigabe von anschlüssen nach der min_umsteigezeit.
     - ankunft_labels, abfahrt_labels: zugbeschriftungen, indiziert nach zid.
+    - ankunft_filter_kategorien: zugskategorien (s. Anlage.zugschema), die auf der ankunftsachse erscheinen
+    - abfahrt_filter_kategorien: zugskategorien (s. Anlage.zugschema), die auf der abfahrtsachse erscheinen
     """
 
     ZUG_SCHILDER = ['gleis', 'name', 'richtung', 'zeit', 'verspaetung']
@@ -100,6 +102,8 @@ class Anschlussmatrix:
         self.bahnhof: Optional[str] = None
         self.anschlusszeit: int = 15
         self.umsteigezeit: int = 2
+        self.ankunft_filter_kategorien: Set[str] = {'X', 'F', 'N', 'S'}
+        self.abfahrt_filter_kategorien: Set[str] = {'X', 'F', 'N'}
         self.ankunft_label_muster: List[str] = ['name', 'richtung', 'verspaetung']
         self.abfahrt_label_muster: List[str] = ['name', 'richtung', 'verspaetung']
         self.ankuenfte_ausblenden: Set[int] = set([])
@@ -227,34 +231,37 @@ class Anschlussmatrix:
         min_umsteigezeit = self.umsteigezeit
 
         for zid, zug in planung.zugliste.items():
+            kategorie = self.anlage.zugschema.kategorie(zug)
             # ankünfte
-            for ziel in self._fahrplan_filter(zug.fahrplan, True, False):
-                if not ziel.abgefahren and ziel.an is not None and time_to_minutes(ziel.an) < endzeit:
-                    # keine ankunft, wenn zug aus nummernwechsel auf diesem gleis hervorgeht
-                    zzid = ZugZielNode.neu(ziel=ziel)
-                    for zzid1, zzid2, edge_data in planung.zielgraph.in_edges(zzid, data=True):
-                        try:
-                            if edge_data['typ'] in {'E', 'F'}:
-                                break
-                        except KeyError:
-                            pass
-                    else:
-                        self.zid_ankuenfte_set.add(zid)
-                        self.zuege[zid] = zug
-                        self.ankunft_ziele[zid] = ziel
+            if kategorie in self.ankunft_filter_kategorien:
+                for ziel in self._fahrplan_filter(zug.fahrplan, True, False):
+                    if not ziel.abgefahren and ziel.an is not None and time_to_minutes(ziel.an) < endzeit:
+                        # keine ankunft, wenn zug aus nummernwechsel auf diesem gleis hervorgeht
+                        zzid = ZugZielNode.neu(ziel=ziel)
+                        for zzid1, zzid2, edge_data in planung.zielgraph.in_edges(zzid, data=True):
+                            try:
+                                if edge_data['typ'] in {'E', 'F'}:
+                                    break
+                            except KeyError:
+                                pass
+                        else:
+                            self.zid_ankuenfte_set.add(zid)
+                            self.zuege[zid] = zug
+                            self.ankunft_ziele[zid] = ziel
 
             # abfahrten
-            for ziel in self._fahrplan_filter(zug.fahrplan, False, True):
-                if not ziel.abgefahren and ziel.ab is not None and time_to_minutes(ziel.ab) < endzeit + min_umsteigezeit:
-                    # keine abfahrt, wenn zug ersetzt wird
-                    if ziel.ersatzzug is None and ziel.kuppelzug is None:
-                        self.zid_abfahrten_set.add(zid)
-                        self.zuege[zid] = zug
-                        self.abfahrt_ziele[zid] = ziel
+            if kategorie in self.abfahrt_filter_kategorien:
+                for ziel in self._fahrplan_filter(zug.fahrplan, False, True):
+                    if not ziel.abgefahren and ziel.ab is not None and time_to_minutes(ziel.ab) < endzeit + min_umsteigezeit:
+                        # keine abfahrt, wenn zug ersetzt wird
+                        if ziel.ersatzzug is None and ziel.kuppelzug is None:
+                            self.zid_abfahrten_set.add(zid)
+                            self.zuege[zid] = zug
+                            self.abfahrt_ziele[zid] = ziel
+                        else:
+                            self.zid_abfahrten_set.discard(zid)
                     else:
                         self.zid_abfahrten_set.discard(zid)
-                else:
-                    self.zid_abfahrten_set.discard(zid)
 
             if zug.amgleis and zug.gleis in self.gleise and zid not in self.eff_ankunftszeiten:
                 try:
