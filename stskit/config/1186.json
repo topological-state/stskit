@@ -1,0 +1,199 @@
+{
+    "_aid": 1186,
+    "_build": 5851,
+    "_name": "Uppsala",
+    "_region": "Sverige",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Arlanda": {
+            "__class__": "Set",
+            "data": [
+                "Arlanda"
+            ]
+        },
+        "M\u00e4rsta": {
+            "__class__": "Set",
+            "data": [
+                "M\u00e4rsta"
+            ]
+        },
+        "Sala": {
+            "__class__": "Set",
+            "data": [
+                "Sala"
+            ]
+        },
+        "Sidosp\u00e5r N": {
+            "__class__": "Set",
+            "data": [
+                "Sidosp\u00e5r N"
+            ]
+        },
+        "Sidosp\u00e5r S": {
+            "__class__": "Set",
+            "data": [
+                "Sidosp\u00e5r S"
+            ]
+        },
+        "Tierp": {
+            "__class__": "Set",
+            "data": [
+                "Tierp"
+            ]
+        },
+        "prod": {
+            "__class__": "Set",
+            "data": [
+                "prod"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Bna": {
+            "__class__": "Set",
+            "data": [
+                "Bna 1",
+                "Bna 2"
+            ]
+        },
+        "Eby": {
+            "__class__": "Set",
+            "data": [
+                "Eby"
+            ]
+        },
+        "Kn": {
+            "__class__": "Set",
+            "data": [
+                "Kn 2",
+                "Kn 1 Gt",
+                "Kn 1",
+                "Kn 3",
+                "Kn 2 Gt"
+            ]
+        },
+        "Myn": {
+            "__class__": "Set",
+            "data": [
+                "Myn"
+            ]
+        },
+        "Sam": {
+            "__class__": "Set",
+            "data": [
+                "Sam"
+            ]
+        },
+        "S\u00e4y": {
+            "__class__": "Set",
+            "data": [
+                "S\u00e4y"
+            ]
+        },
+        "U": {
+            "__class__": "Set",
+            "data": [
+                "U 12",
+                "U 5",
+                "U 6",
+                "U 14",
+                "U 2",
+                "U 1",
+                "U 1/2",
+                "U 11",
+                "U 3",
+                "U 7",
+                "U 4",
+                "U 1N",
+                "U 8",
+                "U 13",
+                "U 6N"
+            ]
+        },
+        "Una": {
+            "__class__": "Set",
+            "data": [
+                "Una 3",
+                "Una 4"
+            ]
+        }
+    },
+    "hauptstrecke": "Tierp-Arlanda",
+    "sektoren": {
+        "Kn 1": {
+            "__class__": "Set",
+            "data": [
+                "Kn 1 Gt",
+                "Kn 1"
+            ]
+        },
+        "Kn 2": {
+            "__class__": "Set",
+            "data": [
+                "Kn 2",
+                "Kn 2 Gt"
+            ]
+        },
+        "U 1": {
+            "__class__": "Set",
+            "data": [
+                "U 1N",
+                "U 1"
+            ]
+        },
+        "U 6": {
+            "__class__": "Set",
+            "data": [
+                "U 6",
+                "U 6N"
+            ]
+        }
+    },
+    "strecken": {
+        "Sala-Arlanda": [
+            "Sala",
+            "Bna",
+            "Una",
+            "U",
+            "S\u00e4y",
+            "Eby",
+            "Kn",
+            "Myn",
+            "Arlanda"
+        ],
+        "Sala-M\u00e4rsta": [
+            "Sala",
+            "Bna",
+            "Una",
+            "U",
+            "S\u00e4y",
+            "Eby",
+            "Kn",
+            "Myn",
+            "M\u00e4rsta"
+        ],
+        "Tierp-Arlanda": [
+            "Tierp",
+            "Sam",
+            "U",
+            "S\u00e4y",
+            "Eby",
+            "Kn",
+            "Myn",
+            "Arlanda"
+        ],
+        "Tierp-M\u00e4rsta": [
+            "Tierp",
+            "Sam",
+            "U",
+            "S\u00e4y",
+            "Eby",
+            "Kn",
+            "Myn",
+            "M\u00e4rsta"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweden"
+}

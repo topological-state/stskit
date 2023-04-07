@@ -1,0 +1,272 @@
+{
+    "_aid": 218,
+    "_build": 5851,
+    "_name": "\u00c4lvsj\u00f6",
+    "_region": "Sverige",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Dep\u00e5": {
+            "__class__": "Set",
+            "data": [
+                "Dep\u00e5 N",
+                "Dep\u00e5 S"
+            ]
+        },
+        "Gr\u00f6dingebanan": {
+            "__class__": "Set",
+            "data": [
+                "Gr\u00f6dingebanan"
+            ]
+        },
+        "Nyn\u00e4shamn": {
+            "__class__": "Set",
+            "data": [
+                "Nyn\u00e4shamn"
+            ]
+        },
+        "Stockholm": {
+            "__class__": "Set",
+            "data": [
+                "Stockholm L",
+                "Stockholm F"
+            ]
+        },
+        "V\u00e4stra SB": {
+            "__class__": "Set",
+            "data": [
+                "V\u00e4stra SB"
+            ]
+        },
+        "\u00c4sg N": {
+            "__class__": "Set",
+            "data": [
+                "\u00c4sg N"
+            ]
+        },
+        "\u00c4sg S": {
+            "__class__": "Set",
+            "data": [
+                "\u00c4sg S"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Bjn": {
+            "__class__": "Set",
+            "data": [
+                "Bjn"
+            ]
+        },
+        "Dep\u00e5": {
+            "__class__": "Set",
+            "data": [
+                "Dep\u00e5"
+            ]
+        },
+        "D\u00e5n": {
+            "__class__": "Set",
+            "data": [
+                "D\u00e5n"
+            ]
+        },
+        "Fas": {
+            "__class__": "Set",
+            "data": [
+                "Fas 2",
+                "Fas 1"
+            ]
+        },
+        "Flb": {
+            "__class__": "Set",
+            "data": [
+                "Flb 7",
+                "Flb 3",
+                "Flb 5",
+                "Flb 4",
+                "Flb 2",
+                "Flb 6",
+                "Flb M"
+            ]
+        },
+        "Gau": {
+            "__class__": "Set",
+            "data": [
+                "Gau"
+            ]
+        },
+        "Hu": {
+            "__class__": "Set",
+            "data": [
+                "Hu 2",
+                "Hu 4",
+                "Hu 1",
+                "Hu 3"
+            ]
+        },
+        "H\u00f6n": {
+            "__class__": "Set",
+            "data": [
+                "H\u00f6n"
+            ]
+        },
+        "Msj": {
+            "__class__": "Set",
+            "data": [
+                "Msj"
+            ]
+        },
+        "R\u00f6n": {
+            "__class__": "Set",
+            "data": [
+                "R\u00f6n"
+            ]
+        },
+        "Skg": {
+            "__class__": "Set",
+            "data": [
+                "Skg 2",
+                "Skg 1"
+            ]
+        },
+        "Sta": {
+            "__class__": "Set",
+            "data": [
+                "Sta"
+            ]
+        },
+        "S\u00f6dy": {
+            "__class__": "Set",
+            "data": [
+                "S\u00f6dy"
+            ]
+        },
+        "Tu": {
+            "__class__": "Set",
+            "data": [
+                "Tu 9S",
+                "Tu 2",
+                "Tu 8S",
+                "Tu 4",
+                "Tu 8N",
+                "Tu 3",
+                "Tu 1",
+                "Tu 9N"
+            ]
+        },
+        "Tul": {
+            "__class__": "Set",
+            "data": [
+                "Tul"
+            ]
+        },
+        "T\u00e5d": {
+            "__class__": "Set",
+            "data": [
+                "T\u00e5d"
+            ]
+        },
+        "Uts": {
+            "__class__": "Set",
+            "data": [
+                "Uts"
+            ]
+        },
+        "Vga": {
+            "__class__": "Set",
+            "data": [
+                "Vga"
+            ]
+        },
+        "\u00c4s": {
+            "__class__": "Set",
+            "data": [
+                "\u00c4s 2",
+                "\u00c4s 6",
+                "\u00c4s 8",
+                "\u00c4s 3",
+                "\u00c4s 7",
+                "\u00c4s 5",
+                "\u00c4s 4"
+            ]
+        },
+        "\u00c4sg": {
+            "__class__": "Set",
+            "data": [
+                "\u00c4sg 7",
+                "\u00c4sg 6"
+            ]
+        },
+        "\u00c5be": {
+            "__class__": "Set",
+            "data": [
+                "\u00c5be 2",
+                "\u00c5be 5",
+                "\u00c5be 3",
+                "\u00c5be 4"
+            ]
+        }
+    },
+    "hauptstrecke": "Stockholm-Gr\u00f6dingebanan",
+    "sektoren": {
+        "Tu 8": {
+            "__class__": "Set",
+            "data": [
+                "Tu 8S",
+                "Tu 8N"
+            ]
+        },
+        "Tu 9": {
+            "__class__": "Set",
+            "data": [
+                "Tu 9S",
+                "Tu 9N"
+            ]
+        }
+    },
+    "strecken": {
+        "Stockholm-Gr\u00f6dingebanan": [
+            "Stockholm",
+            "\u00c5be",
+            "\u00c4sg",
+            "\u00c4s",
+            "Sta",
+            "Hu",
+            "Flb",
+            "Bjn",
+            "Msj",
+            "Gr\u00f6dingebanan"
+        ],
+        "Stockholm-Nyn\u00e4shamn": [
+            "Stockholm",
+            "\u00c5be",
+            "\u00c4sg",
+            "\u00c4s",
+            "H\u00f6n",
+            "Fas",
+            "T\u00e5d",
+            "Skg",
+            "Vga",
+            "Nyn\u00e4shamn"
+        ],
+        "Stockholm-V\u00e4stra SB": [
+            "Stockholm",
+            "\u00c5be",
+            "\u00c4sg",
+            "\u00c4s",
+            "Sta",
+            "Hu",
+            "Flb",
+            "Tul",
+            "Uts",
+            "Tu",
+            "S\u00f6dy",
+            "Gau",
+            "R\u00f6n",
+            "D\u00e5n",
+            "V\u00e4stra SB"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweden"
+}

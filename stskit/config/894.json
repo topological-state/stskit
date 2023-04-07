@@ -1,0 +1,267 @@
+{
+    "_aid": 894,
+    "_build": 5851,
+    "_name": "H\u00e4ssleholm",
+    "_region": "Sverige",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abst": {
+            "__class__": "Set",
+            "data": [
+                "Abst"
+            ]
+        },
+        "Alvesta": {
+            "__class__": "Set",
+            "data": [
+                "Alvesta"
+            ]
+        },
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Gbf"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Industrigatan": {
+            "__class__": "Set",
+            "data": [
+                "Industrigatan"
+            ]
+        },
+        "Kristianstad": {
+            "__class__": "Set",
+            "data": [
+                "Kristianstad"
+            ]
+        },
+        "Lund": {
+            "__class__": "Set",
+            "data": [
+                "Lund"
+            ]
+        },
+        "Markaryd": {
+            "__class__": "Set",
+            "data": [
+                "Markaryd"
+            ]
+        },
+        "Teckomatorp": {
+            "__class__": "Set",
+            "data": [
+                "Teckomatorp"
+            ]
+        },
+        "Zuckerfabrik": {
+            "__class__": "Set",
+            "data": [
+                "Zuckerfabrik"
+            ]
+        },
+        "\u00c5storp": {
+            "__class__": "Set",
+            "data": [
+                "\u00c5storp"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Dammstorp": {
+            "__class__": "Set",
+            "data": [
+                "Dammstorp"
+            ]
+        },
+        "E": {
+            "__class__": "Set",
+            "data": [
+                "E 2",
+                "E 4",
+                "E 5",
+                "E 7",
+                "E 1",
+                "E 3",
+                "E 6",
+                "E 19",
+                "E 52"
+            ]
+        },
+        "Hm": {
+            "__class__": "Set",
+            "data": [
+                "Hm 11",
+                "Hm 4",
+                "Hm 4a",
+                "Hm 7b",
+                "Hm 6b",
+                "Hm 2",
+                "Hm 1a",
+                "Hm 8b",
+                "Hm 8a",
+                "Hm 3b",
+                "Hm 9",
+                "Hm 3",
+                "Hm 7a",
+                "Hm 1b",
+                "Hm 6a",
+                "Hm 5",
+                "Hm 23",
+                "Hm 21",
+                "Hm 19",
+                "Hm 22",
+                "Hm 20"
+            ]
+        },
+        "H\u00f6": {
+            "__class__": "Set",
+            "data": [
+                "H\u00f6 2",
+                "H\u00f6 1",
+                "H\u00f6 3"
+            ]
+        },
+        "Mellby": {
+            "__class__": "Set",
+            "data": [
+                "Mellby"
+            ]
+        },
+        "Sg": {
+            "__class__": "Set",
+            "data": [
+                "Sg 1",
+                "Sg 2",
+                "Sg 3"
+            ]
+        },
+        "Stehag": {
+            "__class__": "Set",
+            "data": [
+                "Stehag"
+            ]
+        },
+        "St\u00e5ngby": {
+            "__class__": "Set",
+            "data": [
+                "St\u00e5ngby"
+            ]
+        },
+        "S\u00f6sdala": {
+            "__class__": "Set",
+            "data": [
+                "S\u00f6sdala"
+            ]
+        },
+        "Thl": {
+            "__class__": "Set",
+            "data": [
+                "Thl 2",
+                "Thl 3",
+                "Thl 1",
+                "Thl 4"
+            ]
+        },
+        "T\u00f6": {
+            "__class__": "Set",
+            "data": [
+                "T\u00f6 3",
+                "T\u00f6 1G",
+                "T\u00f6 1",
+                "T\u00f6 2"
+            ]
+        },
+        "V\u00e4d": {
+            "__class__": "Set",
+            "data": [
+                "V\u00e4d 1",
+                "V\u00e4d 3",
+                "V\u00e4d 2",
+                "V\u00e4d 4"
+            ]
+        },
+        "\u00d6": {
+            "__class__": "Set",
+            "data": [
+                "\u00d6 3",
+                "\u00d6 1",
+                "\u00d6 3G",
+                "\u00d6 4",
+                "\u00d6 2",
+                "\u00d6 2G"
+            ]
+        }
+    },
+    "hauptstrecke": "Lund-Alvesta",
+    "sektoren": {
+        "Hm 1": {
+            "__class__": "Set",
+            "data": [
+                "Hm 1b",
+                "Hm 1a"
+            ]
+        },
+        "Hm 3": {
+            "__class__": "Set",
+            "data": [
+                "Hm 3b",
+                "Hm 3"
+            ]
+        },
+        "Hm 4": {
+            "__class__": "Set",
+            "data": [
+                "Hm 4a",
+                "Hm 4"
+            ]
+        },
+        "Hm 6": {
+            "__class__": "Set",
+            "data": [
+                "Hm 6a",
+                "Hm 6b"
+            ]
+        },
+        "Hm 7": {
+            "__class__": "Set",
+            "data": [
+                "Hm 7a",
+                "Hm 7b"
+            ]
+        },
+        "Hm 8": {
+            "__class__": "Set",
+            "data": [
+                "Hm 8b",
+                "Hm 8a"
+            ]
+        }
+    },
+    "strecken": {
+        "Lund-Alvesta": [
+            "Lund",
+            "Thl",
+            "St\u00e5ngby",
+            "\u00d6",
+            "Dammstorp",
+            "E",
+            "Stehag",
+            "H\u00f6",
+            "T\u00f6",
+            "V\u00e4d",
+            "S\u00f6sdala",
+            "Mellby",
+            "Hm",
+            "Alvesta"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweden"
+}

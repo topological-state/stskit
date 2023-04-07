@@ -1,0 +1,270 @@
+{
+    "_aid": 838,
+    "_build": 5851,
+    "_name": "Hyllie",
+    "_region": "Sverige",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Br\u00e5garp": {
+            "__class__": "Set",
+            "data": [
+                "Br\u00e5garp"
+            ]
+        },
+        "Hie 83b": {
+            "__class__": "Set",
+            "data": [
+                "Hie 83b"
+            ]
+        },
+        "Kastrup": {
+            "__class__": "Set",
+            "data": [
+                "Kastrup"
+            ]
+        },
+        "Lund": {
+            "__class__": "Set",
+            "data": [
+                "Lund"
+            ]
+        },
+        "Malm\u00f6 C": {
+            "__class__": "Set",
+            "data": [
+                "Malm\u00f6 C 2",
+                "Malm\u00f6 C 1"
+            ]
+        },
+        "Trelleborg": {
+            "__class__": "Set",
+            "data": [
+                "Trelleborg 1",
+                "Trelleborg 2"
+            ]
+        },
+        "Triangeln": {
+            "__class__": "Set",
+            "data": [
+                "Triangeln"
+            ]
+        },
+        "Ystad": {
+            "__class__": "Set",
+            "data": [
+                "Ystad"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Fosieby": {
+            "__class__": "Set",
+            "data": [
+                "Fosieby"
+            ]
+        },
+        "Fsb": {
+            "__class__": "Set",
+            "data": [
+                "Fsb"
+            ]
+        },
+        "Hie": {
+            "__class__": "Set",
+            "data": [
+                "Hie 2a",
+                "Hie 3a",
+                "Hie 4a",
+                "Hie 1a",
+                "Hie 2b",
+                "Hie 3b",
+                "Hie 4b",
+                "Hie 1b",
+                "Hie 83a",
+                "Hie 82a",
+                "Hie 82b"
+            ]
+        },
+        "Lernacken": {
+            "__class__": "Set",
+            "data": [
+                "Lernacken"
+            ]
+        },
+        "Persborg": {
+            "__class__": "Set",
+            "data": [
+                "Persborg"
+            ]
+        },
+        "Roseng\u00e5rd": {
+            "__class__": "Set",
+            "data": [
+                "Roseng\u00e5rd"
+            ]
+        },
+        "Stp": {
+            "__class__": "Set",
+            "data": [
+                "Stp 2",
+                "Stp 1G",
+                "Stp 3",
+                "Stp 4",
+                "Stp 3G",
+                "Stp 4G",
+                "Stp 1",
+                "Stp 2G"
+            ]
+        },
+        "\u00d6sterv\u00e4rn": {
+            "__class__": "Set",
+            "data": [
+                "\u00d6sterv\u00e4rn"
+            ]
+        },
+        "\u00d6vn": {
+            "__class__": "Set",
+            "data": [
+                "\u00d6vn 1",
+                "\u00d6vn 4",
+                "\u00d6vn 3",
+                "\u00d6vn 2"
+            ]
+        }
+    },
+    "hauptstrecke": "Triangeln-Lund",
+    "sektoren": {
+        "Hie 1": {
+            "__class__": "Set",
+            "data": [
+                "Hie 1a",
+                "Hie 1b"
+            ]
+        },
+        "Hie 2": {
+            "__class__": "Set",
+            "data": [
+                "Hie 2a",
+                "Hie 2b"
+            ]
+        },
+        "Hie 3": {
+            "__class__": "Set",
+            "data": [
+                "Hie 3a",
+                "Hie 3b"
+            ]
+        },
+        "Hie 4": {
+            "__class__": "Set",
+            "data": [
+                "Hie 4a",
+                "Hie 4b"
+            ]
+        },
+        "Hie 82": {
+            "__class__": "Set",
+            "data": [
+                "Hie 82b",
+                "Hie 82a"
+            ]
+        },
+        "Stp 1": {
+            "__class__": "Set",
+            "data": [
+                "Stp 1",
+                "Stp 1G"
+            ]
+        },
+        "Stp 2": {
+            "__class__": "Set",
+            "data": [
+                "Stp 2",
+                "Stp 2G"
+            ]
+        },
+        "Stp 3": {
+            "__class__": "Set",
+            "data": [
+                "Stp 3G",
+                "Stp 3"
+            ]
+        },
+        "Stp 4": {
+            "__class__": "Set",
+            "data": [
+                "Stp 4G",
+                "Stp 4"
+            ]
+        }
+    },
+    "strecken": {
+        "Kastrup-Lund": [
+            "Kastrup",
+            "Lernacken",
+            "Stp",
+            "Fosieby",
+            "Persborg",
+            "Roseng\u00e5rd",
+            "\u00d6vn",
+            "\u00d6sterv\u00e4rn",
+            "Lund"
+        ],
+        "Kastrup-Malm\u00f6": [
+            "Kastrup",
+            "Lernacken",
+            "Stp",
+            "Fosieby",
+            "Persborg",
+            "Roseng\u00e5rd",
+            "\u00d6vn",
+            "\u00d6sterv\u00e4rn",
+            "Malm\u00f6 C"
+        ],
+        "Kastrup-Triangeln": [
+            "Kastrup",
+            "Lernacken",
+            "Hie",
+            "Triangeln"
+        ],
+        "Malm\u00f6-Triangeln": [
+            "Malm\u00f6 C",
+            "\u00d6sterv\u00e4rn",
+            "\u00d6vn",
+            "Roseng\u00e5rd",
+            "Persborg",
+            "Fosieby",
+            "Stp",
+            "Lernacken",
+            "Hie",
+            "Triangeln"
+        ],
+        "Triangeln-Lund": [
+            "Triangeln",
+            "Hie",
+            "Lernacken",
+            "Stp",
+            "Fosieby",
+            "Persborg",
+            "Roseng\u00e5rd",
+            "\u00d6vn",
+            "\u00d6sterv\u00e4rn",
+            "Lund"
+        ],
+        "Triangeln-Malm\u00f6": [
+            "Triangeln",
+            "Hie",
+            "Lernacken",
+            "Stp",
+            "Fosieby",
+            "Persborg",
+            "Roseng\u00e5rd",
+            "\u00d6vn",
+            "\u00d6sterv\u00e4rn",
+            "Malm\u00f6 C"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweden"
+}

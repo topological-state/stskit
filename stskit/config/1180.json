@@ -1,0 +1,362 @@
+{
+    "_aid": 1180,
+    "_build": 5851,
+    "_name": "Trelleborg",
+    "_region": "Sverige",
+    "_version": 2,
+    "anschlussgruppen": {
+        "52-56": {
+            "__class__": "Set",
+            "data": [
+                "52-56"
+            ]
+        },
+        "61-65": {
+            "__class__": "Set",
+            "data": [
+                "61-65"
+            ]
+        },
+        "70": {
+            "__class__": "Set",
+            "data": [
+                "70"
+            ]
+        },
+        "Fosieby": {
+            "__class__": "Set",
+            "data": [
+                "Fosieby 2",
+                "Fosieby 1"
+            ]
+        },
+        "F\u00e4rja": {
+            "__class__": "Set",
+            "data": [
+                "F\u00e4rja 3",
+                "F\u00e4rja 1",
+                "F\u00e4rja 2"
+            ]
+        },
+        "Industri": {
+            "__class__": "Set",
+            "data": [
+                "Industri"
+            ]
+        },
+        "Kombiterminal": {
+            "__class__": "Set",
+            "data": [
+                "Kombiterminal"
+            ]
+        },
+        "Sv\u00e5gertorp": {
+            "__class__": "Set",
+            "data": [
+                "Sv\u00e5gertorp"
+            ]
+        },
+        "Tomelilla": {
+            "__class__": "Set",
+            "data": [
+                "Tomelilla"
+            ]
+        },
+        "Vossloh": {
+            "__class__": "Set",
+            "data": [
+                "Vossloh Switch"
+            ]
+        },
+        "Wheel": {
+            "__class__": "Set",
+            "data": [
+                "Wheel Systems"
+            ]
+        },
+        "Y 1": {
+            "__class__": "Set",
+            "data": [
+                "Y 1"
+            ]
+        },
+        "Y 12-16": {
+            "__class__": "Set",
+            "data": [
+                "Y 12-16"
+            ]
+        },
+        "Y F\u00e4rja": {
+            "__class__": "Set",
+            "data": [
+                "Y F\u00e4rja"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Lmm": {
+            "__class__": "Set",
+            "data": [
+                "Lmm 2",
+                "Lmm 1"
+            ]
+        },
+        "Lockarp": {
+            "__class__": "Set",
+            "data": [
+                "Lockarp"
+            ]
+        },
+        "Marsvinsholm": {
+            "__class__": "Set",
+            "data": [
+                "Marsvinsholm"
+            ]
+        },
+        "Oxie": {
+            "__class__": "Set",
+            "data": [
+                "Oxie"
+            ]
+        },
+        "Rdg": {
+            "__class__": "Set",
+            "data": [
+                "Rdg 1G",
+                "Rdg 2G",
+                "Rdg 2",
+                "Rdg 1"
+            ]
+        },
+        "Rye": {
+            "__class__": "Set",
+            "data": [
+                "Rye 1",
+                "Rye 2"
+            ]
+        },
+        "Sa\u00f6": {
+            "__class__": "Set",
+            "data": [
+                "Sa\u00f6 1",
+                "Sa\u00f6 2"
+            ]
+        },
+        "Sea": {
+            "__class__": "Set",
+            "data": [
+                "Sea 2",
+                "Sea 2G",
+                "Sea 1G",
+                "Sea 1"
+            ]
+        },
+        "Srp": {
+            "__class__": "Set",
+            "data": [
+                "Srp 2",
+                "Srp 1",
+                "Srp 2G",
+                "Srp 1G"
+            ]
+        },
+        "Svarte": {
+            "__class__": "Set",
+            "data": [
+                "Svarte"
+            ]
+        },
+        "Sv\u00f6": {
+            "__class__": "Set",
+            "data": [
+                "Sv\u00f6 1",
+                "Sv\u00f6 2"
+            ]
+        },
+        "Trg": {
+            "__class__": "Set",
+            "data": [
+                "Trg 75",
+                "Trg 83",
+                "Trg 82",
+                "Trg 42",
+                "Trg 69",
+                "Trg 46",
+                "Trg 80",
+                "Trg 40",
+                "Trg 45",
+                "Trg 85",
+                "Trg 67",
+                "Trg 39",
+                "Trg 41",
+                "Trg 2",
+                "Trg 68",
+                "Trg 44",
+                "Trg 77",
+                "Trg 43",
+                "Trg 81",
+                "Trg 66",
+                "Trg 1"
+            ]
+        },
+        "Trg indsp": {
+            "__class__": "Set",
+            "data": [
+                "Trg indsp"
+            ]
+        },
+        "Vid": {
+            "__class__": "Set",
+            "data": [
+                "Vid 1G",
+                "Vid 2",
+                "Vid 1",
+                "Vid 2G"
+            ]
+        },
+        "Vlb": {
+            "__class__": "Set",
+            "data": [
+                "Vlb 1",
+                "Vlb 2"
+            ]
+        },
+        "Y": {
+            "__class__": "Set",
+            "data": [
+                "Y 11",
+                "Y 23",
+                "Y 4",
+                "Y 2",
+                "Y 21",
+                "Y 22",
+                "Y 3"
+            ]
+        },
+        "\u00d6g": {
+            "__class__": "Set",
+            "data": [
+                "\u00d6g 2G",
+                "\u00d6g 1G",
+                "\u00d6g 1",
+                "\u00d6g 2"
+            ]
+        }
+    },
+    "hauptstrecke": "Sv\u00e5gertorp-Tomelilla",
+    "sektoren": {
+        "Rdg 1": {
+            "__class__": "Set",
+            "data": [
+                "Rdg 1G",
+                "Rdg 1"
+            ]
+        },
+        "Rdg 2": {
+            "__class__": "Set",
+            "data": [
+                "Rdg 2G",
+                "Rdg 2"
+            ]
+        },
+        "Sea 1": {
+            "__class__": "Set",
+            "data": [
+                "Sea 1",
+                "Sea 1G"
+            ]
+        },
+        "Sea 2": {
+            "__class__": "Set",
+            "data": [
+                "Sea 2",
+                "Sea 2G"
+            ]
+        },
+        "Srp 1": {
+            "__class__": "Set",
+            "data": [
+                "Srp 1G",
+                "Srp 1"
+            ]
+        },
+        "Srp 2": {
+            "__class__": "Set",
+            "data": [
+                "Srp 2",
+                "Srp 2G"
+            ]
+        },
+        "Vid 1": {
+            "__class__": "Set",
+            "data": [
+                "Vid 1G",
+                "Vid 1"
+            ]
+        },
+        "Vid 2": {
+            "__class__": "Set",
+            "data": [
+                "Vid 2",
+                "Vid 2G"
+            ]
+        }
+    },
+    "strecken": {
+        "Fosieby-F\u00e4rja": [
+            "Fosieby",
+            "Lockarp",
+            "Vid",
+            "\u00d6g",
+            "Sv\u00f6",
+            "Trg indsp",
+            "Trg",
+            "F\u00e4rja"
+        ],
+        "Fosieby-Tomelilla": [
+            "Fosieby",
+            "Lockarp",
+            "Oxie",
+            "Sa\u00f6",
+            "Sea",
+            "Lmm",
+            "Srp",
+            "Rdg",
+            "Rye",
+            "Marsvinsholm",
+            "Svarte",
+            "Vlb",
+            "Y",
+            "Tomelilla"
+        ],
+        "Sv\u00e5gertorp-F\u00e4rja": [
+            "Sv\u00e5gertorp",
+            "Lockarp",
+            "Vid",
+            "\u00d6g",
+            "Sv\u00f6",
+            "Trg indsp",
+            "Trg",
+            "F\u00e4rja"
+        ],
+        "Sv\u00e5gertorp-Tomelilla": [
+            "Sv\u00e5gertorp",
+            "Lockarp",
+            "Oxie",
+            "Sa\u00f6",
+            "Sea",
+            "Lmm",
+            "Srp",
+            "Rdg",
+            "Rye",
+            "Marsvinsholm",
+            "Svarte",
+            "Vlb",
+            "Y",
+            "Tomelilla"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweden"
+}

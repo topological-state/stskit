@@ -1,0 +1,214 @@
+{
+    "_aid": 839,
+    "_build": 5851,
+    "_name": "Malm\u00f6 C",
+    "_region": "Sverige",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Ablaufberg": {
+            "__class__": "Set",
+            "data": [
+                "Ablaufberg"
+            ]
+        },
+        "Autolink": {
+            "__class__": "Set",
+            "data": [
+                "Autolink 1",
+                "Autolink 2"
+            ]
+        },
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW"
+            ]
+        },
+        "Depot": {
+            "__class__": "Set",
+            "data": [
+                "Depot"
+            ]
+        },
+        "Hamnen": {
+            "__class__": "Set",
+            "data": [
+                "Hamnen"
+            ]
+        },
+        "Hyllie": {
+            "__class__": "Set",
+            "data": [
+                "Hyllie"
+            ]
+        },
+        "Ladestra\u00dfen": {
+            "__class__": "Set",
+            "data": [
+                "Ladestra\u00dfen"
+            ]
+        },
+        "Lok": {
+            "__class__": "Set",
+            "data": [
+                "Lok"
+            ]
+        },
+        "Lund": {
+            "__class__": "Set",
+            "data": [
+                "Lund 4",
+                "Lund 2",
+                "Lund 1",
+                "Lund 3"
+            ]
+        },
+        "Lund Gbg": {
+            "__class__": "Set",
+            "data": [
+                "Lund Gbg 1",
+                "Lund Gbg 2"
+            ]
+        },
+        "MA 21-24": {
+            "__class__": "Set",
+            "data": [
+                "MA 21-24"
+            ]
+        },
+        "MG 61-63": {
+            "__class__": "Set",
+            "data": [
+                "MG 61-63"
+            ]
+        },
+        "Reng\u00f6ring": {
+            "__class__": "Set",
+            "data": [
+                "Reng\u00f6ring"
+            ]
+        },
+        "Toyota": {
+            "__class__": "Set",
+            "data": [
+                "Toyota"
+            ]
+        },
+        "\u00d6sterv\u00e4rn": {
+            "__class__": "Set",
+            "data": [
+                "\u00d6sterv\u00e4rn 1",
+                "\u00d6sterv\u00e4rn 2"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Auto": {
+            "__class__": "Set",
+            "data": [
+                "Auto 2",
+                "Auto 1",
+                "Auto 5",
+                "Auto 4"
+            ]
+        },
+        "M": {
+            "__class__": "Set",
+            "data": [
+                "M 2a",
+                "M 10",
+                "M 6",
+                "M 3b",
+                "M 8",
+                "M 3a",
+                "M 9",
+                "M 4a",
+                "M 7",
+                "M 1b",
+                "M 2b",
+                "M 5",
+                "M 4b",
+                "M 1a",
+                "M 401",
+                "M 402"
+            ]
+        },
+        "MA": {
+            "__class__": "Set",
+            "data": [
+                "MA 7",
+                "MA 12",
+                "MA 46",
+                "MA 8"
+            ]
+        },
+        "MG": {
+            "__class__": "Set",
+            "data": [
+                "MG 3",
+                "MG 1",
+                "MG 0",
+                "MG 4",
+                "MG 2",
+                "MG 10",
+                "MG 64"
+            ]
+        },
+        "Triangeln": {
+            "__class__": "Set",
+            "data": [
+                "Triangeln"
+            ]
+        }
+    },
+    "hauptstrecke": "Hyllie-Lund",
+    "sektoren": {
+        "M 1": {
+            "__class__": "Set",
+            "data": [
+                "M 1a",
+                "M 1b"
+            ]
+        },
+        "M 2": {
+            "__class__": "Set",
+            "data": [
+                "M 2a",
+                "M 2b"
+            ]
+        },
+        "M 3": {
+            "__class__": "Set",
+            "data": [
+                "M 3a",
+                "M 3b"
+            ]
+        },
+        "M 4": {
+            "__class__": "Set",
+            "data": [
+                "M 4a",
+                "M 4b"
+            ]
+        }
+    },
+    "strecken": {
+        "Hyllie-Lund": [
+            "Hyllie",
+            "Triangeln",
+            "M",
+            "MA",
+            "Lund"
+        ],
+        "Hyllie-\u00d6sterv\u00e4rn": [
+            "Hyllie",
+            "Triangeln",
+            "M",
+            "MA",
+            "\u00d6sterv\u00e4rn"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweden"
+}

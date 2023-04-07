@@ -1,0 +1,216 @@
+{
+    "_aid": 899,
+    "_build": 5851,
+    "_name": "Lund",
+    "_region": "Sverige",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Ablaufberg": {
+            "__class__": "Set",
+            "data": [
+                "Ablaufberg"
+            ]
+        },
+        "Hyllie": {
+            "__class__": "Set",
+            "data": [
+                "Hyllie"
+            ]
+        },
+        "H\u00e4ssleholm": {
+            "__class__": "Set",
+            "data": [
+                "H\u00e4ssleholm"
+            ]
+        },
+        "Kombi S": {
+            "__class__": "Set",
+            "data": [
+                "Kombi S"
+            ]
+        },
+        "Kombiterminal N": {
+            "__class__": "Set",
+            "data": [
+                "Kombiterminal N"
+            ]
+        },
+        "K\u00e4vlinge": {
+            "__class__": "Set",
+            "data": [
+                "K\u00e4vlinge"
+            ]
+        },
+        "K\u00e4vlinge G": {
+            "__class__": "Set",
+            "data": [
+                "K\u00e4vlinge G"
+            ]
+        },
+        "Lok": {
+            "__class__": "Set",
+            "data": [
+                "Lok"
+            ]
+        },
+        "Malm\u00f6 C": {
+            "__class__": "Set",
+            "data": [
+                "Malm\u00f6 C 4",
+                "Malm\u00f6 C 1",
+                "Malm\u00f6 C 2",
+                "Malm\u00f6 C 3"
+            ]
+        },
+        "Malm\u00f6 G": {
+            "__class__": "Set",
+            "data": [
+                "Malm\u00f6 G 2",
+                "Malm\u00f6 G 1"
+            ]
+        },
+        "Nordic Sugar": {
+            "__class__": "Set",
+            "data": [
+                "Nordic Sugar"
+            ]
+        },
+        "Tetra Pak": {
+            "__class__": "Set",
+            "data": [
+                "Tetra Pak"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Al": {
+            "__class__": "Set",
+            "data": [
+                "Al 60",
+                "Al 59"
+            ]
+        },
+        "Arl\u00f6v": {
+            "__class__": "Set",
+            "data": [
+                "Arl\u00f6v"
+            ]
+        },
+        "Burl\u00f6v": {
+            "__class__": "Set",
+            "data": [
+                "Burl\u00f6v"
+            ]
+        },
+        "Flackarp": {
+            "__class__": "Set",
+            "data": [
+                "Flackarp"
+            ]
+        },
+        "Hj\u00e4rup": {
+            "__class__": "Set",
+            "data": [
+                "Hj\u00e4rup"
+            ]
+        },
+        "Kombiterminal S": {
+            "__class__": "Set",
+            "data": [
+                "Kombiterminal S"
+            ]
+        },
+        "Lu": {
+            "__class__": "Set",
+            "data": [
+                "Lu 5L",
+                "Lu 3L",
+                "Lu 3",
+                "Lu 6",
+                "Lu 1",
+                "Lu 2",
+                "Lu 4",
+                "Lu 6L",
+                "Lu 5",
+                "Lu 1L",
+                "Lu 4L",
+                "Lu 2L"
+            ]
+        },
+        "Mgb": {
+            "__class__": "Set",
+            "data": [
+                "Mgb 63",
+                "Mgb 59",
+                "Mgb 62",
+                "Mgb 28",
+                "Mgb 3",
+                "Mgb 33",
+                "Mgb 61",
+                "Mgb 10",
+                "Mgb 7",
+                "Mgb 8",
+                "Mgb 35",
+                "Mgb 6",
+                "Mgb 64",
+                "Mgb 5",
+                "Mgb 2"
+            ]
+        },
+        "\u00c5karp": {
+            "__class__": "Set",
+            "data": [
+                "\u00c5karp"
+            ]
+        },
+        "\u00c5karps Norra": {
+            "__class__": "Set",
+            "data": [
+                "\u00c5karps Norra"
+            ]
+        }
+    },
+    "hauptstrecke": "Malm\u00f6 C-H\u00e4ssleholm",
+    "sektoren": {},
+    "strecken": {
+        "Hyllie-K\u00e4vlinge G": [
+            "Hyllie",
+            "Mgb",
+            "Arl\u00f6v",
+            "K\u00e4vlinge G"
+        ],
+        "Malm\u00f6 C-H\u00e4ssleholm": [
+            "Malm\u00f6 C",
+            "Mgb",
+            "Arl\u00f6v",
+            "Burl\u00f6v",
+            "\u00c5karp",
+            "\u00c5karps Norra",
+            "Hj\u00e4rup",
+            "Flackarp",
+            "Lu",
+            "H\u00e4ssleholm"
+        ],
+        "Malm\u00f6 C-K\u00e4vlinge": [
+            "Malm\u00f6 C",
+            "Mgb",
+            "Arl\u00f6v",
+            "Burl\u00f6v",
+            "\u00c5karp",
+            "\u00c5karps Norra",
+            "Hj\u00e4rup",
+            "Flackarp",
+            "Lu",
+            "K\u00e4vlinge"
+        ],
+        "Malm\u00f6 G-K\u00e4vlinge G": [
+            "Malm\u00f6 G",
+            "Mgb",
+            "Arl\u00f6v",
+            "K\u00e4vlinge G"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweden"
+}

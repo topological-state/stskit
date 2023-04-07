@@ -1,0 +1,231 @@
+{
+    "_aid": 168,
+    "_build": 5851,
+    "_name": "K\u00f8benhavn H",
+    "_region": "Danmark \u00d8st",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Belvedere 1": {
+            "__class__": "Set",
+            "data": [
+                "Belvedere 1"
+            ]
+        },
+        "Belvedere 2": {
+            "__class__": "Set",
+            "data": [
+                "Belvedere 2"
+            ]
+        },
+        "Belvedere 3": {
+            "__class__": "Set",
+            "data": [
+                "Belvedere 3"
+            ]
+        },
+        "IC3 Depot": {
+            "__class__": "Set",
+            "data": [
+                "IC3 Depot"
+            ]
+        },
+        "Kastrup": {
+            "__class__": "Set",
+            "data": [
+                "Kastrup"
+            ]
+        },
+        "M1": {
+            "__class__": "Set",
+            "data": [
+                "M1"
+            ]
+        },
+        "Ny Ellebjerg": {
+            "__class__": "Set",
+            "data": [
+                "Ny Ellebjerg"
+            ]
+        },
+        "Ny Ellebjerg S": {
+            "__class__": "Set",
+            "data": [
+                "Ny Ellebjerg S"
+            ]
+        },
+        "S-Tog": {
+            "__class__": "Set",
+            "data": [
+                "S-Tog"
+            ]
+        },
+        "Valby": {
+            "__class__": "Set",
+            "data": [
+                "Valby"
+            ]
+        },
+        "Valby S": {
+            "__class__": "Set",
+            "data": [
+                "Valby S"
+            ]
+        },
+        "\u00d8sterport": {
+            "__class__": "Set",
+            "data": [
+                "\u00d8sterport"
+            ]
+        },
+        "\u00d8sterport S": {
+            "__class__": "Set",
+            "data": [
+                "\u00d8sterport S"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Ban": {
+            "__class__": "Set",
+            "data": [
+                "Ban 2",
+                "Ban 1"
+            ]
+        },
+        "Carlsberg": {
+            "__class__": "Set",
+            "data": [
+                "Carlsberg"
+            ]
+        },
+        "Dybb\u00f8lsbro": {
+            "__class__": "Set",
+            "data": [
+                "Dybb\u00f8lsbro"
+            ]
+        },
+        "HBf": {
+            "__class__": "Set",
+            "data": [
+                "3L",
+                "10",
+                "9",
+                "4L",
+                "3",
+                "1L",
+                "5",
+                "7",
+                "4",
+                "6",
+                "26",
+                "7L",
+                "2",
+                "1",
+                "11",
+                "8",
+                "12",
+                "2L",
+                "8L"
+            ]
+        },
+        "Skelb\u00e6k": {
+            "__class__": "Set",
+            "data": [
+                "Skelb\u00e6k"
+            ]
+        },
+        "Sydhavn": {
+            "__class__": "Set",
+            "data": [
+                "Sydhavn"
+            ]
+        },
+        "Vesterport": {
+            "__class__": "Set",
+            "data": [
+                "Vesterport"
+            ]
+        }
+    },
+    "hauptstrecke": "Ny Ellebjerg S-\u00d8sterport S",
+    "sektoren": {
+        "1": {
+            "__class__": "Set",
+            "data": [
+                "1L",
+                "1"
+            ]
+        },
+        "2": {
+            "__class__": "Set",
+            "data": [
+                "2",
+                "2L"
+            ]
+        },
+        "3": {
+            "__class__": "Set",
+            "data": [
+                "3",
+                "3L"
+            ]
+        },
+        "4": {
+            "__class__": "Set",
+            "data": [
+                "4",
+                "4L"
+            ]
+        },
+        "7": {
+            "__class__": "Set",
+            "data": [
+                "7L",
+                "7"
+            ]
+        },
+        "8": {
+            "__class__": "Set",
+            "data": [
+                "8",
+                "8L"
+            ]
+        }
+    },
+    "strecken": {
+        "Kastrup-\u00d8sterport": [
+            "Kastrup",
+            "HBf",
+            "\u00d8sterport"
+        ],
+        "Ny Ellebjerg S-\u00d8sterport S": [
+            "Ny Ellebjerg S",
+            "Sydhavn",
+            "Ban",
+            "Dybb\u00f8lsbro",
+            "HBf",
+            "Vesterport",
+            "\u00d8sterport S"
+        ],
+        "Ny Ellebjerg-\u00d8sterport": [
+            "Ny Ellebjerg",
+            "HBf",
+            "\u00d8sterport"
+        ],
+        "Valby S-\u00d8sterport S": [
+            "Valby S",
+            "Dybb\u00f8lsbro",
+            "HBf",
+            "Vesterport",
+            "\u00d8sterport S"
+        ],
+        "Valby-\u00d8sterport": [
+            "Valby",
+            "HBf",
+            "\u00d8sterport"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweden"
+}

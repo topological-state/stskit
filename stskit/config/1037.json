@@ -1,0 +1,316 @@
+{
+    "_aid": 1037,
+    "_build": 5851,
+    "_name": "Upplands V\u00e4sby",
+    "_region": "Sverige",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Arlandab": {
+            "__class__": "Set",
+            "data": [
+                "Arlandab"
+            ]
+        },
+        "Container": {
+            "__class__": "Set",
+            "data": [
+                "Container"
+            ]
+        },
+        "Dep\u00e5 AEX": {
+            "__class__": "Set",
+            "data": [
+                "Dep\u00e5 AEX"
+            ]
+        },
+        "Hgl": {
+            "__class__": "Set",
+            "data": [
+                "Hgl vagn",
+                "Hgl lok"
+            ]
+        },
+        "J\u00e4st": {
+            "__class__": "Set",
+            "data": [
+                "J\u00e4st"
+            ]
+        },
+        "Ostkustb": {
+            "__class__": "Set",
+            "data": [
+                "Ostkustb"
+            ]
+        },
+        "Post": {
+            "__class__": "Set",
+            "data": [
+                "Post"
+            ]
+        },
+        "Stockholm": {
+            "__class__": "Set",
+            "data": [
+                "Stockholm V",
+                "Stockholm F",
+                "Stockholm L",
+                "Stockholm G"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Arnc": {
+            "__class__": "Set",
+            "data": [
+                "Arnc 2",
+                "Arnc 1"
+            ]
+        },
+        "Arne": {
+            "__class__": "Set",
+            "data": [
+                "Arne"
+            ]
+        },
+        "Arnn": {
+            "__class__": "Set",
+            "data": [
+                "Arnn 9",
+                "Arnn 6",
+                "Arnn 7"
+            ]
+        },
+        "Arns": {
+            "__class__": "Set",
+            "data": [
+                "Arns 4",
+                "Arns 5"
+            ]
+        },
+        "Bra": {
+            "__class__": "Set",
+            "data": [
+                "Bra 1",
+                "Bra 2",
+                "Bra 5",
+                "Bra 3",
+                "Bra 6"
+            ]
+        },
+        "Bvr": {
+            "__class__": "Set",
+            "data": [
+                "Bvr",
+                "Bvr dep\u00e5n"
+            ]
+        },
+        "Ghu": {
+            "__class__": "Set",
+            "data": [
+                "Ghu"
+            ]
+        },
+        "Hel": {
+            "__class__": "Set",
+            "data": [
+                "Hel"
+            ]
+        },
+        "Hgl": {
+            "__class__": "Set",
+            "data": [
+                "Hgl"
+            ]
+        },
+        "Hgv": {
+            "__class__": "Set",
+            "data": [
+                "Hgv 3",
+                "Hgv 1",
+                "Hgv 7",
+                "Hgv 2",
+                "Hgv 4"
+            ]
+        },
+        "Kmy": {
+            "__class__": "Set",
+            "data": [
+                "Kmy"
+            ]
+        },
+        "Mr": {
+            "__class__": "Set",
+            "data": [
+                "Mr 9N",
+                "Mr 8S",
+                "Mr 1",
+                "Mr 2",
+                "Mr 9S",
+                "Mr 7",
+                "Mr 3",
+                "Mr 8N",
+                "Mr 4"
+            ]
+        },
+        "Nvk": {
+            "__class__": "Set",
+            "data": [
+                "Nvk"
+            ]
+        },
+        "R": {
+            "__class__": "Set",
+            "data": [
+                "R indsp2",
+                "R 2",
+                "R 3",
+                "R sky1",
+                "R 1",
+                "R 4"
+            ]
+        },
+        "Rs": {
+            "__class__": "Set",
+            "data": [
+                "Rs 3",
+                "Rs 31",
+                "Rs 30",
+                "Rs 1",
+                "Rs 32",
+                "Rs 2"
+            ]
+        },
+        "Skby": {
+            "__class__": "Set",
+            "data": [
+                "Skby"
+            ]
+        },
+        "So": {
+            "__class__": "Set",
+            "data": [
+                "So 2",
+                "So 7",
+                "So 6",
+                "So 1",
+                "So 4",
+                "So 3"
+            ]
+        },
+        "Sol": {
+            "__class__": "Set",
+            "data": [
+                "Sol"
+            ]
+        },
+        "Udl": {
+            "__class__": "Set",
+            "data": [
+                "Udl 3",
+                "Udl 2",
+                "Udl 4",
+                "Udl 7",
+                "Udl 1"
+            ]
+        },
+        "Upv": {
+            "__class__": "Set",
+            "data": [
+                "Upv 2",
+                "Upv 9S",
+                "Upv 4",
+                "Upv 3",
+                "Upv 1",
+                "Upv G1",
+                "Upv 9N",
+                "Upv 5",
+                "Upv 8N",
+                "Upv 8S"
+            ]
+        }
+    },
+    "hauptstrecke": "Arlandab-Stockholm",
+    "sektoren": {
+        "Mr 8": {
+            "__class__": "Set",
+            "data": [
+                "Mr 8S",
+                "Mr 8N"
+            ]
+        },
+        "Mr 9": {
+            "__class__": "Set",
+            "data": [
+                "Mr 9N",
+                "Mr 9S"
+            ]
+        },
+        "Upv 8": {
+            "__class__": "Set",
+            "data": [
+                "Upv 8S",
+                "Upv 8N"
+            ]
+        },
+        "Upv 9": {
+            "__class__": "Set",
+            "data": [
+                "Upv 9N",
+                "Upv 9S"
+            ]
+        }
+    },
+    "strecken": {
+        "Arlanda-Stockholm": [
+            "Arnn",
+            "Arns",
+            "Arne",
+            "Bvr",
+            "Skby",
+            "Upv",
+            "Nvk",
+            "Hgv",
+            "Sol",
+            "Kmy",
+            "Hel",
+            "Udl",
+            "So",
+            "Stockholm"
+        ],
+        "Arlandab-Stockholm": [
+            "Arlandab",
+            "Arnc",
+            "Arne",
+            "Bvr",
+            "Skby",
+            "Upv",
+            "Nvk",
+            "Hgv",
+            "Sol",
+            "Kmy",
+            "Hel",
+            "Udl",
+            "So",
+            "Stockholm"
+        ],
+        "Ostkustb-Stockholm": [
+            "Ostkustb",
+            "Mr",
+            "Bra",
+            "Rs",
+            "Skby",
+            "Upv",
+            "Nvk",
+            "Hgv",
+            "Sol",
+            "Kmy",
+            "Hel",
+            "Udl",
+            "So",
+            "Stockholm"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweden"
+}
