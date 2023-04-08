@@ -145,12 +145,11 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self._distanz: List[float] = []
         self._zuglaeufe: Dict[Tuple[int, int], List[Trasse]] = {}
 
-        self.zeitfenster_voraus = 55
-        self.zeitfenster_zurueck = 5
+        self.vorlaufzeit = 55
+        self.nachlaufzeit = 5
 
         self.ui = Ui_BildfahrplanWindow()
         self.ui.setupUi(self)
-        self.ui.display_button.setDefaultAction(self.ui.actionAnzeige)
 
         self.setWindowTitle("Bildfahrplan")
 
@@ -171,6 +170,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.von_combo.currentIndexChanged.connect(self.strecke_selection_changed)
         self.ui.via_combo.currentIndexChanged.connect(self.strecke_selection_changed)
         self.ui.nach_combo.currentIndexChanged.connect(self.strecke_selection_changed)
+
+        self.ui.vorlaufzeit_spin.valueChanged.connect(self.vorlaufzeit_changed)
+        self.ui.nachlaufzeit_spin.valueChanged.connect(self.nachlaufzeit_changed)
 
         self._axes = self.display_canvas.figure.subplots()
         self.display_canvas.mpl_connect("button_press_event", self.on_button_press)
@@ -218,7 +220,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and trasse_nachbar == 0)
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and trasse_nachbar == 1)
 
-    def update_combos(self):
+    def update_widgets(self):
         name = self._strecken_name
         von = self._strecke_von
         via = self._strecke_via
@@ -246,6 +248,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         if name:
             self.ui.vordefiniert_combo.setCurrentText(name)
 
+        self.ui.vorlaufzeit_spin.setValue(self.vorlaufzeit)
+        self.ui.nachlaufzeit_spin.setValue(self.nachlaufzeit)
+
     def default_strecke_waehlen(self):
         strecken = [(name, len(strecke)) for name, strecke in self.anlage.strecken.items()]
         try:
@@ -268,7 +273,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self._strecke_nach = strecke[-1]
         self._strecke_via = ""
 
-        self.update_combos()
+        self.update_widgets()
 
     @pyqtSlot()
     def strecke_selection_changed(self):
@@ -309,9 +314,23 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     def page_changed(self):
         self.update_actions()
 
+    @pyqtSlot()
+    def vorlaufzeit_changed(self):
+        try:
+            self.vorlaufzeit = self.ui.vorlaufzeit_spin.value()
+        except ValueError:
+            pass
+
+    @pyqtSlot()
+    def nachlaufzeit_changed(self):
+        try:
+            self.nachlaufzeit = self.ui.nachlaufzeit_spin.value()
+        except ValueError:
+            pass
+
     def planung_update(self, *args, **kwargs):
         if self.ui.von_combo.count() == 0:
-            self.update_combos()
+            self.update_widgets()
         if self._strecke_von and self._strecke_nach:
             self.update_strecke()
             self.daten_update()
@@ -481,7 +500,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self._axes.xaxis.grid(True)
 
         zeit = time_to_minutes(self.client.calc_simzeit())
-        ylim = (zeit - self.zeitfenster_zurueck, zeit + self.zeitfenster_voraus)
+        ylim = (zeit - self.nachlaufzeit, zeit + self.vorlaufzeit)
         self._axes.set_ylim(top=ylim[0], bottom=ylim[1])
         try:
             self._axes.set_xlim(left=x_labels_pos[0], right=x_labels_pos[-1])
@@ -497,7 +516,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                                linewidth=mpl.rcParams['axes.linewidth'])
 
         wid_x = x_labels_pos[-1] - x_labels_pos[0]
-        wid_y = self.zeitfenster_zurueck + self.zeitfenster_voraus
+        wid_y = self.nachlaufzeit + self.vorlaufzeit
         off_x = 0
         off = self._axes.transData.inverted().transform([(0, 0), (0, -5)])
         off_y = (off[1] - off[0])[1]
@@ -540,7 +559,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
             item.set_fontsize('small')
 
-        if self.zeitfenster_zurueck > 0:
+        if self.nachlaufzeit > 0:
             self._axes.axhline(y=zeit, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
 
         for tr, farbe in zip(self._trasse_auswahl, ['yellow', 'cyan']):

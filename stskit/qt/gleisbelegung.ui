@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
@@ -23,10 +23,358 @@
       <widget class="QWidget" name="settings_page">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QTreeView" name="gleisView">
-          <property name="alternatingRowColors">
-           <bool>true</bool>
+         <widget class="QGroupBox" name="gleise_group">
+          <property name="title">
+           <string>Gleise</string>
           </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QTreeView" name="gleisView">
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="zuege_group">
+          <property name="title">
+           <string>Züge</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QLabel" name="kategorien_label">
+             <property name="text">
+              <string>&amp;Kategorien</string>
+             </property>
+             <property name="buddy">
+              <cstring>kategorien_list</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QListWidget" name="kategorien_list">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="selectionBehavior">
+              <enum>QAbstractItemView::SelectRows</enum>
+             </property>
+             <item>
+              <property name="text">
+               <string>Express</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Fernverkehr</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Nahverkehr</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>S-Bahn</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Güterzug</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Sonderzug</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Dienstzug</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Rangierfahrt</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="beschriftung_label">
+             <property name="text">
+              <string>&amp;Beschriftung</string>
+             </property>
+             <property name="buddy">
+              <cstring>beschriftung_table</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="beschriftung_table">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::NoSelection</enum>
+             </property>
+             <row>
+              <property name="text">
+               <string>Gleis</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Zug</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Nummer</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Richtung</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Zeit</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Verspätung</string>
+              </property>
+             </row>
+             <column>
+              <property name="text">
+               <string>Ankunft</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Abfahrt</string>
+              </property>
+             </column>
+             <item row="0" column="0">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="checkState">
+               <enum>Unchecked</enum>
+              </property>
+              <property name="flags">
+               <set>ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+             <item row="0" column="1">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="checkState">
+               <enum>Unchecked</enum>
+              </property>
+              <property name="flags">
+               <set>ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+             <item row="1" column="0">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="checkState">
+               <enum>Unchecked</enum>
+              </property>
+              <property name="flags">
+               <set>ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+             <item row="1" column="1">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="checkState">
+               <enum>Unchecked</enum>
+              </property>
+              <property name="flags">
+               <set>ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+             <item row="2" column="0">
+              <property name="flags">
+               <set>ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+             <item row="3" column="0">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="checkState">
+               <enum>Unchecked</enum>
+              </property>
+              <property name="flags">
+               <set>ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+             <item row="3" column="1">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="checkState">
+               <enum>Unchecked</enum>
+              </property>
+              <property name="flags">
+               <set>ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+             <item row="4" column="0">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="checkState">
+               <enum>Unchecked</enum>
+              </property>
+              <property name="flags">
+               <set>ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+             <item row="4" column="1">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="checkState">
+               <enum>Unchecked</enum>
+              </property>
+              <property name="flags">
+               <set>ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+             <item row="5" column="0">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="checkState">
+               <enum>Unchecked</enum>
+              </property>
+              <property name="flags">
+               <set>ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+             <item row="5" column="1">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="checkState">
+               <enum>Unchecked</enum>
+              </property>
+              <property name="flags">
+               <set>ItemIsUserCheckable|ItemIsEnabled</set>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="darstellung_group">
+          <property name="title">
+           <string>Darstellung</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QLabel" name="vorlaufzeit_label">
+             <property name="text">
+              <string>V&amp;orlaufzeit</string>
+             </property>
+             <property name="buddy">
+              <cstring>vorlaufzeit_spin</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="vorlaufzeit_spin">
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="suffix">
+              <string> Min.</string>
+             </property>
+             <property name="minimum">
+              <number>15</number>
+             </property>
+             <property name="maximum">
+              <number>120</number>
+             </property>
+             <property name="singleStep">
+              <number>5</number>
+             </property>
+             <property name="value">
+              <number>55</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="nachlaufzeit_label">
+             <property name="text">
+              <string>N&amp;achlaufzeit</string>
+             </property>
+             <property name="buddy">
+              <cstring>nachlaufzeit_spin</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="nachlaufzeit_spin">
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="suffix">
+              <string> Min.</string>
+             </property>
+             <property name="minimum">
+              <number>5</number>
+             </property>
+             <property name="maximum">
+              <number>120</number>
+             </property>
+             <property name="singleStep">
+              <number>5</number>
+             </property>
+             <property name="value">
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="darstellung_stretch" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>
@@ -135,7 +483,7 @@
   </widget>
   <action name="actionSetup">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/equalizer.png</normaloff>
      <disabledoff>:/equalizer-dis.png</disabledoff>:/equalizer.png</iconset>
    </property>
@@ -151,7 +499,7 @@
   </action>
   <action name="actionAnzeige">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/slots.png</normaloff>
      <disabledoff>:/slots-dis.png</disabledoff>:/slots.png</iconset>
    </property>
@@ -167,7 +515,7 @@
   </action>
   <action name="actionPlusEins">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/clock--plus.png</normaloff>:/clock--plus.png</iconset>
    </property>
    <property name="text">
@@ -182,7 +530,7 @@
   </action>
   <action name="actionMinusEins">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/clock--minus.png</normaloff>:/clock--minus.png</iconset>
    </property>
    <property name="text">
@@ -197,7 +545,7 @@
   </action>
   <action name="actionFix">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/clock--pencil.png</normaloff>:/clock--pencil.png</iconset>
    </property>
    <property name="text">
@@ -212,7 +560,7 @@
   </action>
   <action name="actionLoeschen">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/chain--return.png</normaloff>:/chain--return.png</iconset>
    </property>
    <property name="text">
@@ -227,7 +575,7 @@
   </action>
   <action name="actionAnkunftAbwarten">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/chain--arrow-in.png</normaloff>:/chain--arrow-in.png</iconset>
    </property>
    <property name="text">
@@ -242,7 +590,7 @@
   </action>
   <action name="actionAbfahrtAbwarten">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/chain--arrow.png</normaloff>:/chain--arrow.png</iconset>
    </property>
    <property name="text">
@@ -257,7 +605,7 @@
   </action>
   <action name="actionWarnungSetzen">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/flag.png</normaloff>:/flag.png</iconset>
    </property>
    <property name="text">
@@ -272,7 +620,7 @@
   </action>
   <action name="actionWarnungIgnorieren">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/flag-green.png</normaloff>:/flag-green.png</iconset>
    </property>
    <property name="text">
@@ -287,7 +635,7 @@
   </action>
   <action name="actionWarnungReset">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/flag-white.png</normaloff>:/flag-white.png</iconset>
    </property>
    <property name="text">
@@ -311,7 +659,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/funnel-small.png</normaloff>
      <disabledoff>:/funnel-small-dis</disabledoff>:/funnel-small.png</iconset>
    </property>
@@ -326,8 +674,6 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

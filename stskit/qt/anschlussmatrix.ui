@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="settings_page">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -332,7 +332,7 @@
   </widget>
   <action name="actionSetup">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/equalizer.png</normaloff>
      <disabledoff>:/equalizer-dis.png</disabledoff>:/equalizer.png</iconset>
    </property>
@@ -348,7 +348,7 @@
   </action>
   <action name="actionAnzeige">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/slots.png</normaloff>
      <disabledoff>:/slots-dis.png</disabledoff>:/slots.png</iconset>
    </property>
@@ -364,7 +364,7 @@
   </action>
   <action name="actionPlusEins">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/clock--plus.png</normaloff>:/clock--plus.png</iconset>
    </property>
    <property name="text">
@@ -379,7 +379,7 @@
   </action>
   <action name="actionMinusEins">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/clock--minus.png</normaloff>:/clock--minus.png</iconset>
    </property>
    <property name="text">
@@ -394,7 +394,7 @@
   </action>
   <action name="actionFix">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/clock--pencil.png</normaloff>:/clock--pencil.png</iconset>
    </property>
    <property name="text">
@@ -409,7 +409,7 @@
   </action>
   <action name="actionLoeschen">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/chain--return.png</normaloff>:/chain--return.png</iconset>
    </property>
    <property name="text">
@@ -424,7 +424,7 @@
   </action>
   <action name="actionAnkunftAbwarten">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/chain--arrow-in.png</normaloff>:/chain--arrow-in.png</iconset>
    </property>
    <property name="text">
@@ -439,7 +439,7 @@
   </action>
   <action name="actionAbfahrtAbwarten">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/chain--arrow.png</normaloff>:/chain--arrow.png</iconset>
    </property>
    <property name="text">
@@ -454,7 +454,7 @@
   </action>
   <action name="actionWarnungSetzen">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/flag.png</normaloff>:/flag.png</iconset>
    </property>
    <property name="text">
@@ -469,7 +469,7 @@
   </action>
   <action name="actionWarnungIgnorieren">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/flag-green.png</normaloff>:/flag-green.png</iconset>
    </property>
    <property name="text">
@@ -484,7 +484,7 @@
   </action>
   <action name="actionWarnungReset">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/flag-white.png</normaloff>:/flag-white.png</iconset>
    </property>
    <property name="text">
@@ -499,7 +499,7 @@
   </action>
   <action name="actionAnschlussAufgeben">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/chain--cross.png</normaloff>:/chain--cross.png</iconset>
    </property>
    <property name="text">
@@ -514,7 +514,7 @@
   </action>
   <action name="actionZugAusblenden">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/train--minus.png</normaloff>:/train--minus.png</iconset>
    </property>
    <property name="text">
@@ -529,7 +529,7 @@
   </action>
   <action name="actionZugEinblenden">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/train--return.png</normaloff>:/train--return.png</iconset>
    </property>
    <property name="text">
@@ -543,8 +543,6 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -370,8 +370,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self._warnung_auswahl: List[SlotWarnung] = []
         self.belegung: Optional[Gleisbelegung] = None
 
-        self.zeitfenster_voraus = 55
-        self.zeitfenster_zurueck = 5
+        self.vorlaufzeit = 55
+        self.nachlaufzeit = 5
         self.belegte_gleise_zeigen = False
 
         self.ui = Ui_GleisbelegungWindow()
@@ -399,12 +399,16 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.actionAbfahrtAbwarten.triggered.connect(self.action_abfahrt_abwarten)
         self.ui.stackedWidget.currentChanged.connect(self.page_changed)
 
+        self.ui.vorlaufzeit_spin.valueChanged.connect(self.vorlaufzeit_changed)
+        self.ui.nachlaufzeit_spin.valueChanged.connect(self.nachlaufzeit_changed)
+
         self._axes = self.display_canvas.figure.subplots()
         self.display_canvas.mpl_connect("button_press_event", self.on_button_press)
         self.display_canvas.mpl_connect("button_release_event", self.on_button_release)
         self.display_canvas.mpl_connect("pick_event", self.on_pick)
         self.display_canvas.mpl_connect("resize_event", self.on_resize)
 
+        self.update_widgets()
         self.update_actions()
 
     @property
@@ -439,6 +443,24 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.actionMinusEins.setEnabled(display_mode and len(self._slot_auswahl))
         self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and len(self._slot_auswahl) == 2)
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and len(self._slot_auswahl) == 2)
+
+    def update_widgets(self):
+        self.ui.vorlaufzeit_spin.setValue(self.vorlaufzeit)
+        self.ui.nachlaufzeit_spin.setValue(self.nachlaufzeit)
+
+    @pyqtSlot()
+    def vorlaufzeit_changed(self):
+        try:
+            self.vorlaufzeit = self.ui.vorlaufzeit_spin.value()
+        except ValueError:
+            pass
+
+    @pyqtSlot()
+    def nachlaufzeit_changed(self):
+        try:
+            self.nachlaufzeit = self.ui.nachlaufzeit_spin.value()
+        except ValueError:
+            pass
 
     def planung_update(self, *args, **kwargs):
         """
@@ -515,7 +537,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self._axes.xaxis.grid(True)
 
         zeit = time_to_minutes(self.client.calc_simzeit())
-        self._axes.set_ylim(bottom=zeit + self.zeitfenster_voraus, top=zeit - self.zeitfenster_zurueck, auto=False)
+        self._axes.set_ylim(bottom=zeit + self.vorlaufzeit, top=zeit - self.nachlaufzeit, auto=False)
 
         self._plot_sperrungen(x_labels, x_labels_pos, kwargs)
         self._plot_verspaetungen(slots, x_pos, colors)
@@ -535,7 +557,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
             item.set_fontsize('small')
 
-        if self.zeitfenster_zurueck > 0:
+        if self.nachlaufzeit > 0:
             self._axes.axhline(y=zeit, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
 
         self._axes.figure.tight_layout()
@@ -705,6 +727,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.gleisauswahl.set_sperrungen(self.anlage.gleissperrungen)
         self.ui.gleisView.expandAll()
         self.ui.gleisView.resizeColumnToContents(0)
+        self.update_widgets()
 
     @pyqtSlot()
     def display_button_clicked(self):

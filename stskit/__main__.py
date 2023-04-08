@@ -194,7 +194,7 @@ class MainWindow(QtWidgets.QMainWindow):
         window.show_zufahrten = True
         window.show_bahnsteige = False
         window.setWindowTitle("Einfahrten/Ausfahrten")
-        window.zeitfenster_voraus = 25
+        window.vorlaufzeit = 25
         window.planung_update()
         window.show()
         self.windows.add(window)
