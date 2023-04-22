@@ -1183,30 +1183,54 @@ class Anlage:
         return result
 
     @staticmethod
-    def _merge_gruppen(auto_gruppe: Dict[str, Set[str]], config_gruppe: Dict[str, Set[str]]) -> Dict[str, Set[str]]:
+    def _gruppen_abgleichen(anlage_gruppe: Dict[str, Set[str]], config_gruppe: Dict[str, Set[str]]) -> Dict[str, Set[str]]:
+        """
+        konfiguration von bahnsteig- oder anschlussgruppen abgleichen
+
+        idealerweise enthält die konfiguration alle in der anlage vorkommenden bahnsteige bzw. anschlüsse.
+        wenn es unterschiede gibt, versucht diese funktion die gruppen abzugleichen,
+        so dass die konfiguration nach möglichkeit trotzdem verwendet werden kann.
+        dadurch entstehende probleme nimmt man gegenüber den unzulänglichkeiten einer vollständigen neukonfiguration in kauf.
+
+        konkret entfernt diese funktion gleise/anschlüsse aus der konfiguration, die in der anlage nicht vorkommen.
+        wenn die anlage gleise/anschlüsse enthält, die nicht konfiguriert sind, wird eine exception ausgelöst.
+        in diesem fall muss die konfiguration überarbeitet werden.
+
+        :param anlage_gruppe: gleis- bzw. anschlussgruppen gemäss anlagendefinition
+        :param config_gruppe: gleis- bzw. anschlussgruppen aus der konfiguration
+        :return:
+        """
+
+        anlage_elemente = set().union(*anlage_gruppe.values())
+        conf_elemente = set().union(*config_gruppe.values())
+        nicht_in_conf = anlage_elemente.difference(conf_elemente)
+        nicht_in_anlage = conf_elemente.difference(anlage_elemente)
+        if len(nicht_in_conf):
+            logger.error("die folgenden anlagenelemente sind nicht konfiguriert: " +
+                         ", ".join(nicht_in_conf))
+            raise ValueError("anlage enthält unkonfigurierte elemente")
+        if len(nicht_in_anlage):
+            logger.warning("die folgenden konfigurationselemente sind in der anlage nicht vorhanden: " +
+                           ", ".join(nicht_in_anlage))
+        config_gruppe = {k: s for k, v in config_gruppe.items() if len(s := v.difference(nicht_in_anlage))}
         return config_gruppe
 
-    def kompatibilitaet_pruefen(self, config_dict: Dict):
+    def konfiguration_abgleichen(self, config_dict: Dict):
         """
-        anlagenkompatibilität prüfen
+        konfiguration mit der anlage abgleichen
 
         prüft, ob eine gegebene anlagenkonfiguration kompatibel mit der aktuellen anlage ist.
-        die konfiguration wird als kompatibel bewertet, wenn alle konfigurierten gleise in der anlage vorkommen.
+        die konfiguration wird als kompatibel bewertet,
+        wenn alle gleise und anschlüsse der anlage in der konfiguration vorkommen.
+        andernfalls löst die funktion eine ValueError-exception aus.
+
+        konfigurierte gleise, die in der anlage nicht vorkommen, werden entfernt.
+
+        :param config_dict: dictionary mit der gesamten anlagekonfiguration.
         """
 
-        fehler = False
-        for gruppe, anschluesse in config_dict['anschlussgruppen'].items():
-            for anschluss in anschluesse:
-                if anschluss not in self.anschlusszuordnung:
-                    logger.error(f"anschluss {anschluss} nicht in der anlage")
-                    fehler = True
-        for gruppe, bahnsteige in config_dict['bahnsteiggruppen'].items():
-            for bahnsteig in bahnsteige:
-                if bahnsteig not in self.bahnsteigzuordnung:
-                    logger.error(f"bahnsteige {bahnsteig} nicht in der anlage")
-                    fehler = True
-        if fehler:
-            raise ValueError("konfiguration ist nicht mit der anlage kompatibel")
+        config_dict['anschlussgruppen'] = self._gruppen_abgleichen(self.anschlussgruppen, config_dict['anschlussgruppen'])
+        config_dict['bahnsteiggruppen'] = self._gruppen_abgleichen(self.bahnsteiggruppen, config_dict['bahnsteiggruppen'])
 
     def load_config(self, path: os.PathLike, load_graphs=False, ignore_version=False):
         """
@@ -1231,7 +1255,7 @@ class Anlage:
             if self.anlage.build != d['_build']:
                 logger.warning(f"unterschiedliche build-nummern (file: {d['_build']}, sim: {self.anlage.build})")
                 try:
-                    self.kompatibilitaet_pruefen(d)
+                    self.konfiguration_abgleichen(d)
                 except ValueError:
                     print(f"inkompatible konfigurationsdatei - auto-konfiguration")
                     logger.error(f"inkompatible konfigurationsdatei - auto-konfiguration")
