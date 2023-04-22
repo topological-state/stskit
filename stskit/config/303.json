@@ -1,10 +1,9 @@
 {
     "_aid": 303,
-    "_build": 5845,
+    "_build": 5851,
     "_name": "Burgdorf",
     "_region": "Bern - L\u00f6tschberg",
     "_version": 2,
-    "zugschema": "schweiz",
     "anschlussgruppen": {
         "Abstellgl": {
             "__class__": "Set",
@@ -15,28 +14,28 @@
         "BDFS": {
             "__class__": "Set",
             "data": [
-                "BDFS 222",
-                "BDFS 122"
+                "BDFS 122",
+                "BDFS 222"
             ]
         },
-        "Kirchberg": {
+        "KEBAG": {
             "__class__": "Set",
             "data": [
-                "Kirchberg-A."
+                "KEBAG"
             ]
         },
         "LGUT": {
             "__class__": "Set",
             "data": [
-                "LGUT 507",
-                "LGUT 607"
+                "LGUT 607",
+                "LGUT 507"
             ]
         },
         "RTW": {
             "__class__": "Set",
             "data": [
-                "RTW 375",
-                "RTW 475"
+                "RTW 475",
+                "RTW 375"
             ]
         },
         "SCHB": {
@@ -44,6 +43,18 @@
             "data": [
                 "SCHB 394",
                 "SCHB 494"
+            ]
+        },
+        "Solothurn": {
+            "__class__": "Set",
+            "data": [
+                "Solothurn"
+            ]
+        },
+        "Stahl Gerlafingen": {
+            "__class__": "Set",
+            "data": [
+                "Stahl Gerlafingen"
             ]
         },
         "WANZ": {
@@ -56,20 +67,27 @@
     },
     "anschlusslage": {},
     "bahnsteiggruppen": {
+        "AEF": {
+            "__class__": "Set",
+            "data": [
+                "AEF 1",
+                "AEF 2"
+            ]
+        },
         "BDF": {
             "__class__": "Set",
             "data": [
+                "BDF 5CD",
+                "BDF 3CD",
+                "BDF 2CD",
+                "BDF 2AB",
+                "BDF 5AB",
+                "BDF 1AB",
+                "BDF 4CD",
+                "BDF 4AB",
+                "BDF 1CD",
                 "BDF 11",
-                "BDF 5A",
-                "BDF 2C",
-                "BDF 3C",
-                "BDF 1C",
-                "BDF 4C",
-                "BDF 5C",
-                "BDF 2A",
-                "BDF 3A",
-                "BDF 4A",
-                "BDF 1A"
+                "BDF 3AB"
             ]
         },
         "BDFB": {
@@ -78,11 +96,26 @@
                 "BDFB"
             ]
         },
+        "BIST": {
+            "__class__": "Set",
+            "data": [
+                "BIST 52",
+                "BIST 51",
+                "BIST 1",
+                "BIST 2"
+            ]
+        },
+        "GLF": {
+            "__class__": "Set",
+            "data": [
+                "GLF 1"
+            ]
+        },
         "HBK": {
             "__class__": "Set",
             "data": [
-                "HBK 2",
                 "HBK 1",
+                "HBK 2",
                 "HBK 3"
             ]
         },
@@ -90,6 +123,13 @@
             "__class__": "Set",
             "data": [
                 "HERS"
+            ]
+        },
+        "KIAL": {
+            "__class__": "Set",
+            "data": [
+                "KIAL 1",
+                "KIAL 2"
             ]
         },
         "LYS": {
@@ -101,12 +141,33 @@
         "MATA": {
             "__class__": "Set",
             "data": [
-                "MATA813",
-                "MATA713",
-                "MATA492",
-                "MATA613",
-                "MATA513",
-                "MATA392"
+                "MATA 392",
+                "MATA 513",
+                "MATA 713",
+                "MATA 492",
+                "MATA 813",
+                "MATA 613"
+            ]
+        },
+        "UT": {
+            "__class__": "Set",
+            "data": [
+                "UT 1",
+                "UT 2"
+            ]
+        },
+        "WR": {
+            "__class__": "Set",
+            "data": [
+                "WR 3",
+                "WR 2"
+            ]
+        },
+        "WRN": {
+            "__class__": "Set",
+            "data": [
+                "WRN 422",
+                "WRN 423"
             ]
         },
         "WY": {
@@ -116,45 +177,51 @@
             ]
         }
     },
+    "hauptstrecke": "LGUT-RTW",
     "sektoren": {
         "BDF 1": {
             "__class__": "Set",
             "data": [
-                "BDF 1C",
-                "BDF 1A"
+                "BDF 1AB",
+                "BDF 1CD"
             ]
         },
         "BDF 2": {
             "__class__": "Set",
             "data": [
-                "BDF 2A",
-                "BDF 2C"
+                "BDF 2CD",
+                "BDF 2AB"
             ]
         },
         "BDF 3": {
             "__class__": "Set",
             "data": [
-                "BDF 3A",
-                "BDF 3C"
+                "BDF 3CD",
+                "BDF 3AB"
             ]
         },
         "BDF 4": {
             "__class__": "Set",
             "data": [
-                "BDF 4C",
-                "BDF 4A"
+                "BDF 4CD",
+                "BDF 4AB"
             ]
         },
         "BDF 5": {
             "__class__": "Set",
             "data": [
-                "BDF 5C",
-                "BDF 5A"
+                "BDF 5AB",
+                "BDF 5CD"
             ]
         }
     },
-    "hauptstrecke": "LGUT-RTW",
     "strecken": {
+        "BDFS-RTW": [
+            "BDFS",
+            "BDF",
+            "WY",
+            "RTW"
+        ],
         "LGUT-RTW": [
             "LGUT",
             "MATA",
@@ -179,11 +246,69 @@
             "WY",
             "RTW"
         ],
-        "SCHB-WANZ": [
-            "SCHB",
-            "MATA",
-            "HERS",
-            "WANZ"
+        "Solothurn-BDF": [
+            "Solothurn",
+            "BIST",
+            "GLF",
+            "WRN",
+            "WR",
+            "UT",
+            "AEF",
+            "KIAL",
+            "BDFB",
+            "BDF"
+        ],
+        "Solothurn-RTW": [
+            "Solothurn",
+            "BIST",
+            "GLF",
+            "WRN",
+            "WR",
+            "UT",
+            "AEF",
+            "KIAL",
+            "BDFB",
+            "BDF",
+            "WY",
+            "RTW"
         ]
-    }
+    },
+    "streckenmarkierung": [
+        [
+            "Solothurn",
+            "BIST",
+            "E"
+        ],
+        [
+            "GLF",
+            "WRN",
+            "E"
+        ],
+        [
+            "WR",
+            "UT",
+            "E"
+        ],
+        [
+            "UT",
+            "AEF",
+            "E"
+        ],
+        [
+            "AEF",
+            "KIAL",
+            "E"
+        ],
+        [
+            "KIAL",
+            "BDFB",
+            "E"
+        ],
+        [
+            "BDFB",
+            "BDF",
+            "E"
+        ]
+    ],
+    "zugschema": "schweiz"
 }

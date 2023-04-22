@@ -1,0 +1,270 @@
+{
+    "_aid": 438,
+    "_build": 5851,
+    "_name": "Wetzikon",
+    "_region": "Z\u00fcrich und Umgebung",
+    "_version": 2,
+    "anschlussgruppen": {
+        "DUE Industrie": {
+            "__class__": "Set",
+            "data": [
+                "DUE Industrie"
+            ]
+        },
+        "DVZO": {
+            "__class__": "Set",
+            "data": [
+                "DVZO"
+            ]
+        },
+        "Effretikon": {
+            "__class__": "Set",
+            "data": [
+                "Effretikon"
+            ]
+        },
+        "RUE": {
+            "__class__": "Set",
+            "data": [
+                "RUE 468",
+                "RUE 368"
+            ]
+        },
+        "STET": {
+            "__class__": "Set",
+            "data": [
+                "STET 291",
+                "STET 191"
+            ]
+        },
+        "WS": {
+            "__class__": "Set",
+            "data": [
+                "WS 391",
+                "WS 491"
+            ]
+        },
+        "WZ Industrie": {
+            "__class__": "Set",
+            "data": [
+                "WZ Industrie"
+            ]
+        },
+        "Witzberg": {
+            "__class__": "Set",
+            "data": [
+                "Witzberg"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "AAT": {
+            "__class__": "Set",
+            "data": [
+                "AAT1",
+                "AAT2"
+            ]
+        },
+        "BUB": {
+            "__class__": "Set",
+            "data": [
+                "BUB2",
+                "BUB3"
+            ]
+        },
+        "DUE": {
+            "__class__": "Set",
+            "data": [
+                "DUE3",
+                "DUE2",
+                "DUE4"
+            ]
+        },
+        "FET": {
+            "__class__": "Set",
+            "data": [
+                "FET2",
+                "FET1",
+                "FET41"
+            ]
+        },
+        "HI": {
+            "__class__": "Set",
+            "data": [
+                "HI3",
+                "HI2"
+            ]
+        },
+        "IL": {
+            "__class__": "Set",
+            "data": [
+                "IL2",
+                "IL1"
+            ]
+        },
+        "KN": {
+            "__class__": "Set",
+            "data": [
+                "KN1",
+                "KN2"
+            ]
+        },
+        "NAEN": {
+            "__class__": "Set",
+            "data": [
+                "NAEN"
+            ]
+        },
+        "PFZ": {
+            "__class__": "Set",
+            "data": [
+                "PFZ2",
+                "PFZ1"
+            ]
+        },
+        "SCWE": {
+            "__class__": "Set",
+            "data": [
+                "SCWE3",
+                "SCWE1",
+                "SCWE2",
+                "SCWE1l"
+            ]
+        },
+        "UST": {
+            "__class__": "Set",
+            "data": [
+                "UST2",
+                "UST3",
+                "UST1"
+            ]
+        },
+        "WZ": {
+            "__class__": "Set",
+            "data": [
+                "WZ4",
+                "WZ1",
+                "WZ2",
+                "WZ5",
+                "WZ3"
+            ]
+        }
+    },
+    "hauptstrecke": "",
+    "sektoren": {
+        "SCWE1": {
+            "__class__": "Set",
+            "data": [
+                "SCWE1",
+                "SCWE1l"
+            ]
+        }
+    },
+    "strecken": {
+        "Effretikon-Hinwil": [
+            "Effretikon",
+            "IL",
+            "FET",
+            "PFZ",
+            "KN",
+            "WZ",
+            "HI"
+        ],
+        "Effretikon-R\u00fcti": [
+            "Effretikon",
+            "IL",
+            "FET",
+            "PFZ",
+            "KN",
+            "WZ",
+            "BUB",
+            "RUE"
+        ],
+        "Stettbach-Hinwil": [
+            "STET",
+            "DUE",
+            "SCWE",
+            "NAEN",
+            "UST",
+            "AAT",
+            "WZ",
+            "HI"
+        ],
+        "Stettbach-R\u00fcti": [
+            "STET",
+            "DUE",
+            "SCWE",
+            "NAEN",
+            "UST",
+            "AAT",
+            "WZ",
+            "BUB",
+            "RUE"
+        ],
+        "Wallisellen-Hinwil": [
+            "WS",
+            "DUE",
+            "SCWE",
+            "NAEN",
+            "UST",
+            "AAT",
+            "WZ",
+            "HI"
+        ],
+        "Wallisellen-R\u00fcti": [
+            "WS",
+            "DUE",
+            "SCWE",
+            "NAEN",
+            "UST",
+            "AAT",
+            "WZ",
+            "BUB",
+            "RUE"
+        ]
+    },
+    "streckenmarkierung": [
+        [
+            "UST",
+            "AAT",
+            "E"
+        ],
+        [
+            "WZ",
+            "HI",
+            "E"
+        ],
+        [
+            "WZ",
+            "BUB",
+            "E"
+        ],
+        [
+            "Effretikon",
+            "IL",
+            "E"
+        ],
+        [
+            "IL",
+            "FET",
+            "E"
+        ],
+        [
+            "FET",
+            "PFZ",
+            "E"
+        ],
+        [
+            "PFZ",
+            "KN",
+            "E"
+        ],
+        [
+            "KN",
+            "WZ",
+            "E"
+        ]
+    ],
+    "zugschema": "schweiz"
+}

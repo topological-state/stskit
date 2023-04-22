@@ -1,0 +1,288 @@
+{
+    "_aid": 373,
+    "_build": 5851,
+    "_name": "Seeland West",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Lyss": {
+            "__class__": "Set",
+            "data": [
+                "Lyss"
+            ]
+        },
+        "Migros": {
+            "__class__": "Set",
+            "data": [
+                "Migros"
+            ]
+        },
+        "Montilier": {
+            "__class__": "Set",
+            "data": [
+                "Montilier-L."
+            ]
+        },
+        "Muntelier": {
+            "__class__": "Set",
+            "data": [
+                "Muntelier-L."
+            ]
+        },
+        "Neuch\u00e2tel": {
+            "__class__": "Set",
+            "data": [
+                "Neuch\u00e2tel"
+            ]
+        },
+        "ROSS": {
+            "__class__": "Set",
+            "data": [
+                "ROSS 116",
+                "ROSS 216"
+            ]
+        },
+        "Tribeton": {
+            "__class__": "Set",
+            "data": [
+                "Tribeton"
+            ]
+        },
+        "Zuckerfabrik": {
+            "__class__": "Set",
+            "data": [
+                "Zuckerfabrik"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "ABE": {
+            "__class__": "Set",
+            "data": [
+                "ABE3",
+                "ABE41",
+                "ABE43",
+                "ABE1",
+                "ABE42",
+                "ABE2"
+            ]
+        },
+        "BRG": {
+            "__class__": "Set",
+            "data": [
+                "BRG"
+            ]
+        },
+        "FAWA": {
+            "__class__": "Set",
+            "data": [
+                "FAWA134",
+                "FAWA234"
+            ]
+        },
+        "FRAE": {
+            "__class__": "Set",
+            "data": [
+                "FRAE"
+            ]
+        },
+        "GMM": {
+            "__class__": "Set",
+            "data": [
+                "GMM2",
+                "GMM1"
+            ]
+        },
+        "GP": {
+            "__class__": "Set",
+            "data": [
+                "GP"
+            ]
+        },
+        "GZ": {
+            "__class__": "Set",
+            "data": [
+                "GZ1",
+                "GZ2"
+            ]
+        },
+        "INS": {
+            "__class__": "Set",
+            "data": [
+                "INS3",
+                "INS1",
+                "INS94",
+                "INS4",
+                "INS2",
+                "INS93"
+            ]
+        },
+        "KAL": {
+            "__class__": "Set",
+            "data": [
+                "KAL1",
+                "KAL2"
+            ]
+        },
+        "KZ": {
+            "__class__": "Set",
+            "data": [
+                "KZ5",
+                "KZ4B",
+                "KZ73",
+                "KZ4A",
+                "KZ6A",
+                "KZ71",
+                "KZ6B",
+                "KZ72",
+                "KZ1",
+                "KZ3",
+                "KZ2"
+            ]
+        },
+        "KZPP": {
+            "__class__": "Set",
+            "data": [
+                "KZPP"
+            ]
+        },
+        "LYGR": {
+            "__class__": "Set",
+            "data": [
+                "LYGR"
+            ]
+        },
+        "MEP": {
+            "__class__": "Set",
+            "data": [
+                "MEP3",
+                "MEP4",
+                "MEP4k",
+                "MEP2"
+            ]
+        },
+        "MM": {
+            "__class__": "Set",
+            "data": [
+                "MM4",
+                "MM42",
+                "MM41",
+                "MM1",
+                "MM23",
+                "MM2",
+                "MM52",
+                "MM3"
+            ]
+        },
+        "SBLB": {
+            "__class__": "Set",
+            "data": [
+                "SBLB2",
+                "SBLB1"
+            ]
+        },
+        "SUGI": {
+            "__class__": "Set",
+            "data": [
+                "SUGI1",
+                "SUGI2"
+            ]
+        },
+        "ZBR": {
+            "__class__": "Set",
+            "data": [
+                "ZBR"
+            ]
+        }
+    },
+    "hauptstrecke": "Neuch\u00e2tel-ROSS",
+    "sektoren": {
+        "KZ4": {
+            "__class__": "Set",
+            "data": [
+                "KZ4A",
+                "KZ4B"
+            ]
+        },
+        "KZ6": {
+            "__class__": "Set",
+            "data": [
+                "KZ6A",
+                "KZ6B"
+            ]
+        },
+        "MEP4": {
+            "__class__": "Set",
+            "data": [
+                "MEP4",
+                "MEP4k"
+            ]
+        }
+    },
+    "strecken": {
+        "Lyss-Muntelier": [
+            "Lyss",
+            "LYGR",
+            "ABE",
+            "BRG",
+            "KAL",
+            "FRAE",
+            "KZPP",
+            "KZ",
+            "GZ",
+            "Muntelier"
+        ],
+        "Lyss-ROSS": [
+            "Lyss",
+            "LYGR",
+            "ABE",
+            "BRG",
+            "KAL",
+            "FRAE",
+            "KZPP",
+            "KZ",
+            "GMM",
+            "ROSS"
+        ],
+        "Neuch\u00e2tel-Montilier": [
+            "Neuch\u00e2tel",
+            "SBLB",
+            "MEP",
+            "ZBR",
+            "FAWA",
+            "GP",
+            "INS",
+            "SUGI",
+            "Montilier"
+        ],
+        "Neuch\u00e2tel-Muntelier": [
+            "Neuch\u00e2tel",
+            "SBLB",
+            "MEP",
+            "ZBR",
+            "FAWA",
+            "GP",
+            "INS",
+            "MM",
+            "KZ",
+            "GZ",
+            "Muntelier"
+        ],
+        "Neuch\u00e2tel-ROSS": [
+            "Neuch\u00e2tel",
+            "SBLB",
+            "MEP",
+            "ZBR",
+            "FAWA",
+            "GP",
+            "INS",
+            "MM",
+            "KZ",
+            "GMM",
+            "ROSS"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweiz"
+}

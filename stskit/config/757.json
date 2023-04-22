@@ -1,0 +1,284 @@
+{
+    "_aid": 757,
+    "_build": 5851,
+    "_name": "Bern B\u00fcmpliz",
+    "_region": "Bern - L\u00f6tschberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BNAN A": {
+            "__class__": "Set",
+            "data": [
+                "A4",
+                "A5"
+            ]
+        },
+        "BN x68": {
+            "__class__": "Set",
+            "data": [
+                "BN 868",
+                "BN 968"
+            ]
+        },
+        "BN x02": {
+            "__class__": "Set",
+            "data": [
+                "BN 702",
+                "BN 802"
+            ]
+        },
+        "BN x01": {
+            "__class__": "Set",
+            "data": [
+                "BN 201",
+                "BN 101"
+            ]
+        },
+        "BNBS A": {
+            "__class__": "Set",
+            "data": [
+                "BNBS 3",
+                "BNBS Abst."
+            ]
+        },
+        "BNFI": {
+            "__class__": "Set",
+            "data": [
+                "BNFI 302",
+                "BNFI 402"
+            ]
+        },
+        "BNWM Gbf": {
+            "__class__": "Set",
+            "data": [
+                "BNWM Gbf Ost",
+                "BNWM Gbf West"
+            ]
+        },
+        "GMM": {
+            "__class__": "Set",
+            "data": [
+                "GMM 116",
+                "GMM 216"
+            ]
+        },
+        "LPNO": {
+            "__class__": "Set",
+            "data": [
+                "LPNO"
+            ]
+        },
+        "NBT AGl.": {
+            "__class__": "Set",
+            "data": [
+                "NBT AGl."
+            ]
+        },
+        "SCMI": {
+            "__class__": "Set",
+            "data": [
+                "SCMI 855",
+                "SCMI 955"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BNAH": {
+            "__class__": "Set",
+            "data": [
+                "BNAH"
+            ]
+        },
+        "BNAN": {
+            "__class__": "Set",
+            "data": [
+                "BNAN A2",
+                "BNAN A1",
+                "BNAN A3"
+            ]
+        },
+        "BNAS": {
+            "__class__": "Set",
+            "data": [
+                "BNAS"
+            ]
+        },
+        "BNB": {
+            "__class__": "Set",
+            "data": [
+                "BNB 2",
+                "BNB 1"
+            ]
+        },
+        "BNBS": {
+            "__class__": "Set",
+            "data": [
+                "BNBS 1",
+                "BNBS 2",
+                "BNBS 33"
+            ]
+        },
+        "BNBZ": {
+            "__class__": "Set",
+            "data": [
+                "BNBZ 2",
+                "BNBZ 5",
+                "BNBZ 4",
+                "BNBZ 3"
+            ]
+        },
+        "BNST": {
+            "__class__": "Set",
+            "data": [
+                "BNST"
+            ]
+        },
+        "BNWM": {
+            "__class__": "Set",
+            "data": [
+                "BNWM 4",
+                "BNWM 5",
+                "BNWM 6",
+                "BNWM 2",
+                "BNWM 3",
+                "BNWM 1",
+                "BNWM GB Ost",
+                "BNWM GB West"
+            ]
+        },
+        "FLM": {
+            "__class__": "Set",
+            "data": [
+                "FLM 2",
+                "FLM 1",
+                "FLM 3"
+            ]
+        },
+        "FLMD": {
+            "__class__": "Set",
+            "data": [
+                "FLMD"
+            ]
+        },
+        "LPN": {
+            "__class__": "Set",
+            "data": [
+                "LPN 1"
+            ]
+        },
+        "NGG": {
+            "__class__": "Set",
+            "data": [
+                "NGG 2",
+                "NGG 1"
+            ]
+        },
+        "NWA": {
+            "__class__": "Set",
+            "data": [
+                "NWA"
+            ]
+        },
+        "OWA": {
+            "__class__": "Set",
+            "data": [
+                "OWA"
+            ]
+        },
+        "RCH": {
+            "__class__": "Set",
+            "data": [
+                "RCH 2",
+                "RCH 1"
+            ]
+        },
+        "ROSS": {
+            "__class__": "Set",
+            "data": [
+                "ROSS 3",
+                "ROSS 2"
+            ]
+        },
+        "THO": {
+            "__class__": "Set",
+            "data": [
+                "THO 2",
+                "THO 1",
+                "THO 3"
+            ]
+        },
+        "THOD": {
+            "__class__": "Set",
+            "data": [
+                "THOD"
+            ]
+        },
+        "WUE": {
+            "__class__": "Set",
+            "data": [
+                "WUE"
+            ]
+        }
+    },
+    "hauptstrecke": "SCMI-BN x68",
+    "sektoren": {},
+    "strecken": {
+        "BNFI-BN x01": [
+            "BNFI",
+            "BNAH",
+            "BNWM",
+            "BN x01"
+        ],
+        "GMM-BN x68": [
+            "GMM",
+            "ROSS",
+            "RCH",
+            "BNB",
+            "BNBZ",
+            "BNST",
+            "BNAN",
+            "BNWM",
+            "BN x68"
+        ],
+        "GMM-BN x01": [
+            "GMM",
+            "ROSS",
+            "RCH",
+            "BNB",
+            "BNBZ",
+            "BNST",
+            "BNAN",
+            "BNWM",
+            "BN x01"
+        ],
+        "LPN-BN x68": [
+            "LPN",
+            "NGG",
+            "FLMD",
+            "FLM",
+            "THOD",
+            "THO",
+            "OWA",
+            "NWA",
+            "BNBS",
+            "BNAS",
+            "BNWM",
+            "BN x68"
+        ],
+        "SCMI-BN x68": [
+            "SCMI",
+            "WUE",
+            "FLM",
+            "THOD",
+            "THO",
+            "OWA",
+            "NWA",
+            "BNBS",
+            "BNAS",
+            "BNWM",
+            "BN x68"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweiz"
+}

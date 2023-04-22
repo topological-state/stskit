@@ -1,0 +1,167 @@
+{
+    "_aid": 442,
+    "_build": 5851,
+    "_name": "Z\u00fcriberg",
+    "_region": "Z\u00fcrich und Umgebung",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung"
+            ]
+        },
+        "DTL": {
+            "__class__": "Set",
+            "data": [
+                "DTL 281",
+                "DTL 181"
+            ]
+        },
+        "DUE": {
+            "__class__": "Set",
+            "data": [
+                "DUE 191",
+                "DUE 291"
+            ]
+        },
+        "HRD": {
+            "__class__": "Set",
+            "data": [
+                "HRD 802",
+                "HRD 902"
+            ]
+        },
+        "Herdern": {
+            "__class__": "Set",
+            "data": [
+                "Herdern"
+            ]
+        },
+        "ZAS": {
+            "__class__": "Set",
+            "data": [
+                "ZAS 893",
+                "ZAS 993"
+            ]
+        },
+        "ZK": {
+            "__class__": "Set",
+            "data": [
+                "ZK 674",
+                "ZK 574"
+            ]
+        },
+        "ZUE": {
+            "__class__": "Set",
+            "data": [
+                "ZUE L12",
+                "ZUE L11"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "STET": {
+            "__class__": "Set",
+            "data": [
+                "STET2",
+                "STET1"
+            ]
+        },
+        "ZHDB": {
+            "__class__": "Set",
+            "data": [
+                "ZHDB2",
+                "ZHDB1",
+                "ZHDB4",
+                "ZHDB3"
+            ]
+        },
+        "ZMUS": {
+            "__class__": "Set",
+            "data": [
+                "ZMUS44",
+                "ZMUS41",
+                "ZMUS42",
+                "ZMUS43"
+            ]
+        },
+        "ZSTH": {
+            "__class__": "Set",
+            "data": [
+                "ZSTH2",
+                "ZSTH1",
+                "ZSTH3"
+            ]
+        },
+        "ZTB": {
+            "__class__": "Set",
+            "data": [
+                "ZTB3",
+                "ZTB1",
+                "ZTB2"
+            ]
+        }
+    },
+    "hauptstrecke": "HRD-ZK",
+    "sektoren": {},
+    "strecken": {
+        "HRD-DTL": [
+            "HRD",
+            "ZHDB",
+            "ZMUS",
+            "ZSTH",
+            "STET",
+            "DTL"
+        ],
+        "HRD-DUE": [
+            "HRD",
+            "ZHDB",
+            "ZMUS",
+            "ZSTH",
+            "STET",
+            "DUE"
+        ],
+        "HRD-ZK": [
+            "HRD",
+            "ZHDB",
+            "ZMUS",
+            "ZSTH",
+            "ZTB",
+            "ZK"
+        ],
+        "ZAS-DTL": [
+            "ZAS",
+            "ZHDB",
+            "ZMUS",
+            "ZSTH",
+            "STET",
+            "DTL"
+        ],
+        "ZAS-DUE": [
+            "ZAS",
+            "ZHDB",
+            "ZMUS",
+            "ZSTH",
+            "STET",
+            "DUE"
+        ],
+        "ZAS-ZK": [
+            "ZAS",
+            "ZHDB",
+            "ZMUS",
+            "ZSTH",
+            "ZTB",
+            "ZK"
+        ]
+    },
+    "streckenmarkierung": [
+        [
+            "ZSTH",
+            "ZTB",
+            "E"
+        ]
+    ],
+    "zugschema": "schweiz"
+}
