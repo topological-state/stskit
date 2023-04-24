@@ -589,6 +589,9 @@ class Zugschema:
         "O": ["Sonderzug", "tab:pink"],
         "R": ["Übriger Verkehr", "tab:gray"]}
 
+    # verfuegbare zugschema-dateien. key = schema-name, value = dateipfad
+    schemas: Dict[str, os.PathLike] = {}
+
     def __init__(self):
         self.name: str = ""
         self.pfad: Optional[Path] = None
@@ -629,28 +632,65 @@ class Zugschema:
                   "gattungen": gattungsnamen + gattungsnummern}
         return config
 
-    def load_config(self, path: os.PathLike, default_path: os.PathLike, region: str):
-        if self.name:
-            name = self.name.lower()
+    def load_config(self, name: str, region: str = ""):
+        """
+        Lädt das Zugschema.
+
+        Das Dictionary self.schemas muss vorher mittels find_schemas befüllt werden.
+        Die Methode wählt das Schema in der folgenden Reihenfolge aus:
+
+        - name (kommt i.d.R. aus der Stellwerkskonfiguration)
+        - REGIONEN_SCHEMA der Region (nicht alle Regionen sind dort erfasst)
+        - "deutschland" als default
+
+        :param name: Name des Zugschemas. Der Name ist ein Schlüssel in self.schemas.
+        :param region: Name der Stellwerksregion aus der Anlageninfo. Optional.
+        :return: None
+        """
+
+        if name:
+            name = name.lower()
         else:
             try:
                 name = REGIONEN_SCHEMA[region].lower()
             except KeyError:
                 name = "deutschland"
 
-        p = Path(path) / f"zugschema.{name}.json"
         try:
-            with open(p) as fp:
-                d = json.load(fp, object_hook=json_object_hook)
-            self.set_config(d)
-        except OSError:
+            p = self.schemas[name]
+        except KeyError:
+            self.name = ""
+            self.pfad = None
+        else:
             try:
-                p = Path(default_path) / f"zugschema.{name}.json"
                 with open(p) as fp:
                     d = json.load(fp, object_hook=json_object_hook)
                 self.set_config(d)
+                self.pfad = p
             except OSError:
                 self.name = ""
+                self.pfad = None
+
+    @classmethod
+    def find_schemas(cls, path: os.PathLike):
+        """
+        Zugschemadateien suchen und in Liste aufnehmen
+
+        Sucht Zugschemadateien im angegebenen Verzeichnis und nimmt ihre Pfade in die klasseninterne Liste schemas auf.
+        Die Methode kann mehrmals aufgerufen werden und überschreibt dann vorbestehende Pfade gleichen Dateinamens.
+
+        :param path: Directorypfad
+        :return:
+        """
+
+        p = Path(path)
+        for fp in p.glob("zugschema.*.json"):
+            try:
+                name = fp.name.split('.')[1]
+            except IndexError:
+                pass
+            else:
+                cls.schemas[name] = fp
 
     def kategorie(self, zug: ZugDetails) -> str:
         try:
@@ -667,7 +707,7 @@ class Zugschema:
 
     def zugfarbe(self, zug: ZugDetails) -> str:
         """
-        matplotlib-farbcode eines zuges
+        Matplotlib-Farbcode eines Zuges
 
         :param zug:
         :return: str
@@ -678,13 +718,38 @@ class Zugschema:
 
     def zugfarbe_rgb(self, zug: ZugDetails) -> Tuple[int]:
         """
-        rgb-farbcode eines zuges
+        RGB-Farbcode eines Zuges
 
         :param zug:
-        :return: tupel (r,g,b)
+        :return: tupel (r,g,b). r,g,b sind Integer im Bereich 0-255.
         """
 
         farbe = self.zugfarbe(zug)
+        frgb = mpl.colors.to_rgb(farbe)
+        rgb = [round(255 * v) for v in frgb]
+        return tuple(rgb)
+
+    def kategorie_farbe(self, kat: str) -> str:
+        """
+        Matplotlib-Farbcode einer Zugkategorie.
+
+        :param kat: Kategoriekürzel, z.B. "F"
+        :return: str
+        """
+
+        return self.kategorien[kat]["farbe"]
+
+    def kategorie_rgb(self, kat: str) -> Tuple[int]:
+        """
+        RGB-Farbcode einer Zugskategorie
+
+        Kann mit QtGui.QColor(*rgb) in einen Qt-Farbcode umgewandelt werden.
+
+        :param kat: Kategoriekürzel, z.B. "F"
+        :return: tupel (r,g,b). r,g,b sind Integer im Bereich 0-255.
+        """
+
+        farbe = self.kategorien[kat]["farbe"]
         frgb = mpl.colors.to_rgb(farbe)
         rgb = [round(255 * v) for v in frgb]
         return tuple(rgb)
@@ -814,7 +879,9 @@ class Anlage:
             except ValueError as e:
                 logger.exception("fehlerhafte anlagenkonfiguration")
 
-            self.zugschema.load_config(config_path, default_path, self.anlage.region)
+            Zugschema.find_schemas(default_path)
+            Zugschema.find_schemas(config_path)
+            self.zugschema.load_config(self.zugschema.name, self.anlage.region)
             self.config_loaded = True
 
         if len(self.gleis_graph) == 0 or len(self.bahnhof_graph) == 0 or len(self.gleis_graph_probleme) > 0:
