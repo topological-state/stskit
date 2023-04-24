@@ -25,6 +25,7 @@ from stskit.stsplugin import PluginClient, TaskDone, DEFAULT_HOST, DEFAULT_PORT
 from stskit.zentrale import DatenZentrale
 from stskit.anschlussmatrix import AnschlussmatrixWindow
 from stskit.bildfahrplan import BildFahrplanWindow
+from stskit.einstellungen import EinstellungenWindow
 from stskit.gleisbelegung import GleisbelegungWindow
 from stskit.gleisnetz import GleisnetzWindow
 from stskit.qticker import TickerWindow
@@ -177,6 +178,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ticker_button.clicked.connect(self.ticker_clicked)
         layout.addWidget(self.ticker_button)
 
+        self.einstellungen_button = QtWidgets.QPushButton("Einstellungen", self)
+        self.einstellungen_button.setEnabled(False)
+        self.einstellungen_button.clicked.connect(self.einstellungen_clicked)
+        layout.addWidget(self.einstellungen_button)
+
         self.statusfeld = QtWidgets.QLineEdit("Initialisierung...")
         self.statusfeld.setReadOnly(True)
         layout.addWidget(self.statusfeld)
@@ -229,6 +235,12 @@ class MainWindow(QtWidgets.QMainWindow):
         window.show()
         self.windows.add(window)
 
+    def einstellungen_clicked(self):
+        window = EinstellungenWindow(self.zentrale)
+        window.update()
+        window.show()
+        self.windows.add(window)
+
     @pyqtSlot()
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         """Detect close events and emit the ``closed`` signal."""
@@ -271,6 +283,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.fahrplan_button.setEnabled(self.enable_update)
                 self.netz_button.setEnabled(self.enable_update)
                 self.ticker_button.setEnabled(self.enable_update)
+                # self.einstellungen_button.setEnabled(self.enable_update)
 
             self.statusfeld.setText("")
             await trio.sleep(self.update_interval)

@@ -20,7 +20,6 @@ import matplotlib as mpl
 from PyQt5 import Qt, QtCore, QtGui
 from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QObject
 
-from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stskit.stsobj import time_to_minutes, ZugDetails
 
 logger = logging.getLogger(__name__)
@@ -450,7 +449,7 @@ class Zugbeschriftung:
     def __init__(self):
         self.muster: List[str] = []
 
-    def format_label(self, ziel: ZugZielPlanung, kontext: str = 'Abfahrt') -> str:
+    def format_label(self, ziel: 'ZugZielPlanung', kontext: str = 'Abfahrt') -> str:
         """
         zugbeschriftung nach ankunfts- oder abfahrtsmuster formatieren
 

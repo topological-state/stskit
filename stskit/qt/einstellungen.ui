@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>konfig_dialog</class>
- <widget class="QDialog" name="konfig_dialog">
+ <class>EinstellungenWindow</class>
+ <widget class="QMainWindow" name="EinstellungenWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,246 +11,257 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Einstellungen</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QFrame" name="header_frame">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>40</height>
-      </size>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>20</y>
-        <width>106</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <item>
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QLabel" name="stellwerk_label">
-         <property name="text">
-          <string>Stellwerk</string>
+        <widget class="QTabWidget" name="tab_widget">
+         <property name="currentIndex">
+          <number>3</number>
          </property>
+         <widget class="QWidget" name="einaus_tab">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <attribute name="title">
+           <string>Ein-/Ausfahrten</string>
+          </attribute>
+          <widget class="QTreeView" name="einaus_view">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>20</y>
+             <width>511</width>
+             <height>621</height>
+            </rect>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="einaus_zusammen_button">
+           <property name="geometry">
+            <rect>
+             <x>590</x>
+             <y>30</y>
+             <width>80</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>zusammenfassen</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="einaus_teilen_button">
+           <property name="geometry">
+            <rect>
+             <x>590</x>
+             <y>60</y>
+             <width>80</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>aufteilen</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="einaus_umbenennen_button">
+           <property name="geometry">
+            <rect>
+             <x>590</x>
+             <y>90</y>
+             <width>80</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>umbenennen</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="einaus_rauf_button">
+           <property name="geometry">
+            <rect>
+             <x>590</x>
+             <y>120</y>
+             <width>80</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>rauf</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="einaus_runter_button">
+           <property name="geometry">
+            <rect>
+             <x>590</x>
+             <y>150</y>
+             <width>80</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>runter</string>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QWidget" name="bahnhof_tab">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <attribute name="title">
+           <string>Bahnhöfe</string>
+          </attribute>
+          <widget class="QTreeView" name="bahnhof_view">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>20</y>
+             <width>601</width>
+             <height>611</height>
+            </rect>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="bahnhof_teilen_button">
+           <property name="geometry">
+            <rect>
+             <x>670</x>
+             <y>130</y>
+             <width>80</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>aufteilen</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="bahnhof_zusammen_button">
+           <property name="geometry">
+            <rect>
+             <x>670</x>
+             <y>100</y>
+             <width>80</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>zusammenfassen</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="bahnhof_rauf_button">
+           <property name="geometry">
+            <rect>
+             <x>670</x>
+             <y>190</y>
+             <width>80</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>rauf</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="bahnhof_runter_button">
+           <property name="geometry">
+            <rect>
+             <x>670</x>
+             <y>220</y>
+             <width>80</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>runter</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="bahnhof_umbenennen_button">
+           <property name="geometry">
+            <rect>
+             <x>670</x>
+             <y>160</y>
+             <width>80</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>umbenennen</string>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QWidget" name="strecken_tab">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <attribute name="title">
+           <string>Strecken</string>
+          </attribute>
+         </widget>
+         <widget class="QWidget" name="zugschema_tab">
+          <attribute name="title">
+           <string>Zugschema</string>
+          </attribute>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QLabel" name="zugschema_name_label">
+               <property name="text">
+                <string>Zugschema</string>
+               </property>
+               <property name="buddy">
+                <cstring>zugschema_name_label</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="zugschema_name_combo"/>
+             </item>
+             <item>
+              <widget class="QLabel" name="zugschema_details_label">
+               <property name="text">
+                <string>Kategorien</string>
+               </property>
+               <property name="buddy">
+                <cstring>zugschema_details_table</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTableView" name="zugschema_details_table">
+               <property name="selectionBehavior">
+                <enum>QAbstractItemView::SelectRows</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="region_label">
-         <property name="text">
-          <string>Region</string>
+        <widget class="QDialogButtonBox" name="dialog_button_box">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="standardButtons">
+          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="QTabWidget" name="tab_widget">
-     <property name="currentIndex">
-      <number>3</number>
-     </property>
-     <widget class="QWidget" name="einaus_tab">
-      <attribute name="title">
-       <string>Ein-/Ausfahrten</string>
-      </attribute>
-      <widget class="QTreeView" name="einaus_view">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>20</y>
-         <width>511</width>
-         <height>621</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="einaus_zusammen_button">
-       <property name="geometry">
-        <rect>
-         <x>590</x>
-         <y>30</y>
-         <width>80</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>zusammenfassen</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="einaus_teilen_button">
-       <property name="geometry">
-        <rect>
-         <x>590</x>
-         <y>60</y>
-         <width>80</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>aufteilen</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="einaus_umbenennen_button">
-       <property name="geometry">
-        <rect>
-         <x>590</x>
-         <y>90</y>
-         <width>80</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>umbenennen</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="einaus_rauf_button">
-       <property name="geometry">
-        <rect>
-         <x>590</x>
-         <y>120</y>
-         <width>80</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>rauf</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="einaus_runter_button">
-       <property name="geometry">
-        <rect>
-         <x>590</x>
-         <y>150</y>
-         <width>80</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>runter</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="bahnhof_tab">
-      <attribute name="title">
-       <string>Bahnhöfe</string>
-      </attribute>
-      <widget class="QTreeView" name="bahnhof_view">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>20</y>
-         <width>601</width>
-         <height>611</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="bahnhof_teilen_button">
-       <property name="geometry">
-        <rect>
-         <x>670</x>
-         <y>130</y>
-         <width>80</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>aufteilen</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="bahnhof_zusammen_button">
-       <property name="geometry">
-        <rect>
-         <x>670</x>
-         <y>100</y>
-         <width>80</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>zusammenfassen</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="bahnhof_rauf_button">
-       <property name="geometry">
-        <rect>
-         <x>670</x>
-         <y>190</y>
-         <width>80</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>rauf</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="bahnhof_runter_button">
-       <property name="geometry">
-        <rect>
-         <x>670</x>
-         <y>220</y>
-         <width>80</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>runter</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="bahnhof_umbenennen_button">
-       <property name="geometry">
-        <rect>
-         <x>670</x>
-         <y>160</y>
-         <width>80</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>umbenennen</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="routen_tab">
-      <attribute name="title">
-       <string>Routen</string>
-      </attribute>
-     </widget>
-     <widget class="QWidget" name="farbschema_tab">
-      <attribute name="title">
-       <string>Farbschema</string>
-      </attribute>
-     </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="dialog_button_box">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-  </layout>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections>
   <connection>
    <sender>dialog_button_box</sender>
    <signal>accepted()</signal>
-   <receiver>konfig_dialog</receiver>
+   <receiver>EinstellungenWindow</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -266,7 +277,7 @@
   <connection>
    <sender>dialog_button_box</sender>
    <signal>rejected()</signal>
-   <receiver>konfig_dialog</receiver>
+   <receiver>EinstellungenWindow</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
