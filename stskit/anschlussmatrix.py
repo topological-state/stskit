@@ -120,7 +120,7 @@ class Anschlussmatrix:
         self.ankunft_ziele: Dict[int, ZugZielPlanung] = {}
         self.abfahrt_ziele: Dict[int, ZugZielPlanung] = {}
         self.eff_ankunftszeiten: Dict[int, int] = {}
-        self.anschlussstatus = np.zeros((0, 0), dtype=np.float)
+        self.anschlussstatus = np.zeros((0, 0), dtype=float)
         self.anschlussplan = np.zeros_like(self.anschlussstatus)
         self.verspaetung = np.zeros_like(self.anschlussstatus)
         self.anzeigematrix = np.zeros_like(self.anschlussstatus)
@@ -276,9 +276,9 @@ class Anschlussmatrix:
 
         n_ab, n_an = len(self.zid_abfahrten_index), len(self.zid_ankuenfte_index)
         a_ab, a_an = n_ab, n_an
-        self.anschlussplan = np.ones((a_ab, a_an), dtype=np.float) * np.nan
-        self.anschlussstatus = np.ones((a_ab, a_an), dtype=np.float) * np.nan
-        self.verspaetung = np.zeros((a_ab, a_an), dtype=np.float)
+        self.anschlussplan = np.ones((a_ab, a_an), dtype=float) * np.nan
+        self.anschlussstatus = np.ones((a_ab, a_an), dtype=float) * np.nan
+        self.verspaetung = np.zeros((a_ab, a_an), dtype=float)
 
         for i_ab, zid_ab in enumerate(self.zid_abfahrten_index):
             ziel_ab = self.abfahrt_ziele[zid_ab]
