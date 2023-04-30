@@ -86,6 +86,7 @@ class Ui_EinstellungenWindow(object):
         self.zugschema_details_label.setObjectName("zugschema_details_label")
         self.verticalLayout_2.addWidget(self.zugschema_details_label)
         self.zugschema_details_table = QtWidgets.QTableView(self.zugschema_tab)
+        self.zugschema_details_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.zugschema_details_table.setObjectName("zugschema_details_table")
         self.verticalLayout_2.addWidget(self.zugschema_details_table)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
@@ -127,3 +128,4 @@ class Ui_EinstellungenWindow(object):
         self.zugschema_details_label.setText(_translate("EinstellungenWindow", "Kategorien"))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.zugschema_tab), _translate("EinstellungenWindow", "Zugschema"))
 
+import resources_rc

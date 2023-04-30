@@ -264,3 +264,4 @@ class Ui_BildfahrplanWindow(object):
         self.actionAbfahrtAbwarten.setToolTip(_translate("BildfahrplanWindow", "Überholung/Abfahrt von zweitem gewählten Zug abwarten (F)"))
         self.actionAbfahrtAbwarten.setShortcut(_translate("BildfahrplanWindow", "F"))
 
+import resources_rc
