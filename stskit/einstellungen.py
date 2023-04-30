@@ -10,7 +10,7 @@ from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set,
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
-from stskit.zugschema import Zugschema, ZugkategorienModell
+from stskit.zugschema import Zugschema, ZugkategorienAuswahlModell
 from stskit.anlage import Anlage
 from stskit.zentrale import DatenZentrale
 
@@ -35,7 +35,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
 
         self.zugschema = Zugschema()
         self.zugschema.load_config(self.anlage.zugschema.name)
-        self.zugschema_modell = ZugkategorienModell(None, zugschema=self.zugschema)
+        self.zugschema_modell = ZugkategorienAuswahlModell(None, zugschema=self.zugschema)
         self.ui.zugschema_details_table.setModel(self.zugschema_modell)
         self.ui.zugschema_name_combo.currentIndexChanged.connect(self.zugschema_changed)
 

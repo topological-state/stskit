@@ -21,7 +21,7 @@ from stskit.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, \
     FesteVerspaetung, ZugAbwarten, AnkunftAbwarten, AbfahrtAbwarten, ZugNichtAbwarten, ZugZielNode
 from stskit.stsobj import time_to_minutes
-from stskit.zentrale import DatenZentrale
+from stskit.zugschema import Zugbeschriftung, ZugbeschriftungAuswahlModell, Zugschema, ZugkategorienAuswahlModell
 
 from stskit.qt.ui_anschlussmatrix import Ui_AnschlussmatrixWindow
 
@@ -95,8 +95,6 @@ class Anschlussmatrix:
     - abfahrt_filter_kategorien: zugskategorien (s. Anlage.zugschema), die auf der abfahrtsachse erscheinen
     """
 
-    ZUG_SCHILDER = ['gleis', 'name', 'richtung', 'zeit', 'verspaetung']
-
     def __init__(self, anlage: Anlage):
         self.anlage: Anlage = anlage
         self.bahnhof: Optional[str] = None
@@ -104,8 +102,8 @@ class Anschlussmatrix:
         self.umsteigezeit: int = 2
         self.ankunft_filter_kategorien: Set[str] = {'X', 'F', 'N', 'S'}
         self.abfahrt_filter_kategorien: Set[str] = {'X', 'F', 'N'}
-        self.ankunft_label_muster: List[str] = ['name', 'richtung', 'verspaetung']
-        self.abfahrt_label_muster: List[str] = ['name', 'richtung', 'verspaetung']
+        self.ankunft_beschriftung = Zugbeschriftung(einstellung='Anschlussmatrix')
+        self.abfahrt_beschriftung = Zugbeschriftung(einstellung='Anschlussmatrix')
         self.ankuenfte_ausblenden: Set[int] = set([])
         self.abfahrten_ausblenden: Set[int] = set([])
         self.anschluss_auswahl: Set[Tuple[int, int]] = set([])
@@ -139,50 +137,6 @@ class Anschlussmatrix:
             self.gleise = self.anlage.bahnsteiggruppen[bahnhof]
             self.zid_ankuenfte_set = set([])
             self.zid_abfahrten_set = set([])
-
-    def format_label(self, ziel: ZugZielPlanung, abfahrt: bool = False) -> str:
-        """
-        zugbeschriftung nach ankunfts- oder abfahrtsmuster formatieren
-
-        :param ziel: zugziel
-        :param abfahrt: abfahrt (True) oder ankunft (False)
-        :return: str
-        """
-
-        args = {'name': ziel.zug.name, 'gleis': ziel.gleis + ':'}
-        if abfahrt:
-            muster = list(self.abfahrt_label_muster)
-            richtung = ziel.zug.nach
-            zeit = ziel.ab
-            verspaetung = ziel.verspaetung_ab
-        else:
-            muster = list(self.ankunft_label_muster)
-            richtung = ziel.zug.von
-            zeit = ziel.an
-            verspaetung = ziel.verspaetung_an
-
-        args['richtung'] = richtung.replace("Gleis ", "").split(" ")[0]
-
-        try:
-            zeit = time_to_minutes(zeit)
-        except AttributeError:
-            try:
-                muster.remove("zeit")
-            except ValueError:
-                pass
-        else:
-            args['zeit'] = f"{int(zeit) // 60:02}:{int(zeit) % 60:02}"
-
-        if verspaetung > 0:
-            args['verspaetung'] = f"({int(verspaetung):+})"
-        else:
-            try:
-                muster.remove("verspaetung")
-            except ValueError:
-                pass
-
-        beschriftung = " ".join((args[schild] for schild in muster))
-        return beschriftung
 
     def _fahrplan_filter(self, fahrplan: Iterable[ZugZielPlanung], ankuenfte: bool = False, abfahrten: bool = False) \
             -> Iterable[ZugZielPlanung]:
@@ -342,9 +296,9 @@ class Anschlussmatrix:
         aufgabe_auswahl = np.logical_and(aufgabe_auswahl, aufgabe_maske)
         self.anschlussstatus = np.where(aufgabe_auswahl, ANSCHLUSS_AUFGEBEN, self.anschlussstatus)
 
-        self.ankunft_labels = {zid: self.format_label(self.ankunft_ziele[zid], False)
+        self.ankunft_labels = {zid: self.ankunft_beschriftung.format(self.ankunft_ziele[zid], 'Ankunft')
                                for zid in self.zid_ankuenfte_index}
-        self.abfahrt_labels = {zid: self.format_label(self.abfahrt_ziele[zid], True)
+        self.abfahrt_labels = {zid: self.abfahrt_beschriftung.format(self.abfahrt_ziele[zid], 'Abfahrt')
                                for zid in self.zid_abfahrten_index}
 
         loeschen = set(self.zuege.keys()) - self.zid_ankuenfte_set - self.zid_abfahrten_set
@@ -503,13 +457,13 @@ class Anschlussmatrix:
 
 class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
-    def __init__(self, zentrale: DatenZentrale):
+    def __init__(self, zentrale: 'DatenZentrale'):
         super().__init__()
 
         self.zentrale = zentrale
         self.zentrale.planung_update.register(self.planung_update)
 
-        self.anschlussmatrix: Optional[Anschlussmatrix] = None
+        self.anschlussmatrix: Anschlussmatrix = Anschlussmatrix(zentrale.anlage)
         self._pick_event: bool = False
 
         self.in_update = True
@@ -522,6 +476,20 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.ui.displayLayout = QtWidgets.QHBoxLayout(self.ui.grafikWidget)
         self.ui.displayLayout.setObjectName("displayLayout")
         self.ui.displayLayout.addWidget(self.display_canvas)
+
+        self.ankunft_filter_modell = ZugkategorienAuswahlModell(None, zugschema=self.zentrale.anlage.zugschema)
+        self.ui.ankunft_filter_view.setModel(self.ankunft_filter_modell)
+
+        self.abfahrt_filter_modell = ZugkategorienAuswahlModell(None, zugschema=self.zentrale.anlage.zugschema)
+        self.ui.abfahrt_filter_view.setModel(self.abfahrt_filter_modell)
+
+        self.ankunft_beschriftung_modell = ZugbeschriftungAuswahlModell(None,
+            beschriftung=self.anschlussmatrix.ankunft_beschriftung)
+        self.ui.ankunft_beschriftung_view.setModel(self.ankunft_beschriftung_modell)
+
+        self.abfahrt_beschriftung_modell = ZugbeschriftungAuswahlModell(None,
+            beschriftung=self.anschlussmatrix.abfahrt_beschriftung)
+        self.ui.abfahrt_beschriftung_view.setModel(self.abfahrt_beschriftung_modell)
 
         self.ui.actionAnzeige.triggered.connect(self.display_button_clicked)
         self.ui.actionSetup.triggered.connect(self.settings_button_clicked)
@@ -538,7 +506,6 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.ui.bahnhofBox.currentIndexChanged.connect(self.bahnhof_changed)
         self.ui.umsteigezeitSpin.valueChanged.connect(self.umsteigezeit_changed)
         self.ui.anschlusszeitSpin.valueChanged.connect(self.anschlusszeit_changed)
-        self.ui.zugbeschriftungTable.itemChanged.connect(self.beschriftung_changed)
 
         self._axes = self.display_canvas.figure.subplots()
         self.display_canvas.mpl_connect("button_press_event", self.on_button_press)
@@ -546,6 +513,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.display_canvas.mpl_connect("pick_event", self.on_pick)
         self.display_canvas.mpl_connect("resize_event", self.on_resize)
 
+        self.update_widgets()
         self.update_actions()
         self.in_update = False
 
@@ -618,19 +586,22 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.ui.anschlusszeitSpin.setValue(self.anschlussmatrix.anschlusszeit)
         self.ui.umsteigezeitSpin.setValue(self.anschlussmatrix.umsteigezeit)
-        self._update_beschriftung_spalte(0, self.anschlussmatrix.ankunft_label_muster)
-        self._update_beschriftung_spalte(1, self.anschlussmatrix.abfahrt_label_muster)
-        self.ui.zugbeschriftungTable.resizeColumnsToContents()
-        self.ui.zugbeschriftungTable.resizeRowsToContents()
+
+        self.ankunft_filter_modell.auswahl = self.anschlussmatrix.ankunft_filter_kategorien
+        self.abfahrt_filter_modell.auswahl = self.anschlussmatrix.abfahrt_filter_kategorien
+        self.ankunft_beschriftung_modell.auswahl = self.anschlussmatrix.ankunft_beschriftung.elemente
+        self.abfahrt_beschriftung_modell.auswahl = self.anschlussmatrix.abfahrt_beschriftung.elemente
+
+        self.ui.ankunft_beschriftung_view.resizeColumnsToContents()
+        self.ui.ankunft_beschriftung_view.resizeRowsToContents()
+        self.ui.abfahrt_beschriftung_view.resizeColumnsToContents()
+        self.ui.abfahrt_beschriftung_view.resizeRowsToContents()
+        self.ui.ankunft_filter_view.resizeColumnsToContents()
+        self.ui.ankunft_filter_view.resizeRowsToContents()
+        self.ui.abfahrt_filter_view.resizeColumnsToContents()
+        self.ui.abfahrt_filter_view.resizeRowsToContents()
 
         self.in_update = False
-
-    def _update_beschriftung_spalte(self, column: int, schilder: List[str]):
-        for row in range(5):
-            item = self.ui.zugbeschriftungTable.item(row, column)
-            schild = self.anschlussmatrix.ZUG_SCHILDER[row]
-            state = QtCore.Qt.Checked if schild in schilder else QtCore.Qt.Unchecked
-            item.setCheckState(state)
 
     @pyqtSlot()
     def bahnhof_changed(self):
@@ -655,20 +626,6 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
             pass
 
     @pyqtSlot()
-    def beschriftung_changed(self):
-        if not self.in_update:
-            self._beschriftung_spalte_changed(0, self.anschlussmatrix.ankunft_label_muster)
-            self._beschriftung_spalte_changed(1, self.anschlussmatrix.abfahrt_label_muster)
-
-    def _beschriftung_spalte_changed(self, column: int, schilder: List[str]):
-        schilder.clear()
-        for row in range(5):
-            item = self.ui.zugbeschriftungTable.item(row, column)
-            schild = self.anschlussmatrix.ZUG_SCHILDER[row]
-            if item.checkState() == QtCore.Qt.Checked:
-                schilder.append(schild)
-
-    @pyqtSlot()
     def settings_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(0)
         self.update_widgets()
@@ -676,6 +633,10 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
+        self.anschlussmatrix.ankunft_filter_kategorien = self.ankunft_filter_modell.auswahl
+        self.anschlussmatrix.abfahrt_filter_kategorien = self.abfahrt_filter_modell.auswahl
+        self.anschlussmatrix.ankunft_beschriftung.elemente = self.ankunft_beschriftung_modell.auswahl
+        self.anschlussmatrix.abfahrt_beschriftung.elemente = self.abfahrt_beschriftung_modell.auswahl
         if self.anschlussmatrix.bahnhof:
             self.daten_update()
             self.grafik_update()
@@ -698,10 +659,6 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.grafik_update()
 
     def daten_update(self):
-        if self.anschlussmatrix is None and self.anlage is not None:
-            self.anschlussmatrix = Anschlussmatrix(self.anlage)
-            self.update_widgets()
-
         if self.anschlussmatrix:
             self.anschlussmatrix.update(self.planung)
 

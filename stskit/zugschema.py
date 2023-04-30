@@ -227,7 +227,7 @@ class Zugschema:
         return tuple(rgb)
 
 
-class ZugkategorienModell(QtCore.QAbstractTableModel):
+class ZugkategorienAuswahlModell(QtCore.QAbstractTableModel):
     """
     Tabellenmodell zur Auswahl von Zugkategorien
 
@@ -244,7 +244,7 @@ class ZugkategorienModell(QtCore.QAbstractTableModel):
     def __init__(self, *args, zugschema: Zugschema = ..., **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._zugschema = zugschema
-        self._auswahl_erlauben = False
+        self._auswahl_erlauben = True
         self._kategorien: List[str] = []
         self._titel: Dict[str, str] = {}
         self._farben: Dict[str, QtGui.QColor] = {}
@@ -443,99 +443,167 @@ class ZugkategorienModell(QtCore.QAbstractTableModel):
 
 
 class Zugbeschriftung:
+    """
+    Konfigurieren und Formatieren von Zugbeschriftungen
+
+    Idee: Jede Darstellung unterhält ein zugeordnetes Zugbeschriftungsobjekt.
+    In diesem wird das Format der Zugbeschriftung sowie die enthaltenen Elemente konfiguriert.
+
+    Meist bleibt das Format für eine bestimmte Darstellung unverändert und wird programmatisch gesetzt.
+    Die in der Beschriftung verwendeten Elemente werden vom Benutzer konfiguriert,
+    z.B. mittels ZugBeschriftungAuswahlModell.
+    """
+
     ELEMENTE = ['Gleis', 'Name', 'Nummer', 'Richtung', 'Zeit', 'Verspätung']
-    KONTEXTE = ['Ankunft', 'Abfahrt']
+    SITUATIONEN = ['Ankunft', 'Abfahrt']
+    DEFAULT_MUSTER = {
+        'Anschlussmatrix': ['Gleis', 'Name', 'Nummer', 'Richtung', 'Zeit', 'Verspätung'],
+        'Bildfahrplan': ['Name', 'Nummer', 'Verspätung'],
+        'Gleisbelegung': ['Name', 'Nummer', 'Zeit', 'Verspätung'],
+        'default': ['Name', 'Verspätung']
+    }
+    DEFAULT_ELEMENTE = {
+        'Anschlussmatrix': ['Nummer', 'Richtung', 'Verspätung'],
+        'Bildfahrplan': ['Nummer', 'Verspätung'],
+        'Gleisbelegung': ['Nummer', 'Verspätung'],
+        'default': ['Name', 'Verspätung']
+    }
 
-    def __init__(self):
-        self.muster: List[str] = []
+    def __init__(self, einstellung: str = 'default'):
+        self._muster: List[str] = self.DEFAULT_MUSTER[einstellung]
+        self._elemente: Set[str] = self.DEFAULT_ELEMENTE[einstellung]
 
-    def format_label(self, ziel: 'ZugZielPlanung', kontext: str = 'Abfahrt') -> str:
+    @property
+    def muster(self) -> List[str]:
+        return self._muster
+
+    @muster.setter
+    def muster(self, muster: Iterable[str]):
+        self._muster = list(muster)
+
+    @property
+    def elemente(self) -> Set[str]:
+        return self._elemente
+
+    @elemente.setter
+    def elemente(self, elemente: Iterable[str]):
+        self._elemente = set(elemente)
+
+    def format(self,
+               ziel: 'ZugZielPlanung',
+               situation: Optional[Union[str, Set[str]]] = None) -> str:
+
         """
         zugbeschriftung nach ankunfts- oder abfahrtsmuster formatieren
 
+        Gleis Name Nummer Richtung Zeit (Verspätung)
+
         :param ziel: zugziel
-        :param kontext: Abfahrt (default) oder Ankunft
+        :param situation: 'Abfahrt' (default) und/oder 'Ankunft'
         :return: str
         """
 
-        if kontext == 'Abfahrt':
-            muster = list(self.muster)
-            richtung = ziel.zug.nach
-            zeit = ziel.ab
-            verspaetung = ziel.verspaetung_ab
-        else:
-            muster = list(self.muster)
-            richtung = ziel.zug.von
-            zeit = ziel.an
-            verspaetung = ziel.verspaetung_an
+        if situation is None:
+            situation = {'Abfahrt'}
+        elif isinstance(situation, str):
+            situation = {situation}
 
         args = {'Name': ziel.zug.name,
-                'Nummer': ziel.zug.nummer,
+                'Nummer': str(ziel.zug.nummer),
                 'Gleis': ziel.gleis + ':',
-                'Richtung': richtung.replace("Gleis ", "").split(" ")[0]
+                'Richtung': '',
+                'Zeit': None,
+                'Verspätung': None
                 }
 
+        if 'Ankunft' in situation:
+            args['Richtung'] = ziel.zug.von.replace("Gleis ", "").split(" ")[0]
+            args['Zeit'] = ziel.an
+            args['Verspätung'] = ziel.verspaetung_an
+
+        if 'Abfahrt' in situation:
+            args['Richtung'] = ziel.zug.nach.replace("Gleis ", "").split(" ")[0]
+            args['Zeit'] = ziel.ab
+            args['Verspätung'] = ziel.verspaetung_ab
+
         try:
-            zeit = time_to_minutes(zeit)
+            args['Zeit'] = time_to_minutes(args['Zeit'])
         except AttributeError:
             try:
-                muster.remove("Zeit")
+                del args["Zeit"]
             except ValueError:
                 pass
         else:
-            args['Zeit'] = f"{int(zeit) // 60:02}:{int(zeit) % 60:02}"
+            args['Zeit'] = f"{int(args['Zeit']) // 60:02}:{int(args['Zeit']) % 60:02}"
 
-        if verspaetung > 0:
-            args['Verspätung'] = f"({int(verspaetung):+})"
+        if args['Verspätung']:
+            args['Verspätung'] = f"({int(args['Verspätung']):+})"
         else:
             try:
-                muster.remove("Verspätung")
+                del args["Verspätung"]
             except ValueError:
                 pass
 
-        beschriftung = " ".join((args[schild] for schild in muster))
+        beschriftung = " ".join((args[element] for element in self._muster if element in self._elemente and element in args))
         return beschriftung
 
 
-class ZugbeschriftungModell(QtCore.QAbstractTableModel):
+class ZugbeschriftungAuswahlModell(QtCore.QAbstractTableModel):
     """
-    tabellenmodell zum einstellen zugbeschriftung
+    Tabellenmodell zum Einstellen Zugbeschriftung
 
-    die tabelle enthält die spalten 'Element', 'Ankunft', 'Abfahrt'.
-    die zeilen enthalten die wählbaren elemente 'Gleis', 'Zug', 'Nummer', 'Richtung', 'Zeit', 'Verspätung'.
+    Die Tabelle enthält die Spalten 'Auswahl', 'Beschreibung'.
+    Die Zeilen enthalten die wählbaren Elemente 'Gleis', 'Zug', 'Nummer', 'Richtung', 'Zeit', 'Verspätung'.
 
-    implementiert die methoden von QAbstractTableModel.
-
+    Implementiert die Methoden von QAbstractTableModel.
     """
 
-    def __init__(self):
-        super().__init__()
-
-        # beispieldaten
-        self._columns: List[str] = ['Ankunft', 'Anbfahrt']
-        self._rows: List[str] = ['Gleis', 'Zug', 'Nummer', 'Richtung', 'Zeit', 'Verspätung']
-        self._auswahl: Dict[str, Set[str]] = {'Ankunft': {'Nummer'}}
-
-    def set_elemente(self, elemente: Iterable[str]):
-        self.beginResetModel()
-        self._rows = list(elemente)
-        self.endResetModel()
-
-    def set_kontexte(self, kontexte: Iterable[str]):
-        self.beginResetModel()
-        self._columns = list(kontexte)
-        self.endResetModel()
-
-    def set_daten(self, daten: Zugbeschriftung) -> None:
-        """
-        datenobjekt setzen.
-
-        :param daten:
-        :return: None
+    def __init__(self, *args, beschriftung: Zugbeschriftung = ..., **kwargs) -> None:
         """
 
+        :param args: Für Superklasse
+        :param elemente: Wählbare Elemente
+        :param kwargs: Für Superklasse
+        """
+
+        super().__init__(*args, **kwargs)
+
+        self._beschriftung = beschriftung
+        self._spalten: List[str] = ['Auswahl', 'Beschreibung']
+        self._elemente: List[str] = list(beschriftung.muster)
+        self._auswahl: Set[str] = set(beschriftung.elemente)
+
+    @property
+    def elemente(self) -> Iterable[str]:
+        return self._elemente
+
+    @elemente.setter
+    def elemente(self, elemente: Iterable[str]):
         self.beginResetModel()
-        # todo
+        self._elemente = list(elemente)
+        self.endResetModel()
+
+    @property
+    def auswahl(self) -> Set[str]:
+        """
+        Aktuelle Auswahl
+
+        :return: Menge von Beschriftungselementen
+        """
+
+        return self._auswahl.copy()
+
+    @auswahl.setter
+    def auswahl(self, auswahl: Iterable[str]):
+        """
+        Auswahl ändern
+
+        :param auswahl: Menge von Beschriftungselementen
+        :return:
+        """
+
+        self.beginResetModel()
+        self._auswahl = set(auswahl)
         self.endResetModel()
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
@@ -545,7 +613,7 @@ class ZugbeschriftungModell(QtCore.QAbstractTableModel):
         :param parent: nicht verwendet
         :return: die spaltenzahl ist fix.
         """
-        return len(self._columns)
+        return len(self._spalten)
 
     def rowCount(self, parent: QModelIndex = ...) -> int:
         """
@@ -554,21 +622,14 @@ class ZugbeschriftungModell(QtCore.QAbstractTableModel):
         :param parent: nicht verwendet
         :return: anzahl dargestellte zeilen.
         """
-        return len(self._rows)
+        return len(self._elemente)
 
     def data(self, index: QModelIndex, role: int = ...) -> Any:
         """
-        daten pro zelle ausgeben.
+        Daten pro Zelle an den Viewer ausgeben.
 
         :param index: enthält spalte und zeile der gewünschten zelle
         :param role: gewünschtes datenfeld:
-            - UserRole gibt die originaldaten aus (zum sortieren benötigt).
-            - DisplayRole gibt die daten formatiert als str oder int aus.
-            - CheckStateRole gibt an, ob ein zug am gleis steht.
-            - DecorationRole
-            - ForegroundRole färbt die eingefahrenen, ausgefahrenen und noch unsichtbaren züge unterschiedlich ein.
-            - TextAlignmentRole richtet den text aus.
-            - ToolTipRole
         :return: verschiedene
         """
 
@@ -577,33 +638,98 @@ class ZugbeschriftungModell(QtCore.QAbstractTableModel):
 
         try:
             col = index.column()
-            kontext = self._columns[col]
             row = index.row()
-            element = self._rows[row]
-            checked = element in self._auswahl[kontext]
+            element = self._elemente[row]
         except (IndexError, KeyError):
             return None
 
-        if role == QtCore.Qt.CheckStateRole:
-            if checked:
-                return QtCore.Qt.Checked
-            else:
-                return QtCore.Qt.Unchecked
+        if role == QtCore.Qt.DisplayRole:
+            if col == 1:
+                return element
+
+        elif role == QtCore.Qt.CheckStateRole:
+            if col == 0:
+                if element in self._auswahl:
+                    return QtCore.Qt.Checked
+                else:
+                    return QtCore.Qt.Unchecked
 
         elif role == QtCore.Qt.TextAlignmentRole:
-            return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
+            if col == 0:
+                return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
+            else:
+                return QtCore.Qt.AlignLeft + QtCore.Qt.AlignVCenter
+
+        return None
+
+    def setData(self, index: QModelIndex, value: typing.Any, role: int = ...) -> bool:
+        """
+        Datenänderung vom QListView übernehmen.
+
+        Wir reagieren nur auf geänderte Auswahl
+
+        :param index: Zeilenindex
+        :param role: Rolle
+        :param value: neuer Wert
+        :return: True, wenn sich das Model geändert hat.
+        """
+
+        if not index.isValid():
+            return False
+
+        try:
+            col = index.column()
+            row = index.row()
+            element = self._elemente[row]
+        except (IndexError, KeyError):
+            return False
+
+        if role == QtCore.Qt.CheckStateRole:
+            if col == 0:
+                if value == QtCore.Qt.Checked:
+                    self._auswahl.add(element)
+                else:
+                    self._auswahl.remove(element)
+                return True
+
+        return False
+
+    def flags(self, index: QModelIndex) -> Optional[QtCore.Qt.ItemFlags]:
+        """
+        Flags an QListView übergeben
+
+        :param index: Zeilenindex
+        :return: Alle Felder enabled und selectable. Erste Spalte checkable, wenn Auswahl erlaubt.
+        """
+
+        if not index.isValid():
+            return None
+
+        try:
+            col = index.column()
+            row = index.row()
+            element = self._elemente[row]
+        except (IndexError, KeyError):
+            return None
+
+        if col == 0:
+            return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable
+        elif col == 1:
+            return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+
+        return None
 
     def headerData(self, section: int, orientation: QtCore.Qt.Orientation, role: int = ...) -> Any:
         """
         gibt den text der kopfzeile und -spalte aus.
         :param section: element-index
         :param orientation: wahl zeile oder spalte
-        :param role: DisplayRole gibt den spaltentitel oder die zug-id aus.
+        :param role: DisplayRole gibt den titel aus.
         :return:
         """
 
         if role == QtCore.Qt.DisplayRole:
             if orientation == QtCore.Qt.Horizontal:
-                return self._columns[section]
+                return self._spalten[section]
             elif orientation == QtCore.Qt.Vertical:
-                return self._rows[section]
+                return None

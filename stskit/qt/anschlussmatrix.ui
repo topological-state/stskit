@@ -18,211 +18,225 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="settings_page">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <layout class="QFormLayout" name="formLayout">
-          <item row="0" column="0">
-           <widget class="QLabel" name="bahnhofLabel">
-            <property name="text">
-             <string>&amp;Bahnhof</string>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QGroupBox" name="allgemein_group">
+            <property name="title">
+             <string>Allgemein</string>
             </property>
-            <property name="buddy">
-             <cstring>bahnhofBox</cstring>
-            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QLabel" name="bahnhofLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>&amp;Bahnhof</string>
+               </property>
+               <property name="buddy">
+                <cstring>bahnhofBox</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="bahnhofBox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>120</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="sizeAdjustPolicy">
+                <enum>QComboBox::AdjustToContents</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="umsteigezeitLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>&amp;Umsteigezeit</string>
+               </property>
+               <property name="buddy">
+                <cstring>umsteigezeitSpin</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="umsteigezeitSpin">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="suffix">
+                <string> Min.</string>
+               </property>
+               <property name="value">
+                <number>2</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="anschlusszeitLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>&amp;Anschlusszeit</string>
+               </property>
+               <property name="buddy">
+                <cstring>anschlusszeitSpin</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="anschlusszeitSpin">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="suffix">
+                <string> Min.</string>
+               </property>
+               <property name="value">
+                <number>15</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="allgemein_spacer_widget" native="true"/>
+             </item>
+            </layout>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QComboBox" name="bahnhofBox">
-            <property name="sizeAdjustPolicy">
-             <enum>QComboBox::AdjustToContents</enum>
+          <item>
+           <widget class="QGroupBox" name="ankunft_group">
+            <property name="title">
+             <string>Ankommende Züge</string>
             </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QLabel" name="ankunft_filter_label">
+               <property name="text">
+                <string>Filter</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTableView" name="ankunft_filter_view">
+               <property name="alternatingRowColors">
+                <bool>true</bool>
+               </property>
+               <property name="selectionMode">
+                <enum>QAbstractItemView::SingleSelection</enum>
+               </property>
+               <property name="selectionBehavior">
+                <enum>QAbstractItemView::SelectRows</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="ankunft_filter_label_2">
+               <property name="text">
+                <string>Beschriftung</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTableView" name="ankunft_beschriftung_view">
+               <property name="alternatingRowColors">
+                <bool>true</bool>
+               </property>
+               <property name="selectionMode">
+                <enum>QAbstractItemView::SingleSelection</enum>
+               </property>
+               <property name="selectionBehavior">
+                <enum>QAbstractItemView::SelectRows</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="umsteigezeitLabel">
-            <property name="text">
-             <string>&amp;Umsteigezeit (Minuten)</string>
+          <item>
+           <widget class="QGroupBox" name="abfahrt_group">
+            <property name="title">
+             <string>Abfahrende Züge</string>
             </property>
-            <property name="buddy">
-             <cstring>umsteigezeitSpin</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QSpinBox" name="umsteigezeitSpin">
-            <property name="value">
-             <number>2</number>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="zugbeschriftungLabel">
-            <property name="text">
-             <string>B&amp;eschriftung</string>
-            </property>
-            <property name="buddy">
-             <cstring>zugbeschriftungTable</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QTableWidget" name="zugbeschriftungTable">
-            <property name="alternatingRowColors">
-             <bool>true</bool>
-            </property>
-            <property name="selectionMode">
-             <enum>QAbstractItemView::NoSelection</enum>
-            </property>
-            <row>
-             <property name="text">
-              <string>Gleis</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Zug</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Richtung</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Zeit</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Verspätung</string>
-             </property>
-            </row>
-            <column>
-             <property name="text">
-              <string>Ankunft</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Abfahrt</string>
-             </property>
-            </column>
-            <item row="0" column="0">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checkState">
-              <enum>Unchecked</enum>
-             </property>
-             <property name="flags">
-              <set>ItemIsUserCheckable|ItemIsEnabled</set>
-             </property>
-            </item>
-            <item row="0" column="1">
-             <property name="checkState">
-              <enum>Unchecked</enum>
-             </property>
-             <property name="flags">
-              <set>ItemIsUserCheckable|ItemIsEnabled</set>
-             </property>
-            </item>
-            <item row="1" column="0">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checkState">
-              <enum>Unchecked</enum>
-             </property>
-             <property name="flags">
-              <set>ItemIsUserCheckable|ItemIsEnabled</set>
-             </property>
-            </item>
-            <item row="1" column="1">
-             <property name="checkState">
-              <enum>Unchecked</enum>
-             </property>
-             <property name="flags">
-              <set>ItemIsUserCheckable|ItemIsEnabled</set>
-             </property>
-            </item>
-            <item row="2" column="0">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checkState">
-              <enum>Unchecked</enum>
-             </property>
-             <property name="flags">
-              <set>ItemIsUserCheckable|ItemIsEnabled</set>
-             </property>
-            </item>
-            <item row="2" column="1">
-             <property name="checkState">
-              <enum>Unchecked</enum>
-             </property>
-             <property name="flags">
-              <set>ItemIsUserCheckable|ItemIsEnabled</set>
-             </property>
-            </item>
-            <item row="3" column="0">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checkState">
-              <enum>Unchecked</enum>
-             </property>
-             <property name="flags">
-              <set>ItemIsUserCheckable|ItemIsEnabled</set>
-             </property>
-            </item>
-            <item row="3" column="1">
-             <property name="checkState">
-              <enum>Unchecked</enum>
-             </property>
-             <property name="flags">
-              <set>ItemIsUserCheckable|ItemIsEnabled</set>
-             </property>
-            </item>
-            <item row="4" column="0">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checkState">
-              <enum>Unchecked</enum>
-             </property>
-             <property name="flags">
-              <set>ItemIsUserCheckable|ItemIsEnabled</set>
-             </property>
-            </item>
-            <item row="4" column="1">
-             <property name="checkState">
-              <enum>Unchecked</enum>
-             </property>
-             <property name="flags">
-              <set>ItemIsUserCheckable|ItemIsEnabled</set>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="anschlusszeitLabel">
-            <property name="text">
-             <string>&amp;Anschlusszeit (Minuten)</string>
-            </property>
-            <property name="buddy">
-             <cstring>anschlusszeitSpin</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QSpinBox" name="anschlusszeitSpin">
-            <property name="value">
-             <number>15</number>
-            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item>
+              <widget class="QLabel" name="abfahrt_filter_label">
+               <property name="text">
+                <string>Filter</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTableView" name="abfahrt_filter_view">
+               <property name="alternatingRowColors">
+                <bool>true</bool>
+               </property>
+               <property name="selectionMode">
+                <enum>QAbstractItemView::SingleSelection</enum>
+               </property>
+               <property name="selectionBehavior">
+                <enum>QAbstractItemView::SelectRows</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="abfahrt_beschriftung_label">
+               <property name="text">
+                <string>Beschriftung</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTableView" name="abfahrt_beschriftung_view">
+               <property name="alternatingRowColors">
+                <bool>true</bool>
+               </property>
+               <property name="selectionMode">
+                <enum>QAbstractItemView::SingleSelection</enum>
+               </property>
+               <property name="selectionBehavior">
+                <enum>QAbstractItemView::SelectRows</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
