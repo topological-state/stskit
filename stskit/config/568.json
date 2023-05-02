@@ -1,0 +1,121 @@
+{
+    "_aid": 568,
+    "_build": 5851,
+    "_name": "Venezia Santa Lucia",
+    "_region": "Italien Nord",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW"
+            ]
+        },
+        "Gleis 300": {
+            "__class__": "Set",
+            "data": [
+                "Gleis 300"
+            ]
+        },
+        "E/A P": {
+            "__class__": "Set",
+            "data": [
+                "P4",
+                "P3",
+                "P2"
+            ]
+        },
+        "Mestre": {
+            "__class__": "Set",
+            "data": [
+                "Venezia Mestre 2",
+                "Venezia Mestre 1"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Santa Lucia": {
+            "__class__": "Set",
+            "data": [
+                "3",
+                "1",
+                "5",
+                "4",
+                "2",
+                "100",
+                "7",
+                "200",
+                "6",
+                "10",
+                "11",
+                "15",
+                "13",
+                "14",
+                "12",
+                "101",
+                "201",
+                "17",
+                "21",
+                "16",
+                "22",
+                "19",
+                "23",
+                "18",
+                "300",
+                "9",
+                "8"
+            ]
+        },
+        "A": {
+            "__class__": "Set",
+            "data": [
+                "A1",
+                "A2",
+                "A3",
+                "A4",
+                "A5",
+                "A6"
+            ]
+        },
+        "E/A Mestre": {
+            "__class__": "Set",
+            "data": [
+                "Ausfahrt Mestre",
+                "Einfahrt Mestre"
+            ]
+        },
+        "P": {
+            "__class__": "Set",
+            "data": [
+                "P6",
+                "P1",
+                "P5"
+            ]
+        },
+        "Porto Marghera": {
+            "__class__": "Set",
+            "data": [
+                "Porto Marghera"
+            ]
+        },
+        "R": {
+            "__class__": "Set",
+            "data": [
+                "R1",
+                "R5"
+            ]
+        }
+    },
+    "hauptstrecke": "Mestre-Santa Lucia",
+    "sektoren": {},
+    "strecken": {
+        "Mestre-Santa Lucia": [
+            "Mestre",
+            "Porto Marghera",
+            "Santa Lucia"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "italien"
+}

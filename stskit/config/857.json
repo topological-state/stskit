@@ -1,0 +1,264 @@
+{
+    "_aid": 857,
+    "_build": 5851,
+    "_name": "Bolzano/Bozen",
+    "_region": "Italien Nord",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW 1",
+                "BW 2"
+            ]
+        },
+        "Brennero": {
+            "__class__": "Set",
+            "data": [
+                "Brennero"
+            ]
+        },
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Gbf S\u00fcd",
+                "Gbf Nord"
+            ]
+        },
+        "Gleis 10-15": {
+            "__class__": "Set",
+            "data": [
+                "Gleis 10-15"
+            ]
+        },
+        "Gleis 10-17": {
+            "__class__": "Set",
+            "data": [
+                "Gleis 10-17"
+            ]
+        },
+        "Merano": {
+            "__class__": "Set",
+            "data": [
+                "Merano"
+            ]
+        },
+        "Trento": {
+            "__class__": "Set",
+            "data": [
+                "Trento"
+            ]
+        },
+        "Wagenabstellung": {
+            "__class__": "Set",
+            "data": [
+                "Wagenabstellung"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Bolzano": {
+            "__class__": "Set",
+            "data": [
+                "61",
+                "9G",
+                "37a",
+                "Rola 1",
+                "2G",
+                "1",
+                "67",
+                "39a",
+                "5",
+                "G\u00fcter",
+                "6",
+                "40a",
+                "41",
+                "40b",
+                "8G",
+                "65",
+                "3",
+                "42",
+                "37b",
+                "38a",
+                "Rola 2",
+                "4G",
+                "1G",
+                "84",
+                "68",
+                "38b",
+                "3G",
+                "4",
+                "43",
+                "66",
+                "7G",
+                "1T",
+                "39b"
+            ]
+        },
+        "Bressanone": {
+            "__class__": "Set",
+            "data": [
+                "Bressanone 3",
+                "Bressanone 1G",
+                "Bressanone 2",
+                "Bressanone 1",
+                "Bressanone 3G",
+                "Bressanone 2G",
+                "Bressanone 4G",
+                "Bressanone 5G"
+            ]
+        },
+        "Chiusa": {
+            "__class__": "Set",
+            "data": [
+                "Chiusa 2",
+                "Chiusa 1"
+            ]
+        },
+        "E-A Merano": {
+            "__class__": "Set",
+            "data": [
+                "E-A Merano"
+            ]
+        },
+        "Laives": {
+            "__class__": "Set",
+            "data": [
+                "Laives 2",
+                "Laives 1",
+                "Laives  1",
+                "Laives  2"
+            ]
+        },
+        "Ponte": {
+            "__class__": "Set",
+            "data": [
+                "Ponte 2G",
+                "Ponte 2",
+                "Ponte 4G",
+                "Ponte 3G",
+                "Ponte 3"
+            ]
+        },
+        "Prato": {
+            "__class__": "Set",
+            "data": [
+                "Prato 3",
+                "Prato 2",
+                "Prato 1",
+                "Prato 4"
+            ]
+        }
+    },
+    "hauptstrecke": "Brennero-Trento",
+    "sektoren": {
+        "1": {
+            "__class__": "Set",
+            "data": [
+                "1",
+                "1G"
+            ]
+        },
+        "3": {
+            "__class__": "Set",
+            "data": [
+                "3",
+                "3G"
+            ]
+        },
+        "37": {
+            "__class__": "Set",
+            "data": [
+                "37b",
+                "37a"
+            ]
+        },
+        "38": {
+            "__class__": "Set",
+            "data": [
+                "38a",
+                "38b"
+            ]
+        },
+        "39": {
+            "__class__": "Set",
+            "data": [
+                "39b",
+                "39a"
+            ]
+        },
+        "4": {
+            "__class__": "Set",
+            "data": [
+                "4G",
+                "4"
+            ]
+        },
+        "40": {
+            "__class__": "Set",
+            "data": [
+                "40b",
+                "40a"
+            ]
+        },
+        "Bressanone 1": {
+            "__class__": "Set",
+            "data": [
+                "Bressanone 1G",
+                "Bressanone 1"
+            ]
+        },
+        "Bressanone 2": {
+            "__class__": "Set",
+            "data": [
+                "Bressanone 2",
+                "Bressanone 2G"
+            ]
+        },
+        "Bressanone 3": {
+            "__class__": "Set",
+            "data": [
+                "Bressanone 3",
+                "Bressanone 3G"
+            ]
+        },
+        "Ponte 2": {
+            "__class__": "Set",
+            "data": [
+                "Ponte 2G",
+                "Ponte 2"
+            ]
+        },
+        "Ponte 3": {
+            "__class__": "Set",
+            "data": [
+                "Ponte 3G",
+                "Ponte 3"
+            ]
+        }
+    },
+    "strecken": {
+        "Brennero-Merano": [
+            "Brennero",
+            "Bressanone",
+            "Chiusa",
+            "Ponte",
+            "Prato",
+            "Bolzano",
+            "Merano"
+        ],
+        "Brennero-Trento": [
+            "Brennero",
+            "Bressanone",
+            "Chiusa",
+            "Ponte",
+            "Prato",
+            "Bolzano",
+            "Laives",
+            "Trento"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "italien"
+}

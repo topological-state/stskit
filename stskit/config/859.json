@@ -1,0 +1,284 @@
+{
+    "_aid": 859,
+    "_build": 5851,
+    "_name": "Trento",
+    "_region": "Italien Nord",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW"
+            ]
+        },
+        "Bolzano": {
+            "__class__": "Set",
+            "data": [
+                "Bolzano"
+            ]
+        },
+        "Borgo Valsugana": {
+            "__class__": "Set",
+            "data": [
+                "Borgo Valsugana"
+            ]
+        },
+        "Gleis 22-25": {
+            "__class__": "Set",
+            "data": [
+                "Gleis 22-25"
+            ]
+        },
+        "Gleis 26-32": {
+            "__class__": "Set",
+            "data": [
+                "Gleis 26-32"
+            ]
+        },
+        "Gleis 67-69": {
+            "__class__": "Set",
+            "data": [
+                "Gleis 67-69"
+            ]
+        },
+        "Lokgleise": {
+            "__class__": "Set",
+            "data": [
+                "Lokgleise"
+            ]
+        },
+        "Rovereto": {
+            "__class__": "Set",
+            "data": [
+                "Rovereto"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Trento": {
+            "__class__": "Set",
+            "data": [
+                "8b",
+                "1",
+                "3",
+                "3G",
+                "2",
+                "4",
+                "4G",
+                "5",
+                "1G",
+                "2G",
+                "8a",
+                "6",
+                "5G",
+                "7",
+                "1T",
+                "21",
+                "2T",
+                "R2",
+                "R3",
+                "Wende 1",
+                "Wende 2"
+            ]
+        },
+        "Bronzolo": {
+            "__class__": "Set",
+            "data": [
+                "Bronzolo 3",
+                "Bronzolo 2",
+                "Bronzolo 1",
+                "Bronzolo 4"
+            ]
+        },
+        "Egna-Termeno": {
+            "__class__": "Set",
+            "data": [
+                "Egna-Termeno 3",
+                "Egna-Termeno 2",
+                "Egna-Termeno 4",
+                "Egna-Termeno 1"
+            ]
+        },
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Durchfahrt Gbf",
+                "Gbf 16",
+                "Gbf 18",
+                "Gbf 20",
+                "Gbf 15",
+                "Gbf 19",
+                "Gbf 17",
+                "Gbf 43",
+                "Gbf 44",
+                "Gbf 71",
+                "Gbf 45",
+                "Gbf 46",
+                "Gbf 51",
+                "Gbf 50",
+                "Gbf 77",
+                "Gbf 54",
+                "Gbf 76",
+                "Gbf 55",
+                "Gbf 75",
+                "Gbf 78",
+                "Gbf 63",
+                "Gbf 65",
+                "Gbf 61",
+                "Gbf 64",
+                "Gbf 62",
+                "Gbf 66"
+            ]
+        },
+        "Lavis": {
+            "__class__": "Set",
+            "data": [
+                "Lavis 2",
+                "Lavis 1"
+            ]
+        },
+        "Magre-Cortaccia": {
+            "__class__": "Set",
+            "data": [
+                "Magre-Cortaccia 1",
+                "Magre-Cortaccia 2"
+            ]
+        },
+        "Mezzocorona": {
+            "__class__": "Set",
+            "data": [
+                "Mezzocorona 3G",
+                "Mezzocorona 2",
+                "Mezzocorona 4",
+                "Mezzocorona 1G",
+                "Mezzocorona 1",
+                "Mezzocorona 4G",
+                "Mezzocorona 3",
+                "Mezzocorona 2G"
+            ]
+        },
+        "Ora": {
+            "__class__": "Set",
+            "data": [
+                "Ora 2",
+                "Ora 1"
+            ]
+        },
+        "S. Bartolameo": {
+            "__class__": "Set",
+            "data": [
+                "S. Bartolameo"
+            ]
+        },
+        "S. Chiara": {
+            "__class__": "Set",
+            "data": [
+                "S. Chiara"
+            ]
+        },
+        "Salorno": {
+            "__class__": "Set",
+            "data": [
+                "Salorno 1",
+                "Salorno 2"
+            ]
+        }
+    },
+    "hauptstrecke": "Bolzano-Rovereto",
+    "sektoren": {
+        "1": {
+            "__class__": "Set",
+            "data": [
+                "1G",
+                "1"
+            ]
+        },
+        "2": {
+            "__class__": "Set",
+            "data": [
+                "2G",
+                "2"
+            ]
+        },
+        "3": {
+            "__class__": "Set",
+            "data": [
+                "3",
+                "3G"
+            ]
+        },
+        "4": {
+            "__class__": "Set",
+            "data": [
+                "4",
+                "4G"
+            ]
+        },
+        "5": {
+            "__class__": "Set",
+            "data": [
+                "5",
+                "5G"
+            ]
+        },
+        "8": {
+            "__class__": "Set",
+            "data": [
+                "8b",
+                "8a"
+            ]
+        },
+        "Mezzocorona 1": {
+            "__class__": "Set",
+            "data": [
+                "Mezzocorona 1G",
+                "Mezzocorona 1"
+            ]
+        },
+        "Mezzocorona 2": {
+            "__class__": "Set",
+            "data": [
+                "Mezzocorona 2",
+                "Mezzocorona 2G"
+            ]
+        },
+        "Mezzocorona 3": {
+            "__class__": "Set",
+            "data": [
+                "Mezzocorona 3G",
+                "Mezzocorona 3"
+            ]
+        },
+        "Mezzocorona 4": {
+            "__class__": "Set",
+            "data": [
+                "Mezzocorona 4G",
+                "Mezzocorona 4"
+            ]
+        }
+    },
+    "strecken": {
+        "Bolzano-Rovereto": [
+            "Bolzano",
+            "Bronzolo",
+            "Ora",
+            "Egna-Termeno",
+            "Magre-Cortaccia",
+            "Salorno",
+            "Mezzocorona",
+            "Lavis",
+            "Gbf",
+            "Trento",
+            "Rovereto"
+        ],
+        "Trento-Borgo Valsugana": [
+            "Trento",
+            "S. Chiara",
+            "S. Bartolameo",
+            "Borgo Valsugana"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "italien"
+}
