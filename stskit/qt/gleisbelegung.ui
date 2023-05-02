@@ -49,28 +49,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="zuege_group">
-          <property name="title">
-           <string>Züge</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <item>
-            <widget class="QLabel" name="beschriftung_label">
-             <property name="text">
-              <string>&amp;Beschriftung</string>
-             </property>
-             <property name="buddy">
-              <cstring>beschriftung_table</cstring>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTableView" name="beschriftung_table"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
          <widget class="QGroupBox" name="darstellung_group">
           <property name="title">
            <string>Darstellung</string>
@@ -259,7 +237,7 @@
   </widget>
   <action name="actionSetup">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/equalizer.png</normaloff>
      <disabledoff>:/equalizer-dis.png</disabledoff>:/equalizer.png</iconset>
    </property>
@@ -275,7 +253,7 @@
   </action>
   <action name="actionAnzeige">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/slots.png</normaloff>
      <disabledoff>:/slots-dis.png</disabledoff>:/slots.png</iconset>
    </property>
@@ -291,7 +269,7 @@
   </action>
   <action name="actionPlusEins">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/clock--plus.png</normaloff>:/clock--plus.png</iconset>
    </property>
    <property name="text">
@@ -306,7 +284,7 @@
   </action>
   <action name="actionMinusEins">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/clock--minus.png</normaloff>:/clock--minus.png</iconset>
    </property>
    <property name="text">
@@ -321,7 +299,7 @@
   </action>
   <action name="actionFix">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/clock--pencil.png</normaloff>:/clock--pencil.png</iconset>
    </property>
    <property name="text">
@@ -336,7 +314,7 @@
   </action>
   <action name="actionLoeschen">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/chain--return.png</normaloff>:/chain--return.png</iconset>
    </property>
    <property name="text">
@@ -351,7 +329,7 @@
   </action>
   <action name="actionAnkunftAbwarten">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/chain--arrow-in.png</normaloff>:/chain--arrow-in.png</iconset>
    </property>
    <property name="text">
@@ -366,7 +344,7 @@
   </action>
   <action name="actionAbfahrtAbwarten">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/chain--arrow.png</normaloff>:/chain--arrow.png</iconset>
    </property>
    <property name="text">
@@ -381,7 +359,7 @@
   </action>
   <action name="actionWarnungSetzen">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/flag.png</normaloff>:/flag.png</iconset>
    </property>
    <property name="text">
@@ -396,7 +374,7 @@
   </action>
   <action name="actionWarnungIgnorieren">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/flag-green.png</normaloff>:/flag-green.png</iconset>
    </property>
    <property name="text">
@@ -411,7 +389,7 @@
   </action>
   <action name="actionWarnungReset">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/flag-white.png</normaloff>:/flag-white.png</iconset>
    </property>
    <property name="text">
@@ -435,7 +413,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/funnel-small.png</normaloff>
      <disabledoff>:/funnel-small-dis</disabledoff>:/funnel-small.png</iconset>
    </property>
@@ -450,8 +428,6 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
