@@ -10,7 +10,7 @@ from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set,
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
-from stskit.zugschema import Zugschema, ZugkategorienAuswahlModell
+from stskit.zugschema import Zugschema, ZugschemaBearbeitungModell
 from stskit.anlage import Anlage
 from stskit.zentrale import DatenZentrale
 
@@ -35,7 +35,8 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
 
         self.zugschema = Zugschema()
         self.zugschema.load_config(self.anlage.zugschema.name)
-        self.zugschema_modell = ZugkategorienAuswahlModell(None, zugschema=self.zugschema)
+        self.zugschema_namen_nach_titel = {titel: name for name, titel in Zugschema.schematitel.items()}
+        self.zugschema_modell = ZugschemaBearbeitungModell(None, zugschema=self.zugschema)
         self.ui.zugschema_details_table.setModel(self.zugschema_modell)
         self.ui.zugschema_name_combo.currentIndexChanged.connect(self.zugschema_changed)
 
@@ -49,10 +50,10 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
     def update_widgets(self):
         self.in_update = True
 
-        schemas = sorted(Zugschema.schemas.keys())
+        schemas = sorted(self.zugschema_namen_nach_titel.keys())
         self.ui.zugschema_name_combo.clear()
         self.ui.zugschema_name_combo.addItems(schemas)
-        self.ui.zugschema_name_combo.setCurrentText(self.anlage.zugschema.name)
+        self.ui.zugschema_name_combo.setCurrentText(self.zugschema.titel)
 
         self.in_update = False
 
@@ -61,13 +62,22 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def zugschema_changed(self):
-        zugschema = self.ui.zugschema_name_combo.currentText()
+        if self.in_update:
+            return
 
-        changed = zugschema != self.anlage.zugschema.name
+        titel = self.ui.zugschema_name_combo.currentText()
+        try:
+            name = self.zugschema_namen_nach_titel[titel]
+        except KeyError:
+            return
+
+        changed = name != self.zugschema.name
 
         if changed:
-            self.zugschema.load_config(zugschema)
+            self.zugschema.load_config(name)
             self.zugschema_modell.update()
+            self.ui.zugschema_details_table.resizeColumnsToContents()
+            self.ui.zugschema_details_table.resizeRowsToContents()
 
     @pyqtSlot()
     def accept(self):
@@ -76,4 +86,6 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def reject(self):
+        self.zugschema.load_config(self.anlage.zugschema.name)
+        self.zugschema_modell.update()
         self.close()

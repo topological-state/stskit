@@ -1,6 +1,6 @@
 {
     "_version": 1,
-    "name": "PianoRailways",
+    "titel": "PianoRailways",
     "gattungen": [
         ["ICE", 0, 0, "X"],
         ["TGV", 0, 0, "X"],

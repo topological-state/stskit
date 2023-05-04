@@ -27,6 +27,8 @@ logger.addHandler(logging.NullHandler())
 
 REGIONEN_SCHEMA = {
     "Bern - Lötschberg": "Schweiz",
+    "Italien Nord": "Italien",
+    "Merxferri": "Deutschland",
     "Ostschweiz": "Schweiz",
     "Tessin": "Schweiz",
     "Westschweiz": "Schweiz",
@@ -61,20 +63,70 @@ class Zugschema:
         "O": ["Sonderzug", "tab:pink"],
         "R": ["Übriger Verkehr", "tab:gray"]}
 
-    # verfuegbare zugschema-dateien. key = schema-name, value = dateipfad
-    schemas: Dict[str, os.PathLike] = {}
+    # Verfügbare zugschema-dateien. key = schema-name, value = dateipfad
+    schemadateien: Dict[str, os.PathLike] = {}
+    # titel = Benutzerfreundlicher Name des Zugschemas
+    schematitel: Dict[str, str] = {}
 
     def __init__(self):
+        # Name des Zugschemas, wie er im Namen der Konfigurationsdatei vorkommt
         self.name: str = ""
+        # Benutzerfreundlicher Name des Zugschemas.
+        # Der Titel des Zugschemas wird in der Konfigurationsdatei deklariert.
+        self.titel: str = ""
+        # Pfad der Konfigurationsdatei
         self.pfad: Optional[Path] = None
+        # Zuordnung von Gattungsnamen zu Zugkategorien
         self.gattungen: Dict[str, str] = {}
+        # Zuordnung von Zugnummerbereichen zu Zugkategorien
         self.nummern: Dict[Tuple[int, int], str] = {}
+        # Eigenschaften der Zugkategorien.
+        # Der Eigenschaften-Dictionary hat die Schlüssel 'beschreibung' und 'farbe'.
+        # 'farbe' ist ein matplotlib-Farbcode.
         self.kategorien: Dict[str, Dict[str, str]] = {}
 
         d = {"kategorien": self.DEFAULT_KATEGORIEN}
         self.set_config(d)
 
+    def reset(self):
+        """
+        Schemadaten löschen und auf Ausgangswerte zurücksetzen
+
+        Die Kategorien werden auf DEFAULT_KATEGORIEN zurückgesetzt,
+        alle anderen Attribute sind leer.
+
+        :return: None
+        """
+
+        self.name = ""
+        self.titel = ""
+        self.pfad = None
+        self.gattungen = {}
+        self.nummern = {}
+
+        d = {"kategorien": self.DEFAULT_KATEGORIEN}
+        self.set_config(d)
+
     def set_config(self, config: Dict):
+        """
+        Zugschema aus Konfiguration (Dictionary) übernehmen.
+
+        Diese Methode setzt alle Objektattribute ausser self.name und self.pfad.
+        Attribute, die im Dictionary fehlen, werden nicht verändert.
+
+        :param config:
+        :return:
+        """
+
+        try:
+            self.titel = config['titel']
+        except KeyError:
+            try:
+                # hatte früher einen anderen namen
+                self.titel = config['name']
+            except KeyError:
+                pass
+
         try:
             for kat, schema in config['kategorien'].items():
                 try:
@@ -97,28 +149,46 @@ class Zugschema:
             pass
 
     def get_config(self) -> Dict:
+        """
+        Konfiguration als Dictionary auslesen.
+
+        Der Dictinary kann direkt in eine JSON-Konfigurationsdatei geschrieben werden.
+
+        :return:
+        """
+
         kategorien = {kat: [schema["beschreibung"], schema["farbe"]] for kat, schema in self.kategorien.items()}
         gattungsnamen = [[name, 0, 0, kat] for name, kat in self.gattungen.items()]
         gattungsnummern = [["", nummern[0], nummern[1], kat] for nummern, kat in self.nummern.items()]
-        config = {"kategorien": kategorien,
+        config = {"_version": 1,
+                  "titel": self.titel,
+                  "kategorien": kategorien,
                   "gattungen": gattungsnamen + gattungsnummern}
+
         return config
 
     def load_config(self, name: str, region: str = ""):
         """
-        Lädt das Zugschema.
+        Zugschema aus Konfigurationsdatei laden.
 
-        Das Dictionary self.schemas muss vorher mittels find_schemas befüllt werden.
+        Das Dictionary self.schemadateien muss vorher mittels find_schemas befüllt werden.
         Die Methode wählt das Schema in der folgenden Reihenfolge aus:
 
         - name (kommt i.d.R. aus der Stellwerkskonfiguration)
         - REGIONEN_SCHEMA der Region (nicht alle Regionen sind dort erfasst)
         - "deutschland" als default
 
-        :param name: Name des Zugschemas. Der Name ist ein Schlüssel in self.schemas.
+        Wenn der Name nicht aufgelöst werden kann, wird das alphabetisch erste erfasste Schema geladen.
+        Wenn kein Schema erfasst ist, bleibt das Schema leer
+        und eine Fehlermeldung wird in die Log-Datei geschrieben.
+
+        :param name: Name des Zugschemas.
+            Der Name bestimmt die Konfigurationsdatei in self.schemadateien.
         :param region: Name der Stellwerksregion aus der Anlageninfo. Optional.
         :return: None
         """
+
+        self.reset()
 
         if name:
             name = name.lower()
@@ -129,27 +199,32 @@ class Zugschema:
                 name = "deutschland"
 
         try:
-            p = self.schemas[name]
+            p = self.schemadateien[name]
         except KeyError:
-            self.name = ""
-            self.pfad = None
-        else:
             try:
-                with open(p) as fp:
-                    d = json.load(fp)
-                self.set_config(d)
-                self.pfad = p
-            except OSError:
-                self.name = ""
-                self.pfad = None
+                name = sorted(self.schemadateien.keys())[0]
+                p = self.schemadateien[name]
+            except IndexError:
+                logger.error(f"Kein Zugschema definiert")
+                return
+
+        try:
+            with open(p) as fp:
+                d = json.load(fp)
+            self.set_config(d)
+            self.name = name
+            self.pfad = p
+        except OSError:
+            logger.error(f"Fehler beim Laden des Zugschemas {name} von {p}")
 
     @classmethod
     def find_schemas(cls, path: os.PathLike):
         """
         Zugschemadateien suchen und in Liste aufnehmen
 
-        Sucht Zugschemadateien im angegebenen Verzeichnis und nimmt ihre Pfade in die klasseninterne Liste schemas auf.
-        Die Methode kann mehrmals aufgerufen werden und überschreibt dann vorbestehende Pfade gleichen Dateinamens.
+        Sucht Zugschemadateien im angegebenen Verzeichnis und nimmt ihre Pfade in die klasseninterne Liste schemadateien auf.
+        Die Methode kann mehrmals aufgerufen werden (z.B. für Vorgabe und Benutzerkonfiguration).
+        Sie überschreibt dann vorbestehende Pfade gleichen Namens.
 
         :param path: Directorypfad
         :return:
@@ -160,11 +235,32 @@ class Zugschema:
             try:
                 name = fp.name.split('.')[1]
             except IndexError:
-                pass
-            else:
-                cls.schemas[name] = fp
+                continue
+
+            try:
+                with open(fp) as f:
+                    d = json.load(f)
+                    try:
+                        titel = d['titel']
+                    except KeyError:
+                        try:
+                            titel = d['name']
+                        except KeyError:
+                            titel = name
+            except OSError:
+                continue
+
+            cls.schemadateien[name] = fp
+            cls.schematitel[name] = titel
 
     def kategorie(self, zug: ZugDetails) -> str:
+        """
+        Ermittelt die Kategorie eines Zuges
+
+        :param zug: ZugDetails oder davon abgeleitetes Objekt
+        :return: Kategorienkürzel, z.B. "F"
+        """
+
         try:
             return self.gattungen[zug.gattung]
         except KeyError:
@@ -181,7 +277,7 @@ class Zugschema:
         """
         Matplotlib-Farbcode eines Zuges
 
-        :param zug:
+        :param zug: ZugDetails oder davon abgeleitetes Objekt
         :return: str
         """
 
@@ -192,7 +288,7 @@ class Zugschema:
         """
         RGB-Farbcode eines Zuges
 
-        :param zug:
+        :param zug: ZugDetails oder davon abgeleitetes Objekt
         :return: tupel (r,g,b). r,g,b sind Integer im Bereich 0-255.
         """
 
@@ -205,7 +301,7 @@ class Zugschema:
         """
         Matplotlib-Farbcode einer Zugkategorie.
 
-        :param kat: Kategoriekürzel, z.B. "F"
+        :param kat: Kategorienkürzel, z.B. "F"
         :return: str
         """
 
@@ -217,7 +313,7 @@ class Zugschema:
 
         Kann mit QtGui.QColor(*rgb) in einen Qt-Farbcode umgewandelt werden.
 
-        :param kat: Kategoriekürzel, z.B. "F"
+        :param kat: Kategorienkürzel, z.B. "F"
         :return: tupel (r,g,b). r,g,b sind Integer im Bereich 0-255.
         """
 
@@ -227,7 +323,7 @@ class Zugschema:
         return tuple(rgb)
 
 
-class ZugkategorienAuswahlModell(QtCore.QAbstractTableModel):
+class ZugschemaAuswahlModell(QtCore.QAbstractTableModel):
     """
     Tabellenmodell zur Auswahl von Zugkategorien
 
@@ -244,7 +340,7 @@ class ZugkategorienAuswahlModell(QtCore.QAbstractTableModel):
     def __init__(self, *args, zugschema: Zugschema = ..., **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._zugschema = zugschema
-        self._auswahl_erlauben = True
+        self.auswahl_erlauben = True
         self._kategorien: List[str] = []
         self._titel: Dict[str, str] = {}
         self._farben: Dict[str, QtGui.QColor] = {}
@@ -276,7 +372,7 @@ class ZugkategorienAuswahlModell(QtCore.QAbstractTableModel):
 
         try:
             col = index.column()
-            if self._auswahl_erlauben:
+            if self.auswahl_erlauben:
                 col -= 1
             row = index.row()
             kat = self._kategorien[row]
@@ -290,7 +386,7 @@ class ZugkategorienAuswahlModell(QtCore.QAbstractTableModel):
                 return self._titel[kat]
 
         elif role == QtCore.Qt.CheckStateRole:
-            if self._auswahl_erlauben and col == -1:
+            if self.auswahl_erlauben and col == -1:
                 if kat in self._auswahl:
                     return QtCore.Qt.Checked
                 else:
@@ -318,7 +414,7 @@ class ZugkategorienAuswahlModell(QtCore.QAbstractTableModel):
 
         try:
             col = index.column()
-            if self._auswahl_erlauben:
+            if self.auswahl_erlauben:
                 col -= 1
             row = index.row()
             kat = self._kategorien[row]
@@ -326,7 +422,7 @@ class ZugkategorienAuswahlModell(QtCore.QAbstractTableModel):
             return False
 
         if role == QtCore.Qt.CheckStateRole:
-            if self._auswahl_erlauben and col == -1:
+            if self.auswahl_erlauben and col == -1:
                 if value == QtCore.Qt.Checked:
                     self._auswahl.add(kat)
                 else:
@@ -348,7 +444,7 @@ class ZugkategorienAuswahlModell(QtCore.QAbstractTableModel):
 
         try:
             col = index.column()
-            if self._auswahl_erlauben:
+            if self.auswahl_erlauben:
                 col -= 1
             row = index.row()
             kat = self._kategorien[row]
@@ -414,7 +510,7 @@ class ZugkategorienAuswahlModell(QtCore.QAbstractTableModel):
         self._farben = {k: QtGui.QColor(*self._zugschema.kategorie_rgb(k)) for k in self._kategorien}
         self._auswahl.intersection_update(self._kategorien)
         self._spalten = ["Kürzel", "Titel"]
-        if self._auswahl_erlauben:
+        if self.auswahl_erlauben:
             self._spalten.insert(0, "Auswahl")
         self.endResetModel()
 
@@ -439,6 +535,127 @@ class ZugkategorienAuswahlModell(QtCore.QAbstractTableModel):
 
         self.beginResetModel()
         self._auswahl = auswahl
+        self.endResetModel()
+
+
+class ZugschemaBearbeitungModell(QtCore.QAbstractTableModel):
+    """
+    Tabellenmodell zur Bearbeitung von Zugkategorien
+
+    Diese Klasse enthält die ganze Logik,
+    um dem User die Bearbeitung von Zugkategorien in einem QTableView zu ermöglichen.
+
+    Dazu muss eine Instanz erzeugt werden und dem betreffenden QTableView zugewiesen werden.
+    Die Auswahl wird dann über das Property zugschema ein- und ausgelesen.
+
+    Wenn das Zugschema verändert wurde, muss danach die Update-Methode aufgerufen werden.
+
+    Die privaten Attribute dürfen von aussen nicht verändert werden!
+    """
+
+    def __init__(self, *args, zugschema: Zugschema = ..., **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self._zugschema = zugschema
+        self._tabelle: List[Dict[str, Union[int, str, QtGui.QColor]]] = []
+        self._spalten: List[str] = ["Gattung", "Nummern", "Kategorie"]
+        self.update()
+
+    def data(self, index: QModelIndex, role: int = ...) -> typing.Any:
+        """
+        Daten an das QListView übergeben.
+
+        :param index: enthält spalte und zeile der gewünschten zelle
+        :param role: gewünschtes datenfeld:
+            - UserRole gibt die originaldaten aus (zum sortieren benötigt).
+            - DisplayRole gibt die daten formatiert als str oder int aus.
+            - CheckStateRole gibt an, ob ein zug am gleis steht.
+            - DecorationRole
+            - ForegroundRole färbt die eingefahrenen, ausgefahrenen und noch unsichtbaren züge unterschiedlich ein.
+            - TextAlignmentRole richtet den text aus.
+            - ToolTipRole
+        :return: verschiedene
+        """
+
+        if not index.isValid():
+            return None
+
+        try:
+            col = index.column()
+            spalte = self._spalten[col]
+            row = index.row()
+            datum = self._tabelle[row]
+        except (IndexError, KeyError):
+            return None
+
+        if role == QtCore.Qt.DisplayRole:
+            try:
+                return datum[spalte]
+            except KeyError:
+                return None
+
+        elif role == QtCore.Qt.ForegroundRole:
+            try:
+                return datum["Farbe"]
+            except KeyError:
+                return None
+
+        elif role == QtCore.Qt.TextAlignmentRole:
+            return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
+
+        return None
+
+    def headerData(self, section: int, orientation: QtCore.Qt.Orientation, role: int = ...) -> Any:
+        """
+        gibt den text der kopfzeile und -spalte aus.
+        :param section: element-index
+        :param orientation: wahl zeile oder spalte
+        :param role: DisplayRole gibt den titel aus.
+        :return:
+        """
+
+        if role == QtCore.Qt.DisplayRole:
+            if orientation == QtCore.Qt.Horizontal:
+                return self._spalten[section]
+            elif orientation == QtCore.Qt.Vertical:
+                return None
+
+    def columnCount(self, parent: QModelIndex = ...) -> int:
+        """
+        Zeilenanzahl an QListView übergeben
+
+        :param parent: nicht verwendet
+        :return:
+        """
+
+        return len(self._spalten)
+
+    def rowCount(self, parent: QModelIndex = ...) -> int:
+        """
+        Zeilenanzahl an QListView übergeben
+
+        :param parent: nicht verwendet
+        :return: Anzahl wählbare Kategorien
+        """
+
+        return len(self._tabelle)
+
+    def update(self):
+        """
+        Zugschema übernehmen
+
+        Das Zugschema wird aus der Anlage ausgelesen und Modell und View neu aufgebaut.
+
+        :return: None
+        """
+
+        self.beginResetModel()
+        liste_gattungen = [{"Kategorie": kat, "Gattung": gatt, "Nummern": "",
+                            "Farbe": QtGui.QColor(*self._zugschema.kategorie_rgb(kat))}
+                           for gatt, kat in self._zugschema.gattungen.items()]
+        liste_nummern = [{"Kategorie": kat, "Gattung": "", "Nummern": f"{num[0]}-{num[1]}",
+                          "Farbe": QtGui.QColor(*self._zugschema.kategorie_rgb(kat))}
+                         for num, kat in self._zugschema.nummern.items()]
+        self._tabelle = liste_gattungen + liste_nummern
         self.endResetModel()
 
 

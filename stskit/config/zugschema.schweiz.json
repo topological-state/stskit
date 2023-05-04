@@ -1,6 +1,6 @@
 {
     "_version": 1,
-    "name": "Schweiz",
+    "titel": "Schweiz",
     "gattungen": [
         ["ICE", 0, 0, "X"],
         ["TGV", 0, 0, "X"],

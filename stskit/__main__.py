@@ -283,7 +283,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.fahrplan_button.setEnabled(self.enable_update)
                 self.netz_button.setEnabled(self.enable_update)
                 self.ticker_button.setEnabled(self.enable_update)
-                # self.einstellungen_button.setEnabled(self.enable_update)
+                self.einstellungen_button.setEnabled(self.enable_update)
 
             self.statusfeld.setText("")
             await trio.sleep(self.update_interval)

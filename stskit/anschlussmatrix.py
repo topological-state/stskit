@@ -21,7 +21,7 @@ from stskit.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, \
     FesteVerspaetung, ZugAbwarten, AnkunftAbwarten, AbfahrtAbwarten, ZugNichtAbwarten, ZugZielNode
 from stskit.stsobj import time_to_minutes
-from stskit.zugschema import Zugbeschriftung, ZugbeschriftungAuswahlModell, Zugschema, ZugkategorienAuswahlModell
+from stskit.zugschema import Zugbeschriftung, ZugbeschriftungAuswahlModell, Zugschema, ZugschemaAuswahlModell
 
 from stskit.qt.ui_anschlussmatrix import Ui_AnschlussmatrixWindow
 
@@ -477,10 +477,10 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.ui.displayLayout.setObjectName("displayLayout")
         self.ui.displayLayout.addWidget(self.display_canvas)
 
-        self.ankunft_filter_modell = ZugkategorienAuswahlModell(None, zugschema=self.zentrale.anlage.zugschema)
+        self.ankunft_filter_modell = ZugschemaAuswahlModell(None, zugschema=self.zentrale.anlage.zugschema)
         self.ui.ankunft_filter_view.setModel(self.ankunft_filter_modell)
 
-        self.abfahrt_filter_modell = ZugkategorienAuswahlModell(None, zugschema=self.zentrale.anlage.zugschema)
+        self.abfahrt_filter_modell = ZugschemaAuswahlModell(None, zugschema=self.zentrale.anlage.zugschema)
         self.ui.abfahrt_filter_view.setModel(self.abfahrt_filter_modell)
 
         self.ankunft_beschriftung_modell = ZugbeschriftungAuswahlModell(None,

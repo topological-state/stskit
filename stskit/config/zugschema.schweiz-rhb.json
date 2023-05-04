@@ -1,6 +1,6 @@
 {
     "_version": 1,
-    "name": "Schweiz/RhB",
+    "titel": "Schweiz/RhB",
     "gattungen": [
         ["ICE", 0, 0, "X"],
         ["TGV", 0, 0, "X"],
