@@ -324,4 +324,4 @@ class Ui_AnschlussmatrixWindow(object):
         self.actionZugEinblenden.setToolTip(_translate("AnschlussmatrixWindow", "Alle Züge einblenden (Z)"))
         self.actionZugEinblenden.setShortcut(_translate("AnschlussmatrixWindow", "Z"))
 
-import resources_rc
+import stskit.resources_rc

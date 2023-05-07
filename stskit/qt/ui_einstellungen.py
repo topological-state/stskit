@@ -128,4 +128,4 @@ class Ui_EinstellungenWindow(object):
         self.zugschema_details_label.setText(_translate("EinstellungenWindow", "Kategorien"))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.zugschema_tab), _translate("EinstellungenWindow", "Zugschema"))
 
-import resources_rc
+import stskit.resources_rc
