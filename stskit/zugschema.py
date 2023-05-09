@@ -209,7 +209,7 @@ class Zugschema:
                 return
 
         try:
-            with open(p) as fp:
+            with open(p, encoding='utf-8') as fp:
                 d = json.load(fp)
             self.set_config(d)
             self.name = name
@@ -238,7 +238,7 @@ class Zugschema:
                 continue
 
             try:
-                with open(fp) as f:
+                with open(fp, encoding='utf-8') as f:
                     d = json.load(f)
                     try:
                         titel = d['titel']

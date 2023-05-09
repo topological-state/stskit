@@ -86,7 +86,7 @@ class FahrzeitAuswertung:
                 d = {'gleis_zeiten': dict(nx.node_link_data(self.gleis_zeiten)),
                      'bahnhof_zeiten': dict(nx.node_link_data(self.bahnhof_zeiten))}
                 p = Path.home() / r".stskit" / f"auswertung.json"
-                with open(p, "w") as fp:
+                with open(p, "w", encoding='utf-8') as fp:
                     json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
             except AttributeError:
                 pass

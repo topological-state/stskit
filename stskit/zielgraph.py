@@ -135,7 +135,7 @@ def zug_subgraph(graph: nx.DiGraph, zid: int) -> Optional[nx.Graph]:
 
 
 def load(path: os.PathLike):
-    with open(path) as f:
+    with open(path, encoding='utf-8') as f:
         graph_dict = json.load(f)
     graph = nx.node_link_graph(graph_dict)
     return graph

@@ -1111,7 +1111,7 @@ class Anlage:
         else:
             p = Path(path) / f"{self.anlage.aid}.json"
 
-        with open(p) as fp:
+        with open(p, encoding='utf-8') as fp:
             d = json.load(fp, object_hook=json_object_hook)
 
         if not ignore_version:
@@ -1194,13 +1194,13 @@ class Anlage:
     def save_config(self, path: os.PathLike):
         d = self.get_config(graphs=False)
         p = Path(path) / f"{self.anlage.aid}.json"
-        with open(p, "w") as fp:
+        with open(p, "w", encoding='utf-8') as fp:
             json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
 
         if logger.isEnabledFor(logging.DEBUG):
             d = self.get_config(graphs=True)
             p = Path(path) / f"{self.anlage.aid}diag.json"
-            with open(p, "w") as fp:
+            with open(p, "w", encoding='utf-8') as fp:
                 json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
 
     def get_config(self, graphs=False) -> Dict:

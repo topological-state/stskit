@@ -1522,7 +1522,7 @@ class Planung:
 
     def zielgraph_speichern(self, pfad: os.PathLike):
         d = dict(nx.node_link_data(self.zielgraph))
-        with open(pfad, "w") as fp:
+        with open(pfad, "w", encoding='utf-8') as fp:
             json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
 
     def einfahrten_korrigieren(self):
