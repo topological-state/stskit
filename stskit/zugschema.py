@@ -80,10 +80,10 @@ class Zugschema:
         self.gattungen: Dict[str, str] = {}
         # Zuordnung von Zugnummerbereichen zu Zugkategorien
         self.nummern: Dict[Tuple[int, int], str] = {}
-        # Eigenschaften der Zugkategorien.
-        # Der Eigenschaften-Dictionary hat die Schlüssel 'beschreibung' und 'farbe'.
-        # 'farbe' ist ein matplotlib-Farbcode.
-        self.kategorien: Dict[str, Dict[str, str]] = {}
+        # Zugkategorien: Kategorienkürzel -> Beschreibung
+        self.kategorien: Dict[str, str] = {}
+        # Farbschema: Kategorienkürzel -> Matplotlib-Farben
+        self.farben: Dict[str, str] = {}
 
         d = {"kategorien": self.DEFAULT_KATEGORIEN}
         self.set_config(d)
@@ -130,7 +130,8 @@ class Zugschema:
         try:
             for kat, schema in config['kategorien'].items():
                 try:
-                    self.kategorien[kat] = {"beschreibung": schema[0], "farbe": schema[1]}
+                    self.kategorien[kat] = schema[0]
+                    self.farben[kat] = schema[1]
                 except IndexError:
                     pass
         except KeyError:
@@ -157,7 +158,7 @@ class Zugschema:
         :return:
         """
 
-        kategorien = {kat: [schema["beschreibung"], schema["farbe"]] for kat, schema in self.kategorien.items()}
+        kategorien = {kat: [self.kategorien[kat], self.farben[kat]] for kat in self.kategorien.keys()}
         gattungsnamen = [[name, 0, 0, kat] for name, kat in self.gattungen.items()]
         gattungsnummern = [["", nummern[0], nummern[1], kat] for nummern, kat in self.nummern.items()]
         config = {"_version": 1,
@@ -282,7 +283,7 @@ class Zugschema:
         """
 
         kat = self.kategorie(zug)
-        return self.kategorien[kat]["farbe"]
+        return self.farben[kat]
 
     def zugfarbe_rgb(self, zug: ZugDetails) -> Tuple[int]:
         """
@@ -301,11 +302,13 @@ class Zugschema:
         """
         Matplotlib-Farbcode einer Zugkategorie.
 
+        Aequivalent zu self.farben[kat].
+
         :param kat: Kategorienkürzel, z.B. "F"
-        :return: str
+        :return: str: Matplotlib-Farbe
         """
 
-        return self.kategorien[kat]["farbe"]
+        return self.farben[kat]
 
     def kategorie_rgb(self, kat: str) -> Tuple[int]:
         """
@@ -317,7 +320,7 @@ class Zugschema:
         :return: tupel (r,g,b). r,g,b sind Integer im Bereich 0-255.
         """
 
-        farbe = self.kategorien[kat]["farbe"]
+        farbe = self.farben[kat]
         frgb = mpl.colors.to_rgb(farbe)
         rgb = [round(255 * v) for v in frgb]
         return tuple(rgb)
@@ -394,6 +397,12 @@ class ZugschemaAuswahlModell(QtCore.QAbstractTableModel):
 
         elif role == QtCore.Qt.ForegroundRole:
             return self._farben[kat]
+
+        elif role == QtCore.Qt.TextAlignmentRole:
+            if col < 1:
+                return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
+            else:
+                return QtCore.Qt.AlignVCenter
 
         return None
 
@@ -506,7 +515,7 @@ class ZugschemaAuswahlModell(QtCore.QAbstractTableModel):
 
         self.beginResetModel()
         self._kategorien = list(self._zugschema.kategorien.keys())
-        self._titel = {k: v["beschreibung"] for k, v in self._zugschema.kategorien.items()}
+        self._titel = self._zugschema.kategorien.copy()
         self._farben = {k: QtGui.QColor(*self._zugschema.kategorie_rgb(k)) for k in self._kategorien}
         self._auswahl.intersection_update(self._kategorien)
         self._spalten = ["Kürzel", "Titel"]
@@ -557,7 +566,7 @@ class ZugschemaBearbeitungModell(QtCore.QAbstractTableModel):
         super().__init__(*args, **kwargs)
         self._zugschema = zugschema
         self._tabelle: List[Dict[str, Union[int, str, QtGui.QColor]]] = []
-        self._spalten: List[str] = ["Gattung", "Nummern", "Kategorie"]
+        self._spalten: List[str] = ["Gattung", "Nummern", "Kürzel", "Kategorie"]
         self.update()
 
     def data(self, index: QModelIndex, role: int = ...) -> typing.Any:
@@ -600,7 +609,10 @@ class ZugschemaBearbeitungModell(QtCore.QAbstractTableModel):
                 return None
 
         elif role == QtCore.Qt.TextAlignmentRole:
-            return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
+            if spalte == "Kategorie":
+                return QtCore.Qt.AlignVCenter
+            else:
+                return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
 
         return None
 
@@ -649,10 +661,12 @@ class ZugschemaBearbeitungModell(QtCore.QAbstractTableModel):
         """
 
         self.beginResetModel()
-        liste_gattungen = [{"Kategorie": kat, "Gattung": gatt, "Nummern": "",
+        liste_gattungen = [{"Kürzel": kat, "Kategorie": self._zugschema.kategorien[kat],
+                            "Gattung": gatt, "Nummern": "",
                             "Farbe": QtGui.QColor(*self._zugschema.kategorie_rgb(kat))}
                            for gatt, kat in self._zugschema.gattungen.items()]
-        liste_nummern = [{"Kategorie": kat, "Gattung": "", "Nummern": f"{num[0]}-{num[1]}",
+        liste_nummern = [{"Kürzel": kat, "Kategorie": self._zugschema.kategorien[kat],
+                          "Gattung": "", "Nummern": f"{num[0]}-{num[1]}",
                           "Farbe": QtGui.QColor(*self._zugschema.kategorie_rgb(kat))}
                          for num, kat in self._zugschema.nummern.items()]
         self._tabelle = liste_gattungen + liste_nummern
