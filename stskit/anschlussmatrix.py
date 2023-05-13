@@ -102,8 +102,8 @@ class Anschlussmatrix:
         self.umsteigezeit: int = 2
         self.ankunft_filter_kategorien: Set[str] = {'X', 'F', 'N', 'S'}
         self.abfahrt_filter_kategorien: Set[str] = {'X', 'F', 'N'}
-        self.ankunft_beschriftung = Zugbeschriftung(einstellung='Anschlussmatrix')
-        self.abfahrt_beschriftung = Zugbeschriftung(einstellung='Anschlussmatrix')
+        self.ankunft_beschriftung = Zugbeschriftung(stil='Anschlussmatrix')
+        self.abfahrt_beschriftung = Zugbeschriftung(stil='Anschlussmatrix')
         self.ankuenfte_ausblenden: Set[int] = set([])
         self.abfahrten_ausblenden: Set[int] = set([])
         self.anschluss_auswahl: Set[Tuple[int, int]] = set([])

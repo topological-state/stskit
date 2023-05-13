@@ -20,6 +20,7 @@ from stskit.slotgrafik import hour_minutes_formatter
 from stskit.stsplugin import PluginClient
 from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
 from stskit.zentrale import DatenZentrale
+from stskit.zugschema import Zugbeschriftung
 
 from stskit.qt.ui_bildfahrplan import Ui_BildfahrplanWindow
 
@@ -29,7 +30,7 @@ logger.addHandler(logging.NullHandler())
 mpl.use('Qt5Agg')
 
 
-def format_label(plan1: ZugZielPlanung, plan2: ZugZielPlanung):
+def format_label(zugbeschriftung: Zugbeschriftung, plan1: ZugZielPlanung, plan2: ZugZielPlanung):
     """
     zuglabel formatieren mit verspätungsangabe
 
@@ -43,7 +44,13 @@ def format_label(plan1: ZugZielPlanung, plan2: ZugZielPlanung):
     """
     v1 = plan1.verspaetung_ab
     v2 = plan2.verspaetung_an
-    name = plan1.zug.name
+
+    if "Name" in zugbeschriftung.elemente:
+        name = plan1.zug.name
+    elif "Nummer" in zugbeschriftung.elemente:
+        name = plan1.zug.nummer
+    else:
+        name = ""
 
     if v1 == v2:
         if v1 == 0:
@@ -90,6 +97,7 @@ class Trasse:
     koord: List[Tuple[float, float]]
     halt: bool = False
     color: str = "b"
+    titel: str = ""
     fontstyle: str = "normal"
     linestyle: str = "-"
     linewidth: int = 1
@@ -136,6 +144,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self._strecke_von: str = ""
         self._strecke_via: str = ""
         self._strecke_nach: str = ""
+        self.zugbeschriftung = Zugbeschriftung(stil="Bildfahrplan")
 
         self._trasse_auswahl: List[Trasse] = []
         self._pick_event: bool = False
@@ -250,6 +259,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         self.ui.vorlaufzeit_spin.setValue(self.vorlaufzeit)
         self.ui.nachlaufzeit_spin.setValue(self.nachlaufzeit)
+        if "Name" in self.zugbeschriftung.elemente:
+            self.ui.name_button.setChecked(True)
+        else:
+            self.ui.nummer_button.setChecked(True)
 
     def default_strecke_waehlen(self):
         strecken = [(name, len(strecke)) for name, strecke in self.anlage.strecken.items()]
@@ -306,6 +319,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
+        if self.ui.name_button.isChecked():
+            self.zugbeschriftung.elemente = ["Name", "Verspätung"]
+        else:
+            self.zugbeschriftung.elemente = ["Nummer", "Verspätung"]
         if self._strecke_von and self._strecke_nach:
             self.daten_update()
             self.grafik_update()
@@ -410,6 +427,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             trasse.color = color
             trasse.start = plan1
             trasse.ziel = plan2
+            trasse.titel = format_label(self.zugbeschriftung, trasse.start, trasse.ziel)
 
             try:
                 gruppe1 = self.anlage.gleiszuordnung[plan1.gleis]
@@ -551,8 +569,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                         except ZeroDivisionError:
                             pass
                         else:
-                            titel = format_label(trasse.start, trasse.ziel)
-                            self._axes.text(cx, cy, titel, rotation=ang, **label_args)
+                            self._axes.text(cx, cy, trasse.titel, rotation=ang, **label_args)
                     else:
                         label_unterdrueckt = True
 

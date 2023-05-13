@@ -21,6 +21,7 @@ from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_ver
 from stskit.slotgrafik import hour_minutes_formatter, Slot, Gleisbelegung, SlotWarnung, gleis_sektor_sortkey, \
     WARNUNG_VERBINDUNG, WARNUNG_STATUS
 from stskit.zentrale import DatenZentrale
+from stskit.zugschema import Zugbeschriftung, ZugbeschriftungAuswahlModell
 
 from stskit.qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 
@@ -447,6 +448,13 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     def update_widgets(self):
         self.ui.vorlaufzeit_spin.setValue(self.vorlaufzeit)
         self.ui.nachlaufzeit_spin.setValue(self.nachlaufzeit)
+        try:
+            if "Name" in self.belegung.zugbeschriftung.elemente:
+                self.ui.name_button.setChecked(True)
+            else:
+                self.ui.nummer_button.setChecked(True)
+        except AttributeError:
+            pass
 
     @pyqtSlot()
     def vorlaufzeit_changed(self):
@@ -734,6 +742,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.set_gleise(self.gleisauswahl.get_auswahl())
         self.anlage.gleissperrungen = self.gleisauswahl.get_sperrungen()
+        if self.ui.name_button.isChecked():
+            self.belegung.zugbeschriftung.elemente = ["Name"]
+        else:
+            self.belegung.zugbeschriftung.elemente = ["Nummer"]
         self.daten_update()
         self.grafik_update()
 

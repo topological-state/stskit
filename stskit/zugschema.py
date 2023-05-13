@@ -683,6 +683,13 @@ class Zugbeschriftung:
     Meist bleibt das Format für eine bestimmte Darstellung unverändert und wird programmatisch gesetzt.
     Die in der Beschriftung verwendeten Elemente werden vom Benutzer konfiguriert,
     z.B. mittels ZugBeschriftungAuswahlModell.
+
+    Attribute:
+        stil: Name des Stils entspricht dem Ziel der Anzeige: z.B. Anschlussmatrix, Bildfahrplan, Gleisbelegung.
+            Jeder Stil hat ein vorgegebenes Muster und Elemente.
+        muster: Reihenfolge, in der die Elemente dargestellt werden.
+        elemente: Elemente, die in der Beschriftung enthalten sein sollen.
+            Dieses Attribut kann vom Benutzer eingestellt werden.
     """
 
     ELEMENTE = ['Gleis', 'Name', 'Nummer', 'Richtung', 'Zeit', 'Verspätung']
@@ -690,7 +697,7 @@ class Zugbeschriftung:
     DEFAULT_MUSTER = {
         'Anschlussmatrix': ['Gleis', 'Name', 'Nummer', 'Richtung', 'Zeit', 'Verspätung'],
         'Bildfahrplan': ['Name', 'Nummer', 'Verspätung'],
-        'Gleisbelegung': ['Name', 'Nummer', 'Zeit', 'Verspätung'],
+        'Gleisbelegung': ['Name', 'Nummer', 'Verspätung'],
         'default': ['Name', 'Verspätung']
     }
     DEFAULT_ELEMENTE = {
@@ -700,9 +707,10 @@ class Zugbeschriftung:
         'default': ['Name', 'Verspätung']
     }
 
-    def __init__(self, einstellung: str = 'default'):
-        self._muster: List[str] = self.DEFAULT_MUSTER[einstellung]
-        self._elemente: Set[str] = self.DEFAULT_ELEMENTE[einstellung]
+    def __init__(self, stil: str = 'default'):
+        self._stil: str = stil
+        self._muster: List[str] = self.DEFAULT_MUSTER[stil]
+        self._elemente: Set[str] = self.DEFAULT_ELEMENTE[stil]
 
     @property
     def muster(self) -> List[str]:

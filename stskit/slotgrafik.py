@@ -19,6 +19,7 @@ import numpy as np
 from stskit.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes
+from stskit.zugschema import Zugbeschriftung
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -96,6 +97,11 @@ class Slot:
     gleis: str = ""
     zeit: int = 0
     dauer: int = 0
+    titel: str = ""
+    randfarbe: str = "k"
+    linestyle: str = "-"
+    linewidth: int = 1
+    fontstyle: str = "normal"
     verbindung: Optional[ZugDetailsPlanung] = None
     verbindungsart: str = ""
     verbunden: bool = False
@@ -108,6 +114,7 @@ class Slot:
         self.gleis = ziel.gleis
         self.zeit = 0
         self.dauer = 0
+        self.titel = ""
 
         if ziel.ersatzzug:
             self.verbindung = ziel.ersatzzug
@@ -210,64 +217,6 @@ class Slot:
             fp = self.gleis + " " + " - ".join(zt)
 
         return f"{name} ({von} - {nach}): {fp}"
-
-    @property
-    def randfarbe(self) -> str:
-        """
-        randfarbe markiert konflikte und kuppelvorgänge
-
-        :return: farbbezeichnung für matplotlib
-        """
-
-        return 'k'
-
-    @property
-    def titel(self) -> str:
-        """
-        "zugname (verspätung)"
-
-        :return: (str) zugtitel
-        """
-
-        s = f"{self.zug.name}"
-        if self.ziel.einfahrt:
-            s = "→ " + s
-        elif self.ziel.ausfahrt:
-            s = s + " →"
-
-        return s
-
-    @property
-    def fontstyle(self) -> str:
-        """
-        schriftstil markiert halt oder durchfahrt
-
-        :return: "normal" oder "italic"
-        """
-
-        return "italic" if self.ziel.durchfahrt() else "normal"
-
-    @property
-    def linestyle(self) -> str:
-        """
-        linienstil markiert halt oder durchfahrt
-
-        :return: "-" oder "--"
-        """
-
-        return "--" if self.ziel.durchfahrt() else "-"
-
-    @property
-    def linewidth(self) -> int:
-        """
-        linienbreite
-
-        in der aktuellen version immer 1
-
-        :return: 1 oder 2
-        """
-
-        return 1
 
 
 WARNUNG_STATUS = ['undefiniert', 'gleis', 'hauptgleis', 'ersatz', 'kuppeln', 'flügeln', 'fdl-markiert', 'fdl-ignoriert']
@@ -414,6 +363,7 @@ class Gleisbelegung:
         self.hauptgleis_slots: Dict[str, Dict[Any, Slot]] = {}
         self.belegte_gleise: Set[str] = set([])
         self.warnungen: Dict[Any, SlotWarnung] = {}
+        self.zugbeschriftung = Zugbeschriftung(stil="Gleisbelegung")
 
     def slot_warnungen(self, slot: Slot) -> Iterable[SlotWarnung]:
         """
@@ -442,6 +392,7 @@ class Gleisbelegung:
         if len(self.gleise) == 0:
             self.gleise_auswaehlen(self.anlage.gleiszuordnung.keys())
         self.slots_erstellen(planung)
+        self.slots_formatieren()
         self.warnungen_aktualisieren()
 
     def gleise_auswaehlen(self, gleise: Iterable[str]):
@@ -523,6 +474,26 @@ class Gleisbelegung:
             self.gleis_slots[gleis][key] = slot
             self.hauptgleis_slots[hauptgleis][key] = slot
             self.belegte_gleise.add(gleis)
+
+    def slots_formatieren(self):
+        # todo : erweitern und bereinigen
+        for slot in self.slots.values():
+            #slot.titel = self.zugbeschriftung.format(slot=slot)
+
+            if "Name" in self.zugbeschriftung.elemente:
+                s = slot.zug.name
+            else:
+                s = str(slot.zug.nummer)
+            if slot.ziel.einfahrt:
+                s = "→ " + s
+            elif slot.ziel.ausfahrt:
+                s = s + " →"
+            slot.titel = s
+
+            slot.randfarbe = "k"
+            slot.fontstyle = "italic" if slot.ziel.durchfahrt() else "normal"
+            slot.linestyle = "--" if slot.ziel.durchfahrt() else "-"
+            slot.linewidth = 1
 
     def warnungen_aktualisieren(self):
         """

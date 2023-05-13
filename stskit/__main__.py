@@ -30,6 +30,7 @@ from stskit.gleisbelegung import GleisbelegungWindow
 from stskit.gleisnetz import GleisnetzWindow
 from stskit.qticker import TickerWindow
 from stskit.fahrplan import FahrplanWindow
+import stskit.resources_rc
 
 logger = logging.getLogger(__name__)
 
