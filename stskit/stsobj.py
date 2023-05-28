@@ -377,16 +377,21 @@ class ZugDetails:
         """
         zugnummer aus dem zugnamen.
 
-        die nummer ist der hinterste numerische teil des zugnamens, z.b. 8376 in "S8 8376 RF"
-
+        die nummer ist der hinterste rein numerische teil des zugnamens, z.b. 8376 in "S8 8376 RF"
         diese hat nichts mit der zug-id zu tun.
+
+        beispiele von zugnummern:
+        - "536" -> 536
+        - "ICE 624" -> 624
+        - "S8 8376 RF" -> 8376
+        - "S 8449 S12" -> 8449
 
         :return: (int) zugnummer. 0 falls der name keine ziffer enthält.
         """
 
-        s = "".join((c for c in self.name if c.isnumeric() or c == " "))
+        nummern = [int(part) for part in self.name.split() if part.isnumeric()]
         try:
-            return int(s.rsplit(maxsplit=1)[-1])
+            return nummern[-1]
         except (IndexError, ValueError):
             return 0
 
