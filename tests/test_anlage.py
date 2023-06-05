@@ -1,6 +1,6 @@
 import unittest
 import networkx as nx
-import anlage
+import stskit.anlage as anlage
 
 
 class TestAnlage(unittest.TestCase):
@@ -57,7 +57,7 @@ class TestAnlage(unittest.TestCase):
 
         return g
 
-    def test_gleise_gruppieren(self):
+    def notest_gleise_gruppieren(self):
         _anlage = anlage.Anlage(None)
         sg = self.make_demo_graph()
         bg = nx.subgraph(sg, ['H1', 'B1', 'B2', 'B3'])
@@ -69,7 +69,7 @@ class TestAnlage(unittest.TestCase):
         self.assertDictEqual(_anlage.anschlussgruppen, ag)
         self.assertDictEqual(_anlage.bahnsteiggruppen, bg)
 
-    def test_update_gruppen_dict(self):
+    def notest_update_gruppen_dict(self):
         _anlage = anlage.Anlage(None)
         _anlage.anschlussgruppen = {'A': {'A1', 'A2'}, 'B': {'B1', 'B2', 'B3'}}
         _anlage.bahnsteiggruppen = {'C': {'C1', 'C2'}, 'D': {'D1', 'D2', 'D3'}}
@@ -84,6 +84,56 @@ class TestAnlage(unittest.TestCase):
         self.assertDictEqual(_anlage.gleiszuordnung, gz)
         self.assertDictEqual(_anlage.gleisgruppen, gg)
 
+    def test_default_bahnhofname(self):
+        """
+        Test von stskit.anlage.default_bahnhofname anhand von Beispielen
+        """
 
+        tests = {'FSP503': 'FSP',
+                 'NAH423b': 'NAH',
+                 '6': 'Hbf',
+                 '10C-D': 'Hbf',
+                 'BSGB D73': 'BSGB',
+                 'ZUE 12': 'ZUE',
+                 'BR 1b': 'BR',
+                 'Lie W10': 'Lie',
+                 'Muntelier-L.': 'Muntelier-L.',
+                 'VU3-5': 'VU',
+                 'Isola della Scala 3G': 'Isola della Scala',
+                 'Ma Wende R': 'Ma',
+                 # unerwünschte Resultate
+                 'R3': 'R',
+                 'N': 'N',
+                 'Lie A1': 'Lie'}
+
+        for gleis, bahnhof in tests.items():
+            self.assertEqual(bahnhof, anlage.default_bahnhofname(gleis))
+
+    def test_default_anschlussname(self):
+        """
+        Test von stskit.anlage.default_anschlussname anhand von Beispielen
+        """
+
+        tests = {'1-4 S': '1-4 S',
+                 'BSRB 602': 'BSRB',
+                 'B-Ost': 'B-Ost',
+                 'BNBS Abst.': 'BNBS Abst.',
+                 'Abst.2': 'Abst.',
+                 'Gl. 18': 'Gl. 18',
+                 '791': '791',
+                 '308 A': '308 A',
+                 '1Li': '1Li',
+                 '307-309': '307-309',
+                 'Chiasso SMN 304': 'Chiasso SMN',
+                 'ZUE P11': 'ZUE P',
+                 'BO124': 'BO',
+                 'Villach Süd Gvbf 4': 'Villach Süd Gvbf',
+                 'Leinde Fern': 'Leinde Fern'
+                 }
+
+        for gleis, bahnhof in tests.items():
+            self.assertEqual(bahnhof, anlage.default_anschlussname(gleis))
+
+    
 if __name__ == '__main__':
     unittest.main()

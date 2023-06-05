@@ -61,8 +61,14 @@ def gemeinsamer_name(g: Iterable) -> str:
     return ''.join(common_prefix(g)).strip()
 
 
+# \d digit
+# \s whitespace
+# \w word/alphanumeric including underscore
+
 ALPHA_PREFIX_PATTERN = re.compile(r'[^\d\W]*')
 NON_DIGIT_PREFIX_PATTERN = re.compile(r'\D*')
+ALPHANUMERISCHES_GLEIS_PATTERN = re.compile(r'([^\d\W]*)\s*(\w*)')
+ENTHAELT_ZIFFER_REGEX = re.compile(r'\D*\d+\D*')
 EINZEL_ANSCHLUESSE = ['Anschluss', 'Feld', 'Gruppe', 'Gleis', 'Gr.', 'Anschl.', 'Gl.', 'Industrie', 'Depot', 'Abstellung']
 
 
@@ -83,20 +89,64 @@ def alpha_prefix(name: str) -> str:
 
 def default_bahnhofname(gleis: str) -> str:
     """
-    bahnhofnamen aus gleisnamen ableiten.
+    Bahnhofnamen aus Gleisnamen ableiten.
 
-    es wird angenommen, dass der bahnhofname aus den alphabetischen zeichen am anfang des gleisnamens besteht.
-    wenn der gleisname keine alphabetischen zeichen enthält, wird per default "HBf" zurückgegeben.
+    Es gibt kein einheitliches Schema für Gleisnamen, aus dem sich der Bahnhofsname ableiten lässt.
+    Diese Funktion implementiert daher eine Heuristik, die in den meisten Fällen einen brauchbaren Vorschlag liefert.
+    Sie kann aber nicht alle Fälle korrekt verarbeiten, weil der Gleisname nicht genug Information enthält.
+    Diese Fälle müssen manuell korrigiert werden.
+
+    Die Funktion testet folgende Regeln und gibt das Resultat der ersten passenden Regel aus:
+
+    1. Wenn der Gleisname mit einer Ziffer beginnt: "Hbf".
+    2. Wenn der Gleisname keine Ziffer enthält, den ganzen Gleisnamen.
+    2. Rein alphabetischer Teil bis zum ersten Leerzeichen, auf das ein Wort folgt, das eine Ziffer enthält.
+    3. Alphabetischer Teil bis zur ersten Ziffer.
+
+    Beispiele:
+
+    FSP503 -> FSP
+    NAH423b -> NAH
+    6 -> Hbf
+    10C-D -> Hbf
+    BSGB D73 -> BSGB
+    ZUE 12 -> ZUE
+    BR 1b -> BR
+    Lie W10 -> Lie
+    Muntelier-L. -> Muntelier-L.
+    VU3-5 -> VU
+    Isola della Scala 3G -> Isola della Scala
+
+    Beachte, dass Bahnhofs- und Gleisbezeichnungen Leerzeichen und Sonderzeichen enthalten können.
+    In den folgenden Fällen (nicht abschliessend),
+    liefert die Funktion nicht das gewünschte Ergebnis (in Klammern).
+
+    Brennero: R3 -> R (Hbf), N -> N (Hbf)
+    Drautal: Lie A1 -> Lie (Lie A1), Ma Wende R -> Ma Wende R (Ma)
 
     :param gleis: gleis- bzw. bahnsteigname
     :return: bahnhofname
     """
 
-    name = alpha_prefix(gleis)
+    teile = gleis.split()
+    alpha_teile = []
+
+    for teil in teile:
+        if ENTHAELT_ZIFFER_REGEX.search(teil):
+            break
+        elif teil.lower() in {"wende", "lang", "kurz"}:
+            break
+        else:
+            alpha_teile.append(teil)
+    name = " ".join(alpha_teile)
+
+    if not name:
+        name = NON_DIGIT_PREFIX_PATTERN.match(teile[0].strip()).group(0)
+
     if name:
         return name
     else:
-        return "HBf"
+        return "Hbf"
 
 
 def ist_einzel_anschluss(gleis: str) -> bool:
@@ -131,7 +181,7 @@ def default_anschlussname(gleis: str) -> str:
     if ist_einzel_anschluss(gleis):
         return gleis
     else:
-        anschluss = re.match(ALPHA_PREFIX_PATTERN, gleis).group(0).strip()
+        anschluss = NON_DIGIT_PREFIX_PATTERN.match(gleis).group(0).strip()
         if anschluss:
             return anschluss
         else:
