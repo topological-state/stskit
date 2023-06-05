@@ -1,0 +1,295 @@
+{
+    "_aid": 860,
+    "_build": 5851,
+    "_name": "Rovereto/Domegliara",
+    "_region": "Italien Nord",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung"
+            ]
+        },
+        "Anschlu\u00df Mori": {
+            "__class__": "Set",
+            "data": [
+                "Anschlu\u00df Mori"
+            ]
+        },
+        "Ermolli": {
+            "__class__": "Set",
+            "data": [
+                "Ermolli"
+            ]
+        },
+        "Kreuz Verona": {
+            "__class__": "Set",
+            "data": [
+                "Kreuz Verona"
+            ]
+        },
+        "Trento": {
+            "__class__": "Set",
+            "data": [
+                "Trento"
+            ]
+        },
+        "Verladung": {
+            "__class__": "Set",
+            "data": [
+                "Verladung"
+            ]
+        },
+        "Verladung Rovereto": {
+            "__class__": "Set",
+            "data": [
+                "Verladung Rovereto"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Ala": {
+            "__class__": "Set",
+            "data": [
+                "Ala 4",
+                "Ala 3",
+                "Ala 1",
+                "Ala 2",
+                "Ala 2G",
+                "Ala 3G",
+                "Ala 4G",
+                "Ala 1G"
+            ]
+        },
+        "Avio": {
+            "__class__": "Set",
+            "data": [
+                "Avio 1",
+                "Avio 2"
+            ]
+        },
+        "Borghetto": {
+            "__class__": "Set",
+            "data": [
+                "Borghetto 1",
+                "Borghetto 2"
+            ]
+        },
+        "Dolce": {
+            "__class__": "Set",
+            "data": [
+                "Dolce 2",
+                "Dolce 1"
+            ]
+        },
+        "Domegliara": {
+            "__class__": "Set",
+            "data": [
+                "Domegliara 4",
+                "Domegliara 3",
+                "Domegliara 2",
+                "Domegliara 22",
+                "Domegliara 1",
+                "Domegliara 21",
+                "Domegliara 4G",
+                "Domegliara 13",
+                "Domegliara 14",
+                "Domegliara 2G",
+                "Domegliara 3G",
+                "Domegliara 18",
+                "Domegliara 17"
+            ]
+        },
+        "Durchfahrt Trento": {
+            "__class__": "Set",
+            "data": [
+                "Durchfahrt Trento"
+            ]
+        },
+        "Mattarello": {
+            "__class__": "Set",
+            "data": [
+                "Mattarello 2",
+                "Mattarello 3",
+                "Mattarello 4",
+                "Mattarello 1"
+            ]
+        },
+        "Mori": {
+            "__class__": "Set",
+            "data": [
+                "Mori 4",
+                "Mori 3",
+                "Mori R1"
+            ]
+        },
+        "Parona": {
+            "__class__": "Set",
+            "data": [
+                "Parona 4",
+                "Parona 2",
+                "Parona 1",
+                "Parona 3"
+            ]
+        },
+        "Peri": {
+            "__class__": "Set",
+            "data": [
+                "Peri 3",
+                "Peri 1",
+                "Peri 4G",
+                "Peri 4",
+                "Peri 3G",
+                "Peri 2",
+                "Peri 1G",
+                "Peri 2G"
+            ]
+        },
+        "Rovereto": {
+            "__class__": "Set",
+            "data": [
+                "Rovereto 4",
+                "Rovereto 6",
+                "Rovereto 3",
+                "Rovereto 2G",
+                "Rovereto 2",
+                "Rovereto 5",
+                "Rovereto 3G",
+                "Rovereto 1G",
+                "Rovereto 1",
+                "Rovereto 12",
+                "Rovereto 17"
+            ]
+        },
+        "Serravalle": {
+            "__class__": "Set",
+            "data": [
+                "Serravalle 1",
+                "Serravalle 2"
+            ]
+        }
+    },
+    "hauptstrecke": "Trento-Verona",
+    "sektoren": {
+        "Ala 1": {
+            "__class__": "Set",
+            "data": [
+                "Ala 1",
+                "Ala 1G"
+            ]
+        },
+        "Ala 2": {
+            "__class__": "Set",
+            "data": [
+                "Ala 2G",
+                "Ala 2"
+            ]
+        },
+        "Ala 3": {
+            "__class__": "Set",
+            "data": [
+                "Ala 3G",
+                "Ala 3"
+            ]
+        },
+        "Ala 4": {
+            "__class__": "Set",
+            "data": [
+                "Ala 4G",
+                "Ala 4"
+            ]
+        },
+        "Domegliara 2": {
+            "__class__": "Set",
+            "data": [
+                "Domegliara 2G",
+                "Domegliara 2"
+            ]
+        },
+        "Domegliara 3": {
+            "__class__": "Set",
+            "data": [
+                "Domegliara 3",
+                "Domegliara 3G"
+            ]
+        },
+        "Domegliara 4": {
+            "__class__": "Set",
+            "data": [
+                "Domegliara 4",
+                "Domegliara 4G"
+            ]
+        },
+        "Peri 1": {
+            "__class__": "Set",
+            "data": [
+                "Peri 1",
+                "Peri 1G"
+            ]
+        },
+        "Peri 2": {
+            "__class__": "Set",
+            "data": [
+                "Peri 2",
+                "Peri 2G"
+            ]
+        },
+        "Peri 3": {
+            "__class__": "Set",
+            "data": [
+                "Peri 3",
+                "Peri 3G"
+            ]
+        },
+        "Peri 4": {
+            "__class__": "Set",
+            "data": [
+                "Peri 4G",
+                "Peri 4"
+            ]
+        },
+        "Rovereto 1": {
+            "__class__": "Set",
+            "data": [
+                "Rovereto 1G",
+                "Rovereto 1"
+            ]
+        },
+        "Rovereto 2": {
+            "__class__": "Set",
+            "data": [
+                "Rovereto 2G",
+                "Rovereto 2"
+            ]
+        },
+        "Rovereto 3": {
+            "__class__": "Set",
+            "data": [
+                "Rovereto 3G",
+                "Rovereto 3"
+            ]
+        }
+    },
+    "strecken": {
+        "Trento-Verona": [
+            "Trento",
+            "Durchfahrt Trento",
+            "Mattarello",
+            "Rovereto",
+            "Mori",
+            "Serravalle",
+            "Ala",
+            "Avio",
+            "Borghetto",
+            "Peri",
+            "Dolce",
+            "Domegliara",
+            "Parona",
+            "Kreuz Verona"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "italien"
+}

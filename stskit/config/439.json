@@ -1,0 +1,324 @@
+{
+    "_aid": 439,
+    "_build": 5851,
+    "_name": "Poggio Rusco",
+    "_region": "Italien Nord",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Bologna Ovest": {
+            "__class__": "Set",
+            "data": [
+                "Bologna Ovest"
+            ]
+        },
+        "Ferrara": {
+            "__class__": "Set",
+            "data": [
+                "Ferrara"
+            ]
+        },
+        "MONFER Spa": {
+            "__class__": "Set",
+            "data": [
+                "MONFER Spa"
+            ]
+        },
+        "Nogara": {
+            "__class__": "Set",
+            "data": [
+                "Nogara"
+            ]
+        },
+        "Suzzara": {
+            "__class__": "Set",
+            "data": [
+                "Suzzara"
+            ]
+        },
+        "Verladung San Giovanni": {
+            "__class__": "Set",
+            "data": [
+                "Verladung San Giovanni"
+            ]
+        },
+        "Verladung Poggio": {
+            "__class__": "Set",
+            "data": [
+                "Verladung Poggio"
+            ]
+        },
+        "Verladung Crevalcore": {
+            "__class__": "Set",
+            "data": [
+                "Verladung Crevalcore"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Camposanto": {
+            "__class__": "Set",
+            "data": [
+                "Camposanto 2",
+                "Camposanto 1"
+            ]
+        },
+        "Crevalcore": {
+            "__class__": "Set",
+            "data": [
+                "Crevalcore 1",
+                "Crevalcore 3G",
+                "Crevalcore 1G",
+                "Crevalcore 6",
+                "Crevalcore 4G",
+                "Crevalcore 2G",
+                "Crevalcore 8",
+                "Crevalcore 3",
+                "Crevalcore 2",
+                "Crevalcore 4",
+                "Crevalcore 5",
+                "Crevalcore 5G",
+                "Crevalcore W2",
+                "Crevalcore W1",
+                "Crevalcore W3"
+            ]
+        },
+        "E Nogara": {
+            "__class__": "Set",
+            "data": [
+                "E Nogara"
+            ]
+        },
+        "MONFER": {
+            "__class__": "Set",
+            "data": [
+                "MONFER 2",
+                "MONFER 1",
+                "MONFER 3",
+                "MONFER 4",
+                "MONFER 5"
+            ]
+        },
+        "Magnacavallo": {
+            "__class__": "Set",
+            "data": [
+                "Magnacavallo 1",
+                "Magnacavallo 2"
+            ]
+        },
+        "Mirandola": {
+            "__class__": "Set",
+            "data": [
+                "Mirandola 2",
+                "Mirandola 1"
+            ]
+        },
+        "Osteria Nuova": {
+            "__class__": "Set",
+            "data": [
+                "Osteria Nuova 1",
+                "Osteria Nuova 2",
+                "Osteria Nuova 5",
+                "Osteria Nuova 4",
+                "Osteria Nuova 3",
+                "Osteria Nuova 6"
+            ]
+        },
+        "Poggio": {
+            "__class__": "Set",
+            "data": [
+                "Poggio 5",
+                "Poggio 6",
+                "Poggio 4G",
+                "Poggio 3",
+                "Poggio 2G",
+                "Poggio 6G",
+                "Poggio 2",
+                "Poggio 4",
+                "Poggio 1",
+                "Poggio 3G",
+                "Poggio 1G",
+                "Poggio 5G",
+                "Poggio W6",
+                "Poggio 15",
+                "Poggio 11",
+                "Poggio 18",
+                "Poggio 21",
+                "Poggio 20",
+                "Poggio W3",
+                "Poggio W2",
+                "Poggio W1",
+                "Poggio W4",
+                "Poggio W5"
+            ]
+        },
+        "San Felice": {
+            "__class__": "Set",
+            "data": [
+                "San Felice 1G",
+                "San Felice 2",
+                "San Felice 4",
+                "San Felice 4G",
+                "San Felice 3G",
+                "San Felice 3",
+                "San Felice 1",
+                "San Felice 2G"
+            ]
+        },
+        "San Giovanni": {
+            "__class__": "Set",
+            "data": [
+                "San Giovanni 3",
+                "San Giovanni 2",
+                "San Giovanni 4",
+                "San Giovanni 1",
+                "San Giovanni 12",
+                "San Giovanni 13",
+                "San Giovanni 8",
+                "San Giovanni 9"
+            ]
+        },
+        "Schivenoglia": {
+            "__class__": "Set",
+            "data": [
+                "Schivenoglia 1",
+                "Schivenoglia 2"
+            ]
+        }
+    },
+    "hauptstrecke": "Nogara-Bologna",
+    "sektoren": {
+        "Crevalcore 1": {
+            "__class__": "Set",
+            "data": [
+                "Crevalcore 1",
+                "Crevalcore 1G"
+            ]
+        },
+        "Crevalcore 2": {
+            "__class__": "Set",
+            "data": [
+                "Crevalcore 2",
+                "Crevalcore 2G"
+            ]
+        },
+        "Crevalcore 3": {
+            "__class__": "Set",
+            "data": [
+                "Crevalcore 3",
+                "Crevalcore 3G"
+            ]
+        },
+        "Crevalcore 4": {
+            "__class__": "Set",
+            "data": [
+                "Crevalcore 4G",
+                "Crevalcore 4"
+            ]
+        },
+        "Crevalcore 5": {
+            "__class__": "Set",
+            "data": [
+                "Crevalcore 5",
+                "Crevalcore 5G"
+            ]
+        },
+        "Poggio 1": {
+            "__class__": "Set",
+            "data": [
+                "Poggio 1G",
+                "Poggio 1"
+            ]
+        },
+        "Poggio 2": {
+            "__class__": "Set",
+            "data": [
+                "Poggio 2G",
+                "Poggio 2"
+            ]
+        },
+        "Poggio 3": {
+            "__class__": "Set",
+            "data": [
+                "Poggio 3",
+                "Poggio 3G"
+            ]
+        },
+        "Poggio 4": {
+            "__class__": "Set",
+            "data": [
+                "Poggio 4G",
+                "Poggio 4"
+            ]
+        },
+        "Poggio 5": {
+            "__class__": "Set",
+            "data": [
+                "Poggio 5",
+                "Poggio 5G"
+            ]
+        },
+        "Poggio 6": {
+            "__class__": "Set",
+            "data": [
+                "Poggio 6G",
+                "Poggio 6"
+            ]
+        },
+        "San Felice 1": {
+            "__class__": "Set",
+            "data": [
+                "San Felice 1",
+                "San Felice 1G"
+            ]
+        },
+        "San Felice 2": {
+            "__class__": "Set",
+            "data": [
+                "San Felice 2G",
+                "San Felice 2"
+            ]
+        },
+        "San Felice 3": {
+            "__class__": "Set",
+            "data": [
+                "San Felice 3G",
+                "San Felice 3"
+            ]
+        },
+        "San Felice 4": {
+            "__class__": "Set",
+            "data": [
+                "San Felice 4",
+                "San Felice 4G"
+            ]
+        }
+    },
+    "strecken": {
+        "Nogara-Bologna": [
+            "Nogara",
+            "Poggio",
+            "Mirandola",
+            "San Felice",
+            "Camposanto",
+            "Crevalcore",
+            "San Giovanni",
+            "Osteria Nuova",
+            "Bologna Ovest"
+        ],
+        "Suzzara-Ferrara": [
+            "Suzzara",
+            "Schivenoglia",
+            "Poggio",
+            "Magnacavallo",
+            "Ferrara"
+        ]
+    },
+    "streckenmarkierung": [
+        ["Suzzara", "Schivenoglia", "E"],
+        ["Schivenoglia", "Poggio", "E"],
+        ["Poggio", "Magnacavallo", "E"],
+        ["Magnacavallo", "Ferrara", "E"]
+    ],
+    "zugschema": "italien"
+}

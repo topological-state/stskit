@@ -1,0 +1,339 @@
+{
+    "_aid": 70,
+    "_build": 5851,
+    "_name": "Aschaffenburg",
+    "_region": "Rhein-Main",
+    "_version": 2,
+    "anschlussgruppen": {
+        "410-414": {
+            "__class__": "Set",
+            "data": [
+                "410-414"
+            ]
+        },
+        "Babenhausen": {
+            "__class__": "Set",
+            "data": [
+                "Babenhausen 2",
+                "Babenhausen 1"
+            ]
+        },
+        "Gbf O/W": {
+            "__class__": "Set",
+            "data": [
+                "Gbf O",
+                "Gbf W"
+            ]
+        },
+        "Hanau Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Hanau Hbf"
+            ]
+        },
+        "Heigenbr\u00fccken": {
+            "__class__": "Set",
+            "data": [
+                "Heigenbr\u00fccken"
+            ]
+        },
+        "Kraftwerk": {
+            "__class__": "Set",
+            "data": [
+                "Kraftwerk"
+            ]
+        },
+        "Miltenberg": {
+            "__class__": "Set",
+            "data": [
+                "Miltenberg"
+            ]
+        },
+        "Sch\u00f6llkrippen": {
+            "__class__": "Set",
+            "data": [
+                "Sch\u00f6llkrippen"
+            ]
+        },
+        "Wolfgang": {
+            "__class__": "Set",
+            "data": [
+                "Wolfgang"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Abzw Goldbach": {
+            "__class__": "Set",
+            "data": [
+                "Abzw Goldbach"
+            ]
+        },
+        "Abzw Steinerts": {
+            "__class__": "Set",
+            "data": [
+                "Abzw Steinerts"
+            ]
+        },
+        "FDET": {
+            "__class__": "Set",
+            "data": [
+                "FDET2L",
+                "FDET1L",
+                "FDET2",
+                "FDET3",
+                "FDET3L",
+                "FDET1"
+            ]
+        },
+        "FGK": {
+            "__class__": "Set",
+            "data": [
+                "FGK704",
+                "FGK703",
+                "FGK702",
+                "FGK701",
+                "FGK705"
+            ]
+        },
+        "FKLM": {
+            "__class__": "Set",
+            "data": [
+                "FKLM803L",
+                "FKLM801",
+                "FKLM801L",
+                "FKLM802",
+                "FKLM806",
+                "FKLM807",
+                "FKLM803"
+            ]
+        },
+        "FKO": {
+            "__class__": "Set",
+            "data": [
+                "FKO3L",
+                "FKO1L",
+                "FKO2L",
+                "FKO1",
+                "FKO3",
+                "FKO2"
+            ]
+        },
+        "Gro\u00dfauheim": {
+            "__class__": "Set",
+            "data": [
+                "Gro\u00dfauheim"
+            ]
+        },
+        "Gro\u00dfkrotzenburg": {
+            "__class__": "Set",
+            "data": [
+                "Gro\u00dfkrotzenburg"
+            ]
+        },
+        "Hochschule": {
+            "__class__": "Set",
+            "data": [
+                "Hochschule"
+            ]
+        },
+        "Hbf": {
+            "__class__": "Set",
+            "data": [
+                "NAH013",
+                "NAH001",
+                "NAH012",
+                "NAH007",
+                "NAH004",
+                "NAH018",
+                "NAH006",
+                "NAH005",
+                "NAH008",
+                "NAH003",
+                "NAH002",
+                "NAH046",
+                "NAH026",
+                "NAH086",
+                "NAH436",
+                "NAH409",
+                "NAH408",
+                "NAH424b",
+                "NAH425 (Tankstelle)",
+                "NAH424a",
+                "NAH423a",
+                "NAH423b",
+                "NAH497",
+                "NAH502",
+                "NAH505",
+                "NAH501",
+                "NAH496",
+                "NAH503",
+                "NAH504"
+            ]
+        },
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "NAH101",
+                "NAH102",
+                "NAH103",
+                "NAH104",
+                "NAH105",
+                "NAH106",
+                "NAH202",
+                "NAH068",
+                "NAH204",
+                "NAH201",
+                "NAH026",
+                "NAH086",
+                "NAH206",
+                "NAH203",
+                "NAH460",
+                "NAH205",
+                "NAH602",
+                "NAH601"
+            ]
+        },
+        "R\u00fcckersbacher Schlucht": {
+            "__class__": "Set",
+            "data": [
+                "R\u00fcckersbacher Schlucht"
+            ]
+        }
+    },
+    "hauptstrecke": "Hanau-Heigenbr\u00fccken",
+    "sektoren": {
+        "FDET1": {
+            "__class__": "Set",
+            "data": [
+                "FDET1",
+                "FDET1L"
+            ]
+        },
+        "FDET2": {
+            "__class__": "Set",
+            "data": [
+                "FDET2L",
+                "FDET2"
+            ]
+        },
+        "FDET3": {
+            "__class__": "Set",
+            "data": [
+                "FDET3",
+                "FDET3L"
+            ]
+        },
+        "FKLM801": {
+            "__class__": "Set",
+            "data": [
+                "FKLM801",
+                "FKLM801L"
+            ]
+        },
+        "FKLM803": {
+            "__class__": "Set",
+            "data": [
+                "FKLM803L",
+                "FKLM803"
+            ]
+        },
+        "FKO1": {
+            "__class__": "Set",
+            "data": [
+                "FKO1L",
+                "FKO1"
+            ]
+        },
+        "FKO2": {
+            "__class__": "Set",
+            "data": [
+                "FKO2",
+                "FKO2L"
+            ]
+        },
+        "FKO3": {
+            "__class__": "Set",
+            "data": [
+                "FKO3",
+                "FKO3L"
+            ]
+        },
+        "NAH002": {
+            "__class__": "Set",
+            "data": [
+                "NAH002",
+                "NAH012"
+            ]
+        },
+        "NAH003": {
+            "__class__": "Set",
+            "data": [
+                "NAH003",
+                "NAH013"
+            ]
+        },
+        "NAH423": {
+            "__class__": "Set",
+            "data": [
+                "NAH423a",
+                "NAH423b"
+            ]
+        },
+        "NAH424": {
+            "__class__": "Set",
+            "data": [
+                "NAH424a",
+                "NAH424b"
+            ]
+        }
+    },
+    "strecken": {
+        "Hanau-Heigenbr\u00fccken": [
+            "Hanau Hbf",
+            "Gro\u00dfauheim",
+            "FGK",
+            "FKLM",
+            "FDET",
+            "R\u00fcckersbacher Schlucht",
+            "FKO",
+            "Abzw Steinerts",
+            "Hbf",
+            "Gbf",
+            "Abzw Goldbach",
+            "Heigenbr\u00fccken"
+        ],
+        "Wolfgang-Heigenbr\u00fccken": [
+            "Wolfgang",
+            "FGK",
+            "FKLM",
+            "FDET",
+            "R\u00fcckersbacher Schlucht",
+            "FKO",
+            "Abzw Steinerts",
+            "Hbf",
+            "Gbf",
+            "Abzw Goldbach",
+            "Heigenbr\u00fccken"
+        ],
+        "Wolfgang-Babenhausen": [
+            "Wolfgang",
+            "FGK",
+            "FKLM",
+            "FDET",
+            "R\u00fcckersbacher Schlucht",
+            "FKO",
+            "Babenhausen"
+        ],
+        "Babenhausen-Heigenbr\u00fccken": [
+            "Babenhausen",
+            "Hbf",
+            "Gbf",
+            "Abzw Goldbach",
+            "Heigenbr\u00fccken"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

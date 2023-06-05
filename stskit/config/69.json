@@ -1,0 +1,160 @@
+{
+    "_aid": 69,
+    "_build": 5851,
+    "_name": "Wolfgang",
+    "_region": "Rhein-Main",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Glauburg-Stockheim": {
+            "__class__": "Set",
+            "data": [
+                "Glauburg-Stockheim"
+            ]
+        },
+        "Gro\u00dfkrotzenburg": {
+            "__class__": "Set",
+            "data": [
+                "Gro\u00dfkrotzenburg"
+            ]
+        },
+        "HLB": {
+            "__class__": "Set",
+            "data": [
+                "HLB"
+            ]
+        },
+        "Hanau": {
+            "__class__": "Set",
+            "data": [
+                "Hanau S\u00fcdseite",
+                "Hanau Nordseite"
+            ]
+        },
+        "Nidderau": {
+            "__class__": "Set",
+            "data": [
+                "Nidderau"
+            ]
+        },
+        "Schl\u00fcchtern": {
+            "__class__": "Set",
+            "data": [
+                "Schl\u00fcchtern"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Abzw. Rauschwald": {
+            "__class__": "Set",
+            "data": [
+                "Abzw. Rauschwald"
+            ]
+        },
+        "B\u00fcches-D\u00fcdelsheim": {
+            "__class__": "Set",
+            "data": [
+                "B\u00fcches-D\u00fcdelsheim"
+            ]
+        },
+        "B\u00fcdingen": {
+            "__class__": "Set",
+            "data": [
+                "B\u00fcdingen"
+            ]
+        },
+        "FGEL": {
+            "__class__": "Set",
+            "data": [
+                "FGEL1",
+                "FGEL2",
+                "FGEL5",
+                "FGEL4",
+                "FGEL18",
+                "FGEL3",
+                "FGEL88"
+            ]
+        },
+        "FHME": {
+            "__class__": "Set",
+            "data": [
+                "FHME1",
+                "FHME2",
+                "FHME3"
+            ]
+        },
+        "FSLB": {
+            "__class__": "Set",
+            "data": [
+                "FSLB2",
+                "FSLB1",
+                "FSLB4",
+                "FSLB3"
+            ]
+        },
+        "FWFG": {
+            "__class__": "Set",
+            "data": [
+                "FWFG4",
+                "FWFG3",
+                "FWFG2",
+                "FWFG1"
+            ]
+        },
+        "Haitz-H\u00f6chst": {
+            "__class__": "Set",
+            "data": [
+                "Haitz-H\u00f6chst"
+            ]
+        },
+        "Lieblos": {
+            "__class__": "Set",
+            "data": [
+                "Lieblos"
+            ]
+        },
+        "Mittel Gr\u00fcndau": {
+            "__class__": "Set",
+            "data": [
+                "Mittel Gr\u00fcndau"
+            ]
+        },
+        "Niedermittlau": {
+            "__class__": "Set",
+            "data": [
+                "Niedermittlau"
+            ]
+        },
+        "Rodenbach": {
+            "__class__": "Set",
+            "data": [
+                "Rodenbach"
+            ]
+        }
+    },
+    "hauptstrecke": "Hanau-Schl\u00fcchtern",
+    "sektoren": {},
+    "strecken": {
+        "Hanau-Schl\u00fcchtern": [
+            "Hanau",
+            "FWFG",
+            "Rodenbach",
+            "FSLB",
+            "Niedermittlau",
+            "FHME",
+            "FGEL",
+            "Haitz-H\u00f6chst",
+            "Schl\u00fcchtern"
+        ],
+        "Gelnhausen-Glauburg-Stockheim": [
+            "FGEL",
+            "Lieblos",
+            "Mittel Gr\u00fcndau",
+            "B\u00fcdingen",
+            "B\u00fcches-D\u00fcdelsheim",
+            "Glauburg-Stockheim"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

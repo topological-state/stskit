@@ -1,0 +1,186 @@
+{
+    "_aid": 858,
+    "_build": 5851,
+    "_name": "Brennero/Brenner",
+    "_region": "Italien Nord",
+    "_version": 2,
+    "anschlussgruppen": {
+        "AR": {
+            "__class__": "Set",
+            "data": [
+                "AR1",
+                "AR2",
+                "AR7",
+                "AR6",
+                "AR4"
+            ]
+        },
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW 2",
+                "BW 1"
+            ]
+        },
+        "Bolzano": {
+            "__class__": "Set",
+            "data": [
+                "Bolzano"
+            ]
+        },
+        "Matrei": {
+            "__class__": "Set",
+            "data": [
+                "Matrei"
+            ]
+        },
+        "San Candido": {
+            "__class__": "Set",
+            "data": [
+                "San Candido"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Brennero": {
+            "__class__": "Set",
+            "data": [
+                "12",
+                "8",
+                "16",
+                "R7",
+                "11",
+                "R6",
+                "7A",
+                "R4",
+                "9",
+                "R3",
+                "10",
+                "N",
+                "3",
+                "1",
+                "R2",
+                "6",
+                "4",
+                "R5",
+                "7",
+                "2",
+                "5",
+                "17"
+            ]
+        },
+        "Campo": {
+            "__class__": "Set",
+            "data": [
+                "Campo 1",
+                "Campo 2"
+            ]
+        },
+        "Colle": {
+            "__class__": "Set",
+            "data": [
+                "Colle 1",
+                "Colle 3",
+                "Colle 2"
+            ]
+        },
+        "Einfahrt Bolzano": {
+            "__class__": "Set",
+            "data": [
+                "Einfahrt Bolzano"
+            ]
+        },
+        "Fortezza": {
+            "__class__": "Set",
+            "data": [
+                "Fortezza 3",
+                "Fortezza 12",
+                "Fortezza 7G",
+                "Fortezza 1G",
+                "Fortezza 15",
+                "Fortezza R",
+                "Fortezza 3G",
+                "Fortezza 2G",
+                "Fortezza 4G",
+                "Fortezza 1",
+                "Fortezza 1T",
+                "Fortezza 2",
+                "Fortezza 23",
+                "Fortezza 5G",
+                "Fortezza 6G"
+            ]
+        },
+        "Vipiteno": {
+            "__class__": "Set",
+            "data": [
+                "Vipiteno 4G",
+                "Vipiteno 2",
+                "Vipiteno 2G",
+                "Vipiteno 3G",
+                "Vipiteno 1G",
+                "Vipiteno 3",
+                "Vipiteno 1"
+            ]
+        }
+    },
+    "hauptstrecke": "Matrei-Bolzano",
+    "sektoren": {
+        "Fortezza 1": {
+            "__class__": "Set",
+            "data": [
+                "Fortezza 1G",
+                "Fortezza 1"
+            ]
+        },
+        "Fortezza 2": {
+            "__class__": "Set",
+            "data": [
+                "Fortezza 2",
+                "Fortezza 2G"
+            ]
+        },
+        "Fortezza 3": {
+            "__class__": "Set",
+            "data": [
+                "Fortezza 3",
+                "Fortezza 3G"
+            ]
+        },
+        "Vipiteno 1": {
+            "__class__": "Set",
+            "data": [
+                "Vipiteno 1G",
+                "Vipiteno 1"
+            ]
+        },
+        "Vipiteno 2": {
+            "__class__": "Set",
+            "data": [
+                "Vipiteno 2G",
+                "Vipiteno 2"
+            ]
+        },
+        "Vipiteno 3": {
+            "__class__": "Set",
+            "data": [
+                "Vipiteno 3",
+                "Vipiteno 3G"
+            ]
+        }
+    },
+    "strecken": {
+        "Matrei-Bolzano": [
+            "Matrei",
+            "Brennero",
+            "Colle",
+            "Vipiteno",
+            "Campo",
+            "Fortezza",
+            "Einfahrt Bolzano",
+            "Bolzano"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "italien"
+}

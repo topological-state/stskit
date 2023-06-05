@@ -1,0 +1,360 @@
+{
+    "_aid": 1220,
+    "_build": 5851,
+    "_name": "Milano Centrale",
+    "_region": "Italien Nord",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung 1",
+                "Abstellung 2",
+                "Abstellung 3",
+                "Abstellung 4",
+                "Abstellung 5",
+                "Abstellung 6"
+            ]
+        },
+        "BW Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "BW Abstellung"
+            ]
+        },
+        "Bivio Greco": {
+            "__class__": "Set",
+            "data": [
+                "Bivio Greco"
+            ]
+        },
+        "Certosa": {
+            "__class__": "Set",
+            "data": [
+                "Certosa"
+            ]
+        },
+        "ES BW": {
+            "__class__": "Set",
+            "data": [
+                "ES BW"
+            ]
+        },
+        "Greco Pirelli lungo": {
+            "__class__": "Set",
+            "data": [
+                "Greco Pirelli lungo"
+            ]
+        },
+        "Greco Pirelli locale": {
+            "__class__": "Set",
+            "data": [
+                "Greco Pirelli locale"
+            ]
+        },
+        "Lambrate lungo": {
+            "__class__": "Set",
+            "data": [
+                "Lambrate lungo"
+            ]
+        },
+        "Lambrate locale": {
+            "__class__": "Set",
+            "data": [
+                "Lambrate locale"
+            ]
+        },
+        "Porta Garibaldi": {
+            "__class__": "Set",
+            "data": [
+                "Porta Garibaldi"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Milano": {
+            "__class__": "Set",
+            "data": [
+                "5",
+                "9",
+                "16",
+                "7",
+                "11",
+                "20",
+                "1",
+                "3",
+                "22",
+                "21",
+                "8",
+                "15",
+                "23",
+                "10",
+                "2",
+                "6",
+                "14",
+                "24",
+                "4",
+                "13",
+                "12",
+                "17",
+                "18",
+                "19"
+            ]
+        },
+        "Milano 100": {
+            "__class__": "Set",
+            "data": [
+                "84",
+                "112a",
+                "115a",
+                "115b",
+                "113b",
+                "116a",
+                "119",
+                "75",
+                "135",
+                "116b",
+                "180",
+                "139b",
+                "140a",
+                "303",
+                "114b",
+                "112c",
+                "120",
+                "83",
+                "140b",
+                "113a",
+                "117b",
+                "138",
+                "76",
+                "117a",
+                "112b",
+                "80",
+                "82",
+                "118a",
+                "136",
+                "81",
+                "118b",
+                "137",
+                "139a",
+                "114a"
+            ]
+        },
+        "Milano 200": {
+            "__class__": "Set",
+            "data": [
+                "250",
+                "208b",
+                "221",
+                "206b",
+                "210a",
+                "231a",
+                "205a",
+                "205b",
+                "209b",
+                "209a",
+                "211c",
+                "230a",
+                "207a",
+                "233",
+                "229",
+                "52a",
+                "52b",
+                "207b",
+                "208a",
+                "51a",
+                "210b",
+                "232a",
+                "50b",
+                "251",
+                "211a",
+                "232b",
+                "252",
+                "51b",
+                "231b",
+                "50a",
+                "230b",
+                "211b",
+                "206a"
+            ]
+        },
+        "Milano 300": {
+            "__class__": "Set",
+            "data": [
+                "302"
+            ]
+        }
+    },
+    "hauptstrecke": "Milano-Lambrate",
+    "sektoren": {
+        "112": {
+            "__class__": "Set",
+            "data": [
+                "112c",
+                "112a",
+                "112b"
+            ]
+        },
+        "113": {
+            "__class__": "Set",
+            "data": [
+                "113b",
+                "113a"
+            ]
+        },
+        "114": {
+            "__class__": "Set",
+            "data": [
+                "114a",
+                "114b"
+            ]
+        },
+        "115": {
+            "__class__": "Set",
+            "data": [
+                "115b",
+                "115a"
+            ]
+        },
+        "116": {
+            "__class__": "Set",
+            "data": [
+                "116b",
+                "116a"
+            ]
+        },
+        "117": {
+            "__class__": "Set",
+            "data": [
+                "117a",
+                "117b"
+            ]
+        },
+        "118": {
+            "__class__": "Set",
+            "data": [
+                "118b",
+                "118a"
+            ]
+        },
+        "139": {
+            "__class__": "Set",
+            "data": [
+                "139b",
+                "139a"
+            ]
+        },
+        "140": {
+            "__class__": "Set",
+            "data": [
+                "140a",
+                "140b"
+            ]
+        },
+        "205": {
+            "__class__": "Set",
+            "data": [
+                "205a",
+                "205b"
+            ]
+        },
+        "206": {
+            "__class__": "Set",
+            "data": [
+                "206a",
+                "206b"
+            ]
+        },
+        "207": {
+            "__class__": "Set",
+            "data": [
+                "207b",
+                "207a"
+            ]
+        },
+        "208": {
+            "__class__": "Set",
+            "data": [
+                "208a",
+                "208b"
+            ]
+        },
+        "209": {
+            "__class__": "Set",
+            "data": [
+                "209a",
+                "209b"
+            ]
+        },
+        "210": {
+            "__class__": "Set",
+            "data": [
+                "210b",
+                "210a"
+            ]
+        },
+        "211": {
+            "__class__": "Set",
+            "data": [
+                "211b",
+                "211c",
+                "211a"
+            ]
+        },
+        "230": {
+            "__class__": "Set",
+            "data": [
+                "230a",
+                "230b"
+            ]
+        },
+        "231": {
+            "__class__": "Set",
+            "data": [
+                "231a",
+                "231b"
+            ]
+        },
+        "232": {
+            "__class__": "Set",
+            "data": [
+                "232b",
+                "232a"
+            ]
+        },
+        "50": {
+            "__class__": "Set",
+            "data": [
+                "50b",
+                "50a"
+            ]
+        },
+        "51": {
+            "__class__": "Set",
+            "data": [
+                "51b",
+                "51a"
+            ]
+        },
+        "52": {
+            "__class__": "Set",
+            "data": [
+                "52a",
+                "52b"
+            ]
+        }
+    },
+    "strecken": {
+        "Milano-Greco Pirelli": [
+            "Milano",
+            "Greco Pirelli lungo"
+        ],
+        "Milano-Lambrate": [
+            "Milano",
+            "Lambrate lungo"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "italien"
+}

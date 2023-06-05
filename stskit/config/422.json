@@ -1,0 +1,261 @@
+{
+    "_aid": 422,
+    "_build": 5851,
+    "_name": "Bonn-Beuel",
+    "_region": "Rheinland",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Beuel Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Beuel Gbf"
+            ]
+        },
+        "H\u00fctte": {
+            "__class__": "Set",
+            "data": [
+                "H\u00fctte"
+            ]
+        },
+        "Kalenborn": {
+            "__class__": "Set",
+            "data": [
+                "Kalenborn"
+            ]
+        },
+        "Maxion": {
+            "__class__": "Set",
+            "data": [
+                "Maxion"
+            ]
+        },
+        "Neuwied": {
+            "__class__": "Set",
+            "data": [
+                "Neuwied"
+            ]
+        },
+        "Solvay": {
+            "__class__": "Set",
+            "data": [
+                "Solvay"
+            ]
+        },
+        "Troisdorf": {
+            "__class__": "Set",
+            "data": [
+                "Troisdorf"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Bonn-Oberkassel": {
+            "__class__": "Set",
+            "data": [
+                "Bonn-Oberkassel"
+            ]
+        },
+        "Brauerei": {
+            "__class__": "Set",
+            "data": [
+                "Brauerei"
+            ]
+        },
+        "Erpel": {
+            "__class__": "Set",
+            "data": [
+                "Erpel"
+            ]
+        },
+        "KBB": {
+            "__class__": "Set",
+            "data": [
+                "KBB2",
+                "KBB3",
+                "KBB1",
+                "KBB124",
+                "KBB4",
+                "KBB3G"
+            ]
+        },
+        "KFWH": {
+            "__class__": "Set",
+            "data": [
+                "KFWH1",
+                "KFWH3",
+                "KFWH4",
+                "KFWH2",
+                "KFWH145",
+                "KFWH444"
+            ]
+        },
+        "KHBD": {
+            "__class__": "Set",
+            "data": [
+                "KHBD2",
+                "KHBD4",
+                "KHBD3",
+                "KHBD1"
+            ]
+        },
+        "KHGB": {
+            "__class__": "Set",
+            "data": [
+                "KHGB2",
+                "KHGB1",
+                "KHGB3",
+                "KHGB4",
+                "KHGB5",
+                "KHGB23"
+            ]
+        },
+        "KKOW": {
+            "__class__": "Set",
+            "data": [
+                "KKOW4",
+                "KKOW1",
+                "KKOW2",
+                "KKOW5"
+            ]
+        },
+        "KLET": {
+            "__class__": "Set",
+            "data": [
+                "KLET1",
+                "KLET3",
+                "KLET2"
+            ]
+        },
+        "KLI": {
+            "__class__": "Set",
+            "data": [
+                "KLI6",
+                "KLI1",
+                "KLI3",
+                "KLI4",
+                "KLI2",
+                "KLI5",
+                "KLI2L",
+                "KLI1L",
+                "KLI3L",
+                "KLI13",
+                "KLI11"
+            ]
+        },
+        "KMD": {
+            "__class__": "Set",
+            "data": [
+                "KMD2",
+                "KMD1"
+            ]
+        },
+        "KND": {
+            "__class__": "Set",
+            "data": [
+                "KND2",
+                "KND3",
+                "KND1",
+                "KND4"
+            ]
+        },
+        "KRBR": {
+            "__class__": "Set",
+            "data": [
+                "KRBR1",
+                "KRBR3",
+                "KRBR2"
+            ]
+        },
+        "KRHD": {
+            "__class__": "Set",
+            "data": [
+                "KRHD3",
+                "KRHD1",
+                "KRHD2"
+            ]
+        },
+        "KUN": {
+            "__class__": "Set",
+            "data": [
+                "KUN4",
+                "KUN1",
+                "KUN2",
+                "KUN3"
+            ]
+        },
+        "Kasbach": {
+            "__class__": "Set",
+            "data": [
+                "Kasbach"
+            ]
+        },
+        "Leubsdorf": {
+            "__class__": "Set",
+            "data": [
+                "Leubsdorf"
+            ]
+        },
+        "Niederdollendorf": {
+            "__class__": "Set",
+            "data": [
+                "Niederdollendorf"
+            ]
+        }
+    },
+    "hauptstrecke": "Troisdorf-Neuwied",
+    "sektoren": {
+        "KBB3": {
+            "__class__": "Set",
+            "data": [
+                "KBB3",
+                "KBB3G"
+            ]
+        },
+        "KLI1": {
+            "__class__": "Set",
+            "data": [
+                "KLI1",
+                "KLI1L"
+            ]
+        },
+        "KLI2": {
+            "__class__": "Set",
+            "data": [
+                "KLI2L",
+                "KLI2"
+            ]
+        },
+        "KLI3": {
+            "__class__": "Set",
+            "data": [
+                "KLI3",
+                "KLI3L"
+            ]
+        }
+    },
+    "strecken": {
+        "Troisdorf-Neuwied": [
+            "Troisdorf",
+            "KFWH",
+            "KMD",
+            "KBB",
+            "Bonn-Oberkassel",
+            "KND",
+            "Niederdollendorf",
+            "KKOW",
+            "KRHD",
+            "KHBD",
+            "KUN",
+            "Erpel",
+            "KLI",
+            "Leubsdorf",
+            "KHGB",
+            "KRBR",
+            "KLET",
+            "Neuwied"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

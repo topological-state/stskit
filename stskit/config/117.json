@@ -1,0 +1,252 @@
+{
+    "_aid": 117,
+    "_build": 5851,
+    "_name": "K\u00f6ln Hbf",
+    "_region": "Rheinland",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Deutz 1/2": {
+            "__class__": "Set",
+            "data": [
+                "Deutz 1",
+                "Deutz 2"
+            ]
+        },
+        "Deutz 3/4": {
+            "__class__": "Set",
+            "data": [
+                "Deutz 3",
+                "Deutz 4"
+            ]
+        },
+        "Deutz S": {
+            "__class__": "Set",
+            "data": [
+                "Deutz S"
+            ]
+        },
+        "Ehrenfeld S": {
+            "__class__": "Set",
+            "data": [
+                "Ehrenfeld S"
+            ]
+        },
+        "K\u00f6ln BBF": {
+            "__class__": "Set",
+            "data": [
+                "K\u00f6ln BBF"
+            ]
+        },
+        "K\u00f6ln-West": {
+            "__class__": "Set",
+            "data": [
+                "K\u00f6ln-West"
+            ]
+        },
+        "K\u00f6ln-Nippes": {
+            "__class__": "Set",
+            "data": [
+                "K\u00f6ln-Nippes"
+            ]
+        },
+        "K\u00f6ln-Ehrenfeld": {
+            "__class__": "Set",
+            "data": [
+                "K\u00f6ln-Ehrenfeld"
+            ]
+        },
+        "K\u00f6ln Schlund": {
+            "__class__": "Set",
+            "data": [
+                "K\u00f6ln Schlund"
+            ]
+        },
+        "Nippes S": {
+            "__class__": "Set",
+            "data": [
+                "Nippes S"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "KK": {
+            "__class__": "Set",
+            "data": [
+                "7A-B",
+                "4A-B",
+                "6A-B",
+                "1A-B",
+                "6C-D",
+                "3A-B",
+                "5A-B",
+                "9A-B",
+                "2C-D",
+                "7C-D",
+                "10A-B",
+                "5C-D",
+                "8C-D",
+                "2A-B",
+                "3C-D",
+                "8A-B",
+                "1C-D",
+                "11A-B",
+                "9C-D",
+                "4C-D",
+                "9E-F",
+                "2E-F",
+                "8E-F",
+                "3E-F",
+                "7E-F",
+                "11C-D",
+                "5E-F",
+                "10C-D",
+                "6E-F",
+                "1E-F",
+                "4E-F",
+                "1G-H",
+                "9G-H",
+                "5G-H",
+                "8G-H",
+                "7G-H",
+                "6G-H",
+                "370",
+                "4G-H",
+                "2G-H",
+                "3G-H"
+            ]
+        },
+        "315": {
+            "__class__": "Set",
+            "data": [
+                "325",
+                "315",
+                "335",
+                "345",
+                "371"
+            ]
+        },
+        "KKHR": {
+            "__class__": "Set",
+            "data": [
+                "KKHR1",
+                "KKHR2"
+            ]
+        },
+        "KKHRW": {
+            "__class__": "Set",
+            "data": [
+                "KKHRW 142",
+                "KKHRW 141"
+            ]
+        }
+    },
+    "hauptstrecke": "Deutz S-Ehrenfeld S",
+    "sektoren": {
+        "1": {
+            "__class__": "Set",
+            "data": [
+                "1C-D",
+                "1G-H",
+                "1A-B",
+                "1E-F"
+            ]
+        },
+        "10": {
+            "__class__": "Set",
+            "data": [
+                "10A-B",
+                "10C-D"
+            ]
+        },
+        "11": {
+            "__class__": "Set",
+            "data": [
+                "11A-B",
+                "11C-D"
+            ]
+        },
+        "2": {
+            "__class__": "Set",
+            "data": [
+                "2A-B",
+                "2G-H",
+                "2E-F",
+                "2C-D"
+            ]
+        },
+        "3": {
+            "__class__": "Set",
+            "data": [
+                "3E-F",
+                "3A-B",
+                "3G-H",
+                "3C-D"
+            ]
+        },
+        "4": {
+            "__class__": "Set",
+            "data": [
+                "4G-H",
+                "4A-B",
+                "4C-D",
+                "4E-F"
+            ]
+        },
+        "5": {
+            "__class__": "Set",
+            "data": [
+                "5E-F",
+                "5G-H",
+                "5A-B",
+                "5C-D"
+            ]
+        },
+        "6": {
+            "__class__": "Set",
+            "data": [
+                "6C-D",
+                "6A-B",
+                "6E-F",
+                "6G-H"
+            ]
+        },
+        "7": {
+            "__class__": "Set",
+            "data": [
+                "7E-F",
+                "7A-B",
+                "7C-D",
+                "7G-H"
+            ]
+        },
+        "8": {
+            "__class__": "Set",
+            "data": [
+                "8A-B",
+                "8G-H",
+                "8C-D",
+                "8E-F"
+            ]
+        },
+        "9": {
+            "__class__": "Set",
+            "data": [
+                "9C-D",
+                "9E-F",
+                "9G-H",
+                "9A-B"
+            ]
+        }
+    },
+    "strecken": {
+        "Deutz S-Ehrenfeld S": [
+            "Deutz S",
+            "KK",
+            "KKHR",
+            "Ehrenfeld S"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

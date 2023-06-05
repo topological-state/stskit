@@ -1,0 +1,380 @@
+{
+    "_aid": 726,
+    "_build": 5851,
+    "_name": "Luxemburg Hbf",
+    "_region": "Luxemburg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "220 - 225": {
+            "__class__": "Set",
+            "data": [
+                "220 - 225"
+            ]
+        },
+        "32 - 34": {
+            "__class__": "Set",
+            "data": [
+                "32 - 34"
+            ]
+        },
+        "35": {
+            "__class__": "Set",
+            "data": [
+                "35"
+            ]
+        },
+        "37 - 40": {
+            "__class__": "Set",
+            "data": [
+                "37 - 40"
+            ]
+        },
+        "50": {
+            "__class__": "Set",
+            "data": [
+                "50"
+            ]
+        },
+        "79": {
+            "__class__": "Set",
+            "data": [
+                "79"
+            ]
+        },
+        "79 - 81": {
+            "__class__": "Set",
+            "data": [
+                "79 - 81"
+            ]
+        },
+        "80": {
+            "__class__": "Set",
+            "data": [
+                "80"
+            ]
+        },
+        "81": {
+            "__class__": "Set",
+            "data": [
+                "81"
+            ]
+        },
+        "83 - 85": {
+            "__class__": "Set",
+            "data": [
+                "83 - 85"
+            ]
+        },
+        "83 - 86": {
+            "__class__": "Set",
+            "data": [
+                "83 - 86"
+            ]
+        },
+        "86": {
+            "__class__": "Set",
+            "data": [
+                "86"
+            ]
+        },
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung"
+            ]
+        },
+        "Arlon": {
+            "__class__": "Set",
+            "data": [
+                "Arlon "
+            ]
+        },
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW"
+            ]
+        },
+        "BW S\u00fcd": {
+            "__class__": "Set",
+            "data": [
+                "BW S\u00fcd"
+            ]
+        },
+        "Bettembourg": {
+            "__class__": "Set",
+            "data": [
+                "Bettembourg"
+            ]
+        },
+        "EC-Lok": {
+            "__class__": "Set",
+            "data": [
+                "EC-Lok"
+            ]
+        },
+        "Ettelbruck": {
+            "__class__": "Set",
+            "data": [
+                "Ettelbruck"
+            ]
+        },
+        "KB 5 - 7": {
+            "__class__": "Set",
+            "data": [
+                "KB 5 - 7"
+            ]
+        },
+        "Q8": {
+            "__class__": "Set",
+            "data": [
+                "Q8"
+            ]
+        },
+        "Rodange": {
+            "__class__": "Set",
+            "data": [
+                "Rodange"
+            ]
+        },
+        "Shell": {
+            "__class__": "Set",
+            "data": [
+                "Shell"
+            ]
+        },
+        "Wasserbillig": {
+            "__class__": "Set",
+            "data": [
+                "Wasserbillig"
+            ]
+        },
+        "Wasserbillig G\u00fcter": {
+            "__class__": "Set",
+            "data": [
+                "Wasserbillig G\u00fcter"
+            ]
+        },
+        "Werkstatt Nord": {
+            "__class__": "Set",
+            "data": [
+                "Werkstatt Nord"
+            ]
+        },
+        "Werkstatt S\u00fcd": {
+            "__class__": "Set",
+            "data": [
+                "Werkstatt S\u00fcd"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Hbf": {
+            "__class__": "Set",
+            "data": [
+                "9AB",
+                "4CD",
+                "4AB",
+                "10AB",
+                "3AB",
+                "7AB",
+                "7CD",
+                "8AB",
+                "9CD",
+                "1",
+                "11",
+                "3CD",
+                "8CD",
+                "2",
+                "5AB",
+                "5CD",
+                "10CD",
+                "212",
+                "213",
+                "214",
+                "36"
+            ]
+        },
+        "150": {
+            "__class__": "Set",
+            "data": [
+                "150",
+                "154",
+                "153",
+                "151",
+                "152"
+            ]
+        },
+        "610": {
+            "__class__": "Set",
+            "data": [
+                "612",
+                "611",
+                "610"
+            ]
+        },
+        "630": {
+            "__class__": "Set",
+            "data": [
+                "78",
+                "87",
+                "82",
+                "77",
+                "88",
+                "631",
+                "76",
+                "632"
+            ]
+        },
+        "BC": {
+            "__class__": "Set",
+            "data": [
+                "BC 2",
+                "BC 1"
+            ]
+        },
+        "Betrange-Str": {
+            "__class__": "Set",
+            "data": [
+                "Betrange-Str"
+            ]
+        },
+        "Capellen": {
+            "__class__": "Set",
+            "data": [
+                "Capellen"
+            ]
+        },
+        "HW": {
+            "__class__": "Set",
+            "data": [
+                "HW 2",
+                "HW 1"
+            ]
+        },
+        "KB": {
+            "__class__": "Set",
+            "data": [
+                "KB3 G",
+                "KB 4",
+                "KB 1",
+                "KB2 G",
+                "KB 2",
+                "KB 3",
+                "KB1 G",
+                "KB 11",
+                "KB 12"
+            ]
+        },
+        "LH": {
+            "__class__": "Set",
+            "data": [
+                "LH 1",
+                "LH 2"
+            ]
+        },
+        "Mamer": {
+            "__class__": "Set",
+            "data": [
+                "Mamer"
+            ]
+        },
+        "Mamer Lycee": {
+            "__class__": "Set",
+            "data": [
+                "Mamer Lycee"
+            ]
+        },
+        "Viadukt Pulverm\u00fchle": {
+            "__class__": "Set",
+            "data": [
+                "Viadukt Pulverm\u00fchle"
+            ]
+        }
+    },
+    "hauptstrecke": "Arlon-Ettelbruck",
+    "sektoren": {
+        "10": {
+            "__class__": "Set",
+            "data": [
+                "10AB",
+                "10CD"
+            ]
+        },
+        "3": {
+            "__class__": "Set",
+            "data": [
+                "3CD",
+                "3AB"
+            ]
+        },
+        "4": {
+            "__class__": "Set",
+            "data": [
+                "4AB",
+                "4CD"
+            ]
+        },
+        "5": {
+            "__class__": "Set",
+            "data": [
+                "5AB",
+                "5CD"
+            ]
+        },
+        "7": {
+            "__class__": "Set",
+            "data": [
+                "7AB",
+                "7CD"
+            ]
+        },
+        "8": {
+            "__class__": "Set",
+            "data": [
+                "8CD",
+                "8AB"
+            ]
+        },
+        "9": {
+            "__class__": "Set",
+            "data": [
+                "9CD",
+                "9AB"
+            ]
+        }
+    },
+    "strecken": {
+        "Arlon-Ettelbruck": [
+            "Arlon",
+            "KB",
+            "Capellen",
+            "Mamer",
+            "Mamer Lycee",
+            "Betrange-Str",
+            "Hbf",
+            "Viadukt Pulverm\u00fchle",
+            "Ettelbruck"
+        ],
+        "Bettembourg-Ettelbruck": [
+            "Bettembourg",
+            "BC",
+            "610",
+            "HW",
+            "630",
+            "Hbf",
+            "Viadukt Pulverm\u00fchle",
+            "Ettelbruck"
+        ],
+        "Rodange-Wasserbillig": [
+            "Rodange",
+            "LH",
+            "Hbf",
+            "Viadukt Pulverm\u00fchle",
+            "Wasserbillig"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "benelux"
+}

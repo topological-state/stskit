@@ -1,0 +1,173 @@
+{
+    "_aid": 1203,
+    "_build": 5840,
+    "_name": "Lokeren",
+    "_region": "Belgien",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abst": {
+            "__class__": "Set",
+            "data": [
+                "Abst"
+            ]
+        },
+        "Anvers-Berchem": {
+            "__class__": "Set",
+            "data": ["Anvers-Berchem "]
+        },
+        "Anvers-Kallo": {
+            "__class__": "Set",
+            "data": ["Anvers-Kallo "]
+        },
+        "Gand-Dampoort": {
+            "__class__": "Set",
+            "data": [
+                "Gand-Dampoort "
+            ]
+        },
+        "Logistik": {
+            "__class__": "Set",
+            "data": [
+                "Logistik"
+            ]
+        },
+        "Puurs": {
+            "__class__": "Set",
+            "data": [
+                "Puurs 2",
+                "Puurs 1 "
+            ]
+        },
+        "Termonde": {
+            "__class__": "Set",
+            "data": [
+                "Termonde"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Anvers-Sud": {
+            "__class__": "Set",
+            "data": [
+                "Anvers-Sud"
+            ]
+        },
+        "Belsele": {
+            "__class__": "Set",
+            "data": [
+                "Belsele"
+            ]
+        },
+        "Beveren": {
+            "__class__": "Set",
+            "data": [
+                "Beveren"
+            ]
+        },
+        "Lokeren": {
+            "__class__": "Set",
+            "data": [
+                "A",
+                "1",
+                "2",
+                "3",
+                "3a",
+                "4"
+            ]
+        },
+        "Lokeren Est": {
+            "__class__": "Set",
+            "data": [
+                "LE 4",
+                "LE 2",
+                "LE 1",
+                "LE 3"
+            ]
+        },
+        "Melsele": {
+            "__class__": "Set",
+            "data": [
+                "Melsele"
+            ]
+        },
+        "Nieuwkerken-Waas": {
+            "__class__": "Set",
+            "data": [
+                "Nieuwkerken-Waas"
+            ]
+        },
+        "Saint-Nicolas": {
+            "__class__": "Set",
+            "data": [
+                "SN 5",
+                "SN 4",
+                "SN 2",
+                "SN 3",
+                "SN A",
+                "SN 1"
+            ]
+        },
+        "Saint-Nicolas Est": {
+            "__class__": "Set",
+            "data": [
+                "SNE 5",
+                "SNE 7",
+                "SNE 8",
+                "SNE 3",
+                "SNE 4",
+                "SNE 6",
+                "SNE 2",
+                "SNE 1",
+                "SNE 3a",
+                "SNE 4a"
+            ]
+        },
+        "Sinaai": {
+            "__class__": "Set",
+            "data": [
+                "Sinaai"
+            ]
+        },
+        "Y Kattestraat": {
+            "__class__": "Set",
+            "data": [
+                "Y Kattestraat"
+            ]
+        },
+        "Zwijndrecht": {
+            "__class__": "Set",
+            "data": [
+                "Zwijndrecht"
+            ]
+        }
+    },
+    "sektoren": {
+        "3": {
+            "__class__": "Set",
+            "data": [
+                "3",
+                "3a"
+            ]
+        }
+    },
+    "hauptstrecke": "Gand-Dampoort-Anvers-Berchem",
+    "strecken": {
+        "Gand-Dampoort-Anvers-Berchem": [
+            "Gand-Dampoort",
+            "Lokeren",
+            "Lokeren Est",
+            "Sinaai",
+            "Belsele",
+            "Saint-Nicolas",
+            "Saint-Nicolas Est",
+            "Nieuwkerken-Waas",
+            "Beveren",
+            "Melsele",
+            "Zwijndrecht",
+            "Anvers-Sud",
+            "Anvers-Berchem"
+        ]
+    },
+    "zugschema": "benelux"
+}

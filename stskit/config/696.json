@@ -43,13 +43,13 @@
                 "GAGC604"
             ]
         },
-        "KV": {
+        "KV-Terminal": {
             "__class__": "Set",
             "data": [
                 "KV-Terminal"
             ]
         },
-        "Lokdepot": {
+        "Lokdepot SBB": {
             "__class__": "Set",
             "data": [
                 "Lokdepot SBB"

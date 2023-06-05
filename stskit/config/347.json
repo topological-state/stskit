@@ -59,7 +59,7 @@
                 "Merone"
             ]
         },
-        "Rail": {
+        "Rail Cargo Terminal": {
             "__class__": "Set",
             "data": [
                 "Rail Cargo Terminal"

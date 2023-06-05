@@ -1,0 +1,192 @@
+{
+    "_aid": 912,
+    "_build": 5851,
+    "_name": "Biasca",
+    "_region": "Tessin",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Anschluss CLA": {
+            "__class__": "Set",
+            "data": [
+                "Anschluss CLA"
+            ]
+        },
+        "CAST": {
+            "__class__": "Set",
+            "data": [
+                "CAST246",
+                "CAST146"
+            ]
+        },
+        "Drehscheibe": {
+            "__class__": "Set",
+            "data": [
+                "Drehscheibe"
+            ]
+        },
+        "GBT": {
+            "__class__": "Set",
+            "data": [
+                "GBT 7735",
+                "GBT 6735"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "LAV": {
+            "__class__": "Set",
+            "data": [
+                "LAV124",
+                "LAV224"
+            ]
+        },
+        "Monteforno": {
+            "__class__": "Set",
+            "data": [
+                "Monteforno"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BIA": {
+            "__class__": "Set",
+            "data": [
+                "BIA13",
+                "BIA17",
+                "BIA3 kurz",
+                "BIA5",
+                "BIA1",
+                "BIA86",
+                "BIA15",
+                "BIA14",
+                "BIA16",
+                "BIA11",
+                "BIA2 kurz",
+                "BIA8",
+                "BIA87",
+                "BIA3",
+                "BIA813",
+                "BIA1 kurz",
+                "BIA88",
+                "BIA6",
+                "BIA4",
+                "BIA7",
+                "BIA W",
+                "BIA84",
+                "BIA2",
+                "BIA812",
+                "BIA85"
+            ]
+        },
+        "BO": {
+            "__class__": "Set",
+            "data": [
+                "BO57",
+                "BO56",
+                "BO55",
+                "BO56a",
+                "BO76",
+                "BO2",
+                "BO4",
+                "BO5",
+                "BO75",
+                "BO3"
+            ]
+        },
+        "CLA": {
+            "__class__": "Set",
+            "data": [
+                "CLA2",
+                "CLA11",
+                "CLA3",
+                "CLA1"
+            ]
+        },
+        "Gotthard": {
+            "__class__": "Set",
+            "data": [
+                "Gotthard"
+            ]
+        },
+        "OS": {
+            "__class__": "Set",
+            "data": [
+                "OS5",
+                "OS1",
+                "OS4",
+                "OS73",
+                "OS3",
+                "OS2",
+                "OS74"
+            ]
+        },
+        "POLS": {
+            "__class__": "Set",
+            "data": [
+                "POLS4",
+                "POLS3",
+                "POLS13",
+                "POLS1",
+                "POLS2",
+                "POLS23"
+            ]
+        }
+    },
+    "hauptstrecke": "GBT-CAST",
+    "sektoren": {
+        "BIA1": {
+            "__class__": "Set",
+            "data": [
+                "BIA1",
+                "BIA1 kurz"
+            ]
+        },
+        "BIA2": {
+            "__class__": "Set",
+            "data": [
+                "BIA2 kurz",
+                "BIA2"
+            ]
+        },
+        "BIA3": {
+            "__class__": "Set",
+            "data": [
+                "BIA3",
+                "BIA3 kurz"
+            ]
+        },
+        "BO56": {
+            "__class__": "Set",
+            "data": [
+                "BO56a",
+                "BO56"
+            ]
+        }
+    },
+    "strecken": {
+        "GBT-CAST": [
+            "GBT",
+            "Gotthard",
+            "POLS",
+            "OS",
+            "CLA",
+            "CAST"
+        ],
+        "LAV-CAST": [
+            "LAV",
+            "Gotthard",
+            "BO",
+            "BIA",
+            "OS",
+            "CLA",
+            "CAST"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweiz"
+}

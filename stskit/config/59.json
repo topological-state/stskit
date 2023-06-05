@@ -1,0 +1,214 @@
+{
+    "_aid": 59,
+    "_build": 5851,
+    "_name": "Hanau Hbf",
+    "_region": "Rhein-Main",
+    "_version": 2,
+    "anschlussgruppen": {
+        "110-130": {
+            "__class__": "Set",
+            "data": [
+                "110-130"
+            ]
+        },
+        "Aschaffenburg": {
+            "__class__": "Set",
+            "data": [
+                "Aschaffenburg"
+            ]
+        },
+        "Babenhausen": {
+            "__class__": "Set",
+            "data": [
+                "Babenhausen"
+            ]
+        },
+        "Bw": {
+            "__class__": "Set",
+            "data": [
+                "Bw"
+            ]
+        },
+        "Frankfurt Ost": {
+            "__class__": "Set",
+            "data": [
+                "Frankfurt Ost"
+            ]
+        },
+        "Frankfurt S\u00fcd": {
+            "__class__": "Set",
+            "data": [
+                "Frankfurt S\u00fcd"
+            ]
+        },
+        "GHC": {
+            "__class__": "Set",
+            "data": [
+                "GHC"
+            ]
+        },
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Gbf"
+            ]
+        },
+        "Hafen": {
+            "__class__": "Set",
+            "data": [
+                "Hafen 201",
+                "Hafen 210",
+                "Hafen 310",
+                "Hafen 303"
+            ]
+        },
+        "Stahl": {
+            "__class__": "Set",
+            "data": [
+                "Stahl"
+            ]
+        },
+        "Stammstrecke": {
+            "__class__": "Set",
+            "data": [
+                "Stammstrecke"
+            ]
+        },
+        "Wolfgang 1": {
+            "__class__": "Set",
+            "data": [
+                "Wolfgang 1"
+            ]
+        },
+        "Wolfgang 2": {
+            "__class__": "Set",
+            "data": [
+                "Wolfgang 2"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "201": {
+            "__class__": "Set",
+            "data": [
+                "204",
+                "203",
+                "451",
+                "202",
+                "201"
+            ]
+        },
+        "301": {
+            "__class__": "Set",
+            "data": [
+                "302",
+                "301"
+            ]
+        },
+        "Dietesheim": {
+            "__class__": "Set",
+            "data": [
+                "Dietesheim"
+            ]
+        },
+        "Hbf": {
+            "__class__": "Set",
+            "data": [
+                "1",
+                "106",
+                "3",
+                "101",
+                "105",
+                "125",
+                "102",
+                "965",
+                "121",
+                "108",
+                "5",
+                "127",
+                "4",
+                "9",
+                "126A",
+                "103",
+                "25",
+                "104",
+                "114",
+                "7",
+                "26",
+                "107",
+                "6",
+                "113",
+                "126",
+                "109",
+                "2",
+                "115"
+            ]
+        },
+        "M\u00fchlheim": {
+            "__class__": "Set",
+            "data": [
+                "M\u00fchlheim"
+            ]
+        },
+        "M\u00fchlheim Ost": {
+            "__class__": "Set",
+            "data": [
+                "M\u00fchlheim Ost"
+            ]
+        },
+        "Rangier": {
+            "__class__": "Set",
+            "data": [
+                "Rangier"
+            ]
+        },
+        "Steinheim": {
+            "__class__": "Set",
+            "data": [
+                "Steinheim"
+            ]
+        }
+    },
+    "hauptstrecke": "Frankfurt S\u00fcd-Wolfgang",
+    "sektoren": {},
+    "strecken": {
+        "Frankfurt Ost-Wolfgang": [
+            "Frankfurt Ost",
+            "Hbf",
+            "Wolfgang 1"
+        ],
+        "Frankfurt S\u00fcd-Aschaffenburg": [
+            "Frankfurt S\u00fcd",
+            "M\u00fchlheim Ost",
+            "Hbf",
+            "Aschaffenburg"
+        ],
+        "Frankfurt S\u00fcd-Wolfgang": [
+            "Frankfurt S\u00fcd",
+            "M\u00fchlheim Ost",
+            "Hbf",
+            "Wolfgang 1"
+        ],
+        "Stammstrecke-Hanau": [
+            "Stammstrecke",
+            "M\u00fchlheim",
+            "Dietesheim",
+            "Steinheim",
+            "Hbf"
+        ]
+    },
+    "streckenmarkierung": [
+        [
+            "Stammstrecke",
+            "M\u00fchlheim",
+            "E"
+        ],
+        [
+            "Dietesheim",
+            "Hbf",
+            "E"
+        ]
+    ],
+    "zugschema": "deutschland"
+}

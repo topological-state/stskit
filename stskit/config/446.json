@@ -1,0 +1,434 @@
+{
+    "_aid": 446,
+    "_build": 5851,
+    "_name": "Nogara/Legnago",
+    "_region": "Italien Nord",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Kreuz Verona": {
+            "__class__": "Set",
+            "data": [
+                "Kreuz Verona"
+            ]
+        },
+        "Mantova": {
+            "__class__": "Set",
+            "data": [
+                "Mantova"
+            ]
+        },
+        "Monselice": {
+            "__class__": "Set",
+            "data": [
+                "Monselice"
+            ]
+        },
+        "Poggio Rusco": {
+            "__class__": "Set",
+            "data": [
+                "Poggio Rusco"
+            ]
+        },
+        "Rovigo": {
+            "__class__": "Set",
+            "data": [
+                "Rovigo"
+            ]
+        },
+        "Verladung": {
+            "__class__": "Set",
+            "data": [
+                "Verladung"
+            ]
+        },
+        "Verladung/BW": {
+            "__class__": "Set",
+            "data": [
+                "Verladung/BW"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Bevilacqua": {
+            "__class__": "Set",
+            "data": [
+                "Bevilacqua 2G",
+                "Bevilacqua 1",
+                "Bevilacqua 2",
+                "Bevilacqua 1G"
+            ]
+        },
+        "Bonferraro": {
+            "__class__": "Set",
+            "data": [
+                "Bonferraro"
+            ]
+        },
+        "Boschi S.Anna": {
+            "__class__": "Set",
+            "data": [
+                "Boschi S.Anna"
+            ]
+        },
+        "Bovolone": {
+            "__class__": "Set",
+            "data": [
+                "Bovolone 1",
+                "Bovolone 2",
+                "Bovolone 2G",
+                "Bovolone 1G"
+            ]
+        },
+        "Castagnaro": {
+            "__class__": "Set",
+            "data": [
+                "Castagnaro 1G",
+                "Castagnaro 1",
+                "Castagnaro 2",
+                "Castagnaro 2G"
+            ]
+        },
+        "Cerea": {
+            "__class__": "Set",
+            "data": [
+                "Cerea 3G",
+                "Cerea 2G",
+                "Cerea 1",
+                "Cerea 1G",
+                "Cerea 3",
+                "Cerea 2"
+            ]
+        },
+        "Einfahrt Kreuz Verona": {
+            "__class__": "Set",
+            "data": [
+                "Einfahrt Kreuz Verona"
+            ]
+        },
+        "Isola della Scala": {
+            "__class__": "Set",
+            "data": [
+                "Isola della Scala 4G",
+                "Isola della Scala 4",
+                "Isola della Scala 2G",
+                "Isola della Scala 3",
+                "Isola della Scala 2",
+                "Isola della Scala 3G",
+                "Isola della Scala 5"
+            ]
+        },
+        "Legnago": {
+            "__class__": "Set",
+            "data": [
+                "Legnago 6A",
+                "Legnago 1G",
+                "Legnago 2",
+                "Legnago 4",
+                "Legnago 7C",
+                "Legnago 7B",
+                "Legnago 19",
+                "Legnago 11",
+                "Legnago 5G",
+                "Legnago 7A",
+                "Legnago 51",
+                "Legnago 1",
+                "Legnago W1",
+                "Legnago W2",
+                "Legnago 10",
+                "Legnago 52",
+                "Legnago 6B",
+                "Legnago 4G",
+                "Legnago 12",
+                "Legnago 6C",
+                "Legnago 3",
+                "Legnago 3G",
+                "Legnago W3",
+                "Legnago 2G",
+                "Legnago 18",
+                "Legnago 5",
+                "Legnago 17"
+            ]
+        },
+        "Nogara": {
+            "__class__": "Set",
+            "data": [
+                "Nogara 2G",
+                "Nogara 3",
+                "Nogara 6",
+                "Nogara 6G",
+                "Nogara 4G",
+                "Nogara 5G",
+                "Nogara 3G",
+                "Nogara 1",
+                "Nogara 2",
+                "Nogara 5",
+                "Nogara 4",
+                "Nogara 1G"
+            ]
+        },
+        "Ostiglia": {
+            "__class__": "Set",
+            "data": [
+                "Ostiglia 2",
+                "Ostiglia 1"
+            ]
+        },
+        "Sanguinetto": {
+            "__class__": "Set",
+            "data": [
+                "Sanguinetto 1G",
+                "Sanguinetto 2",
+                "Sanguinetto 1",
+                "Sanguinetto 2G"
+            ]
+        },
+        "Villa Bartolomea": {
+            "__class__": "Set",
+            "data": [
+                "Villa Bartolomea"
+            ]
+        }
+    },
+    "hauptstrecke": "Kreuz Verona-Poggio Rusco",
+    "sektoren": {
+        "Bevilacqua 1": {
+            "__class__": "Set",
+            "data": [
+                "Bevilacqua 1",
+                "Bevilacqua 1G"
+            ]
+        },
+        "Bevilacqua 2": {
+            "__class__": "Set",
+            "data": [
+                "Bevilacqua 2",
+                "Bevilacqua 2G"
+            ]
+        },
+        "Bovolone 1": {
+            "__class__": "Set",
+            "data": [
+                "Bovolone 1",
+                "Bovolone 1G"
+            ]
+        },
+        "Bovolone 2": {
+            "__class__": "Set",
+            "data": [
+                "Bovolone 2",
+                "Bovolone 2G"
+            ]
+        },
+        "Castagnaro 1": {
+            "__class__": "Set",
+            "data": [
+                "Castagnaro 1",
+                "Castagnaro 1G"
+            ]
+        },
+        "Castagnaro 2": {
+            "__class__": "Set",
+            "data": [
+                "Castagnaro 2",
+                "Castagnaro 2G"
+            ]
+        },
+        "Cerea 1": {
+            "__class__": "Set",
+            "data": [
+                "Cerea 1",
+                "Cerea 1G"
+            ]
+        },
+        "Cerea 2": {
+            "__class__": "Set",
+            "data": [
+                "Cerea 2G",
+                "Cerea 2"
+            ]
+        },
+        "Cerea 3": {
+            "__class__": "Set",
+            "data": [
+                "Cerea 3G",
+                "Cerea 3"
+            ]
+        },
+        "Isola della Scala 2": {
+            "__class__": "Set",
+            "data": [
+                "Isola della Scala 2G",
+                "Isola della Scala 2"
+            ]
+        },
+        "Isola della Scala 3": {
+            "__class__": "Set",
+            "data": [
+                "Isola della Scala 3G",
+                "Isola della Scala 3"
+            ]
+        },
+        "Isola della Scala 4": {
+            "__class__": "Set",
+            "data": [
+                "Isola della Scala 4G",
+                "Isola della Scala 4"
+            ]
+        },
+        "Legnago 1": {
+            "__class__": "Set",
+            "data": [
+                "Legnago 1G",
+                "Legnago 1"
+            ]
+        },
+        "Legnago 2": {
+            "__class__": "Set",
+            "data": [
+                "Legnago 2",
+                "Legnago 2G"
+            ]
+        },
+        "Legnago 3": {
+            "__class__": "Set",
+            "data": [
+                "Legnago 3",
+                "Legnago 3G"
+            ]
+        },
+        "Legnago 4": {
+            "__class__": "Set",
+            "data": [
+                "Legnago 4G",
+                "Legnago 4"
+            ]
+        },
+        "Legnago 5": {
+            "__class__": "Set",
+            "data": [
+                "Legnago 5G",
+                "Legnago 5"
+            ]
+        },
+        "Legnago 6": {
+            "__class__": "Set",
+            "data": [
+                "Legnago 6B",
+                "Legnago 6C",
+                "Legnago 6A"
+            ]
+        },
+        "Legnago 7": {
+            "__class__": "Set",
+            "data": [
+                "Legnago 7A",
+                "Legnago 7C",
+                "Legnago 7B"
+            ]
+        },
+        "Nogara 1": {
+            "__class__": "Set",
+            "data": [
+                "Nogara 1",
+                "Nogara 1G"
+            ]
+        },
+        "Nogara 2": {
+            "__class__": "Set",
+            "data": [
+                "Nogara 2",
+                "Nogara 2G"
+            ]
+        },
+        "Nogara 3": {
+            "__class__": "Set",
+            "data": [
+                "Nogara 3G",
+                "Nogara 3"
+            ]
+        },
+        "Nogara 4": {
+            "__class__": "Set",
+            "data": [
+                "Nogara 4G",
+                "Nogara 4"
+            ]
+        },
+        "Nogara 5": {
+            "__class__": "Set",
+            "data": [
+                "Nogara 5",
+                "Nogara 5G"
+            ]
+        },
+        "Nogara 6": {
+            "__class__": "Set",
+            "data": [
+                "Nogara 6",
+                "Nogara 6G"
+            ]
+        },
+        "Sanguinetto 1": {
+            "__class__": "Set",
+            "data": [
+                "Sanguinetto 1G",
+                "Sanguinetto 1"
+            ]
+        },
+        "Sanguinetto 2": {
+            "__class__": "Set",
+            "data": [
+                "Sanguinetto 2",
+                "Sanguinetto 2G"
+            ]
+        }
+    },
+    "strecken": {
+        "Kreuz Verona-Poggio Rusco": [
+            "Kreuz Verona",
+            "Einfahrt Kreuz Verona",
+            "Isola della Scala",
+            "Nogara",
+            "Ostiglia",
+            "Poggio Rusco"
+        ],
+        "Kreuz Verona-Rovigo": [
+            "Kreuz Verona",
+            "Einfahrt Kreuz Verona",
+            "Isola della Scala",
+            "Bovolone",
+            "Cerea",
+            "Legnago",
+            "Villa Bartolomea",
+            "Castagnaro",
+            "Rovigo"
+        ],
+        "Mantova-Monselice": [
+            "Mantova",
+            "Bonferraro",
+            "Nogara",
+            "Sanguinetto",
+            "Cerea",
+            "Legnago",
+            "Boschi S.Anna",
+            "Bevilacqua",
+            "Monselice"
+        ]
+    },
+    "streckenmarkierung": [
+    	["Mantova", "Bonferraro", "E"],
+    	["Bonferraro", "Nogara", "E"],
+    	["Nogara", "Sanguinetto", "E"],
+    	["Sanguinetto", "Cerea", "E"],
+    	["Legnago", "Villa Bartolomea", "E"],
+    	["Villa Bartolomea", "Castagnaro", "E"],
+    	["Castagnaro", "Rovigo", "E"],
+    	["Legnago", "Boschi S.Anna", "E"],
+    	["Boschi S.Anna", "Bevilacqua", "E"],
+    	["Bevilacqua", "Monselice", "E"],
+    	["Isola della Scala", "Bovolone", "E"],
+    	["Bovolone", "Cerea", "E"]
+    ],
+    "zugschema": "italien"
+}
