@@ -1,0 +1,28 @@
+{
+    "_version": 1,
+    "titel": "Grossbritannien",
+    "gattungen": [
+        ["", 10000,  20000, "F"],
+        ["", 20000,  30000, "N"],
+        ["", 30000,  40000, "P"],
+        ["", 40000,  50000, "E"],
+        ["", 50000,  60000, "D"],
+        ["", 60000,  70000, "G"],
+        ["", 70000,  80000, "K"],
+        ["", 80000,  90000, "K"],
+        ["", 90000, 100000, "X"],
+        ["",     1,  10000, "R"],
+        ["", 0, 0, "R"]
+    ],
+    "kategorien": {
+        "X": ["Eurostar, special services", "tab:red"],
+        "F": ["Express passenger", "tab:orange"],
+        "N": ["Ordinary passenger", "tab:olive"],
+        "P": ["Prioritized", "tab:green"],
+        "E": ["Freight 75 mph", "tab:cyan"],
+        "G": ["Freight 60 mph", "tab:blue"],
+        "K": ["Freight 45 mph", "tab:purple"],
+        "D": ["Empty coaching stock", "tab:brown"],
+        "R": ["Locomotive", "tab:gray"]
+    }
+}

@@ -1,0 +1,61 @@
+{
+    "_version": 1,
+    "titel": "Frankreich",
+    "gattungen": [
+        ["TGV", 0, 0, "X"],
+        ["ICE", 0, 0, "X"],
+        ["THA", 0, 0, "X"],
+        ["EST", 0, 0, "X"],
+        ["TER-GV", 0, 0, "X"],
+
+        ["IC", 0, 0, "F"],
+        ["ICNT", 0, 0, "F"],
+        ["IZY", 0, 0, "F"],
+        ["TNC", 0, 0, "F"],
+        ["EN", 0, 0, "F"],
+        ["CNL", 0, 0, "F"],
+        ["TER", 0, 0, "N"],
+        ["TRA", 0, 0, "N"],
+        ["RER", 0, 0, "S"],
+        ["RB", 0, 0, "N"],
+
+        ["SDZ", 0, 0, "O"],
+        ["BAUZ", 0, 0, "O"],
+        ["SCHADW", 0, 0, "O"],
+
+        ["TFZF", 0, 0, "D"],
+        ["LT", 0, 0, "D"],
+        ["LR", 0, 0, "D"],
+
+        ["TFI", 0, 0, "G"],
+        ["TFN", 0, 0, "G"],
+        ["TFR", 0, 0, "G"],
+        ["TFL", 0, 0, "G"],
+        ["MLMC", 0, 0, "G"],
+        ["M", 0, 0, "G"],
+
+        ["IKL", 0, 0, "K"],
+        ["IKE", 0, 0, "K"],
+        ["IKS", 0, 0, "K"],
+
+        ["Lok", 0, 0, "R"],
+        ["LOE", 0, 0, "R"],
+        ["LOD", 0, 0, "R"],
+        ["Wagen", 0, 0, "R"],
+        ["Rf", 0, 0, "R"],
+        ["RA", 0, 0, "R"],
+        ["", 0, 0, "R"]
+    ],
+    "kategorien": {
+        "X": ["Hochgeschwindigkeitszug", "tab:red"],
+        "F": ["Fernverkehr", "tab:orange"],
+        "N": ["Nahverkehr", "tab:olive"],
+        "S": ["S-Bahn", "tab:brown"],
+        "G": ["Güterzug", "tab:blue"],
+        "E": ["Schneller Güterzug", "tab:cyan"],
+        "K": ["Kombiverkehr", "tab:purple"],
+        "D": ["Dienstzug", "tab:green"],
+        "O": ["Sonderzug", "tab:pink"],
+        "R": ["Rangierverkehr", "tab:gray"]
+    }
+}

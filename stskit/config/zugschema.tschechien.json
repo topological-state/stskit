@@ -1,0 +1,49 @@
+{
+    "_version": 1,
+    "titel": "Tschechien",
+    "gattungen": [
+        ["SC", 0, 0, "X"],
+        ["EC", 0, 0, "X"],
+        ["EN", 0, 0, "X"],
+        ["RJ", 0, 0, "X"],
+        ["RGJ", 0, 0, "X"],
+
+        ["IC", 0, 0, "F"],
+        ["Ex", 0, 0, "F"],
+        ["Rx", 0, 0, "F"],
+        ["AEx", 0, 0, "F"],
+        ["ALX", 0, 0, "F"],
+        ["LE", 0, 0, "F"],
+
+        ["R", 0, 0, "N"],
+        ["Sp", 0, 0, "N"],
+        ["Os", 0, 0, "N"],
+
+        ["Sv", 0, 0, "D"],
+
+        ["NEx", 0, 0, "E"],
+        ["Nex", 0, 0, "E"],
+
+        ["Pn", 0, 0, "G"],
+        ["Mn", 0, 0, "G"],
+
+        ["Zv", 0, 0, "O"],
+        ["Vlec", 0, 0, "O"],
+        ["Sluz", 0, 0, "O"],
+
+        ["Lv", 0, 0, "R"],
+        ["", 0, 0, "R"]
+    ],
+    "kategorien": {
+        "X": ["Hochgeschwindigkeitszug", "tab:red"],
+        "F": ["Fernverkehr", "tab:orange"],
+        "N": ["Nahverkehr", "tab:olive"],
+        "S": ["S-Bahn", "tab:brown"],
+        "G": ["Güterzug", "tab:blue"],
+        "E": ["Schneller Güterzug", "tab:cyan"],
+        "K": ["Kombiverkehr", "tab:purple"],
+        "D": ["Dienstzug", "tab:green"],
+        "O": ["Sonderzug", "tab:pink"],
+        "R": ["Rangierverkehr", "tab:gray"]
+    }
+}

@@ -1,0 +1,77 @@
+{
+    "_version": 1,
+    "titel": "Polen",
+    "gattungen": [
+        ["EIP", 0, 0, "X"],
+        ["EIC", 0, 0, "X"],
+        ["EC", 0, 0, "X"],
+        ["EN", 0, 0, "X"],
+
+        ["IC", 0, 0, "F"],
+        ["TLK", 0, 0, "F"],
+        ["IR", 0, 0, "F"],
+        ["RE", 0, 0, "F"],
+
+        ["R", 0, 0, "N"],
+        ["RP", 0, 0, "N"],
+        ["OsP", 0, 0, "N"],
+        ["Os", 0, 0, "N"],
+
+        ["SKM", 0, 0, "S"],
+
+        ["G", 0, 0, "G"],
+        ["M", 0, 0, "G"],
+        ["NG", 0, 0, "G"],
+
+        ["DGS", 0, 0, "G"],
+        ["EUC", 0, 0, "G"],
+        ["FE", 0, 0, "G"],
+        ["FIR", 0, 0, "G"],
+        ["FR", 0, 0, "G"],
+        ["FS", 0, 0, "G"],
+        ["FX", 0, 0, "G"],
+        ["FZS", 0, 0, "G"],
+        ["FZT", 0, 0, "G"],
+        ["CFA", 0, 0, "G"],
+        ["CFN", 0, 0, "G"],
+        ["CFP", 0, 0, "G"],
+        ["CIL", 0, 0, "G"],
+        ["CS", 0, 0, "G"],
+        ["CSQ", 0, 0, "G"],
+        ["CL", 0, 0, "G"],
+        ["CT", 0, 0, "G"],
+        ["IRC", 0, 0, "G"],
+        ["PIC", 0, 0, "G"],
+        ["DNG", 0, 0, "G"],
+        ["TEC", 0, 0, "G"],
+        ["ICG", 0, 0, "G"],
+
+        ["TFZF", 0, 0, "D"],
+        ["LT", 0, 0, "D"],
+        ["LR", 0, 0, "D"],
+
+        ["IKL", 0, 0, "K"],
+        ["IKE", 0, 0, "K"],
+        ["IKS", 0, 0, "K"],
+
+        ["BAUZ", 0, 0, "O"],
+        ["SCHADW", 0, 0, "O"],
+        ["SDZ", 0, 0, "O"],
+
+        ["Lok", 0, 0, "R"],
+        ["RF", 0, 0, "R"],
+        ["", 0, 0, "R"]
+    ],
+    "kategorien": {
+        "X": ["Hochgeschwindigkeitszug", "tab:red"],
+        "F": ["Fernverkehr", "tab:orange"],
+        "N": ["Nahverkehr", "tab:olive"],
+        "S": ["S-Bahn", "tab:brown"],
+        "G": ["Güterzug", "tab:blue"],
+        "E": ["Schneller Güterzug", "tab:cyan"],
+        "K": ["Kombiverkehr", "tab:purple"],
+        "D": ["Dienstzug", "tab:green"],
+        "O": ["Sonderzug", "tab:pink"],
+        "R": ["Rangierverkehr", "tab:gray"]
+    }
+}
