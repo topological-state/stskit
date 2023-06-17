@@ -31,6 +31,11 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
         self.ui = Ui_EinstellungenWindow()
         self.ui.setupUi(self)
 
+        # not implemented yet
+        self.ui.tab_widget.removeTab(2)
+        self.ui.tab_widget.removeTab(1)
+        self.ui.tab_widget.removeTab(0)
+
         self.setWindowTitle(f"Einstellungen {self.anlage.anlage.name}")
 
         self.zugschema = Zugschema()

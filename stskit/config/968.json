@@ -1,6 +1,6 @@
 {
     "_aid": 968,
-    "_build": 5847,
+    "_build": 5851,
     "_name": "Giubiasco",
     "_region": "Tessin",
     "_version": 2,
@@ -8,21 +8,21 @@
         "BEL": {
             "__class__": "Set",
             "data": [
-                "BEL251",
-                "BEL151"
+                "BEL151",
+                "BEL251"
             ]
         },
         "Bin": {
             "__class__": "Set",
             "data": [
-                "Bin 91-92"
+                "Bin 80"
             ]
         },
         "CBT": {
             "__class__": "Set",
             "data": [
-                "CBT7035",
-                "CBT6035"
+                "CBT6035",
+                "CBT7035"
             ]
         },
         "Industrie": {
@@ -31,10 +31,10 @@
                 "Industrie"
             ]
         },
-        "Luino": {
+        "Luino (I)": {
             "__class__": "Set",
             "data": [
-                "Luino"
+                "Luino (I)"
             ]
         },
         "TAV": {
@@ -56,7 +56,9 @@
         "CAMO": {
             "__class__": "Set",
             "data": [
-                "CAMO"
+                "CAMO1",
+                "CAMO2",
+                "CAMO3"
             ]
         },
         "CD": {
@@ -67,11 +69,7 @@
                 "CD3",
                 "CD1",
                 "CD5",
-                "CD21",
-                "CD20",
-                "CD36",
                 "CD34",
-                "CD37",
                 "CD84",
                 "CD85"
             ]
@@ -79,7 +77,8 @@
         "GDA": {
             "__class__": "Set",
             "data": [
-                "GDA"
+                "GDA2",
+                "GDA1"
             ]
         },
         "GER": {
@@ -91,42 +90,65 @@
         "GIU": {
             "__class__": "Set",
             "data": [
-                "GIU67",
-                "GIU71",
-                "GIU1",
-                "GIU5",
+                "GIU2k",
                 "GIU3",
-                "GIU77",
+                "GIU71",
+                "GIU4",
+                "GIU72",
+                "GIU5",
                 "GIU2",
-                "GIU4"
+                "GIU67",
+                "GIU77",
+                "GIU1",
+                "GIU5k",
+                "GIU75"
             ]
         },
         "LO": {
             "__class__": "Set",
             "data": [
-                "LO3p",
+                "LO Wende",
                 "LO3",
-                "LO2p",
-                "LO1p",
-                "LO30",
                 "LO4",
+                "LO2p",
                 "LO2",
+                "LO31",
+                "LO32",
+                "LO3p",
                 "LO1",
-                "LO Wende"
+                "LO1p",
+                "LO4p",
+                "LO30"
             ]
         },
         "MAG": {
             "__class__": "Set",
             "data": [
-                "MAG3",
+                "MAG2l",
+                "MAG3l",
                 "MAG2",
-                "MAG4"
+                "MAG1l",
+                "MAG3",
+                "MAG1"
             ]
         },
-        "MEZS": {
+        "MEZ": {
             "__class__": "Set",
             "data": [
-                "MEZS"
+                "MEZ"
+            ]
+        },
+        "MINU": {
+            "__class__": "Set",
+            "data": [
+                "MINU2",
+                "MINU1"
+            ]
+        },
+        "PINC": {
+            "__class__": "Set",
+            "data": [
+                "PINC"
             ]
         },
         "PINT": {
@@ -142,17 +164,11 @@
                 "QUA"
             ]
         },
-        "RIA": {
+        "RIAZ": {
             "__class__": "Set",
             "data": [
-                "RIA"
-            ]
-        },
-        "RIAC": {
-            "__class__": "Set",
-            "data": [
-                "RIAC1",
-                "RIAC2"
+                "RIAZ2",
+                "RIAZ1"
             ]
         },
         "RIB": {
@@ -174,7 +190,8 @@
         "SAN": {
             "__class__": "Set",
             "data": [
-                "SAN"
+                "SAN1",
+                "SAN2"
             ]
         },
         "SN": {
@@ -194,6 +211,20 @@
     },
     "hauptstrecke": "BEL-TAV",
     "sektoren": {
+        "GIU2": {
+            "__class__": "Set",
+            "data": [
+                "GIU2k",
+                "GIU2"
+            ]
+        },
+        "GIU5": {
+            "__class__": "Set",
+            "data": [
+                "GIU5k",
+                "GIU5"
+            ]
+        },
         "LO1": {
             "__class__": "Set",
             "data": [
@@ -211,8 +242,36 @@
         "LO3": {
             "__class__": "Set",
             "data": [
-                "LO3p",
-                "LO3"
+                "LO3",
+                "LO3p"
+            ]
+        },
+        "LO4": {
+            "__class__": "Set",
+            "data": [
+                "LO4",
+                "LO4p"
+            ]
+        },
+        "MAG1": {
+            "__class__": "Set",
+            "data": [
+                "MAG1l",
+                "MAG1"
+            ]
+        },
+        "MAG2": {
+            "__class__": "Set",
+            "data": [
+                "MAG2l",
+                "MAG2"
+            ]
+        },
+        "MAG3": {
+            "__class__": "Set",
+            "data": [
+                "MAG3l",
+                "MAG3"
             ]
         }
     },
@@ -234,28 +293,41 @@
             "SN",
             "GER",
             "RZO",
+            "PINC",
             "PINT",
-            "Luino"
+            "Luino (I)"
         ],
         "BEL-TAV": [
             "BEL",
             "GIU",
             "SAN",
             "RIB",
-            "MEZS",
+            "MEZ",
             "TAV"
         ],
         "BEL-LO": [
-        	"BEL",
-        	"GIU",
-        	"SAN",
-        	"CD",
-        	"RIAC",
-        	"RIA",
-        	"GDA",
-        	"TEN",
-        	"LO"
+            "BEL",
+            "GIU",
+            "SAN",
+            "CD",
+            "RIAZ",
+            "GDA",
+            "TEN",
+            "MINU",
+            "LO"
         ]
     },
-    "streckenmarkierung": []
+    "streckenmarkierung": [
+        ["QUA", "MAG", "E"],
+        ["MAG", "SN", "E"],
+        ["SN", "GER", "E"],
+        ["GER", "RZO", "E"],
+        ["RZO", "PINC", "E"],
+        ["PINC", "PINT", "E"],
+        ["PINT", "Luino (I)", "E"],
+        ["GDA", "TEN", "E"],
+        ["TEN", "MINU", "E"],
+        ["MINU", "LO", "E"]
+    ],
+    "zugschema": "schweiz"
 }
