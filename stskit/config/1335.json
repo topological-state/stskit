@@ -1,0 +1,264 @@
+{
+    "_aid": 1335,
+    "_build": 5851,
+    "_name": "Didcot Parkway",
+    "_region": "Gro\u00dfbritannien South West",
+    "_version": 2,
+    "anschlussgruppen": {
+        "APF Hanson": {
+            "__class__": "Set",
+            "data": [
+                "APF Hanson"
+            ]
+        },
+        "DRP": {
+            "__class__": "Set",
+            "data": [
+                "DRP"
+            ]
+        },
+        "Museum": {
+            "__class__": "Set",
+            "data": [
+                "Museum"
+            ]
+        },
+        "Oxford": {
+            "__class__": "Set",
+            "data": [
+                "Oxford"
+            ]
+        },
+        "Reading fast": {
+            "__class__": "Set",
+            "data": [
+                "Reading fast"
+            ]
+        },
+        "Reading slow": {
+            "__class__": "Set",
+            "data": [
+                "Reading slow"
+            ]
+        },
+        "Sdgs": {
+            "__class__": "Set",
+            "data": [
+                "Sdgs"
+            ]
+        },
+        "Swindon": {
+            "__class__": "Set",
+            "data": [
+                "Swindon"
+            ]
+        },
+        "Yard": {
+            "__class__": "Set",
+            "data": [
+                "Yard 1",
+                "Yard 2"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "APF": {
+            "__class__": "Set",
+            "data": [
+                "APF"
+            ]
+        },
+        "CHO": {
+            "__class__": "Set",
+            "data": [
+                "CHO"
+            ]
+        },
+        "CUM": {
+            "__class__": "Set",
+            "data": [
+                "CUM"
+            ]
+        },
+        "Challow": {
+            "__class__": "Set",
+            "data": [
+                "Challow up main",
+                "Challow up relief",
+                "Challow down relief",
+                "Challow down main"
+            ]
+        },
+        "DID": {
+            "__class__": "Set",
+            "data": [
+                "DID 6",
+                "DID 3",
+                "DID 5",
+                "DID 7",
+                "DID 2",
+                "DID 1",
+                "DID 4",
+                "DID down avoiding",
+                "DID up avoiding",
+                "DID West End"
+            ]
+        },
+        "DID East Jn": {
+            "__class__": "Set",
+            "data": [
+                "DID East Jn"
+            ]
+        },
+        "DID North Jn": {
+            "__class__": "Set",
+            "data": [
+                "DID North Jn"
+            ]
+        },
+        "Foxhall Jn": {
+            "__class__": "Set",
+            "data": [
+                "Foxhall Jn",
+                "Foxhall Jn Halt"
+            ]
+        },
+        "GOR": {
+            "__class__": "Set",
+            "data": [
+                "GOR"
+            ]
+        },
+        "RAD": {
+            "__class__": "Set",
+            "data": [
+                "RAD"
+            ]
+        },
+        "Steventon": {
+            "__class__": "Set",
+            "data": [
+                "Steventon down main",
+                "Steventon UDR",
+                "Steventon DSGL",
+                "Steventon up main"
+            ]
+        },
+        "Uffington": {
+            "__class__": "Set",
+            "data": [
+                "Uffington"
+            ]
+        },
+        "Wantage Road": {
+            "__class__": "Set",
+            "data": [
+                "Wantage Road down main",
+                "Wantage Road up main",
+                "Wantage Road down relief",
+                "Wantage Road up relief"
+            ]
+        },
+        "t/f Oxford": {
+            "__class__": "Set",
+            "data": [
+                "to Oxford",
+                "from Oxford"
+            ]
+        },
+        "t/f Swindon": {
+            "__class__": "Set",
+            "data": [
+                "to Swindon",
+                "from Swindon"
+            ]
+        }
+    },
+    "hauptstrecke": "Swindon-Reading fast",
+    "sektoren": {},
+    "strecken": {
+        "Oxford-Reading fast": [
+            "Oxford",
+            "t/f Oxford",
+            "RAD",
+            "CUM",
+            "APF",
+            "DID North Jn",
+            "DID",
+            "DID East Jn",
+            "CHO",
+            "GOR",
+            "Reading fast"
+        ],
+        "Oxford-Reading slow": [
+            "Oxford",
+            "t/f Oxford",
+            "RAD",
+            "CUM",
+            "APF",
+            "DID North Jn",
+            "DID",
+            "DID East Jn",
+            "CHO",
+            "GOR",
+            "Reading slow"
+        ],
+        "Oxford-Swindon": [
+            "Oxford",
+            "t/f Oxford",
+            "RAD",
+            "CUM",
+            "APF",
+            "DID North Jn",
+            "Foxhall Jn",
+            "Steventon",
+            "Wantage Road",
+            "Uffington",
+            "t/f Swindon",
+            "Swindon"
+        ],
+        "Swindon-Oxford": [
+            "Swindon",
+            "t/f Swindon",
+            "Uffington",
+            "Wantage Road",
+            "Steventon",
+            "Foxhall Jn",
+            "DID North Jn",
+            "APF",
+            "CUM",
+            "RAD",
+            "t/f Oxford",
+            "Oxford"
+        ],
+        "Swindon-Reading fast": [
+            "Swindon",
+            "t/f Swindon",
+            "Uffington",
+            "Wantage Road",
+            "Steventon",
+            "Foxhall Jn",
+            "DID",
+            "DID East Jn",
+            "CHO",
+            "GOR",
+            "Reading fast"
+        ],
+        "Swindon-Reading slow": [
+            "Swindon",
+            "t/f Swindon",
+            "Uffington",
+            "Wantage Road",
+            "Steventon",
+            "Foxhall Jn",
+            "DID",
+            "DID East Jn",
+            "CHO",
+            "GOR",
+            "Reading slow"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "grossbritannien"
+}

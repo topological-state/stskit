@@ -1,0 +1,313 @@
+{
+    "_aid": 1009,
+    "_build": 5851,
+    "_name": "Waterloo Station",
+    "_region": "Gro\u00dfbritannien London",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Linford St Jn": {
+            "__class__": "Set",
+            "data": [
+                "Linford St Jn"
+            ]
+        },
+        "Main Fast": {
+            "__class__": "Set",
+            "data": [
+                "Main Fast"
+            ]
+        },
+        "Main Slow": {
+            "__class__": "Set",
+            "data": [
+                "Main Slow"
+            ]
+        },
+        "South Siding": {
+            "__class__": "Set",
+            "data": [
+                "South Siding"
+            ]
+        },
+        "Windsor": {
+            "__class__": "Set",
+            "data": [
+                "Windsor Down",
+                "Windsor REV",
+                "Windsor Up"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Nine Elms Jn": {
+            "__class__": "Set",
+            "data": [
+                "Nine Elms Jn"
+            ]
+        },
+        "VXH": {
+            "__class__": "Set",
+            "data": [
+                "VXH 4",
+                "VXH 8",
+                "VXH 6",
+                "VXH 2",
+                "VXH 7",
+                "VXH 1",
+                "VXH 3",
+                "VXH 5"
+            ]
+        },
+        "WAT": {
+            "__class__": "Set",
+            "data": [
+                "WAT 15",
+                "WAT 15p",
+                "WAT 11",
+                "WAT 6",
+                "WAT 1p",
+                "WAT 24p",
+                "WAT 13",
+                "WAT 13p",
+                "WAT 5",
+                "WAT 23",
+                "WAT 9",
+                "WAT 17",
+                "WAT 22",
+                "WAT 4",
+                "WAT 14",
+                "WAT 23p",
+                "WAT 16",
+                "WAT 6p",
+                "WAT 16p",
+                "WAT 5p",
+                "WAT 24",
+                "WAT 18p",
+                "WAT 20p",
+                "WAT 17p",
+                "WAT 14p",
+                "WAT 10p",
+                "WAT 22p",
+                "WAT 4p",
+                "WAT 8",
+                "WAT 11p",
+                "WAT 9p",
+                "WAT 19",
+                "WAT 3",
+                "WAT 8p",
+                "WAT 21p",
+                "WAT 2",
+                "WAT 12p",
+                "WAT 20",
+                "WAT 19p",
+                "WAT 7p",
+                "WAT 12",
+                "WAT 1",
+                "WAT 21",
+                "WAT 2p",
+                "WAT 3p",
+                "WAT 10",
+                "WAT 7",
+                "WAT 18"
+            ]
+        }
+    },
+    "hauptstrecke": "Waterloo-Linford St Jn",
+    "sektoren": {
+        "WAT 1": {
+            "__class__": "Set",
+            "data": [
+                "WAT 1",
+                "WAT 1p"
+            ]
+        },
+        "WAT 10": {
+            "__class__": "Set",
+            "data": [
+                "WAT 10p",
+                "WAT 10"
+            ]
+        },
+        "WAT 11": {
+            "__class__": "Set",
+            "data": [
+                "WAT 11p",
+                "WAT 11"
+            ]
+        },
+        "WAT 12": {
+            "__class__": "Set",
+            "data": [
+                "WAT 12",
+                "WAT 12p"
+            ]
+        },
+        "WAT 13": {
+            "__class__": "Set",
+            "data": [
+                "WAT 13",
+                "WAT 13p"
+            ]
+        },
+        "WAT 14": {
+            "__class__": "Set",
+            "data": [
+                "WAT 14p",
+                "WAT 14"
+            ]
+        },
+        "WAT 15": {
+            "__class__": "Set",
+            "data": [
+                "WAT 15",
+                "WAT 15p"
+            ]
+        },
+        "WAT 16": {
+            "__class__": "Set",
+            "data": [
+                "WAT 16p",
+                "WAT 16"
+            ]
+        },
+        "WAT 17": {
+            "__class__": "Set",
+            "data": [
+                "WAT 17p",
+                "WAT 17"
+            ]
+        },
+        "WAT 18": {
+            "__class__": "Set",
+            "data": [
+                "WAT 18p",
+                "WAT 18"
+            ]
+        },
+        "WAT 19": {
+            "__class__": "Set",
+            "data": [
+                "WAT 19",
+                "WAT 19p"
+            ]
+        },
+        "WAT 2": {
+            "__class__": "Set",
+            "data": [
+                "WAT 2",
+                "WAT 2p"
+            ]
+        },
+        "WAT 20": {
+            "__class__": "Set",
+            "data": [
+                "WAT 20p",
+                "WAT 20"
+            ]
+        },
+        "WAT 21": {
+            "__class__": "Set",
+            "data": [
+                "WAT 21p",
+                "WAT 21"
+            ]
+        },
+        "WAT 22": {
+            "__class__": "Set",
+            "data": [
+                "WAT 22",
+                "WAT 22p"
+            ]
+        },
+        "WAT 23": {
+            "__class__": "Set",
+            "data": [
+                "WAT 23",
+                "WAT 23p"
+            ]
+        },
+        "WAT 24": {
+            "__class__": "Set",
+            "data": [
+                "WAT 24p",
+                "WAT 24"
+            ]
+        },
+        "WAT 3": {
+            "__class__": "Set",
+            "data": [
+                "WAT 3p",
+                "WAT 3"
+            ]
+        },
+        "WAT 4": {
+            "__class__": "Set",
+            "data": [
+                "WAT 4p",
+                "WAT 4"
+            ]
+        },
+        "WAT 5": {
+            "__class__": "Set",
+            "data": [
+                "WAT 5p",
+                "WAT 5"
+            ]
+        },
+        "WAT 6": {
+            "__class__": "Set",
+            "data": [
+                "WAT 6",
+                "WAT 6p"
+            ]
+        },
+        "WAT 7": {
+            "__class__": "Set",
+            "data": [
+                "WAT 7",
+                "WAT 7p"
+            ]
+        },
+        "WAT 8": {
+            "__class__": "Set",
+            "data": [
+                "WAT 8",
+                "WAT 8p"
+            ]
+        },
+        "WAT 9": {
+            "__class__": "Set",
+            "data": [
+                "WAT 9p",
+                "WAT 9"
+            ]
+        }
+    },
+    "strecken": {
+        "Waterloo-Linford St Jn": [
+            "WAT",
+            "VXH",
+            "Nine Elms Jn",
+            "Main Fast"
+        ],
+        "Waterloo-Main Fast": [
+            "WAT",
+            "VXH",
+            "Main Fast"
+        ],
+        "Waterloo-Main Slow": [
+            "WAT",
+            "VXH",
+            "Main Fast"
+        ],
+        "Waterloo-Windsor": [
+            "WAT",
+            "VXH",
+            "Nine Elms Jn",
+            "Main Fast"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "grossbritannien"
+}

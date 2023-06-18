@@ -1,0 +1,260 @@
+{
+    "_aid": 1008,
+    "_build": 5851,
+    "_name": "Clapham Junction",
+    "_region": "Gro\u00dfbritannien London",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Balham Fast": {
+            "__class__": "Set",
+            "data": [
+                "Balham Fast"
+            ]
+        },
+        "Balham Slow": {
+            "__class__": "Set",
+            "data": [
+                "Balham Slow"
+            ]
+        },
+        "Barnes Fast": {
+            "__class__": "Set",
+            "data": [
+                "Barnes Fast"
+            ]
+        },
+        "Barnes Slow": {
+            "__class__": "Set",
+            "data": [
+                "Barnes Slow"
+            ]
+        },
+        "Battersea Reversible": {
+            "__class__": "Set",
+            "data": [
+                "Battersea Reversible"
+            ]
+        },
+        "Main Fast": {
+            "__class__": "Set",
+            "data": [
+                "Main Fast"
+            ]
+        },
+        "Main Slow": {
+            "__class__": "Set",
+            "data": [
+                "Main Slow"
+            ]
+        },
+        "Victoria Fast": {
+            "__class__": "Set",
+            "data": [
+                "Victoria Fast",
+                "Victoria Fast "
+            ]
+        },
+        "Victoria Slow": {
+            "__class__": "Set",
+            "data": [
+                "Victoria Slow",
+                "Victoria Slow "
+            ]
+        },
+        "Wandsworth Road": {
+            "__class__": "Set",
+            "data": [
+                "Wandsworth Road"
+            ]
+        },
+        "West Brompton": {
+            "__class__": "Set",
+            "data": [
+                "West Brompton"
+            ]
+        },
+        "Wimbledon Fast": {
+            "__class__": "Set",
+            "data": [
+                "Wimbledon Fast"
+            ]
+        },
+        "Wimbledon Slow": {
+            "__class__": "Set",
+            "data": [
+                "Wimbledon Slow"
+            ]
+        },
+        "Windsor": {
+            "__class__": "Set",
+            "data": [
+                "Windsor Down",
+                "Windsor Rev.",
+                "Windsor Up"
+            ]
+        },
+        "Yards": {
+            "__class__": "Set",
+            "data": [
+                "Yards 1",
+                "Yards 2",
+                "Yards 4",
+                "Yards 3",
+                "Yards 5"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "CLJ": {
+            "__class__": "Set",
+            "data": [
+                "CLJ 10",
+                "CLJ 5",
+                "CLJ 14",
+                "CLJ 11",
+                "CLJ 2",
+                "CLJ 15",
+                "CLJ 6",
+                "CLJ 9",
+                "CLJ 3",
+                "CLJ 13",
+                "CLJ 7",
+                "CLJ Y",
+                "CLJ 16",
+                "CLJ 4",
+                "CLJ 12",
+                "CLJ 1",
+                "CLJ 17",
+                "CLJ 8",
+                "CLJ Pl 2 Berth"
+            ]
+        },
+        "CLJ Signal": {
+            "__class__": "Set",
+            "data": [
+                "CLJ Signal 1049",
+                "CLJ Signal 1046",
+                "CLJ Signal 1048",
+                "CLJ Signal 1047"
+            ]
+        },
+        "Imperial Wharf": {
+            "__class__": "Set",
+            "data": [
+                "Imperial Wharf"
+            ]
+        },
+        "Latchmere Junction": {
+            "__class__": "Set",
+            "data": [
+                "Latchmere Junction"
+            ]
+        },
+        "Longhedge Junction": {
+            "__class__": "Set",
+            "data": [
+                "Longhedge Junction"
+            ]
+        },
+        "Pouparts Jn.": {
+            "__class__": "Set",
+            "data": [
+                "Pouparts Jn."
+            ]
+        },
+        "QRB": {
+            "__class__": "Set",
+            "data": [
+                "QRB 3",
+                "QRB 5",
+                "QRB 6",
+                "QRB 2",
+                "QRB 7",
+                "QRB 1",
+                "QRB 4"
+            ]
+        },
+        "West London Junction": {
+            "__class__": "Set",
+            "data": [
+                "West London Junction"
+            ]
+        },
+        "Windsor Lane": {
+            "__class__": "Set",
+            "data": [
+                "Windsor Slow Lane",
+                "Windsor Fast Lane"
+            ]
+        }
+    },
+    "hauptstrecke": "Barnes Fast-Windsor",
+    "sektoren": {
+        "CLJ 2": {
+            "__class__": "Set",
+            "data": [
+                "CLJ 2",
+                "CLJ Pl 2 Berth"
+            ]
+        }
+    },
+    "strecken": {
+        "Balham Fast-Victoria Fast": [
+            "Balham Fast",
+            "CLJ",
+            "Victoria Fast"
+        ],
+        "Balham Slow-Victoria Slow": [
+            "Balham Slow",
+            "CLJ",
+            "Victoria Slow"
+        ],
+        "Barnes Fast-Windsor": [
+            "Barnes Fast",
+            "CLJ",
+            "QRB",
+            "Windsor"
+        ],
+        "Barnes Slow-Windsor": [
+            "Barnes Slow",
+            "CLJ",
+            "QRB",
+            "Windsor"
+        ],
+        "West Brompton-Balham Slow": [
+            "West Brompton",
+            "Imperial Wharf",
+            "CLJ",
+            "Balham Slow"
+        ],
+        "West Brompton-Battersea Reversible": [
+            "West Brompton",
+            "Imperial Wharf",
+            "Latchmere Junction",
+            "Longhedge Junction",
+            "Battersea Reversible"
+        ],
+        "West Brompton-Wandsworth Road": [
+            "West Brompton",
+            "Imperial Wharf",
+            "Latchmere Junction",
+            "Longhedge Junction",
+            "Wandsworth Road"
+        ],
+        "Wimbledon Fast-Main Fast": [
+            "Wimbledon Fast",
+            "CLJ",
+            "QRB",
+            "Main Fast"
+        ],
+        "Wimbledon Slow-Main Slow": [
+            "Wimbledon Slow",
+            "CLJ",
+            "QRB",
+            "Main Slow"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "grossbritannien"
+}
