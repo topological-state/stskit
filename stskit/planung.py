@@ -1154,7 +1154,7 @@ class ZugZielPlanung(FahrplanZeile):
 class PlanungParams:
     mindestaufenthalt_lokwechsel: int = 5
     mindestaufenthalt_lokumlauf: int = 2
-    mindestaufenthalt_richtungswechsel: int = 2
+    mindestaufenthalt_richtungswechsel: int = 3
     mindestaufenthalt_ersatz: int = 1
     mindestaufenthalt_kupplung: int = 1
     mindestaufenthalt_fluegelung: int = 1
