@@ -1,0 +1,164 @@
+{
+    "_aid": 794,
+    "_build": 5851,
+    "_name": "Graben-Neudorf",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Bruchsal": {
+            "__class__": "Set",
+            "data": [
+                "Bruchsal"
+            ]
+        },
+        "Germersheim": {
+            "__class__": "Set",
+            "data": [
+                "Germersheim"
+            ]
+        },
+        "Karlsruhe": {
+            "__class__": "Set",
+            "data": [
+                "Karlsruhe Gbf",
+                "Karlsruhe Hbf"
+            ]
+        },
+        "Wagh\u00e4usel": {
+            "__class__": "Set",
+            "data": [
+                "Wagh\u00e4usel",
+                "Wagh\u00e4usel NBS"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "E/A Wagh\u00e4usel": {
+            "__class__": "Set",
+            "data": [
+                "Einfahrt Wagh\u00e4usel"
+            ]
+        },
+        "RBAN": {
+            "__class__": "Set",
+            "data": [
+                "RBAN 1",
+                "RBAN 3",
+                "RBAN 2"
+            ]
+        },
+        "RFTL": {
+            "__class__": "Set",
+            "data": [
+                "RFTL"
+            ]
+        },
+        "RGN": {
+            "__class__": "Set",
+            "data": [
+                "RGN 2",
+                "RGN 5L",
+                "RGN 6",
+                "RGN 4",
+                "RGN 3",
+                "RGN 1",
+                "RGN 5",
+                "RGN 10",
+                "RGN 9",
+                "Wende1",
+                "Wende2"
+            ]
+        },
+        "RGNN": {
+            "__class__": "Set",
+            "data": [
+                "RGNN"
+            ]
+        },
+        "RHTT": {
+            "__class__": "Set",
+            "data": [
+                "RHTT"
+            ]
+        },
+        "RKHA": {
+            "__class__": "Set",
+            "data": [
+                "RKHA 2",
+                "RKHA 1"
+            ]
+        },
+        "RPB": {
+            "__class__": "Set",
+            "data": [
+                "RPB 2",
+                "RPB 1"
+            ]
+        },
+        "RRHH": {
+            "__class__": "Set",
+            "data": [
+                "RRHH"
+            ]
+        },
+        "RWI": {
+            "__class__": "Set",
+            "data": [
+                "RWI"
+            ]
+        }
+    },
+    "hauptstrecke": "Karlsruhe-Wagh\u00e4usel",
+    "sektoren": {
+        "RGN 5": {
+            "__class__": "Set",
+            "data": [
+                "RGN 5L",
+                "RGN 5"
+            ]
+        }
+    },
+    "strecken": {
+        "Bruchsal-Germersheim": [
+            "Bruchsal",
+            "RGN",
+            "RGNN",
+            "RHTT",
+            "RPB",
+            "RRHH",
+            "Germersheim"
+        ],
+        "Bruchsal-Wagh\u00e4usel": [
+            "Bruchsal",
+            "RGN",
+            "RWI",
+            "E/A Wagh\u00e4usel",
+            "Wagh\u00e4usel"
+        ],
+        "Karlsruhe-Wagh\u00e4usel": [
+            "Karlsruhe",
+            "RKHA",
+            "RBAN",
+            "RFTL",
+            "RGN",
+            "RWI",
+            "E/A Wagh\u00e4usel",
+            "Wagh\u00e4usel"
+        ],
+        "Karlsruhe-Germersheim": [
+            "Karlsruhe",
+            "RKHA",
+            "RBAN",
+            "RFTL",
+            "RGN",
+            "RGNN",
+            "RHTT",
+            "RPB",
+            "RRHH",
+            "Germersheim"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

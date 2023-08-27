@@ -1,0 +1,308 @@
+{
+    "_aid": 129,
+    "_build": 5851,
+    "_name": "Basel Bad Bf - Weil am Rhein",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "147 - 149": {
+            "__class__": "Set",
+            "data": [
+                "147 - 149"
+            ]
+        },
+        "242 - 259": {
+            "__class__": "Set",
+            "data": [
+                "242 - 259"
+            ]
+        },
+        "49 - 64": {
+            "__class__": "Set",
+            "data": [
+                "49 - 64"
+            ]
+        },
+        "65 - 73 A": {
+            "__class__": "Set",
+            "data": [
+                "65 - 73 A"
+            ]
+        },
+        "65 - 73 B": {
+            "__class__": "Set",
+            "data": [
+                "65 - 73 B"
+            ]
+        },
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW 77 - 89",
+                "BW 82 - 89"
+            ]
+        },
+        "Basel": {
+            "__class__": "Set",
+            "data": [
+                "Basel 163",
+                "Basel 263"
+            ]
+        },
+        "Basel Bad Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Basel Bad Gbf 1"
+            ]
+        },
+        "Grenzach": {
+            "__class__": "Set",
+            "data": [
+                "Grenzach"
+            ]
+        },
+        "Haltingen": {
+            "__class__": "Set",
+            "data": [
+                "Haltingen"
+            ]
+        },
+        "L\u00f6-Stetten": {
+            "__class__": "Set",
+            "data": [
+                "L\u00f6-Stetten"
+            ]
+        },
+        "L\u00f6rrach (Weil Ost)": {
+            "__class__": "Set",
+            "data": [
+                "L\u00f6rrach (Weil Ost)"
+            ]
+        },
+        "Weil am Rhein Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Weil am Rhein Gbf 1",
+                "Weil am Rhein Gbf 3",
+                "Weil am Rhein Gbf 2 (Schleife)"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "RB": {
+            "__class__": "Set",
+            "data": [
+                "RB 1",
+                "RB 9a",
+                "RB 6a",
+                "RB 10a",
+                "RB 4a",
+                "RB 8a",
+                "RB 2a",
+                "RB 3a",
+                "RB 11a",
+                "RB 5a",
+                "RB 7a",
+                "RB 3b",
+                "RB 11b",
+                "RB 2b",
+                "RB 6b",
+                "RB 5b",
+                "RB 9b",
+                "RB 4b",
+                "RB 8b",
+                "RB 10b",
+                "RB 7b",
+                "RB 13",
+                "RB 12",
+                "RB 144",
+                "RB 124",
+                "RB 129",
+                "RB 123",
+                "RB 138",
+                "RB 153",
+                "RB 73",
+                "RB 92"
+            ]
+        },
+        "RRID": {
+            "__class__": "Set",
+            "data": [
+                "RRID"
+            ]
+        },
+        "RRIE": {
+            "__class__": "Set",
+            "data": [
+                "RRIE 1",
+                "RRIE 2"
+            ]
+        },
+        "RW": {
+            "__class__": "Set",
+            "data": [
+                "RW 1a",
+                "RW 9",
+                "RW 250",
+                "RW 7",
+                "RW 25",
+                "RW 8",
+                "RW 18",
+                "RW 1",
+                "RW 17",
+                "RW 6",
+                "RW 2a",
+                "RW 5a",
+                "RW 3",
+                "RW 5",
+                "RW 4",
+                "RW 2",
+                "RW 27",
+                "RW 81",
+                "RW 86",
+                "G\u00fctergl."
+            ]
+        },
+        "RWEI": {
+            "__class__": "Set",
+            "data": [
+                "RWEI"
+            ]
+        },
+        "RWGA": {
+            "__class__": "Set",
+            "data": [
+                "RWGA"
+            ]
+        },
+        "RWPF": {
+            "__class__": "Set",
+            "data": [
+                "RWPF"
+            ]
+        }
+    },
+    "hauptstrecke": "Basel-Haltingen",
+    "sektoren": {
+        "RB 10": {
+            "__class__": "Set",
+            "data": [
+                "RB 10a",
+                "RB 10b"
+            ]
+        },
+        "RB 11": {
+            "__class__": "Set",
+            "data": [
+                "RB 11a",
+                "RB 11b"
+            ]
+        },
+        "RB 2": {
+            "__class__": "Set",
+            "data": [
+                "RB 2b",
+                "RB 2a"
+            ]
+        },
+        "RB 3": {
+            "__class__": "Set",
+            "data": [
+                "RB 3b",
+                "RB 3a"
+            ]
+        },
+        "RB 4": {
+            "__class__": "Set",
+            "data": [
+                "RB 4a",
+                "RB 4b"
+            ]
+        },
+        "RB 5": {
+            "__class__": "Set",
+            "data": [
+                "RB 5a",
+                "RB 5b"
+            ]
+        },
+        "RB 6": {
+            "__class__": "Set",
+            "data": [
+                "RB 6a",
+                "RB 6b"
+            ]
+        },
+        "RB 7": {
+            "__class__": "Set",
+            "data": [
+                "RB 7b",
+                "RB 7a"
+            ]
+        },
+        "RB 8": {
+            "__class__": "Set",
+            "data": [
+                "RB 8b",
+                "RB 8a"
+            ]
+        },
+        "RB 9": {
+            "__class__": "Set",
+            "data": [
+                "RB 9b",
+                "RB 9a"
+            ]
+        },
+        "RW 1": {
+            "__class__": "Set",
+            "data": [
+                "RW 1a",
+                "RW 1"
+            ]
+        },
+        "RW 2": {
+            "__class__": "Set",
+            "data": [
+                "RW 2a",
+                "RW 2"
+            ]
+        },
+        "RW 5": {
+            "__class__": "Set",
+            "data": [
+                "RW 5a",
+                "RW 5"
+            ]
+        }
+    },
+    "strecken": {
+        "Basel-Haltingen": [
+            "Basel",
+            "RB",
+            "RW",
+            "Haltingen"
+        ],
+        "Basel-Weil am Rhein Gbf": [
+            "Basel",
+            "RB",
+            "RW",
+            "Weil am Rhein Gbf"
+        ],
+        "Grenzach-Haltingen": [
+            "Grenzach",
+            "RB",
+            "RW",
+            "Haltingen"
+        ],
+        "Grenzach-Weil am Rhein Gbf": [
+            "Grenzach",
+            "RB",
+            "RW",
+            "Weil am Rhein Gbf"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

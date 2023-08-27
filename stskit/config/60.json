@@ -1,0 +1,263 @@
+{
+    "_aid": 60,
+    "_build": 5851,
+    "_name": "Ulm",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abst. Ostbhf": {
+            "__class__": "Set",
+            "data": [
+                "Abst. Ostbhf"
+            ]
+        },
+        "DB Regio Werk": {
+            "__class__": "Set",
+            "data": [
+                "DB Regio Werk"
+            ]
+        },
+        "Duss Terminal": {
+            "__class__": "Set",
+            "data": [
+                "Duss Terminal"
+            ]
+        },
+        "E-Lok BW": {
+            "__class__": "Set",
+            "data": [
+                "E-Lok BW"
+            ]
+        },
+        "Geislingen": {
+            "__class__": "Set",
+            "data": [
+                "Geislingen"
+            ]
+        },
+        "Gl. 130": {
+            "__class__": "Set",
+            "data": [
+                "Gl. 130",
+                "Gl. 131"
+            ]
+        },
+        "Gl. 429": {
+            "__class__": "Set",
+            "data": [
+                "Gl. 429"
+            ]
+        },
+        "Gl. 4b": {
+            "__class__": "Set",
+            "data": [
+                "Gl. 4b"
+            ]
+        },
+        "Gl. 600": {
+            "__class__": "Set",
+            "data": [
+                "Gl. 601",
+                "Gl. 602",
+                "Gl. 603",
+                "Gl. 608",
+                "Gl. 609",
+                "Gl. 611"
+            ]
+        },
+        "Herrlingen": {
+            "__class__": "Set",
+            "data": [
+                "Herrlingen"
+            ]
+        },
+        "Laupheim": {
+            "__class__": "Set",
+            "data": [
+                "Laupheim"
+            ]
+        },
+        "Neu-Ulm": {
+            "__class__": "Set",
+            "data": [
+                "Neu-Ulm Fern",
+                "Neu-Ulm Regio"
+            ]
+        },
+        "Rbf": {
+            "__class__": "Set",
+            "data": [
+                "Rbf"
+            ]
+        },
+        "Schillerrampe": {
+            "__class__": "Set",
+            "data": [
+                "Schillerrampe"
+            ]
+        },
+        "Thalfingen": {
+            "__class__": "Set",
+            "data": [
+                "Thalfingen"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Hbf": {
+            "__class__": "Set",
+            "data": [
+                "10",
+                "15",
+                "3N",
+                "1",
+                "70",
+                "123",
+                "6S",
+                "16",
+                "129",
+                "128",
+                "2",
+                "4",
+                "3",
+                "12",
+                "4S",
+                "21",
+                "9",
+                "410",
+                "611",
+                "610",
+                "406",
+                "34",
+                "18",
+                "11",
+                "14",
+                "1a",
+                "7",
+                "4N",
+                "6N",
+                "13",
+                "121",
+                "5a",
+                "3S",
+                "8",
+                "409",
+                "6",
+                "13.1",
+                "33",
+                "401",
+                "603",
+                "131",
+                "402",
+                "601",
+                "608",
+                "602",
+                "429",
+                "32",
+                "130",
+                "25",
+                "28",
+                "27",
+                "5b",
+                "29",
+                "W1",
+                "Wende"
+            ]
+        },
+        "TBS": {
+            "__class__": "Set",
+            "data": [
+                "TBS 1",
+                "TBS 3",
+                "TBS 4",
+                "TBS 2"
+            ]
+        },
+        "TWS": {
+            "__class__": "Set",
+            "data": [
+                "TWS",
+                "TWS 1",
+                "TWS 2",
+                "TWS 3",
+                "TWS 4"
+            ]
+        },
+        "Ulm Nord": {
+            "__class__": "Set",
+            "data": [
+                "Ulm Nord"
+            ]
+        }
+    },
+    "hauptstrecke": "Neu-Ulm-Geislingen",
+    "sektoren": {
+        "1": {
+            "__class__": "Set",
+            "data": [
+                "1a",
+                "1"
+            ]
+        },
+        "3": {
+            "__class__": "Set",
+            "data": [
+                "3N",
+                "3S",
+                "3"
+            ]
+        },
+        "4": {
+            "__class__": "Set",
+            "data": [
+                "4",
+                "4S",
+                "4N"
+            ]
+        },
+        "6": {
+            "__class__": "Set",
+            "data": [
+                "6S",
+                "6",
+                "6N"
+            ]
+        }
+    },
+    "strecken": {
+        "Neu-Ulm-Geislingen": [
+            "Neu-Ulm",
+            "Hbf",
+            "Ulm Nord",
+            "TBS",
+            "TWS",
+            "Geislingen"
+        ],
+        "Neu-Ulm-Herrlingen": [
+            "Neu-Ulm",
+            "Hbf",
+            "Herrlingen"
+        ],
+        "Laupheim-Geislingen": [
+            "Laupheim",
+            "Hbf",
+            "Ulm Nord",
+            "TBS",
+            "TWS",
+            "Geislingen"
+        ],
+        "Laupheim-Herrlingen": [
+            "Laupheim",
+            "Hbf",
+            "Herrlingen"
+        ],
+        "Laupheim-Thalfingen": [
+            "Laupheim",
+            "Hbf",
+            "Thalfingen"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

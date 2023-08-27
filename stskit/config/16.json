@@ -1,0 +1,181 @@
+{
+    "_aid": 16,
+    "_build": 5851,
+    "_name": "Plochingen",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abst": {
+            "__class__": "Set",
+            "data": [
+                "Abst"
+            ]
+        },
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW"
+            ]
+        },
+        "Esslingen F": {
+            "__class__": "Set",
+            "data": [
+                "Esslingen F"
+            ]
+        },
+        "Esslingen N": {
+            "__class__": "Set",
+            "data": [
+                "Esslingen N"
+            ]
+        },
+        "G\u00f6ppingen": {
+            "__class__": "Set",
+            "data": [
+                "G\u00f6ppingen"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Oberlenningen": {
+            "__class__": "Set",
+            "data": [
+                "Oberlenningen"
+            ]
+        },
+        "Reutlingen": {
+            "__class__": "Set",
+            "data": [
+                "Reutlingen"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "TACH": {
+            "__class__": "Set",
+            "data": [
+                "TACH"
+            ]
+        },
+        "TKT": {
+            "__class__": "Set",
+            "data": [
+                "TKT Wende",
+                "TKT2",
+                "TKT3",
+                "TKT1"
+            ]
+        },
+        "TKTO": {
+            "__class__": "Set",
+            "data": [
+                "TKTO1",
+                "TKTO2"
+            ]
+        },
+        "TOBB": {
+            "__class__": "Set",
+            "data": [
+                "TOBB"
+            ]
+        },
+        "TP": {
+            "__class__": "Set",
+            "data": [
+                "TP8",
+                "TP1",
+                "TP53",
+                "TP5",
+                "TP7",
+                "TP3",
+                "TP59",
+                "TP4",
+                "TP903",
+                "TP2",
+                "TP10",
+                "TP902",
+                "TP9",
+                "TP901",
+                "TP900",
+                "TP6",
+                "TP A",
+                "TP W2",
+                "TP W"
+            ]
+        },
+        "TRF": {
+            "__class__": "Set",
+            "data": [
+                "TRF1",
+                "TRF2"
+            ]
+        },
+        "TWD": {
+            "__class__": "Set",
+            "data": [
+                "TWD1",
+                "TWD2",
+                "TWD3",
+                "TWD12",
+                "TWD11"
+            ]
+        },
+        "TWER": {
+            "__class__": "Set",
+            "data": [
+                "TWER"
+            ]
+        }
+    },
+    "hauptstrecke": "Esslingen F-G\u00f6ppingen",
+    "sektoren": {},
+    "strecken": {
+        "Esslingen F-G\u00f6ppingen": [
+            "Esslingen F",
+            "TP",
+            "TRF",
+            "G\u00f6ppingen"
+        ],
+        "Esslingen F-Reutlingen": [
+            "Esslingen F",
+            "TP",
+            "TWER",
+            "TWD",
+            "TOBB",
+            "Reutlingen"
+        ],
+        "Esslingen N-G\u00f6ppingen": [
+            "Esslingen N",
+            "TACH",
+            "TP",
+            "TRF",
+            "G\u00f6ppingen"
+        ],
+        "Esslingen N-Oberlenningen": [
+            "Esslingen N",
+            "TACH",
+            "TP",
+            "TWER",
+            "TWD",
+            "TKTO",
+            "TKT",
+            "Oberlenningen"
+        ],
+        "Esslingen N-Reutlingen": [
+            "Esslingen N",
+            "TACH",
+            "TP",
+            "TWER",
+            "TWD",
+            "TOBB",
+            "Reutlingen"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

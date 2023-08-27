@@ -1,0 +1,109 @@
+{
+    "_aid": 749,
+    "_build": 5851,
+    "_name": "Vaihingen (Enz)",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Bietigheim": {
+            "__class__": "Set",
+            "data": [
+                "Bietigheim"
+            ]
+        },
+        "Bruchsal": {
+            "__class__": "Set",
+            "data": [
+                "Bruchsal"
+            ]
+        },
+        "M\u00fchlacker": {
+            "__class__": "Set",
+            "data": [
+                "M\u00fchlacker"
+            ]
+        },
+        "M\u00fcnster": {
+            "__class__": "Set",
+            "data": [
+                "M\u00fcnster"
+            ]
+        },
+        "Vaihingen Nord": {
+            "__class__": "Set",
+            "data": [
+                "Vaihingen Nord"
+            ]
+        },
+        "Zuffenhausen": {
+            "__class__": "Set",
+            "data": [
+                "Zuffenhausen"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Eisenhut": {
+            "__class__": "Set",
+            "data": [
+                "Eisenhut"
+            ]
+        },
+        "Langes Feld": {
+            "__class__": "Set",
+            "data": [
+                "Langes Feld"
+            ]
+        },
+        "RKT": {
+            "__class__": "Set",
+            "data": [
+                "RKT7",
+                "RKT4",
+                "RKT3",
+                "RKT5",
+                "RKT6"
+            ]
+        },
+        "TSER": {
+            "__class__": "Set",
+            "data": [
+                "TSER"
+            ]
+        },
+        "TV": {
+            "__class__": "Set",
+            "data": [
+                "TV5",
+                "TV8",
+                "TV1",
+                "TV6",
+                "TV2",
+                "TV4",
+                "TV7",
+                "TV3"
+            ]
+        }
+    },
+    "hauptstrecke": "Bruchsal-Zuffenhausen",
+    "sektoren": {},
+    "strecken": {
+        "Bruchsal-Zuffenhausen": [
+            "Bruchsal",
+            "Eisenhut",
+            "RKT",
+            "TV",
+            "Langes Feld",
+            "Zuffenhausen"
+        ],
+        "M\u00fchlacker-Bietigheim": [
+            "M\u00fchlacker",
+            "TV",
+            "TSER",
+            "Bietigheim"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

@@ -1,0 +1,176 @@
+{
+    "_aid": 6,
+    "_build": 5851,
+    "_name": "Heidelberg",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abst": {
+            "__class__": "Set",
+            "data": [
+                "Abst"
+            ]
+        },
+        "Anschl.": {
+            "__class__": "Set",
+            "data": [
+                "Anschl."
+            ]
+        },
+        "Bruchsal": {
+            "__class__": "Set",
+            "data": [
+                "Bruchsal"
+            ]
+        },
+        "Heidelberger": {
+            "__class__": "Set",
+            "data": [
+                "Heidelberger"
+            ]
+        },
+        "Mannheim": {
+            "__class__": "Set",
+            "data": [
+                "Mannheim"
+            ]
+        },
+        "Neckargem\u00fcnd": {
+            "__class__": "Set",
+            "data": [
+                "Neckargem\u00fcnd"
+            ]
+        },
+        "Weinheim": {
+            "__class__": "Set",
+            "data": [
+                "Weinheim"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "RH": {
+            "__class__": "Set",
+            "data": [
+                "RH A3",
+                "RH A1",
+                "RH A2",
+                "RH1 kurz",
+                "RH8",
+                "RH5",
+                "RH6",
+                "RH3",
+                "RH1",
+                "RH2",
+                "RH7",
+                "RH9",
+                "RH10",
+                "RH4",
+                "RH24",
+                "RH28",
+                "RH55",
+                "RH66",
+                "RH56"
+            ]
+        },
+        "RHBF": {
+            "__class__": "Set",
+            "data": [
+                "RHBF"
+            ]
+        },
+        "RHBP": {
+            "__class__": "Set",
+            "data": [
+                "RHBP"
+            ]
+        },
+        "RHKA": {
+            "__class__": "Set",
+            "data": [
+                "RHKA2",
+                "RHKA1"
+            ]
+        },
+        "RHKM": {
+            "__class__": "Set",
+            "data": [
+                "RHKM1",
+                "RHKM3",
+                "RHKM2"
+            ]
+        },
+        "RSIG": {
+            "__class__": "Set",
+            "data": [
+                "RSIG"
+            ]
+        },
+        "RSR": {
+            "__class__": "Set",
+            "data": [
+                "RSR"
+            ]
+        },
+        "RWS": {
+            "__class__": "Set",
+            "data": [
+                "RWS2",
+                "RWS3",
+                "RWS1",
+                "RWS31"
+            ]
+        }
+    },
+    "hauptstrecke": "Mannheim-Bruchsal",
+    "sektoren": {
+        "RH1": {
+            "__class__": "Set",
+            "data": [
+                "RH1 kurz",
+                "RH1"
+            ]
+        }
+    },
+    "strecken": {
+        "Mannheim-Bruchsal": [
+            "Mannheim",
+            "RHBP",
+            "RH",
+            "RHKM",
+            "RSIG",
+            "RWS",
+            "Bruchsal"
+        ],
+        "Mannheim-Neckargem\u00fcnd": [
+            "Mannheim",
+            "RHBP",
+            "RH",
+            "RHBF",
+            "RHKA",
+            "RSR",
+            "Neckargem\u00fcnd"
+        ],
+        "Weinheim-Bruchsal": [
+            "Weinheim",
+            "RHBP",
+            "RH",
+            "RHKM",
+            "RSIG",
+            "RWS",
+            "Bruchsal"
+        ],
+        "Weinheim-Neckargem\u00fcnd": [
+            "Weinheim",
+            "RHBP",
+            "RH",
+            "RHBF",
+            "RHKA",
+            "RSR",
+            "Neckargem\u00fcnd"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

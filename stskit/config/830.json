@@ -1,0 +1,250 @@
+{
+    "_aid": 830,
+    "_build": 5851,
+    "_name": "Schwetzingen",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Hafen": {
+            "__class__": "Set",
+            "data": [
+                "Hafen"
+            ]
+        },
+        "Heidelberg N": {
+            "__class__": "Set",
+            "data": [
+                "Heidelberg N"
+            ]
+        },
+        "Heidelberg S": {
+            "__class__": "Set",
+            "data": [
+                "Heidelberg S"
+            ]
+        },
+        "Hockenheim": {
+            "__class__": "Set",
+            "data": [
+                "Hockenheim"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Kraftwerk": {
+            "__class__": "Set",
+            "data": [
+                "Kraftwerk"
+            ]
+        },
+        "MA Rbf Gr. 1": {
+            "__class__": "Set",
+            "data": [
+                "MA Rbf Gr. D1",
+                "MA Rbf Gr. M1"
+            ]
+        },
+        "MA Rbf Gr. 2": {
+            "__class__": "Set",
+            "data": [
+                "MA Rbf Gr. D2",
+                "MA Rbf Gr. M2"
+            ]
+        },
+        "MA Rbf Gr. K": {
+            "__class__": "Set",
+            "data": [
+                "MA Rbf Gr. K"
+            ]
+        },
+        "Mannheim N": {
+            "__class__": "Set",
+            "data": [
+                "Mannheim N"
+            ]
+        },
+        "Mannheim S": {
+            "__class__": "Set",
+            "data": [
+                "Mannheim S"
+            ]
+        },
+        "Talhaus": {
+            "__class__": "Set",
+            "data": [
+                "Talhaus"
+            ]
+        },
+        "Weinheim": {
+            "__class__": "Set",
+            "data": [
+                "Weinheim"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "A G\u00fcterbahnhof": {
+            "__class__": "Set",
+            "data": [
+                "Ausfahrt G\u00fcterbahnhof"
+            ]
+        },
+        "E Heidelberg": {
+            "__class__": "Set",
+            "data": [
+                "Einfahrt Heidelberg"
+            ]
+        },
+        "E Hockenheim": {
+            "__class__": "Set",
+            "data": [
+                "Einfahrt Hockenheim"
+            ]
+        },
+        "E Weinheim": {
+            "__class__": "Set",
+            "data": [
+                "Einfahrt Weinheim"
+            ]
+        },
+        "RMA": {
+            "__class__": "Set",
+            "data": [
+                "RMA Wende",
+                "RMA1",
+                "RMA4",
+                "RMA2",
+                "RMA3",
+                "RMA10",
+                "RMA41",
+                "RMA31",
+                "RMA51"
+            ]
+        },
+        "RMF": {
+            "__class__": "Set",
+            "data": [
+                "RMF6",
+                "RMF4",
+                "RMF2",
+                "RMF5",
+                "RMF8",
+                "RMF3",
+                "RMF7",
+                "RMF9",
+                "RMF1"
+            ]
+        },
+        "RMFS": {
+            "__class__": "Set",
+            "data": [
+                "RMFS"
+            ]
+        },
+        "RMN": {
+            "__class__": "Set",
+            "data": [
+                "RMN2",
+                "RMN1",
+                "RMN3"
+            ]
+        },
+        "RMRP": {
+            "__class__": "Set",
+            "data": [
+                "RMRP"
+            ]
+        },
+        "RMSE": {
+            "__class__": "Set",
+            "data": [
+                "RMSE"
+            ]
+        },
+        "ROFH": {
+            "__class__": "Set",
+            "data": [
+                "ROFH3",
+                "ROFH1",
+                "ROFH2"
+            ]
+        },
+        "RSZ": {
+            "__class__": "Set",
+            "data": [
+                "RSZ Wende",
+                "RSZ5",
+                "RSZ11",
+                "RSZ2",
+                "RSZ10",
+                "RSZ9",
+                "RSZ1",
+                "RSZ8",
+                "RSZ108"
+            ]
+        }
+    },
+    "hauptstrecke": "Mannheim N-Heidelberg S",
+    "sektoren": {},
+    "strecken": {
+        "Mannheim N-Heidelberg S": [
+            "Mannheim N",
+            "RMRP",
+            "RMSE",
+            "A G\u00fcterbahnhof",
+            "RMFS",
+            "E Heidelberg",
+            "Heidelberg S"
+        ],
+        "Mannheim N-Weinheim": [
+            "Mannheim N",
+            "RMRP",
+            "RMSE",
+            "A G\u00fcterbahnhof",
+            "RMFS",
+            "RMF",
+            "E Weinheim",
+            "Weinheim"
+        ],
+        "Mannheim S-Hockenheim": [
+            "Mannheim S",
+            "RMN",
+            "RMA",
+            "RSZ",
+            "ROFH",
+            "E Hockenheim",
+            "Hockenheim"
+        ],
+        "Weinheim-Heidelberg N": [
+            "Weinheim",
+            "E Weinheim",
+            "RMF",
+            "E Heidelberg",
+            "Heidelberg N"
+        ],
+        "Weinheim-Hockenheim": [
+            "Weinheim",
+            "E Weinheim",
+            "RMF",
+            "RSZ",
+            "ROFH",
+            "E Hockenheim",
+            "Hockenheim"
+        ],
+        "Weinheim-Mannheim N": [
+            "Weinheim",
+            "E Weinheim",
+            "RMF",
+            "RMSE",
+            "RMRP",
+            "Mannheim N"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

@@ -1,0 +1,193 @@
+{
+    "_aid": 30,
+    "_build": 5851,
+    "_name": "Stuttgart-Zuffenhausen",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Gbf"
+            ]
+        },
+        "Hbf F": {
+            "__class__": "Set",
+            "data": [
+                "Hbf F"
+            ]
+        },
+        "Hbf N": {
+            "__class__": "Set",
+            "data": [
+                "Hbf N"
+            ]
+        },
+        "Kornwestheim F": {
+            "__class__": "Set",
+            "data": [
+                "Kornwestheim F"
+            ]
+        },
+        "Kornwestheim N": {
+            "__class__": "Set",
+            "data": [
+                "Kornwestheim N"
+            ]
+        },
+        "Kornwestheim Rbf": {
+            "__class__": "Set",
+            "data": [
+                "Kornwestheim Rbf"
+            ]
+        },
+        "Leonberg": {
+            "__class__": "Set",
+            "data": [
+                "Leonberg"
+            ]
+        },
+        "NBS": {
+            "__class__": "Set",
+            "data": [
+                "NBS"
+            ]
+        },
+        "S-Vaihingen": {
+            "__class__": "Set",
+            "data": [
+                "S-Vaihingen"
+            ]
+        },
+        "Tankstelle": {
+            "__class__": "Set",
+            "data": [
+                "Tankstelle"
+            ]
+        },
+        "Weissach": {
+            "__class__": "Set",
+            "data": [
+                "Weissach"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "E/A Rbf": {
+            "__class__": "Set",
+            "data": [
+                "Af Rbf",
+                "Ef Rbf"
+            ]
+        },
+        "TKO": {
+            "__class__": "Set",
+            "data": [
+                "TKO W",
+                "TKO4",
+                "TKO2",
+                "TKO3",
+                "TKO7",
+                "TKO1",
+                "TKO52",
+                "TKO53",
+                "TKO51"
+            ]
+        },
+        "TNW": {
+            "__class__": "Set",
+            "data": [
+                "TNW"
+            ]
+        },
+        "TSFE": {
+            "__class__": "Set",
+            "data": [
+                "TSFE1",
+                "TSFE2",
+                "TSFE3",
+                "TSFE1a",
+                "TSFE4"
+            ]
+        },
+        "TSWF": {
+            "__class__": "Set",
+            "data": [
+                "TSWF"
+            ]
+        },
+        "TSZ": {
+            "__class__": "Set",
+            "data": [
+                "TSZ5",
+                "TSZ12",
+                "TSZ13",
+                "TSZ4",
+                "TSZ3",
+                "TSZ11",
+                "TSZ2",
+                "TSZ6",
+                "TSZ14",
+                "TSZ126",
+                "TSZ127",
+                "TSZ125",
+                "Wende"
+            ]
+        }
+    },
+    "hauptstrecke": "Hbf N-Leonberg",
+    "sektoren": {},
+    "strecken": {
+        "Hbf F-Kornwestheim F": [
+            "Hbf F",
+            "TSFE",
+            "TSZ",
+            "Kornwestheim F"
+        ],
+        "Hbf F-NBS": [
+            "Hbf F",
+            "TSFE",
+            "TSZ",
+            "NBS"
+        ],
+        "Hbf N-Kornwestheim N": [
+            "Hbf N",
+            "TSFE",
+            "TSZ",
+            "Kornwestheim N"
+        ],
+        "Hbf N-Leonberg": [
+            "Hbf N",
+            "TSFE",
+            "TSZ",
+            "TNW",
+            "TKO",
+            "TSWF",
+            "Leonberg"
+        ],
+        "S-Vaihingen-Kornwestheim N": [
+            "S-Vaihingen",
+            "TSFE",
+            "TSZ",
+            "Kornwestheim N"
+        ],
+        "S-Vaihingen-Kornwestheim Rbf": [
+            "S-Vaihingen",
+            "TSFE",
+            "TSZ",
+            "Kornwestheim Rbf"
+        ],
+        "S-Vaihingen-Leonberg": [
+            "S-Vaihingen",
+            "TSFE",
+            "TSZ",
+            "TNW",
+            "TKO",
+            "TSWF",
+            "Leonberg"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

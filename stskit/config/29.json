@@ -1,0 +1,217 @@
+{
+    "_aid": 29,
+    "_build": 5851,
+    "_name": "Bruchsal",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Bretten": {
+            "__class__": "Set",
+            "data": [
+                "Bretten",
+                "Bretten G\u00fcterbahn"
+            ]
+        },
+        "Gleis 60": {
+            "__class__": "Set",
+            "data": [
+                "Gleis 60"
+            ]
+        },
+        "Gleise 51-53": {
+            "__class__": "Set",
+            "data": [
+                "Gleise 51-53"
+            ]
+        },
+        "Graben-Neudorf": {
+            "__class__": "Set",
+            "data": [
+                "Graben-Neudorf"
+            ]
+        },
+        "Heidelberg": {
+            "__class__": "Set",
+            "data": [
+                "Heidelberg"
+            ]
+        },
+        "Hockenheim": {
+            "__class__": "Set",
+            "data": [
+                "Hockenheim"
+            ]
+        },
+        "Karlsruhe-Durlach": {
+            "__class__": "Set",
+            "data": [
+                "Karlsruhe-Durlach"
+            ]
+        },
+        "Laderampe": {
+            "__class__": "Set",
+            "data": [
+                "Laderampe"
+            ]
+        },
+        "Ubstadt": {
+            "__class__": "Set",
+            "data": [
+                "Ubstadt"
+            ]
+        },
+        "Vaihingen(E)": {
+            "__class__": "Set",
+            "data": [
+                "Vaihingen(E)"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "E/A Hockenheim": {
+            "__class__": "Set",
+            "data": [
+                "Af Hockenheim",
+                "Ef Hockenheim"
+            ]
+        },
+        "E/A Vaihingen": {
+            "__class__": "Set",
+            "data": [
+                "Af Vaihingen",
+                "Ef Vaihingen"
+            ]
+        },
+        "RBR": {
+            "__class__": "Set",
+            "data": [
+                "RBR6",
+                "RBR2",
+                "RBR7",
+                "RBR11",
+                "RBR5",
+                "RBR10",
+                "RBR3",
+                "RBR1",
+                "RBR4",
+                "RBR12",
+                "RBR31",
+                "RBR30",
+                "RBR40",
+                "RBR61"
+            ]
+        },
+        "RBRC": {
+            "__class__": "Set",
+            "data": [
+                "RBRC"
+            ]
+        },
+        "RBRD": {
+            "__class__": "Set",
+            "data": [
+                "RBRD"
+            ]
+        },
+        "RBS": {
+            "__class__": "Set",
+            "data": [
+                "RBS2",
+                "RBS1",
+                "RBS3"
+            ]
+        },
+        "RBSK": {
+            "__class__": "Set",
+            "data": [
+                "RBSK"
+            ]
+        },
+        "RKF": {
+            "__class__": "Set",
+            "data": [
+                "RKF"
+            ]
+        },
+        "RRM": {
+            "__class__": "Set",
+            "data": [
+                "RRM3",
+                "RRM1",
+                "RRM2"
+            ]
+        },
+        "RUW": {
+            "__class__": "Set",
+            "data": [
+                "RUW"
+            ]
+        }
+    },
+    "hauptstrecke": "Heidelberg-Karlsruhe-Durlach",
+    "sektoren": {},
+    "strecken": {
+        "Graben-Neudorf-Bretten": [
+            "Graben-Neudorf",
+            "RKF",
+            "RBR",
+            "Bretten"
+        ],
+        "Graben-Neudorf-Karlsruhe-Durlach": [
+            "Graben-Neudorf",
+            "RKF",
+            "RBR",
+            "Karlsruhe-Durlach"
+        ],
+        "Heidelberg-Bretten": [
+            "Heidelberg",
+            "RRM",
+            "RBSK",
+            "RBS",
+            "RUW",
+            "RBR",
+            "Bretten"
+        ],
+        "Heidelberg-Karlsruhe-Durlach": [
+            "Heidelberg",
+            "RRM",
+            "RBSK",
+            "RBS",
+            "RUW",
+            "RBR",
+            "Karlsruhe-Durlach"
+        ],
+        "Heidelberg-Vaihingen(E)": [
+            "Heidelberg",
+            "RRM",
+            "RBSK",
+            "RBS",
+            "RUW",
+            "E/A Vaihingen",
+            "Vaihingen(E)"
+        ],
+        "Hockenheim-Vaihingen(E)": [
+            "Hockenheim",
+            "E/A Hockenheim",
+            "E/A Vaihingen",
+            "Vaihingen(E)"
+        ],
+        "Ubstadt-Bretten": [
+            "Ubstadt",
+            "RBRC",
+            "RBRD",
+            "RBR",
+            "Bretten"
+        ],
+        "Ubstadt-Karlsruhe-Durlach": [
+            "Ubstadt",
+            "RBRC",
+            "RBRD",
+            "RBR",
+            "Karlsruhe-Durlach"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

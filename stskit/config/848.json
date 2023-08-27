@@ -1,0 +1,235 @@
+{
+    "_aid": 848,
+    "_build": 5851,
+    "_name": "Karlsruhe-Durlach",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Bruchsal": {
+            "__class__": "Set",
+            "data": [
+                "Bruchsal"
+            ]
+        },
+        "Gleisbauhof": {
+            "__class__": "Set",
+            "data": [
+                "Gleisbauhof"
+            ]
+        },
+        "Gr. B 18-20 (Stw 2)": {
+            "__class__": "Set",
+            "data": [
+                "Gr. B 18-20 (Stw 2)"
+            ]
+        },
+        "Gruppe B (Stw 2)": {
+            "__class__": "Set",
+            "data": [
+                "Gruppe B (Stw 2)"
+            ]
+        },
+        "Gruppe C/Ubf (Stw 2)": {
+            "__class__": "Set",
+            "data": [
+                "Gruppe C/Ubf (Stw 2)"
+            ]
+        },
+        "Karlsruhe Hagsfeld": {
+            "__class__": "Set",
+            "data": [
+                "Karlsruhe Hagsfeld"
+            ]
+        },
+        "Karlsruhe Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Karlsruhe Hbf n\u00f6rdl.",
+                "Karlsruhe Hbf s\u00fcdl."
+            ]
+        },
+        "Karlsruhe West": {
+            "__class__": "Set",
+            "data": [
+                "Karlsruhe West"
+            ]
+        },
+        "Ladestr.": {
+            "__class__": "Set",
+            "data": [
+                "Ladestr."
+            ]
+        },
+        "Lokabstellung O": {
+            "__class__": "Set",
+            "data": [
+                "Lokabstellung O"
+            ]
+        },
+        "Lokabstellung W": {
+            "__class__": "Set",
+            "data": [
+                "Lokabstellung W"
+            ]
+        },
+        "Pforzheim": {
+            "__class__": "Set",
+            "data": [
+                "Pforzheim"
+            ]
+        },
+        "Rastatt": {
+            "__class__": "Set",
+            "data": [
+                "Rastatt Durmersheim",
+                "Rastatt Ettlingen"
+            ]
+        },
+        "Verbindungsgl. Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Verbindungsgl. Hbf"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Gruppe E": {
+            "__class__": "Set",
+            "data": [
+                "107",
+                "107.1",
+                "106",
+                "93",
+                "91",
+                "92",
+                "108"
+            ]
+        },
+        "Gruppe A": {
+            "__class__": "Set",
+            "data": [
+                "76",
+                "77",
+                "81",
+                "81a",
+                "83"
+            ]
+        },
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Gbf 11",
+                "Gbf 9",
+                "Gbf 1",
+                "Gbf 7",
+                "Gbf 3",
+                "Gbf 6",
+                "Gbf 4",
+                "Gbf 8",
+                "Gbf 12",
+                "Gbf 5",
+                "Gbf 2",
+                "Gbf 10",
+                "Gbf 14",
+                "Gbf 17",
+                "100",
+                "101",
+                "102"
+            ]
+        },
+        "Gruppe B": {
+            "__class__": "Set",
+            "data": [
+                "Gruppe B",
+                "84",
+                "206",
+                "207"
+            ]
+        },
+        "RBRZ": {
+            "__class__": "Set",
+            "data": [
+                "RBRZ"
+            ]
+        },
+        "RKDU": {
+            "__class__": "Set",
+            "data": [
+                "RKDU 5",
+                "RKDU 6",
+                "RKDU 1",
+                "RKDU 9",
+                "RKDU 2"
+            ]
+        },
+        "RURB": {
+            "__class__": "Set",
+            "data": [
+                "RURB"
+            ]
+        },
+        "RWGT": {
+            "__class__": "Set",
+            "data": [
+                "RWGT 1",
+                "RWGT 13",
+                "RWGT 12",
+                "RWGT 11",
+                "RWGT 2"
+            ]
+        }
+    },
+    "hauptstrecke": "Bruchsal-Karlsruhe Hbf",
+    "sektoren": {
+        "81": {
+            "__class__": "Set",
+            "data": [
+                "81a",
+                "81"
+            ]
+        }
+    },
+    "strecken": {
+        "Bruchsal-Karlsruhe Hbf": [
+            "Bruchsal",
+            "RBRZ",
+            "RURB",
+            "RWGT",
+            "RKDU",
+            "Karlsruhe Hbf"
+        ],
+        "Bruchsal-Rastatt": [
+            "RBRZ",
+            "RURB",
+            "RWGT",
+            "RKDU",
+            "Gruppe B",
+            "Gbf",
+            "Gruppe E",
+            "Rastatt"
+        ],
+        "Karlsruhe Hagsfeld-Rastatt": [
+            "Karlsruhe Hagsfeld",
+            "Gruppe B",
+            "Gbf",
+            "Gruppe E",
+            "Rastatt"
+        ],
+        "Pforzheim-Karlsruhe Hbf": [
+            "Pforzheim",
+            "RKDU",
+            "Karlsruhe Hbf"
+        ],
+        "Pforzheim-Rastatt": [
+            "Pforzheim",
+            "RKDU",
+            "Gruppe B",
+            "Gbf",
+            "Gruppe E",
+            "Rastatt"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

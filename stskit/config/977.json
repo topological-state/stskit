@@ -1,0 +1,275 @@
+{
+    "_aid": 977,
+    "_build": 5851,
+    "_name": "Baden-Baden",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Gbf"
+            ]
+        },
+        "Gl. 73-75": {
+            "__class__": "Set",
+            "data": [
+                "Gl. 73-75"
+            ]
+        },
+        "Hafen/Stahlwerke": {
+            "__class__": "Set",
+            "data": [
+                "Hafen/Stahlwerke"
+            ]
+        },
+        "Ind.Stammgl.": {
+            "__class__": "Set",
+            "data": [
+                "Ind.Stammgl."
+            ]
+        },
+        "Oberkirch": {
+            "__class__": "Set",
+            "data": [
+                "Oberkirch"
+            ]
+        },
+        "Offenburg": {
+            "__class__": "Set",
+            "data": [
+                "Offenburg (Fern)",
+                "Offenburg (R)"
+            ]
+        },
+        "Ottenh\u00f6fen": {
+            "__class__": "Set",
+            "data": [
+                "Ottenh\u00f6fen"
+            ]
+        },
+        "Rastatt S\u00fcd": {
+            "__class__": "Set",
+            "data": [
+                "Rastatt S\u00fcd (Fernbahn)",
+                "Rastatt S\u00fcd (Rheintal)"
+            ]
+        },
+        "Stra\u00dfburg": {
+            "__class__": "Set",
+            "data": [
+                "Stra\u00dfburg"
+            ]
+        },
+        "\u00d6llager": {
+            "__class__": "Set",
+            "data": [
+                "\u00d6llager"
+            ]
+        },
+        "\u00dcbergabebf.": {
+            "__class__": "Set",
+            "data": [
+                "\u00dcbergabebf."
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "RAH": {
+            "__class__": "Set",
+            "data": [
+                "RAH 504",
+                "RAH 510",
+                "RAH 506",
+                "RAH 502",
+                "RAH 509",
+                "RAH 503",
+                "RAH 505",
+                "RAH 519",
+                "RAH 501",
+                "RAH 73"
+            ]
+        },
+        "RAP": {
+            "__class__": "Set",
+            "data": [
+                "RAP 503",
+                "RAP 501",
+                "RAP 508",
+                "RAP 504",
+                "RAP 502",
+                "RAP 505",
+                "RAP 010",
+                "RAP 030",
+                "RAPP 509"
+            ]
+        },
+        "RBB": {
+            "__class__": "Set",
+            "data": [
+                "RBB 503",
+                "RBB 504",
+                "RBB 501",
+                "RBB 505",
+                "RBB 506",
+                "RBB 507",
+                "RBB 502",
+                "RBB 510",
+                "RBB 510.1",
+                "RBB Wende"
+            ]
+        },
+        "RBBL": {
+            "__class__": "Set",
+            "data": [
+                "RBBL"
+            ]
+        },
+        "RBNB": {
+            "__class__": "Set",
+            "data": [
+                "RBNB 307",
+                "RBNB 305"
+            ]
+        },
+        "RBUE": {
+            "__class__": "Set",
+            "data": [
+                "RBUE"
+            ]
+        },
+        "RHEB": {
+            "__class__": "Set",
+            "data": [
+                "RHEB"
+            ]
+        },
+        "RKL": {
+            "__class__": "Set",
+            "data": [
+                "RKL 5",
+                "RKL 4",
+                "RKL 1",
+                "RKL 3",
+                "RKL 211",
+                "RKL 31",
+                "RKL 221",
+                "RKL 241",
+                "RKL 41",
+                "RKL 231",
+                "RKL 212",
+                "RKL 222a",
+                "RKL 222b",
+                "RKL 32",
+                "RKL 42",
+                "Rheinbr\u00fccke"
+            ]
+        },
+        "RKOR": {
+            "__class__": "Set",
+            "data": [
+                "RKOR",
+                "RKOR 311",
+                "RKOR 308",
+                "RKOR 307",
+                "RKOR 312",
+                "RKOR 309"
+            ]
+        },
+        "RLT": {
+            "__class__": "Set",
+            "data": [
+                "RLT"
+            ]
+        },
+        "ROW": {
+            "__class__": "Set",
+            "data": [
+                "ROW 402",
+                "ROW 403",
+                "ROW 401",
+                "ROW 405",
+                "ROW 404"
+            ]
+        },
+        "RR": {
+            "__class__": "Set",
+            "data": [
+                "RR"
+            ]
+        },
+        "RSZM": {
+            "__class__": "Set",
+            "data": [
+                "RSZM"
+            ]
+        },
+        "RSZN": {
+            "__class__": "Set",
+            "data": [
+                "RSZN"
+            ]
+        }
+    },
+    "hauptstrecke": "Rastatt S\u00fcd-Offenburg",
+    "sektoren": {
+        "RBB 510": {
+            "__class__": "Set",
+            "data": [
+                "RBB 510.1",
+                "RBB 510"
+            ]
+        },
+        "RKL 222": {
+            "__class__": "Set",
+            "data": [
+                "RKL 222b",
+                "RKL 222a"
+            ]
+        }
+    },
+    "strecken": {
+        "Rastatt S\u00fcd-Offenburg": [
+            "Rastatt S\u00fcd",
+            "RHEB",
+            "RBB",
+            "RSZN",
+            "RSZM",
+            "RBBL",
+            "RBUE",
+            "ROW",
+            "RAH",
+            "RR",
+            "RAP",
+            "Offenburg"
+        ],
+        "Rastatt S\u00fcd-Stra\u00dfburg": [
+            "Rastatt S\u00fcd (Rheintal)",
+            "RHEB",
+            "RBB",
+            "RSZN",
+            "RSZM",
+            "RBBL",
+            "RBUE",
+            "ROW",
+            "RAH",
+            "RR",
+            "RAP",
+            "RLT",
+            "RKOR",
+            "RKL",
+            "Stra\u00dfburg"
+        ],
+        "Stra\u00dfburg-Offenburg": [
+            "Stra\u00dfburg",
+            "RKL",
+            "RKOR",
+            "RLT",
+            "RAP",
+            "Offenburg"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

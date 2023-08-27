@@ -1,0 +1,136 @@
+{
+    "_aid": 795,
+    "_build": 5851,
+    "_name": "Hockenheim",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Bruchsal": {
+            "__class__": "Set",
+            "data": [
+                "Bruchsal"
+            ]
+        },
+        "Graben-Neudorf": {
+            "__class__": "Set",
+            "data": [
+                "Graben-Neudorf"
+            ]
+        },
+        "Graben-Neudorf NBS": {
+            "__class__": "Set",
+            "data": [
+                "Graben-Neudorf NBS"
+            ]
+        },
+        "Mannheim": {
+            "__class__": "Set",
+            "data": [
+                "Mannheim"
+            ]
+        },
+        "Schwetzingen": {
+            "__class__": "Set",
+            "data": [
+                "Schwetzingen"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Abzw. Saalbach": {
+            "__class__": "Set",
+            "data": [
+                "Abzw. Saalbach"
+            ]
+        },
+        "E/A Bruchsal": {
+            "__class__": "Set",
+            "data": [
+                "Einfahrt Bruchsal"
+            ]
+        },
+        "E/A Mannheim": {
+            "__class__": "Set",
+            "data": [
+                "Einfahrt Mannheim"
+            ]
+        },
+        "RHK": {
+            "__class__": "Set",
+            "data": [
+                "RHK5",
+                "RHK1",
+                "RHK4",
+                "RHK6",
+                "RHK2",
+                "RHK3",
+                "RHK7"
+            ]
+        },
+        "RNL": {
+            "__class__": "Set",
+            "data": [
+                "RNL"
+            ]
+        },
+        "RWG": {
+            "__class__": "Set",
+            "data": [
+                "RWG2",
+                "RWG3",
+                "RWG4",
+                "RWG1"
+            ]
+        }
+    },
+    "hauptstrecke": "Mannheim-Bruchsal",
+    "sektoren": {},
+    "strecken": {
+        "Mannheim-Bruchsal": [
+            "Mannheim",
+            "E/A Mannheim",
+            "RHK",
+            "Abzw. Saalbach",
+            "E/A Bruchsal",
+            "Bruchsal"
+        ],
+        "Mannheim-Graben-Neudorf": [
+            "Mannheim",
+            "E/A Mannheim",
+            "RHK",
+            "RNL",
+            "RWG",
+            "Graben-Neudorf"
+        ],
+        "Mannheim-Graben-Neudorf NBS": [
+            "Mannheim",
+            "E/A Mannheim",
+            "RHK",
+            "Abzw. Saalbach",
+            "Graben-Neudorf NBS"
+        ],
+        "Schwetzingen-Bruchsal": [
+            "Schwetzingen",
+            "RHK",
+            "Abzw. Saalbach",
+            "E/A Bruchsal",
+            "Bruchsal"
+        ],
+        "Schwetzingen-Graben-Neudorf": [
+            "Schwetzingen",
+            "RHK",
+            "RNL",
+            "RWG",
+            "Graben-Neudorf"
+        ],
+        "Schwetzingen-Graben-Neudorf NBS": [
+            "Schwetzingen",
+            "RHK",
+            "Abzw. Saalbach",
+            "Graben-Neudorf NBS"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

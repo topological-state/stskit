@@ -1,0 +1,243 @@
+{
+    "_aid": 922,
+    "_build": 5851,
+    "_name": "Ludwigsburg",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abst": {
+            "__class__": "Set",
+            "data": [
+                "Abst"
+            ]
+        },
+        "Autoverladung": {
+            "__class__": "Set",
+            "data": [
+                "Autoverladung"
+            ]
+        },
+        "Backnang": {
+            "__class__": "Set",
+            "data": [
+                "Backnang"
+            ]
+        },
+        "Bietigheim": {
+            "__class__": "Set",
+            "data": [
+                "Bietigheim F",
+                "Bietigheim N"
+            ]
+        },
+        "Df-Gleis": {
+            "__class__": "Set",
+            "data": [
+                "Df-Gleis"
+            ]
+        },
+        "NBS": {
+            "__class__": "Set",
+            "data": [
+                "NBS"
+            ]
+        },
+        "Rbf N": {
+            "__class__": "Set",
+            "data": [
+                "Rbf N"
+            ]
+        },
+        "Rbf S": {
+            "__class__": "Set",
+            "data": [
+                "Rbf S"
+            ]
+        },
+        "Untert\u00fcrkheim": {
+            "__class__": "Set",
+            "data": [
+                "Untert\u00fcrkheim"
+            ]
+        },
+        "Zuffenhausen": {
+            "__class__": "Set",
+            "data": [
+                "Zuffenhausen F",
+                "Zuffenhausen N"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "E/A Bietigheim": {
+            "__class__": "Set",
+            "data": [
+                "Ef Bietigheim"
+            ]
+        },
+        "E/A Zuffenhausen": {
+            "__class__": "Set",
+            "data": [
+                "Ef Zuffenhausen"
+            ]
+        },
+        "TAX": {
+            "__class__": "Set",
+            "data": [
+                "TAX",
+                "TAX3",
+                "TAX1",
+                "TAX2"
+            ]
+        },
+        "TBEN": {
+            "__class__": "Set",
+            "data": [
+                "TBEN1",
+                "TBEN2"
+            ]
+        },
+        "TERD": {
+            "__class__": "Set",
+            "data": [
+                "TERD"
+            ]
+        },
+        "TFG": {
+            "__class__": "Set",
+            "data": [
+                "TFG2",
+                "TFG3"
+            ]
+        },
+        "TFV": {
+            "__class__": "Set",
+            "data": [
+                "TFV"
+            ]
+        },
+        "TKH": {
+            "__class__": "Set",
+            "data": [
+                "TKH1",
+                "TKH5",
+                "TKH3",
+                "TKH7",
+                "TKH4",
+                "TKH6"
+            ]
+        },
+        "TLU": {
+            "__class__": "Set",
+            "data": [
+                "TLU1",
+                "TLU5",
+                "TLU4",
+                "TLU2",
+                "TLU3"
+            ]
+        },
+        "TMB": {
+            "__class__": "Set",
+            "data": [
+                "TMB3",
+                "TMB1",
+                "TMB2",
+                "TMB8",
+                "TMB7"
+            ]
+        },
+        "TSEB": {
+            "__class__": "Set",
+            "data": [
+                "TSEB"
+            ]
+        },
+        "TSM": {
+            "__class__": "Set",
+            "data": [
+                "TSM",
+                "TSM1",
+                "TSM2",
+                "TSM3"
+            ]
+        },
+        "TSZAH": {
+            "__class__": "Set",
+            "data": [
+                "TSZAH"
+            ]
+        },
+        "TTM": {
+            "__class__": "Set",
+            "data": [
+                "TTM",
+                "TTM4",
+                "TTM5",
+                "TTM3"
+            ]
+        }
+    },
+    "hauptstrecke": "Zuffenhausen-Bietigheim",
+    "sektoren": {},
+    "strecken": {
+        "Untert\u00fcrkheim-Backnang": [
+            "Untert\u00fcrkheim",
+            "TSEB",
+            "TSM",
+            "TSZAH",
+            "TKH",
+            "TLU",
+            "TFV",
+            "TFG",
+            "TBEN",
+            "TMB",
+            "TERD",
+            "Backnang"
+        ],
+        "Untert\u00fcrkheim-Bietigheim": [
+            "Untert\u00fcrkheim",
+            "TSEB",
+            "TSM",
+            "TSZAH",
+            "TKH",
+            "TLU",
+            "TAX",
+            "TTM",
+            "E/A Bietigheim",
+            "Bietigheim"
+        ],
+        "Untert\u00fcrkheim-NBS": [
+            "Untert\u00fcrkheim",
+            "TSEB",
+            "TSM",
+            "TSZAH",
+            "NBS"
+        ],
+        "Zuffenhausen-Bietigheim": [
+            "Zuffenhausen",
+            "E/A Zuffenhausen",
+            "TKH",
+            "TLU",
+            "TAX",
+            "TTM",
+            "E/A Bietigheim",
+            "Bietigheim"
+        ],
+        "Zuffenhausen-Backnang": [
+            "Zuffenhausen",
+            "E/A Zuffenhausen",
+            "TKH",
+            "TLU",
+            "TFV",
+            "TFG",
+            "TBEN",
+            "TMB",
+            "TERD",
+            "Backnang"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

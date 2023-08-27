@@ -1,0 +1,258 @@
+{
+    "_aid": 19,
+    "_build": 5851,
+    "_name": "Stuttgart Hbf",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW3",
+                "BW1",
+                "BW2",
+                "BW5",
+                "BW4"
+            ]
+        },
+        "Bad Cannstatt F": {
+            "__class__": "Set",
+            "data": [
+                "Bad Cannstatt F"
+            ]
+        },
+        "Bad Cannstatt N": {
+            "__class__": "Set",
+            "data": [
+                "Bad Cannstatt N"
+            ]
+        },
+        "Lok": {
+            "__class__": "Set",
+            "data": [
+                "Lok"
+            ]
+        },
+        "S-Bahn C": {
+            "__class__": "Set",
+            "data": [
+                "S-Bahn C"
+            ]
+        },
+        "S-Bahn Z": {
+            "__class__": "Set",
+            "data": [
+                "S-Bahn Z"
+            ]
+        },
+        "Vaihingen": {
+            "__class__": "Set",
+            "data": [
+                "Vaihingen"
+            ]
+        },
+        "Zuffenhausen F": {
+            "__class__": "Set",
+            "data": [
+                "Zuffenhausen F"
+            ]
+        },
+        "Zuffenhausen N": {
+            "__class__": "Set",
+            "data": [
+                "Zuffenhausen N"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "E/A C": {
+            "__class__": "Set",
+            "data": [
+                "Ausfahrt C",
+                "Einfahrt C"
+            ]
+        },
+        "E/A Z": {
+            "__class__": "Set",
+            "data": [
+                "Ausfahrt Z",
+                "Einfahrt Z"
+            ]
+        },
+        "TS": {
+            "__class__": "Set",
+            "data": [
+                "TS13",
+                "TS1",
+                "TS14",
+                "TS16",
+                "TS3",
+                "TS2",
+                "TS8",
+                "TS10",
+                "TS15",
+                "TS1a",
+                "TS7",
+                "TS11",
+                "TS5",
+                "TS6",
+                "TS4",
+                "TS9",
+                "TS12",
+                "TS13K",
+                "TS6K",
+                "TS12K",
+                "TS2K",
+                "TS5K",
+                "TS14K",
+                "TS15K",
+                "TS8K",
+                "TS3K",
+                "TS11K",
+                "TS4K",
+                "TS10K",
+                "TS7K",
+                "TS9K",
+                "TS16K",
+                "TS1K"
+            ]
+        },
+        "TSN": {
+            "__class__": "Set",
+            "data": [
+                "TSN"
+            ]
+        }
+    },
+    "hauptstrecke": "S-Bahn Zuffenhausen",
+    "sektoren": {
+        "TS1": {
+            "__class__": "Set",
+            "data": [
+                "TS1",
+                "TS1K"
+            ]
+        },
+        "TS10": {
+            "__class__": "Set",
+            "data": [
+                "TS10K",
+                "TS10"
+            ]
+        },
+        "TS11": {
+            "__class__": "Set",
+            "data": [
+                "TS11K",
+                "TS11"
+            ]
+        },
+        "TS12": {
+            "__class__": "Set",
+            "data": [
+                "TS12K",
+                "TS12"
+            ]
+        },
+        "TS13": {
+            "__class__": "Set",
+            "data": [
+                "TS13",
+                "TS13K"
+            ]
+        },
+        "TS14": {
+            "__class__": "Set",
+            "data": [
+                "TS14K",
+                "TS14"
+            ]
+        },
+        "TS15": {
+            "__class__": "Set",
+            "data": [
+                "TS15",
+                "TS15K"
+            ]
+        },
+        "TS16": {
+            "__class__": "Set",
+            "data": [
+                "TS16K",
+                "TS16"
+            ]
+        },
+        "TS2": {
+            "__class__": "Set",
+            "data": [
+                "TS2",
+                "TS2K"
+            ]
+        },
+        "TS3": {
+            "__class__": "Set",
+            "data": [
+                "TS3",
+                "TS3K"
+            ]
+        },
+        "TS4": {
+            "__class__": "Set",
+            "data": [
+                "TS4K",
+                "TS4"
+            ]
+        },
+        "TS5": {
+            "__class__": "Set",
+            "data": [
+                "TS5K",
+                "TS5"
+            ]
+        },
+        "TS6": {
+            "__class__": "Set",
+            "data": [
+                "TS6K",
+                "TS6"
+            ]
+        },
+        "TS7": {
+            "__class__": "Set",
+            "data": [
+                "TS7",
+                "TS7K"
+            ]
+        },
+        "TS8": {
+            "__class__": "Set",
+            "data": [
+                "TS8",
+                "TS8K"
+            ]
+        },
+        "TS9": {
+            "__class__": "Set",
+            "data": [
+                "TS9",
+                "TS9K"
+            ]
+        }
+    },
+    "strecken": {
+        "S-Bahn Bad Cannstatt": [
+            "S-Bahn C",
+            "E/A C",
+            "Bad Cannstatt N"
+        ],
+        "S-Bahn Zuffenhausen": [
+            "S-Bahn Z",
+            "E/A Z",
+            "TSN",
+            "Zuffenhausen N"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

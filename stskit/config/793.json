@@ -1,0 +1,92 @@
+{
+    "_aid": 793,
+    "_build": 5851,
+    "_name": "Esslingen",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung"
+            ]
+        },
+        "Bad Cannstatt": {
+            "__class__": "Set",
+            "data": [
+                "Bad Cannstatt F",
+                "Bad Cannstatt N"
+            ]
+        },
+        "Plochingen": {
+            "__class__": "Set",
+            "data": [
+                "Plochingen F",
+                "Plochingen N"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "E/A Bad Cannstatt": {
+            "__class__": "Set",
+            "data": [
+                "Einfahrt Bad Cannstatt"
+            ]
+        },
+        "E/A Plochingen": {
+            "__class__": "Set",
+            "data": [
+                "Einfahrt Plochingen"
+            ]
+        },
+        "TE": {
+            "__class__": "Set",
+            "data": [
+                "TE4",
+                "TE6",
+                "TE8",
+                "TE3",
+                "TE7",
+                "TE2",
+                "TE5",
+                "TE20",
+                "TE21"
+            ]
+        },
+        "TEME": {
+            "__class__": "Set",
+            "data": [
+                "TEME"
+            ]
+        },
+        "TEZL": {
+            "__class__": "Set",
+            "data": [
+                "TEZL"
+            ]
+        },
+        "TOES": {
+            "__class__": "Set",
+            "data": [
+                "TOES"
+            ]
+        }
+    },
+    "hauptstrecke": "Bad Cannstatt-Plochingen",
+    "sektoren": {},
+    "strecken": {
+        "Bad Cannstatt-Plochingen ": [
+            "Bad Cannstatt",
+            "E/A Bad Cannstatt",
+            "TEME",
+            "TE",
+            "TOES",
+            "TEZL",
+            "E/A Plochingen",
+            "Plochingen"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

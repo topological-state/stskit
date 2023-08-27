@@ -1,0 +1,214 @@
+{
+    "_aid": 302,
+    "_build": 5851,
+    "_name": "Leipzig Hbf",
+    "_region": "Sachsen",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Abst. Ost 1/2/3": {
+            "__class__": "Set",
+            "data": [
+                "Abst. Ost 2",
+                "Abst. Ost 3",
+                "Abst. Ost 1"
+            ]
+        },
+        "Abstellung Mitte 1/2": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung Mitte 1",
+                "Abstellung Mitte 2"
+            ]
+        },
+        "BW Nah 1/2": {
+            "__class__": "Set",
+            "data": [
+                "BW Nah 2",
+                "BW Nah 1"
+            ]
+        },
+        "BW Nord": {
+            "__class__": "Set",
+            "data": [
+                "BW Nord"
+            ]
+        },
+        "BW Ost": {
+            "__class__": "Set",
+            "data": [
+                "BW Ost"
+            ]
+        },
+        "BW West 1/2": {
+            "__class__": "Set",
+            "data": [
+                "BW West 2",
+                "BW West 1"
+            ]
+        },
+        "Baust. Citytunnel A/B": {
+            "__class__": "Set",
+            "data": [
+                "Baust. Citytunnel A",
+                "Baust. Citytunnel B"
+            ]
+        },
+        "Leipzig Nord 1/2": {
+            "__class__": "Set",
+            "data": [
+                "Leipzig Nord 2",
+                "Leipzig Nord 1"
+            ]
+        },
+        "Leipzig Ost 1/2/3": {
+            "__class__": "Set",
+            "data": [
+                "Leipzig Ost 2",
+                "Leipzig Ost 1",
+                "Leipzig Ost 3"
+            ]
+        },
+        "Leipzig Ost Nord": {
+            "__class__": "Set",
+            "data": [
+                "Leipzig Ost Nord"
+            ]
+        },
+        "Leipzig S\u00fcdwest": {
+            "__class__": "Set",
+            "data": [
+                "Leipzig S\u00fcdwest"
+            ]
+        },
+        "Leipzig West": {
+            "__class__": "Set",
+            "data": [
+                "Leipzig West"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "LL": {
+            "__class__": "Set",
+            "data": [
+                "LL 13",
+                "LL 7",
+                "LL 17",
+                "LL 10a",
+                "LL 9",
+                "LL 10",
+                "LL 11",
+                "LL 19",
+                "LL 22",
+                "LL 8a",
+                "LL 12",
+                "LL 21a",
+                "LL 16",
+                "LL 23",
+                "LL 15",
+                "LL 18a",
+                "LL 20",
+                "LL 21",
+                "LL 8",
+                "LL 14",
+                "LL 24",
+                "LL 18"
+            ]
+        },
+        "LL 98": {
+            "__class__": "Set",
+            "data": [
+                "LL 98",
+                "LL 99"
+            ]
+        },
+        "LL A 10": {
+            "__class__": "Set",
+            "data": [
+                "LL A 15b",
+                "LL A 13",
+                "LL A 14b",
+                "LL A 15a",
+                "LL A 14a",
+                "LL A 20",
+                "LL A 10R"
+            ]
+        },
+        "LL A 30": {
+            "__class__": "Set",
+            "data": [
+                "LL A 30",
+                "LL A 33",
+                "LL A 31",
+                "LL A 32"
+            ]
+        },
+        "LL A 40": {
+            "__class__": "Set",
+            "data": [
+                "LL A 46",
+                "LL A 43",
+                "LL A 44",
+                "LL A 40",
+                "LL A 45"
+            ]
+        },
+        "LL A 50": {
+            "__class__": "Set",
+            "data": [
+                "LL A 51",
+                "LL A 50"
+            ]
+        },
+        "LLG": {
+            "__class__": "Set",
+            "data": [
+                "LLG"
+            ]
+        },
+        "LLOT": {
+            "__class__": "Set",
+            "data": [
+                "LLOT"
+            ]
+        },
+        "Leipzig Nord": {
+            "__class__": "Set",
+            "data": [
+                "Leipzig Nord"
+            ]
+        }
+    },
+    "hauptstrecke": "Leipzig--Leipzig Ost",
+    "sektoren": {
+        "LL A 14": {
+            "__class__": "Set",
+            "data": [
+                "LL A 14b",
+                "LL A 14a"
+            ]
+        },
+        "LL A 15": {
+            "__class__": "Set",
+            "data": [
+                "LL A 15b",
+                "LL A 15a"
+            ]
+        }
+    },
+    "strecken": {
+        "Leipzig--Leipzig Ost": [
+            "LL",
+            "LLOT",
+            "Leipzig Ost"
+        ],
+        "Leipzig-Leipzig S\u00fcdwest": [
+            "LL",
+            "LLG",
+            "Leipzig S\u00fcdwest"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

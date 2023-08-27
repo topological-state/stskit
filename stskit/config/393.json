@@ -1,0 +1,172 @@
+{
+    "_aid": 393,
+    "_build": 5851,
+    "_name": "Stuttgart-Bad Cannstatt",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Anschluss": {
+            "__class__": "Set",
+            "data": [
+                "Anschluss"
+            ]
+        },
+        "Esslingen": {
+            "__class__": "Set",
+            "data": [
+                "Esslingen F",
+                "Esslingen N"
+            ]
+        },
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Gbf O",
+                "Gbf W"
+            ]
+        },
+        "Hafen": {
+            "__class__": "Set",
+            "data": [
+                "Hafen"
+            ]
+        },
+        "Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Hbf F",
+                "Hbf N"
+            ]
+        },
+        "Kornwestheim": {
+            "__class__": "Set",
+            "data": [
+                "Kornwestheim"
+            ]
+        },
+        "Kraftwerk": {
+            "__class__": "Set",
+            "data": [
+                "Kraftwerk"
+            ]
+        },
+        "Waiblingen": {
+            "__class__": "Set",
+            "data": [
+                "Waiblingen F",
+                "Waiblingen N"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "E/A Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Ausfahrt Gbf"
+            ]
+        },
+        "E/A Kornwestheim": {
+            "__class__": "Set",
+            "data": [
+                "Ausfahrt Kornwestheim",
+                "Einfahrt Kornwestheim"
+            ]
+        },
+        "TSC": {
+            "__class__": "Set",
+            "data": [
+                "TSC8",
+                "TSC1",
+                "TSC3",
+                "TSC2",
+                "TSC5",
+                "TSC4",
+                "TSC6",
+                "TSC7"
+            ]
+        },
+        "TSNS": {
+            "__class__": "Set",
+            "data": [
+                "TSNS3",
+                "TSNS2",
+                "TSNS1"
+            ]
+        },
+        "TSNU": {
+            "__class__": "Set",
+            "data": [
+                "TSNU"
+            ]
+        },
+        "TSOM": {
+            "__class__": "Set",
+            "data": [
+                "TSOM"
+            ]
+        },
+        "TSSM": {
+            "__class__": "Set",
+            "data": [
+                "TSSM1",
+                "TSSM2",
+                "TSSM4",
+                "TSSM3"
+            ]
+        },
+        "TSU": {
+            "__class__": "Set",
+            "data": [
+                "TSU6",
+                "TSU1",
+                "TSU3",
+                "TSU2",
+                "TSU5",
+                "TSU4"
+            ]
+        },
+        "TSU Gbf": {
+            "__class__": "Set",
+            "data": [
+                "TSU201",
+                "TSU204",
+                "TSU202",
+                "TSU203",
+                "TSU527",
+                "TSU528",
+                "TSU524"
+            ]
+        }
+    },
+    "hauptstrecke": "Hbf-Esslingen",
+    "sektoren": {},
+    "strecken": {
+        "Hbf-Esslingen": [
+            "Hbf",
+            "TSC",
+            "TSNS",
+            "TSU",
+            "TSOM",
+            "Esslingen"
+        ],
+        "Hbf-Waiblingen": [
+            "Hbf",
+            "TSC",
+            "E/A Gbf",
+            "TSNU",
+            "TSSM",
+            "Waiblingen"
+        ],
+        "Kornwestheim-Esslingen": [
+            "Kornwestheim",
+            "E/A Kornwestheim",
+            "TSU Gbf",
+            "TSU",
+            "TSOM",
+            "Esslingen"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

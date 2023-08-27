@@ -1,0 +1,156 @@
+{
+    "_aid": 454,
+    "_build": 5851,
+    "_name": "Karlsruhe Hbf",
+    "_region": "Baden-W\u00fcrttemberg",
+    "_version": 2,
+    "anschlussgruppen": {
+        "464-468": {
+            "__class__": "Set",
+            "data": [
+                "464-468"
+            ]
+        },
+        "Albtalbhf": {
+            "__class__": "Set",
+            "data": [
+                "Albtalbhf"
+            ]
+        },
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW"
+            ]
+        },
+        "Durlach": {
+            "__class__": "Set",
+            "data": [
+                "Durlach n\u00f6rdlich",
+                "Durlach s\u00fcdlich"
+            ]
+        },
+        "Durmersheim": {
+            "__class__": "Set",
+            "data": [
+                "Durmersheim"
+            ]
+        },
+        "Ettlingen": {
+            "__class__": "Set",
+            "data": [
+                "Ettlingen"
+            ]
+        },
+        "Graben-Neudorf": {
+            "__class__": "Set",
+            "data": [
+                "Graben-Neudorf"
+            ]
+        },
+        "KA-Gbf": {
+            "__class__": "Set",
+            "data": [
+                "KA-Gbf"
+            ]
+        },
+        "Karlsruhe Gbf D": {
+            "__class__": "Set",
+            "data": [
+                "Karlsruhe Gbf D"
+            ]
+        },
+        "Karlsruhe Gbf E": {
+            "__class__": "Set",
+            "data": [
+                "Karlsruhe Gbf E"
+            ]
+        },
+        "W\u00f6rth": {
+            "__class__": "Set",
+            "data": [
+                "W\u00f6rth"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Hbf": {
+            "__class__": "Set",
+            "data": [
+                "450",
+                "062",
+                "068",
+                "453",
+                "075",
+                "063",
+                "454",
+                "455",
+                "8",
+                "4",
+                "470",
+                "472",
+                "2",
+                "1",
+                "12",
+                "10",
+                "14",
+                "3",
+                "11",
+                "5",
+                "6",
+                "13",
+                "7",
+                "9",
+                "471",
+                "101",
+                "102",
+                "195",
+                "430",
+                "488",
+                "489",
+                "Wende"
+            ]
+        },
+        "Albtal": {
+            "__class__": "Set",
+            "data": [
+                "Albtal"
+            ]
+        },
+        "G\u00fcterbahn": {
+            "__class__": "Set",
+            "data": [
+                "G\u00fcterbahn"
+            ]
+        }
+    },
+    "hauptstrecke": "Graben-Neudorf-Durmersheim",
+    "sektoren": {},
+    "strecken": {
+        "Durlach-Durmersheim": [
+            "Durlach",
+            "Hbf",
+            "Durmersheim"
+        ],
+        "Durlach-Ettlingen": [
+            "Durlach",
+            "Hbf",
+            "G\u00fcterbahn",
+            "Ettlingen"
+        ],
+        "Graben-Neudorf-Durmersheim": [
+            "Graben-Neudorf",
+            "Hbf",
+            "Durmersheim"
+        ],
+        "Graben-Neudorf-Ettlingen": [
+            "Graben-Neudorf",
+            "Hbf",
+            "G\u00fcterbahn",
+            "Ettlingen"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

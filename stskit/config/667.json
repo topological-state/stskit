@@ -1,7 +1,7 @@
 {
     "_aid": 667,
-    "_build": 5845,
-    "_name": "Biel",
+    "_build": 5851,
+    "_name": "Biel/Bienne",
     "_region": "Westschweiz",
     "_version": 2,
     "zugschema": "schweiz",
@@ -19,19 +19,19 @@
                 "BI 96"
             ]
         },
-        "BIRB A61": {
-            "__class__": "Set",
-            "data": [
-                "BIRB A61"
-            ]
-        },
         "BIRB": {
             "__class__": "Set",
             "data": [
+                "BIRB 495",
                 "BIRB 500",
                 "BIRB 396",
-                "BIRB 495",
                 "BIRB 600"
+            ]
+        },
+        "BIRB A": {
+            "__class__": "Set",
+            "data": [
+                "BIRB A61"
             ]
         },
         "Depot Ost": {
@@ -49,8 +49,8 @@
         "LD": {
             "__class__": "Set",
             "data": [
-                "LD 811",
-                "LD 711"
+                "LD 711",
+                "LD 811"
             ]
         },
         "Mahlenwald": {
@@ -79,15 +79,17 @@
             "__class__": "Set",
             "data": [
                 "BI1",
-                "BI6",
-                "BI10",
-                "BI9",
-                "BI5",
                 "BI2",
                 "BI3",
                 "BI4",
-                "BI8",
+                "BI5",
+                "BI6",
                 "BI7",
+                "BI8",
+                "BI9AB",
+                "BI9CD",
+                "BI10AB",
+                "BI10CD",
                 "BI97",
                 "BI81"
             ]
@@ -107,8 +109,8 @@
         "GS": {
             "__class__": "Set",
             "data": [
-                "GS3",
                 "GS1",
+                "GS3",
                 "GS2"
             ]
         },
@@ -159,8 +161,23 @@
             ]
         }
     },
-    "sektoren": {},
     "hauptstrecke": "LD-SEL",
+    "sektoren": {
+        "BI10": {
+            "__class__": "Set",
+            "data": [
+                "BI10AB",
+                "BI10CD"
+            ]
+        },
+        "BI9": {
+            "__class__": "Set",
+            "data": [
+                "BI9CD",
+                "BI9AB"
+            ]
+        }
+    },
     "strecken": {
         "BI-Grenchen Nord": [
             "BI",
