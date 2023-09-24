@@ -1,0 +1,328 @@
+{
+    "_aid": 89,
+    "_build": 5851,
+    "_name": "Jenbach",
+    "_region": "\u00d6sterreich West",
+    "_version": 2,
+    "anschlussgruppen": {
+        "205": {
+            "__class__": "Set",
+            "data": [
+                "205"
+            ]
+        },
+        "Binderholz": {
+            "__class__": "Set",
+            "data": [
+                "Binderholz"
+            ]
+        },
+        "Gubert": {
+            "__class__": "Set",
+            "data": [
+                "Gubert"
+            ]
+        },
+        "Hall in Tirol": {
+            "__class__": "Set",
+            "data": [
+                "Hall in Tirol"
+            ]
+        },
+        "Holzverladung": {
+            "__class__": "Set",
+            "data": [
+                "Holzverladung"
+            ]
+        },
+        "Rundholz": {
+            "__class__": "Set",
+            "data": [
+                "Rundholz"
+            ]
+        },
+        "Stra\u00df i. Z.": {
+            "__class__": "Set",
+            "data": [
+                "Stra\u00df i. Z."
+            ]
+        },
+        "Tyrolit": {
+            "__class__": "Set",
+            "data": [
+                "Tyrolit"
+            ]
+        },
+        "W\u00f6rgl": {
+            "__class__": "Set",
+            "data": [
+                "W\u00f6rgl"
+            ]
+        },
+        "Z Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Z Abstellung"
+            ]
+        },
+        "Z Lok": {
+            "__class__": "Set",
+            "data": [
+                "Z Lok"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Bri H1": {
+            "__class__": "Set",
+            "data": [
+                "Bri H1"
+            ]
+        },
+        "EA Bri": {
+            "__class__": "Set",
+            "data": [
+                "EA Bri"
+            ]
+        },
+        "Fw": {
+            "__class__": "Set",
+            "data": [
+                "Fw101",
+                "Fw102",
+                "Fw204",
+                "Fw401",
+                "Fw303",
+                "Fw201",
+                "Fw203G",
+                "Fw202",
+                "Fw204G",
+                "Fw402",
+                "Fw203",
+                "Fw202G",
+                "Fw201G"
+            ]
+        },
+        "Jb H1": {
+            "__class__": "Set",
+            "data": [
+                "Jb H1"
+            ]
+        },
+        "Jb": {
+            "__class__": "Set",
+            "data": [
+                "Jb102",
+                "Jb101",
+                "Jb103",
+                "Jb201",
+                "Jb301",
+                "Jb304",
+                "Jb321",
+                "Jb322",
+                "Jb305",
+                "Jb302",
+                "Jb303",
+                "Jb203",
+                "Jb204",
+                "Jb204G",
+                "Jb205",
+                "Jb202G",
+                "Jb201G",
+                "Jb203G",
+                "Jb314",
+                "Jb202",
+                "Jb307",
+                "Jb309"
+            ]
+        },
+        "Sw H1H": {
+            "__class__": "Set",
+            "data": [
+                "Sw H1H"
+            ]
+        },
+        "Sw H2": {
+            "__class__": "Set",
+            "data": [
+                "Sw H2"
+            ]
+        },
+        "Sw": {
+            "__class__": "Set",
+            "data": [
+                "Sw102",
+                "Sw101",
+                "Sw201G",
+                "Sw202G",
+                "Sw203",
+                "Sw201",
+                "Sw206",
+                "Sw301",
+                "Sw206G",
+                "Sw204",
+                "Sw302",
+                "Sw304",
+                "Sw204G",
+                "Sw203G",
+                "Sw202"
+            ]
+        },
+        "Z01": {
+            "__class__": "Set",
+            "data": [
+                "Z01",
+                "Z03",
+                "Z05",
+                "Z02",
+                "Z12",
+                "Z31",
+                "Z24o",
+                "Z22o",
+                "Z22w",
+                "Z24w",
+                "Z26o",
+                "Z26w",
+                "Lokwende"
+            ]
+        }
+    },
+    "hauptstrecke": "W\u00f6rgl-Hall in Tirol",
+    "sektoren": {
+        "Fw201": {
+            "__class__": "Set",
+            "data": [
+                "Fw201",
+                "Fw201G"
+            ]
+        },
+        "Fw202": {
+            "__class__": "Set",
+            "data": [
+                "Fw202G",
+                "Fw202"
+            ]
+        },
+        "Fw203": {
+            "__class__": "Set",
+            "data": [
+                "Fw203",
+                "Fw203G",
+                "Fw303"
+            ]
+        },
+        "Fw204": {
+            "__class__": "Set",
+            "data": [
+                "Fw204",
+                "Fw204G"
+            ]
+        },
+        "Jb201": {
+            "__class__": "Set",
+            "data": [
+                "Jb201",
+                "Jb201G",
+                "Jb301"
+            ]
+        },
+        "Jb202": {
+            "__class__": "Set",
+            "data": [
+                "Jb202G",
+                "Jb202",
+                "Jb302"
+            ]
+        },
+        "Jb203": {
+            "__class__": "Set",
+            "data": [
+                "Jb203G",
+                "Jb203",
+                "Jb303"
+            ]
+        },
+        "Jb204": {
+            "__class__": "Set",
+            "data": [
+                "Jb204",
+                "Jb204G",
+                "Jb304"
+            ]
+        },
+        "Sw201": {
+            "__class__": "Set",
+            "data": [
+                "Sw201G",
+                "Sw201"
+            ]
+        },
+        "Sw202": {
+            "__class__": "Set",
+            "data": [
+                "Sw202G",
+                "Sw202"
+            ]
+        },
+        "Sw203": {
+            "__class__": "Set",
+            "data": [
+                "Sw203",
+                "Sw203G"
+            ]
+        },
+        "Sw204": {
+            "__class__": "Set",
+            "data": [
+                "Sw204",
+                "Sw204G"
+            ]
+        },
+        "Sw206": {
+            "__class__": "Set",
+            "data": [
+                "Sw206G",
+                "Sw206"
+            ]
+        },
+        "Z22": {
+            "__class__": "Set",
+            "data": [
+                "Z22w",
+                "Z22o"
+            ]
+        },
+        "Z24": {
+            "__class__": "Set",
+            "data": [
+                "Z24o",
+                "Z24w"
+            ]
+        },
+        "Z26": {
+            "__class__": "Set",
+            "data": [
+                "Z26o",
+                "Z26w"
+            ]
+        }
+    },
+    "strecken": {
+        "W\u00f6rgl-Hall in Tirol": [
+            "W\u00f6rgl",
+            "EA Bri",
+            "Bri H1",
+            "Jb",
+            "Jb H1",
+            "Sw",
+            "Sw H1H",
+            "Sw H2",
+            "Fw",
+            "Fw201",
+            "Hall in Tirol"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

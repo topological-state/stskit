@@ -41,10 +41,10 @@
                 "FF Süd"
             ]
         },
-        "FF Höchst": {
+        "FF-Höchst": {
             "__class__": "Set",
             "data": [
-                "FF Höchst"
+                "FF-Höchst"
             ]
         },
         "FF Flughafen S": {
@@ -65,19 +65,19 @@
                 "FF Süd (Forsthaus)"
             ]
         },
-        "FF Griesheim S": {
+        "FF-Griesheim S": {
             "__class__": "Set",
             "data": [
-                "FF Griesheim S"
+                "FF-Griesheim S"
             ]
         },
-        "FF Griesheim (Niederrad)": {
+        "FF-Griesheim (Niederrad)": {
             "__class__": "Set",
             "data": [
                 "FF-Griesheim (Niederrad)"
             ]
         },
-        "FF Griesheim (Außenbf)": {
+        "FF-Griesheim (Außenbf)": {
             "__class__": "Set",
             "data": [
                 "FF-Griesheim (Außenbf)"
@@ -142,6 +142,12 @@
     },
     "anschlusslage": {},
     "bahnsteiggruppen": {
+        "Abstellung": {
+            "__class__": "Set",
+            "data": [
+                "Abstellung"
+            ]
+        },
         "FF H": {
             "__class__": "Set",
             "data": [
@@ -211,15 +217,26 @@
         "FNI": {
             "__class__": "Set",
             "data": [
+                "FNI1",
+                "FNI2",
+                "FNI21",
+                "FNI22",
+                "FNI111",
+                "FNI112",
+                "FNI116",
+                "FNI301",
+                "FNI302",
+                "FNI303",
+                "FNI304",
+                "FNI306",
+                "FNI307",
+                "FNI603",
                 "FNI604",
                 "FNI607",
-                "FNI2",
-                "FNI1",
-                "FNI603",
                 "FNI608",
+                "FNI653",
                 "FNI654",
-                "FNI658",
-                "FNI653"
+                "FNI658"
             ]
         }
     },
@@ -248,11 +265,11 @@
             "FFGA",
             "Stamm Galluswarte"
         ],
-        "Blau: Höchst-Hoch-Tief 4": [
+        "Blau: Höchst-Hoch-Tief": [
             "FF-Höchst",
             "FMLA",
             "FFH",
-            "Hbf Hoch-Tief 4"
+            "Hbf Hoch-Tief 3/4"
         ],
         "Gelb: Flughafen-Stamm Hoch-Tief": [
             "FF Flughafen S",
@@ -264,7 +281,7 @@
         "Grün: Flughafen-Hoch-Tief": [
             "FF Flughafen",
             "FN",
-            "Hbf Hoch-Tief 1"
+            "Hbf Hoch-Tief 1/2"
         ]
     }
 }
