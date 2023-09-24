@@ -1503,21 +1503,53 @@ class Planung:
                 ziel1 = ziel2
                 zzid1 = zzid2
 
+        self._zielgraph_schleifen_aufbrechen()
         self._zielgraph_sortieren()
 
-    def _zielgraph_sortieren(self):
-        try:
-            self.zielsortierung = list(nx.topological_sort(self.zielgraph))
-        except nx.NetworkXUnfeasible as e:
-            logger.error("fehler beim sortieren des zielgraphen")
-            logger.exception(e)
+    def _zielgraph_schleifen_aufbrechen(self):
+        """
+        Schleifen im Zielgraph aufbrechen
+
+        Der Zielgraph ist ein gerichteter Graph und darf eigentlich keine Schleifen enthalten.
+        Beim Stellwerk Jenbach kommen aus noch ungeklärtem Grund trotzdem Schleifen vor.
+        Diese Funktion bricht etwaige Schleifen an einem willkürlichen Punkt auf und gibt eine Warnung im Log aus.
+
+        Die Verspätungsberechnung funktioniert nicht korrekt, wenn Schleifen vorhanden sind bzw. waren.
+        Für dieses Problem muss noch eine Lösung gefunden werden.
+        """
+
+        while True:
             try:
                 cycle = nx.find_cycle(self.zielgraph)
             except nx.NetworkXNoCycle:
-                pass
+                break
+
+            msg = ", ".join((str(edge) for edge in cycle))
+            logger.error("Schleife im Zielgraph gefunden: " + msg)
+            for edge in cycle:
+                if edge[0].zid != edge[1].zid:
+                    break
             else:
-                msg = ", ".join((str(edge) for edge in cycle))
-                logger.error("schleife gefunden: " + msg)
+                edge = cycle[-1]
+
+            self.zielgraph.remove_edge(edge[0], edge[1])
+            logger.warning(f"Verbindung {edge} entfernt.")
+
+    def _zielgraph_sortieren(self):
+        """
+        Zielgraph topologisch sortieren.
+
+        Der Zielgraph wird so sortiert, dass alle Abhängigkeiten eines Ziels weiter vorne in der Liste erscheinen.
+        Der Zielgraph darf dazu keine Schleifen enthalten, ansonsten wird eine NetworkXUnfeasible Exception generiert.
+
+        Die Sortierung wird als Liste von Nodes in self.zielsortierung abgelegt.
+        """
+
+        try:
+            self.zielsortierung = list(nx.topological_sort(self.zielgraph))
+        except nx.NetworkXUnfeasible as e:
+            logger.error("Fehler beim Sortieren des Zielgraphen")
+            logger.exception(e)
             raise
 
     def zielgraph_speichern(self, pfad: os.PathLike):
@@ -2017,11 +2049,13 @@ class Planung:
 
 async def test() -> Planung:
     """
-    testprogramm
+    Testprogramm
 
-    das testprogramm fragt alle daten einmalig vom simulator ab und gibt ein planungsobjekt zurueck.
+    Das Testprogramm fragt alle Daten einmalig vom Simulator ab und gibt ein Planungsobjekt zurück.
 
-    :return: Planung-instanz
+    Diese Coroutine muss über trio.run ausgeführt werden.
+
+    :return: Planung-Instanz
     """
 
     client = PluginClient(name='stskit-planung', autor='tester', version='0.0', text='planungsobjekt abfragen')
@@ -2050,5 +2084,21 @@ async def test() -> Planung:
     return _planung
 
 
+def main_test():
+    """
+    Testprogramm
+
+    Das Testprogramm fragt alle Daten einmalig vom Simulator ab und gibt ein Planungsobjekt zurück.
+
+    Diese Funktion wird in einer synchronen Umgebung aufgerufen.
+    Sie kehrt erst zurück, wenn alle Daten eingetroffen sind.
+
+    :return: Planung-Instanz
+    """
+
+    _planung = trio.run(test)
+    return _planung
+
+
 if __name__ == '__main__':
-    planung_obj, simzeit = trio.run(test)
+    planung_obj = main_test()

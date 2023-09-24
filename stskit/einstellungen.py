@@ -1,6 +1,7 @@
 """
-datenstrukturen und fenster für anschlussmatrix
+Einstellungsfenster
 
+- Auswahl des Zugschemas
 
 """
 
@@ -19,7 +20,7 @@ from stskit.qt.ui_einstellungen import Ui_EinstellungenWindow
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
-
+    
 class EinstellungenWindow(QtWidgets.QMainWindow):
 
     def __init__(self, zentrale: DatenZentrale):

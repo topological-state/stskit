@@ -66,7 +66,7 @@ def ziel_topo_layout(graph: nx.Graph) -> Dict:
     zuege = set([])
     zugliste = []
     for node in sorted_nodes:
-        zid = graph.nodes[node]['zid']
+        zid = node.zid
         if zid not in zuege:
             zugliste.append(zid)
         zuege.add(zid)
@@ -76,7 +76,7 @@ def ziel_topo_layout(graph: nx.Graph) -> Dict:
     pos = {}
     zeit = 0
     for node in sorted_nodes:
-        zid = graph.nodes[node]['zid']
+        zid = node.zid
         zeit -= 1
         pos[node] = np.array((zug_pos[zid], zeit))
 
