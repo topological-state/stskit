@@ -39,7 +39,11 @@ def ziel_zeit_layout(graph: nx.Graph) -> Dict:
     zuege = set([])
     zugliste = []
     for node in sorted_nodes:
-        zid = graph.nodes[node]['zid']
+        try:
+            zid = node.zid
+        except AttributeError:
+            zid = node[0]
+
         if zid not in zuege:
             zugliste.append(zid)
         zuege.add(zid)
@@ -49,7 +53,11 @@ def ziel_zeit_layout(graph: nx.Graph) -> Dict:
     pos = {}
     zeit = {zid: 0 for zid in zuege}
     for node in sorted_nodes:
-        zid = node[1]
+        try:
+            zid = node.zid
+        except AttributeError:
+            zid = node[0]
+
         try:
             zeit[zid] = min(zeit[zid] - 1, -graph.nodes[node]['p_ab'])
         except KeyError:
@@ -61,24 +69,36 @@ def ziel_zeit_layout(graph: nx.Graph) -> Dict:
 
 
 def ziel_topo_layout(graph: nx.Graph) -> Dict:
+    def _linear_edge(n1, n2):
+        return graph[n1][n2].get("typ", "P") in {"P", "E"}
+
+    komponenten_index = {}
+    einfache_ketten = nx.subgraph_view(graph, filter_edge=_linear_edge)
+    for komponente, kette in enumerate(nx.weakly_connected_components(einfache_ketten)):
+        for zzn in kette:
+            komponenten_index[zzn[0]] = komponente
+
     sorted_nodes = list(nx.topological_sort(graph))
-
-    zuege = set([])
-    zugliste = []
-    for node in sorted_nodes:
-        zid = node.zid
-        if zid not in zuege:
-            zugliste.append(zid)
-        zuege.add(zid)
-
-    zug_pos = {zid: idx for idx, zid in enumerate(zugliste)}
 
     pos = {}
     zeit = 0
+    letzte_spalte = -1
+    komponenten_spalte = {}
+
     for node in sorted_nodes:
-        zid = node.zid
+        try:
+            zid = node.zid
+        except AttributeError:
+            zid = node[0]
+
+        try:
+            spalte = komponenten_spalte[komponenten_index[zid]]
+        except KeyError:
+            spalte = letzte_spalte = letzte_spalte + 1
+            komponenten_spalte[komponenten_index[zid]] = letzte_spalte
+
         zeit -= 1
-        pos[node] = np.array((zug_pos[zid], zeit))
+        pos[node] = np.array((spalte, zeit))
 
     return pos
 
@@ -102,13 +122,15 @@ def plot_zielgraph(graph: nx.Graph):
     # node_labels = {key: format_node_label(graph.nodes[key]) for key in pos.keys()}
     node_labels = {n: format_node_label(d) for n, d in graph.nodes(data=True)}
     edge_labels = {(e1, e2): d.get('typ', '?') for e1, e2, d in graph.edges(data=True)}
+    edge_color_map = {'P': 'k', 'E': 'b', 'F': 'g', 'K': 'm', '?': 'r'}
+    edge_colors = [edge_color_map[d.get('typ', '?')] for e1, e2, d in graph.edges(data=True)]
 
     # args: node_size, node_color, alpha
     # nx.draw_networkx_nodes(graph, pos, node_size=100)
     label_options = {"ec": "k", "fc": "white", "alpha": 0.7, "pad": 2}
     nx.draw_networkx_labels(graph, pos, labels=node_labels, bbox=label_options, font_size="x-small")
     # args: edge_color, alpha
-    nx.draw_networkx_edges(graph, pos)
+    nx.draw_networkx_edges(graph, pos, edge_color=edge_colors)
 
     # bbox = dict(boxstyle="round", ec=mpl.rcParams['axes.facecolor'], fc=mpl.rcParams['axes.facecolor'])
     label_options = {"ec": "white", "fc": "white", "alpha": 1, "pad": 2}
