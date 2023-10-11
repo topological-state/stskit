@@ -154,7 +154,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.gleisbelegung_button.clicked.connect(self.gleisbelegung_clicked)
         layout.addWidget(self.gleisbelegung_button)
 
-        self.bildfahrplan_button = QtWidgets.QPushButton("Bildfahrplan", self)
+        self.bildfahrplan_button = QtWidgets.QPushButton("Streckenfahrplan", self)
         self.bildfahrplan_button.setEnabled(False)
         self.bildfahrplan_button.clicked.connect(self.bildfahrplan_clicked)
         layout.addWidget(self.bildfahrplan_button)
@@ -164,7 +164,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.matrix_button.clicked.connect(self.matrix_clicked)
         layout.addWidget(self.matrix_button)
 
-        self.fahrplan_button = QtWidgets.QPushButton("Tabellenfahrplan", self)
+        self.fahrplan_button = QtWidgets.QPushButton("Zugfahrplan", self)
         self.fahrplan_button.setEnabled(False)
         self.fahrplan_button.clicked.connect(self.fahrplan_clicked)
         layout.addWidget(self.fahrplan_button)

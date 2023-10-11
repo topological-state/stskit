@@ -160,7 +160,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui = Ui_BildfahrplanWindow()
         self.ui.setupUi(self)
 
-        self.setWindowTitle("Bildfahrplan")
+        self.setWindowTitle("Streckenfahrplan")
 
         self.display_canvas = FigureCanvas(Figure(figsize=(5, 3)))
         self.ui.displayLayout = QtWidgets.QHBoxLayout(self.ui.grafikWidget)

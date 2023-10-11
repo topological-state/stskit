@@ -3,15 +3,20 @@ dieses Qt-fenster stellt den fahrplan (zugliste und detailfahrplan eines zuges) 
 """
 
 import logging
-from pathlib import Path
 from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
-from PyQt5 import Qt, QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import QTableView, QLabel
-from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel
+
+import matplotlib as mpl
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+
+from PyQt5 import Qt, QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
 from stskit.zentrale import DatenZentrale
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stskit.stsobj import ZugDetails, time_to_minutes, format_verspaetung
+from stskit.qt.ui_fahrplan import Ui_FahrplanWidget
+from stskit.zielgraph import draw_zielgraph, zug_subgraph, format_node_label_name
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -314,8 +319,10 @@ class FahrplanModell(QtCore.QAbstractTableModel):
                     return QtGui.QColor("cyan")
                 else:
                     return None
-            else:
+            elif self.zug.gleis:
                 return None
+            else:
+                return QtGui.QColor("darkCyan")
 
         elif role == QtCore.Qt.TextAlignmentRole:
             return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
@@ -350,42 +357,42 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.zentrale = zentrale
         self.zentrale.planung_update.register(self.planung_update)
 
-        self.zugliste_view: Optional[QTableView] = None
-        self.fahrplan_view: Optional[QTableView] = None
-        self.fahrplan_label: Optional[QLabel] = None
-        self.folgezug_view: Optional[QTableView] = None
-        self.folgezug_label: Optional[QLabel] = None
+        self.ui = Ui_FahrplanWidget()
+        self.ui.setupUi(self)
 
-        py_path = Path(__file__).parent
-        ui_path = Path(py_path, 'qt', 'fahrplan.ui')
-        uic.loadUi(ui_path, self)
+        self.setWindowTitle("Zugfahrplan")
 
-        self.setWindowTitle("Tabellenfahrplan")
+        self.display_canvas = FigureCanvas(Figure(figsize=(3, 5)))
+        self._axes = self.display_canvas.figure.subplots()
+
+        self.ui.display_layout = QtWidgets.QHBoxLayout(self.ui.grafik_widget)
+        self.ui.display_layout.setObjectName("display_layout")
+        self.ui.display_layout.addWidget(self.display_canvas)
 
         self.zugliste_modell = ZuglisteModell()
         self.zugliste_modell.zugschema = self.zentrale.anlage.zugschema
         self.zugliste_sort_filter = QSortFilterProxyModel(self)
         self.zugliste_sort_filter.setSourceModel(self.zugliste_modell)
         self.zugliste_sort_filter.setSortRole(QtCore.Qt.UserRole)
-        self.zugliste_view.setModel(self.zugliste_sort_filter)
-        self.zugliste_view.selectionModel().selectionChanged.connect(
+        self.ui.zugliste_view.setModel(self.zugliste_sort_filter)
+        self.ui.zugliste_view.selectionModel().selectionChanged.connect(
             self.zugliste_selection_changed)
-        self.zugliste_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
-        self.zugliste_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
-        self.zugliste_view.sortByColumn(0, 0)
-        self.zugliste_view.setSortingEnabled(True)
+        self.ui.zugliste_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
+        self.ui.zugliste_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
+        self.ui.zugliste_view.sortByColumn(0, 0)
+        self.ui.zugliste_view.setSortingEnabled(True)
 
         self.fahrplan_modell = FahrplanModell()
-        self.fahrplan_view.setModel(self.fahrplan_modell)
-        self.fahrplan_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
-        self.fahrplan_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
-        self.fahrplan_view.verticalHeader().setVisible(False)
+        self.ui.fahrplan_view.setModel(self.fahrplan_modell)
+        self.ui.fahrplan_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
+        self.ui.fahrplan_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
+        self.ui.fahrplan_view.verticalHeader().setVisible(False)
 
         self.folgezug_modell = FahrplanModell()
-        self.folgezug_view.setModel(self.folgezug_modell)
-        self.folgezug_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
-        self.folgezug_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
-        self.folgezug_view.verticalHeader().setVisible(False)
+        self.ui.folgezug_view.setModel(self.folgezug_modell)
+        self.ui.folgezug_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
+        self.ui.folgezug_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
+        self.ui.folgezug_view.verticalHeader().setVisible(False)
 
     def planung_update(self, *args, **kwargs) -> None:
         """
@@ -396,7 +403,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         :return: None
         """
         try:
-            view_index = self.zugliste_view.selectedIndexes()[0]
+            view_index = self.ui.zugliste_view.selectedIndexes()[0]
             model_index = self.zugliste_sort_filter.mapToSource(view_index)
         except IndexError:
             model_index = None
@@ -405,11 +412,11 @@ class FahrplanWindow(QtWidgets.QWidget):
 
         if model_index:
             view_index = self.zugliste_sort_filter.mapFromSource(model_index)
-            self.zugliste_view.selectionModel().select(view_index, QItemSelectionModel.SelectionFlag.Select |
+            self.ui.zugliste_view.selectionModel().select(view_index, QItemSelectionModel.SelectionFlag.Select |
                                                        QItemSelectionModel.SelectionFlag.Rows)
 
-        self.zugliste_view.resizeColumnsToContents()
-        self.zugliste_view.resizeRowsToContents()
+        self.ui.zugliste_view.resizeColumnsToContents()
+        self.ui.zugliste_view.resizeRowsToContents()
 
     @QtCore.pyqtSlot('QItemSelection', 'QItemSelection')
     def zugliste_selection_changed(self, selected, deselected):
@@ -421,18 +428,19 @@ class FahrplanWindow(QtWidgets.QWidget):
         :return: None
         """
         try:
-            index = self.zugliste_view.selectedIndexes()[0]
+            index = self.ui.zugliste_view.selectedIndexes()[0]
             index = self.zugliste_sort_filter.mapToSource(index)
             row = index.row()
             zug = self.zugliste_modell.get_zug(row)
-            self.fahrplan_label.setText(f"Fahrplan {zug.name}")
+            self.ui.fahrplan_label.setText(f"Stammzug {zug.name}")
             self.fahrplan_modell.set_zug(zug)
         except IndexError:
             pass
         else:
-            self.fahrplan_view.resizeColumnsToContents()
-            self.fahrplan_view.resizeRowsToContents()
+            self.ui.fahrplan_view.resizeColumnsToContents()
+            self.ui.fahrplan_view.resizeRowsToContents()
         self.update_folgezug()
+        self.grafik_update()
 
     def update_folgezug(self):
         if self.fahrplan_modell.zug:
@@ -440,13 +448,61 @@ class FahrplanWindow(QtWidgets.QWidget):
                 folgezug = fpz.ersatzzug or fpz.fluegelzug or fpz.kuppelzug
                 if folgezug:
                     self.folgezug_modell.set_zug(folgezug)
-                    self.folgezug_label.setText(f"Fahrplan {folgezug.name}")
-                    self.folgezug_view.resizeColumnsToContents()
-                    self.folgezug_view.resizeRowsToContents()
+                    self.ui.folgezug_label.setText(f"Folgezug {folgezug.name}")
+                    self.ui.folgezug_view.resizeColumnsToContents()
+                    self.ui.folgezug_view.resizeRowsToContents()
                     break
             else:
                 self.folgezug_modell.set_zug(None)
-                self.folgezug_label.setText(f"Fahrplan Folgezug")
+                self.ui.folgezug_label.setText(f"Kein Folgezug")
         else:
             self.folgezug_modell.set_zug(None)
-            self.folgezug_label.setText(f"Fahrplan Folgezug")
+            self.ui.folgezug_label.setText(f"Kein Folgezug")
+
+    def grafik_update(self):
+        def node_color(data):
+            farbe = mpl.rcParams['text.color']
+            try:
+                obj: ZugZielPlanung = data['obj']
+                zug = obj.zug
+            except (AttributeError, KeyError):
+                pass
+            else:
+                if zug.sichtbar:
+                    if obj.abgefahren:
+                        farbe = "darkcyan"
+                    elif obj.angekommen or obj.gleis == zug.gleis:
+                        farbe = "cyan"
+                elif not zug.gleis:
+                    farbe = "darkcyan"
+
+            return farbe
+
+        self._axes.clear()
+
+        try:
+            zg = zug_subgraph(self.zentrale.planung.zielgraph, self.fahrplan_modell.zug.zid)
+        except AttributeError:
+            logger.exception("exception in grafik_update")
+            return
+
+        if len(zg):
+            logger.debug(f"draw_zielgraph")
+            draw_zielgraph(zg, node_format=format_node_label_name, node_color=node_color, ax=self._axes)
+        else:
+            logger.warning(f"leerer zielgraph")
+
+        self._axes.figure.tight_layout()
+        self._axes.figure.canvas.draw()
+
+    def on_resize(self, event):
+        """
+        matplotlib resize-event
+
+        zeichnet die grafik neu.
+
+        :param event:
+        :return:
+        """
+
+        self.grafik_update()

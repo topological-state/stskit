@@ -6,3 +6,4 @@ trio
 qtrio
 untangle
 networkx
+netgraph

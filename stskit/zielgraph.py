@@ -28,10 +28,6 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
-plt.rcParams["figure.figsize"] = [15, 10]
-# plt.rcParams["figure.dpi"] = 300
-plt.rcParams["figure.autolayout"] = True
-
 
 def ziel_zeit_layout(graph: nx.Graph) -> Dict:
     sorted_nodes = list(nx.topological_sort(graph))
@@ -104,40 +100,62 @@ def ziel_topo_layout(graph: nx.Graph) -> Dict:
 
 
 def format_zeit(minuten: int, verspaetung: int) -> str:
-    return f"{int(minuten) // 60:02}:{int(minuten) % 60:02}{verspaetung:+}"
+    if verspaetung:
+        return f"{int(minuten) // 60:02}:{int(minuten) % 60:02}{verspaetung:+}"
+    else:
+        return f"{int(minuten) // 60:02}:{int(minuten) % 60:02}"
 
 
-def format_node_label(data: Dict[str, Any]) -> str:
+def format_node_label_name(data: Dict[str, Any]) -> str:
     # typ, zid, plan, p_an, p_ab, v_an, v_ab
     label = []
-    label.append(f"{data['zid']} {data['typ']} {data['plan']}")
-    label.append(format_zeit(data['p_an'], data['v_an']) + " - " + format_zeit(data['p_ab'], data['v_ab']))
+    ziel = data['obj']
+    label.append(f"{ziel.zug.name} {data['typ']} {data['plan']}")
+    label.append(format_zeit(data['p_an'], data['v_an']) + " / " + format_zeit(data['p_ab'], data['v_ab']))
     return "\n".join(label)
 
 
-def plot_zielgraph(graph: nx.Graph):
-    # pos = nx.multipartite_layout(graph, subset_key="zid", align="vertical")
+def format_node_label_zid(data: Dict[str, Any]) -> str:
+    # typ, zid, plan, p_an, p_ab, v_an, v_ab
+    label = []
+    label.append(f"{data['zid']} {data['typ']} {data['plan']}")
+    label.append(format_zeit(data['p_an'], data['v_an']) + " / " + format_zeit(data['p_ab'], data['v_ab']))
+    return "\n".join(label)
+
+
+def draw_zielgraph(graph: nx.Graph, node_format=format_node_label_zid, node_color=None, ax=None):
     pos = ziel_topo_layout(graph)
 
-    # node_labels = {key: format_node_label(graph.nodes[key]) for key in pos.keys()}
-    node_labels = {n: format_node_label(d) for n, d in graph.nodes(data=True)}
     edge_labels = {(e1, e2): d.get('typ', '?') for e1, e2, d in graph.edges(data=True)}
-    edge_color_map = {'P': 'k', 'E': 'b', 'F': 'g', 'K': 'm', '?': 'r'}
+    edge_color_map = {'P': 'w', 'E': 'b', 'F': 'g', 'K': 'm', '?': 'r'}
     edge_colors = [edge_color_map[d.get('typ', '?')] for e1, e2, d in graph.edges(data=True)]
 
-    # args: node_size, node_color, alpha
-    # nx.draw_networkx_nodes(graph, pos, node_size=100)
-    label_options = {"ec": "k", "fc": "white", "alpha": 0.7, "pad": 2}
-    nx.draw_networkx_labels(graph, pos, labels=node_labels, bbox=label_options, font_size="x-small")
+    for node, data in graph.nodes(data=True):
+        label = node_format(data)
+        try:
+            farbe = node_color(data)
+        except (AttributeError, KeyError, TypeError) as e:
+            farbe = mpl.rcParams['text.color']
+
+        label_options = {"ec": farbe, "fc": mpl.rcParams['axes.facecolor'], "alpha": 1.0, "pad": 2}
+        nx.draw_networkx_labels(graph, pos, labels={node: label},
+                                font_size="x-small", font_color=farbe,
+                                bbox=label_options, ax=ax)
+
     # args: edge_color, alpha
-    nx.draw_networkx_edges(graph, pos, edge_color=edge_colors)
+    nx.draw_networkx_edges(graph, pos, edge_color=edge_colors, ax=ax)
 
-    # bbox = dict(boxstyle="round", ec=mpl.rcParams['axes.facecolor'], fc=mpl.rcParams['axes.facecolor'])
-    label_options = {"ec": "white", "fc": "white", "alpha": 1, "pad": 2}
+    label_options = {"ec": mpl.rcParams['axes.facecolor'], "fc": mpl.rcParams['axes.facecolor'], "alpha": 1.0, "pad": 2}
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels,
-                                 font_size='x-small',  # font_color=mpl.rcParams['text.color'],
-                                 bbox=label_options)
+                                 font_size='x-small', font_color=mpl.rcParams['text.color'],
+                                 bbox=label_options, ax=ax)
 
+
+def plot_zielgraph(graph: nx.Graph):
+    plt.rcParams["figure.figsize"] = [15, 10]
+    # plt.rcParams["figure.dpi"] = 300
+    plt.rcParams["figure.autolayout"] = True
+    draw_zielgraph(graph)
     plt.show()
 
 
