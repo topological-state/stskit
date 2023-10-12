@@ -15,6 +15,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import networkx as nx
+from netgraph import InteractiveGraph
 
 from stskit.stsplugin import PluginClient
 from stskit.anlage import Anlage
@@ -33,23 +34,21 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
         self.zentrale = zentrale
         self.zentrale.anlage_update.register(self.anlage_update)
 
-        self.layout_seed: int = 0
-
-        self.setWindowTitle("gleisplan")
-        ss = f"background-color: {mpl.rcParams['axes.facecolor']};" \
-             f"color: {mpl.rcParams['text.color']};"
-        self.setStyleSheet(ss)
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)
         layout = QtWidgets.QVBoxLayout(self._main)
 
-        canvas = FigureCanvas(Figure(figsize=(5, 3)))
+        canvas = FigureCanvas(Figure())
+        canvas.setParent(self._main)
         layout.addWidget(canvas)
         self._axes = canvas.figure.subplots()
 
-        self.layout_spinbox = QtWidgets.QSpinBox(canvas)
-        self.layout_spinbox.setMinimum(0)
-        self.layout_spinbox.valueChanged.connect(self.layout_spinbox_changed)
+        self.setWindowTitle("Gleisnetz")
+
+        canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
+        canvas.setFocus()
+
+        self._graph = None
 
     @property
     def anlage(self) -> Anlage:
@@ -59,12 +58,53 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
     def client(self) -> PluginClient:
         return self.zentrale.client
 
-    @pyqtSlot(int)
-    def layout_spinbox_changed(self, v):
-        self.layout_seed = max(0, int(v))
-        self.update()
-
     def anlage_update(self, *args, **kwargs):
+        if self._graph:
+            return
+
+        try:
+            self._axes.clear()
+            if self.anlage.bahnhof_graph:
+                self.draw_graph()
+
+            self._axes.figure.tight_layout()
+            self._axes.figure.canvas.draw()
+        except AttributeError:
+            self._graph = None
+
+    def draw_graph(self):
+        graph = self.anlage.bahnhof_graph
+
+        colormap = {'bahnhof': 'tab:blue', 'anschluss': 'tab:orange'}
+        node_colors = {key: colormap.get(typ, "r") for key, typ in graph.nodes(data='typ', default='kein')}
+
+        edge_labels = {(e1, e2): str(round(zeit / 60))
+                       for e1, e2, zeit in graph.edges(data='fahrzeit_min', default=0)
+                       if zeit >= 30}
+
+        # node_size=3
+        # node_edge_width
+        node_label_fontdict = {"size": 10}
+        edge_label_fontdict = {"size": 10, "bbox": {"boxstyle": "circle",
+                                                    "fc": mpl.rcParams["axes.facecolor"],
+                                                    "ec": mpl.rcParams["axes.facecolor"]}}
+        self._graph = InteractiveGraph(self.anlage.bahnhof_graph, ax=self._axes,
+                                       node_color=node_colors,
+                                       node_edge_width=0.0,
+                                       node_labels=True,
+                                       node_label_fontdict=node_label_fontdict,
+                                       node_size=2,
+                                       edge_color=mpl.rcParams['text.color'],
+                                       edge_labels=edge_labels,
+                                       edge_label_fontdict=edge_label_fontdict,
+                                       edge_width=0.5,
+                                       prettify=False)
+
+        self._axes.set_xticks([])
+        self._axes.set_yticks([])
+        self._axes.set_aspect('equal')
+
+    def anlage_update_alt(self, *args, **kwargs):
         try:
             self._axes.clear()
             if self.anlage.bahnhof_graph:
