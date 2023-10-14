@@ -6,6 +6,7 @@ import logging
 from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 import matplotlib as mpl
+import networkx as nx
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
@@ -16,7 +17,7 @@ from stskit.zentrale import DatenZentrale
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stskit.stsobj import ZugDetails, time_to_minutes, format_verspaetung
 from stskit.qt.ui_fahrplan import Ui_FahrplanWidget
-from stskit.zielgraph import draw_zielgraph, zug_subgraph, format_node_label_name
+from stskit.zielgraph import draw_zielgraph, zug_subgraph, format_node_label_name, verarbeitete_stammzuege_entfernen
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -481,13 +482,13 @@ class FahrplanWindow(QtWidgets.QWidget):
         self._axes.clear()
 
         try:
-            zg = zug_subgraph(self.zentrale.planung.zielgraph, self.fahrplan_modell.zug.zid)
+            zg = nx.DiGraph(zug_subgraph(self.zentrale.planung.zielgraph, self.fahrplan_modell.zug.zid))
+            verarbeitete_stammzuege_entfernen(zg, self.zentrale.planung.zugbaum, self.fahrplan_modell.zug.zid)
         except AttributeError:
             logger.exception("exception in grafik_update")
             return
 
         if len(zg):
-            logger.debug(f"draw_zielgraph")
             draw_zielgraph(zg, node_format=format_node_label_name, node_color=node_color, ax=self._axes)
         else:
             logger.warning(f"leerer zielgraph")

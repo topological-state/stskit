@@ -20,6 +20,7 @@ zielgraph.plot_zielgraph(zg)
 """
 
 import json
+import logging
 import os
 from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, NamedTuple, Optional, Set, Tuple, Type, Union
 
@@ -27,6 +28,9 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 def ziel_zeit_layout(graph: nx.Graph) -> Dict:
@@ -109,9 +113,15 @@ def format_zeit(minuten: int, verspaetung: int) -> str:
 def format_node_label_name(data: Dict[str, Any]) -> str:
     # typ, zid, plan, p_an, p_ab, v_an, v_ab
     label = []
-    ziel = data['obj']
-    label.append(f"{ziel.zug.name} {data['typ']} {data['plan']}")
-    label.append(format_zeit(data['p_an'], data['v_an']) + " / " + format_zeit(data['p_ab'], data['v_ab']))
+    try:
+        zug_name = data['obj'].zug.name
+    except KeyError:
+        zug_name = "?"
+    label.append(f"{zug_name} {data.get('typ', '?')} {data.get('plan', '?')}")
+    try:
+        label.append(format_zeit(data['p_an'], data['v_an']) + " / " + format_zeit(data['p_ab'], data['v_ab']))
+    except KeyError:
+        pass
     return "\n".join(label)
 
 
@@ -172,6 +182,28 @@ def zug_subgraph(graph: nx.DiGraph, zid: int) -> Optional[nx.Graph]:
         return None
 
     return nx.subgraph(graph, nodes)
+
+
+def verarbeitete_stammzuege_entfernen(zielgraph: nx.Graph, zuggraph: nx.Graph, zid: int):
+
+    try:
+        zug = zuggraph.nodes[zid]['obj']
+    except KeyError:
+        logger.warning(f"kein zugobjekt zu zid {zid} im zugbaum")
+        return
+
+    verarbeitete_zuege = {
+        _zid for _zid, _zug in zuggraph.nodes(data='obj', default=zug)
+        if _zug.ausgefahren and _zug.ausfahrtszeit < zug.einfahrtszeit
+    }
+
+    entfernen = [
+        _zzid for _zzid, _zid in zielgraph.nodes(data='zid', default=None)
+        if _zid in verarbeitete_zuege
+    ]
+
+    for _zzid in entfernen:
+        zielgraph.remove_node(_zzid)
 
 
 def load(path: os.PathLike):
