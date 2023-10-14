@@ -137,7 +137,7 @@ def draw_zielgraph(graph: nx.Graph, node_format=format_node_label_zid, node_colo
     pos = ziel_topo_layout(graph)
 
     edge_labels = {(e1, e2): d.get('typ', '?') for e1, e2, d in graph.edges(data=True)}
-    edge_color_map = {'P': 'w', 'E': 'b', 'F': 'g', 'K': 'm', '?': 'r'}
+    edge_color_map = {'P': 'w', 'E': 'b', 'F': 'g', 'K': 'm', '?': 'r', 'A': 'darkorange'}
     edge_colors = [edge_color_map[d.get('typ', '?')] for e1, e2, d in graph.edges(data=True)]
 
     for node, data in graph.nodes(data=True):
