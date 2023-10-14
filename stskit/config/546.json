@@ -1,0 +1,319 @@
+{
+    "_aid": 546,
+    "_build": 5851,
+    "_name": "Wien H\u00fctteldorf",
+    "_region": "\u00d6sterreich Ost",
+    "_version": 2,
+    "anschlussgruppen": {
+        "11a": {
+            "__class__": "Set",
+            "data": [
+                "11a"
+            ]
+        },
+        "311": {
+            "__class__": "Set",
+            "data": [
+                "311"
+            ]
+        },
+        "6-8a": {
+            "__class__": "Set",
+            "data": [
+                "6-8a"
+            ]
+        },
+        "ASC": {
+            "__class__": "Set",
+            "data": [
+                "ASC 210"
+            ]
+        },
+        "Kn Hetzendorf": {
+            "__class__": "Set",
+            "data": [
+                "Kn Hetzendorf"
+            ]
+        },
+        "L\u00fctzowgasse": {
+            "__class__": "Set",
+            "data": [
+                "L\u00fctzowgasse"
+            ]
+        },
+        "Plasser": {
+            "__class__": "Set",
+            "data": [
+                "Plasser"
+            ]
+        },
+        "Pz-Gleisgr 700": {
+            "__class__": "Set",
+            "data": [
+                "Pz-Gleisgr 700"
+            ]
+        },
+        "Tullnerbach-P.": {
+            "__class__": "Set",
+            "data": [
+                "Tullnerbach-P."
+            ]
+        },
+        "Tullnerfeld": {
+            "__class__": "Set",
+            "data": [
+                "Tullnerfeld"
+            ]
+        },
+        "W. Penzing": {
+            "__class__": "Set",
+            "data": [
+                "W. Penzing 101"
+            ]
+        },
+        "Wien Meidling": {
+            "__class__": "Set",
+            "data": [
+                "Wien Meidling 6",
+                "Wien Meidling 5",
+                "Wien Meidling 3",
+                "Wien Meidling 4"
+            ]
+        },
+        "Wien Penzing": {
+            "__class__": "Set",
+            "data": [
+                "Wien Penzing"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Abz": {
+            "__class__": "Set",
+            "data": [
+                "Abz 405",
+                "Abz 505",
+                "Abz 503",
+                "Abz 403",
+                "Abz 502",
+                "Abz 603",
+                "Abz 501",
+                "Abz 507",
+                "Abz 401",
+                "Abz 601",
+                "Abz 605",
+                "Abz 402"
+            ]
+        },
+        "Hdd": {
+            "__class__": "Set",
+            "data": [
+                "Hdd"
+            ]
+        },
+        "Hdd S20": {
+            "__class__": "Set",
+            "data": [
+                "Hdd S21",
+                "Hdd S22"
+            ]
+        },
+        "Hez S30": {
+            "__class__": "Set",
+            "data": [
+                "Hez S31",
+                "Hez S32"
+            ]
+        },
+        "Hf": {
+            "__class__": "Set",
+            "data": [
+                "Hf 313",
+                "Hf 308",
+                "Hf 317",
+                "Hf 304",
+                "Hf 305",
+                "Hf 307",
+                "Hf 302",
+                "Hf 301",
+                "Hf 315",
+                "Hf 311"
+            ]
+        },
+        "Hf H1": {
+            "__class__": "Set",
+            "data": [
+                "Hf H1"
+            ]
+        },
+        "Hf H1A": {
+            "__class__": "Set",
+            "data": [
+                "Hf H1A"
+            ]
+        },
+        "Hf H2": {
+            "__class__": "Set",
+            "data": [
+                "Hf H2"
+            ]
+        },
+        "Hf H3": {
+            "__class__": "Set",
+            "data": [
+                "Hf H3"
+            ]
+        },
+        "Hf H4": {
+            "__class__": "Set",
+            "data": [
+                "Hf H4"
+            ]
+        },
+        "Hf U22": {
+            "__class__": "Set",
+            "data": [
+                "Hf U22"
+            ]
+        },
+        "Hf Z1": {
+            "__class__": "Set",
+            "data": [
+                "Hf Z1"
+            ]
+        },
+        "Hfg": {
+            "__class__": "Set",
+            "data": [
+                "Hfg 105",
+                "Hfg 101",
+                "Hfg 151",
+                "Hfg 104",
+                "Hfg 109",
+                "Hfg 107",
+                "Hfg 152",
+                "Hfg 215",
+                "Hfg 201",
+                "Hfg 203",
+                "Hfg 213",
+                "Hfg 256",
+                "Hfg 204",
+                "Hfg 217",
+                "Hfg 205",
+                "Hfg 202",
+                "Hfg 206",
+                "Hfg 207",
+                "Hfg 209"
+            ]
+        },
+        "Up": {
+            "__class__": "Set",
+            "data": [
+                "Up 107",
+                "Up 102",
+                "Up 109",
+                "Up 104",
+                "Up 115",
+                "Up 101",
+                "Up 113",
+                "Up W65",
+                "Up W63",
+                "Up W64"
+            ]
+        },
+        "Up H1": {
+            "__class__": "Set",
+            "data": [
+                "Up H1"
+            ]
+        },
+        "Up S10": {
+            "__class__": "Set",
+            "data": [
+                "Up S11",
+                "Up S12"
+            ]
+        },
+        "von L\u00fctzowgasse": {
+            "__class__": "Set",
+            "data": [
+                "von L\u00fctzowgasse"
+            ]
+        }
+    },
+    "hauptstrecke": "Kn Hetzendorf-Tullnerfeld",
+    "sektoren": {
+        "Abz 501": {
+            "__class__": "Set",
+            "data": [
+                "Abz 501",
+                "Abz 401",
+                "Abz 601"
+            ]
+        },
+        "Abz 502": {
+            "__class__": "Set",
+            "data": [
+                "Abz 502",
+                "Abz 402"
+            ]
+        },
+        "Abz 503": {
+            "__class__": "Set",
+            "data": [
+                "Abz 503",
+                "Abz 403",
+                "Abz 603"
+            ]
+        },
+        "Abz 505": {
+            "__class__": "Set",
+            "data": [
+                "Abz 405",
+                "Abz 505",
+                "Abz 605"
+            ]
+        }
+    },
+    "strecken": {
+        "Kn Hetzendorf-Tullnerfeld": [
+            "Kn Hetzendorf",
+            "Hez S30",
+            "Hdd",
+            "Hdd S20",
+            "Tullnerfeld"
+        ],
+        "Penzing 101-Meidling": [
+            "W. Penzing",
+            "Hf Z1",
+            "Hf H1A",
+            "Abz",
+            "Wien Meidling"
+        ],
+        "Penzing-Tullnerbach-P.": [
+            "Wien Penzing",
+            "Hfg",
+            "Hf",
+            "Hdd",
+            "Hf H1",
+            "Hf H2",
+            "Hf H3",
+            "Hf H4",
+            "Up",
+            "Up H1",
+            "Up S10",
+            "Tullnerbach-P."
+        ],
+        "Penzing-Tullnerfeld": [
+            "Wien Penzing",
+            "Hfg",
+            "Hf",
+            "Hdd",
+            "Hdd S20",
+            "Tullnerfeld"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

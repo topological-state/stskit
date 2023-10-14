@@ -1,0 +1,373 @@
+{
+    "_aid": 548,
+    "_build": 5851,
+    "_name": "Tullnerfeld",
+    "_region": "\u00d6sterreich Ost",
+    "_version": 2,
+    "anschlussgruppen": {
+        "128": {
+            "__class__": "Set",
+            "data": [
+                "128"
+            ]
+        },
+        "146": {
+            "__class__": "Set",
+            "data": [
+                "146"
+            ]
+        },
+        "16H": {
+            "__class__": "Set",
+            "data": [
+                "16H"
+            ]
+        },
+        "16R": {
+            "__class__": "Set",
+            "data": [
+                "16R"
+            ]
+        },
+        "219": {
+            "__class__": "Set",
+            "data": [
+                "219"
+            ]
+        },
+        "305n": {
+            "__class__": "Set",
+            "data": [
+                "305n"
+            ]
+        },
+        "305s": {
+            "__class__": "Set",
+            "data": [
+                "305s"
+            ]
+        },
+        "513": {
+            "__class__": "Set",
+            "data": [
+                "513"
+            ]
+        },
+        "6-8a": {
+            "__class__": "Set",
+            "data": [
+                "6-8a"
+            ]
+        },
+        "8E": {
+            "__class__": "Set",
+            "data": [
+                "8E"
+            ]
+        },
+        "Egger": {
+            "__class__": "Set",
+            "data": [
+                "Egger"
+            ]
+        },
+        "Knoten Hadersdorf": {
+            "__class__": "Set",
+            "data": [
+                "Knoten Hadersdorf"
+            ]
+        },
+        "Knoten Wagram": {
+            "__class__": "Set",
+            "data": [
+                "Knoten Wagram"
+            ]
+        },
+        "Statzendorf": {
+            "__class__": "Set",
+            "data": [
+                "Statzendorf"
+            ]
+        },
+        "Sunpor": {
+            "__class__": "Set",
+            "data": [
+                "Sunpor"
+            ]
+        },
+        "Tulln Stadt": {
+            "__class__": "Set",
+            "data": [
+                "Tulln Stadt"
+            ]
+        },
+        "UW D\u00fcrnrohr": {
+            "__class__": "Set",
+            "data": [
+                "UW D\u00fcrnrohr"
+            ]
+        },
+        "Viehofen": {
+            "__class__": "Set",
+            "data": [
+                "Viehofen"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Hdd S30": {
+            "__class__": "Set",
+            "data": [
+                "Hdd S31",
+                "Hdd S32"
+            ]
+        },
+        "Ho": {
+            "__class__": "Set",
+            "data": [
+                "Ho 134",
+                "Ho 101",
+                "Ho 121",
+                "Ho 304",
+                "Ho 301",
+                "Ho 306",
+                "Ho 306 Bstg",
+                "Ho 307",
+                "Ho 303",
+                "Ho 305",
+                "Ho 404",
+                "Ho Wende S"
+            ]
+        },
+        "Ho 104 PZH": {
+            "__class__": "Set",
+            "data": [
+                "Ho 104 PZH"
+            ]
+        },
+        "Hoh": {
+            "__class__": "Set",
+            "data": [
+                "Hoh 511",
+                "Hoh 553",
+                "Hoh 552",
+                "Hoh 555",
+                "Hoh 551"
+            ]
+        },
+        "Hor": {
+            "__class__": "Set",
+            "data": [
+                "Hor 603",
+                "Hor 611"
+            ]
+        },
+        "Mos": {
+            "__class__": "Set",
+            "data": [
+                "Mos 011",
+                "Mos 016",
+                "Mos 104",
+                "Mos 101 G",
+                "Mos 101",
+                "Mos 108",
+                "Mos 103",
+                "Mos 106",
+                "Mos 114",
+                "Mos 102",
+                "Mos 103 G",
+                "Mos 124",
+                "Mos 110",
+                "Mos 112",
+                "Mos 146",
+                "Mos 126",
+                "Mos 141",
+                "Mos 128"
+            ]
+        },
+        "Mos H1": {
+            "__class__": "Set",
+            "data": [
+                "Mos H1"
+            ]
+        },
+        "Mos H2H": {
+            "__class__": "Set",
+            "data": [
+                "Mos H2H"
+            ]
+        },
+        "Mos H3": {
+            "__class__": "Set",
+            "data": [
+                "Mos H3"
+            ]
+        },
+        "Tfd": {
+            "__class__": "Set",
+            "data": [
+                "Tfd 207",
+                "Tfd 213",
+                "Tfd 215",
+                "Tfd 329",
+                "Tfd 327",
+                "Tfd 305",
+                "Tfd 303",
+                "Tfd 311",
+                "Tfd 313",
+                "Tfd 315",
+                "Tfd 301",
+                "Tfd 513",
+                "Tfd 413",
+                "Tfd 403",
+                "Tfd 407"
+            ]
+        },
+        "Tfd H1": {
+            "__class__": "Set",
+            "data": [
+                "Tfd H1"
+            ]
+        },
+        "Tfd H2": {
+            "__class__": "Set",
+            "data": [
+                "Tfd H2"
+            ]
+        },
+        "Tfd U2": {
+            "__class__": "Set",
+            "data": [
+                "Tfd U2"
+            ]
+        },
+        "Tfd U4": {
+            "__class__": "Set",
+            "data": [
+                "Tfd U4"
+            ]
+        },
+        "Tfn": {
+            "__class__": "Set",
+            "data": [
+                "Tfn 111",
+                "Tfn 113"
+            ]
+        },
+        "Tfo": {
+            "__class__": "Set",
+            "data": [
+                "Tfo 107",
+                "Tfo 111",
+                "Tfo 109"
+            ]
+        },
+        "Tra": {
+            "__class__": "Set",
+            "data": [
+                "Tra 232",
+                "Tra 231 G",
+                "Tra 231",
+                "Tra 232 G",
+                "Tra 223"
+            ]
+        },
+        "Tra H1": {
+            "__class__": "Set",
+            "data": [
+                "Tra H1"
+            ]
+        },
+        "Tra H2": {
+            "__class__": "Set",
+            "data": [
+                "Tra H2"
+            ]
+        }
+    },
+    "hauptstrecke": "Knoten Hadersdorf-Knoten Wagram",
+    "sektoren": {
+        "Ho 304": {
+            "__class__": "Set",
+            "data": [
+                "Ho 304",
+                "Ho 404"
+            ]
+        },
+        "Ho 306": {
+            "__class__": "Set",
+            "data": [
+                "Ho 306",
+                "Ho 306 Bstg"
+            ]
+        },
+        "Mos 101": {
+            "__class__": "Set",
+            "data": [
+                "Mos 101 G",
+                "Mos 101"
+            ]
+        },
+        "Mos 103": {
+            "__class__": "Set",
+            "data": [
+                "Mos 103 G",
+                "Mos 103"
+            ]
+        },
+        "Tra 231": {
+            "__class__": "Set",
+            "data": [
+                "Tra 231",
+                "Tra 231 G"
+            ]
+        },
+        "Tra 232": {
+            "__class__": "Set",
+            "data": [
+                "Tra 232",
+                "Tra 232 G"
+            ]
+        }
+    },
+    "strecken": {
+        "Knoten Hadersdorf-Knoten Wagram": [
+            "Knoten Hadersdorf",
+            "Hdd S30",
+            "Tfo",
+            "Tfd",
+            "Tfd U2",
+            "Tfd U4",
+            "Knoten Wagram"
+        ],
+        "Statzendorf-Viehofen": [
+            "Statzendorf",
+            "Ho 104 PZH",
+            "Ho",
+            "Hoh",
+            "Hor",
+            "Viehofen"
+        ],
+        "Tulln Stadt-Viehofen": [
+            "Tulln Stadt",
+            "Tfn",
+            "Tfd",
+            "Tfd H1",
+            "Tfd H2",
+            "Mos",
+            "Mos H1",
+            "Mos H2H",
+            "Mos H3",
+            "Tra",
+            "Tra H1",
+            "Tra H2",
+            "Ho",
+            "Hoh",
+            "Hor",
+            "Viehofen"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

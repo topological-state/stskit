@@ -1,0 +1,184 @@
+{
+    "_aid": 376,
+    "_build": 5851,
+    "_name": "W\u00f6rgl Hbf",
+    "_region": "\u00d6sterreich West",
+    "_version": 2,
+    "anschlussgruppen": {
+        "BEX": {
+            "__class__": "Set",
+            "data": [
+                "BEX"
+            ]
+        },
+        "Bw": {
+            "__class__": "Set",
+            "data": [
+                "Bw"
+            ]
+        },
+        "Gbf A": {
+            "__class__": "Set",
+            "data": [
+                "Gbf A"
+            ]
+        },
+        "Gbf B": {
+            "__class__": "Set",
+            "data": [
+                "Gbf B"
+            ]
+        },
+        "Hopfgarten": {
+            "__class__": "Set",
+            "data": [
+                "Hopfgarten"
+            ]
+        },
+        "Jenbach": {
+            "__class__": "Set",
+            "data": [
+                "Jenbach"
+            ]
+        },
+        "Kufstein": {
+            "__class__": "Set",
+            "data": [
+                "Kufstein"
+            ]
+        },
+        "Montanwerke": {
+            "__class__": "Set",
+            "data": [
+                "Montanwerke"
+            ]
+        },
+        "Spar": {
+            "__class__": "Set",
+            "data": [
+                "Spar"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Hbf": {
+            "__class__": "Set",
+            "data": [
+                "1",
+                "24",
+                "4",
+                "20",
+                "22",
+                "5",
+                "2",
+                "3",
+                "7",
+                "6",
+                "21",
+                "23",
+                "12",
+                "11",
+                "13",
+                "55",
+                "121",
+                "71",
+                "72",
+                "A",
+                "B",
+                "Lok"
+            ]
+        },
+        "Bri": {
+            "__class__": "Set",
+            "data": [
+                "Bri3",
+                "Bri4",
+                "Bri5",
+                "Bri1",
+                "Bri2"
+            ]
+        },
+        "K": {
+            "__class__": "Set",
+            "data": [
+                "K2",
+                "K4",
+                "K1",
+                "K3"
+            ]
+        },
+        "R1": {
+            "__class__": "Set",
+            "data": [
+                "R2",
+                "R1",
+                "R4",
+                "R3",
+                "R2a",
+                "R3a",
+                "R1a",
+                "R4a"
+            ]
+        },
+        "Rattenberg": {
+            "__class__": "Set",
+            "data": [
+                "Rattenberg"
+            ]
+        }
+    },
+    "hauptstrecke": "Kufstein-Jenbach",
+    "sektoren": {
+        "R1": {
+            "__class__": "Set",
+            "data": [
+                "R1a",
+                "R1"
+            ]
+        },
+        "R2": {
+            "__class__": "Set",
+            "data": [
+                "R2a",
+                "R2"
+            ]
+        },
+        "R3": {
+            "__class__": "Set",
+            "data": [
+                "R3a",
+                "R3"
+            ]
+        },
+        "R4": {
+            "__class__": "Set",
+            "data": [
+                "R4a",
+                "R4"
+            ]
+        }
+    },
+    "strecken": {
+        "Hopfgarten-Jenbach": [
+            "Hopfgarten",
+            "Hbf",
+            "R",
+            "K",
+            "Rattenberg",
+            "Bri",
+            "Jenbach"
+        ],
+        "Kufstein-Jenbach": [
+            "Kufstein",
+            "Hbf",
+            "R",
+            "K",
+            "Rattenberg",
+            "Bri",
+            "Jenbach"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

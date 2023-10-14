@@ -1,0 +1,365 @@
+{
+    "_aid": 418,
+    "_build": 5851,
+    "_name": "Wien Meidling",
+    "_region": "\u00d6sterreich Ost",
+    "_version": 2,
+    "anschlussgruppen": {
+        "353-357": {
+            "__class__": "Set",
+            "data": [
+                "353-357"
+            ]
+        },
+        "358-360": {
+            "__class__": "Set",
+            "data": [
+                "358-360"
+            ]
+        },
+        "359N": {
+            "__class__": "Set",
+            "data": [
+                "359N"
+            ]
+        },
+        "359S": {
+            "__class__": "Set",
+            "data": [
+                "359S"
+            ]
+        },
+        "360N": {
+            "__class__": "Set",
+            "data": [
+                "360N"
+            ]
+        },
+        "360S": {
+            "__class__": "Set",
+            "data": [
+                "360S"
+            ]
+        },
+        "364": {
+            "__class__": "Set",
+            "data": [
+                "364"
+            ]
+        },
+        "380-384": {
+            "__class__": "Set",
+            "data": [
+                "380-384"
+            ]
+        },
+        "703": {
+            "__class__": "Set",
+            "data": [
+                "703"
+            ]
+        },
+        "864": {
+            "__class__": "Set",
+            "data": [
+                "864"
+            ]
+        },
+        "870": {
+            "__class__": "Set",
+            "data": [
+                "870"
+            ]
+        },
+        "891": {
+            "__class__": "Set",
+            "data": [
+                "891"
+            ]
+        },
+        "ASC": {
+            "__class__": "Set",
+            "data": [
+                "ASC 573-577",
+                "ASC 570-572"
+            ]
+        },
+        "Brunn-Maria E.": {
+            "__class__": "Set",
+            "data": [
+                "Brunn-Maria E."
+            ]
+        },
+        "Inzersdorf Ort": {
+            "__class__": "Set",
+            "data": [
+                "Inzersdorf Ort"
+            ]
+        },
+        "Inzersdorf WLB": {
+            "__class__": "Set",
+            "data": [
+                "Inzersdorf WLB"
+            ]
+        },
+        "Iz Ort": {
+            "__class__": "Set",
+            "data": [
+                "Iz Ort 9",
+                "Iz Ort 7"
+            ]
+        },
+        "Kn Hadersdorf": {
+            "__class__": "Set",
+            "data": [
+                "Kn Hadersdorf"
+            ]
+        },
+        "Maxing": {
+            "__class__": "Set",
+            "data": [
+                "Maxing 5",
+                "Maxing 6",
+                "Maxing 4",
+                "Maxing 3"
+            ]
+        },
+        "Stammstrecke": {
+            "__class__": "Set",
+            "data": [
+                "Stammstrecke"
+            ]
+        },
+        "Waldm\u00fchle": {
+            "__class__": "Set",
+            "data": [
+                "Waldm\u00fchle"
+            ]
+        },
+        "Wien Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Wien Hbf 350",
+                "Wien Hbf 3",
+                "Wien Hbf 5",
+                "Wien Hbf 1",
+                "Wien Hbf 2",
+                "Wien Hbf 351"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Aa": {
+            "__class__": "Set",
+            "data": [
+                "Aa"
+            ]
+        },
+        "Het": {
+            "__class__": "Set",
+            "data": [
+                "Het 711",
+                "Het 712"
+            ]
+        },
+        "Hez": {
+            "__class__": "Set",
+            "data": [
+                "Hez"
+            ]
+        },
+        "Hez U1": {
+            "__class__": "Set",
+            "data": [
+                "Hez U1"
+            ]
+        },
+        "Lg": {
+            "__class__": "Set",
+            "data": [
+                "Lg 322",
+                "Lg 403",
+                "Lg 431",
+                "Lg 332",
+                "Lg 402",
+                "Lg 401",
+                "Lg 432",
+                "Lg 531"
+            ]
+        },
+        "Lga": {
+            "__class__": "Set",
+            "data": [
+                "Lga 202",
+                "Lga 203",
+                "Lga 201"
+            ]
+        },
+        "Lgf": {
+            "__class__": "Set",
+            "data": [
+                "Lgf 301",
+                "Lgf 302",
+                "Lgf 352",
+                "Lgf 351",
+                "Lgf 354",
+                "Lgf 303",
+                "Lgf 353"
+            ]
+        },
+        "Mat": {
+            "__class__": "Set",
+            "data": [
+                "Mat 301",
+                "Mat 303",
+                "Mat 302",
+                "Mat 351",
+                "Mat 305",
+                "Mat 350",
+                "Mat 452",
+                "Mat 352",
+                "Mat 401",
+                "Mat 319",
+                "Mat 451"
+            ]
+        },
+        "Mi": {
+            "__class__": "Set",
+            "data": [
+                "Mi 481",
+                "Mi 483",
+                "Mi 502",
+                "Mi *01",
+                "Mi 501",
+                "Mi 510",
+                "Mi *05",
+                "Mi 515",
+                "Mi *06",
+                "Mi 503",
+                "Mi *01 (l)",
+                "Mi *03 (l)",
+                "Mi *03",
+                "Mi 504 (l)",
+                "Mi 508",
+                "Mi *08",
+                "Mi 506",
+                "Mi 502 (l)",
+                "Mi 504",
+                "Mi 513",
+                "Mi 516",
+                "Mi 518",
+                "Mi 552",
+                "Mi 551",
+                "Mi 601",
+                "Mi 612",
+                "Mi 610",
+                "Mi W253",
+                "Mi W279"
+            ]
+        },
+        "Osw": {
+            "__class__": "Set",
+            "data": [
+                "Osw"
+            ]
+        },
+        "Wbb": {
+            "__class__": "Set",
+            "data": [
+                "Wbb"
+            ]
+        }
+    },
+    "hauptstrecke": "Brunn-Maria-Stammstrecke",
+    "sektoren": {
+        "Mi *01": {
+            "__class__": "Set",
+            "data": [
+                "Mi *01",
+                "Mi 501",
+                "Mi *01 (l)",
+                "Mi 481"
+            ]
+        },
+        "Mi *02": {
+            "__class__": "Set",
+            "data": [
+                "Mi 502",
+                "Mi 502 (l)"
+            ]
+        },
+        "Mi *03": {
+            "__class__": "Set",
+            "data": [
+                "Mi 503",
+                "Mi *03 (l)",
+                "Mi *03",
+                "Mi 513",
+                "Mi 483"
+            ]
+        },
+        "Mi *04": {
+            "__class__": "Set",
+            "data": [
+                "Mi 504 (l)",
+                "Mi 504"
+            ]
+        },
+        "Mi *05": {
+            "__class__": "Set",
+            "data": [
+                "Mi *05",
+                "Mi 505",
+                "Mi 515"
+            ]
+        },
+        "Mi *06": {
+            "__class__": "Set",
+            "data": [
+                "Mi *06",
+                "Mi 506",
+                "Mi 516"
+            ]
+        },
+        "Mi *08": {
+            "__class__": "Set",
+            "data": [
+                "Mi 508",
+                "Mi *08",
+                "Mi 518"
+            ]
+        }
+    },
+    "strecken": {
+        "Brunn-Maria-Stammstrecke": [
+            "Brunn-Maria E.",
+            "Lg",
+            "Lgf",
+            "Lga",
+            "Het",
+            "Wbb",
+            "Mi",
+            "Stammstrecke"
+        ],
+        "Brunn-Maria E.-Wien Hbf": [
+            "Brunn-Maria E.",
+            "Lg",
+            "Lgf",
+            "Lga",
+            "Het",
+            "Wbb",
+            "Mi",
+            "Wien Hbf"
+        ],
+        "Kn Hadersdorf-Wien Hbf": [
+            "Kn Hadersdorf",
+            "Hez U1",
+            "Hez",
+            "Mi",
+            "Wien Hbf"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

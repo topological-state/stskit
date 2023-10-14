@@ -1,0 +1,484 @@
+{
+    "_aid": 424,
+    "_build": 5851,
+    "_name": "Wien Westbf",
+    "_region": "\u00d6sterreich Ost",
+    "_version": 2,
+    "anschlussgruppen": {
+        "127-131b": {
+            "__class__": "Set",
+            "data": [
+                "127-131b"
+            ]
+        },
+        "213b": {
+            "__class__": "Set",
+            "data": [
+                "213b"
+            ]
+        },
+        "502-504": {
+            "__class__": "Set",
+            "data": [
+                "502-504"
+            ]
+        },
+        "612": {
+            "__class__": "Set",
+            "data": [
+                "612"
+            ]
+        },
+        "612-620": {
+            "__class__": "Set",
+            "data": [
+                "612-620"
+            ]
+        },
+        "701a-721b": {
+            "__class__": "Set",
+            "data": [
+                "701a-721b"
+            ]
+        },
+        "704-712": {
+            "__class__": "Set",
+            "data": [
+                "704-712"
+            ]
+        },
+        "712": {
+            "__class__": "Set",
+            "data": [
+                "712"
+            ]
+        },
+        "714-732a": {
+            "__class__": "Set",
+            "data": [
+                "714-732a"
+            ]
+        },
+        "716-718": {
+            "__class__": "Set",
+            "data": [
+                "716-718"
+            ]
+        },
+        "7a-7c": {
+            "__class__": "Set",
+            "data": [
+                "7a-7c"
+            ]
+        },
+        "805": {
+            "__class__": "Set",
+            "data": [
+                "805"
+            ]
+        },
+        "807": {
+            "__class__": "Set",
+            "data": [
+                "807"
+            ]
+        },
+        "817": {
+            "__class__": "Set",
+            "data": [
+                "817"
+            ]
+        },
+        "851": {
+            "__class__": "Set",
+            "data": [
+                "851"
+            ]
+        },
+        "853": {
+            "__class__": "Set",
+            "data": [
+                "853"
+            ]
+        },
+        "855-871": {
+            "__class__": "Set",
+            "data": [
+                "855-871"
+            ]
+        },
+        "Maxing": {
+            "__class__": "Set",
+            "data": [
+                "Maxing 101"
+            ]
+        },
+        "Meinl": {
+            "__class__": "Set",
+            "data": [
+                "Meinl"
+            ]
+        },
+        "Wien Heiligenstadt": {
+            "__class__": "Set",
+            "data": [
+                "Wien Heiligenstadt"
+            ]
+        },
+        "Wien H\u00fctteldorf": {
+            "__class__": "Set",
+            "data": [
+                "Wien H\u00fctteldorf"
+            ]
+        },
+        "Wien H\u00fctteldorf 004": {
+            "__class__": "Set",
+            "data": [
+                "Wien H\u00fctteldorf 004"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Hnf": {
+            "__class__": "Set",
+            "data": [
+                "Hnf 322",
+                "Hnf 321",
+                "Hnf 325",
+                "Hnf 323"
+            ]
+        },
+        "Hns": {
+            "__class__": "Set",
+            "data": [
+                "Hns 222",
+                "Hns 221",
+                "Hns 223"
+            ]
+        },
+        "Ht H3": {
+            "__class__": "Set",
+            "data": [
+                "Ht H3 061",
+                "Ht H3 062"
+            ]
+        },
+        "Ht U3": {
+            "__class__": "Set",
+            "data": [
+                "Ht U3"
+            ]
+        },
+        "Ok": {
+            "__class__": "Set",
+            "data": [
+                "Ok 721",
+                "Ok 722"
+            ]
+        },
+        "Ok H1": {
+            "__class__": "Set",
+            "data": [
+                "Ok H1 071",
+                "Ok H1 072"
+            ]
+        },
+        "Ow": {
+            "__class__": "Set",
+            "data": [
+                "Ow 113 A",
+                "Ow 217 B",
+                "Ow 209 C",
+                "Ow 205 D",
+                "Ow 125",
+                "Ow 215 A",
+                "Ow 211 C",
+                "Ow 205 C",
+                "Ow 111 B",
+                "Ow 103 A",
+                "Ow 102",
+                "Ow 215 B",
+                "Ow 107",
+                "Ow 109 B",
+                "Ow 110",
+                "Ow 221",
+                "Ow 117",
+                "Ow 217 A",
+                "Ow 105 B",
+                "Ow 123",
+                "Ow 103 B",
+                "Ow 213 C",
+                "Ow 101",
+                "Ow 203 C",
+                "Ow 710",
+                "Ow 323",
+                "Ow 119",
+                "Ow 207",
+                "Ow 105 A",
+                "Ow 113 B",
+                "Ow 203 D",
+                "Ow 125 Sp",
+                "Ow 121",
+                "Ow 104a",
+                "Ow 108",
+                "Ow 219",
+                "Ow W301",
+                "Ow 2W",
+                "Ow 4S",
+                "Ow 3S",
+                "Ow 1W",
+                "Ow 5S",
+                "Ow 251",
+                "Ow 51",
+                "Ow 55",
+                "Ow 63",
+                "Ow 61",
+                "Ow 57",
+                "Ow 49",
+                "Ow 53",
+                "Ow 506",
+                "Ow 512",
+                "Ow 510",
+                "Ow 508",
+                "Ow 610",
+                "Ow 708",
+                "Ow 809",
+                "Ow 809 W"
+            ]
+        },
+        "Pz": {
+            "__class__": "Set",
+            "data": [
+                "Pz 5a",
+                "Pz 3a",
+                "Pz 404",
+                "Pz 401",
+                "Pz 406",
+                "Pz 402",
+                "Pz W21",
+                "Pz W20",
+                "Pz W14"
+            ]
+        },
+        "Pz F1": {
+            "__class__": "Set",
+            "data": [
+                "Pz F1 506",
+                "Pz F1 504"
+            ]
+        },
+        "Pz U1": {
+            "__class__": "Set",
+            "data": [
+                "Pz U1"
+            ]
+        },
+        "Wasch": {
+            "__class__": "Set",
+            "data": [
+                "Wasch 1",
+                "Wasch 2",
+                "Wasch 3"
+            ]
+        },
+        "Ws": {
+            "__class__": "Set",
+            "data": [
+                "Ws 008",
+                "Ws 003 2ET",
+                "Ws 001",
+                "Ws 009",
+                "Ws 011",
+                "Ws 004 2ET",
+                "Ws 005 2ET",
+                "Ws 010 2ET",
+                "Ws 006 2ET",
+                "Ws 009 2ET",
+                "Ws 003",
+                "Ws 011 2ET",
+                "Ws 010",
+                "Ws 005",
+                "Ws 002",
+                "Ws 007 2ET",
+                "Ws 007",
+                "Ws 006",
+                "Ws 002 2ET",
+                "Ws 004",
+                "Ws 008 2ET",
+                "Ws 001 2ET",
+                "Ws 008v",
+                "Ws W69",
+                "Ws 1a",
+                "Ws 009v",
+                "Ws 800"
+            ]
+        }
+    },
+    "hauptstrecke": "Westbf-H\u00fctteldorf",
+    "sektoren": {
+        "Ow 103": {
+            "__class__": "Set",
+            "data": [
+                "Ow 103 B",
+                "Ow 103 A",
+                "Ow 203 D",
+                "Ow 203 C"
+            ]
+        },
+        "Ow 105": {
+            "__class__": "Set",
+            "data": [
+                "Ow 105 B",
+                "Ow 105 A",
+                "Ow 205 D",
+                "Ow 205 C"
+            ]
+        },
+        "Ow 113": {
+            "__class__": "Set",
+            "data": [
+                "Ow 113 A",
+                "Ow 113 B"
+            ]
+        },
+        "Ow 125": {
+            "__class__": "Set",
+            "data": [
+                "Ow 125",
+                "Ow 125 Sp"
+            ]
+        },
+        "Ow 215": {
+            "__class__": "Set",
+            "data": [
+                "Ow 115",
+                "Ow 215 B",
+                "Ow 215 A"
+            ]
+        },
+        "Ow 217": {
+            "__class__": "Set",
+            "data": [
+                "Ow 217 A",
+                "Ow 217 B"
+            ]
+        },
+        "Ow 809": {
+            "__class__": "Set",
+            "data": [
+                "Ow 809",
+                "Ow 809 W"
+            ]
+        },
+        "Pz F1": {
+            "__class__": "Set",
+            "data": [
+                "Pz F1 506",
+                "Pz F1 504"
+            ]
+        },
+        "Ws 001": {
+            "__class__": "Set",
+            "data": [
+                "Ws 001",
+                "Ws 001 2ET"
+            ]
+        },
+        "Ws 002": {
+            "__class__": "Set",
+            "data": [
+                "Ws 002",
+                "Ws 002 2ET"
+            ]
+        },
+        "Ws 003": {
+            "__class__": "Set",
+            "data": [
+                "Ws 003",
+                "Ws 003 2ET"
+            ]
+        },
+        "Ws 004": {
+            "__class__": "Set",
+            "data": [
+                "Ws 004 2ET",
+                "Ws 004"
+            ]
+        },
+        "Ws 005": {
+            "__class__": "Set",
+            "data": [
+                "Ws 005 2ET",
+                "Ws 005"
+            ]
+        },
+        "Ws 006": {
+            "__class__": "Set",
+            "data": [
+                "Ws 006 2ET",
+                "Ws 006"
+            ]
+        },
+        "Ws 007": {
+            "__class__": "Set",
+            "data": [
+                "Ws 007 2ET",
+                "Ws 007"
+            ]
+        },
+        "Ws 008": {
+            "__class__": "Set",
+            "data": [
+                "Ws 008v",
+                "Ws 008 2ET",
+                "Ws 008"
+            ]
+        },
+        "Ws 009": {
+            "__class__": "Set",
+            "data": [
+                "Ws 009",
+                "Ws 009 2ET",
+                "Ws 009v"
+            ]
+        },
+        "Ws 010": {
+            "__class__": "Set",
+            "data": [
+                "Ws 010",
+                "Ws 010 2ET"
+            ]
+        },
+        "Ws 011": {
+            "__class__": "Set",
+            "data": [
+                "Ws 011 2ET",
+                "Ws 011"
+            ]
+        }
+    },
+    "strecken": {
+       "Heiligenstadt-H\u00fctteldorf 004": [
+            "Wien Heiligenstadt",
+            "Ht U3",
+            "Ht H3",
+            "Hns",
+            "Hnf",
+            "Ok",
+            "Ok H1",
+            "Pz",
+            "Pz F1",
+            "Wien H\u00fctteldorf 004"
+        ],
+        "Westbf-H\u00fctteldorf": [
+            "Ws",
+            "Ow",
+            "Pz",
+            "Pz U1",
+            "Wien H\u00fctteldorf"
+        ]
+    },
+    "streckenmarkierung": ["Pz F1", "Wien H\u00fctteldorf 004", "E"],
+    "zugschema": "deutschland"
+}
