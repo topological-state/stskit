@@ -51,7 +51,7 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
 
         self._zugliste: Dict[int, ZugDetailsPlanung] = {}
         self._reihenfolge: List[int] = []
-        self._columns: List[str] = ['Status', 'Einfahrt', 'Zug', 'Von', 'Nach', 'Gleis', 'Verspätung']
+        self._columns: List[str] = ['Zug', 'Status', 'Von', 'Nach', 'Einfahrt', 'Ausfahrt', 'Gleis', 'Verspätung']
         self.zugschema = None
 
     def set_zugliste(self, zugliste: Dict[int, ZugDetailsPlanung]) -> None:
@@ -127,7 +127,12 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
                 return zug.zid
             elif col == 'Einfahrt':
                 try:
-                    return time_to_minutes(zug.einfahrtszeit) + zug.verspaetung
+                    return time_to_minutes(zug.einfahrtszeit)
+                except AttributeError:
+                    return None
+            elif col == 'Ausfahrt':
+                try:
+                    return time_to_minutes(zug.ausfahrtszeit)
                 except AttributeError:
                     return None
             elif col == 'Zug':
@@ -151,6 +156,11 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
             elif col == 'Einfahrt':
                 try:
                     return zug.einfahrtszeit.isoformat(timespec='minutes')
+                except AttributeError:
+                    return ""
+            elif col == 'Ausfahrt':
+                try:
+                    return zug.ausfahrtszeit.isoformat(timespec='minutes')
                 except AttributeError:
                     return ""
             elif col == 'Zug':
@@ -213,6 +223,75 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
                 return self._columns[section]
             elif orientation == QtCore.Qt.Vertical:
                 return self._zugliste[self._reihenfolge[section]].zid
+
+
+class ZuglisteFilterProxy(QSortFilterProxyModel):
+
+    def __init__(self, parent=...):
+        super().__init__(parent)
+        self._simzeit: int = 0
+        self._vorlaufzeit: int = 0
+        self._nachlaufzeit: int = 15
+        self._zugliste_model: ZuglisteModell = None
+
+    @property
+    def simzeit(self) -> int:
+        return self._simzeit
+
+    @simzeit.setter
+    def simzeit(self, minuten: int):
+        self._simzeit = minuten
+
+    @property
+    def vorlaufzeit(self) -> int:
+        return self._vorlaufzeit
+
+    @vorlaufzeit.setter
+    def vorlaufzeit(self, minuten: int):
+        self._vorlaufzeit = minuten
+
+    @property
+    def nachlaufzeit(self) -> int:
+        return self._nachlaufzeit
+
+    @nachlaufzeit.setter
+    def nachlaufzeit(self, minuten: int):
+        self._nachlaufzeit = minuten
+
+    def filterAcceptsRow(self, source_row, source_parent):
+        if self.simzeit <= 0:
+            return True
+
+        try:
+            zug = self.sourceModel().get_zug(source_row)
+        except AttributeError:
+            print("can't get zug")
+            pass
+        else:
+            if zug is None or zug.sichtbar:
+                return True
+
+            elif zug.gleis:
+                if self._vorlaufzeit <= 0:
+                    return True
+
+                try:
+                    if time_to_minutes(zug.einfahrtszeit) > self.simzeit + self._vorlaufzeit:
+                        return False
+                except AttributeError:
+                    pass
+
+            else:
+                if self._nachlaufzeit <= 0:
+                    return True
+
+                try:
+                    if time_to_minutes(zug.ausfahrtszeit) < self.simzeit - self._nachlaufzeit:
+                        return False
+                except AttributeError:
+                    pass
+
+        return True
 
 
 class FahrplanModell(QtCore.QAbstractTableModel):
@@ -361,6 +440,13 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui = Ui_FahrplanWidget()
         self.ui.setupUi(self)
 
+        # todo : suche implementieren
+        del self.ui.suche_gleis_label
+        del self.ui.suche_gleis_edit
+        del self.ui.suche_zugnummer_label
+        del self.ui.suche_zugnummer_edit
+        del self.ui.suche_loeschen_button
+
         self.setWindowTitle("Zugfahrplan")
 
         self.display_canvas = FigureCanvas(Figure(figsize=(3, 5)))
@@ -371,8 +457,9 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui.display_layout.addWidget(self.display_canvas)
 
         self.zugliste_modell = ZuglisteModell()
+
         self.zugliste_modell.zugschema = self.zentrale.anlage.zugschema
-        self.zugliste_sort_filter = QSortFilterProxyModel(self)
+        self.zugliste_sort_filter = ZuglisteFilterProxy(self)
         self.zugliste_sort_filter.setSourceModel(self.zugliste_modell)
         self.zugliste_sort_filter.setSortRole(QtCore.Qt.UserRole)
         self.ui.zugliste_view.setModel(self.zugliste_sort_filter)
@@ -382,6 +469,11 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui.zugliste_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
         self.ui.zugliste_view.sortByColumn(0, 0)
         self.ui.zugliste_view.setSortingEnabled(True)
+
+        self.ui.vorlaufzeit_spin.setValue(self.zugliste_sort_filter.vorlaufzeit)
+        self.ui.nachlaufzeit_spin.setValue(self.zugliste_sort_filter.nachlaufzeit)
+        self.ui.vorlaufzeit_spin.valueChanged.connect(self.vorlaufzeit_changed)
+        self.ui.nachlaufzeit_spin.valueChanged.connect(self.nachlaufzeit_changed)
 
         self.fahrplan_modell = FahrplanModell()
         self.ui.fahrplan_view.setModel(self.fahrplan_modell)
@@ -409,6 +501,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         except IndexError:
             model_index = None
 
+        self.zugliste_sort_filter.simzeit = self.zentrale.planung.simzeit_minuten
         self.zugliste_modell.set_zugliste(self.zentrale.planung.zugliste)
 
         if model_index:
@@ -507,3 +600,18 @@ class FahrplanWindow(QtWidgets.QWidget):
         """
 
         self.grafik_update()
+
+    @pyqtSlot()
+    def vorlaufzeit_changed(self):
+        try:
+            self.zugliste_sort_filter.vorlaufzeit = self.ui.vorlaufzeit_spin.value()
+        except ValueError:
+            pass
+
+    @pyqtSlot()
+    def nachlaufzeit_changed(self):
+        try:
+            self.zugliste_sort_filter.nachlaufzeit = self.ui.nachlaufzeit_spin.value()
+        except ValueError:
+            pass
+
