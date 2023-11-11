@@ -26,33 +26,55 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QLabel" name="suche_zugnummer_label">
+           <widget class="QLabel" name="suche_zug_label">
             <property name="text">
-             <string>Suche Zugnummer</string>
+             <string>Suche Zug</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="suche_zugnummer_edit"/>
-          </item>
-          <item>
-           <widget class="QLabel" name="suche_gleis_label">
-            <property name="text">
-             <string>Suche Gleis</string>
+           <widget class="QLineEdit" name="suche_zug_edit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
            </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="suche_gleis_edit"/>
           </item>
           <item>
            <widget class="QPushButton" name="suche_loeschen_button">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>23</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="text">
-             <string>Suche löschen</string>
+             <string>x</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>
@@ -64,7 +86,7 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QLabel" name="vorlaufzeit_label">
             <property name="text">
@@ -135,6 +157,19 @@
             </property>
            </widget>
           </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </item>
        </layout>
@@ -199,7 +234,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>515</width>
+             <width>348</width>
              <height>736</height>
             </rect>
            </property>

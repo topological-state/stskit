@@ -440,13 +440,6 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui = Ui_FahrplanWidget()
         self.ui.setupUi(self)
 
-        # todo : suche implementieren
-        del self.ui.suche_gleis_label
-        del self.ui.suche_gleis_edit
-        del self.ui.suche_zugnummer_label
-        del self.ui.suche_zugnummer_edit
-        del self.ui.suche_loeschen_button
-
         self.setWindowTitle("Zugfahrplan")
 
         self.display_canvas = FigureCanvas(Figure(figsize=(3, 5)))
@@ -474,6 +467,9 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui.nachlaufzeit_spin.setValue(self.zugliste_sort_filter.nachlaufzeit)
         self.ui.vorlaufzeit_spin.valueChanged.connect(self.vorlaufzeit_changed)
         self.ui.nachlaufzeit_spin.valueChanged.connect(self.nachlaufzeit_changed)
+
+        self.ui.suche_zug_edit.textEdited.connect(self.suche_zug_changed)
+        self.ui.suche_loeschen_button.clicked.connect(self.suche_loeschen_clicked)
 
         self.fahrplan_modell = FahrplanModell()
         self.ui.fahrplan_view.setModel(self.fahrplan_modell)
@@ -615,3 +611,25 @@ class FahrplanWindow(QtWidgets.QWidget):
         except ValueError:
             pass
 
+    @pyqtSlot()
+    def suche_zug_changed(self):
+        text = self.ui.suche_zug_edit.text()
+        if not text:
+            return
+
+        column = self.zugliste_modell._columns.index("Zug")
+        start = self.zugliste_sort_filter.index(0, column)
+        matches = self.zugliste_sort_filter.match(start, QtCore.Qt.DisplayRole, text, 1, QtCore.Qt.MatchContains)
+
+        for index in matches:
+            if index.column() == column:
+                self.ui.zugliste_view.selectionModel().clear()
+                self.ui.zugliste_view.selectionModel().select(index, QItemSelectionModel.SelectionFlag.Select |
+                                                              QItemSelectionModel.SelectionFlag.Rows)
+                break
+        else:
+            self.ui.zugliste_view.selectionModel().clear()
+
+    @pyqtSlot()
+    def suche_loeschen_clicked(self):
+        self.ui.suche_zug_edit.clear()
