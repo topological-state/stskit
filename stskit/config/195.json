@@ -1,0 +1,306 @@
+{
+    "_aid": 195,
+    "_build": 5851,
+    "_name": "Leoben Hbf",
+    "_region": "\u00d6sterreich Mitte",
+    "_version": 2,
+    "anschlussgruppen": {
+        "24": {
+            "__class__": "Set",
+            "data": [
+                "24"
+            ]
+        },
+        "2b": {
+            "__class__": "Set",
+            "data": [
+                "2b"
+            ]
+        },
+        "3b-21b": {
+            "__class__": "Set",
+            "data": [
+                "3b-21b"
+            ]
+        },
+        "405": {
+            "__class__": "Set",
+            "data": [
+                "405"
+            ]
+        },
+        "412": {
+            "__class__": "Set",
+            "data": [
+                "412"
+            ]
+        },
+        "419": {
+            "__class__": "Set",
+            "data": [
+                "419"
+            ]
+        },
+        "420": {
+            "__class__": "Set",
+            "data": [
+                "420"
+            ]
+        },
+        "5a": {
+            "__class__": "Set",
+            "data": [
+                "5a"
+            ]
+        },
+        "BP Gas": {
+            "__class__": "Set",
+            "data": [
+                "BP Gas"
+            ]
+        },
+        "Bruck": {
+            "__class__": "Set",
+            "data": [
+                "Bruck"
+            ]
+        },
+        "Papierf.": {
+            "__class__": "Set",
+            "data": [
+                "Papierf."
+            ]
+        },
+        "St. Michael": {
+            "__class__": "Set",
+            "data": [
+                "St. Michael"
+            ]
+        },
+        "St. Peter-F.": {
+            "__class__": "Set",
+            "data": [
+                "St. Peter-F."
+            ]
+        },
+        "voestalpine": {
+            "__class__": "Set",
+            "data": [
+                "voestalpine"
+            ]
+        },
+        "voestalpine II": {
+            "__class__": "Set",
+            "data": [
+                "voestalpine II"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Bm": {
+            "__class__": "Set",
+            "data": [
+                "Bm U2L"
+            ]
+        },
+        "Dv": {
+            "__class__": "Set",
+            "data": [
+                "Dv 12",
+                "Dv 4",
+                "Dv 3",
+                "Dv 10 (k)",
+                "Dv 1",
+                "Dv 12 (k)",
+                "Dv 14 (k)",
+                "Dv 8",
+                "Dv 6",
+                "Dv 14",
+                "Dv 10",
+                "Dv 2b",
+                "Dv 18a",
+                "Dv 18a (k)",
+                "Dv 16 (k)",
+                "Dv 3a",
+                "Dv W1",
+                "Dv W64"
+            ]
+        },
+        "Lade": {
+            "__class__": "Set",
+            "data": [
+                "Lade 1",
+                "Lade 2",
+                "Lade 3"
+            ]
+        },
+        "Leb": {
+            "__class__": "Set",
+            "data": [
+                "Leb 208",
+                "Leb 101",
+                "Leb 301",
+                "Leb 202",
+                "Leb 208 (k)",
+                "Leb 404",
+                "Leb 410",
+                "Leb 412",
+                "Leb 401",
+                "Leb 406 G",
+                "Leb 402",
+                "Leb 404 G",
+                "Leb 408",
+                "Leb 403",
+                "Leb 406",
+                "Leb 407",
+                "Leb 409"
+            ]
+        },
+        "Leb U1": {
+            "__class__": "Set",
+            "data": [
+                "Leb U1"
+            ]
+        },
+        "Leg": {
+            "__class__": "Set",
+            "data": [
+                "Leg 201",
+                "Leg 202 (k)",
+                "Leg 203",
+                "Leg 202",
+                "Leg 5",
+                "Leg 204 (k)",
+                "Leg 201 (k)",
+                "Leg 203 (k)",
+                "Leg 204",
+                "Leg Wende"
+            ]
+        },
+        "Lew": {
+            "__class__": "Set",
+            "data": [
+                "Lew"
+            ]
+        },
+        "Ni": {
+            "__class__": "Set",
+            "data": [
+                "Ni 104",
+                "Ni 102",
+                "Ni 105",
+                "Ni 111",
+                "Ni 109",
+                "Ni 107",
+                "Ni 113",
+                "Ni 101",
+                "Ni 3a (k)",
+                "Ni W2",
+                "Ni 3a",
+                "Ni W62",
+                "Ni 3b"
+            ]
+        }
+    },
+    "hauptstrecke": "Bruck-St. Michael",
+    "sektoren": {
+        "Dv 10": {
+            "__class__": "Set",
+            "data": [
+                "Dv 10 (k)",
+                "Dv 10"
+            ]
+        },
+        "Dv 12": {
+            "__class__": "Set",
+            "data": [
+                "Dv 12",
+                "Dv 12 (k)"
+            ]
+        },
+        "Dv 14": {
+            "__class__": "Set",
+            "data": [
+                "Dv 14",
+                "Dv 14 (k)"
+            ]
+        },
+        "Dv 18": {
+            "__class__": "Set",
+            "data": [
+                "Dv 18a",
+                "Dv 18a (k)"
+            ]
+        },
+        "Leb 208": {
+            "__class__": "Set",
+            "data": [
+                "Leb 208",
+                "Leb 208 (k)"
+            ]
+        },
+        "Leb 404": {
+            "__class__": "Set",
+            "data": [
+                "Leb 404",
+                "Leb 404 G"
+            ]
+        },
+        "Leb 406": {
+            "__class__": "Set",
+            "data": [
+                "Leb 406 G",
+                "Leb 406"
+            ]
+        },
+        "Leg 201": {
+            "__class__": "Set",
+            "data": [
+                "Leg 201",
+                "Leg 201 (k)"
+            ]
+        },
+        "Leg 202": {
+            "__class__": "Set",
+            "data": [
+                "Leg 202",
+                "Leg 202 (k)"
+            ]
+        },
+        "Leg 203": {
+            "__class__": "Set",
+            "data": [
+                "Leg 203 (k)",
+                "Leg 203"
+            ]
+        },
+        "Leg 204": {
+            "__class__": "Set",
+            "data": [
+                "Leg 204 (k)",
+                "Leg 204"
+            ]
+        },
+        "Ni 3": {
+            "__class__": "Set",
+            "data": [
+                "Ni 3a (k)",
+                "Ni 3a"
+            ]
+        }
+    },
+    "strecken": {
+        "Bruck-St. Michael": [
+            "Bruck",
+            "Bm",
+            "Ni",
+            "Leb",
+            "Lew",
+            "Leb U1",
+            "St. Michael"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

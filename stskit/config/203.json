@@ -1,0 +1,364 @@
+{
+    "_aid": 203,
+    "_build": 5851,
+    "_name": "Zeltweg",
+    "_region": "\u00d6sterreich Mitte",
+    "_version": 2,
+    "anschlussgruppen": {
+        "116": {
+            "__class__": "Set",
+            "data": [
+                "116"
+            ]
+        },
+        "14o": {
+            "__class__": "Set",
+            "data": [
+                "14o"
+            ]
+        },
+        "14w": {
+            "__class__": "Set",
+            "data": [
+                "14w"
+            ]
+        },
+        "208-210": {
+            "__class__": "Set",
+            "data": [
+                "208-210"
+            ]
+        },
+        "208o": {
+            "__class__": "Set",
+            "data": [
+                "208o"
+            ]
+        },
+        "410": {
+            "__class__": "Set",
+            "data": [
+                "410"
+            ]
+        },
+        "5b": {
+            "__class__": "Set",
+            "data": [
+                "5b"
+            ]
+        },
+        "Friesach": {
+            "__class__": "Set",
+            "data": [
+                "Friesach"
+            ]
+        },
+        "Knittelfeld": {
+            "__class__": "Set",
+            "data": [
+                "Knittelfeld"
+            ]
+        },
+        "Ladegl. StLB": {
+            "__class__": "Set",
+            "data": [
+                "Ladegl. StLB"
+            ]
+        },
+        "Mondi Coating": {
+            "__class__": "Set",
+            "data": [
+                "Mondi Coating"
+            ]
+        },
+        "Oberbauwk": {
+            "__class__": "Set",
+            "data": [
+                "Oberbauwk"
+            ]
+        },
+        "P\u00f6ls": {
+            "__class__": "Set",
+            "data": [
+                "P\u00f6ls"
+            ]
+        },
+        "Stahl Ostwk": {
+            "__class__": "Set",
+            "data": [
+                "Stahl Ostwk"
+            ]
+        },
+        "Stahl Westwk": {
+            "__class__": "Set",
+            "data": [
+                "Stahl Westwk"
+            ]
+        },
+        "Tamsweg": {
+            "__class__": "Set",
+            "data": [
+                "Tamsweg"
+            ]
+        },
+        "VAE Weichenwk": {
+            "__class__": "Set",
+            "data": [
+                "VAE Weichenwk"
+            ]
+        },
+        "Wei\u00dfkirchen": {
+            "__class__": "Set",
+            "data": [
+                "Wei\u00dfkirchen"
+            ]
+        },
+        "Wuppermann": {
+            "__class__": "Set",
+            "data": [
+                "Wuppermann"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Jg": {
+            "__class__": "Set",
+            "data": [
+                "Jg 102",
+                "Jg 101",
+                "Jg 202",
+                "Jg 204",
+                "Jg 201",
+                "Jg 205",
+                "Jg 203",
+                "Jg 205 Bstg",
+                "Jg 206",
+                "Jg 207",
+                "Jg 402",
+                "Jg 401",
+                "Jg 403"
+            ]
+        },
+        "Mah": {
+            "__class__": "Set",
+            "data": [
+                "Mah 002",
+                "Mah 001",
+                "Mah 004 Bstg",
+                "Mah 004"
+            ]
+        },
+        "Nes": {
+            "__class__": "Set",
+            "data": [
+                "Nes 103",
+                "Nes 102",
+                "Nes 101"
+            ]
+        },
+        "Nes U1": {
+            "__class__": "Set",
+            "data": [
+                "Nes U1"
+            ]
+        },
+        "Sf": {
+            "__class__": "Set",
+            "data": [
+                "Sf 003",
+                "Sf 002",
+                "Sf 001",
+                "Sf 4a"
+            ]
+        },
+        "Tel": {
+            "__class__": "Set",
+            "data": [
+                "Tel 102",
+                "Tel 103",
+                "Tel 101",
+                "Tel 104",
+                "Tel 5a",
+                "Tel 6",
+                "Tel Wende"
+            ]
+        },
+        "Tel H1": {
+            "__class__": "Set",
+            "data": [
+                "Tel H1"
+            ]
+        },
+        "Um": {
+            "__class__": "Set",
+            "data": [
+                "Um 103",
+                "Um 101",
+                "Um 10b",
+                "Um 304",
+                "Um 308",
+                "Um 313",
+                "Um 302",
+                "Um 303",
+                "Um 301",
+                "Um 306",
+                "Um 401",
+                "Um Wende",
+                "Wende StLB"
+            ]
+        },
+        "Zg": {
+            "__class__": "Set",
+            "data": [
+                "Zg 101",
+                "Zg W8",
+                "Zg 102",
+                "Zg 14o",
+                "Zg 14w",
+                "Zg 312",
+                "Zg 308o",
+                "Zg 304w",
+                "Zg 308",
+                "Zg 316",
+                "Zg W51",
+                "Zg 302",
+                "Zg 301",
+                "Zg 308w",
+                "Zg 303",
+                "Zg 304",
+                "Zg 310o",
+                "Zg 306o",
+                "Zg 310w",
+                "Zg 306w",
+                "Zg 310",
+                "Zg 306",
+                "Zg 304o",
+                "Zg 404",
+                "Zg 501",
+                "Zg 601",
+                "Zg 504",
+                "Zg 502",
+                "Zg 602",
+                "Zg 414 (k)",
+                "Zg 414",
+                "Zg 412",
+                "Zg A5"
+            ]
+        },
+        "km 240.743": {
+            "__class__": "Set",
+            "data": [
+                "km 240.743"
+            ]
+        },
+        "km 264.086": {
+            "__class__": "Set",
+            "data": [
+                "km 264.086"
+            ]
+        },
+        "km 274.167": {
+            "__class__": "Set",
+            "data": [
+                "km 274.167"
+            ]
+        },
+        "km 280.103": {
+            "__class__": "Set",
+            "data": [
+                "km 280.103"
+            ]
+        },
+        "von Wei\u00dfkirchen": {
+            "__class__": "Set",
+            "data": [
+                "von Wei\u00dfkirchen"
+            ]
+        }
+    },
+    "hauptstrecke": "Knittelfeld-Friesach",
+    "sektoren": {
+        "Jg 205": {
+            "__class__": "Set",
+            "data": [
+                "Jg 205 Bstg",
+                "Jg 205"
+            ]
+        },
+        "Mah 004": {
+            "__class__": "Set",
+            "data": [
+                "Mah 004",
+                "Mah 004 Bstg"
+            ]
+        },
+        "Zg 14": {
+            "__class__": "Set",
+            "data": [
+                "Zg 14o",
+                "Zg 14w"
+            ]
+        },
+        "Zg 304": {
+            "__class__": "Set",
+            "data": [
+                "Zg 304",
+                "Zg 304w",
+                "Zg 304o"
+            ]
+        },
+        "Zg 306": {
+            "__class__": "Set",
+            "data": [
+                "Zg 306w",
+                "Zg 306",
+                "Zg 306o"
+            ]
+        },
+        "Zg 308": {
+            "__class__": "Set",
+            "data": [
+                "Zg 308o",
+                "Zg 308",
+                "Zg 308w"
+            ]
+        },
+        "Zg 310": {
+            "__class__": "Set",
+            "data": [
+                "Zg 310o",
+                "Zg 310",
+                "Zg 310w"
+            ]
+        },
+        "Zg 414": {
+            "__class__": "Set",
+            "data": [
+                "Zg 414 (k)",
+                "Zg 414"
+            ]
+        }
+    },
+    "strecken": {
+        "Knittelfeld-Friesach": [
+            "Knittelfeld",
+            "Zg",
+            "Jg",
+            "km 240.743",
+            "Tel",
+            "Tel H1",
+            "Um",
+            "km 264.086",
+            "Sf",
+            "Mah",
+            "km 274.167",
+            "Nes",
+            "km 280.103",
+            "Nes U1",
+            "Friesach"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

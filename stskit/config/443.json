@@ -1,10 +1,9 @@
 {
     "_aid": 443,
-    "_build": 5847,
-    "_name": "Oerlikon Nord-West",
+    "_build": 5851,
+    "_name": "Unterland",
     "_region": "Z\u00fcrich und Umgebung",
     "_version": 2,
-    "zugschema": "schweiz",
     "anschlussgruppen": {
         "BUD Industrie": {
             "__class__": "Set",
@@ -12,17 +11,17 @@
                 "BUD Industrie"
             ]
         },
-        "B\u00fclach": {
+        "BUE": {
             "__class__": "Set",
             "data": [
-                "B\u00fclach 810",
-                "B\u00fclach 910"
+                "BUE 910",
+                "BUE 810"
             ]
         },
-        "Dielsdorf": {
+        "GLB Tanklager": {
             "__class__": "Set",
             "data": [
-                "Dielsdorf"
+                "GLB Tanklager"
             ]
         },
         "Killwangen": {
@@ -31,17 +30,10 @@
                 "Killwangen"
             ]
         },
-        "Oerlikon 856": {
+        "NG Tanklager": {
             "__class__": "Set",
             "data": [
-                "Oerlikon 856"
-            ]
-        },
-        "Oerlikon": {
-            "__class__": "Set",
-            "data": [
-                "Oerlikon 906",
-                "Oerlikon 806"
+                "NG Tanklager"
             ]
         },
         "Opfikon": {
@@ -56,22 +48,18 @@
                 "REG Industrie"
             ]
         },
-        "Tanklager NG": {
-            "__class__": "Set",
-            "data": [
-                "Tanklager NG"
-            ]
-        },
-        "Tanklager GLB": {
-            "__class__": "Set",
-            "data": [
-                "Tanklager GLB"
-            ]
-        },
         "Wettingen": {
             "__class__": "Set",
             "data": [
                 "Wettingen"
+            ]
+        },
+        "ZOER": {
+            "__class__": "Set",
+            "data": [
+                "ZOER 806",
+                "ZOER 856",
+                "ZOER 906"
             ]
         }
     },
@@ -81,66 +69,67 @@
             "__class__": "Set",
             "data": [
                 "BUD2",
-                "BUD1"
-            ]
-        },
-        "BUD4x": {
-            "__class__": "Set",
-            "data": [
+                "BUD1",
+                "BUD42",
                 "BUD43",
                 "BUD41",
-                "BUD42"
+                "BUD51",
+                "BUD52"
             ]
         },
-        "BUD5x": {
+        "DI": {
             "__class__": "Set",
             "data": [
-                "BUD52",
-                "BUD51"
+                "DI3",
+                "DI2"
             ]
         },
         "GLB": {
             "__class__": "Set",
             "data": [
-                "GLB2",
                 "GLB4",
-                "GLB3"
-            ]
-        },
-        "GLB5x": {
-            "__class__": "Set",
-            "data": [
+                "GLB3",
+                "GLB2",
+                "GLB57",
                 "GLB54",
-                "GLB57"
-            ]
-        },
-        "GLB8x": {
-            "__class__": "Set",
-            "data": [
-                "GLB86",
-                "GLB85"
+                "GLB85",
+                "GLB86"
             ]
         },
         "NG": {
             "__class__": "Set",
             "data": [
-                "NG5",
                 "NG4",
-                "NG6",
                 "NG2",
-                "NG3"
+                "NG3",
+                "NG5",
+                "NG6"
+            ]
+        },
+        "NIE": {
+            "__class__": "Set",
+            "data": [
+                "NIE"
+            ]
+        },
+        "NW": {
+            "__class__": "Set",
+            "data": [
+                "NW1",
+                "NW2"
+            ]
+        },
+        "NWD": {
+            "__class__": "Set",
+            "data": [
+                "NWD"
             ]
         },
         "OF": {
             "__class__": "Set",
             "data": [
+                "OF1",
                 "OF2",
-                "OF1"
-            ]
-        },
-        "OF2x": {
-            "__class__": "Set",
-            "data": [
                 "OF21",
                 "OF22"
             ]
@@ -163,17 +152,29 @@
             "__class__": "Set",
             "data": [
                 "REG2",
-                "REG4",
+                "REG3",
                 "REG5",
-                "REG3"
+                "REG4"
             ]
         },
         "RUEM": {
             "__class__": "Set",
             "data": [
                 "RUEM2",
-                "RUEM3",
-                "RUEM4"
+                "RUEM4",
+                "RUEM3"
+            ]
+        },
+        "SCHO": {
+            "__class__": "Set",
+            "data": [
+                "SCHO"
+            ]
+        },
+        "STMR": {
+            "__class__": "Set",
+            "data": [
+                "STMR"
             ]
         },
         "WUER": {
@@ -192,78 +193,67 @@
         "ZSEB": {
             "__class__": "Set",
             "data": [
-                "ZSEB1",
-                "ZSEB2",
+                "ZSEB4",
                 "ZSEB3",
-                "ZSEB4"
+                "ZSEB2",
+                "ZSEB1"
             ]
         }
     },
-    "hauptstrecke": "B\u00fclach-Wettingen",
+    "hauptstrecke": "BUE-Wettingen",
     "sektoren": {},
     "strecken": {
-        "B\u00fclach-Oerlikon": [
+        "BUE-Killwangen": [
+            "BUE",
             "NG",
             "OGL",
             "RUEM",
-            "GLB8x",
-            "GLB5x",
             "GLB",
-            "Oerlikon"
-        ],
-        "B\u00fclach-Wettingen": [
-            "B\u00fclach",
-            "NG",
-            "NG",
-            "OGL",
-            "RUEM",
-            "GLB8x",
-            "GLB5x",
-            "GLB",
+            "ZOER",
             "ZSEB",
             "ZAF",
             "REG",
             "BUD",
-            "BUD4x",
-            "BUD5x",
-            "OFR",
-            "OF2x",
             "OF",
             "WUER",
-            "Wettingen"
+            "Killwangen"
         ],
-        "Oerlikon-Wettingen": [
-            "Oerlikon 856",
+        "BUE-Wettingen": [
+            "BUE",
+            "NG",
+            "OGL",
+            "RUEM",
+            "GLB",
+            "ZOER",
             "ZSEB",
             "ZAF",
             "REG",
             "BUD",
-            "BUD4x",
-            "BUD5x",
-            "OFR",
-            "OF2x",
             "OF",
             "WUER",
             "Wettingen"
         ],
-        "Opfikon-Wettingen": [
-            "Opfikon",
-            "ZAF",
-            "REG",
-            "BUD",
-            "BUD4x",
-            "BUD5x",
-            "OFR",
-            "OF2x",
-            "OF",
-            "WUER",
-            "Wettingen"
+        "BUE-ZOER": [
+            "BUE",
+            "NG",
+            "OGL",
+            "RUEM",
+            "GLB",
+            "ZOER"
+        ],
+        "NW-ZOER": [
+            "NW",
+            "NWD",
+            "SCHO",
+            "STMR",
+            "DI",
+            "NIE",
+            "OGL",
+            "RUEM",
+            "GLB",
+            "ZOER"
         ]
     },
-    "streckenmarkierung": [
-        ["OF", "WUER", "E"],
-        ["OFR", "BUD5x", "E"],
-        ["BUD", "REG", "E"],
-        ["GLB", "ZSEB", "E"]
-    ]
+    "streckenmarkierung": [],
+    "zugschema": "schweiz"
 }

@@ -1,0 +1,130 @@
+{
+    "_aid": 465,
+    "_build": 5851,
+    "_name": "Limmattal",
+    "_region": "Z\u00fcrich und Umgebung",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Kieswerk": {
+            "__class__": "Set",
+            "data": [
+                "Kieswerk"
+            ]
+        },
+        "MELH": {
+            "__class__": "Set",
+            "data": [
+                "MELH 321",
+                "MELH 421"
+            ]
+        },
+        "NHOF": {
+            "__class__": "Set",
+            "data": [
+                "NHOF 611",
+                "NHOF 711"
+            ]
+        },
+        "RBL": {
+            "__class__": "Set",
+            "data": [
+                "RBL 110",
+                "RBL 210",
+                "RBL 308",
+                "RBL 208",
+                "RBL 309",
+                "RBL 310"
+            ]
+        },
+        "W\u00fcrenlos": {
+            "__class__": "Set",
+            "data": [
+                "W\u00fcrenlos"
+            ]
+        },
+        "ZAS": {
+            "__class__": "Set",
+            "data": [
+                "ZAS 504",
+                "ZAS 604",
+                "ZAS 704",
+                "ZAS 404"
+            ]
+        },
+        "ZMUE": {
+            "__class__": "Set",
+            "data": [
+                "ZMUE 304"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "DT": {
+            "__class__": "Set",
+            "data": [
+                "DT 3",
+                "DT 5",
+                "DT 6",
+                "DT 4",
+                "DT 1",
+                "DT 2",
+                "DT 31"
+            ]
+        },
+        "GLZB": {
+            "__class__": "Set",
+            "data": [
+                "GLZB"
+            ]
+        },
+        "KLW": {
+            "__class__": "Set",
+            "data": [
+                "KLW 6",
+                "KLW 7",
+                "KLW 8",
+                "KLW 3",
+                "KLW 5",
+                "KLW 4",
+                "KLW 2"
+            ]
+        },
+        "SCHL": {
+            "__class__": "Set",
+            "data": [
+                "SCHL 2",
+                "SCHL 5",
+                "SCHL 7",
+                "SCHL 6",
+                "SCHL 3",
+                "SCHL 4",
+                "SCHL 1"
+            ]
+        }
+    },
+    "hauptstrecke": "ZAS-MELH",
+    "sektoren": {},
+    "strecken": {
+        "ZAS-MELH": [
+            "ZAS",
+            "SCHL",
+            "GLZB",
+            "DT",
+            "RBL",
+            "KLW",
+            "MELH"
+        ],
+        "ZAS-NHOF": [
+            "ZAS",
+            "SCHL",
+            "GLZB",
+            "DT",
+            "RBL",
+            "KLW",
+            "NHOF"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweiz"
+}

@@ -1,0 +1,454 @@
+{
+    "_aid": 194,
+    "_build": 5851,
+    "_name": "St. Michael",
+    "_region": "\u00d6sterreich Mitte",
+    "_version": 2,
+    "anschlussgruppen": {
+        "307": {
+            "__class__": "Set",
+            "data": [
+                "307"
+            ]
+        },
+        "309": {
+            "__class__": "Set",
+            "data": [
+                "309"
+            ]
+        },
+        "317": {
+            "__class__": "Set",
+            "data": [
+                "317"
+            ]
+        },
+        "439": {
+            "__class__": "Set",
+            "data": [
+                "439"
+            ]
+        },
+        "473": {
+            "__class__": "Set",
+            "data": [
+                "473"
+            ]
+        },
+        "509n": {
+            "__class__": "Set",
+            "data": [
+                "509n"
+            ]
+        },
+        "509s": {
+            "__class__": "Set",
+            "data": [
+                "509s"
+            ]
+        },
+        "527n": {
+            "__class__": "Set",
+            "data": [
+                "527n"
+            ]
+        },
+        "527s": {
+            "__class__": "Set",
+            "data": [
+                "527s"
+            ]
+        },
+        "5w": {
+            "__class__": "Set",
+            "data": [
+                "5w"
+            ]
+        },
+        "707": {
+            "__class__": "Set",
+            "data": [
+                "707"
+            ]
+        },
+        "802": {
+            "__class__": "Set",
+            "data": [
+                "802"
+            ]
+        },
+        "848": {
+            "__class__": "Set",
+            "data": [
+                "848"
+            ]
+        },
+        "AB": {
+            "__class__": "Set",
+            "data": [
+                "AB 306"
+            ]
+        },
+        "ASC": {
+            "__class__": "Set",
+            "data": [
+                "ASC 803"
+            ]
+        },
+        "Grafitbergbau": {
+            "__class__": "Set",
+            "data": [
+                "Grafitbergbau"
+            ]
+        },
+        "Leoben Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Leoben Hbf"
+            ]
+        },
+        "Seiz": {
+            "__class__": "Set",
+            "data": [
+                "Seiz"
+            ]
+        },
+        "Steinbruch": {
+            "__class__": "Set",
+            "data": [
+                "Steinbruch"
+            ]
+        },
+        "Wenzel": {
+            "__class__": "Set",
+            "data": [
+                "Wenzel"
+            ]
+        },
+        "Zeltweg": {
+            "__class__": "Set",
+            "data": [
+                "Zeltweg"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "AB Uitz": {
+            "__class__": "Set",
+            "data": [
+                "AB Uitz"
+            ]
+        },
+        "Fes": {
+            "__class__": "Set",
+            "data": [
+                "Fes 102",
+                "Fes 104",
+                "Fes 101",
+                "Fes 103",
+                "Fes W1",
+                "Fes W2",
+                "Fes W56",
+                "Fes W55"
+            ]
+        },
+        "Kd": {
+            "__class__": "Set",
+            "data": [
+                "Kd 201",
+                "Kd 107",
+                "Kd 101",
+                "Kd 102",
+                "Kd 207",
+                "Kd 202",
+                "Kd 301",
+                "Kd 302",
+                "Kd 315",
+                "Kd 302 (l)",
+                "Kd 303",
+                "Kd 301 (l)",
+                "Kd 305",
+                "Kd 309",
+                "Kd 304",
+                "Kd 304 Bstg",
+                "Kd 311",
+                "Kd 307",
+                "Kd 406",
+                "Kd 313",
+                "Kd 510",
+                "Kd 506",
+                "Kd 507",
+                "Kd 603",
+                "Kd 701",
+                "Kd 702",
+                "Kd 703",
+                "Kd 602",
+                "Kd 802",
+                "Kd 848"
+            ]
+        },
+        "Kd A1": {
+            "__class__": "Set",
+            "data": [
+                "Kd A1"
+            ]
+        },
+        "Kd S1": {
+            "__class__": "Set",
+            "data": [
+                "Kd S1"
+            ]
+        },
+        "Kra": {
+            "__class__": "Set",
+            "data": [
+                "Kra 201",
+                "Kra 203 Bstg",
+                "Kra 205",
+                "Kra 203",
+                "Kra 202",
+                "Kra W57",
+                "Kra W56"
+            ]
+        },
+        "Kra A1": {
+            "__class__": "Set",
+            "data": [
+                "Kra A1"
+            ]
+        },
+        "Kra U1": {
+            "__class__": "Set",
+            "data": [
+                "Kra U1"
+            ]
+        },
+        "M": {
+            "__class__": "Set",
+            "data": [
+                "M 101",
+                "M 102",
+                "M 303",
+                "M W7",
+                "M 307",
+                "M 402",
+                "M 309",
+                "M 404",
+                "M 409",
+                "M 533",
+                "M 506",
+                "M 511s",
+                "M 505",
+                "M 525",
+                "M 507n",
+                "M 515",
+                "M 519n",
+                "M 503",
+                "M 513",
+                "M 608",
+                "M 504",
+                "M 517s",
+                "M 504 (k)",
+                "M 517",
+                "M 519s",
+                "M 523",
+                "M 517n",
+                "M 511n",
+                "M 519",
+                "M 515n",
+                "M 507",
+                "M 513n",
+                "M 505s",
+                "M 515s",
+                "M 505n",
+                "M 507s",
+                "M 521",
+                "M 516",
+                "M 513s",
+                "M 610",
+                "M 511",
+                "M 508",
+                "M 509n",
+                "M 509s",
+                "M 617",
+                "M 705",
+                "M 703",
+                "M 717",
+                "M 822n",
+                "M 821n",
+                "M 821s",
+                "M 822s",
+                "M W66",
+                "M W74"
+            ]
+        },
+        "M A1": {
+            "__class__": "Set",
+            "data": [
+                "M A1"
+            ]
+        },
+        "M BEX": {
+            "__class__": "Set",
+            "data": [
+                "M BEX 1",
+                "M BEX 4"
+            ]
+        },
+        "Mot": {
+            "__class__": "Set",
+            "data": [
+                "Mot"
+            ]
+        },
+        "Mwt": {
+            "__class__": "Set",
+            "data": [
+                "Mwt"
+            ]
+        }
+    },
+    "hauptstrecke": "Leoben Hbf-Zeltweg",
+    "sektoren": {
+        "Kd 301": {
+            "__class__": "Set",
+            "data": [
+                "Kd 301",
+                "Kd 301 (l)"
+            ]
+        },
+        "Kd 302": {
+            "__class__": "Set",
+            "data": [
+                "Kd 302",
+                "Kd 302 (l)"
+            ]
+        },
+        "Kd 304": {
+            "__class__": "Set",
+            "data": [
+                "Kd 304",
+                "Kd 304 Bstg"
+            ]
+        },
+        "Kra 203": {
+            "__class__": "Set",
+            "data": [
+                "Kra 203 Bstg",
+                "Kra 203"
+            ]
+        },
+        "M 504": {
+            "__class__": "Set",
+            "data": [
+                "M 504 (k)",
+                "M 504"
+            ]
+        },
+        "M 505": {
+            "__class__": "Set",
+            "data": [
+                "M 505s",
+                "M 505n",
+                "M 505"
+            ]
+        },
+        "M 507": {
+            "__class__": "Set",
+            "data": [
+                "M 507s",
+                "M 507",
+                "M 507n"
+            ]
+        },
+        "M 509": {
+            "__class__": "Set",
+            "data": [
+                "M 509n",
+                "M 509s"
+            ]
+        },
+        "M 511": {
+            "__class__": "Set",
+            "data": [
+                "M 511n",
+                "M 511",
+                "M 511s"
+            ]
+        },
+        "M 513": {
+            "__class__": "Set",
+            "data": [
+                "M 513n",
+                "M 513s",
+                "M 513"
+            ]
+        },
+        "M 515": {
+            "__class__": "Set",
+            "data": [
+                "M 515n",
+                "M 515s",
+                "M 515"
+            ]
+        },
+        "M 517": {
+            "__class__": "Set",
+            "data": [
+                "M 517",
+                "M 517s",
+                "M 517n"
+            ]
+        },
+        "M 519": {
+            "__class__": "Set",
+            "data": [
+                "M 519",
+                "M 519s",
+                "M 519n"
+            ]
+        },
+        "M 821": {
+            "__class__": "Set",
+            "data": [
+                "M 821n",
+                "M 821s"
+            ]
+        },
+        "M 822": {
+            "__class__": "Set",
+            "data": [
+                "M 822s",
+                "M 822n"
+            ]
+        }
+    },
+    "strecken": {
+        "Leoben Hbf-Zeltweg": [
+            "Leoben Hbf",
+            "Mot",
+            "M",
+            "Mwt",
+            "Kra",
+            "Kra A1",
+            "Fes",
+            "Kd",
+            "Kd A1",
+            "Zeltweg"
+        ],
+        "Seiz-Zeltweg": [
+            "Seiz",
+            "M",
+            "Mwt",
+            "Kra",
+            "Kra A1",
+            "Fes",
+            "Kd",
+            "Kd A1",
+            "Zeltweg"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

@@ -1,0 +1,228 @@
+{
+    "_aid": 83,
+    "_build": 5851,
+    "_name": "Rosenheim",
+    "_region": "S\u00fcdbayern",
+    "_version": 2,
+    "anschlussgruppen": {
+        "1b": {
+            "__class__": "Set",
+            "data": [
+                "1b"
+            ]
+        },
+        "Abstellgleise": {
+            "__class__": "Set",
+            "data": [
+                "Abstellgleise"
+            ]
+        },
+        "A\u00dfling": {
+            "__class__": "Set",
+            "data": [
+                "A\u00dfling"
+            ]
+        },
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Gbf 1",
+                "Gbf 2"
+            ]
+        },
+        "Haro": {
+            "__class__": "Set",
+            "data": [
+                "Haro"
+            ]
+        },
+        "Kolbermoor": {
+            "__class__": "Set",
+            "data": [
+                "Kolbermoor"
+            ]
+        },
+        "Kufstein": {
+            "__class__": "Set",
+            "data": [
+                "Kufstein"
+            ]
+        },
+        "M\u00fchldorf": {
+            "__class__": "Set",
+            "data": [
+                "M\u00fchldorf"
+            ]
+        },
+        "Obing": {
+            "__class__": "Set",
+            "data": [
+                "Obing"
+            ]
+        },
+        "Prien": {
+            "__class__": "Set",
+            "data": [
+                "Prien"
+            ]
+        },
+        "Rohrdorf": {
+            "__class__": "Set",
+            "data": [
+                "Rohrdorf"
+            ]
+        },
+        "SCA": {
+            "__class__": "Set",
+            "data": [
+                "SCA"
+            ]
+        },
+        "Schotterwerk": {
+            "__class__": "Set",
+            "data": [
+                "Schotterwerk"
+            ]
+        },
+        "Zement": {
+            "__class__": "Set",
+            "data": [
+                "Zement"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Rosenheim": {
+            "__class__": "Set",
+            "data": [
+                "5",
+                "11",
+                "13",
+                "6",
+                "2",
+                "1",
+                "3",
+                "7",
+                "4",
+                "12",
+                "101",
+                "104",
+                "107",
+                "1a"
+            ]
+        },
+        "Brannenburg": {
+            "__class__": "Set",
+            "data": [
+                "B2",
+                "B1",
+                "B3"
+            ]
+        },
+        "Bad Endorf": {
+            "__class__": "Set",
+            "data": [
+                "BE2",
+                "BE3",
+                "BE4",
+                "BE1"
+            ]
+        },
+        "Fischbach": {
+            "__class__": "Set",
+            "data": [
+                "Fi",
+                "Fi Gegengleis"
+            ]
+        },
+        "Flintsbach": {
+            "__class__": "Set",
+            "data": [
+                "Flintsbach"
+            ]
+        },
+        "Kiefersfelden": {
+            "__class__": "Set",
+            "data": [
+                "K3",
+                "K2",
+                "K1"
+            ]
+        },
+        "Kurve": {
+            "__class__": "Set",
+            "data": [
+                "Kurve"
+            ]
+        },
+        "Landl": {
+            "__class__": "Set",
+            "data": [
+                "Landl",
+                "Wende"
+            ]
+        },
+        "Oberaudorf": {
+            "__class__": "Set",
+            "data": [
+                "Oberaudorf"
+            ]
+        },
+        "Pfraundorf": {
+            "__class__": "Set",
+            "data": [
+                "Pfraundorf"
+            ]
+        },
+        "Raubling": {
+            "__class__": "Set",
+            "data": [
+                "R2",
+                "R4",
+                "R3",
+                "R1"
+            ]
+        }
+    },
+    "hauptstrecke": "A\u00dfling-Kufstein",
+    "sektoren": {
+    },
+    "strecken": {
+        "A\u00dfling-Kufstein": [
+            "A\u00dfling",
+            "Rosenheim",
+            "Pfraundorf",
+            "Raubling",
+            "Brannenburg",
+            "Flintsbach",
+            "Fischbach",
+            "Oberaudorf",
+            "Kiefersfelden",
+            "Kufstein"
+        ],
+        "A\u00dfling-Prien": [
+            "A\u00dfling",
+            "Rosenheim",
+            "Landl",
+            "Bad Endorf",
+            "Prien"
+        ],
+        "Prien-Kufstein": [
+            "Prien",
+            "Bad Endorf",
+            "Landl",
+            "Kurve",
+            "Pfraundorf",
+            "Raubling",
+            "Brannenburg",
+            "Flintsbach",
+            "Fischbach",
+            "Oberaudorf",
+            "Kiefersfelden",
+            "Kufstein"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

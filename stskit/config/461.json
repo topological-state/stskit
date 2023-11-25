@@ -1,0 +1,378 @@
+{
+    "_aid": 461,
+    "_build": 5851,
+    "_name": "St. P\u00f6lten Hbf",
+    "_region": "\u00d6sterreich Ost",
+    "_version": 2,
+    "anschlussgruppen": {
+        "307": {
+            "__class__": "Set",
+            "data": [
+                "307"
+            ]
+        },
+        "562o": {
+            "__class__": "Set",
+            "data": [
+                "562o"
+            ]
+        },
+        "562w": {
+            "__class__": "Set",
+            "data": [
+                "562w"
+            ]
+        },
+        "572": {
+            "__class__": "Set",
+            "data": [
+                "572"
+            ]
+        },
+        "576": {
+            "__class__": "Set",
+            "data": [
+                "576"
+            ]
+        },
+        "578": {
+            "__class__": "Set",
+            "data": [
+                "578"
+            ]
+        },
+        "590": {
+            "__class__": "Set",
+            "data": [
+                "590"
+            ]
+        },
+        "754": {
+            "__class__": "Set",
+            "data": [
+                "754"
+            ]
+        },
+        "857-861": {
+            "__class__": "Set",
+            "data": [
+                "857-861"
+            ]
+        },
+        "857-865": {
+            "__class__": "Set",
+            "data": [
+                "857-865"
+            ]
+        },
+        "863-871": {
+            "__class__": "Set",
+            "data": [
+                "863-871"
+            ]
+        },
+        "Apl N\u00d6VOG": {
+            "__class__": "Set",
+            "data": [
+                "Apl N\u00d6VOG"
+            ]
+        },
+        "B\u00f6heimkirchen": {
+            "__class__": "Set",
+            "data": [
+                "B\u00f6heimkirchen"
+            ]
+        },
+        "D": {
+            "__class__": "Set",
+            "data": [
+                "D2"
+            ]
+        },
+        "Herzogenburg": {
+            "__class__": "Set",
+            "data": [
+                "Herzogenburg"
+            ]
+        },
+        "Kaiserwald": {
+            "__class__": "Set",
+            "data": [
+                "Kaiserwald"
+            ]
+        },
+        "Knoten Rohr": {
+            "__class__": "Set",
+            "data": [
+                "Knoten Rohr"
+            ]
+        },
+        "Prinzersdorf": {
+            "__class__": "Set",
+            "data": [
+                "Prinzersdorf 4",
+                "Prinzersdorf 1",
+                "Prinzersdorf 3"
+            ]
+        },
+        "Tullnerfeld": {
+            "__class__": "Set",
+            "data": [
+                "Tullnerfeld"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Ho": {
+            "__class__": "Set",
+            "data": [
+                "Ho H2"
+            ]
+        },
+        "Pb": {
+            "__class__": "Set",
+            "data": [
+                "Pb 106",
+                "Pb 113",
+                "Pb 114",
+                "Pb 118",
+                "Pb 204",
+                "Pb 405",
+                "Pb 203",
+                "Pb 303",
+                "Pb 204 (l)",
+                "Pb 302",
+                "Pb 202",
+                "Pb 205",
+                "Pb 407",
+                "Pb 305",
+                "Pb 403",
+                "Pb 208",
+                "Pb 306",
+                "Pb 306 (l)",
+                "Pb 210",
+                "Pb 206",
+                "Pb 201",
+                "Pb 308 (l)",
+                "Pb 308",
+                "Pb 201 (l)",
+                "Pb 310",
+                "Pb 409",
+                "Pb 411 2ET",
+                "Pb 409 2ET",
+                "Pb 411",
+                "Pb 507",
+                "Pb 505",
+                "Pb 511",
+                "Pb 509",
+                "Pb 858",
+                "Pb V863-871",
+                "Pb V857-861"
+            ]
+        },
+        "Pb Z1": {
+            "__class__": "Set",
+            "data": [
+                "Pb Z1"
+            ]
+        },
+        "Pw": {
+            "__class__": "Set",
+            "data": [
+                "Pw 553",
+                "Pw 556w",
+                "Pw 566",
+                "Pw 568",
+                "Pw 556oo",
+                "Pw 554",
+                "Pw 556ww",
+                "Pw 558o",
+                "Pw 560",
+                "Pw 556o",
+                "Pw 564",
+                "Pw 562",
+                "Pw 551",
+                "Pw 558w",
+                "Pw 570",
+                "Pw 574",
+                "Pw 582",
+                "Pw 592",
+                "Pw 588",
+                "Pw 714",
+                "Pw 711",
+                "Pw 713",
+                "Pw 754",
+                "Pw W042",
+                "Pw W120"
+            ]
+        },
+        "Vn": {
+            "__class__": "Set",
+            "data": [
+                "Vn 102 G",
+                "Vn 102",
+                "Vn 101",
+                "Vn 113",
+                "Vn 101 G",
+                "Vn 103 G",
+                "Vn 103",
+                "Vn 105",
+                "Vn 101 (k)"
+            ]
+        },
+        "Vn H1": {
+            "__class__": "Set",
+            "data": [
+                "Vn H1"
+            ]
+        },
+        "Wat": {
+            "__class__": "Set",
+            "data": [
+                "Wat 607",
+                "Wat 602",
+                "Wat 604",
+                "Wat 606",
+                "Wat 609",
+                "Wat 601",
+                "Wat 605",
+                "Wat 603",
+                "Wat W1",
+                "Wat W2"
+            ]
+        },
+        "Wgm": {
+            "__class__": "Set",
+            "data": [
+                "Wgm 102",
+                "Wgm 201",
+                "Wgm 306",
+                "Wgm 301",
+                "Wgm 305",
+                "Wgm 302"
+            ]
+        },
+        "Wgm W6": {
+            "__class__": "Set",
+            "data": [
+                "Wgm W6"
+            ]
+        }
+    },
+    "hauptstrecke": "B\u00f6heimkirchen-Prinzersdorf",
+    "sektoren": {
+        "Pb 201": {
+            "__class__": "Set",
+            "data": [
+                "Pb 201",
+                "Pb 201 (l)"
+            ]
+        },
+        "Pb 204": {
+            "__class__": "Set",
+            "data": [
+                "Pb 204",
+                "Pb 204 (l)"
+            ]
+        },
+        "Pb 306": {
+            "__class__": "Set",
+            "data": [
+                "Pb 306 (l)",
+                "Pb 306"
+            ]
+        },
+        "Pb 308": {
+            "__class__": "Set",
+            "data": [
+                "Pb 308 (l)",
+                "Pb 308"
+            ]
+        },
+        "Pb 409": {
+            "__class__": "Set",
+            "data": [
+                "Pb 409",
+                "Pb 409 2ET"
+            ]
+        },
+        "Pb 411": {
+            "__class__": "Set",
+            "data": [
+                "Pb 411",
+                "Pb 411 2ET"
+            ]
+        },
+        "Pw 556": {
+            "__class__": "Set",
+            "data": [
+                "Pw 556o",
+                "Pw 556oo",
+                "Pw 556w",
+                "Pw 556ww"
+            ]
+        },
+        "Pw 558": {
+            "__class__": "Set",
+            "data": [
+                "Pw 558o",
+                "Pw 558w"
+            ]
+        },
+        "Vn 101": {
+            "__class__": "Set",
+            "data": [
+                "Vn 101",
+                "Vn 101 (k)",
+                "Vn 101 G"
+            ]
+        },
+        "Vn 102": {
+            "__class__": "Set",
+            "data": [
+                "Vn 102",
+                "Vn 102 G"
+            ]
+        },
+        "Vn 103": {
+            "__class__": "Set",
+            "data": [
+                "Vn 103 G",
+                "Vn 103"
+            ]
+        }
+    },
+    "strecken": {
+        "B\u00f6heimkirchen-Knoten Rohr": [
+            "B\u00f6heimkirchen",
+            "Wgm",
+            "Wat",
+            "Knoten Rohr"
+        ],
+        "B\u00f6heimkirchen-Prinzersdorf": [
+            "B\u00f6heimkirchen",
+            "Wgm",
+            "Wat",
+            "Pb",
+            "Pw",
+            "Pb Z1",
+            "Prinzersdorf"
+        ],
+        "Tullnerfeld-Knoten Rohr": [
+            "Tullnerfeld",
+            "Wat",
+            "Knoten Rohr"
+        ],
+        "Tullnerfeld-Prinzersdorf": [
+            "Tullnerfeld",
+            "Wat",
+            "Pb",
+            "Pw",
+            "Pb Z1",
+            "Prinzersdorf"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

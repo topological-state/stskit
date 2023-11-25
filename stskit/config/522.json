@@ -1,0 +1,248 @@
+{
+    "_aid": 522,
+    "_build": 5851,
+    "_name": "Rekawinkel",
+    "_region": "\u00d6sterreich Ost",
+    "_version": 2,
+    "anschlussgruppen": {
+        "5a": {
+            "__class__": "Set",
+            "data": [
+                "5a"
+            ]
+        },
+        "5b": {
+            "__class__": "Set",
+            "data": [
+                "5b"
+            ]
+        },
+        "6-8a": {
+            "__class__": "Set",
+            "data": [
+                "6-8a"
+            ]
+        },
+        "7-9": {
+            "__class__": "Set",
+            "data": [
+                "7-9"
+            ]
+        },
+        "8b-1L": {
+            "__class__": "Set",
+            "data": [
+                "8b-1L"
+            ]
+        },
+        "9": {
+            "__class__": "Set",
+            "data": [
+                "9"
+            ]
+        },
+        "Knoten Wagram": {
+            "__class__": "Set",
+            "data": [
+                "Knoten Wagram"
+            ]
+        },
+        "Unter Purkersdorf": {
+            "__class__": "Set",
+            "data": [
+                "Unter Purkersdorf"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Bh": {
+            "__class__": "Set",
+            "data": [
+                "Bh 204 G",
+                "Bh 203",
+                "Bh 202",
+                "Bh 203 G",
+                "Bh 201",
+                "Bh 204",
+                "Bh W292",
+                "Bh W192"
+            ]
+        },
+        "Hu": {
+            "__class__": "Set",
+            "data": [
+                "Hu 231",
+                "Hu 202",
+                "Hu 201"
+            ]
+        },
+        "Hu H1": {
+            "__class__": "Set",
+            "data": [
+                "Hu H1"
+            ]
+        },
+        "Hu H2": {
+            "__class__": "Set",
+            "data": [
+                "Hu H2"
+            ]
+        },
+        "Hu H3": {
+            "__class__": "Set",
+            "data": [
+                "Hu H3"
+            ]
+        },
+        "Hu H4": {
+            "__class__": "Set",
+            "data": [
+                "Hu H4"
+            ]
+        },
+        "Krt": {
+            "__class__": "Set",
+            "data": [
+                "Krt 103",
+                "Krt 104",
+                "Krt 102",
+                "Krt 101"
+            ]
+        },
+        "Nl": {
+            "__class__": "Set",
+            "data": [
+                "Nl 103",
+                "Nl 101",
+                "Nl 105",
+                "Nl 104 (k)",
+                "Nl 104",
+                "Nl 102",
+                "Nl 6b",
+                "Nl 9a",
+                "Nl W3",
+                "Nl W8",
+                "Nl W55"
+            ]
+        },
+        "Nl H1": {
+            "__class__": "Set",
+            "data": [
+                "Nl H1"
+            ]
+        },
+        "Pm": {
+            "__class__": "Set",
+            "data": [
+                "Pm 202",
+                "Pm 201",
+                "Pm 204",
+                "Pm 203"
+            ]
+        },
+        "Pm H1": {
+            "__class__": "Set",
+            "data": [
+                "Pm H1"
+            ]
+        },
+        "Pm H2": {
+            "__class__": "Set",
+            "data": [
+                "Pm H2"
+            ]
+        },
+        "Rw": {
+            "__class__": "Set",
+            "data": [
+                "Rw 102",
+                "Rw 103 G",
+                "Rw 103",
+                "Rw 104",
+                "Rw 101",
+                "Rw 104 G"
+            ]
+        },
+        "Rw H1": {
+            "__class__": "Set",
+            "data": [
+                "Rw H1"
+            ]
+        },
+        "Up H2": {
+            "__class__": "Set",
+            "data": [
+                "Up H2"
+            ]
+        },
+        "Up U2": {
+            "__class__": "Set",
+            "data": [
+                "Up U2"
+            ]
+        }
+    },
+    "hauptstrecke": "Unter Purkersdorf-Knoten Wagram",
+    "sektoren": {
+        "Bh 203": {
+            "__class__": "Set",
+            "data": [
+                "Bh 203",
+                "Bh 203 G"
+            ]
+        },
+        "Bh 204": {
+            "__class__": "Set",
+            "data": [
+                "Bh 204 G",
+                "Bh 204"
+            ]
+        },
+        "Nl 104": {
+            "__class__": "Set",
+            "data": [
+                "Nl 104",
+                "Nl 104 (k)"
+            ]
+        },
+        "Rw 103": {
+            "__class__": "Set",
+            "data": [
+                "Rw 103 G",
+                "Rw 103"
+            ]
+        },
+        "Rw 104": {
+            "__class__": "Set",
+            "data": [
+                "Rw 104",
+                "Rw 104 G"
+            ]
+        }
+    },
+    "strecken": {
+        "Unter Purkersdorf-Knoten Wagram": [
+            "Unter Purkersdorf",
+            "Up U2",
+            "Up H2",
+            "Pm",
+            "Pm H1",
+            "Pm H2",
+            "Rw",
+            "Rw H1",
+            "Hu",
+            "Hu H1",
+            "Hu H2",
+            "Hu H3",
+            "Hu H4",
+            "Nl",
+            "Nl H1",
+            "Krt",
+            "Bh",
+            "Knoten Wagram"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

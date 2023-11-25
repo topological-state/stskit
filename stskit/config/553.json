@@ -1,10 +1,9 @@
 {
     "_aid": 553,
-    "_build": 5847,
+    "_build": 5851,
     "_name": "Neuch\u00e2tel",
     "_region": "Westschweiz",
     "_version": 2,
-    "zugschema": "schweiz",
     "anschlussgruppen": {
         "B-Gruppe": {
             "__class__": "Set",
@@ -70,17 +69,27 @@
         "AUV": {
             "__class__": "Set",
             "data": [
+                "AUV1",
+                "AUV2G",
                 "AUV2",
+                "AUV3G",
                 "AUV3",
-                "AUV1"
+                "AUV1G"
+            ]
+        },
+        "B": {
+            "__class__": "Set",
+            "data": [
+                "B1",
+                "B2"
             ]
         },
         "BDR": {
             "__class__": "Set",
             "data": [
-                "BDR2",
                 "BDR3",
-                "BDR1"
+                "BDR1",
+                "BDR2"
             ]
         },
         "BV": {
@@ -93,35 +102,53 @@
         "CLB": {
             "__class__": "Set",
             "data": [
-                "CLB1",
+                "CLB3G",
+                "CLB1G",
+                "CLB2",
                 "CLB3",
-                "CLB2"
+                "CLB1",
+                "CLB2G"
             ]
         },
         "CORN": {
             "__class__": "Set",
             "data": [
-                "CORN2",
                 "CORN1",
-                "A3",
+                "CORN2",
                 "A1",
                 "A2",
                 "A4",
+                "A3",
                 "A17"
             ]
         },
         "CRNE": {
             "__class__": "Set",
             "data": [
-                "CRNE1",
-                "CRNE2"
+                "CRNE"
+            ]
+        },
+        "D": {
+            "__class__": "Set",
+            "data": [
+                "D5",
+                "D4"
+            ]
+        },
+        "F": {
+            "__class__": "Set",
+            "data": [
+                "F1"
             ]
         },
         "GOR": {
             "__class__": "Set",
             "data": [
-                "GOR2",
+                "GOR2G",
                 "GOR1",
+                "GOR2",
+                "GOR3G",
+                "GOR1G",
                 "GOR3"
             ]
         },
@@ -129,52 +156,132 @@
             "__class__": "Set",
             "data": [
                 "LD2",
+                "LD1",
+                "LD3G",
+                "LD1G",
                 "LD3",
-                "LD1"
+                "LD2G"
             ]
         },
         "NE": {
             "__class__": "Set",
             "data": [
-                "NE3",
-                "NE4",
-                "NE1AB",
-                "NE1CD",
-                "NE6",
-                "NE5",
-                "NE7",
-                "NE2",
                 "A12",
-                "B2",
-                "B1",
-                "D4",
-                "D5",
-                "F1"
+                "NE1AB",
+                "NE3",
+                "NE7",
+                "NE4",
+                "NE5",
+                "NE1CD",
+                "NE2",
+                "NE6"
             ]
         },
         "NESE": {
             "__class__": "Set",
             "data": [
-                "NESE2",
-                "NESE1"
+                "NESE1",
+                "NESE2"
             ]
         },
         "SBL": {
             "__class__": "Set",
             "data": [
-                "SBL2",
-                "SBL1"
+                "SBL"
             ]
         },
         "VAU": {
             "__class__": "Set",
             "data": [
-                "VAU1",
-                "VAU2"
+                "VAU"
             ]
         }
     },
     "sektoren": {
+        "AUV1": {
+            "__class__": "Set",
+            "data": [
+                "AUV1G",
+                "AUV1"
+            ]
+        },
+        "AUV2": {
+            "__class__": "Set",
+            "data": [
+                "AUV2G",
+                "AUV2"
+            ]
+        },
+        "AUV3": {
+            "__class__": "Set",
+            "data": [
+                "AUV3G",
+                "AUV3"
+            ]
+        },
+        "CLB1": {
+            "__class__": "Set",
+            "data": [
+                "CLB1",
+                "CLB1G"
+            ]
+        },
+        "CLB2": {
+            "__class__": "Set",
+            "data": [
+                "CLB2",
+                "CLB2G"
+            ]
+        },
+        "CLB3": {
+            "__class__": "Set",
+            "data": [
+                "CLB3",
+                "CLB3G"
+            ]
+        },
+        "GOR1": {
+            "__class__": "Set",
+            "data": [
+                "GOR1",
+                "GOR1G"
+            ]
+        },
+        "GOR2": {
+            "__class__": "Set",
+            "data": [
+                "GOR2G",
+                "GOR2"
+            ]
+        },
+        "GOR3": {
+            "__class__": "Set",
+            "data": [
+                "GOR3G",
+                "GOR3"
+            ]
+        },
+        "LD1": {
+            "__class__": "Set",
+            "data": [
+                "LD1G",
+                "LD1"
+            ]
+        },
+        "LD2": {
+            "__class__": "Set",
+            "data": [
+                "LD2",
+                "LD2G"
+            ]
+        },
+        "LD3": {
+            "__class__": "Set",
+            "data": [
+                "LD3",
+                "LD3G"
+            ]
+        },
         "NE1": {
             "__class__": "Set",
             "data": [
@@ -194,6 +301,7 @@
             "CLB",
             "AUV",
             "NESE",
+            "Chambrelien",
             "NE",
             "SBL",
             "CORN",
@@ -201,5 +309,7 @@
             "LD",
             "TWN"
         ]
-    }
+    },
+    "streckenmarkierung": [],
+    "zugschema": "schweiz"
 }

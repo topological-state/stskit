@@ -1,0 +1,576 @@
+{
+    "_aid": 133,
+    "_build": 5851,
+    "_name": "Wr. Neustadt Hbf",
+    "_region": "\u00d6sterreich Ost",
+    "_version": 2,
+    "anschlussgruppen": {
+        "509": {
+            "__class__": "Set",
+            "data": [
+                "509"
+            ]
+        },
+        "570": {
+            "__class__": "Set",
+            "data": [
+                "570"
+            ]
+        },
+        "605": {
+            "__class__": "Set",
+            "data": [
+                "605"
+            ]
+        },
+        "607": {
+            "__class__": "Set",
+            "data": [
+                "607"
+            ]
+        },
+        "609": {
+            "__class__": "Set",
+            "data": [
+                "609"
+            ]
+        },
+        "611": {
+            "__class__": "Set",
+            "data": [
+                "611"
+            ]
+        },
+        "613": {
+            "__class__": "Set",
+            "data": [
+                "613"
+            ]
+        },
+        "615": {
+            "__class__": "Set",
+            "data": [
+                "615"
+            ]
+        },
+        "617": {
+            "__class__": "Set",
+            "data": [
+                "617"
+            ]
+        },
+        "619": {
+            "__class__": "Set",
+            "data": [
+                "619"
+            ]
+        },
+        "621": {
+            "__class__": "Set",
+            "data": [
+                "621"
+            ]
+        },
+        "623": {
+            "__class__": "Set",
+            "data": [
+                "623"
+            ]
+        },
+        "625": {
+            "__class__": "Set",
+            "data": [
+                "625"
+            ]
+        },
+        "627": {
+            "__class__": "Set",
+            "data": [
+                "627"
+            ]
+        },
+        "629": {
+            "__class__": "Set",
+            "data": [
+                "629"
+            ]
+        },
+        "653-655a": {
+            "__class__": "Set",
+            "data": [
+                "653-655a"
+            ]
+        },
+        "703-709": {
+            "__class__": "Set",
+            "data": [
+                "703-709"
+            ]
+        },
+        "711": {
+            "__class__": "Set",
+            "data": [
+                "711"
+            ]
+        },
+        "713": {
+            "__class__": "Set",
+            "data": [
+                "713"
+            ]
+        },
+        "715": {
+            "__class__": "Set",
+            "data": [
+                "715"
+            ]
+        },
+        "717": {
+            "__class__": "Set",
+            "data": [
+                "717"
+            ]
+        },
+        "719": {
+            "__class__": "Set",
+            "data": [
+                "719"
+            ]
+        },
+        "721": {
+            "__class__": "Set",
+            "data": [
+                "721"
+            ]
+        },
+        "723": {
+            "__class__": "Set",
+            "data": [
+                "723"
+            ]
+        },
+        "725": {
+            "__class__": "Set",
+            "data": [
+                "725"
+            ]
+        },
+        "727": {
+            "__class__": "Set",
+            "data": [
+                "727"
+            ]
+        },
+        "729": {
+            "__class__": "Set",
+            "data": [
+                "729"
+            ]
+        },
+        "731": {
+            "__class__": "Set",
+            "data": [
+                "731"
+            ]
+        },
+        "817": {
+            "__class__": "Set",
+            "data": [
+                "817"
+            ]
+        },
+        "819": {
+            "__class__": "Set",
+            "data": [
+                "819"
+            ]
+        },
+        "823": {
+            "__class__": "Set",
+            "data": [
+                "823"
+            ]
+        },
+        "825": {
+            "__class__": "Set",
+            "data": [
+                "825"
+            ]
+        },
+        "827": {
+            "__class__": "Set",
+            "data": [
+                "827"
+            ]
+        },
+        "829": {
+            "__class__": "Set",
+            "data": [
+                "829"
+            ]
+        },
+        "831": {
+            "__class__": "Set",
+            "data": [
+                "831"
+            ]
+        },
+        "AB": {
+            "__class__": "Set",
+            "data": [
+                "AB 665"
+            ]
+        },
+        "ASC": {
+            "__class__": "Set",
+            "data": [
+                "ASC 108-110a",
+                "ASC 424-428"
+            ]
+        },
+        "Bad Fischau-Brunn": {
+            "__class__": "Set",
+            "data": [
+                "Bad Fischau-Brunn"
+            ]
+        },
+        "Brenntag": {
+            "__class__": "Set",
+            "data": [
+                "Brenntag"
+            ]
+        },
+        "Felixdorf": {
+            "__class__": "Set",
+            "data": [
+                "Felixdorf"
+            ]
+        },
+        "Lanzenkirchen": {
+            "__class__": "Set",
+            "data": [
+                "Lanzenkirchen"
+            ]
+        },
+        "Neud\u00f6rfl": {
+            "__class__": "Set",
+            "data": [
+                "Neud\u00f6rfl"
+            ]
+        },
+        "Neunkirchen": {
+            "__class__": "Set",
+            "data": [
+                "Neunkirchen"
+            ]
+        },
+        "Obereggendorf": {
+            "__class__": "Set",
+            "data": [
+                "Obereggendorf"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Ed H1": {
+            "__class__": "Set",
+            "data": [
+                "Ed H1"
+            ]
+        },
+        "Fld H2": {
+            "__class__": "Set",
+            "data": [
+                "Fld H2"
+            ]
+        },
+        "Nb": {
+            "__class__": "Set",
+            "data": [
+                "Nb 441",
+                "Nb 341",
+                "Nb 604",
+                "Nb 345",
+                "Nb 606",
+                "Nb 106b",
+                "Nb 343",
+                "Nb 347",
+                "Nb 349",
+                "Nb 402",
+                "Nb 412",
+                "Nb 504",
+                "Nb 414",
+                "Nb 401",
+                "Nb 533",
+                "Nb 415",
+                "Nb 508",
+                "Nb 506",
+                "Nb 418",
+                "Nb 413",
+                "Nb 501",
+                "Nb 410",
+                "Nb 408 2VT",
+                "Nb 403",
+                "Nb 405",
+                "Nb 502",
+                "Nb 505",
+                "Nb 408",
+                "Nb 505 2VT",
+                "Nb 510",
+                "Nb 510 2VT",
+                "Nb 422",
+                "Nb 511",
+                "Nb 410 2VT",
+                "Nb 420",
+                "Nb 603",
+                "Nb 416",
+                "Nb 508 2VT",
+                "Nb 406",
+                "Nb 511 2VT",
+                "Nb 404",
+                "Nb 503",
+                "Nb 512",
+                "Nb 608",
+                "Nb 813c",
+                "Nb 811b",
+                "Nb 811c",
+                "Nb 811a",
+                "Nb 813b",
+                "Nb 815",
+                "Nb 831",
+                "Nb 823",
+                "Nb 835",
+                "Nb 819",
+                "Nb 827",
+                "Nb 829",
+                "Nb 833",
+                "Nb 825",
+                "Nb 837"
+            ]
+        },
+        "Nb H1A": {
+            "__class__": "Set",
+            "data": [
+                "Nb H1A"
+            ]
+        },
+        "Nb S1x": {
+            "__class__": "Set",
+            "data": [
+                "Nb S11",
+                "Nb S12"
+            ]
+        },
+        "Nbb": {
+            "__class__": "Set",
+            "data": [
+                "Nbb 113",
+                "Nbb 115",
+                "Nbb 653"
+            ]
+        },
+        "Nbf": {
+            "__class__": "Set",
+            "data": [
+                "Nbf 704"
+            ]
+        },
+        "Nbn": {
+            "__class__": "Set",
+            "data": [
+                "Nbn 202",
+                "Nbn 205",
+                "Nbn 201"
+            ]
+        },
+        "Nbs": {
+            "__class__": "Set",
+            "data": [
+                "Nbs 702",
+                "Nbs 701"
+            ]
+        },
+        "Ne": {
+            "__class__": "Set",
+            "data": [
+                "Ne 715",
+                "Ne 731",
+                "Ne 723",
+                "Ne 713",
+                "Ne 711",
+                "Ne 719",
+                "Ne 721",
+                "Ne 725",
+                "Ne 717",
+                "Ne 729",
+                "Ne 727",
+                "Ne 903"
+            ]
+        },
+        "Ngg": {
+            "__class__": "Set",
+            "data": [
+                "Ngg 437",
+                "Ngg 439",
+                "Ngg 521",
+                "Ngg 519",
+                "Ngg 523",
+                "Ngg 541",
+                "Ngg 570"
+            ]
+        },
+        "Nr": {
+            "__class__": "Set",
+            "data": [
+                "Nr 570",
+                "Nr 619",
+                "Nr 621",
+                "Nr 625",
+                "Nr 609",
+                "Nr 613",
+                "Nr 605",
+                "Nr 611",
+                "Nr 623",
+                "Nr 629",
+                "Nr 627",
+                "Nr 607",
+                "Nr 615",
+                "Nr 617"
+            ]
+        }
+    },
+    "hauptstrecke": "Felixdorf-Neunkirchen",
+    "sektoren": {
+        "Nb 401": {
+            "__class__": "Set",
+            "data": [
+                "Nb 401",
+                "Nb 501"
+            ]
+        },
+        "Nb 403": {
+            "__class__": "Set",
+            "data": [
+                "Nb 413",
+                "Nb 403",
+                "Nb 503"
+            ]
+        },
+        "Nb 405": {
+            "__class__": "Set",
+            "data": [
+                "Nb 405",
+                "Nb 505",
+                "Nb 505 2VT",
+                "Nb 415",
+                "Nb 515"
+            ]
+        },
+        "Nb 502": {
+            "__class__": "Set",
+            "data": [
+                "Nb 402",
+                "Nb 502"
+            ]
+        },
+        "Nb 504": {
+            "__class__": "Set",
+            "data": [
+                "Nb 504",
+                "Nb 404"
+            ]
+        },
+        "Nb 506": {
+            "__class__": "Set",
+            "data": [
+                "Nb 406",
+                "Nb 506"
+            ]
+        },
+        "Nb 508": {
+            "__class__": "Set",
+            "data": [
+                "Nb 408 2VT",
+                "Nb 408",
+                "Nb 508 2VT",
+                "Nb 508"
+            ]
+        },
+        "Nb 510": {
+            "__class__": "Set",
+            "data": [
+                "Nb 410",
+                "Nb 410 2VT",
+                "Nb 510 2VT",
+                "Nb 510"
+            ]
+        },
+        "Nb 511": {
+            "__class__": "Set",
+            "data": [
+                "Nb 511",
+                "Nb 511 2VT"
+            ]
+        },
+        "Nb 811": {
+            "__class__": "Set",
+            "data": [
+                "Nb 811c",
+                "Nb 811a",
+                "Nb 811b"
+            ]
+        },
+        "Nb 813": {
+            "__class__": "Set",
+            "data": [
+                "Nb 813c",
+                "Nb 813b"
+            ]
+        }
+    },
+    "strecken": {
+        "Felixdorf-Bad Fischau-Brunn": [
+            "Felixdorf",
+            "Fld H2",
+            "Nbn",
+            "Nb",
+            "Nbf",
+            "Nb H1A",
+            "Bad Fischau-Brunn"
+        ],
+        "Felixdorf-Neunkirchen": [
+            "Felixdorf",
+            "Fld H2",
+            "Nbn",
+            "Nb",
+            "Nr",
+            "Ne",
+            "Nb S11",
+            "Neunkirchen"
+        ],
+        "Obereggendorf-Bad Fischau-Brunn": [
+            "Obereggendorf",
+            "Ed H1",
+            "Nbb",
+            "Nbn",
+            "Nb",
+            "Nbf",
+            "Nb H1A",
+            "Bad Fischau-Brunn"
+        ],
+        "Obereggendorf-Neunkirchen": [
+            "Obereggendorf",
+            "Ed H1",
+            "Nbb",
+            "Nbn",
+            "Nb",
+            "Nr",
+            "Ne",
+            "Nb S11",
+            "Neunkirchen"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

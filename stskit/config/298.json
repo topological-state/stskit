@@ -1,0 +1,392 @@
+{
+    "_aid": 298,
+    "_build": 5851,
+    "_name": "S-Bahn Elbgaustra\u00dfe",
+    "_region": "Hamburg - Schleswig-Holstein",
+    "_version": 2,
+    "anschlussgruppen": {
+        "14-16": {
+            "__class__": "Set",
+            "data": [
+                "14-16"
+            ]
+        },
+        "17-18": {
+            "__class__": "Set",
+            "data": [
+                "17-18"
+            ]
+        },
+        "25-29": {
+            "__class__": "Set",
+            "data": [
+                "25-29"
+            ]
+        },
+        "Altona Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Altona Gbf"
+            ]
+        },
+        "Altona Pbf": {
+            "__class__": "Set",
+            "data": [
+                "Altona Pbf"
+            ]
+        },
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW 1",
+                "BW 2"
+            ]
+        },
+        "HH-Eidelstedt": {
+            "__class__": "Set",
+            "data": [
+                "HH-Eidelstedt"
+            ]
+        },
+        "Hbf Tunnel": {
+            "__class__": "Set",
+            "data": [
+                "Hbf Tunnel"
+            ]
+        },
+        "Hbf oben": {
+            "__class__": "Set",
+            "data": [
+                "Hbf oben"
+            ]
+        },
+        "Kaltenkirchen": {
+            "__class__": "Set",
+            "data": [
+                "Kaltenkirchen"
+            ]
+        },
+        "Pinneberg": {
+            "__class__": "Set",
+            "data": [
+                "Pinneberg"
+            ]
+        },
+        "Wedel": {
+            "__class__": "Set",
+            "data": [
+                "Wedel"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "AAS": {
+            "__class__": "Set",
+            "data": [
+                "AAS 2L",
+                "AAS 2",
+                "AAS 3L",
+                "AAS 4L",
+                "AAS 1",
+                "AAS 1L",
+                "AAS 4",
+                "AAS 3",
+                "AAS 32"
+            ]
+        },
+        "ADT": {
+            "__class__": "Set",
+            "data": [
+                "ADT 1L",
+                "ADT 2",
+                "ADT 2L",
+                "ADT 1"
+            ]
+        },
+        "AEGS": {
+            "__class__": "Set",
+            "data": [
+                "AEGS 1",
+                "AEGS 2",
+                "AEGS 2L",
+                "AEGS 1L",
+                "AEGS 11",
+                "AEGS 10"
+            ]
+        },
+        "AEST": {
+            "__class__": "Set",
+            "data": [
+                "AEST 1L",
+                "AEST 1",
+                "AEST 2",
+                "AEST 2L",
+                "AEST 3A",
+                "AEST 3B",
+                "AEST 4"
+            ]
+        },
+        "ALAS": {
+            "__class__": "Set",
+            "data": [
+                "ALAS 2",
+                "ALAS 1"
+            ]
+        },
+        "ASST": {
+            "__class__": "Set",
+            "data": [
+                "ASST 2",
+                "ASST 2L",
+                "ASST 1",
+                "ASST 1L",
+                "ASST 50"
+            ]
+        },
+        "Bahrenfeld": {
+            "__class__": "Set",
+            "data": [
+                "Bahrenfeld 1",
+                "Bahrenfeld 2"
+            ]
+        },
+        "Halstenbek": {
+            "__class__": "Set",
+            "data": [
+                "Halstenbek 1",
+                "Halstenbek 2"
+            ]
+        },
+        "Holstenstra\u00dfe": {
+            "__class__": "Set",
+            "data": [
+                "Holstenstra\u00dfe 1",
+                "Holstenstra\u00dfe 1L",
+                "Holstenstra\u00dfe 2",
+                "Holstenstra\u00dfe 2L"
+            ]
+        },
+        "Jungfernstieg": {
+            "__class__": "Set",
+            "data": [
+                "Jungfernstieg 2",
+                "Jungfernstieg 1"
+            ]
+        },
+        "Krupunder": {
+            "__class__": "Set",
+            "data": [
+                "Krupunder 1",
+                "Krupunder 2"
+            ]
+        },
+        "K\u00f6nigstra\u00dfe": {
+            "__class__": "Set",
+            "data": [
+                "K\u00f6nigstra\u00dfe 2",
+                "K\u00f6nigstra\u00dfe 1"
+            ]
+        },
+        "Langenfelde": {
+            "__class__": "Set",
+            "data": [
+                "Langenfelde 1",
+                "Langenfelde 2"
+            ]
+        },
+        "Reeperbahn": {
+            "__class__": "Set",
+            "data": [
+                "Reeperbahn 2",
+                "Reeperbahn 1"
+            ]
+        },
+        "Stadthausbr\u00fccke": {
+            "__class__": "Set",
+            "data": [
+                "Stadthausbr\u00fccke 1",
+                "Stadthausbr\u00fccke 2"
+            ]
+        },
+        "Stellingen": {
+            "__class__": "Set",
+            "data": [
+                "Stellingen 1",
+                "Stellingen 2"
+            ]
+        }
+    },
+    "hauptstrecke": "Pinneberg-Hbf Tunnel",
+    "sektoren": {
+        "AAS 1": {
+            "__class__": "Set",
+            "data": [
+                "AAS 1",
+                "AAS 1L"
+            ]
+        },
+        "AAS 2": {
+            "__class__": "Set",
+            "data": [
+                "AAS 2L",
+                "AAS 2"
+            ]
+        },
+        "AAS 3": {
+            "__class__": "Set",
+            "data": [
+                "AAS 3L",
+                "AAS 3"
+            ]
+        },
+        "AAS 4": {
+            "__class__": "Set",
+            "data": [
+                "AAS 4L",
+                "AAS 4"
+            ]
+        },
+        "ADT 1": {
+            "__class__": "Set",
+            "data": [
+                "ADT 1L",
+                "ADT 1"
+            ]
+        },
+        "ADT 2": {
+            "__class__": "Set",
+            "data": [
+                "ADT 2",
+                "ADT 2L"
+            ]
+        },
+        "AEGS 1": {
+            "__class__": "Set",
+            "data": [
+                "AEGS 1",
+                "AEGS 1L"
+            ]
+        },
+        "AEGS 2": {
+            "__class__": "Set",
+            "data": [
+                "AEGS 2",
+                "AEGS 2L"
+            ]
+        },
+        "AEST 1": {
+            "__class__": "Set",
+            "data": [
+                "AEST 1L",
+                "AEST 1"
+            ]
+        },
+        "AEST 2": {
+            "__class__": "Set",
+            "data": [
+                "AEST 2",
+                "AEST 2L"
+            ]
+        },
+        "AEST 3": {
+            "__class__": "Set",
+            "data": [
+                "AEST 3B",
+                "AEST 3A"
+            ]
+        },
+        "ASST 1": {
+            "__class__": "Set",
+            "data": [
+                "ASST 1",
+                "ASST 1L"
+            ]
+        },
+        "ASST 2": {
+            "__class__": "Set",
+            "data": [
+                "ASST 2",
+                "ASST 2L"
+            ]
+        }
+    },
+    "strecken": {
+        "Hbf Tunnel-Hbf oben": [
+            "Hbf Tunnel",
+            "Jungfernstieg",
+            "Stadthausbr\u00fccke",
+            "ALAS",
+            "Reeperbahn",
+            "AAS",
+            "Holstenstra\u00dfe",
+            "ASST",
+            "Hbf oben"
+        ],
+        "Hbf Tunnel-Pinneberg": [
+            "Hbf Tunnel",
+            "Jungfernstieg",
+            "Stadthausbr\u00fccke",
+            "ALAS",
+            "Reeperbahn",
+            "AAS",
+            "ADT",
+            "Langenfelde",
+            "Stellingen",
+            "AEST",
+            "AEGS",
+            "Krupunder",
+            "Halstenbek",
+            "Pinneberg"
+        ],
+        "Hbf oben-Wedel": [
+            "Hbf oben",
+            "ASST",
+            "Holstenstra\u00dfe",
+            "AAS",
+            "Bahrenfeld",
+            "Wedel"
+        ],
+        "Hbf Tunnel-Wedel": [
+            "Hbf Tunnel",
+            "Jungfernstieg",
+            "Stadthausbr\u00fccke",
+            "ALAS",
+            "Reeperbahn",
+            "AAS",
+            "Bahrenfeld",
+            "Wedel"
+        ],
+        "Pinneberg-Hbf Tunnel": [
+            "Pinneberg",
+            "Halstenbek",
+            "Krupunder",
+            "AEGS",
+            "AEST",
+            "Stellingen",
+            "Langenfelde",
+            "ADT",
+            "AAS",
+            "Reeperbahn",
+            "ALAS",
+            "Stadthausbr\u00fccke",
+            "Jungfernstieg",
+            "Hbf Tunnel"
+        ],
+        "Pinneberg-Hbf oben": [
+            "Pinneberg",
+            "Halstenbek",
+            "Krupunder",
+            "AEGS",
+            "AEST",
+            "Stellingen",
+            "Langenfelde",
+            "ADT",
+            "Holstenstra\u00dfe",
+            "ASST",
+            "Hbf oben"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}

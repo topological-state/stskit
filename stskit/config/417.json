@@ -1,0 +1,224 @@
+{
+    "_aid": 417,
+    "_build": 5851,
+    "_name": "Wien Praterstern",
+    "_region": "\u00d6sterreich Ost",
+    "_version": 2,
+    "anschlussgruppen": {
+        "Floridsdorf": {
+            "__class__": "Set",
+            "data": [
+                "Floridsdorf"
+            ]
+        },
+        "Mat 111B": {
+            "__class__": "Set",
+            "data": [
+                "Mat 111B"
+            ]
+        },
+        "SGP": {
+            "__class__": "Set",
+            "data": [
+                "SGP"
+            ]
+        },
+        "Wien Hbf": {
+            "__class__": "Set",
+            "data": [
+                "Wien Hbf 216",
+                "Wien Hbf 214"
+            ]
+        },
+        "Wien Meidling": {
+            "__class__": "Set",
+            "data": [
+                "Wien Meidling"
+            ]
+        },
+        "Zentralfriedhof": {
+            "__class__": "Set",
+            "data": [
+                "Zentralfriedhof"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Cat": {
+            "__class__": "Set",
+            "data": [
+                "Cat 143"
+            ]
+        },
+        "Dok": {
+            "__class__": "Set",
+            "data": [
+                "Dok"
+            ]
+        },
+        "Hz": {
+            "__class__": "Set",
+            "data": [
+                "Hz 131",
+                "Hz 134",
+                "Hz 123",
+                "Hz 133",
+                "Hz 132"
+            ]
+        },
+        "Mat": {
+            "__class__": "Set",
+            "data": [
+                "Mat 306",
+                "Mat 304"
+            ]
+        },
+        "Mlx": {
+            "__class__": "Set",
+            "data": [
+                "Mlx"
+            ]
+        },
+        "Ng": {
+            "__class__": "Set",
+            "data": [
+                "Ng 603",
+                "Ng 602",
+                "Ng 601"
+            ]
+        },
+        "Nw": {
+            "__class__": "Set",
+            "data": [
+                "Nw 234",
+                "Nw 221",
+                "Nw 225",
+                "Nw 224",
+                "Nw 222",
+                "Nw 223"
+            ]
+        },
+        "Nw H1": {
+            "__class__": "Set",
+            "data": [
+                "Nw H1"
+            ]
+        },
+        "Nw H1H": {
+            "__class__": "Set",
+            "data": [
+                "Nw H1H"
+            ]
+        },
+        "Nw H2": {
+            "__class__": "Set",
+            "data": [
+                "Nw H2"
+            ]
+        },
+        "Nw U11": {
+            "__class__": "Set",
+            "data": [
+                "Nw U11"
+            ]
+        },
+        "Nwi": {
+            "__class__": "Set",
+            "data": [
+                "Nwi"
+            ]
+        },
+        "Ren": {
+            "__class__": "Set",
+            "data": [
+                "Ren 104",
+                "Ren 106"
+            ]
+        },
+        "Sah": {
+            "__class__": "Set",
+            "data": [
+                "Sah 204",
+                "Sah 201",
+                "Sah 202",
+                "Sah 302 PZH",
+                "Sah 201 PZH"
+            ]
+        },
+        "Wsp": {
+            "__class__": "Set",
+            "data": [
+                "Wsp 974",
+                "Wsp 976"
+            ]
+        },
+        "Wwb": {
+            "__class__": "Set",
+            "data": [
+                "Wwb 954",
+                "Wwb 956"
+            ]
+        },
+        "Wwb U1": {
+            "__class__": "Set",
+            "data": [
+                "Wwb U1"
+            ]
+        }
+    },
+    "hauptstrecke": "Wien Meidling-Floridsdorf",
+    "sektoren": {
+        "Sah 201": {
+            "__class__": "Set",
+            "data": [
+                "Sah 201",
+                "Sah 201 PZH"
+            ]
+        }
+    },
+    "strecken": {
+        "Wien Meidling-Floridsdorf": [
+            "Wien Meidling",
+            "Mat",
+            "Mlx",
+            "Wsp",
+            "Wwb",
+            "Wwb U1",
+            "Ren",
+            "Hz",
+            "Cat",
+            "Dok",
+            "Nw",
+            "Ng",
+            "Nwi",
+            "Nw H1",
+            "Nw H2",
+            "Floridsdorf"
+        ],
+        "Wien Meidling-Wien Hbf": [
+            "Wien Meidling",
+            "Mat",
+            "Mlx",
+            "Wien Hbf"
+        ],
+        "Zentralfriedhof-Floridsdorf": [
+            "Zentralfriedhof",
+            "Sah",
+            "Nw H1H",
+            "Nw U11",
+            "Ren",
+            "Hz",
+            "Cat",
+            "Dok",
+            "Nw",
+            "Ng",
+            "Nwi",
+            "Nw H1",
+            "Nw H2",
+            "Floridsdorf"
+        ]
+    },
+    "streckenmarkierung": [],
+    "zugschema": "deutschland"
+}
