@@ -31,6 +31,7 @@ wenn dies nicht gewünscht wird, der rest des programms aber auf DEBUG bleiben s
 kann die stufe dieses moduls individuell angepasst werden durch
 "logging.getLogger('stsplugin').setLevel(logging.WARNING)".
 """
+import sys
 
 import trio
 import datetime
@@ -193,7 +194,15 @@ class PluginClient:
                         # xml tag complete?
                         if len(handler.elements) == 0:
                             element = handler.root
-                            parser.close()
+                            try:
+                                parser.close()
+                            except xml.sax.SAXParseException as e:
+                                # rare parse exception: unclosed element
+                                logger.exception(e)
+                                logger.error(f"offending string: {s}")
+                                print(e.getMessage(), sys.stderr)
+                                continue
+
                             handler.root = untangle.Element(None, None)
                             handler.root.is_root = True
 
