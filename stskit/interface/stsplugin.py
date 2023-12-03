@@ -385,16 +385,17 @@ class PluginClient:
 
     async def request_zugdetails(self, zid: Optional[Union[int, Iterable[int]]] = None):
         """
-        fahrplan eines zuges, mehrerer oder aller züge anfragen.
+        ZugDetails eines, mehrerer oder aller Züge anfragen.
 
-        wenn ein ZugDetails-objekt mit der zid muss bereits in der zugliste angelegt ist,
+        Wenn ein ZugDetails-Objekt mit der zid bereits in der Zugliste angelegt ist,
         wird es aktualisiert, andernfalls neu angelegt.
-        wenn ein fehler auftritt (weil z.b. der zug nicht mehr im stellwerk ist),
-        wird der zug aus der zugliste gelöscht.
+        Wenn ein Fehler auftritt (weil z.B. der Zug nicht mehr im Stellwerk ist),
+        wird der Zug aus der Zugliste gelöscht.
 
-        :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
+        :param zid: Einzelne Zug-ID, Iterable von Zug-IDs, oder None (alle in der Zugliste).
         :return: None
         """
+
         if zid is not None:
             try:
                 zids = list(iter(zid))
@@ -403,29 +404,46 @@ class PluginClient:
         else:
             zids = list(self.zugliste.keys())
 
-        for zid in zids:
+        for zid in sorted(map(int, zids)):
             if zid > 0:
-                await self._send_request("zugdetails", zid=zid)
-                response = await self._antwort_channel_out.receive()
+                await self.request_zugdetails_einzeln(zid)
             else:
                 logger.warning(f"request_zugdetails: anfrage mit zid={zid} ignoriert.")
-                continue
 
-            try:
-                zug = self.zugliste[zid]
-            except KeyError:
-                zug = ZugDetails()
-                zug.zid = zid
-                self.zugliste[zid] = zug
+    async def request_zugdetails_einzeln(self, zid: int) -> bool:
+        """
+        ZugDetails eines einzelnen Zuges anfragen.
 
-            try:
-                zug.update(response.zugdetails)
-                logger.debug(f"request_zugdetails: {zug}")
-            except AttributeError:
-                del self.zugliste[zid]
-                log_status_warning("request_zugdetails", response)
-            else:
-                self.zuggattungen.add(zug.gattung)
+        Wenn ein ZugDetails-Objekt mit der angegebenen zid bereits in der Zugliste angelegt ist,
+        wird es aktualisiert, andernfalls neu angelegt.
+        Wenn ein Fehler auftritt (weil z.B. der Zug nicht mehr im Stellwerk ist),
+        wird der Zug aus der Zugliste gelöscht.
+
+        :param zid: einzelne zug-id.
+        :return: True (Erfolg) oder False (Fehler, Zug entfernt)
+        """
+
+        await self._send_request("zugdetails", zid=zid)
+        response = await self._antwort_channel_out.receive()
+
+        try:
+            zug = self.zugliste[zid]
+        except KeyError:
+            zug = ZugDetails()
+            zug.zid = zid
+            self.zugliste[zid] = zug
+
+        try:
+            zug.update(response.zugdetails)
+            logger.debug(f"request_zugdetails: {zug}")
+        except AttributeError:
+            del self.zugliste[zid]
+            log_status_warning("request_zugdetails", response)
+            return False
+        else:
+            self.zuggattungen.add(zug.gattung)
+
+        return True
 
     async def request_ereignis(self, art, zids: Iterable[int]):
         """
@@ -449,50 +467,79 @@ class PluginClient:
 
     async def request_zugfahrplan(self, zid: Optional[Union[int, Iterable[int]]] = None):
         """
-        fahrplan eines zuges, mehrerer oder aller züge anfragen.
+        Fahrplan eines, mehrerer oder aller Züge anfragen.
 
-        das ZugDetails-objekt muss in der zugliste bereits existieren.
+        Das ZugDetails-Objekt muss in der Zugliste bereits existieren.
 
-        bemerkung: abgefahrene wegpunkte sind im fahrplan nicht mehr vorhanden.
+        Bemerkungen
+        -----------
+
+        - Abgefahrene Wegpunkte sind im Fahrplan nicht mehr vorhanden.
 
         :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
         :return: None
         """
+
         if zid is not None:
             zids = [zid]
         else:
             zids = self.zugliste.keys()
-        for zid in map(int, zids):
-            try:
-                zug = self.zugliste[zid]
-                zug.fahrplan = []
-            except KeyError:
-                continue
+        for zid in sorted(map(int, zids)):
+            if zid in self.zugliste:
+                await self.request_zugfahrplan_einzeln(zid)
 
-            await self._send_request("zugfahrplan", zid=zid)
-            response = await self._antwort_channel_out.receive()
+    async def request_zugfahrplan_einzeln(self, zid: int) -> bool:
+        """
+        Fahrplan eines Zuges anfragen.
 
-            try:
-                zug.ziel_index = None
-                for gleis in response.zugfahrplan.gleis:
-                    zeile = FahrplanZeile(zug).update(gleis)
-                    zug.fahrplan.append(zeile)
-                    if zug.plangleis == zeile.plan:
-                        zug.ziel_index = len(zug.fahrplan) - 1
-                    logger.debug(f"request_zugfahrplan: {zeile}")
-            except AttributeError:
-                log_status_warning("request_zugfahrplan", response)
+        Das ZugDetails-Objekt muss in der Zugliste bereits existieren.
+
+        Bemerkungen
+        -----------
+
+        - Abgefahrene Wegpunkte sind im Fahrplan nicht mehr vorhanden.
+
+        :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
+        :return: True (Erfolg) oder False (Fehler)
+        """
+
+        zug = self.zugliste[zid]
+        zug.fahrplan = []
+
+        await self._send_request("zugfahrplan", zid=zid)
+        response = await self._antwort_channel_out.receive()
+
+        try:
+            zug.ziel_index = None
+            for gleis in response.zugfahrplan.gleis:
+                zeile = FahrplanZeile(zug).update(gleis)
+                zug.fahrplan.append(zeile)
+                if zug.plangleis == zeile.plan:
+                    zug.ziel_index = len(zug.fahrplan) - 1
+                logger.debug(f"request_zugfahrplan: {zeile}")
+        except AttributeError:
+            log_status_warning("request_zugfahrplan", response)
+            return False
+
+        return True
 
     async def request_zugliste(self):
         """
-        zugliste anfragen.
+        Zugliste anfragen.
 
-        die zugliste wird angefragt und neu aufgebaut.
+        Die Zugliste wird angefragt und neu aufgebaut.
 
-        bemerkung: folgezüge sind möglicherweise nicht enthalten.
+        Bemerkungen
+        -----------
+
+        - Die vom Simulator gelieferte Zugliste enthält nicht alle Folgezüge.
+        - Ausgefahrene Züge werden von der Liste entfernt.
+        - Die Zugobjekte sind nach dieser Abfrage schon ziemlich komplett.
+          Einzig die aktuelle Verspätung fehlt und muss per request_zugdetails angefragt werden.
 
         :return: None
         """
+
         self.zugliste = {}
 
         await self._send_request("zugliste")

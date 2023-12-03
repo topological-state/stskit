@@ -487,39 +487,84 @@ class ZugDetails:
 
         return graph
 
-    def find_fahrplanzeile(self, gleis: Optional[str] = None, plan: Optional[str] = None) -> Optional['FahrplanZeile']:
+    def find_fahrplanzeile(self, gleis: Optional[str] = None, plan: Optional[str] = None,
+                           zeit: Optional[datetime.time] = None) -> Optional['FahrplanZeile']:
         """
-        finde erste fahrplanzeile, in der ein bestimmtes gleis vorkommt.
+        Finde eine Fahrplanzeile nach Gleis und/oder Zeit.
 
-        man kann nach dem aktuellen gleis oder dem plangleis suchen.
-        mindestens eines der beiden muss zutreffen.
+        Alle angegebenen Kriterien müssen zutreffen.
+        Die Zeit muss grösser oder gleich der Ankunftszeit (wenn bekannt)
+        und kleiner oder gleich der Abfahrtszeit (wenn bekannt) sein.
+        Wenn eine der Zeiten nicht bekannt ist, wird das entsprechende Kriterium als erfüllt gewertet.
 
-        :param gleis: (str)
-        :param plan: (str)
+        Diese Methode ist ein Wrapper von find_fahrplan, der nur das Fahrplanobjekt zurückgibt.
 
-        :return: FahrplanZeile objekt oder None.
+        :param gleis: (str) Gleis (Gross-/Kleinschreibung egal)
+        :param plan: (str) Plangleis (Gross-/Kleinschreibung egal)
+        :param zeit: (datetime.time) Zeit, >= Ankunft und <= Abfahrt
+
+        :return: FahrplanZeile-Objekt oder None.
         """
-        for zeile in self.fahrplan:
-            if gleis == zeile.gleis or plan == zeile.plan:
-                return zeile
-        return None
 
-    def find_fahrplan_index(self, gleis: Optional[str] = None, plan: Optional[str] = None) -> Optional[int]:
+        _, zeile = self.find_fahrplan(gleis=gleis, plan=plan, zeit=zeit)
+        return zeile
+
+    def find_fahrplan_index(self, gleis: Optional[str] = None, plan: Optional[str] = None,
+                            zeit: Optional[datetime.time] = None) -> Optional[int]:
         """
-        finde den index der ersten fahrplanzeile, in der ein bestimmtes gleis vorkommt.
+        Finde eine Fahrplanzeile nach Gleis und/oder Zeit.
 
-        man kann nach dem aktuellen gleis oder dem plangleis suchen.
-        mindestens eines der beiden muss zutreffen.
+        Alle angegebenen Kriterien müssen zutreffen.
+        Die Zeit muss grösser oder gleich der Ankunftszeit (wenn bekannt)
+        und kleiner oder gleich der Abfahrtszeit (wenn bekannt) sein.
+        Wenn eine der Zeiten nicht bekannt ist, wird das entsprechende Kriterium als erfüllt gewertet.
 
-        :param gleis: (str)
-        :param plan: (str)
+        Diese Methode ist ein Wrapper von find_fahrplan, der nur den Index zurückgibt.
 
-        :return: index in fahrplan-liste oder None.
+        :param gleis: (str) Gleis (Gross-/Kleinschreibung egal)
+        :param plan: (str) Plangleis (Gross-/Kleinschreibung egal)
+        :param zeit: (datetime.time) Zeit, >= Ankunft und <= Abfahrt
+
+        :return: Listenindex in Fahrplan oder None.
+            Vorsicht: 0 ist ein gültiges Resultat.
         """
+
+        index, _ = self.find_fahrplan(gleis=gleis, plan=plan, zeit=zeit)
+        return index
+
+    def find_fahrplan(self, gleis: Optional[str] = None, plan: Optional[str] = None,
+                            zeit: Optional[datetime.time] = None) -> Tuple[Optional[int], Optional['FahrplanZeile']]:
+        """
+        Finde Index und Fahrplanzeile nach Gleis und/oder Zeit.
+
+        Alle angegebenen Kriterien müssen zutreffen.
+        Die Zeit muss grösser oder gleich der Ankunftszeit (wenn bekannt)
+        und kleiner oder gleich der Abfahrtszeit (wenn bekannt) sein.
+        Wenn eine der Zeiten nicht bekannt ist, wird das entsprechende Kriterium als erfüllt gewertet.
+
+        :param gleis: (str) Gleis (Gross-/Kleinschreibung egal)
+        :param plan: (str) Plangleis (Gross-/Kleinschreibung egal)
+        :param zeit: (datetime.time) Zeit, >= Ankunft und <= Abfahrt
+
+        :return: Listenindex im Fahrplan und FahrplanZeile-Objekt.
+                 Die Objekte sind None, wenn kein passender Eintrag gefunden wurde.
+        """
+
+        gleis = gleis.casefold() if gleis else None
+        plan = plan.casefold() if plan else None
+
         for index, zeile in enumerate(self.fahrplan):
-            if gleis == zeile.gleis or plan == zeile.plan:
-                return index
-        return None
+            if gleis and gleis != zeile.gleis.casefold():
+                continue
+            if plan and plan != zeile.plan.casefold():
+                continue
+            if zeit and zeile.an and zeit < zeile.an:
+                continue
+            if zeit and zeile.ab and zeit > zeile.ab:
+                continue
+            return index, zeile
+
+        return None, None
 
 
 class Ereignis(ZugDetails):
@@ -632,15 +677,31 @@ class FahrplanZeile:
         self.fluegelzug: Optional[ZugDetails] = None
         self.kuppelzug: Optional[ZugDetails] = None
 
+    @property
+    def fid(self) -> Tuple[int, Optional[datetime.time], Optional[datetime.time], str]:
+        """
+        Fahrplanziel-Identifikation
+
+        Die Identifikation besteht aus den eindeutigen, unveränderlichen Attributen zug.zid, an, ab und plan.
+
+        Die attribute an, ab und plan alleine sind (auch für einen Zug) nicht eindeutig:
+        an oder ab können None sein, das Gleis kann mehrmals angefahren werden.
+
+        :return: Vierertupel (zid, an, ab, plan)
+        """
+
+        return self.zug.zid, self.an, self.ab, self.plan
+
     def __hash__(self) -> int:
         """
-        zugziel-hash
+        Zugziel-Hash
 
-        der hash basiert auf den eindeutigen, unveränderlichen attributen zug.zid und plan.
+        Der Hash basiert auf den eindeutigen, unveränderlichen Attributen zug.zid, an, ab und plan.
 
-        :return: hash-wert
+        :return: Hash-Wert
         """
-        return hash((self.zug.zid, self.plan))
+
+        return hash(self.fid)
 
     def __eq__(self, other: 'FahrplanZeile') -> bool:
         """

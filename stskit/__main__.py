@@ -21,6 +21,7 @@ import trio
 import qtrio
 
 from stskit.interface.stsplugin import PluginClient, TaskDone, DEFAULT_HOST, DEFAULT_PORT
+from stskit.interface.stsgraph import GraphClient
 from stskit.zentrale import DatenZentrale
 from stskit.anschlussmatrix import AnschlussmatrixWindow
 from stskit.bildfahrplan import BildFahrplanWindow
@@ -327,8 +328,8 @@ async def main_window():
 
     window = MainWindow(arguments.data_dir)
 
-    client = PluginClient(name='STSdispo', autor='bummler', version='0.8',
-                          text='STSdispo: grafische fahrpläne, disposition und auswertung')
+    client = GraphClient(name='STSdispo', autor='matthias muntwiler', version='0.9',
+                         text='STSdispo: grafische fahrpläne, disposition und auswertung')
 
     await client.connect(host=arguments.host, port=arguments.port)
     window.zentrale.client = client
