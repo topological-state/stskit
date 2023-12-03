@@ -2,12 +2,12 @@ import datetime
 import logging
 import json
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Dict, Iterable, Mapping
 
 import networkx as nx
 import numpy as np
 
-from stskit.stsobj import ZugDetails, FahrplanZeile, Ereignis, time_to_minutes, time_to_seconds, minutes_to_time
+from stskit.interface.stsobj import ZugDetails, FahrplanZeile, Ereignis, time_to_seconds
 from stskit.anlage import Anlage, JSONEncoder
 
 

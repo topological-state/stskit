@@ -1,7 +1,7 @@
 import datetime
 import unittest
 
-import stskit.stsobj as stsobj
+import stskit.interface.stsobj as stsobj
 
 
 class TestStsObj(unittest.TestCase):

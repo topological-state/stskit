@@ -38,11 +38,11 @@ import datetime
 import html.entities
 import logging
 import re
-from typing import Any, Callable, Dict, List, Iterable, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, Union
 import untangle
 import xml.sax
 
-from stskit.stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis
+from stskit.interface.stsobj import AnlagenInfo, BahnsteigInfo, Knoten, ZugDetails, FahrplanZeile, Ereignis
 
 
 logger = logging.getLogger(__name__)

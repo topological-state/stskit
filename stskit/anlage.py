@@ -5,14 +5,14 @@ import re
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Dict, Generator, Iterable, List, Mapping, Set, Tuple
 
 import networkx as nx
 import numpy as np
 import trio
 
-from stskit.stsobj import AnlagenInfo, Knoten, ZugDetails, time_to_seconds
-from stskit.stsplugin import PluginClient, TaskDone
+from stskit.interface.stsobj import AnlagenInfo, Knoten, ZugDetails, time_to_seconds
+from stskit.interface.stsplugin import PluginClient, TaskDone
 from stskit.zugschema import Zugschema
 
 logger = logging.getLogger(__name__)

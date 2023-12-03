@@ -5,21 +5,17 @@ dieses modul ist in entwicklung.
 """
 
 import logging
-from typing import Any, Dict, List, Optional, Set, Union
 
 import numpy as np
-from PyQt5 import QtCore, QtWidgets, uic, QtGui
-from PyQt5.QtCore import pyqtSlot
+from PyQt5 import QtCore, QtWidgets
 import matplotlib as mpl
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import networkx as nx
 from netgraph import InteractiveGraph
 
-from stskit.stsplugin import PluginClient
+from stskit.interface.stsplugin import PluginClient
 from stskit.anlage import Anlage
-from stskit.auswertung import Auswertung
 from stskit.zentrale import DatenZentrale
 
 logger = logging.getLogger(__name__)

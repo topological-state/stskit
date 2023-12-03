@@ -14,13 +14,13 @@ import logging
 import os
 import typing
 from pathlib import Path
-from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
 
 import matplotlib as mpl
-from PyQt5 import Qt, QtCore, QtGui
-from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QObject
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtCore import QModelIndex
 
-from stskit.stsobj import time_to_minutes, ZugDetails
+from stskit.interface.stsobj import time_to_minutes, ZugDetails
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

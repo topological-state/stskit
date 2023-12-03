@@ -11,17 +11,16 @@ import argparse
 import functools
 import logging
 import os
-import weakref
 from pathlib import Path
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
+from typing import Any, Dict, Optional, Sequence
 
 import matplotlib.style
-from PyQt5 import QtCore, QtWidgets, uic, QtGui
+from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import pyqtSlot
 import trio
 import qtrio
 
-from stskit.stsplugin import PluginClient, TaskDone, DEFAULT_HOST, DEFAULT_PORT
+from stskit.interface.stsplugin import PluginClient, TaskDone, DEFAULT_HOST, DEFAULT_PORT
 from stskit.zentrale import DatenZentrale
 from stskit.anschlussmatrix import AnschlussmatrixWindow
 from stskit.bildfahrplan import BildFahrplanWindow
@@ -30,7 +29,6 @@ from stskit.gleisbelegung import GleisbelegungWindow
 from stskit.gleisnetz import GleisnetzWindow
 from stskit.qticker import TickerWindow
 from stskit.fahrplan import FahrplanWindow
-import stskit.resources_rc
 
 logger = logging.getLogger(__name__)
 

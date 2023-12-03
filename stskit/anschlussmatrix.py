@@ -5,7 +5,7 @@ datenstrukturen und fenster für anschlussmatrix
 """
 import itertools
 import logging
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Type, Union
+from typing import Dict, Iterable, List, Optional, Set, Tuple, Type
 
 import matplotlib as mpl
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -14,14 +14,14 @@ from matplotlib.image import AxesImage
 from matplotlib.text import Text
 import numpy as np
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
 from stskit.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, \
     FesteVerspaetung, ZugAbwarten, AnkunftAbwarten, AbfahrtAbwarten, ZugNichtAbwarten, ZugZielNode
-from stskit.stsobj import time_to_minutes
-from stskit.zugschema import Zugbeschriftung, ZugbeschriftungAuswahlModell, Zugschema, ZugschemaAuswahlModell
+from stskit.interface.stsobj import time_to_minutes
+from stskit.zugschema import Zugbeschriftung, ZugbeschriftungAuswahlModell, ZugschemaAuswahlModell
 
 from stskit.qt.ui_anschlussmatrix import Ui_AnschlussmatrixWindow
 

@@ -3,16 +3,16 @@ import datetime
 import json
 import logging
 import os
-from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, NamedTuple, Optional, Set, Tuple, Type, Union
+from typing import Any, Dict, Iterable, List, NamedTuple, Optional, Set, Tuple, Union
 import weakref
 
 import numpy as np
 import networkx as nx
 import trio
 
-from stskit.stsobj import ZugDetails, FahrplanZeile, Ereignis
-from stskit.stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
-from stskit.stsplugin import PluginClient, TaskDone
+from stskit.interface.stsobj import ZugDetails, FahrplanZeile, Ereignis
+from stskit.interface.stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
+from stskit.interface.stsplugin import PluginClient, TaskDone
 from stskit.auswertung import Auswertung
 
 

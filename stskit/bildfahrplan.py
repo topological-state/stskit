@@ -1,24 +1,22 @@
-import itertools
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import logging
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Type, Union
+from typing import Dict, List, Optional, Tuple, Type
 
 import matplotlib as mpl
 from PyQt5.QtCore import pyqtSlot
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
-import numpy as np
-from PyQt5 import Qt, QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets
 
 from stskit.auswertung import Auswertung
 from stskit.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, \
-    AnkunftAbwarten, AbfahrtAbwarten, ZugAbwarten, ZugNichtAbwarten
+    AnkunftAbwarten, AbfahrtAbwarten, ZugAbwarten
 from stskit.slotgrafik import hour_minutes_formatter
-from stskit.stsplugin import PluginClient
-from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
+from stskit.interface.stsplugin import PluginClient
+from stskit.interface.stsobj import time_to_minutes, format_verspaetung
 from stskit.zentrale import DatenZentrale
 from stskit.zugschema import Zugbeschriftung
 

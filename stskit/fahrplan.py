@@ -3,7 +3,7 @@ dieses Qt-fenster stellt den fahrplan (zugliste und detailfahrplan eines zuges) 
 """
 
 import logging
-from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 import matplotlib as mpl
 import networkx as nx
@@ -14,8 +14,8 @@ from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
 from stskit.zentrale import DatenZentrale
-from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung
-from stskit.stsobj import ZugDetails, time_to_minutes, format_verspaetung
+from stskit.planung import ZugDetailsPlanung, ZugZielPlanung
+from stskit.interface.stsobj import ZugDetails, time_to_minutes, format_verspaetung
 from stskit.qt.ui_fahrplan import Ui_FahrplanWidget
 from stskit.zielgraph import draw_zielgraph, zug_subgraph, format_node_label_name, verarbeitete_stammzuege_entfernen
 

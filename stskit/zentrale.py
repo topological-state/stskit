@@ -1,11 +1,10 @@
 import logging
 import os
-from pathlib import Path
-from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
+from typing import Any, Optional
 import weakref
 
-from stskit.stsobj import Ereignis, time_to_minutes
-from stskit.stsplugin import PluginClient
+from stskit.interface.stsobj import Ereignis, time_to_minutes
+from stskit.interface.stsplugin import PluginClient
 from stskit.anlage import Anlage
 from stskit.auswertung import Auswertung
 from stskit.planung import Planung

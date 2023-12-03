@@ -9,12 +9,12 @@ die EreignisTabelle-klasse bereitet die simulationsdaten für das tabellenwidget
 
 import copy
 import logging
-from typing import Any, Dict, List, Optional, Set, Union
+from typing import Any, List
 
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QModelIndex
 
-from stskit.stsobj import Ereignis
+from stskit.interface.stsobj import Ereignis
 from stskit.zentrale import DatenZentrale
 
 logger = logging.getLogger(__name__)

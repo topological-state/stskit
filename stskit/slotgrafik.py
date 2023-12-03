@@ -10,15 +10,11 @@ import functools
 import itertools
 import logging
 import re
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
-
-import matplotlib as mpl
-import networkx as nx
-import numpy as np
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
 
 from stskit.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung
-from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes
+from stskit.interface.stsobj import time_to_minutes
 from stskit.zugschema import Zugbeschriftung
 
 logger = logging.getLogger(__name__)

@@ -1,12 +1,10 @@
-import itertools
 import logging
-from typing import AbstractSet, Any, Dict, Generator, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Type, Union
+from typing import AbstractSet, Any, Iterable, List, Optional, Sequence, Set, Type, Union
 
 import matplotlib as mpl
-import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtCore import QModelIndex, QSortFilterProxyModel, QItemSelectionModel
+from PyQt5.QtCore import QModelIndex
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -15,13 +13,12 @@ import numpy as np
 from stskit.auswertung import Auswertung
 from stskit.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, \
-    AbfahrtAbwarten, AnkunftAbwarten, ZugAbwarten, ZugNichtAbwarten
-from stskit.stsplugin import PluginClient
-from stskit.stsobj import FahrplanZeile, ZugDetails, time_to_minutes, format_verspaetung
+    AbfahrtAbwarten, AnkunftAbwarten, ZugAbwarten
+from stskit.interface.stsplugin import PluginClient
+from stskit.interface.stsobj import time_to_minutes
 from stskit.slotgrafik import hour_minutes_formatter, Slot, Gleisbelegung, SlotWarnung, gleis_sektor_sortkey, \
-    WARNUNG_VERBINDUNG, WARNUNG_STATUS
+    WARNUNG_VERBINDUNG
 from stskit.zentrale import DatenZentrale
-from stskit.zugschema import Zugbeschriftung, ZugbeschriftungAuswahlModell
 
 from stskit.qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 
