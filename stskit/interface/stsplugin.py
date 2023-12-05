@@ -74,22 +74,43 @@ class MyEntityResolver(untangle.Handler, xml.sax.handler.EntityResolver):
 
 class PluginClient:
     """
-    PluginClient - der kern der plugin-schnittstelle
+    PluginClient - der Kern der Plugin-Schnittstelle
 
-    attribute
+    Attribute
     ---------
 
-    wege: dict von Knoten-objekten repräsentiert den wege-graph.
-        der dict ist nach Knoten.key aufgeschlüsselt.
-    wege_nach_enr: wege-graph nach enr-nummern aufgeschlüsselt.
-        der dict enthält die Knoten-objekte, die eine enr-nummer deklariert haben
-        (signale, weichen, einfahrten und ausfahrten).
-    wege_nach_namen: wege-graph nach knoten-namen aufgeschlüsselt.
-        der dict enthält die Knoten-objekte, die einen namen deklariert haben
-        (einfahrten, ausfahrten, bahnsteige und haltepunkte).
-        achtung: namen sind nicht eindeutig! deshalb enthält der dict sets von Knoten-objekte.
-    wege_nach_typ: wege-graph nach typ-nummer aufgeschlüsselt.
-        der dict enthält sets von Knoten-objekten.
+    name: Name des Plugins. Wird beim Start im Sim angezeigt.
+    autor: Autor des Plugins. Wird beim Start im Sim angezeigt.
+    version: Version des Plugins. Wird beim Start im Sim angezeigt.
+    text: Beschreibung des Plugins. Wird beim Start im Sim angezeigt.
+
+    anlageninfo: AnlagenInfo vom Simulator. Wird durch request_anlageninfo abgefragt.
+
+    bahnsteigliste: Liste von BahnsteigInfo-Objekten. Wird durch request_bahnsteigliste abgefragt.
+
+    zugliste: List von ZugDetails-Objekten mit den Informationen zu den Zügen.
+        Wird durch request_zugliste und request_zugdetails abgefragt.
+
+    wege: Dict von Knoten-objekten repräsentiert den Wege-Graph.
+        Der Dict ist nach Knoten.key aufgeschlüsselt.
+        Dies ist für die meisten Element die enr.
+        Für Bahnsteige und Haltepunkte ist es der Name.
+        Vorsicht: Bahnsteige und Einfahrten/Ausfahrten können den gleichen Namen haben.
+    wege_nach_enr: Wege-Graph nach enr-Nummern aufgeschlüsselt.
+        Der Dict enthält die Knoten-Objekte, die eine enr-Nummer deklariert haben:
+        Signale, Weichen, Einfahrten und Ausfahrten.
+    wege_nach_namen: Wege-Graph nach knoten-Namen aufgeschlüsselt.
+        Der Dict enthält die Knoten-Objekte, die einen Namen deklariert haben.
+        Weil der Name nicht eindeutig ist
+        (Anschlüsse und Bahnsteige haben z.B. in einigen Stellwerken den gleichen Namen),
+        sind die Werte des Dicts Sets.
+    wege_nach_typ: Wege-Graph nach Typnummer aufgeschlüsselt.
+        Der Dict enthält Sets von Knoten-objekten.
+
+    Verwendung
+    ----------
+
+    Siehe Beispielcode am Ende des Moduls (test-Funktion).
     """
 
     def __init__(self, name: str, autor: str, version: str, text: str):
@@ -109,10 +130,11 @@ class PluginClient:
 
         self.anlageninfo: Optional[AnlagenInfo] = None
         self.bahnsteigliste: Dict[str, BahnsteigInfo] = {}
-        self.wege: Dict[Tuple[int, Union[int, str]], Knoten] = {}
+        self.wege: Dict[Union[int, str], Knoten] = {}
         self.wege_nach_enr: Dict[int, Knoten] = {}
         self.wege_nach_namen: Dict[str, Set[Knoten]] = {}
         self.wege_nach_typ: Dict[int, Set[Knoten]] = {}
+        self.wege_nach_typ_namen: Dict[int, Dict[str, Knoten]] = {}
         self.zugliste: Dict[int, ZugDetails] = {}
         self.zuggattungen: Set[str] = set()
 
@@ -200,7 +222,7 @@ class PluginClient:
                                 # rare parse exception: unclosed element
                                 logger.exception(e)
                                 logger.error(f"offending string: {s}")
-                                print(e.getMessage(), sys.stderr)
+                                print(e.getMessage(), file=sys.stderr)
                                 continue
 
                             handler.root = untangle.Element(None, None)
@@ -314,20 +336,24 @@ class PluginClient:
 
     async def request_wege(self):
         """
-        wege-graph anfragen
+        Wege-Graph anfragen
 
-        der wege-graph enthält die elemente des gleisbilds und ihre verbindungen.
-        im PluginClient wird er als dict von Knoten-objekten dargestellt,
-        die über ihre nachbarn-attribute verlinkt sind.
+        Der Wege-Graph enthält die Elemente des Gleisbilds und ihre Verbindungen.
+        Im PluginClient wird er als Dict von Knoten-Objekten dargestellt,
+        die über ihre Nachbarn-attribute verlinkt sind.
+        Für eine Darstellung mittels networkx-Graphen, siehe stsgraph.GraphClient.
 
-        da der simulator für die elemente zwei verschiedene schlüssel (enr und name) verwendet,
-        ist der schlüssel des wege-dict zweiteilig und enthält den elementtyp und
-        - je nach typ - entweder die enr oder den namen.
-        die wege_nach_enr, wege_nach_namen und wege_nach_typ indizieren den graphen
-        nach einfachen schlüsseln haben jedoch sets als bildmenge bzw. enthalten nicht alle elemente.
+        Da der Simulator für die Elemente zwei verschiedene Schlüssel (enr und name) verwendet,
+        ist der Schlüssel des Wege-Dict zweiteilig und enthält den Elementtyp und
+        - je nach Typ - entweder die enr oder den Namen.
 
-        die methode aktualisiert folgende attribute:
+        Die methode aktualisiert folgende Attribute:
         wege, wege_nach_enr, wege_nach_namen, wege_nach_typ.
+
+        Bemerkungen
+        -----------
+
+        - Teilweise fehlen wichtige Gleisverbindungen in dem Graphen, z.B. von Anschlüssen ans Gleisnetz.
 
         :return: None
         """
@@ -338,6 +364,7 @@ class PluginClient:
         self.wege_nach_enr = {}
         self.wege_nach_namen = {}
         self.wege_nach_typ = {}
+        self.wege_nach_typ_namen = {typ: {} for typ in Knoten.TYP_NAME}
 
         for shape in response.wege.shape:
             knoten = Knoten().update(shape)
@@ -355,29 +382,29 @@ class PluginClient:
                     self.wege_nach_typ[knoten.typ].add(knoten)
                 except KeyError:
                     self.wege_nach_typ[knoten.typ] = {knoten}
+                try:
+                    self.wege_nach_typ_namen[knoten.typ][knoten.name] = knoten
+                except KeyError:
+                    pass
 
         for connector in response.wege.connector:
-            knoten1 = None
             try:
-                if connector['enr1']:
-                    knoten1 = self.wege_nach_enr[int(connector['enr1'])]
-                elif connector['name1']:
-                    for knoten in self.wege_nach_namen[str(connector['name1'])]:
-                        knoten1 = knoten
-                        break
-            except (KeyError, IndexError):
-                pass
+                knoten1 = self.wege[int(connector['enr1'])]
+            except (KeyError, TypeError):
+                try:
+                    knoten1 = self.wege[connector['name1']]
+                except KeyError:
+                    logger.warning(f"Nicht auflösbare Gleisverbindung zu Knoten 1 von {connector}")
+                    continue
 
-            knoten2 = None
             try:
-                if connector['enr2']:
-                    knoten2 = self.wege_nach_enr[int(connector['enr2'])]
-                elif connector['name2']:
-                    for knoten in self.wege_nach_namen[str(connector['name2'])]:
-                        knoten2 = knoten
-                        break
-            except (KeyError, IndexError):
-                pass
+                knoten2 = self.wege[int(connector['enr2'])]
+            except (KeyError, TypeError):
+                try:
+                    knoten2 = self.wege[connector['name2']]
+                except KeyError:
+                    logger.warning(f"Nicht auflösbare Gleisverbindung zu Knoten 2 von {connector}")
+                    continue
 
             if knoten1 is not None and knoten2 is not None:
                 knoten1.nachbarn.add(knoten2)
@@ -678,29 +705,28 @@ class PluginClient:
         for knoten in self.wege.values():
             knoten.zuege = []
 
+        einfahrten = {knoten.name: knoten for knoten in self.wege_nach_typ[6]}
+        ausfahrten = {knoten.name: knoten for knoten in self.wege_nach_typ[7]}
+        bahnsteige = {knoten.name: knoten for knoten in self.wege_nach_typ[5]}
+        haltepunkte = {knoten.name: knoten for knoten in self.wege_nach_typ[12]}
+        haltepunkte.update(bahnsteige)
+
         for zid in self.zugliste.keys():
             zug = self.zugliste[zid]
 
             try:
-                einfahrten = self.wege_nach_namen[zug.von].intersection(self.wege_nach_typ[6])
-                for einfahrt in einfahrten:
-                    einfahrt.zuege.append(zug)
+                einfahrten[zug.von].zuege.append(zug)
             except KeyError:
                 pass
             try:
-                ausfahrten = self.wege_nach_namen[zug.nach].intersection(self.wege_nach_typ[7])
-                for ausfahrt in ausfahrten:
-                    ausfahrt.zuege.append(zug)
+                ausfahrten[zug.nach].zuege.append(zug)
             except KeyError:
                 pass
             for fahrplanzeile in zug.fahrplan:
                 try:
-                    gleise = self.wege_nach_namen[fahrplanzeile.gleis]
+                    haltepunkte[fahrplanzeile.gleis].zuege.append(fahrplanzeile.gleis)
                 except KeyError:
                     pass
-                else:
-                    for gleis in gleise:
-                        gleis.zuege.append(zug)
 
         for knoten in self.wege.values():
             if knoten.typ == 5 or knoten.typ == 12:

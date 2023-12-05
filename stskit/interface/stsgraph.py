@@ -36,8 +36,9 @@ class GraphClient(PluginClient):
     ----------------
 
     Knoten 'typ': (int) stsobj.Knoten.TYP_NUMMER
-    Kanten 'typ': (str) 'gleis'
-    Kanten 'distanz': (int) Länge (Anzahl Knoten) des kürzesten Pfades zwischen den Knoten. Wird auf 1 gesetzt.
+    Kanten 'typ': (str) 'gleis' zwischen knoten mit namen, sonst 'verbindung' (z.b. weichen).
+    Kanten 'distanz': (int) Länge (Anzahl Knoten) des kürzesten Pfades zwischen den Knoten.
+                      Wird auf 1 gesetzt.
 
     Bahnsteiggraph
     ==============
@@ -159,11 +160,10 @@ class GraphClient(PluginClient):
         self.signalgraph.clear()
 
         for knoten1 in self.wege.values():
-            if knoten1.name:
-                self.signalgraph.add_node(knoten1.name, typ=knoten1.typ)
+            if knoten1.key:
+                self.signalgraph.add_node(knoten1.key, typ=knoten1.typ, name=knoten1.name)
                 for knoten2 in knoten1.nachbarn:
-                    if knoten2.name:
-                        self.signalgraph.add_edge(knoten1.name, knoten2.name, typ='gleis', distanz=1)
+                    self.signalgraph.add_edge(knoten1.key, knoten2.key, typ='verbindung', distanz=1)
 
     def _bahnsteig_graph_erstellen(self):
         """

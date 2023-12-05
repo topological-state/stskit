@@ -181,19 +181,28 @@ class BahnsteigInfo:
 
 class Knoten:
     """
-    objektklasse für ein gleisbildelement ("knoten").
+    Objektklasse für ein Gleisbildelement ("Knoten").
 
-    diese klasse entspricht dem xml-tag "shape" mit eigenen ergänzungen.
+    Diese Klasse entspricht dem xml-Tag "shape".
+    Verbindungen aus "connector"-Tags werden im Attribut `nachbarn` gespeichert.
 
-    bemerkungen:
-    - einige shape-tags haben nur enr-nummern, andere nur einen namen, einige beides.
-      da wir alle elemente im gleichen dictionary speichern wollen,
-      deklariert diese klasse noch einen 'key', der den knoten eindeutig identifiziert.
-      der key besteht aus der typ-nummer und entweder (wo deklariert) der enr-nummer oder dem namen.
-    - der elementtyp wird numerisch gespeichert.
-      er kann mittels der dicts TYP_NAME und TYP_NUMMER übersetzt werden.
-    - in der liste 'zuege', führt der klient die züge, die über das gleiselement fahren
-      (nur bei einfahrten, ausfahrten und bahnsteigen).
+    Bemerkungen
+    -----------
+
+    - Bahnsteige haben nur einen Namen.
+      Alle anderen Tags haben eine enr-Nummer und einen Namen.
+      Die enr ist fortlaufend über alle Elemente beginnend bei 1.
+      Die enr hat nichts mit Signal- oder Weichennummern gemeinsam.
+      Die enr wird, wo vorhanden, im connector-Tag verwendet.
+      Bei Bahnsteigen wird der Name angegeben.
+      Anschlüsse können den gleichen Namen wie ein Bahnsteig haben, da sie per enr identifiziert werden.
+    - Da wir alle Elemente im gleichen Dictionary speichern wollen,
+      deklariert diese klasse noch einen 'key', der den Knoten eindeutig identifiziert.
+      Der key ist, wo deklariert, gleich der enr-Nummer und sonst gleich dem Namen.
+    - Der Elementtyp wird numerisch gespeichert.
+      Er kann mittels der Dicts TYP_NAME und TYP_NUMMER übersetzt werden.
+    - In der Liste 'zuege', führt der Klient die Züge, die über das Gleiselement fahren
+      (nur bei Einfahrten, Ausfahrten und Bahnsteigen).
     """
 
     # xml-tagname
@@ -217,9 +226,9 @@ class Knoten:
 
     def __init__(self):
         super().__init__()
-        self.key: Tuple[int, str] = (0, "")
-        self.enr: int = 0
-        self.name: str = ""
+        self.key: Optional[Union[int, str]] = None
+        self.enr: Optional[int] = None
+        self.name: Optional[str] = None
         self.typ: int = 0
         self.nachbarn: Set['Knoten'] = set()
         self.zuege: List['ZugDetails'] = []
@@ -253,10 +262,10 @@ class Knoten:
             self.typ = int(shape['type'])
         except TypeError:
             self.typ = 0
-        if self.enr:
-            self.key = (self.typ, self.enr)
+        if self.enr is not None:
+            self.key = self.enr
         else:
-            self.key = (self.typ, self.name)
+            self.key = self.name
         return self
 
     @property
