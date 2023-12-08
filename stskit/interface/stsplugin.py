@@ -38,7 +38,7 @@ import datetime
 import html.entities
 import logging
 import re
-from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, Union
+from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
 import untangle
 import xml.sax
 
@@ -106,6 +106,8 @@ class PluginClient:
         sind die Werte des Dicts Sets.
     wege_nach_typ: Wege-Graph nach Typnummer aufgeschlüsselt.
         Der Dict enthält Sets von Knoten-objekten.
+    wege_verbindungen: Set von Zweiertuples Knoten.key mit den Verbindungen zwischen Knoten.
+        Kann als Kantenliste für den Aufbau von Graphen verwendet werden.
 
     Verwendung
     ----------
@@ -135,6 +137,7 @@ class PluginClient:
         self.wege_nach_namen: Dict[str, Set[Knoten]] = {}
         self.wege_nach_typ: Dict[int, Set[Knoten]] = {}
         self.wege_nach_typ_namen: Dict[int, Dict[str, Knoten]] = {}
+        self.wege_verbindungen: Set[Tuple[Union[int, str], Union[int, str]]] = set([])
         self.zugliste: Dict[int, ZugDetails] = {}
         self.zuggattungen: Set[str] = set()
 
@@ -348,7 +351,7 @@ class PluginClient:
         - je nach Typ - entweder die enr oder den Namen.
 
         Die methode aktualisiert folgende Attribute:
-        wege, wege_nach_enr, wege_nach_namen, wege_nach_typ.
+        wege, wege_nach_enr, wege_nach_namen, wege_nach_typ, wege_verbindungen.
 
         Bemerkungen
         -----------
@@ -363,7 +366,7 @@ class PluginClient:
         self.wege = {}
         self.wege_nach_enr = {}
         self.wege_nach_namen = {}
-        self.wege_nach_typ = {}
+        self.wege_nach_typ = {typ: set([]) for typ in Knoten.TYP_NAME}
         self.wege_nach_typ_namen = {typ: {} for typ in Knoten.TYP_NAME}
 
         for shape in response.wege.shape:
@@ -389,22 +392,37 @@ class PluginClient:
 
         for connector in response.wege.connector:
             try:
-                knoten1 = self.wege[int(connector['enr1'])]
+                key1 = int(connector['enr1'])
             except (KeyError, TypeError):
                 try:
-                    knoten1 = self.wege[connector['name1']]
+                    key1 = connector['name1']
                 except KeyError:
-                    logger.warning(f"Nicht auflösbare Gleisverbindung zu Knoten 1 von {connector}")
+                    logger.warning(f"Fehlerhafte Elementreferenz zu Knoten 1 von {connector}")
                     continue
 
             try:
-                knoten2 = self.wege[int(connector['enr2'])]
+                knoten1 = self.wege[key1]
+            except KeyError:
+                logger.warning(f"Nicht auflösbare Elementreferenz zu Knoten 1 von {connector}")
+                knoten1 = None
+
+            try:
+                key2 = int(connector['enr2'])
             except (KeyError, TypeError):
                 try:
-                    knoten2 = self.wege[connector['name2']]
+                    key2 = connector['name2']
                 except KeyError:
-                    logger.warning(f"Nicht auflösbare Gleisverbindung zu Knoten 2 von {connector}")
+                    logger.warning(f"Fehlerhafte Elementreferenz zu Knoten 2 von {connector}")
                     continue
+
+            try:
+                knoten2 = self.wege[key2]
+            except KeyError:
+                logger.warning(f"Nicht auflösbare Elementreferenz zu Knoten 2 von {connector}")
+                knoten2 = None
+
+            if key1 and key2:
+                self.wege_verbindungen.add((key1, key2))
 
             if knoten1 is not None and knoten2 is not None:
                 knoten1.nachbarn.add(knoten2)

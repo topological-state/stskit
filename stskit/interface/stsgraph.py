@@ -1,3 +1,5 @@
+import datetime
+
 import trio
 import logging
 from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, Union
@@ -5,6 +7,7 @@ from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, Union
 import networkx as nx
 
 from stskit.interface.stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
+from stskit.interface.stsobj import Knoten
 from stskit.interface.stsplugin import PluginClient, TaskDone
 
 
@@ -95,14 +98,20 @@ class GraphClient(PluginClient):
     Knotenattribute
     ---------------
 
-    obj (stsobj.FahrplanZeile): Fahrplanziel-Objekt
+    obj (stsobj.FahrplanZeile): Fahrplanziel-Objekt (fehlt bei Ein- und Ausfahrten).
     fid (Tupel): Fahrplanziel-ID, siehe stsobj.FahrplanZeile.fid Property.
-    plan (str): Plangleis
+        Bei Ein- und Ausfahrten wird statt dem Gleiseintrag die Elementnummer (enr) eingesetzt.
+    plan (str): Plangleis.
+        Bei Ein- und Ausfahrten der Name des Anschlusses.
     typ (str): Zielpunkttyp:
         'H': Planmässiger Halt
         'D': Durchfahrt
+        'E': Einfahrt
+        'A': Ausfahrt
     an (int/float): planmässige Ankunftszeit in Minuten
     ab (int/float): planmässige Abfahrtszeit in Minuten
+
+    Bei Ein- und Ausfahrten wird die Ankunfts- und Abfahrtszeit auf 1 Minute vor bzw. nach dem Halt geschätzt.
 
 
     Kantenattribute
@@ -288,6 +297,36 @@ class GraphClient(PluginClient):
 
             ziel1 = ziel2
             fid1 = fid2
+
+        if zug2.von and not zug2.von.startswith("Gleis"):
+            fid2 = zug2.fahrplan[0].fid
+            dt = datetime.datetime.combine(datetime.datetime(1, 1, 1), fid2[1])
+            dt -= datetime.timedelta(minutes=1)
+            einfahrtszeit = dt.time()
+            enr = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Einfahrt']][zug2.von]
+            fid1 = (zid2, einfahrtszeit, einfahrtszeit, enr)
+            ziel_data = {'fid': fid1,
+                         'typ': 'E',
+                         'plan': zug2.von,
+                         'an': time_to_minutes(einfahrtszeit),
+                         'ab': time_to_minutes(einfahrtszeit)}
+            self.zielgraph.add_node(fid1, **ziel_data)
+            self.zielgraph.add_edge(fid1, fid2, typ='P')
+
+        if zug2.nach and not zug2.nach.startswith("Gleis"):
+            fid2 = zug2.fahrplan[-1].fid
+            dt = datetime.datetime.combine(datetime.datetime(1, 1, 1), fid2[1])
+            dt += datetime.timedelta(minutes=1)
+            ausfahrtszeit = dt.time()
+            enr = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Ausfahrt']][zug2.nach]
+            fid1 = (zid2, ausfahrtszeit, ausfahrtszeit, enr)
+            ziel_data = {'fid': fid1,
+                         'typ': 'A',
+                         'plan': fid1[3],
+                         'an': time_to_minutes(ausfahrtszeit),
+                         'ab': time_to_minutes(ausfahrtszeit)}
+            self.zielgraph.add_node(fid1, **ziel_data)
+            self.zielgraph.add_edge(fid2, fid1, typ='P')
 
     def _zielgraph_link_flag(self, ziel2, zid3, typ):
         """
