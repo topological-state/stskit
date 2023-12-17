@@ -3,7 +3,8 @@ FORMS += \
     gleisbelegung.ui \
     fahrplan.ui \
     anschlussmatrix.ui \
-    einstellungen.ui
+    einstellungen.ui \
+    gleisnetz.ui
 
 RESOURCES += \
     resources.qrc

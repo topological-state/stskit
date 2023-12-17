@@ -1,9 +1,10 @@
-matplotlib
+matplotlib >= 3.5
 numpy
 pandas
+python >= 3.8
 PyQt5
 trio
 qtrio
-untangle
-networkx
-netgraph
+untangle >= 1.2
+networkx >= 3.0
+netgraph >= 4.12

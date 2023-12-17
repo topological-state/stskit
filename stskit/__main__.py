@@ -168,7 +168,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.fahrplan_button.clicked.connect(self.fahrplan_clicked)
         layout.addWidget(self.fahrplan_button)
 
-        self.netz_button = QtWidgets.QPushButton("Gleisplan", self)
+        self.netz_button = QtWidgets.QPushButton("Gleisplan (Geduld!)", self)
         self.netz_button.setEnabled(False)
         self.netz_button.clicked.connect(self.netz_clicked)
         layout.addWidget(self.netz_button)

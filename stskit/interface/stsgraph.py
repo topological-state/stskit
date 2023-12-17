@@ -103,6 +103,7 @@ class GraphClient(PluginClient):
         Bei Ein- und Ausfahrten wird statt dem Gleiseintrag die Elementnummer (enr) eingesetzt.
     plan (str): Plangleis.
         Bei Ein- und Ausfahrten der Name des Anschlusses.
+    bft (str): Name des Bahnhofteils (nach self.bahnhofteile)
     typ (str): Zielpunkttyp:
         'H': Planmässiger Halt
         'D': Durchfahrt
@@ -123,6 +124,12 @@ class GraphClient(PluginClient):
         'F': Fluegelung
         'K': Kupplung
 
+    Weitere Instanzattribute
+    ========================
+
+    bahnhofteile: Ordnet jedem Gleis ein Bahnhofteil zu.
+        Der Bahnhofteil entspricht dem alphabetisch ersten Gleis in der Nachbarschaft.
+        Der Dictionary wird durch _bahnhofteile_gruppieren gefuellt.
     """
 
     def __init__(self, name: str, autor: str, version: str, text: str):
@@ -132,10 +139,13 @@ class GraphClient(PluginClient):
         self.bahnsteiggraph = nx.Graph()
         self.zuggraph = nx.DiGraph()
         self.zielgraph = nx.DiGraph()
+        self.liniengraph = nx.Graph()
+        self.bahnhofteile: Dict[str, str] = {}
 
     async def request_bahnsteigliste(self):
         await super().request_bahnsteigliste()
         self._bahnsteig_graph_erstellen()
+        self._bahnhofteile_gruppieren()
 
     async def request_wege(self):
         await super().request_wege()
@@ -174,6 +184,13 @@ class GraphClient(PluginClient):
                 for knoten2 in knoten1.nachbarn:
                     self.signalgraph.add_edge(knoten1.key, knoten2.key, typ='verbindung', distanz=1)
 
+        for knoten1, typ in self.signalgraph.nodes(data='typ', default='kein'):
+            if typ == 'kein':
+                print(f"_signalgraph_erstellen: Knoten {knoten1} hat keinen Typ.")
+                self.signalgraph.remove_node(knoten1)
+
+        self.signalgraph.remove_edges_from(nx.selfloop_edges(self.signalgraph))
+
     def _bahnsteig_graph_erstellen(self):
         """
         Bahnsteiggraph erstellen.
@@ -186,8 +203,23 @@ class GraphClient(PluginClient):
         self.bahnsteiggraph.clear()
 
         for bs1 in self.bahnsteigliste.values():
+            self.bahnsteiggraph.add_node(bs1.name)
             for bs2 in bs1.nachbarn:
                 self.bahnsteiggraph.add_edge(bs1.name, bs2.name, typ='bahnsteig', distanz=0)
+
+    def _bahnhofteile_gruppieren(self):
+        """
+        Bahnhofteile nach Nachbarschaftsbeziehung gruppieren
+
+        Diese Funktion erstellt das bahnhofteile Dictionary
+        """
+
+        self.bahnhofteile = {}
+
+        for comp in nx.connected_components(self.bahnsteiggraph.to_undirected(as_view=True)):
+            hauptgleis = sorted(comp)[0]
+            for gleis in comp:
+                self.bahnhofteile[gleis] = hauptgleis
 
     def _zuggraph_erstellen(self, clean=False):
         """
@@ -240,6 +272,7 @@ class GraphClient(PluginClient):
         if clean:
             self.zuggraph.clear()
             self.zielgraph.clear()
+            self.liniengraph.clear()
 
         for zid2, zug2 in self.zugliste.items():
             self._zielgraph_update_zug(zid2)
@@ -275,6 +308,7 @@ class GraphClient(PluginClient):
             ziel_data = {'fid': fid2,
                          'obj': ziel2,
                          'plan': ziel2.plan,
+                         'bft': self.bahnhofteile[ziel2.plan],
                          'typ': 'D' if ziel2.durchfahrt() else 'H'}
             if ziel2.an is not None:
                 ziel_data['an'] = time_to_minutes(ziel2.an)
@@ -283,8 +317,9 @@ class GraphClient(PluginClient):
             self.zielgraph.add_node(fid2, **ziel_data)
 
             if ziel1:
-                if fid1 != fid2:
+                if fid1 != fid2 and not self.zielgraph.has_edge(fid1, fid2):
                     self.zielgraph.add_edge(fid1, fid2, typ='P')
+                    self._liniengraph_add_linie(fid1, fid2)
 
             if zid3 := ziel2.ersatz_zid():
                 self._zielgraph_link_flag(ziel2, zid3, 'E')
@@ -303,30 +338,42 @@ class GraphClient(PluginClient):
             dt = datetime.datetime.combine(datetime.datetime(1, 1, 1), fid2[1])
             dt -= datetime.timedelta(minutes=1)
             einfahrtszeit = dt.time()
-            enr = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Einfahrt']][zug2.von]
-            fid1 = (zid2, einfahrtszeit, einfahrtszeit, enr)
-            ziel_data = {'fid': fid1,
-                         'typ': 'E',
-                         'plan': zug2.von,
-                         'an': time_to_minutes(einfahrtszeit),
-                         'ab': time_to_minutes(einfahrtszeit)}
-            self.zielgraph.add_node(fid1, **ziel_data)
-            self.zielgraph.add_edge(fid1, fid2, typ='P')
+            enr = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Einfahrt']].get(zug2.von, None) or \
+                  self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Ausfahrt']].get(zug2.von, None)
+
+            if enr is not None:
+                fid1 = (zid2, einfahrtszeit, einfahrtszeit, enr)
+                ziel_data = {'fid': fid1,
+                             'typ': 'E',
+                             'plan': zug2.von,
+                             'bft': zug2.von,
+                             'an': time_to_minutes(einfahrtszeit),
+                             'ab': time_to_minutes(einfahrtszeit)}
+                self.zielgraph.add_node(fid1, **ziel_data)
+                if not self.zielgraph.has_edge(fid1, fid2):
+                    self.zielgraph.add_edge(fid1, fid2, typ='P')
+                    self._liniengraph_add_linie(fid1, fid2)
 
         if zug2.nach and not zug2.nach.startswith("Gleis"):
             fid2 = zug2.fahrplan[-1].fid
             dt = datetime.datetime.combine(datetime.datetime(1, 1, 1), fid2[1])
             dt += datetime.timedelta(minutes=1)
             ausfahrtszeit = dt.time()
-            enr = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Ausfahrt']][zug2.nach]
-            fid1 = (zid2, ausfahrtszeit, ausfahrtszeit, enr)
-            ziel_data = {'fid': fid1,
-                         'typ': 'A',
-                         'plan': fid1[3],
-                         'an': time_to_minutes(ausfahrtszeit),
-                         'ab': time_to_minutes(ausfahrtszeit)}
-            self.zielgraph.add_node(fid1, **ziel_data)
-            self.zielgraph.add_edge(fid2, fid1, typ='P')
+            enr = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Ausfahrt']].get(zug2.nach, None) or \
+                  self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Einfahrt']].get(zug2.nach, None)
+
+            if enr is not None:
+                fid1 = (zid2, ausfahrtszeit, ausfahrtszeit, enr)
+                ziel_data = {'fid': fid1,
+                             'typ': 'A',
+                             'plan': fid1[3],
+                             'bft': fid1[3],
+                             'an': time_to_minutes(ausfahrtszeit),
+                             'ab': time_to_minutes(ausfahrtszeit)}
+                self.zielgraph.add_node(fid1, **ziel_data)
+                if not self.zielgraph.has_edge(fid2, fid1):
+                    self.zielgraph.add_edge(fid2, fid1, typ='P')
+                    self._liniengraph_add_linie(fid2, fid1)
 
     def _zielgraph_link_flag(self, ziel2, zid3, typ):
         """
@@ -352,6 +399,43 @@ class GraphClient(PluginClient):
         else:
             if fid2 != fid3:
                 self.zielgraph.add_edge(fid2, fid3, typ=typ)
+
+    def _liniengraph_add_linie(self, fid1, fid2):
+        """
+        Liniengrpah erstellen
+
+        Der Liniengraph benötigt den Zielgraph und den Bahnsteiggraph.
+
+        Sollte nicht mehr als einmal pro Zug aufgerufen werden, da sonst die Statistik verfaelscht werden kann.
+        """
+
+        MAX_FAHRZEIT = 24 * 60
+
+        halt1 = self.zielgraph.nodes[fid1]
+        halt2 = self.zielgraph.nodes[fid2]
+        try:
+            gleis1 = self.bahnhofteile[halt1['plan']]
+            gleis2 = self.bahnhofteile[halt2['plan']]
+            fahrzeit = halt2['an'] - halt1['ab']
+            # beschleunigungszeit von haltenden zuegen kompensieren
+            if halt1['typ'] == 'D':
+                fahrzeit += 1
+        except KeyError:
+            return
+
+        try:
+            liniendaten = self.liniengraph[gleis1][gleis2]
+        except KeyError:
+            liniendaten = dict(fahrzeit_min=MAX_FAHRZEIT, fahrzeit_max=0,
+                               fahrten=0, fahrzeit_summe=0., fahrzeit_schnitt=0.)
+
+        liniendaten['fahrzeit_min'] = min(liniendaten['fahrzeit_min'], fahrzeit)
+        liniendaten['fahrzeit_max'] = max(liniendaten['fahrzeit_max'], fahrzeit)
+        liniendaten['fahrten'] = liniendaten['fahrten'] + 1
+        liniendaten['fahrzeit_summe'] = liniendaten['fahrzeit_summe'] + fahrzeit
+        liniendaten['fahrzeit_schnitt'] = liniendaten['fahrzeit_summe'] / liniendaten['fahrten']
+
+        self.liniengraph.add_edge(gleis1, gleis2, **liniendaten)
 
 
 async def test() -> GraphClient:
