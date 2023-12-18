@@ -36,6 +36,8 @@ def graph_nachbarbahnsteige_vereinen(g: nx.DiGraph) -> nx.DiGraph:
         else:
             break
 
+    g.remove_edges_from(nx.selfloop_edges(g))
+
     return g
 
 
@@ -143,7 +145,11 @@ class BahnhofGraph:
                     7: "tab:purple",  # Ausfahrt
                     12: "tab:orange"}  # Haltepunkt
 
-        node_colors = {key: colormap.get(typ, "r") for key, typ in self.vereinfachter_graph.nodes(data='typ', default='kein')}
+        node_colors = {key: colormap.get(typ, "r")
+                       for key, typ in self.vereinfachter_graph.nodes(data='typ', default='kein')}
+
+        node_labels = {key: name
+                       for key, name in self.vereinfachter_graph.nodes(data='name', default='?')}
 
         edge_labels = {(e1, e2): distanz
                        for e1, e2, distanz in self.vereinfachter_graph.edges(data='distanz', default=0)
@@ -162,7 +168,7 @@ class BahnhofGraph:
                                       node_layout_kwargs=dict(edge_length=edge_length),
                                       node_color=node_colors,
                                       node_edge_width=0.0,
-                                      node_labels=True,
+                                      node_labels=node_labels,
                                       node_label_fontdict=node_label_fontdict,
                                       node_size=1,
                                       edge_color=mpl.rcParams['text.color'],
@@ -200,7 +206,10 @@ def liniengraph_schleifen_aufloesen(g: nx.Graph):
                 print("symmetrische schleife", schleife)
 
     for u, v in entfernen:
-        g.remove_edge(u, v)
+        try:
+            g.remove_edge(u, v)
+        except nx.NetworkXError:
+            pass
 
     return g
 
@@ -220,7 +229,14 @@ class LinienGraph:
             graph = filt(graph)
 
         colormap = {'bahnhof': 'tab:red', 'anschluss': 'tab:pink', 'H': 'tab:red', 'E': 'tab:pink', 'A': 'tab:pink'}
-        node_colors = {key: colormap.get(typ, "r") for key, typ in graph.nodes(data='typ', default='kein')}
+        colormap = {2: "tab:blue",  # Signal
+                    3: "tab:gray",  # Weiche unten
+                    4: "tab:gray",  # Weiche oben
+                    5: "tab:red",  # Bahnsteig
+                    6: "tab:pink",  # Einfahrt
+                    7: "tab:purple",  # Ausfahrt
+                    12: "tab:orange"}  # Haltepunkt
+        node_colors = {key: colormap.get(typ, "tab:gray") for key, typ in graph.nodes(data='typ', default='kein')}
 
         edge_labels = {(e1, e2): str(round(zeit))
                        for e1, e2, zeit in graph.edges(data='fahrzeit_min', default=0)

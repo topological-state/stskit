@@ -127,9 +127,9 @@ class GraphClient(PluginClient):
     Weitere Instanzattribute
     ========================
 
-    bahnhofteile: Ordnet jedem Gleis ein Bahnhofteil zu.
+    bahnhofteile: Ordnet jedem Gleis einen Bahnhofteil zu.
         Der Bahnhofteil entspricht dem alphabetisch ersten Gleis in der Nachbarschaft.
-        Der Dictionary wird durch _bahnhofteile_gruppieren gefuellt.
+        Der Dictionary wird durch _bahnhofteile_gruppieren gefüllt.
     """
 
     def __init__(self, name: str, autor: str, version: str, text: str):
@@ -141,6 +141,7 @@ class GraphClient(PluginClient):
         self.zielgraph = nx.DiGraph()
         self.liniengraph = nx.Graph()
         self.bahnhofteile: Dict[str, str] = {}
+        self.anschlussgruppen: Dict[int, str] = {}
 
     async def request_bahnsteigliste(self):
         await super().request_bahnsteigliste()
@@ -150,6 +151,7 @@ class GraphClient(PluginClient):
     async def request_wege(self):
         await super().request_wege()
         self._signalgraph_erstellen()
+        self._anschluesse_gruppieren()
 
     async def request_zugliste(self):
         await super().request_zugliste()
@@ -211,7 +213,7 @@ class GraphClient(PluginClient):
         """
         Bahnhofteile nach Nachbarschaftsbeziehung gruppieren
 
-        Diese Funktion erstellt das bahnhofteile Dictionary
+        Diese Funktion erstellt das bahnhofteile Dictionary.
         """
 
         self.bahnhofteile = {}
@@ -220,6 +222,11 @@ class GraphClient(PluginClient):
             hauptgleis = sorted(comp)[0]
             for gleis in comp:
                 self.bahnhofteile[gleis] = hauptgleis
+
+    def _anschluesse_gruppieren(self):
+        for anschluss, data in self.signalgraph.nodes(data=True):
+            if data['typ'] in {Knoten.TYP_NUMMER['Einfahrt'], Knoten.TYP_NUMMER['Ausfahrt']}:
+                self.anschlussgruppen[anschluss] = data['name']
 
     def _zuggraph_erstellen(self, clean=False):
         """
@@ -335,20 +342,23 @@ class GraphClient(PluginClient):
 
         if zug2.von and not zug2.von.startswith("Gleis"):
             fid2 = zug2.fahrplan[0].fid
-            dt = datetime.datetime.combine(datetime.datetime(1, 1, 1), fid2[1])
+            dt = datetime.datetime.combine(datetime.datetime.today(), fid2[1])
             dt -= datetime.timedelta(minutes=1)
             einfahrtszeit = dt.time()
-            enr = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Einfahrt']].get(zug2.von, None) or \
-                  self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Ausfahrt']].get(zug2.von, None)
 
-            if enr is not None:
-                fid1 = (zid2, einfahrtszeit, einfahrtszeit, enr)
+            k = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Einfahrt']].get(zug2.von, None) or \
+                self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Ausfahrt']].get(zug2.von, None)
+            try:
+                fid1 = (zid2, einfahrtszeit, einfahrtszeit, k.enr)
                 ziel_data = {'fid': fid1,
                              'typ': 'E',
-                             'plan': zug2.von,
-                             'bft': zug2.von,
+                             'plan': k.enr,
+                             'bft': self.anschlussgruppen[k.enr],
                              'an': time_to_minutes(einfahrtszeit),
                              'ab': time_to_minutes(einfahrtszeit)}
+            except (AttributeError, KeyError):
+                logger.error(f"Fehler in Einfahrtsdaten {fid1}, Knoten {k}")
+            else:
                 self.zielgraph.add_node(fid1, **ziel_data)
                 if not self.zielgraph.has_edge(fid1, fid2):
                     self.zielgraph.add_edge(fid1, fid2, typ='P')
@@ -356,20 +366,23 @@ class GraphClient(PluginClient):
 
         if zug2.nach and not zug2.nach.startswith("Gleis"):
             fid2 = zug2.fahrplan[-1].fid
-            dt = datetime.datetime.combine(datetime.datetime(1, 1, 1), fid2[1])
+            dt = datetime.datetime.combine(datetime.datetime.today(), fid2[1])
             dt += datetime.timedelta(minutes=1)
             ausfahrtszeit = dt.time()
-            enr = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Ausfahrt']].get(zug2.nach, None) or \
-                  self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Einfahrt']].get(zug2.nach, None)
 
-            if enr is not None:
-                fid1 = (zid2, ausfahrtszeit, ausfahrtszeit, enr)
+            k = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Ausfahrt']].get(zug2.nach, None) or \
+                self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Einfahrt']].get(zug2.nach, None)
+            try:
+                fid1 = (zid2, ausfahrtszeit, ausfahrtszeit, k.enr)
                 ziel_data = {'fid': fid1,
                              'typ': 'A',
-                             'plan': fid1[3],
-                             'bft': fid1[3],
+                             'plan': k.enr,
+                             'bft': self.anschlussgruppen[k.enr],
                              'an': time_to_minutes(ausfahrtszeit),
                              'ab': time_to_minutes(ausfahrtszeit)}
+            except (AttributeError, KeyError):
+                logger.warning(f"Fehler in Ausfahrtsdaten {fid1}, Knoten {k}")
+            else:
                 self.zielgraph.add_node(fid1, **ziel_data)
                 if not self.zielgraph.has_edge(fid2, fid1):
                     self.zielgraph.add_edge(fid2, fid1, typ='P')
@@ -413,18 +426,31 @@ class GraphClient(PluginClient):
 
         halt1 = self.zielgraph.nodes[fid1]
         halt2 = self.zielgraph.nodes[fid2]
+
         try:
-            gleis1 = self.bahnhofteile[halt1['plan']]
-            gleis2 = self.bahnhofteile[halt2['plan']]
+            typ1 = self.signalgraph.nodes[fid1[3]]['typ']
+            typ2 = self.signalgraph.nodes[fid2[3]]['typ']
+        except KeyError:
+            logger.warning(f"Liniengraph erstellen: Fehlende Typ-Angabe im Zielgraph von Knoten {fid1} oder {fid2}")
+            return
+
+        try:
+            bft1 = halt1['bft']
+            bft2 = halt2['bft']
+        except KeyError:
+            logger.warning(f"Liniengraph erstellen: Fehlende Bft-Angabe im Zielgraph von Knoten {fid1} oder {fid2}")
+            return
+
+        try:
             fahrzeit = halt2['an'] - halt1['ab']
             # beschleunigungszeit von haltenden zuegen kompensieren
             if halt1['typ'] == 'D':
                 fahrzeit += 1
         except KeyError:
-            return
+            fahrzeit = 2
 
         try:
-            liniendaten = self.liniengraph[gleis1][gleis2]
+            liniendaten = self.liniengraph[bft1][bft2]
         except KeyError:
             liniendaten = dict(fahrzeit_min=MAX_FAHRZEIT, fahrzeit_max=0,
                                fahrten=0, fahrzeit_summe=0., fahrzeit_schnitt=0.)
@@ -435,7 +461,9 @@ class GraphClient(PluginClient):
         liniendaten['fahrzeit_summe'] = liniendaten['fahrzeit_summe'] + fahrzeit
         liniendaten['fahrzeit_schnitt'] = liniendaten['fahrzeit_summe'] / liniendaten['fahrten']
 
-        self.liniengraph.add_edge(gleis1, gleis2, **liniendaten)
+        self.liniengraph.add_edge(bft1, bft2, **liniendaten)
+        self.liniengraph.add_node(bft1, typ=typ1)
+        self.liniengraph.add_node(bft2, typ=typ2)
 
 
 async def test() -> GraphClient:
