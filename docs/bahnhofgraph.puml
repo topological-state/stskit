@@ -1,0 +1,53 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+class Anlage {
+    Region
+    Stellwerk
+}
+
+class Bf {
+    Bahnhof
+}
+
+class Bft {
+    Bahnhofteil
+}
+
+class Bs {
+    Bahnsteig
+}
+
+class Gl {
+    {field} Gleis(sektor)
+}
+
+class Agl {
+    Anschlussgleis
+}
+
+class Anst {
+    Anschlussstelle
+}
+
+note right of Anlage : wie im Sim
+note left of Bf : manuell\nkeine Entsprechung im Sim
+note left of Bft : Gruppierung nach Sim\nName manuell
+note left of Bs : algorithmisch/manuell\nkeine Entsprechung im Sim
+note left of Gl : wie im Sim
+
+note right of Anst : algorithmisch/manuell\nkeine Entsprechung im Sim
+note right of Agl : wie im Sim
+
+Anlage "1" *-- "*" Bf
+Bf "1" *-- "*" Bft
+Bft "1" *-- "*" Bs
+Bs "1" *-- "*" Gl
+
+Anlage "1" *-- "*" Anst
+Anst "1" *-- "*" Agl
+
+Bf . Anst
+Gl . Agl
+
+@enduml

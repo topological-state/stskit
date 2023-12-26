@@ -92,34 +92,77 @@ class SignalGraphUngerichtet(nx.Graph):
 
 
 class BahnsteigGraphNode(dict):
-    name = dict_property("name", str, docstring="""
-        Bahnsteig
+    """
+    Klasse der Knotenattribute von BahnsteigGraph und BahnhofGraph
+    """
+    name = dict_property("name", str, docstring="Name")
+    typ = dict_property("typ", str, docstring="""
+        'Gl': Gleis(sektor)bezeichnung, wie sie in den Fahrplänen vorkommt. Vom Sim deklariert. 
+        'Bs': Bahnsteigbezeichnung, fasst Gleissektoren zusammen.
+        'Bft': Bahnhofteil, fasst Bahnsteige zusammen, auf die ein Zug umdisponiert werden kann.
+        'Bf': Bahnhof für grafische Darstellung und Fahrzeitauswertung.
+        'Agl': Anschluss- oder Übergabegleis. Vom Sim deklariert.
+        'Anst': Anschluss- oder Übergabestelle, fasst Anschlussgleise zusammen auf die ein Zug umdisponiert werden kann. 
         """)
+    sperrung = dict_property("sperrung", bool, docstring="Gleissperrung")
 
 
 class BahnsteigGraphEdge(dict):
+    """
+    Klasse der Kantenattribute von BahnsteigGraph und BahnhofGraph
+    """
     typ = dict_property("typ", str, docstring="""
-        Bahnsteig
+        'Nachbar': Nachbarbeziehung gemäss Simulator.
+        'Hierarchie': Von StsDispo definierte Hierarchiebeziehung.
         """)
     distanz = dict_property("distanz", int, docstring="""
-        Länge (Anzahl Knoten) des kürzesten Pfades zwischen den Knoten. Wird auf 0 gesetzt.
+        Länge (Anzahl Knoten) des kürzesten Pfades zwischen den Knoten.
         """)
 
 
 class BahnsteigGraph(nx.Graph):
     """
+    Bahnsteige
+
     Der _Bahnsteiggraph_ enthält alle Bahnsteige aus der Bahnsteigliste der Plugin-Schnittstelle als Knoten.
     Kanten werden entsprechend der Nachbarrelationen gesetzt.
     Der Graph ist ungerichtet, da die Nachbarbeziehung als reziprok aufgefasst wird.
 
-    Der Graph sollte nicht verändert werden.
-    Es wird nicht erwartet, dass sich der Graph im Laufe eines Spiels ändert.
+    Vom Simulator werden nur die Gleisbezeichnungen der untersten Hierarchie sowie ihre Nachbarbeziehungen angegeben.
+    Die Gruppierung in Bahnhofteile, Bahnhöfe und Anschlussstellen wird von der Klasse unterstützt,
+    muss aber vom Besitzer gemacht werden.
     """
     node_attr_dict_factory = BahnsteigGraphNode
     edge_attr_dict_factory = BahnsteigGraphEdge
 
     def to_undirected_class(self):
         return self.__class__
+
+    def to_directed_class(self):
+        return BahnhofGraph
+
+
+class BahnhofGraph(nx.DiGraph):
+    """
+    Bahnhöfe und ihre Gleishierarchie
+
+    Der _Bahnhofgraph_ stellt die Gleishierarchie der Bahnhöfe dar
+    und ordnet Bahnhöfe, Bahnhofteile, Bahnsteige und Gleise einander zu.
+
+    Die Attribute der Knoten haben die Klasse BahnsteigGraphNode, die Kanten BahnsteigGraphEdge.
+
+    Der Graph ist gerichtet, die Kanten zeigen von Bahnhöfen zu Gleisen.
+    Die ungerichtete Variante ist der BahnsteigGraph.
+    """
+
+    node_attr_dict_factory = BahnsteigGraphNode
+    edge_attr_dict_factory = BahnsteigGraphEdge
+
+    def to_directed_class(self):
+        return self.__class__
+
+    def to_undirected_class(self):
+        return BahnsteigGraph
 
 
 class ZugGraphNode(dict):
@@ -502,9 +545,9 @@ class GraphClient(PluginClient):
         self.bahnsteiggraph.clear()
 
         for bs1 in self.bahnsteigliste.values():
-            self.bahnsteiggraph.add_node(bs1.name)
+            self.bahnsteiggraph.add_node(bs1.name, name=bs1.name, typ='Gl')
             for bs2 in bs1.nachbarn:
-                self.bahnsteiggraph.add_edge(bs1.name, bs2.name, typ='bahnsteig', distanz=0)
+                self.bahnsteiggraph.add_edge(bs1.name, bs2.name, typ='Nachbar', distanz=0)
 
     def _bahnhofteile_gruppieren(self):
         """
@@ -515,7 +558,7 @@ class GraphClient(PluginClient):
 
         self.bahnhofteile = {}
 
-        for comp in nx.connected_components(self.bahnsteiggraph.to_undirected(as_view=True)):
+        for comp in nx.connected_components(self.bahnsteiggraph.to_undirected(as_view=False)):
             hauptgleis = sorted(comp)[0]
             for gleis in comp:
                 self.bahnhofteile[gleis] = hauptgleis
