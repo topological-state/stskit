@@ -5,7 +5,6 @@ dieses modul ist in entwicklung.
 """
 
 import logging
-import sys
 from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, Union
 
 import matplotlib as mpl
@@ -16,9 +15,13 @@ import netgraph
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
-from stskit.interface.stsplugin import PluginClient
-from stskit.anlage import Anlage
-import stskit.anlage as anlage
+from stskit.dispo.anlage import Anlage
+from stskit.graphs.bahnhofgraph import BahnhofGraph
+from stskit.graphs.liniengraph import LinienGraph
+from stskit.graphs.signalgraph import (graph_weichen_ersetzen, graph_anschluesse_pruefen,
+                                       graph_bahnsteigsignale_ersetzen, graph_signalpaare_ersetzen,
+                                       graph_schleifen_aufloesen, graph_zwischensignale_entfernen)
+
 from stskit.zentrale import DatenZentrale
 from stskit.qt.ui_gleisnetz import Ui_GleisnetzWindow
 
@@ -41,11 +44,32 @@ def graph_nachbarbahnsteige_vereinen(g: nx.DiGraph) -> nx.DiGraph:
     return g
 
 
-class SignalGraph:
+BAHNHOF_COLORMAP = {'Bf': "tab:red",
+                    'Bft': "tab:orange",
+                    'Bs': "tab:blue",
+                    'Gl': "tab:cyan",
+                    'Anst': "tab:purple",
+                    'Agl': "tab:pink"
+                    }
+
+SIGNAL_COLORMAP = {2: "tab:blue",  # Signal
+                   3: "tab:gray",  # Weiche unten
+                   4: "tab:gray",  # Weiche oben
+                   5: "tab:red",  # Bahnsteig
+                   6: "tab:pink",  # Einfahrt
+                   7: "tab:purple",  # Ausfahrt
+                   12: "tab:orange"}  # Haltepunkt
+
+
+class SignalDiagramm:
+    """
+    Stellt einen SignalGraph grafisch dar.
+    """
     def __init__(self):
         self.canvas = FigureCanvas(Figure(figsize=(5, 3)))
         self.axes = self.canvas.figure.subplots()
-        self.graph = None
+        self.colormap = SIGNAL_COLORMAP
+        self.netgraph = None
 
     def draw_graph(self, graph: nx.Graph, bahnsteig_graph: nx.Graph, filters: Optional[Iterable[Callable]] = None):
         self.axes.clear()
@@ -68,15 +92,8 @@ class SignalGraph:
         sub_edges = list(zip(sub_nodes, sub_nodes[1:] + [sub_nodes[0]]))
         layout = netgraph.get_circular_layout(sub_edges)
 
-        colormap = {2: "tab:blue",  # Signal
-                    3: "tab:gray",  # Weiche unten
-                    4: "tab:gray",  # Weiche oben
-                    5: "tab:red",  # Bahnsteig
-                    6: "tab:pink",  # Einfahrt
-                    7: "tab:purple",  # Ausfahrt
-                    12: "tab:orange"}  # Haltepunkt
-
-        node_colors = {key: colormap.get(typ, "r") for key, typ in graph.nodes(data='typ', default='kein')}
+        node_colors = {key: self.colormap.get(typ, "r")
+                       for key, typ in graph.nodes(data='typ', default='kein')}
 
         node_labels = {key: data["name"] for key, data in graph.nodes(data=True) if data.get('typ', -1) in {5, 6, 7, 12}}
 
@@ -92,7 +109,7 @@ class SignalGraph:
         edge_label_fontdict = {"size": 10, "bbox": {"boxstyle": "circle",
                                                     "fc": mpl.rcParams["axes.facecolor"],
                                                     "ec": mpl.rcParams["axes.facecolor"]}}
-        self.graph = netgraph.InteractiveGraph(graph, ax=self.axes,
+        self.netgraph = netgraph.InteractiveGraph(graph, ax=self.axes,
                                       node_layout="spring",
                                       # node_layout_kwargs=dict(node_positions=layout),
                                       node_color=node_colors,
@@ -113,22 +130,26 @@ class SignalGraph:
         self.axes.figure.canvas.draw()
 
 
-class BahnhofGraph:
+class SignalBahnhofDiagramm:
+    """
+    Reduziert einen SignalGraph auf die Bahnsteige und stellt ihre Beziehungen grafisch dar.
+    """
     def __init__(self):
         self.canvas = FigureCanvas(Figure(figsize=(5, 3)))
         self.axes = self.canvas.figure.subplots()
-        self.graph = None
+        self.colormap = SIGNAL_COLORMAP
+        self.netgraph = None
         self.vereinfachter_graph = None
 
     def graph_vereinfachen(self, graph):
         g = graph.to_undirected()
-        g = anlage.graph_weichen_ersetzen(g)
-        g = anlage.graph_anschluesse_pruefen(g)
-        g = anlage.graph_bahnsteigsignale_ersetzen(g)
-        g = anlage.graph_signalpaare_ersetzen(g)
-        g = anlage.graph_schleifen_aufloesen(g)
-        g = anlage.graph_zwischensignale_entfernen(g)
-        g = anlage.graph_schleifen_aufloesen(g)
+        g = graph_weichen_ersetzen(g)
+        g = graph_anschluesse_pruefen(g)
+        g = graph_bahnsteigsignale_ersetzen(g)
+        g = graph_signalpaare_ersetzen(g)
+        g = graph_schleifen_aufloesen(g)
+        g = graph_zwischensignale_entfernen(g)
+        g = graph_schleifen_aufloesen(g)
         self.vereinfachter_graph = g
 
     def draw_graph(self, graph: nx.Graph, bahnsteig_graph: nx.Graph, filters: Optional[Iterable[Callable]] = None):
@@ -137,15 +158,7 @@ class BahnhofGraph:
         if self.vereinfachter_graph is None:
             self.graph_vereinfachen(graph)
 
-        colormap = {2: "tab:blue",  # Signal
-                    3: "tab:gray",  # Weiche unten
-                    4: "tab:gray",  # Weiche oben
-                    5: "tab:red",  # Bahnsteig
-                    6: "tab:pink",  # Einfahrt
-                    7: "tab:purple",  # Ausfahrt
-                    12: "tab:orange"}  # Haltepunkt
-
-        node_colors = {key: colormap.get(typ, "r")
+        node_colors = {key: self.colormap.get(typ, "r")
                        for key, typ in self.vereinfachter_graph.nodes(data='typ', default='kein')}
 
         node_labels = {key: name
@@ -163,7 +176,7 @@ class BahnhofGraph:
         edge_label_fontdict = {"size": 10, "bbox": {"boxstyle": "circle",
                                                     "fc": mpl.rcParams["axes.facecolor"],
                                                     "ec": mpl.rcParams["axes.facecolor"]}}
-        self.graph = netgraph.InteractiveGraph(self.vereinfachter_graph, ax=self.axes,
+        self.netgraph = netgraph.InteractiveGraph(self.vereinfachter_graph, ax=self.axes,
                                       node_layout="geometric",
                                       node_layout_kwargs=dict(edge_length=edge_length),
                                       node_color=node_colors,
@@ -176,6 +189,61 @@ class BahnhofGraph:
                                       # edge_label_fontdict=edge_label_fontdict,
                                       edge_width=0.2,
                                       prettify=False)
+
+        self.axes.set_xticks([])
+        self.axes.set_yticks([])
+        self.axes.set_aspect('equal')
+        self.axes.figure.tight_layout()
+        self.axes.figure.canvas.draw()
+
+
+class BahnhofDiagramm:
+    """
+    Stellt einen BahnhofGraph grafisch dar.
+    """
+    def __init__(self):
+        self.canvas = FigureCanvas(Figure(figsize=(5, 3)))
+        self.axes = self.canvas.figure.subplots()
+        self.colormap = BAHNHOF_COLORMAP
+        self.netgraph = None
+
+    def draw_graph(self, graph: BahnhofGraph):
+        self.axes.clear()
+
+        node_colors = {key: self.colormap.get(typ, "tab:gray")
+                       for key, typ in graph.nodes(data='typ', default='?')}
+        node_labels = {key: name
+                       for key, name in graph.nodes(data='name', default='?')}
+
+        partitions_dict = {}
+        for node, data in graph.nodes(data=True):
+            try:
+                partitions_dict[data.typ].add(node)
+            except KeyError:
+                partitions_dict[data.typ] = {node}
+        partitions = [
+            sorted(partitions_dict['Bf']),
+            sorted(partitions_dict['Bft']),
+            sorted(partitions_dict['Bs']),
+            sorted(partitions_dict['Gl']),
+            sorted(partitions_dict['Anst']),
+            sorted(partitions_dict['Agl'])
+        ]
+
+        node_positions = netgraph.get_multipartite_layout(list(graph.edges()), partitions,
+                                                          reduce_edge_crossings=True)
+        node_positions = {node: (x, -y) for node, (y, x) in node_positions.items()}
+        self.netgraph = netgraph.InteractiveGraph(graph, ax=self.axes,
+                                                  node_layout=node_positions,
+                                                  node_color=node_colors,
+                                                  node_edge_width=0.0,
+                                                  node_labels=node_labels,
+                                                  #node_label_fontdict=node_label_fontdict,
+                                                  node_size=1,
+                                                  edge_color=mpl.rcParams['text.color'],
+                                                  edge_width=0.2,
+                                                  prettify=False
+                                                  )
 
         self.axes.set_xticks([])
         self.axes.set_yticks([])
@@ -214,13 +282,17 @@ def liniengraph_schleifen_aufloesen(g: nx.Graph):
     return g
 
 
-class LinienGraph:
+class LinienDiagramm:
+    """
+    Stellt einen LinienGraph grafisch dar.
+    """
     def __init__(self):
         self.canvas = FigureCanvas(Figure(figsize=(5, 3)))
         self.axes = self.canvas.figure.subplots()
-        self.graph = None
+        self.colormap = BAHNHOF_COLORMAP
+        self.netgraph = None
 
-    def draw_graph(self, graph: nx.Graph, bahnsteig_graph: nx.Graph, filters: Optional[Iterable[Callable]] = None):
+    def draw_graph(self, graph: LinienGraph, filters: Optional[Iterable[Callable]] = None):
         self.axes.clear()
 
         if filters is None:
@@ -228,21 +300,18 @@ class LinienGraph:
         for filt in filters:
             graph = filt(graph)
 
-        colormap = {'bahnhof': 'tab:red', 'anschluss': 'tab:pink', 'H': 'tab:red', 'E': 'tab:pink', 'A': 'tab:pink'}
-        colormap = {2: "tab:blue",  # Signal
-                    3: "tab:gray",  # Weiche unten
-                    4: "tab:gray",  # Weiche oben
-                    5: "tab:red",  # Bahnsteig
-                    6: "tab:pink",  # Einfahrt
-                    7: "tab:purple",  # Ausfahrt
-                    12: "tab:orange"}  # Haltepunkt
-        node_colors = {key: colormap.get(typ, "tab:gray") for key, typ in graph.nodes(data='typ', default='kein')}
+        node_colors = {key: self.colormap.get(typ, "tab:gray")
+                       for key, typ in graph.nodes(data='typ', default='?')}
+        node_labels = {key: name
+                       for key, name in graph.nodes(data='name', default='?')}
 
         edge_labels = {(e1, e2): str(round(zeit))
-                       for e1, e2, zeit in graph.edges(data='fahrzeit_min', default=0)
+                       for e1, e2, zeit in graph.edges(data='fahrzeit_schnitt', default=0)
                        if zeit > 0}
         edge_length = {(e1, e2): max(1/1000, zeit * 60 / 1000)
-                       for e1, e2, zeit in graph.edges(data='fahrzeit_min', default=0)}
+                       for e1, e2, zeit in graph.edges(data='fahrzeit_schnitt', default=0)}
+        edge_width = {(e1, e2): min(1., max(1 / 100, fahrten / 10))
+                      for e1, e2, fahrten in graph.edges(data='fahrten', default=0)}
 
         # node_size=3
         # node_edge_width
@@ -250,21 +319,22 @@ class LinienGraph:
         edge_label_fontdict = {"size": 10, "bbox": {"boxstyle": "circle",
                                                     "fc": mpl.rcParams["axes.facecolor"],
                                                     "ec": mpl.rcParams["axes.facecolor"]}}
-        self.graph = netgraph.InteractiveGraph(graph,
-                                      ax=self.axes,
-                                      node_layout="geometric",
-                                      node_layout_kwargs=dict(edge_length=edge_length),
-                                      node_color=node_colors,
-                                      node_edge_width=0.0,
-                                      node_labels=True,
-                                      node_label_fontdict=node_label_fontdict,
-                                      node_size=1,
-                                      edge_color=mpl.rcParams['text.color'],
-                                      edge_labels=edge_labels,
-                                      edge_label_fontdict=edge_label_fontdict,
-                                      edge_width=0.2,
-                                      # scale=(10., 10.),
-                                      prettify=False)
+
+        self.netgraph = netgraph.InteractiveGraph(graph,
+                                                  ax=self.axes,
+                                                  node_layout="geometric",
+                                                  node_layout_kwargs=dict(edge_length=edge_length),
+                                                  node_color=node_colors,
+                                                  node_edge_width=0.0,
+                                                  node_labels=node_labels,
+                                                  node_label_fontdict=node_label_fontdict,
+                                                  node_size=1,
+                                                  edge_color=mpl.rcParams['text.color'],
+                                                  edge_labels=edge_labels,
+                                                  edge_label_fontdict=edge_label_fontdict,
+                                                  edge_width=edge_width,
+                                                  # scale=(10., 10.),
+                                                  prettify=False)
 
         self.axes.set_xticks([])
         self.axes.set_yticks([])
@@ -286,83 +356,74 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
 
         self.setWindowTitle("Netzplan")
 
-        self.signal_graph = SignalGraph()
-        self.signal_graph.canvas.setParent(self.ui.signal_graph_area)
+        self.signal_diagramm = SignalDiagramm()
+        self.signal_diagramm.canvas.setParent(self.ui.signal_graph_area)
         self.ui.signal_layout = QtWidgets.QHBoxLayout(self.ui.signal_graph_area)
         self.ui.signal_layout.setObjectName("signal_layout")
-        self.ui.signal_layout.addWidget(self.signal_graph.canvas)
-        self.signal_graph.canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
+        self.ui.signal_layout.addWidget(self.signal_diagramm.canvas)
+        self.signal_diagramm.canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
 
-        self.bahnhof_graph = BahnhofGraph()
-        self.bahnhof_graph.canvas.setParent(self.ui.bahnhof_graph_area)
+        self.bahnhof_diagramm = BahnhofDiagramm()
+        self.bahnhof_diagramm.canvas.setParent(self.ui.bahnhof_graph_area)
         self.ui.bahnhof_layout = QtWidgets.QHBoxLayout(self.ui.bahnhof_graph_area)
         self.ui.bahnhof_layout.setObjectName("bahnhof_layout")
-        self.ui.bahnhof_layout.addWidget(self.bahnhof_graph.canvas)
-        self.bahnhof_graph.canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
+        self.ui.bahnhof_layout.addWidget(self.bahnhof_diagramm.canvas)
+        self.bahnhof_diagramm.canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
 
-        self.linien_graph = LinienGraph()
-        self.linien_graph.canvas.setParent(self.ui.linien_graph_area)
+        self.linien_diagramm = LinienDiagramm()
+        self.linien_diagramm.canvas.setParent(self.ui.linien_graph_area)
         self.ui.linien_layout = QtWidgets.QHBoxLayout(self.ui.linien_graph_area)
         self.ui.linien_layout.setObjectName("linien_layout")
-        self.ui.linien_layout.addWidget(self.linien_graph.canvas)
-        self.linien_graph.canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
+        self.ui.linien_layout.addWidget(self.linien_diagramm.canvas)
+        self.linien_diagramm.canvas.setFocusPolicy(QtCore.Qt.ClickFocus)
 
         self.ui.signal_aktualisieren_button.clicked.connect(self.on_signal_aktualisieren_button_clicked)
         self.ui.linien_aktualisieren_button.clicked.connect(self.on_linie_aktualisieren_button_clicked)
 
-        self.signal_graph.canvas.setFocus()
+        self.signal_diagramm.canvas.setFocus()
 
     @property
     def anlage(self) -> Anlage:
         return self.zentrale.anlage
 
-    @property
-    def client(self) -> PluginClient:
-        return self.zentrale.client
-
     def anlage_update(self, *args, **kwargs):
         try:
-            if self.client.signalgraph and not self.signal_graph.graph:
-                self.signal_graph.draw_graph(self.client.signalgraph, self.client.bahnsteiggraph)
+            # if self.anlage.signalgraph and not self.signal_diagramm.netgraph:
+            #     self.signal_diagramm.draw_graph(self.anlage.signalgraph, self.anlage.bahnsteiggraph)
 
-            if self.client.signalgraph and not self.bahnhof_graph.graph:
-                self.bahnhof_graph.draw_graph(self.client.signalgraph, self.client.bahnsteiggraph)
+            if self.anlage.bahnhofgraph and not self.bahnhof_diagramm.netgraph:
+                self.bahnhof_diagramm.draw_graph(self.anlage.signalgraph)
 
-            if self.client.liniengraph and not self.linien_graph.graph:
-                self.linien_graph.draw_graph(self.client.liniengraph, self.client.bahnsteiggraph)
+            if self.anlage.liniengraph and not self.linien_diagramm.netgraph:
+                self.linien_diagramm.draw_graph(self.anlage.liniengraph, self.anlage.bahnsteiggraph)
         except AttributeError as e:
             print(e)
 
     @pyqtSlot()
     def on_signal_aktualisieren_button_clicked(self):
-        print("aktualisieren button clicked")
         filters = []
 
         if self.ui.signal_weichen_check.isChecked():
-            filters.append(anlage.graph_weichen_ersetzen)
+            filters.append(graph_weichen_ersetzen)
         if self.ui.signal_anschluss_check.isChecked():
-            filters.append(anlage.graph_anschluesse_pruefen)
+            filters.append(graph_anschluesse_pruefen)
         if self.ui.signal_nachbarn_check.isChecked():
             filters.append(graph_nachbarbahnsteige_vereinen)
         if self.ui.signal_bahnsteig_check.isChecked():
-            filters.append(anlage.graph_bahnsteigsignale_ersetzen)
+            filters.append(graph_bahnsteigsignale_ersetzen)
         if self.ui.signal_paar_check.isChecked():
-            filters.append(anlage.graph_signalpaare_ersetzen)
+            filters.append(graph_signalpaare_ersetzen)
         if self.ui.signal_schleifen_check.isChecked():
-            filters.append(anlage.graph_schleifen_aufloesen)
+            filters.append(graph_schleifen_aufloesen)
         if self.ui.signal_zwischen_check.isChecked():
-            filters.append(anlage.graph_zwischensignale_entfernen)
-        self.signal_graph.draw_graph(self.client.signalgraph, self.client.bahnsteiggraph, filters=filters)
+            filters.append(graph_zwischensignale_entfernen)
 
-        print("exit clicked handler")
+        self.signal_diagramm.draw_graph(self.anlage.signalgraph, self.anlage.bahnsteiggraph, filters=filters)
 
     @pyqtSlot()
     def on_linie_aktualisieren_button_clicked(self):
-        print("aktualisieren button clicked")
         filters = []
 
         if self.ui.linien_schleifen_check.isChecked():
             filters.append(liniengraph_schleifen_aufloesen)
-        self.linien_graph.draw_graph(self.client.liniengraph, self.client.bahnsteiggraph, filters=filters)
-
-        print("exit clicked handler")
+        self.linien_diagramm.draw_graph(self.anlage.liniengraph, filters=filters)
