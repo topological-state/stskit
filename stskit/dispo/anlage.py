@@ -1,16 +1,19 @@
+import json
 import logging
 import os
+from pathlib import Path
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 import networkx as nx
 
 from stskit.interface.stsgraph import GraphClient
-from stskit.interface.stsobj import Knoten
+from stskit.interface.stsobj import Knoten, AnlagenInfo
 from stskit.graphs.signalgraph import SignalGraph
 from stskit.graphs.bahnhofgraph import BahnhofGraph, BahnsteigGraph
 from stskit.graphs.liniengraph import LinienGraph
 from stskit.graphs.zielgraph import ZielGraph
 from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
+from stskit.utils.export import json_object_hook
 from stskit.zugschema import Zugschema
 
 
@@ -44,10 +47,14 @@ def bahnhofgraph_konfig_umdrehen(gleis_konfig, anschluss_konfig):
 
 class Anlage:
     def __init__(self):
-        self.signalgraph = SignalGraph()
-        self.bahnsteiggraph = BahnsteigGraph()
-        self.bahnhofgraph = BahnhofGraph()
-        self.liniengraph = LinienGraph()
+        self.anlageninfo: Optional[AnlagenInfo] = None
+        self.config: Dict[str, Any] = {}
+
+        self.signalgraph: Optional[SignalGraph] = None
+        self.bahnsteiggraph: Optional[BahnsteigGraph] = None
+        self.bahnhofgraph: Optional[BahnhofGraph] = None
+        self.liniengraph: Optional[LinienGraph] = None
+        self.zielgraph: Optional[ZielGraph] = None
 
         # todo : zugschema
         # todo : strecken
@@ -60,23 +67,50 @@ class Anlage:
 
         self.zugschema = Zugschema()
 
+        self._verbindungsstrecke_cache: Dict[Tuple[str, str], List[str]] = {}
+
     def update(self, client: GraphClient, config_path: os.PathLike):
-        # todo : update-frequenz
-        # todo : konfiguration
-        self.graphen_uebernehmen(client.signalgraph, client.bahnsteiggraph, client.zielgraph)
+        # todo : konfiguration speichern
 
-    def graphen_uebernehmen(self,
-                            signalgraph: SignalGraph,
-                            bahnsteiggraph: BahnsteigGraph,
-                            zielgraph: ZielGraph):
+        if self.anlageninfo is None:
+            self.anlageninfo = client.anlageninfo
 
-        self.signalgraph = signalgraph.copy(as_view=False)
-        self.bahnsteiggraph = bahnsteiggraph.copy(as_view=False)
+        if not self.config and config_path:
+            config_path = Path(config_path)
+            default_path = Path(__file__).parent / "config"
+            try:
+                logger.info(f"Konfiguration laden von {config_path}")
+                self.load_config(config_path)
+            except OSError:
+                logger.warning("Keine benutzerspezifische Anlagenkonfiguration gefunden")
+                logger.info(f"Beispielkonfiguration laden von {default_path}")
+                try:
+                    self.load_config(default_path)
+                except OSError:
+                    logger.warning("Keine Beispielkonfiguration gefunden")
+            except ValueError as e:
+                logger.exception("Fehlerhafte Anlagenkonfiguration")
+
+            Zugschema.find_schemas(default_path)
+            Zugschema.find_schemas(config_path)
+            self.zugschema.load_config(self.config['zugschema'], self.anlageninfo.region)
+
+        if not self.signalgraph:
+            self.signalgraph = client.signalgraph.copy(as_view=False)
+        if not self.bahnsteiggraph:
+            self.bahnsteiggraph = client.bahnsteiggraph.copy(as_view=False)
+        if not self.bahnhofgraph and self.signalgraph and self.bahnsteiggraph:
+            self.bahnhofgraph_erstellen()
+            self.bahnhofgraph_konfigurieren(self.config['bahnhofgraph'])
+
         # todo : zielgraph kann sich zur laufzeit aendern
-        self.zielgraph = zielgraph.copy(as_view=True)
+        self.zielgraph = client.zielgraph.copy(as_view=True)
 
-        self.bahnhofgraph_erstellen()
-        self.liniengraph_konfigurieren()
+        if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
+            self.liniengraph_konfigurieren()
+
+        # if len(self.strecken) == 0:
+        #     self.strecken_aus_bahnhofgraph()
 
     def bahnhofgraph_erstellen(self):
         """
@@ -171,3 +205,109 @@ class Anlage:
                 bst1 = self.bahnhofgraph.nodes[self.bahnhofgraph.find_root(self.label_aus_zielgleis(ziel1.plan))]
                 bst2 = self.bahnhofgraph.nodes[self.bahnhofgraph.find_root(self.label_aus_zielgleis(ziel2.plan))]
                 self.liniengraph.linie_eintragen(ziel1, bst1, ziel2, bst2)
+
+    def load_config(self, path: os.PathLike, load_graphs=False, ignore_version=False):
+        """
+
+        :param path: verzeichnis mit den konfigurationsdaten.
+            der dateiname wird aus der anlagen-id gebildet.
+        :param load_graphs: die graphen werden normalerweise vom simulator abgefragt und erstellt.
+            für offline-auswertung können sie auch aus dem konfigurationsfile geladen werden.
+        :return: None
+        :raise: OSError, JSONDecodeError(ValueError)
+        """
+        if load_graphs:
+            p = Path(path) / f"{self.anlageninfo.aid}diag.json"
+        else:
+            p = Path(path) / f"{self.anlageninfo.aid}.json"
+
+        with open(p, encoding='utf-8') as fp:
+            d = json.load(fp, object_hook=json_object_hook)
+
+        if not ignore_version:
+            assert d['_aid'] == self.anlageninfo.aid
+            if self.anlageninfo.build != d['_build']:
+                logger.warning(f"unterschiedliche build-nummern (file: {d['_build']}, sim: {self.anlageninfo.build})")
+                try:
+                    self.konfiguration_abgleichen(d)
+                except ValueError:
+                    print(f"inkompatible konfigurationsdatei - auto-konfiguration")
+                    logger.error(f"inkompatible konfigurationsdatei - auto-konfiguration")
+                    return
+
+            if '_version' not in d:
+                d['_version'] = 1
+                logger.warning(f"konfigurationsdatei ohne versionsangabe. nehme 1 an.")
+            if d['_version'] < 2:
+                logger.error(f"inkompatible konfigurationsdatei - auto-konfiguration")
+                return
+
+        if d['_version'] == 2:
+            self.config = d
+        elif d['_version'] == 3:
+            self.config = d
+
+    def set_config_v2(self, d: Dict):
+        def _find_sektor(gleis: str, sektoren_gleise: Dict) -> Optional[str]:
+            for bahnsteig, gleise in sektoren_gleise.items():
+                if gleis in gl:
+                    return bahnsteig
+            else:
+                return None
+
+        gleis_konfig = {}
+        try:
+            sektoren = d['sektoren']
+        except KeyError:
+            logger.info("Fehlende Sektoren-Konfiguration")
+            sektoren = {}
+
+        try:
+            for bf, gl in d['bahnsteiggruppen'].items():
+                if bf not in gleis_konfig:
+                    gleis_konfig[bf] = {bf: {}}
+                bs = _find_sektor(gl, sektoren)
+                if not bs:
+                    bs = gl
+                try:
+                    gleis_konfig[bf][bf][bs].add(gl)
+                except KeyError:
+                    gleis_konfig[bf][bf][bs] = {gl}
+
+            gleis_konfig.update(d['bahnsteiggruppen'])
+        except KeyError:
+            logger.info("Fehlende Bahnsteiggruppen-Konfiguration")
+
+        try:
+            anschluss_konfig = d['anschlussgruppen']
+        except KeyError:
+            logger.info("Fehlende Anschlussgruppen-Konfiguration")
+            anschluss_konfig = {}
+
+        self.config['bahnhofgraph'] = bahnhofgraph_konfig_umdrehen(gleis_konfig, anschluss_konfig)
+
+        try:
+            self.config['strecken'] = d['strecken']
+        except KeyError:
+            logger.info("Fehlende Streckenkonfiguration")
+        try:
+            self.config['hauptstrecke'] = d['hauptstrecke']
+        except KeyError:
+            logger.info("Keine Hauptstrecke konfiguriert")
+        try:
+            markierungen = d['streckenmarkierung']
+        except KeyError:
+            logger.info("keine streckenmarkierungen konfiguriert")
+        else:
+            streckenmarkierung = {}
+            for markierung in markierungen:
+                try:
+                    streckenmarkierung[(markierung[0], markierung[1])] = markierung[2]
+                except IndexError:
+                    pass
+            self.config['streckenmarkierung'] = streckenmarkierung
+
+        try:
+            self.config['zugschema'] = d['zugschema']
+        except KeyError:
+            pass
