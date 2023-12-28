@@ -6,6 +6,9 @@ import networkx as nx
 
 import stskit.interface.stsgraph as stsgraph
 from stskit.interface.stsobj import Knoten
+from stskit.graphs.signalgraph import SignalGraph
+from stskit.graphs.bahnhofgraph import BahnhofGraph, BahnsteigGraph
+from stskit.graphs.liniengraph import LinienGraph
 from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
 from stskit.zugschema import Zugschema
 
@@ -40,10 +43,10 @@ def bahnhofgraph_konfig_umdrehen(gleis_konfig, anschluss_konfig):
 
 class Anlage:
     def __init__(self):
-        self.signalgraph = stsgraph.SignalGraph()
-        self.bahnsteiggraph = stsgraph.BahnsteigGraph()
-        self.bahnhofgraph = stsgraph.BahnhofGraph()
-        self.liniengraph = stsgraph.LinienGraph()
+        self.signalgraph = SignalGraph()
+        self.bahnsteiggraph = BahnsteigGraph()
+        self.bahnhofgraph = BahnhofGraph()
+        self.liniengraph = LinienGraph()
 
         # todo : zugschema
         # todo : strecken
@@ -59,17 +62,15 @@ class Anlage:
     def update(self, client: stsgraph.GraphClient, config_path: os.PathLike):
         # todo : update-frequenz
         # todo : konfiguration
-        self.graphen_uebernehmen(client.signalgraph, client.bahnsteiggraph, client.liniengraph)
+        self.graphen_uebernehmen(client.signalgraph, client.bahnsteiggraph)
 
     def graphen_uebernehmen(self,
-                            signalgraph: stsgraph.SignalGraph,
-                            bahnsteiggraph: stsgraph.BahnsteigGraph,
-                            liniengraph: stsgraph.LinienGraph):
+                            signalgraph: SignalGraph,
+                            bahnsteiggraph: BahnsteigGraph):
 
         self.signalgraph = signalgraph.copy(as_view=False)
         self.bahnsteiggraph = bahnsteiggraph.copy(as_view=False)
         # todo : bahnhofteile anpassen
-        self.liniengraph = liniengraph.copy(as_view=False)
 
         self.bahnhofgraph_erstellen()
         self.liniengraph_konfigurieren()
