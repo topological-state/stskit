@@ -4,7 +4,7 @@ from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set,
 
 import networkx as nx
 
-import stskit.interface.stsgraph as stsgraph
+from stskit.interface.stsgraph import GraphClient
 from stskit.interface.stsobj import Knoten
 from stskit.graphs.signalgraph import SignalGraph
 from stskit.graphs.bahnhofgraph import BahnhofGraph, BahnsteigGraph
@@ -59,7 +59,7 @@ class Anlage:
 
         self.zugschema = Zugschema()
 
-    def update(self, client: stsgraph.GraphClient, config_path: os.PathLike):
+    def update(self, client: GraphClient, config_path: os.PathLike):
         # todo : update-frequenz
         # todo : konfiguration
         self.graphen_uebernehmen(client.signalgraph, client.bahnsteiggraph)
