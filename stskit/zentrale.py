@@ -4,8 +4,8 @@ from typing import Any, Optional
 import weakref
 
 from stskit.interface.stsobj import Ereignis, time_to_minutes
-from stskit.interface.stsplugin import PluginClient
-from stskit.anlage import Anlage
+from stskit.interface.stsgraph import GraphClient
+from stskit.dispo.anlage import Anlage
 from stskit.auswertung import Auswertung
 from stskit.planung import Planung
 
@@ -79,7 +79,7 @@ class DatenZentrale:
 
     def __init__(self, config_path: Optional[os.PathLike] = None):
         self.config_path: os.PathLike = config_path
-        self.client: Optional[PluginClient] = None
+        self.client: Optional[GraphClient] = None
         self.anlage: Optional[Anlage] = None
         self.planung: Optional[Planung] = None
         self.auswertung: Optional[Auswertung] = None
@@ -100,7 +100,7 @@ class DatenZentrale:
             await self.client.request_ereignis(art, self.client.zugliste.keys())
 
         if not self.anlage:
-            self.anlage = Anlage(self.client.anlageninfo)
+            self.anlage = Anlage()
         self.anlage.update(self.client, self.config_path)
 
         if not self.planung:

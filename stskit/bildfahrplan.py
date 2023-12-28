@@ -11,7 +11,7 @@ from matplotlib.lines import Line2D
 from PyQt5 import QtWidgets
 
 from stskit.auswertung import Auswertung
-from stskit.anlage import Anlage
+from stskit.dispo.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, \
     AnkunftAbwarten, AbfahrtAbwarten, ZugAbwarten
 from stskit.slotgrafik import hour_minutes_formatter
@@ -233,7 +233,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         via = self._strecke_via
         nach = self._strecke_nach
 
-        gruppen_liste = sorted((gr for gr in self.anlage.gleisgruppen.keys()))
+        gruppen_liste = sorted((gr for gr in self.anlage.bahnhofgraph.bahnhoefe()))
         strecken_liste = sorted(self.anlage.strecken.keys())
 
         self.ui.von_combo.clear()
@@ -428,7 +428,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             trasse.titel = format_label(self.zugbeschriftung, trasse.start, trasse.ziel)
 
             try:
-                gruppe1 = self.anlage.gleiszuordnung[plan1.gleis]
+                gruppe1 = self.anlage.bahnhofgraph.gleis_bahnhof(plan1.gleis)
             except KeyError:
                 logger.warning(f"gleis {plan1.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
                 gruppe1 = ""
@@ -443,7 +443,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                 continue
 
             try:
-                gruppe2 = self.anlage.gleiszuordnung[plan2.gleis]
+                gruppe2 = self.anlage.bahnhofgraph.gleis_bahnhof(plan2.gleis)
             except KeyError:
                 logger.warning(f"gleis {plan2.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
                 gruppe2 = ""
@@ -747,9 +747,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.update_actions()
 
     def nachbartrasse_ziel(self, trasse: Trasse, nachbar: Trasse) -> Tuple[int, ZugZielPlanung]:
-        bf1 = self.anlage.gleiszuordnung[trasse.start.plan]
-        bf2s = self.anlage.gleiszuordnung[nachbar.start.plan]
-        bf2z = self.anlage.gleiszuordnung[nachbar.ziel.plan]
+        bf1 = self.anlage.bahnhofgraph.gleis_bahnhof(trasse.start.plan)
+        bf2s = self.anlage.bahnhofgraph.gleis_bahnhof(nachbar.start.plan)
+        bf2z = self.anlage.bahnhofgraph.gleis_bahnhof(nachbar.ziel.plan)
         if bf1 == bf2s:
             return 0, nachbar.start
         elif bf1 == bf2z:

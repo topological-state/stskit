@@ -17,7 +17,7 @@ import numpy as np
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
-from stskit.anlage import Anlage
+from stskit.dispo.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, \
     FesteVerspaetung, ZugAbwarten, AnkunftAbwarten, AbfahrtAbwarten, ZugNichtAbwarten, ZugZielNode
 from stskit.interface.stsobj import time_to_minutes
@@ -127,14 +127,14 @@ class Anschlussmatrix:
 
     def set_bahnhof(self, bahnhof: str):
         """
-        bahnhof auswählen
+        Bahnhof auswählen
 
-        :param bahnhof: muss ein schlüsselwort aus anlage.bahnsteiggruppen sein
+        :param bahnhof: Muss im Bahnhofgraph definiert sein.
         :return: None
         """
         if bahnhof != self.bahnhof:
             self.bahnhof = bahnhof
-            self.gleise = self.anlage.bahnsteiggruppen[bahnhof]
+            self.gleise = set(self.anlage.bahnhofgraph.bahnhofgleise(bahnhof))
             self.zid_ankuenfte_set = set([])
             self.zid_abfahrten_set = set([])
 
@@ -563,9 +563,10 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.in_update = True
 
         try:
-            bahnhoefe = self.anlage.bahnsteiggruppen.keys()
+            bahnhoefe = list(self.anlage.bahnhofgraph.bahnhoefe())
             bahnhoefe_nach_namen = sorted(bahnhoefe)
-            bahnhoefe_nach_groesse = sorted(bahnhoefe, key=lambda b: len(self.anlage.bahnsteiggruppen[b]))
+            bahnhoefe_nach_groesse = sorted(bahnhoefe,
+                                            key=lambda b: len(list(self.anlage.bahnhofgraph.bahnhofgleise(b))))
         except AttributeError:
             return
 

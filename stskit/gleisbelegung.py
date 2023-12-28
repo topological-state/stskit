@@ -2,6 +2,7 @@ import logging
 from typing import AbstractSet, Any, Iterable, List, Optional, Sequence, Set, Type, Union
 
 import matplotlib as mpl
+import networkx as nx
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex
@@ -11,7 +12,7 @@ from matplotlib.figure import Figure
 import numpy as np
 
 from stskit.auswertung import Auswertung
-from stskit.anlage import Anlage
+from stskit.dispo.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, \
     AbfahrtAbwarten, AnkunftAbwarten, ZugAbwarten
 from stskit.interface.stsplugin import PluginClient
@@ -269,45 +270,31 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
         self.beginResetModel()
 
         self._root = GleisauswahlItem(self, "root", "")
-        self.alle_gleise = set(anlage.gleiszuordnung.keys())
+        self.alle_gleise = {node[1] for node in self.anlage.bahnhofgraph.nodes if node[0] in {'Gl', 'Agl'}}
 
         if zufahrten:
-            zufahrten_item = GleisauswahlItem(self, "Kategorie", "Zufahrten")
-            self._root.addChild(zufahrten_item)
+            anschluesse_item = GleisauswahlItem(self, "Kategorie", "Anschlüsse")
+            self._root.addChild(anschluesse_item)
 
-            for gruppe, gleise in anlage.anschlussgruppen.items():
-                gruppen_item = GleisauswahlItem(self, "Gruppe", gruppe)
-                zufahrten_item.addChild(gruppen_item)
-                for gleis in sorted(gleise):
-                    gleis_item = GleisauswahlItem(self, "Gleis", gleis)
-                    gruppen_item.addChild(gleis_item)
+            for anst in anlage.bahnhofgraph.anschlussstellen():
+                anst_item = GleisauswahlItem(self, "Anst", anst)
+                anschluesse_item.addChild(anst_item)
+                for agl in sorted(anlage.bahnhofgraph.anschlussgleise(anst)):
+                    agl_item = GleisauswahlItem(self, "Agl", agl)
+                    anst_item.addChild(agl_item)
 
         if bahnsteige:
             bahnsteige_item = GleisauswahlItem(self, "Kategorie", "Bahnsteige")
             self._root.addChild(bahnsteige_item)
 
-            for bahnhof, gleise in anlage.bahnsteiggruppen.items():
-                bahnhof_item = GleisauswahlItem(self, "Gruppe", bahnhof)
-                bahnsteige_item.addChild(bahnhof_item)
-
-                hauptgleise = {}
-                for gleis in sorted(gleise):
-                    hauptgleis = anlage.sektoren.hauptgleis(gleis)
-                    try:
-                        hauptgleis_item = hauptgleise[hauptgleis]
-                    except KeyError:
-                        hauptgleis_item = GleisauswahlItem(self, "Hauptgleis", hauptgleis)
-                        hauptgleise[hauptgleis] = hauptgleis_item
-
-                    gleis_item = GleisauswahlItem(self, "Gleis", gleis)
-                    hauptgleis_item.addChild(gleis_item)
-
-                for hauptgleis in sorted(hauptgleise.keys()):
-                    hauptgleis_item = hauptgleise[hauptgleis]
-                    if hauptgleis_item.childCount() > 1:
-                        bahnhof_item.addChild(hauptgleis_item)
-                    else:
-                        bahnhof_item.addChild(hauptgleis_item.child(0))
+            items = {}
+            for bahnhof in anlage.bahnhofgraph.bahnhoefe():
+                item = GleisauswahlItem(self, "Bf", bahnhof)
+                items[('Bf', bahnhof)] = item
+                for node1, node2 in nx.dfs_edges(anlage.bahnhofgraph, source=('Bf', bahnhof)):
+                    item = GleisauswahlItem(self, node2[0], node2[1])
+                    items[node2] = item
+                    items[node1].addChild(item)
 
         self.endResetModel()
 
@@ -747,9 +734,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.grafik_update()
 
     def set_gleise(self, gleise):
-        hauptgleise = [self.anlage.sektoren.hauptgleis(gleis) for gleis in gleise]
-        gleis_sektoren = sorted(zip(hauptgleise, gleise), key=gleis_sektor_sortkey)
-        self._gleise = [gs[1] for gs in gleis_sektoren]
+        self._gleise = list(gleise)
 
     @pyqtSlot()
     def page_changed(self):

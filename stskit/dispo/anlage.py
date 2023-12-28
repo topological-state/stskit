@@ -1,5 +1,5 @@
 import logging
-import re
+import os
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple
 
 import networkx as nx
@@ -7,6 +7,8 @@ import networkx as nx
 import stskit.interface.stsgraph as stsgraph
 from stskit.interface.stsobj import Knoten
 from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
+from stskit.zugschema import Zugschema
+
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -43,6 +45,22 @@ class Anlage:
         self.bahnhofgraph = stsgraph.BahnhofGraph()
         self.liniengraph = stsgraph.LinienGraph()
 
+        # todo : zugschema
+        # todo : strecken
+        # todo : streckenmarkierung
+
+        self.strecken: Dict[str, Tuple[str]] = {}
+        self.hauptstrecke: str = ""
+        self.streckenmarkierung: Dict[Tuple[str, str], str] = {}
+        self.gleissperrungen: Set[str] = set([])
+
+        self.zugschema = Zugschema()
+
+    def update(self, client: stsgraph.GraphClient, config_path: os.PathLike):
+        # todo : update-frequenz
+        # todo : konfiguration
+        self.graphen_uebernehmen(client.signalgraph, client.bahnsteiggraph, client.liniengraph)
+
     def graphen_uebernehmen(self,
                             signalgraph: stsgraph.SignalGraph,
                             bahnsteiggraph: stsgraph.BahnsteigGraph,
@@ -50,7 +68,11 @@ class Anlage:
 
         self.signalgraph = signalgraph.copy(as_view=False)
         self.bahnsteiggraph = bahnsteiggraph.copy(as_view=False)
+        # todo : bahnhofteile anpassen
         self.liniengraph = liniengraph.copy(as_view=False)
+
+        self.bahnhofgraph_erstellen()
+        self.liniengraph_konfigurieren()
 
     def bahnhofgraph_erstellen(self):
         """
@@ -127,3 +149,6 @@ class Anlage:
             if data['name'] != node[1]:
                 data['name'] = node[1]
                 data['auto'] = False
+
+    def liniengraph_konfigurieren(self):
+        pass

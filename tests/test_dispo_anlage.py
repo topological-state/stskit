@@ -226,6 +226,42 @@ class TestBahnhofGraph(unittest.TestCase):
         result = anlage.bahnhofgraph_konfig_umdrehen(self.gleis_konfig, self.anschluss_konfig)
         self.assertDictEqual(result, self.bahnhof_konfig)
 
+    def test_bahnhofgleise(self):
+        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        result = sorted((gl for gl in self.anlage.bahnhofgraph.bahnhofgleise("A")))
+        expected = sorted(['Aa1a', 'Aa1b', 'Aa2a', 'Aa2b', 'Ab1a'])
+        self.assertListEqual(result, expected)
+
+    def test_bahnhofteilgleise(self):
+        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        result = sorted(self.anlage.bahnhofgraph.bahnhofteilgleise("Aa"))
+        expected = sorted(['Aa1a', 'Aa1b', 'Aa2a', 'Aa2b'])
+        self.assertListEqual(result, expected)
+
+    def test_gleis_bahnhof(self):
+        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        result = self.anlage.bahnhofgraph.gleis_bahnhof("Ab1a")
+        expected = "A"
+        self.assertEqual(result, expected)
+
+    def test_gleis_bahnhofteil(self):
+        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        result = self.anlage.bahnhofgraph.gleis_bahnhofteil("Ab1a")
+        expected = "Ab"
+        self.assertEqual(result, expected)
+
+    def test_gleis_bahnsteig(self):
+        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        result = self.anlage.bahnhofgraph.gleis_bahnsteig("Aa1b")
+        expected = "Aa1"
+        self.assertEqual(result, expected)
+
+    def test_bahnhoefe(self):
+        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        result = sorted(self.anlage.bahnhofgraph.bahnhoefe())
+        expected = sorted(['A', 'B'])
+        self.assertListEqual(result, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

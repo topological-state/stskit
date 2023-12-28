@@ -12,7 +12,7 @@ import logging
 import re
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
 
-from stskit.anlage import Anlage
+from stskit.dispo.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stskit.interface.stsobj import time_to_minutes
 from stskit.zugschema import Zugbeschriftung
@@ -385,6 +385,8 @@ class Gleisbelegung:
         :return: None
         """
 
+        # todo : gleisbelegung
+
         if len(self.gleise) == 0:
             self.gleise_auswaehlen(self.anlage.gleiszuordnung.keys())
         self.slots_erstellen(planung)
@@ -453,6 +455,8 @@ class Gleisbelegung:
 
         :return: None
         """
+
+        # todo : gleisbelegung
 
         self.gleis_slots = {}
         self.hauptgleis_slots = {}

@@ -8,7 +8,8 @@ import networkx as nx
 import numpy as np
 
 from stskit.interface.stsobj import ZugDetails, FahrplanZeile, Ereignis, time_to_seconds
-from stskit.anlage import Anlage, JSONEncoder
+from stskit.dispo.anlage import Anlage
+from stskit.utils.export import JSONEncoder
 
 
 logger = logging.getLogger(__name__)
@@ -390,8 +391,11 @@ class Auswertung:
         self._update_koordinaten()
 
     def _update_koordinaten(self):
-        wegpunkte = {**self.config.bahnsteiggruppen,
-                     **self.config.anschlussgruppen}
+        bahnhoefe = {bahnhof: self.config.bahnhofgraph.bahnhofgleise(bahnhof)
+                     for bahnhof in self.config.bahnhofgraph.bahnhoefe}
+        anschluesse = {anschluss: self.config.bahnhofgraph.anschlussgleise(anschluss)
+                       for anschluss in self.config.bahnhofgraph.anschlussstellen()}
+        wegpunkte = {**bahnhoefe, **anschluesse}
         self.fahrzeiten.set_koordinaten(wegpunkte)
 
     def zuege_uebernehmen(self, zuege: Iterable[ZugDetails]):

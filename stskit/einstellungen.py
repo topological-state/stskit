@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
 from stskit.zugschema import Zugschema, ZugschemaBearbeitungModell
-from stskit.anlage import Anlage
+from stskit.dispo.anlage import Anlage
 from stskit.zentrale import DatenZentrale
 
 from stskit.qt.ui_einstellungen import Ui_EinstellungenWindow
