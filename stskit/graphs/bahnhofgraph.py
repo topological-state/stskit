@@ -108,6 +108,12 @@ class BahnhofGraph(nx.DiGraph):
         else:
             raise KeyError(f"{child_typ} {child_name} ist keinem {parent_typ} zugeordnet")
 
+    def find_root(self, label: Tuple[str, str]) -> Tuple[str, str]:
+        for node in self.predecessors(label):
+            return self.find_root(node)
+        else:
+            return label
+
     def gleis_bahnsteig(self, gleis: str) -> str:
         """
         Zugeordneten Bahnsteig nachschlagen

@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple
+from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
 
 import networkx as nx
 
@@ -9,6 +9,7 @@ from stskit.interface.stsobj import Knoten
 from stskit.graphs.signalgraph import SignalGraph
 from stskit.graphs.bahnhofgraph import BahnhofGraph, BahnsteigGraph
 from stskit.graphs.liniengraph import LinienGraph
+from stskit.graphs.zielgraph import ZielGraph
 from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
 from stskit.zugschema import Zugschema
 
@@ -62,15 +63,17 @@ class Anlage:
     def update(self, client: GraphClient, config_path: os.PathLike):
         # todo : update-frequenz
         # todo : konfiguration
-        self.graphen_uebernehmen(client.signalgraph, client.bahnsteiggraph)
+        self.graphen_uebernehmen(client.signalgraph, client.bahnsteiggraph, client.zielgraph)
 
     def graphen_uebernehmen(self,
                             signalgraph: SignalGraph,
-                            bahnsteiggraph: BahnsteigGraph):
+                            bahnsteiggraph: BahnsteigGraph,
+                            zielgraph: ZielGraph):
 
         self.signalgraph = signalgraph.copy(as_view=False)
         self.bahnsteiggraph = bahnsteiggraph.copy(as_view=False)
-        # todo : bahnhofteile anpassen
+        # todo : zielgraph kann sich zur laufzeit aendern
+        self.zielgraph = zielgraph.copy(as_view=True)
 
         self.bahnhofgraph_erstellen()
         self.liniengraph_konfigurieren()
@@ -151,5 +154,20 @@ class Anlage:
                 data['name'] = node[1]
                 data['auto'] = False
 
+    def label_aus_zielgleis(self, gleis: Union[int, str]) -> Tuple[str, str]:
+        if isinstance(gleis, int):
+            signal_node = self.signalgraph.nodes[gleis]
+            return 'Agl', signal_node.name
+        else:
+            return 'Gl', gleis
+
     def liniengraph_konfigurieren(self):
-        pass
+        """
+        benoetigt zielgraph
+        """
+
+        for ziel1, ziel2, kante in self.zielgraph.edges(data=True):
+            if kante.typ == 'P':
+                bst1 = self.bahnhofgraph.nodes[self.bahnhofgraph.find_root(self.label_aus_zielgleis(ziel1.plan))]
+                bst2 = self.bahnhofgraph.nodes[self.bahnhofgraph.find_root(self.label_aus_zielgleis(ziel2.plan))]
+                self.liniengraph.linie_eintragen(ziel1, bst1, ziel2, bst2)
