@@ -1,5 +1,6 @@
+import itertools
 import logging
-from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple, TypeVar, Union
 
 import networkx as nx
 
@@ -44,6 +45,11 @@ class LinienGraph(nx.Graph):
     """
     node_attr_dict_factory = LinienGraphNode
     edge_attr_dict_factory = LinienGraphEdge
+
+    def __init__(self, incoming_graph_data=None, **attr):
+        super().__init__(incoming_graph_data, **attr)
+
+        self._strecken_cache: Dict[Tuple[str, str], List[str]] = {}
 
     def to_undirected_class(self):
         return self.__class__
@@ -104,3 +110,97 @@ class LinienGraph(nx.Graph):
         self.add_edge(bft1, bft2, **liniendaten)
         self.add_node(bft1, **knoten1_daten)
         self.add_node(bft2, **knoten2_daten)
+
+    def strecke(self, start: Tuple[str, str], ziel: Tuple[str, str]) -> List[Tuple[str, str]]:
+        """
+        Kürzeste Verbindung zwischen zwei Punkten bestimmen
+
+        Start und Ziel sind die Labels zweier beliebiger Knoten im Liniengraph.
+        Die berechnete Strecke ist eine geordnete Liste von Labels.
+
+        Da die Streckenberechnung aufwändig sein kann, werden die Resultate im self._strecken_cache gespeichert.
+        Der Cache muss gelöscht werden, wenn der Graph verändert wird.
+
+        :param start: bahnhof- oder anschlussname
+        :param ziel: bahnhof- oder anschlussname
+        :return: liste von befahrenen gleisgruppen vom start zum ziel.
+            die liste kann leer sein, wenn kein pfad gefunden wurde!
+        """
+
+        try:
+            return self._strecken_cache[(start, ziel)]
+        except KeyError:
+            pass
+
+        try:
+            strecke = nx.shortest_path(self, start, ziel)
+        except nx.NetworkXException:
+            strecke = []
+
+        self._strecken_cache[(start, ziel)] = strecke
+        return strecke
+
+    def strecken_vorschlagen(self, min_fahrten: int = 0, min_laenge: int = 2) -> List[List[Tuple[str, str]]]:
+        """
+        Strecken aus Liniengraph vorschlagen
+
+        Diese Funktion bestimmt die kürzesten Strecken zwischen allen Kombinationen von Anschlüssen.
+        Wenig frequentierte Anschlüsse können ausgeschlossen werden.
+
+        Eine Strecke besteht aus einer Liste von Bahnhöfen inklusive Einfahrt am Anfang und Ausfahrt am Ende.
+        Die Elemente sind Knotenlabels des Liniengraphen.
+
+        :param: min_fahrten: Minimale Anzahl von Fahrten, die ein Anschluss aufweisen muss,
+            um in die Auswahl aufgenommen zu werden.
+            Per default (0), werden auch Strecken zwischen unbenutzten Anschlüssen erstellt.
+
+        :param: min_laenge: Minimale Länge (Anzahl Wegpunkte) einer Strecke.
+            Kürzere Strecken werden ignoriert.
+            Die Defaultlänge 2 liefert auch direkte Strecken zwischen Einfahrt und Ausfahrt.
+
+        :return: Liste von Listen von Liniengraphlabels
+        """
+
+        anschluesse = [x for x, d in self.nodes(data=True) if d.typ == 'Anst']
+        strecken = []
+
+        for ein, aus in itertools.permutations(anschluesse, 2):
+            try:
+                fahrten = min(self.nodes[ein]['fahrten'], self.nodes[aus]['fahrten'])
+            except KeyError:
+                fahrten = -1
+
+            if ein != aus and fahrten >= min_fahrten:
+                strecke = self.strecke(ein, aus)
+                if len(strecke) >= min_laenge:
+                    strecken.append(strecke)
+
+        return strecken
+
+    def strecken_zeitachse(self, strecke: List[Tuple[str, str]], parameter: str = 'fahrzeit_min') -> List[Union[int, float]]:
+        """
+        Distanzen entlang einer Strecke berechnen
+
+        Kumulierte Distanzen der Haltepunkte ab dem ersten Punkt der strecke berechnen.
+        Die Distanz wird als minimale Fahrzeit in Minuten angegeben.
+
+        :param strecke: Liste von Linienpunkten
+        :param parameter: Zu verwendender Zeitparameter, fahrzeit_min, fahrzeit_schnitt, fahrzeit_max.
+        :return: distanz = Fahrzeit in Minuten.
+            Die Liste enthält die gleiche Anzahl Elemente wie die Strecke.
+            Das erste Element ist 0.
+        """
+        kanten = zip(strecke[:-1], strecke[1:])
+        distanz = 0
+        result = [distanz]
+        for u, v in kanten:
+            try:
+                zeit = self[u][v][parameter]
+                distanz += max(1, zeit)
+            except KeyError:
+                logger.warning(f"Verbindung {u}-{v} nicht im Liniengraph.")
+                distanz += 1
+
+            result.append(float(distanz))
+
+        return result

@@ -15,6 +15,7 @@ class BahnsteigGraphNode(dict):
     Klasse der Knotenattribute von BahnsteigGraph und BahnhofGraph
     """
     name = dict_property("name", str, docstring="Name")
+    enr = dict_property("enr", int, docstring="Elementnummer bei Anschlussgleisen. Nur für Agl definiert.")
     typ = dict_property("typ", str, docstring="""
         'Gl': Gleis(sektor)bezeichnung, wie sie in den Fahrplänen vorkommt. Vom Sim deklariert. 
         'Bs': Bahnsteigbezeichnung, fasst Gleissektoren zusammen.
@@ -23,6 +24,9 @@ class BahnsteigGraphNode(dict):
         'Agl': Anschluss- oder Übergabegleis. Vom Sim deklariert.
         'Anst': Anschluss- oder Übergabestelle, fasst Anschlussgleise zusammen auf die ein Zug umdisponiert werden kann. 
         """)
+    auto = dict_property("auto", bool, docstring="True bei automatischer, False bei manueller Konfiguration.")
+    einfahrt = dict_property("einfahrt", bool, docstring="True, wenn das Gleis eine Einfahrt ist. Nur für Agl definiert.")
+    ausfahrt = dict_property("ausfahrt", bool, docstring="True, wenn das Gleis eine Ausfahrt ist. Nur für Agl definiert.")
     sperrung = dict_property("sperrung", bool, docstring="Gleissperrung")
 
 
@@ -98,6 +102,13 @@ class BahnhofGraph(nx.DiGraph):
     def to_undirected_class(self):
         return BahnsteigGraph
 
+    @staticmethod
+    def label(typ: str, name: str) -> Tuple[str, str]:
+        """
+        Das Label Besteht aus Typ und Name des BahnsteigGraphNode.
+        """
+        return typ, name
+
     def find_parent_name(self, child_typ: str, child_name: str, parent_typ: str) -> str:
         """
         Übergeordnetes Element finden
@@ -109,6 +120,13 @@ class BahnhofGraph(nx.DiGraph):
             raise KeyError(f"{child_typ} {child_name} ist keinem {parent_typ} zugeordnet")
 
     def find_root(self, label: Tuple[str, str]) -> Tuple[str, str]:
+        """
+        Stammelement suchen
+
+        Das Stammelement hat die höchste Hierarchiestufe im Baum.
+        :param label: Ausgangselement
+        :return:
+        """
         for node in self.predecessors(label):
             return self.find_root(node)
         else:
@@ -160,6 +178,14 @@ class BahnhofGraph(nx.DiGraph):
         """
         for parent, child in nx.dfs_edges(self, ('Anst', anst)):
             if child[0] == 'Agl':
+                yield child[1]
+
+    def gruppengleise(self, gruppe: Tuple[str, str]) -> Iterable[str]:
+        """
+        Listet die zu einem Gruppenelement gehörenden Gleise auf.
+        """
+        for parent, child in nx.dfs_edges(self, gruppe):
+            if child[0] in {'Agl', 'Gl'}:
                 yield child[1]
 
     def bahnhoefe(self) -> Iterable[str]:

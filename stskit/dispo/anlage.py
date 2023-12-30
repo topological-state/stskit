@@ -10,7 +10,7 @@ from stskit.interface.stsgraph import GraphClient
 from stskit.interface.stsobj import Knoten, AnlagenInfo
 from stskit.graphs.signalgraph import SignalGraph
 from stskit.graphs.bahnhofgraph import BahnhofGraph, BahnsteigGraph
-from stskit.graphs.liniengraph import LinienGraph
+from stskit.graphs.liniengraph import LinienGraph, LinienGraphEdge
 from stskit.graphs.zielgraph import ZielGraph
 from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
 from stskit.utils.export import json_object_hook
@@ -56,18 +56,15 @@ class Anlage:
         self.liniengraph: Optional[LinienGraph] = None
         self.zielgraph: Optional[ZielGraph] = None
 
-        # todo : zugschema
-        # todo : strecken
+        # todo : streckenkonfiguration
         # todo : streckenmarkierung
 
-        self.strecken: Dict[str, Tuple[str]] = {}
-        self.hauptstrecke: str = ""
-        self.streckenmarkierung: Dict[Tuple[str, str], str] = {}
-        self.gleissperrungen: Set[str] = set([])
+        self.strecken: Dict[Tuple[Tuple[str, str], Tuple[str, str]], List[Tuple[str, str]]] = {}
+        self.hauptstrecke: Optional[Tuple[Tuple[str, str], Tuple[str, str]]] = None
+        self.streckenmarkierung: Dict[Tuple[Tuple[str, str], Tuple[str, str]], str] = {}
+        self.gleissperrungen: Set[Tuple[str, str]] = set()
 
         self.zugschema = Zugschema()
-
-        self._verbindungsstrecke_cache: Dict[Tuple[str, str], List[str]] = {}
 
     def update(self, client: GraphClient, config_path: os.PathLike):
         # todo : konfiguration speichern
@@ -108,9 +105,13 @@ class Anlage:
 
         if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
             self.liniengraph_konfigurieren()
+            self.liniengraph_mit_signalgraph_abgleichen()
 
-        # if len(self.strecken) == 0:
-        #     self.strecken_aus_bahnhofgraph()
+        if len(self.strecken) == 0 and self.liniengraph:
+            strecken = self.liniengraph.strecken_vorschlagen(2, 3)
+            for strecke in strecken:
+                key = (strecke[0], strecke[-1])
+                self.strecken[key] = strecke
 
     def bahnhofgraph_erstellen(self):
         """
@@ -134,9 +135,9 @@ class Anlage:
                 self.bahnhofgraph.add_edge(('Bs', bs), ('Gl', gleis), typ='Bs', auto=True)
 
         for anschluss, data in self.signalgraph.nodes(data=True):
-            if data['typ'] in {Knoten.TYP_NUMMER['Einfahrt'], Knoten.TYP_NUMMER['Ausfahrt']}:
-                agl = data['name']
-                agl_data = dict(name=agl, typ='Agl', auto=True)
+            if data.typ in {Knoten.TYP_NUMMER['Einfahrt'], Knoten.TYP_NUMMER['Ausfahrt']}:
+                agl = data.name
+                agl_data = dict(name=agl, typ='Agl', enr=data.enr, auto=True)
                 if data['typ'] == Knoten.TYP_NUMMER['Einfahrt']:
                     agl_data['einfahrt'] = True
                 if data['typ'] == Knoten.TYP_NUMMER['Ausfahrt']:
@@ -205,6 +206,45 @@ class Anlage:
                 bst1 = self.bahnhofgraph.nodes[self.bahnhofgraph.find_root(self.label_aus_zielgleis(ziel1.plan))]
                 bst2 = self.bahnhofgraph.nodes[self.bahnhofgraph.find_root(self.label_aus_zielgleis(ziel2.plan))]
                 self.liniengraph.linie_eintragen(ziel1, bst1, ziel2, bst2)
+
+    def liniengraph_mit_signalgraph_abgleichen(self):
+        bearbeiten = {(ziel1, ziel2): kante for ziel1, ziel2, kante in self.liniengraph.edges(data=True)}
+
+        while bearbeiten:
+            ziel1, ziel2 = next(iter(bearbeiten))
+            kante = bearbeiten[(ziel1, ziel2)]
+
+            gleis1 = self.bahnhofgraph.gruppengleise(ziel1)
+            gleis1_data = self.bahnhofgraph.nodes[gleis1]
+            signal1 = gleis1_data.enr if gleis1_data.typ == "Agl" else gleis1_data.name
+
+            gleis2 = self.bahnhofgraph.gruppengleise(ziel2)
+            gleis2_data = self.bahnhofgraph.nodes[gleis2]
+            signal2 = gleis2_data.enr if gleis2_data.typ == "Agl" else gleis2_data.name
+
+            signal_strecke = nx.shortest_path(self.signalgraph, signal1, signal2)
+
+            for signal in signal_strecke:
+                signal_data = self.signalgraph.nodes[signal]
+                if signal_data.typ in {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}:
+                    zwischenziel = self.bahnhofgraph.find_root(BahnhofGraph.label('Gl', signal_data.name))
+
+                    neue_kante = LinienGraphEdge()
+                    neue_kante.update(kante)
+                    neue_kante.fahrzeit_max = kante.fahrzeit_max / 2
+                    neue_kante.fahrzeit_min = kante.fahrzeit_min / 2
+                    neue_kante.fahrzeit_summe = kante.fahrzeit_summe / 2
+                    neue_kante.fahrzeit_schnitt = kante.fahrzeit_schnitt / 2
+
+                    if not self.liniengraph.has_edge(ziel1, zwischenziel):
+                        self.liniengraph.add_edge(ziel1, zwischenziel, **neue_kante)
+                        bearbeiten[(ziel1, zwischenziel)] = neue_kante
+
+                    if not self.liniengraph.has_edge(zwischenziel, ziel2):
+                        self.liniengraph.add_edge(zwischenziel, ziel2, **neue_kante)
+                        bearbeiten[(zwischenziel, ziel2)] = neue_kante
+
+                    self.liniengraph.remove_edge(ziel1, ziel2)
 
     def load_config(self, path: os.PathLike, load_graphs=False, ignore_version=False):
         """
