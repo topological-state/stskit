@@ -1,3 +1,4 @@
+import itertools
 import logging
 from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, TypeVar, Union
 
@@ -93,6 +94,8 @@ class BahnhofGraph(nx.DiGraph):
     Die ungerichtete Variante ist der BahnsteigGraph.
     """
 
+    # todo : abstrakte Wurzelelemente 'Anlage', 'Bahnhöfe', 'Anschlüsse' einführen?
+
     node_attr_dict_factory = BahnsteigGraphNode
     edge_attr_dict_factory = BahnsteigGraphEdge
 
@@ -131,6 +134,39 @@ class BahnhofGraph(nx.DiGraph):
             return self.find_root(node)
         else:
             return label
+
+    def find_name(self, name: str) -> Optional[Tuple[str, str]]:
+        """
+        Betriebsstelle nach Namen suchen.
+
+        Wenn der Tzp nicht bekannt ist.
+        Sucht zuerst in den Bahnhöfen und Anschlussstellen, dann in den weiteren Hierarchie.
+
+        :param name: Name der Betriebsstelle
+        :return: Label (Typ und Name) der Betriebsstelle oder None
+        """
+
+        for node in self.nodes:
+            if node[0] == 'Bf' and node[1] == name:
+                return node
+
+        bahnhoefe = [n for n in self.nodes if n[0] == 'Bf']
+        anschluesse = [n for n in self.nodes if n[0] == 'Anst']
+
+        node = ('Bf', name)
+        if node in bahnhoefe:
+            return node
+
+        node = ('Anst', name)
+        if node in anschluesse:
+            return node
+
+        for node in bahnhoefe + anschluesse:
+            for u, v in nx.bfs_edges(self, node):
+                if v[1] == name:
+                    return v
+
+        return None
 
     def gleis_bahnsteig(self, gleis: str) -> str:
         """
@@ -180,13 +216,13 @@ class BahnhofGraph(nx.DiGraph):
             if child[0] == 'Agl':
                 yield child[1]
 
-    def gruppengleise(self, gruppe: Tuple[str, str]) -> Iterable[str]:
+    def gruppengleise(self, gruppe: Tuple[str, str]) -> Iterable[Tuple[str, str]]:
         """
         Listet die zu einem Gruppenelement gehörenden Gleise auf.
         """
         for parent, child in nx.dfs_edges(self, gruppe):
             if child[0] in {'Agl', 'Gl'}:
-                yield child[1]
+                yield child
 
     def bahnhoefe(self) -> Iterable[str]:
         """

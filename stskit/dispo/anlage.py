@@ -50,11 +50,11 @@ class Anlage:
         self.anlageninfo: Optional[AnlagenInfo] = None
         self.config: Dict[str, Any] = {}
 
-        self.signalgraph: Optional[SignalGraph] = None
-        self.bahnsteiggraph: Optional[BahnsteigGraph] = None
-        self.bahnhofgraph: Optional[BahnhofGraph] = None
-        self.liniengraph: Optional[LinienGraph] = None
-        self.zielgraph: Optional[ZielGraph] = None
+        self.signalgraph = SignalGraph()
+        self.bahnsteiggraph = BahnsteigGraph()
+        self.bahnhofgraph = BahnhofGraph()
+        self.liniengraph = LinienGraph()
+        self.zielgraph = ZielGraph()
 
         # todo : streckenkonfiguration
         # todo : streckenmarkierung
@@ -74,7 +74,7 @@ class Anlage:
 
         if not self.config and config_path:
             config_path = Path(config_path)
-            default_path = Path(__file__).parent / "config"
+            default_path = Path(__file__).parent.parent / "config"
             try:
                 logger.info(f"Konfiguration laden von {config_path}")
                 self.load_config(config_path)
@@ -90,7 +90,7 @@ class Anlage:
 
             Zugschema.find_schemas(default_path)
             Zugschema.find_schemas(config_path)
-            self.zugschema.load_config(self.config['zugschema'], self.anlageninfo.region)
+            self.zugschema.load_config(self.config.get('zugschema', ''), self.anlageninfo.region)
 
         if not self.signalgraph:
             self.signalgraph = client.signalgraph.copy(as_view=False)
@@ -98,12 +98,16 @@ class Anlage:
             self.bahnsteiggraph = client.bahnsteiggraph.copy(as_view=False)
         if not self.bahnhofgraph and self.signalgraph and self.bahnsteiggraph:
             self.bahnhofgraph_erstellen()
-            self.bahnhofgraph_konfigurieren(self.config['bahnhofgraph'])
+            try:
+                self.bahnhofgraph_konfigurieren(self.config['bahnhofgraph'])
+            except KeyError:
+                logger.warning("keine bahnhofkonfiguration gefunden")
 
         # todo : zielgraph kann sich zur laufzeit aendern
         self.zielgraph = client.zielgraph.copy(as_view=True)
 
         if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
+            # todo : fehler: anschluesse bleiben Agl statt Anst!
             self.liniengraph_konfigurieren()
             self.liniengraph_mit_signalgraph_abgleichen()
 
@@ -112,13 +116,14 @@ class Anlage:
             for strecke in strecken:
                 key = (strecke[0], strecke[-1])
                 self.strecken[key] = strecke
+            self.strecken_konfigurieren()
 
     def bahnhofgraph_erstellen(self):
         """
         Initialisiert den Bahnhofgraphen aus dem Bahnsteiggraphen
 
         """
-        self.bahnhofgraph.clear()
+        self.bahnhofgraph = BahnhofGraph()
         
         for comp in nx.connected_components(self.bahnsteiggraph):
             bft = default_bahnsteigname(sorted(comp)[0])
@@ -201,11 +206,13 @@ class Anlage:
         benoetigt zielgraph
         """
 
-        for ziel1, ziel2, kante in self.zielgraph.edges(data=True):
+        for node1, node2, kante in self.zielgraph.edges(data=True):
             if kante.typ == 'P':
-                bst1 = self.bahnhofgraph.nodes[self.bahnhofgraph.find_root(self.label_aus_zielgleis(ziel1.plan))]
-                bst2 = self.bahnhofgraph.nodes[self.bahnhofgraph.find_root(self.label_aus_zielgleis(ziel2.plan))]
-                self.liniengraph.linie_eintragen(ziel1, bst1, ziel2, bst2)
+                data1 = self.zielgraph.nodes[node1]
+                data2 = self.zielgraph.nodes[node2]
+                bst1 = self.bahnhofgraph.nodes[self.bahnhofgraph.find_root(self.label_aus_zielgleis(data1.plan))]
+                bst2 = self.bahnhofgraph.nodes[self.bahnhofgraph.find_root(self.label_aus_zielgleis(data2.plan))]
+                self.liniengraph.linie_eintragen(data1, bst1, data2, bst2)
 
     def liniengraph_mit_signalgraph_abgleichen(self):
         bearbeiten = {(ziel1, ziel2): kante for ziel1, ziel2, kante in self.liniengraph.edges(data=True)}
@@ -213,18 +220,26 @@ class Anlage:
         while bearbeiten:
             ziel1, ziel2 = next(iter(bearbeiten))
             kante = bearbeiten[(ziel1, ziel2)]
+            del bearbeiten[(ziel1, ziel2)]
 
-            gleis1 = self.bahnhofgraph.gruppengleise(ziel1)
+            try:
+                # todo : anschlussgleise werden hier nicht richtig behandelt, weil zieltyp == 'Agl'
+                gleis1 = sorted(self.bahnhofgraph.gruppengleise(ziel1))[0]
+            except IndexError:
+                continue
             gleis1_data = self.bahnhofgraph.nodes[gleis1]
             signal1 = gleis1_data.enr if gleis1_data.typ == "Agl" else gleis1_data.name
 
-            gleis2 = self.bahnhofgraph.gruppengleise(ziel2)
+            try:
+                gleis2 = sorted(self.bahnhofgraph.gruppengleise(ziel2))[0]
+            except IndexError:
+                continue
             gleis2_data = self.bahnhofgraph.nodes[gleis2]
             signal2 = gleis2_data.enr if gleis2_data.typ == "Agl" else gleis2_data.name
 
             signal_strecke = nx.shortest_path(self.signalgraph, signal1, signal2)
 
-            for signal in signal_strecke:
+            for signal in signal_strecke[1:-1]:
                 signal_data = self.signalgraph.nodes[signal]
                 if signal_data.typ in {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}:
                     zwischenziel = self.bahnhofgraph.find_root(BahnhofGraph.label('Gl', signal_data.name))
@@ -245,6 +260,26 @@ class Anlage:
                         bearbeiten[(zwischenziel, ziel2)] = neue_kante
 
                     self.liniengraph.remove_edge(ziel1, ziel2)
+
+    def strecken_konfigurieren(self):
+        for titel, konfig in self.config['strecken']:
+            strecke = []
+            for name in konfig:
+                if self.bahnhofgraph.has_node(node := ('Bf', name)):
+                    strecke.append(node)
+                elif self.bahnhofgraph.has_node(node := ('Anst', name)):
+                    strecke.append(node)
+            key = (strecke[0], strecke[-1])
+            self.strecken[key] = strecke
+
+            if titel == self.config['hauptstrecke']:
+                self.hauptstrecke = key
+
+        for namen, markierung in self.config['streckenmarkierung']:
+            node1 = self.bahnhofgraph.find_name(namen[0])
+            node2 = self.bahnhofgraph.find_name(namen[1])
+            if node1 is not None and node2 is not None:
+                self.streckenmarkierung[(node1, node2)] = markierung
 
     def load_config(self, path: os.PathLike, load_graphs=False, ignore_version=False):
         """
@@ -268,13 +303,6 @@ class Anlage:
             assert d['_aid'] == self.anlageninfo.aid
             if self.anlageninfo.build != d['_build']:
                 logger.warning(f"unterschiedliche build-nummern (file: {d['_build']}, sim: {self.anlageninfo.build})")
-                try:
-                    self.konfiguration_abgleichen(d)
-                except ValueError:
-                    print(f"inkompatible konfigurationsdatei - auto-konfiguration")
-                    logger.error(f"inkompatible konfigurationsdatei - auto-konfiguration")
-                    return
-
             if '_version' not in d:
                 d['_version'] = 1
                 logger.warning(f"konfigurationsdatei ohne versionsangabe. nehme 1 an.")
@@ -283,7 +311,7 @@ class Anlage:
                 return
 
         if d['_version'] == 2:
-            self.config = d
+            self.set_config_v2(d)
         elif d['_version'] == 3:
             self.config = d
 
@@ -303,18 +331,17 @@ class Anlage:
             sektoren = {}
 
         try:
-            for bf, gl in d['bahnsteiggruppen'].items():
-                if bf not in gleis_konfig:
-                    gleis_konfig[bf] = {bf: {}}
-                bs = _find_sektor(gl, sektoren)
-                if not bs:
-                    bs = gl
-                try:
-                    gleis_konfig[bf][bf][bs].add(gl)
-                except KeyError:
-                    gleis_konfig[bf][bf][bs] = {gl}
-
-            gleis_konfig.update(d['bahnsteiggruppen'])
+            for bf, gleise in d['bahnsteiggruppen'].items():
+                for gl in gleise:
+                    if bf not in gleis_konfig:
+                        gleis_konfig[bf] = {bf: {}}
+                    bs = _find_sektor(gl, sektoren)
+                    if not bs:
+                        bs = gl
+                    try:
+                        gleis_konfig[bf][bf][bs].add(gl)
+                    except KeyError:
+                        gleis_konfig[bf][bf][bs] = {gl}
         except KeyError:
             logger.info("Fehlende Bahnsteiggruppen-Konfiguration")
 
@@ -350,4 +377,4 @@ class Anlage:
         try:
             self.config['zugschema'] = d['zugschema']
         except KeyError:
-            pass
+            self.config['zugschema'] = ''

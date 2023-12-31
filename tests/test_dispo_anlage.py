@@ -63,10 +63,10 @@ class TestBahnhofGraph(unittest.TestCase):
         alg.bahnsteiggraph.add_edge('Ba1a', 'Ba1b', typ='Nachbar', distanz=0)
 
         # original signalgraph (minimal)
-        alg.signalgraph.add_node('A1', typ=6, name='A1')
-        alg.signalgraph.add_node('A2', typ=7, name='A2')
-        alg.signalgraph.add_node('B1', typ=6, name='B1')
-        alg.signalgraph.add_node('B1', typ=7, name='B1')
+        alg.signalgraph.add_node('A1', typ=6, name='A1', enr=21)
+        alg.signalgraph.add_node('A2', typ=7, name='A2', enr=22)
+        alg.signalgraph.add_node('B1', typ=6, name='B1', enr=31)
+        alg.signalgraph.add_node('B1', typ=7, name='B1', enr=32)
 
         # bahnhofgraph aus original bahnsteig- und signalgraphen
         alg.bahnhofgraph.add_node(('Gl', 'Aa1a'), typ='Gl', name='Aa1a', auto=True)
