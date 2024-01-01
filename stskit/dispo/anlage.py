@@ -1,3 +1,4 @@
+import collections
 import json
 import logging
 import os
@@ -142,6 +143,17 @@ class Anlage:
                 self.liniengraph.linie_eintragen(ziel1_data, bst1_data, ziel2_data, bst2_data)
 
     def liniengraph_mit_signalgraph_abgleichen(self):
+        mapping = {}
+        for gleis, gleis_data in self.bahnhofgraph.nodes(data=True):
+            if gleis[0] in {'Gl', 'Agl'}:
+                bst = self.bahnhofgraph.find_superior(gleis, {'Bf', 'Anst'})
+                if gleis[0] == 'Gl':
+                    mapping[gleis_data.name] = bst
+                elif gleis[0] == 'Agl':
+                    mapping[gleis_data.enr] = bst
+        signalgraph_einfach = nx.relabel_nodes(self.signalgraph, mapping)
+        signalgraph_einfach.remove_edges_from(nx.selfloop_edges(signalgraph_einfach))
+        
         bearbeiten = {(ziel1, ziel2): kante for ziel1, ziel2, kante in self.liniengraph.edges(data=True)}
 
         while bearbeiten:
@@ -149,27 +161,9 @@ class Anlage:
             kante = bearbeiten[(ziel1, ziel2)]
             del bearbeiten[(ziel1, ziel2)]
 
-            try:
-                gleis1 = sorted(self.bahnhofgraph.list_children(ziel1, {'Gl', 'Agl'}))[0]
-            except IndexError:
-                continue
-            gleis1_data = self.bahnhofgraph.nodes[gleis1]
-            signal1 = gleis1_data.enr if gleis1_data.typ == "Agl" else gleis1_data.name
-
-            try:
-                gleis2 = sorted(self.bahnhofgraph.list_children(ziel2, {'Gl', 'Agl'}))[0]
-            except IndexError:
-                continue
-            gleis2_data = self.bahnhofgraph.nodes[gleis2]
-            signal2 = gleis2_data.enr if gleis2_data.typ == "Agl" else gleis2_data.name
-
-            signal_strecke = nx.shortest_path(self.signalgraph, signal1, signal2)
-
-            for signal in signal_strecke[1:-1]:
-                signal_data = self.signalgraph.nodes[signal]
-                if signal_data.typ in {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}:
-                    zwischenziel = self.bahnhofgraph.find_superior(('Gl', signal_data.name), {'Bf', 'Agl'})
-
+            signal_strecke = nx.shortest_path(signalgraph_einfach, ziel1, ziel2)
+            for zwischenziel in signal_strecke[1:-1]:
+                if isinstance(zwischenziel, collections.abc.Sequence) and zwischenziel[0] in {'Bf', 'Anst'}:
                     neue_kante = LinienGraphEdge()
                     neue_kante.update(kante)
                     neue_kante.fahrzeit_max = kante.fahrzeit_max / 2
@@ -188,7 +182,7 @@ class Anlage:
                     self.liniengraph.remove_edge(ziel1, ziel2)
 
     def strecken_konfigurieren(self):
-        for titel, konfig in self.config['strecken']:
+        for titel, konfig in self.config['strecken'].items():
             strecke = []
             for name in konfig:
                 if self.bahnhofgraph.has_node(node := ('Bf', name)):
@@ -201,7 +195,7 @@ class Anlage:
             if titel == self.config['hauptstrecke']:
                 self.hauptstrecke = key
 
-        for namen, markierung in self.config['streckenmarkierung']:
+        for namen, markierung in self.config['streckenmarkierung'].items():
             node1 = self.bahnhofgraph.find_name(namen[0])
             node2 = self.bahnhofgraph.find_name(namen[1])
             if node1 is not None and node2 is not None:
@@ -283,22 +277,25 @@ class Anlage:
             self.config['strecken'] = d['strecken']
         except KeyError:
             logger.info("Fehlende Streckenkonfiguration")
+            self.config['strecken'] = {}
         try:
             self.config['hauptstrecke'] = d['hauptstrecke']
         except KeyError:
             logger.info("Keine Hauptstrecke konfiguriert")
+            self.config['hauptstrecke'] = ""
         try:
             markierungen = d['streckenmarkierung']
         except KeyError:
             logger.info("keine streckenmarkierungen konfiguriert")
-        else:
-            streckenmarkierung = {}
-            for markierung in markierungen:
-                try:
-                    streckenmarkierung[(markierung[0], markierung[1])] = markierung[2]
-                except IndexError:
-                    pass
-            self.config['streckenmarkierung'] = streckenmarkierung
+            markierungen = []
+
+        streckenmarkierung = {}
+        for markierung in markierungen:
+            try:
+                streckenmarkierung[(markierung[0], markierung[1])] = markierung[2]
+            except IndexError:
+                pass
+        self.config['streckenmarkierung'] = streckenmarkierung
 
         try:
             self.config['zugschema'] = d['zugschema']
