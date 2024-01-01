@@ -97,9 +97,11 @@ class Anlage:
         if not self.bahnsteiggraph:
             self.bahnsteiggraph = client.bahnsteiggraph.copy(as_view=False)
         if not self.bahnhofgraph and self.signalgraph and self.bahnsteiggraph:
-            self.bahnhofgraph_erstellen()
+            self.bahnhofgraph.import_anlageninfo(self.anlageninfo)
+            self.bahnhofgraph.import_bahnsteiggraph(self.bahnsteiggraph, default_bahnsteigname, default_bahnhofname)
+            self.bahnhofgraph.import_signalgraph(self.signalgraph, default_anschlussname)
             try:
-                self.bahnhofgraph_konfigurieren(self.config['bahnhofgraph'])
+                self.bahnhofgraph.konfigurieren(self.config['bahnhofgraph'])
             except KeyError:
                 logger.warning("keine bahnhofkonfiguration gefunden")
 
@@ -107,7 +109,6 @@ class Anlage:
         self.zielgraph = client.zielgraph.copy(as_view=True)
 
         if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
-            # todo : fehler: anschluesse bleiben Agl statt Anst!
             self.liniengraph_konfigurieren()
             self.liniengraph_mit_signalgraph_abgleichen()
 
@@ -117,82 +118,6 @@ class Anlage:
                 key = (strecke[0], strecke[-1])
                 self.strecken[key] = strecke
             self.strecken_konfigurieren()
-
-    def bahnhofgraph_erstellen(self):
-        """
-        Initialisiert den Bahnhofgraphen aus dem Bahnsteiggraphen
-
-        """
-        self.bahnhofgraph = BahnhofGraph()
-        
-        for comp in nx.connected_components(self.bahnsteiggraph):
-            bft = default_bahnsteigname(sorted(comp)[0])
-            bf = default_bahnhofname(bft)
-            self.bahnhofgraph.add_node(('Bf', bf), name=bf, typ='Bf', auto=True)
-            self.bahnhofgraph.add_node(('Bft', bft), name=bft, typ='Bft', auto=True)
-            self.bahnhofgraph.add_edge(('Bf', bf), ('Bft', bft), typ='Bf', auto=True)
-            
-            for gleis in comp:
-                bs = default_bahnsteigname(gleis)
-                self.bahnhofgraph.add_node(('Bs', bs), name=bs, typ='Bs', auto=True)
-                self.bahnhofgraph.add_node(('Gl', gleis), name=gleis, typ='Gl', auto=True)
-                self.bahnhofgraph.add_edge(('Bft', bft), ('Bs', bs), typ='Bft', auto=True)
-                self.bahnhofgraph.add_edge(('Bs', bs), ('Gl', gleis), typ='Bs', auto=True)
-
-        for anschluss, data in self.signalgraph.nodes(data=True):
-            if data.typ in {Knoten.TYP_NUMMER['Einfahrt'], Knoten.TYP_NUMMER['Ausfahrt']}:
-                agl = data.name
-                agl_data = dict(name=agl, typ='Agl', enr=data.enr, auto=True)
-                if data['typ'] == Knoten.TYP_NUMMER['Einfahrt']:
-                    agl_data['einfahrt'] = True
-                if data['typ'] == Knoten.TYP_NUMMER['Ausfahrt']:
-                    agl_data['ausfahrt'] = True
-
-                anst = default_anschlussname(agl)
-                self.bahnhofgraph.add_node(('Agl', agl), **agl_data)
-                self.bahnhofgraph.add_node(('Anst', anst), name=anst, typ='Anst', auto=True)
-                self.bahnhofgraph.add_edge(('Agl', agl), ('Anst', anst), typ='Anst', auto=True)
-
-    def bahnhofgraph_konfigurieren(self, config: Dict[Tuple[str, str], Tuple[str, ...]]) -> None:
-        """
-        Modifiziert den Bahnhofgraphen anhand von Konfigurationsdaten
-
-        :param config: Mapping von STS-Gleisnamen zu Tupel (Bahnsteig, Bahnhofteil, Bahnhof) bzw. (Anschlussstelle)
-        """
-
-        relabeling = {}
-
-        def bahnhof_ast(graph: nx.Graph, gl: Tuple[str, str]) -> Optional[List[Tuple[str, str]]]:
-            """
-            Finde den Bf bzw. Anst-Knoten und gib den Pfad zum Gleisknoten zurück.
-            :param graph: Bahnhofgraph
-            :param gl: Gleislabel (typ, name)
-            :return: Liste von Bahnhofgraphlabels von Bf zu Gl, bzw. Anst zu Agl
-            """
-
-            try:
-                pfade = nx.shortest_path(graph, target=gl)
-            except nx.NodeNotFound:
-                return None
-
-            for key, pfad in pfade.items():
-                if key[0] in {'Bf', 'Anst'}:
-                    return pfad
-
-        for gleis, bf_bft_bs in config.items():
-            ast = bahnhof_ast(self.bahnhofgraph, gleis)
-            if ast:
-                for label_alt, name_neu in zip(ast, bf_bft_bs):
-                    typ, name_alt = label_alt
-                    if name_neu != name_alt:
-                        relabeling[label_alt] = (typ, name_neu)
-
-        nx.relabel_nodes(self.bahnhofgraph, relabeling, copy=False)
-
-        for node, data in self.bahnhofgraph.nodes(data=True):
-            if data['name'] != node[1]:
-                data['name'] = node[1]
-                data['auto'] = False
 
     def label_aus_zielgleis(self, gleis: Union[int, str]) -> Tuple[str, str]:
         if isinstance(gleis, int):
@@ -208,11 +133,13 @@ class Anlage:
 
         for node1, node2, kante in self.zielgraph.edges(data=True):
             if kante.typ == 'P':
-                data1 = self.zielgraph.nodes[node1]
-                data2 = self.zielgraph.nodes[node2]
-                bst1 = self.bahnhofgraph.nodes[self.bahnhofgraph.find_root(self.label_aus_zielgleis(data1.plan))]
-                bst2 = self.bahnhofgraph.nodes[self.bahnhofgraph.find_root(self.label_aus_zielgleis(data2.plan))]
-                self.liniengraph.linie_eintragen(data1, bst1, data2, bst2)
+                ziel1_data = self.zielgraph.nodes[node1]
+                ziel2_data = self.zielgraph.nodes[node2]
+                bst1 = self.bahnhofgraph.find_superior(self.label_aus_zielgleis(ziel1_data.plan), {'Bf', 'Anst'})
+                bst2 = self.bahnhofgraph.find_superior(self.label_aus_zielgleis(ziel2_data.plan), {'Bf', 'Anst'})
+                bst1_data = self.bahnhofgraph.nodes[bst1]
+                bst2_data = self.bahnhofgraph.nodes[bst2]
+                self.liniengraph.linie_eintragen(ziel1_data, bst1_data, ziel2_data, bst2_data)
 
     def liniengraph_mit_signalgraph_abgleichen(self):
         bearbeiten = {(ziel1, ziel2): kante for ziel1, ziel2, kante in self.liniengraph.edges(data=True)}
@@ -223,15 +150,14 @@ class Anlage:
             del bearbeiten[(ziel1, ziel2)]
 
             try:
-                # todo : anschlussgleise werden hier nicht richtig behandelt, weil zieltyp == 'Agl'
-                gleis1 = sorted(self.bahnhofgraph.gruppengleise(ziel1))[0]
+                gleis1 = sorted(self.bahnhofgraph.list_children(ziel1, {'Gl', 'Agl'}))[0]
             except IndexError:
                 continue
             gleis1_data = self.bahnhofgraph.nodes[gleis1]
             signal1 = gleis1_data.enr if gleis1_data.typ == "Agl" else gleis1_data.name
 
             try:
-                gleis2 = sorted(self.bahnhofgraph.gruppengleise(ziel2))[0]
+                gleis2 = sorted(self.bahnhofgraph.list_children(ziel2, {'Gl', 'Agl'}))[0]
             except IndexError:
                 continue
             gleis2_data = self.bahnhofgraph.nodes[gleis2]
@@ -242,7 +168,7 @@ class Anlage:
             for signal in signal_strecke[1:-1]:
                 signal_data = self.signalgraph.nodes[signal]
                 if signal_data.typ in {Knoten.TYP_NUMMER["Bahnsteig"], Knoten.TYP_NUMMER["Haltepunkt"]}:
-                    zwischenziel = self.bahnhofgraph.find_root(BahnhofGraph.label('Gl', signal_data.name))
+                    zwischenziel = self.bahnhofgraph.find_superior(('Gl', signal_data.name), {'Bf', 'Agl'})
 
                     neue_kante = LinienGraphEdge()
                     neue_kante.update(kante)

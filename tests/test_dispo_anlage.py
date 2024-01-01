@@ -1,6 +1,8 @@
 import unittest
 import networkx as nx
 import stskit.dispo.anlage as anlage
+from stskit.interface.stsobj import AnlagenInfo
+from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
 
 
 class TestBahnhofGraph(unittest.TestCase):
@@ -46,6 +48,8 @@ class TestBahnhofGraph(unittest.TestCase):
         }
 
         alg = anlage.Anlage()
+        alg.anlageninfo = AnlagenInfo()
+        alg.anlageninfo.name = 'Testanlage'
 
         # original bahnsteiggraph
 
@@ -69,6 +73,12 @@ class TestBahnhofGraph(unittest.TestCase):
         alg.signalgraph.add_node('B1', typ=7, name='B1', enr=32)
 
         # bahnhofgraph aus original bahnsteig- und signalgraphen
+        alg.bahnhofgraph.add_node(('Anl', 'Testanlage'), typ='Anl', name='Testanlage', auto=True)
+        alg.bahnhofgraph.add_node(('Bst', 'Bf'), typ='Bst', name='Bf', auto=True)
+        alg.bahnhofgraph.add_node(('Bst', 'Anst'), typ='Bst', name='Anst', auto=True)
+        alg.bahnhofgraph.add_edge(('Anl', 'Testanlage'), ('Bst', 'Bf'), typ='Anl', auto=True)
+        alg.bahnhofgraph.add_edge(('Anl', 'Testanlage'), ('Bst', 'Anst'), typ='Anl', auto=True)
+
         alg.bahnhofgraph.add_node(('Gl', 'Aa1a'), typ='Gl', name='Aa1a', auto=True)
         alg.bahnhofgraph.add_node(('Gl', 'Aa1b'), typ='Gl', name='Aa1b', auto=True)
         alg.bahnhofgraph.add_node(('Gl', 'Aa2a'), typ='Gl', name='Aa2a', auto=True)
@@ -88,6 +98,9 @@ class TestBahnhofGraph(unittest.TestCase):
         alg.bahnhofgraph.add_node(('Bf', 'Ab'), typ='Bf', name='Ab', auto=True)
         alg.bahnhofgraph.add_node(('Bf', 'Ba'), typ='Bf', name='Ba', auto=True)
 
+        alg.bahnhofgraph.add_edge(('Bst', 'Bf'), ('Bf', 'Aa'), typ='Bst', auto=True)
+        alg.bahnhofgraph.add_edge(('Bst', 'Bf'), ('Bf', 'Ab'), typ='Bst', auto=True)
+        alg.bahnhofgraph.add_edge(('Bst', 'Bf'), ('Bf', 'Ba'), typ='Bst', auto=True)
         alg.bahnhofgraph.add_edge(('Bf', 'Aa'), ('Bft', 'Aa1'), typ='Bf', auto=True)
         alg.bahnhofgraph.add_edge(('Bf', 'Ab'), ('Bft', 'Ab1'), typ='Bf', auto=True)
         alg.bahnhofgraph.add_edge(('Bf', 'Ba'), ('Bft', 'Ba1'), typ='Bf', auto=True)
@@ -114,6 +127,8 @@ class TestBahnhofGraph(unittest.TestCase):
         alg.bahnhofgraph.add_node(('Anst', 'A'), typ='Anst', name='A', auto=True)
         alg.bahnhofgraph.add_node(('Anst', 'B'), typ='Anst', name='B', auto=True)
 
+        alg.bahnhofgraph.add_edge(('Bst', 'Anst'), ('Anst', 'A'), typ='Bst', auto=True)
+        alg.bahnhofgraph.add_edge(('Bst', 'Anst'), ('Anst', 'B'), typ='Bst', auto=True)
         alg.bahnhofgraph.add_edge(('Anst', 'A'), ('Agl', 'A1'), typ='Anst', auto=True)
         alg.bahnhofgraph.add_edge(('Anst', 'A'), ('Agl', 'A2'), typ='Anst', auto=True)
         alg.bahnhofgraph.add_edge(('Anst', 'B'), ('Agl', 'B1'), typ='Anst', auto=True)
@@ -122,8 +137,10 @@ class TestBahnhofGraph(unittest.TestCase):
 
     def test_bahnhofgraph_erstellen(self):
         expectedgraph = self.anlage.bahnhofgraph.copy()
-        self.anlage.bahnhofgraph.clear()
-        self.anlage.bahnhofgraph_erstellen()
+        self.anlage.bahnhofgraph.add_node(('Anl', 'Testanlage'), typ='Anl', name='Testanlage', auto=True)
+        self.anlage.bahnhofgraph.import_anlageninfo(self.anlage.anlageninfo)
+        self.anlage.bahnhofgraph.import_bahnsteiggraph(self.anlage.bahnsteiggraph, default_bahnsteigname, default_bahnhofname)
+        self.anlage.bahnhofgraph.import_signalgraph(self.anlage.signalgraph, default_anschlussname)
         resultgraph = self.anlage.bahnhofgraph
 
         self.assertListEqual(sorted(expectedgraph.nodes), sorted(resultgraph.nodes))
@@ -164,10 +181,18 @@ class TestBahnhofGraph(unittest.TestCase):
 
             (('Anst', 'A'), ('Agl', 'A1')),
             (('Anst', 'A'), ('Agl', 'A2')),
-            (('Anst', 'B'), ('Agl', 'B1'))
+            (('Anst', 'B'), ('Agl', 'B1')),
+
+            (('Bst', 'Bf'), ('Bf', 'A')),
+            (('Bst', 'Bf'), ('Bf', 'B')),
+            (('Bst', 'Anst'), ('Anst', 'A')),
+            (('Bst', 'Anst'), ('Anst', 'B')),
+
+            (('Anl', 'Testanlage'), ('Bst', 'Bf')),
+            (('Anl', 'Testanlage'), ('Bst', 'Anst')),
         ]
 
-        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        self.anlage.bahnhofgraph.konfigurieren(self.bahnhof_konfig)
         result = nx.to_edgelist(self.anlage.bahnhofgraph)
 
         result_edges = [tuple(sorted([t[0], t[1]])) for t in result]
@@ -199,7 +224,16 @@ class TestBahnhofGraph(unittest.TestCase):
             (('Bf', 'B'), ('Bft', 'Ba')),
 
             (('Anst', 'A'), ('Agl', 'A2')),
-            (('Anst', 'B'), ('Agl', 'B1'))
+            (('Anst', 'B'), ('Agl', 'B1')),
+
+            (('Bst', 'Bf'), ('Bf', 'A')),
+            (('Bst', 'Bf'), ('Bf', 'Ab')),
+            (('Bst', 'Bf'), ('Bf', 'B')),
+            (('Bst', 'Anst'), ('Anst', 'A')),
+            (('Bst', 'Anst'), ('Anst', 'B')),
+
+            (('Anl', 'Testanlage'), ('Bst', 'Bf')),
+            (('Anl', 'Testanlage'), ('Bst', 'Anst'))
         ]
 
         # konfigurierte gleise, die in der anlage nicht mehr vorhanden sind
@@ -215,7 +249,7 @@ class TestBahnhofGraph(unittest.TestCase):
         del self.bahnhof_konfig[('Agl', 'B1')]
         del self.bahnhof_konfig[('Gl', 'Ab1a')]
 
-        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        self.anlage.bahnhofgraph.konfigurieren(self.bahnhof_konfig)
         result = nx.to_edgelist(self.anlage.bahnhofgraph)
 
         result_edges = [tuple(sorted([t[0], t[1]])) for t in result]
@@ -227,37 +261,37 @@ class TestBahnhofGraph(unittest.TestCase):
         self.assertDictEqual(result, self.bahnhof_konfig)
 
     def test_bahnhofgleise(self):
-        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        self.anlage.bahnhofgraph.konfigurieren(self.bahnhof_konfig)
         result = sorted((gl for gl in self.anlage.bahnhofgraph.bahnhofgleise("A")))
         expected = sorted(['Aa1a', 'Aa1b', 'Aa2a', 'Aa2b', 'Ab1a'])
         self.assertListEqual(result, expected)
 
     def test_bahnhofteilgleise(self):
-        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        self.anlage.bahnhofgraph.konfigurieren(self.bahnhof_konfig)
         result = sorted(self.anlage.bahnhofgraph.bahnhofteilgleise("Aa"))
         expected = sorted(['Aa1a', 'Aa1b', 'Aa2a', 'Aa2b'])
         self.assertListEqual(result, expected)
 
     def test_gleis_bahnhof(self):
-        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        self.anlage.bahnhofgraph.konfigurieren(self.bahnhof_konfig)
         result = self.anlage.bahnhofgraph.gleis_bahnhof("Ab1a")
         expected = "A"
         self.assertEqual(result, expected)
 
     def test_gleis_bahnhofteil(self):
-        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        self.anlage.bahnhofgraph.konfigurieren(self.bahnhof_konfig)
         result = self.anlage.bahnhofgraph.gleis_bahnhofteil("Ab1a")
         expected = "Ab"
         self.assertEqual(result, expected)
 
     def test_gleis_bahnsteig(self):
-        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        self.anlage.bahnhofgraph.konfigurieren(self.bahnhof_konfig)
         result = self.anlage.bahnhofgraph.gleis_bahnsteig("Aa1b")
         expected = "Aa1"
         self.assertEqual(result, expected)
 
     def test_bahnhoefe(self):
-        self.anlage.bahnhofgraph_konfigurieren(self.bahnhof_konfig)
+        self.anlage.bahnhofgraph.konfigurieren(self.bahnhof_konfig)
         result = sorted(self.anlage.bahnhofgraph.bahnhoefe())
         expected = sorted(['A', 'B'])
         self.assertListEqual(result, expected)
