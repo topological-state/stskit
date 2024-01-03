@@ -12,6 +12,9 @@ import logging
 import re
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
 
+import networkx
+import networkx as nx
+
 from stskit.dispo.anlage import Anlage
 from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung
 from stskit.interface.stsobj import time_to_minutes
@@ -106,7 +109,7 @@ class Slot:
         self.zug = zug
         self.ziel = ziel
         self.zugstamm = set([])
-        self.gleistyp = ziel.gleistyp
+        self.gleistyp = "Agl" if ziel.einfahrt or ziel.ausfahrt else "Gl"
         self.gleis = ziel.gleis
         self.zeit = 0
         self.dauer = 0
@@ -215,11 +218,11 @@ class Slot:
         return f"{name} ({von} - {nach}): {fp}"
 
 
-WARNUNG_STATUS = ['undefiniert', 'gleis', 'hauptgleis', 'ersatz', 'kuppeln', 'flügeln', 'fdl-markiert', 'fdl-ignoriert']
+WARNUNG_STATUS = ['undefiniert', 'gleis', 'bahnsteig', 'ersatz', 'kuppeln', 'flügeln', 'fdl-markiert', 'fdl-ignoriert']
 WARNUNG_VERBINDUNG = {'E': 'ersatz', 'K': 'kuppeln', 'F': 'flügeln'}
 WARNUNG_FARBE = {'undefiniert': 'gray',
                  'gleis': 'red',
-                 'hauptgleis': 'orange',
+                 'bahnsteig': 'orange',
                  'ersatz': 'darkblue',
                  'kuppeln': 'magenta',
                  'flügeln': 'darkgreen',
@@ -227,7 +230,7 @@ WARNUNG_FARBE = {'undefiniert': 'gray',
                  'fdl-ignoriert': 'gray'}
 WARNUNG_BREITE = {'undefiniert': 1,
                   'gleis': 2,
-                  'hauptgleis': 2,
+                  'bahnsteig': 2,
                   'ersatz': 1,
                   'kuppeln': 2,
                   'flügeln': 2,
@@ -308,9 +311,6 @@ class SlotWarnung:
         return WARNUNG_BREITE[self.status]
 
 
-GLEIS_TYPEN = {'haupt', 'sektor', 'zufahrt'}
-
-
 class Gleisbelegung:
     """
     gleisbelegungsmodell
@@ -388,7 +388,8 @@ class Gleisbelegung:
         # todo : gleisbelegung
 
         if len(self.gleise) == 0:
-            self.gleise_auswaehlen(self.anlage.gleiszuordnung.keys())
+            root_label = self.anlage.bahnhofgraph.root()
+            self.gleise_auswaehlen(self.anlage.bahnhofgraph.list_children(root_label, {'Agl', 'Gl'}))
         self.slots_erstellen(planung)
         self.slots_formatieren()
         self.warnungen_aktualisieren()
@@ -464,16 +465,24 @@ class Gleisbelegung:
 
         for gleis in self.gleise:
             self.gleis_slots[gleis] = {}
-            hauptgleis = self.anlage.sektoren.hauptgleis(gleis)
-            self.hauptgleis_slots[hauptgleis] = {}
+            try:
+                hauptgleis = self.anlage.bahnhofgraph.find_superior(('Gl', gleis), {'Bs'})
+                self.hauptgleis_slots[hauptgleis] = {}
+            except nx.NetworkXException:
+                pass
 
         for slot in self.slots.values():
-            gleis = slot.ziel.gleis
-            hauptgleis = self.anlage.sektoren.hauptgleis(gleis)
             key = slot.key
+            gleis = slot.ziel.gleis
             self.gleis_slots[gleis][key] = slot
-            self.hauptgleis_slots[hauptgleis][key] = slot
             self.belegte_gleise.add(gleis)
+
+            try:
+                hauptgleis = self.anlage.bahnhofgraph.find_superior(('Gl', gleis), {'Bs'})
+            except nx.NetworkXException:
+                pass
+            else:
+                self.hauptgleis_slots[hauptgleis][key] = slot
 
     def slots_formatieren(self):
         # todo : erweitern und bereinigen
@@ -538,10 +547,12 @@ class Gleisbelegung:
 
         for gleis, slot_dict in self.gleis_slots.items():
             slots = slot_dict.values()
-            if gleis in self.anlage.anschlusszuordnung.keys():
-                yield from self._zufahrtwarnungen(slots)
-            else:
-                yield from self._gleiswarnungen(slots)
+            gl = self.anlage.bahnhofgraph.find_name(gleis)
+            if gl is not None:
+                if gl[0] == 'Agl':
+                    yield from self._zufahrtwarnungen(slots)
+                else:
+                    yield from self._gleiswarnungen(slots)
 
         for gleis, slot_dict in self.hauptgleis_slots.items():
             slots = slot_dict.values()
@@ -588,7 +599,7 @@ class Gleisbelegung:
             if s2.zug.zid in s1.zugstamm:
                 pass
             elif s1.zeit <= s2.zeit <= s1.zeit + s1.dauer:
-                k = SlotWarnung(gleise={s1.gleis, s2.gleis}, status="hauptgleis")
+                k = SlotWarnung(gleise={s1.gleis, s2.gleis}, status="bahnsteig")
                 k.zeit = max(s1.zeit, s2.zeit)
                 k.dauer = min(s1.zeit + s1.dauer, s2.zeit + s2.dauer) - k.zeit
                 k.slots = {s1, s2}

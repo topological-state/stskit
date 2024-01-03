@@ -392,7 +392,7 @@ class Auswertung:
 
     def _update_koordinaten(self):
         bahnhoefe = {bahnhof: self.config.bahnhofgraph.bahnhofgleise(bahnhof)
-                     for bahnhof in self.config.bahnhofgraph.bahnhoefe}
+                     for bahnhof in self.config.bahnhofgraph.bahnhoefe()}
         anschluesse = {anschluss: self.config.bahnhofgraph.anschlussgleise(anschluss)
                        for anschluss in self.config.bahnhofgraph.anschlussstellen()}
         wegpunkte = {**bahnhoefe, **anschluesse}

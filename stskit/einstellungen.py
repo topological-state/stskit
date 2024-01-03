@@ -37,7 +37,10 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
         self.ui.tab_widget.removeTab(1)
         self.ui.tab_widget.removeTab(0)
 
-        self.setWindowTitle(f"Einstellungen {self.anlage.anlage.name}")
+        try:
+            self.setWindowTitle(f"Einstellungen {self.anlage.anlageninfo.name}")
+        except AttributeError:
+            self.setWindowTitle(f"Einstellungen")
 
         self.zugschema = Zugschema()
         self.zugschema.load_config(self.anlage.zugschema.name)

@@ -57,11 +57,8 @@ class Anlage:
         self.liniengraph = LinienGraph()
         self.zielgraph = ZielGraph()
 
-        # todo : streckenkonfiguration
-        # todo : streckenmarkierung
-
-        self.strecken: Dict[Tuple[Tuple[str, str], Tuple[str, str]], List[Tuple[str, str]]] = {}
-        self.hauptstrecke: Optional[Tuple[Tuple[str, str], Tuple[str, str]]] = None
+        self.strecken: Dict[str, List[Tuple[str, str]]] = {}
+        self.hauptstrecke: Optional[str] = None
         self.streckenmarkierung: Dict[Tuple[Tuple[str, str], Tuple[str, str]], str] = {}
         self.gleissperrungen: Set[Tuple[str, str]] = set()
 
@@ -116,7 +113,7 @@ class Anlage:
         if len(self.strecken) == 0 and self.liniengraph:
             strecken = self.liniengraph.strecken_vorschlagen(2, 3)
             for strecke in strecken:
-                key = (strecke[0], strecke[-1])
+                key = f"{strecke[0][1]}-{strecke[-1][1]}"
                 self.strecken[key] = strecke
             self.strecken_konfigurieren()
 
@@ -179,7 +176,10 @@ class Anlage:
                         self.liniengraph.add_edge(zwischenziel, ziel2, **neue_kante)
                         bearbeiten[(zwischenziel, ziel2)] = neue_kante
 
-                    self.liniengraph.remove_edge(ziel1, ziel2)
+                    try:
+                        self.liniengraph.remove_edge(ziel1, ziel2)
+                    except nx.NetworkXError:
+                        pass
 
     def strecken_konfigurieren(self):
         for titel, konfig in self.config['strecken'].items():
@@ -189,7 +189,7 @@ class Anlage:
                     strecke.append(node)
                 elif self.bahnhofgraph.has_node(node := ('Anst', name)):
                     strecke.append(node)
-            key = (strecke[0], strecke[-1])
+            key = f"{strecke[0][1]}-{strecke[-1][1]}"
             self.strecken[key] = strecke
 
             if titel == self.config['hauptstrecke']:

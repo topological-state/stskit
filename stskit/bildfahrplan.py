@@ -8,6 +8,7 @@ from PyQt5.QtCore import pyqtSlot
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
+import networkx as nx
 from PyQt5 import QtWidgets
 
 from stskit.auswertung import Auswertung
@@ -148,7 +149,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self._pick_event: bool = False
 
         # bahnhofname -> distanz [minuten]
-        self._strecke: List[str] = []
+        self._strecke: List[Tuple[str, str]] = []
         self._distanz: List[float] = []
         self._zuglaeufe: Dict[Tuple[int, int], List[Trasse]] = {}
 
@@ -280,9 +281,14 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             except KeyError:
                 strecke = []
 
-        self._strecke_von = strecke[0]
-        self._strecke_nach = strecke[-1]
-        self._strecke_via = ""
+        try:
+            self._strecke_von = strecke[0][1]
+            self._strecke_nach = strecke[-1][1]
+            self._strecke_via = ""
+        except IndexError:
+            self._strecke_von = ""
+            self._strecke_nach = ""
+            self._strecke_via = ""
 
         self.update_widgets()
 
@@ -378,27 +384,27 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             if self._strecke_via:
                 von_gleis = self._strecke_von
                 nach_gleis = self._strecke_via
-                strecke1 = self.anlage.verbindungsstrecke(von_gleis, nach_gleis)
+                strecke1 = self.anlage.liniengraph.strecke(von_gleis, nach_gleis)
                 von_gleis = self._strecke_via
                 nach_gleis = self._strecke_nach
-                strecke2 = self.anlage.verbindungsstrecke(von_gleis, nach_gleis)
+                strecke2 = self.anlage.liniengraph.strecke(von_gleis, nach_gleis)
                 strecke = [*strecke1[:-1], *strecke2]
             else:
                 von_gleis = self._strecke_von
                 nach_gleis = self._strecke_nach
-                strecke = self.anlage.verbindungsstrecke(von_gleis, nach_gleis)
+                strecke = self.anlage.liniengraph.strecke(von_gleis, nach_gleis)
             titel = f"Bildfahrplan {self._strecke_von}-{self._strecke_nach}"
         else:
             strecke = []
             titel = "Bildfahrplan (keine Strecke ausgewählt)"
 
         self.ui.strecke_list.clear()
-        self.ui.strecke_list.addItems(strecke)
+        self.ui.strecke_list.addItems((p[1] for p in strecke))
 
         if len(strecke):
-            sd = self.anlage.get_strecken_distanzen(strecke)
+            sd = self.anlage.liniengraph.strecken_zeitachse(strecke, parameter='fahrzeit_schnitt')
             self._strecke = strecke
-            self._distanz = [v / 60 for v in sd]
+            self._distanz = sd
 
         self.setWindowTitle(titel)
         self.update_actions()
@@ -428,8 +434,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             trasse.titel = format_label(self.zugbeschriftung, trasse.start, trasse.ziel)
 
             try:
-                gruppe1 = self.anlage.bahnhofgraph.gleis_bahnhof(plan1.gleis)
-            except KeyError:
+                gleis1 = self.anlage.bahnhofgraph.find_name(plan1.gleis)
+                gruppe1 = self.anlage.bahnhofgraph.find_superior(gleis1, {'Bf', 'Anst'})
+            except (KeyError, nx.NetworkXError):
                 logger.warning(f"gleis {plan1.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
                 gruppe1 = ""
             try:
@@ -443,8 +450,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                 continue
 
             try:
-                gruppe2 = self.anlage.bahnhofgraph.gleis_bahnhof(plan2.gleis)
-            except KeyError:
+                gleis2 = self.anlage.bahnhofgraph.find_name(plan2.gleis)
+                gruppe2 = self.anlage.bahnhofgraph.find_superior(gleis2, {'Bf', 'Anst'})
+            except (KeyError, nx.NetworkXError):
                 logger.warning(f"gleis {plan2.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
                 gruppe2 = ""
             try:
@@ -505,7 +513,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     def grafik_update(self):
         self._axes.clear()
 
-        x_labels = self._strecke
+        x_labels = [s for _, s in self._strecke]
         x_labels_pos = self._distanz
 
         self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
@@ -524,7 +532,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             return
 
         try:
-            idx = self._strecke.index(self._strecke_via)
+            idx = x_labels.index(self._strecke_via)
         except ValueError:
             pass
         else:
@@ -621,8 +629,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         h = max(ylim) - min(ylim)
         for strecke, art in markierungen.items():
             try:
-                x1 = x_labels_pos[x_labels.index(strecke[0])]
-                x2 = x_labels_pos[x_labels.index(strecke[1])]
+                x1 = x_labels_pos[x_labels.index(strecke[0][1])]
+                x2 = x_labels_pos[x_labels.index(strecke[1][1])]
                 xy = (x1, min(ylim))
                 w = x2 - x1
             except ValueError:

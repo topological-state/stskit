@@ -1,5 +1,5 @@
 import logging
-from typing import AbstractSet, Any, Iterable, List, Optional, Sequence, Set, Type, Union
+from typing import AbstractSet, Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple, Type, Union
 
 import matplotlib as mpl
 import networkx as nx
@@ -58,7 +58,7 @@ def weginfo_kurz(zug: ZugDetailsPlanung, gleis_index: int) -> str:
 
 
 class GleisauswahlItem:
-    TYPEN = {"root", "Kategorie", "Gruppe", "Hauptgleis", "Gleis"}
+    TYPEN = {"root", "Kat", "Anst", "Agl", "Bf", "Bft", "Bs", "Gl"}
 
     def __init__(self, modell: 'GleisauswahlModell', typ: str, name: str):
         super().__init__()
@@ -270,10 +270,12 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
         self.beginResetModel()
 
         self._root = GleisauswahlItem(self, "root", "")
-        self.alle_gleise = {node[1] for node in self.anlage.bahnhofgraph.nodes if node[0] in {'Gl', 'Agl'}}
+        self.alle_gleise = {node[1] for node in anlage.bahnhofgraph.nodes if node[0] in {'Gl', 'Agl'}}
+
+        items: Dict[Tuple[str, str], GleisauswahlItem] = {}
 
         if zufahrten:
-            anschluesse_item = GleisauswahlItem(self, "Kategorie", "Anschlüsse")
+            anschluesse_item = GleisauswahlItem(self, "Kat", "Anschlüsse")
             self._root.addChild(anschluesse_item)
 
             for anst in anlage.bahnhofgraph.anschlussstellen():
@@ -284,17 +286,14 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
                     anst_item.addChild(agl_item)
 
         if bahnsteige:
-            bahnsteige_item = GleisauswahlItem(self, "Kategorie", "Bahnsteige")
+            bahnsteige_item = GleisauswahlItem(self, "Kat", "Bahnsteige")
             self._root.addChild(bahnsteige_item)
+            items[('Bst', 'Bf')] = bahnsteige_item
 
-            items = {}
-            for bahnhof in anlage.bahnhofgraph.bahnhoefe():
-                item = GleisauswahlItem(self, "Bf", bahnhof)
-                items[('Bf', bahnhof)] = item
-                for node1, node2 in nx.dfs_edges(anlage.bahnhofgraph, source=('Bf', bahnhof)):
-                    item = GleisauswahlItem(self, node2[0], node2[1])
-                    items[node2] = item
-                    items[node1].addChild(item)
+            for node1, node2 in nx.dfs_edges(anlage.bahnhofgraph, source=('Bst', 'Bf')):
+                item = GleisauswahlItem(self, node2[0], node2[1])
+                items[node2] = item
+                items[node1].addChild(item)
 
         self.endResetModel()
 
@@ -326,12 +325,12 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
 
         return gleise
 
-    def set_sperrungen(self, gleissperrungen: AbstractSet[str]) -> None:
+    def set_sperrungen(self, gleissperrungen: AbstractSet[Tuple[str, str]]) -> None:
         for item in self.gleis_items():
-            item.sperrung = item.name in gleissperrungen
+            item.sperrung = (item.typ, item.name) in gleissperrungen
 
-    def get_sperrungen(self) -> Set[str]:
-        sperrungen = (item.name for item in self.gleis_items() if item.sperrung and item.typ == "Gleis")
+    def get_sperrungen(self) -> Set[Tuple[str, str]]:
+        sperrungen = ((item.typ, item.name) for item in self.gleis_items() if item.sperrung and item.typ == "Gl")
         return set(sperrungen)
 
 

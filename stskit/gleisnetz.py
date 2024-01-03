@@ -210,17 +210,25 @@ class BahnhofDiagramm:
     def draw_graph(self, graph: BahnhofGraph):
         self.axes.clear()
 
-        node_colors = {key: self.colormap.get(typ, "tab:gray")
-                       for key, typ in graph.nodes(data='typ', default='?')}
-        node_labels = {key: name
-                       for key, name in graph.nodes(data='name', default='?')}
-
+        elements = {'Bf', 'Bft', 'Bs', 'Gl', 'Anst', 'Agl'}
+        node_colors = {}
+        node_labels = {}
         partitions_dict = {}
         for node, data in graph.nodes(data=True):
-            try:
-                partitions_dict[data.typ].add(node)
-            except KeyError:
-                partitions_dict[data.typ] = {node}
+            if node[0] in elements:
+                key = f"{node[0]}/{node[1]}"
+                node_labels[key] = data.name
+                node_colors[key] = self.colormap.get(data.typ, "tab:gray")
+
+                try:
+                    partitions_dict[data.typ].add(key)
+                except KeyError:
+                    partitions_dict[data.typ] = {key}
+
+        edges = [(f"{u[0]}/{u[1]}", f"{v[0]}/{v[1]}")
+                 for u, v in graph.edges
+                 if u[0] in elements and v[0] in elements]
+
         partitions = [
             sorted(partitions_dict['Bf']),
             sorted(partitions_dict['Bft']),
@@ -230,15 +238,20 @@ class BahnhofDiagramm:
             sorted(partitions_dict['Agl'])
         ]
 
-        node_positions = netgraph.get_multipartite_layout(list(graph.edges()), partitions,
-                                                          reduce_edge_crossings=True)
+        node_label_fontdict = {"size": 10}
+        edge_label_fontdict = {"size": 10, "bbox": {"boxstyle": "circle",
+                                                    "fc": mpl.rcParams["axes.facecolor"],
+                                                    "ec": mpl.rcParams["axes.facecolor"]}}
+
+        node_positions = netgraph.get_multipartite_layout(edges, partitions)
         node_positions = {node: (x, -y) for node, (y, x) in node_positions.items()}
-        self.netgraph = netgraph.InteractiveGraph(graph, ax=self.axes,
+        self.netgraph = netgraph.InteractiveGraph(edges,
+                                                  ax=self.axes,
                                                   node_layout=node_positions,
                                                   node_color=node_colors,
                                                   node_edge_width=0.0,
                                                   node_labels=node_labels,
-                                                  #node_label_fontdict=node_label_fontdict,
+                                                  node_label_fontdict=node_label_fontdict,
                                                   node_size=1,
                                                   edge_color=mpl.rcParams['text.color'],
                                                   edge_width=0.2,
@@ -392,10 +405,10 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
             #     self.signal_diagramm.draw_graph(self.anlage.signalgraph, self.anlage.bahnsteiggraph)
 
             if self.anlage.bahnhofgraph and not self.bahnhof_diagramm.netgraph:
-                self.bahnhof_diagramm.draw_graph(self.anlage.signalgraph)
+                self.bahnhof_diagramm.draw_graph(self.anlage.bahnhofgraph)
 
             if self.anlage.liniengraph and not self.linien_diagramm.netgraph:
-                self.linien_diagramm.draw_graph(self.anlage.liniengraph, self.anlage.bahnsteiggraph)
+                self.linien_diagramm.draw_graph(self.anlage.liniengraph)
         except AttributeError as e:
             print(e)
 
