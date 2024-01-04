@@ -332,6 +332,11 @@ class BahnhofGraph(nx.DiGraph):
             ast = bahnhof_ast(self, gleis)
             if ast:
                 for label_alt, name_neu in zip(ast, bf_bft_bs):
+                    # die alten konfigurationsdaten unterscheiden nicht zwischen Bf und Bft.
+                    # die bahnhofsnamen sind mit einem fragezeichen markiert.
+                    if name_neu.endswith("?"):
+                        bf_neu = name_neu[:-1]
+                        continue
                     typ, name_alt = label_alt
                     if name_neu != name_alt:
                         relabeling[label_alt] = (typ, name_neu)
@@ -342,3 +347,24 @@ class BahnhofGraph(nx.DiGraph):
             if data['name'] != node[1]:
                 data['name'] = node[1]
                 data['auto'] = False
+
+    def bereinigen(self):
+        """
+        Fehler im Graph bereinigen
+
+        - Mehrfache eingehende Kanten: Behalte die Kante zum Knoten mit dem kürzesten Namen und lösche die anderen.
+
+        :return:
+        """
+
+        kanten_entfernen = []
+
+        for node, data in self.nodes(data=True):
+            preds = list(self.predecessors(node))
+            if len(preds) > 1:
+                keep = min(sorted(preds), key=lambda n: len(n[1]))
+                preds.remove(keep)
+                for pred in preds:
+                    kanten_entfernen.append((pred, node))
+
+        self.remove_edges_from(kanten_entfernen)

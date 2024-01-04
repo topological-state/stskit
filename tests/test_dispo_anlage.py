@@ -144,8 +144,8 @@ class TestBahnhofGraph(unittest.TestCase):
         resultgraph = self.anlage.bahnhofgraph
 
         self.assertListEqual(sorted(expectedgraph.nodes), sorted(resultgraph.nodes))
-        expected_edges = sorted([tuple(sorted([t[0], t[1]])) for t in nx.to_edgelist(expectedgraph)])
-        result_edges = sorted([tuple(sorted([t[0], t[1]])) for t in nx.to_edgelist(resultgraph)])
+        expected_edges = sorted(nx.to_edgelist(expectedgraph))
+        result_edges = sorted(nx.to_edgelist(resultgraph))
         self.assertListEqual(result_edges, expected_edges)
 
         result_dict = dict(resultgraph.nodes(data='name', default='???'))
@@ -195,9 +195,9 @@ class TestBahnhofGraph(unittest.TestCase):
         self.anlage.bahnhofgraph.konfigurieren(self.bahnhof_konfig)
         result = nx.to_edgelist(self.anlage.bahnhofgraph)
 
-        result_edges = [tuple(sorted([t[0], t[1]])) for t in result]
-        expected_edges = [tuple(sorted([t[0], t[1]])) for t in expected]
-        self.assertListEqual(sorted(result_edges), sorted(expected_edges))
+        result_edges = sorted(((t[0], t[1]) for t in result))
+        expected_edges = sorted(((t[0], t[1]) for t in expected))
+        self.assertListEqual(result_edges, expected_edges)
 
     def test_bahnhofgraph_konfigurieren_2(self):
         """
@@ -252,9 +252,66 @@ class TestBahnhofGraph(unittest.TestCase):
         self.anlage.bahnhofgraph.konfigurieren(self.bahnhof_konfig)
         result = nx.to_edgelist(self.anlage.bahnhofgraph)
 
-        result_edges = [tuple(sorted([t[0], t[1]])) for t in result]
-        expected_edges = [tuple(sorted([t[0], t[1]])) for t in expected]
-        self.assertListEqual(sorted(result_edges), sorted(expected_edges))
+        result_edges = sorted(((t[0], t[1]) for t in result))
+        expected_edges = sorted(((t[0], t[1]) for t in expected))
+        self.assertListEqual(result_edges, expected_edges)
+
+    def test_bahnhofgraph_konfigurieren_3(self):
+        """
+        Bahnhofgraph konfigurieren: automatische Bahnhofszuordnung passt nicht.
+        """
+
+        konfig = {
+            ('Gl', 'Aa1a'): ('A', 'Aa', 'Aa1'),
+            ('Gl', 'Aa1b'): ('A', 'Aa', 'Aa1'),
+            ('Gl', 'Aa2a'): ('A', 'Aa', 'Aa2'),
+            ('Gl', 'Aa2b'): ('A', 'Aa', 'Aa2'),
+            ('Gl', 'Ab1a'): ('C', 'Ab', 'Ab1'),
+            ('Gl', 'Ba1a'): ('B', 'Ba', 'Ba1'),
+            ('Gl', 'Ba1b'): ('B', 'Ba', 'Ba1'),
+            ('Agl', 'A1'): ('A',),
+            ('Agl', 'A2'): ('A',),
+            ('Agl', 'B1'): ('B',)
+        }
+
+        expected = [
+            (('Bs', 'Aa1'), ('Gl', 'Aa1a')),
+            (('Bs', 'Aa1'), ('Gl', 'Aa1b')),
+            (('Bs', 'Aa2'), ('Gl', 'Aa2a')),
+            (('Bs', 'Aa2'), ('Gl', 'Aa2b')),
+            (('Bs', 'Ab1'), ('Gl', 'Ab1a')),
+            (('Bs', 'Ba1'), ('Gl', 'Ba1a')),
+            (('Bs', 'Ba1'), ('Gl', 'Ba1b')),
+
+            (('Bft', 'Aa'), ('Bs', 'Aa1')),
+            (('Bft', 'Aa'), ('Bs', 'Aa2')),
+            (('Bft', 'Ab'), ('Bs', 'Ab1')),
+            (('Bft', 'Ba'), ('Bs', 'Ba1')),
+
+            (('Bf', 'A'), ('Bft', 'Aa')),
+            (('Bf', 'C'), ('Bft', 'Ab')),
+            (('Bf', 'B'), ('Bft', 'Ba')),
+
+            (('Anst', 'A'), ('Agl', 'A1')),
+            (('Anst', 'A'), ('Agl', 'A2')),
+            (('Anst', 'B'), ('Agl', 'B1')),
+
+            (('Bst', 'Bf'), ('Bf', 'A')),
+            (('Bst', 'Bf'), ('Bf', 'B')),
+            (('Bst', 'Bf'), ('Bf', 'C')),
+            (('Bst', 'Anst'), ('Anst', 'A')),
+            (('Bst', 'Anst'), ('Anst', 'B')),
+
+            (('Anl', 'Testanlage'), ('Bst', 'Bf')),
+            (('Anl', 'Testanlage'), ('Bst', 'Anst')),
+        ]
+
+        self.anlage.bahnhofgraph.konfigurieren(konfig)
+        result = nx.to_edgelist(self.anlage.bahnhofgraph)
+
+        result_edges = sorted(((t[0], t[1]) for t in result))
+        expected_edges = sorted(((t[0], t[1]) for t in expected))
+        self.assertListEqual(result_edges, expected_edges)
 
     def test_bahnhofgraph_konfig_umdrehen(self):
         result = anlage.bahnhofgraph_konfig_umdrehen(self.gleis_konfig, self.anschluss_konfig)

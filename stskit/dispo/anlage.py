@@ -126,7 +126,10 @@ class Anlage:
 
     def liniengraph_konfigurieren(self):
         """
-        benoetigt zielgraph
+        Erstellt den Liniengraphen aus dem Zielgraphen.
+
+        Jede Strecke aus dem Zielgraphen wird in eine Relation zwischen Bahnhöfen bzw. Anschlussstellen übersetzt
+        und als Linie eingefügt.
         """
 
         for node1, node2, kante in self.zielgraph.edges(data=True):
@@ -135,11 +138,17 @@ class Anlage:
                 ziel2_data = self.zielgraph.nodes[node2]
                 bst1 = self.bahnhofgraph.find_superior(self.label_aus_zielgleis(ziel1_data.plan), {'Bf', 'Anst'})
                 bst2 = self.bahnhofgraph.find_superior(self.label_aus_zielgleis(ziel2_data.plan), {'Bf', 'Anst'})
-                bst1_data = self.bahnhofgraph.nodes[bst1]
-                bst2_data = self.bahnhofgraph.nodes[bst2]
-                self.liniengraph.linie_eintragen(ziel1_data, bst1_data, ziel2_data, bst2_data)
+                if bst1 != bst2:
+                    bst1_data = self.bahnhofgraph.nodes[bst1]
+                    bst2_data = self.bahnhofgraph.nodes[bst2]
+                    self.liniengraph.linie_eintragen(ziel1_data, bst1_data, ziel2_data, bst2_data)
 
     def liniengraph_mit_signalgraph_abgleichen(self):
+        """
+        Liniengraph mittels Signalgraph vereinfachen.
+
+        Die Methode trennt die Linien auf, die gemäss Signalgraphen über andere Haltestellen verlaufen.
+        """
         mapping = {}
         for gleis, gleis_data in self.bahnhofgraph.nodes(data=True):
             if gleis[0] in {'Gl', 'Agl'}:
@@ -158,7 +167,11 @@ class Anlage:
             kante = bearbeiten[(ziel1, ziel2)]
             del bearbeiten[(ziel1, ziel2)]
 
-            signal_strecke = nx.shortest_path(signalgraph_einfach, ziel1, ziel2)
+            try:
+                signal_strecke = nx.shortest_path(signalgraph_einfach, ziel1, ziel2)
+            except (nx.NodeNotFound, nx.NetworkXNoPath):
+                continue
+
             for zwischenziel in signal_strecke[1:-1]:
                 if isinstance(zwischenziel, collections.abc.Sequence) and zwischenziel[0] in {'Bf', 'Anst'}:
                     neue_kante = LinienGraphEdge()
@@ -182,6 +195,9 @@ class Anlage:
                         pass
 
     def strecken_konfigurieren(self):
+        """
+        Streckendefinition aus der Konfiguration übernehmen
+        """
         for titel, konfig in self.config['strecken'].items():
             strecke = []
             for name in konfig:
@@ -203,11 +219,12 @@ class Anlage:
 
     def load_config(self, path: os.PathLike, load_graphs=False, ignore_version=False):
         """
+        Konfiguration aus Konfigurationsdatei laden.
 
-        :param path: verzeichnis mit den konfigurationsdaten.
-            der dateiname wird aus der anlagen-id gebildet.
-        :param load_graphs: die graphen werden normalerweise vom simulator abgefragt und erstellt.
-            für offline-auswertung können sie auch aus dem konfigurationsfile geladen werden.
+        :param path: Verzeichnis mit den Konfigurationsdaten.
+            Der Dateiname wird aus der Anlagen-ID gebildet.
+        :param load_graphs: Die Graphen werden normalerweise vom Simulator abgefragt und erstellt.
+            Für die Offline-Auswertung können sie stattdessen aus dem Konfigurationsfile geladen werden.
         :return: None
         :raise: OSError, JSONDecodeError(ValueError)
         """
@@ -236,9 +253,15 @@ class Anlage:
             self.config = d
 
     def set_config_v2(self, d: Dict):
+        """
+        Konfigurationsdaten im Format der Version 2 laden.
+
+        :param d:
+        :return:
+        """
         def _find_sektor(gleis: str, sektoren_gleise: Dict) -> Optional[str]:
             for bahnsteig, gleise in sektoren_gleise.items():
-                if gleis in gl:
+                if gleis in gleise:
                     return bahnsteig
             else:
                 return None
@@ -251,17 +274,18 @@ class Anlage:
             sektoren = {}
 
         try:
-            for bf, gleise in d['bahnsteiggruppen'].items():
+            for bft, gleise in d['bahnsteiggruppen'].items():
+                bf = bft + "?"
                 for gl in gleise:
-                    if bf not in gleis_konfig:
-                        gleis_konfig[bf] = {bf: {}}
+                    if bft not in gleis_konfig:
+                        gleis_konfig[bf] = {bft: {}}
                     bs = _find_sektor(gl, sektoren)
                     if not bs:
                         bs = gl
                     try:
-                        gleis_konfig[bf][bf][bs].add(gl)
+                        gleis_konfig[bf][bft][bs].add(gl)
                     except KeyError:
-                        gleis_konfig[bf][bf][bs] = {gl}
+                        gleis_konfig[bf][bft][bs] = {gl}
         except KeyError:
             logger.info("Fehlende Bahnsteiggruppen-Konfiguration")
 

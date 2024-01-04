@@ -145,6 +145,9 @@ class ZielGraph(nx.DiGraph):
 
         - Der vom Simulator gemeldete Fahrplan enthält nur anzufahrende Ziele.
           Im Zielgraphen werden die abgefahrenen Ziele jedoch beibehalten.
+        - Die Methode fügt auch Knoten und Kanten für Einfahrten und Ausfahrten ein,
+          wenn diese in den von- und nach-Feldertn angegeben sind.
+          Einfahrten werden nur eingefügt, wenn der Zug noch nicht eingefahren ist.
 
         :param: zid: Zug-ID. Der Zug muss in der Zugliste enthalten sein.
         :return: Abgehende Verknüpfungen des Zuges mit anderen Zügen.
@@ -181,7 +184,7 @@ class ZielGraph(nx.DiGraph):
             ziel1 = ziel2
             fid1 = fid2
 
-        if zug2.von and not zug2.von.startswith("Gleis"):
+        if not zug2.sichtbar and zug2.von and not zug2.von.startswith("Gleis"):
             fid2 = zug2.fahrplan[0].fid
             dt = datetime.datetime.combine(datetime.datetime.today(), fid2[1])
             dt -= datetime.timedelta(minutes=1)
