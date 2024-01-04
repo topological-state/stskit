@@ -8,6 +8,7 @@ import logging
 from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, Union
 
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import networkx as nx
@@ -210,42 +211,59 @@ class BahnhofDiagramm:
     def draw_graph(self, graph: BahnhofGraph):
         self.axes.clear()
 
-        elements = {'Bf', 'Bft', 'Bs', 'Gl', 'Anst', 'Agl'}
+        edges_gen = nx.bfs_edges(graph, graph.root(), sort_neighbors=sorted)
+
+        y_pos = {'Bf': 0.8,
+                 'Bft': 0.7,
+                 'Bs': 0.6,
+                 'Gl': 0.5,
+                 'Anst': 0.3,
+                 'Agl': 0.2}
+
+        graph = nx.subgraph_view(graph, filter_node=lambda node: node[0] in y_pos)
+
         node_colors = {}
         node_labels = {}
+        node_positions = {}
         partitions_dict = {}
+
         for node, data in graph.nodes(data=True):
-            if node[0] in elements:
-                key = f"{node[0]}/{node[1]}"
+            if node[0] in y_pos:
+                key = node
                 node_labels[key] = data.name
                 node_colors[key] = self.colormap.get(data.typ, "tab:gray")
+                node_positions[key] = (0, y_pos[node[0]])
 
                 try:
                     partitions_dict[data.typ].add(key)
                 except KeyError:
                     partitions_dict[data.typ] = {key}
 
-        edges = [(f"{u[0]}/{u[1]}", f"{v[0]}/{v[1]}")
-                 for u, v in graph.edges
-                 if u[0] in elements and v[0] in elements]
+        partitions = {
+            'Bf': sorted(partitions_dict['Bf']),
+            'Bft': sorted(partitions_dict['Bft']),
+            'Bs': sorted(partitions_dict['Bs']),
+            'Gl': sorted(partitions_dict['Gl']),
+            'Anst': sorted(partitions_dict['Anst']),
+            'Agl': sorted(partitions_dict['Agl'])
+        }
 
-        partitions = [
-            sorted(partitions_dict['Bf']),
-            sorted(partitions_dict['Bft']),
-            sorted(partitions_dict['Bs']),
-            sorted(partitions_dict['Gl']),
-            sorted(partitions_dict['Anst']),
-            sorted(partitions_dict['Agl'])
-        ]
+        x_delta = {k: 1 / (len(partition) + 1) for k, partition in partitions.items()}
+        x_pos = {k: 0. for k in partitions.keys()}
+
+        for e in edges_gen:
+            node = e[1]
+            typ = node[0]
+            if typ in y_pos:
+                x_pos[typ] = x = x_pos[typ] + x_delta[typ]
+                node_positions[node] = (x, y_pos[typ])
 
         node_label_fontdict = {"size": 10}
         edge_label_fontdict = {"size": 10, "bbox": {"boxstyle": "circle",
                                                     "fc": mpl.rcParams["axes.facecolor"],
                                                     "ec": mpl.rcParams["axes.facecolor"]}}
 
-        node_positions = netgraph.get_multipartite_layout(edges, partitions)
-        node_positions = {node: (x, -y) for node, (y, x) in node_positions.items()}
-        self.netgraph = netgraph.InteractiveGraph(edges,
+        self.netgraph = netgraph.InteractiveGraph(graph,
                                                   ax=self.axes,
                                                   node_layout=node_positions,
                                                   node_color=node_colors,
@@ -257,6 +275,21 @@ class BahnhofDiagramm:
                                                   edge_width=0.2,
                                                   prettify=False
                                                   )
+
+        node_proxy_artists = []
+        for typ in y_pos:
+            proxy = plt.Line2D(
+                [], [],
+                linestyle='None',
+                color=self.colormap.get(typ, "tab:gray"),
+                marker='o',
+                markersize=2,
+                label=typ
+            )
+            node_proxy_artists.append(proxy)
+
+        node_legend = self.axes.legend(handles=node_proxy_artists, loc='upper left')
+        self.axes.add_artist(node_legend)
 
         self.axes.set_xticks([])
         self.axes.set_yticks([])
