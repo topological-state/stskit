@@ -28,6 +28,7 @@ NON_DIGIT_PREFIX_PATTERN = re.compile(r'\D*')
 ALPHANUMERISCHES_GLEIS_PATTERN = re.compile(r'([^\d\W]*)\s*(\w*)')
 ENTHAELT_ZIFFER_REGEX = re.compile(r'\D*\d+\D*')
 BAHNSTEIG_VON_SEKTOR_REGEX = re.compile(r'\D*\d+')
+HALTESTELLE_OESTERREICH_REGEX = re.compile(r'\D+\s[AHKSU]\d\D?')
 
 EINZEL_ANSCHLUESSE = ['Anschluss', 'Feld', 'Gruppe', 'Gleis', 'Gr.', 'Anschl.', 'Gl.', 'Industrie', 'Depot', 'Abstellung']
 
@@ -111,6 +112,9 @@ def default_bahnhofname(gleis: str) -> str:
 
     teile = gleis.split()
     alpha_teile = []
+
+    if HALTESTELLE_OESTERREICH_REGEX.match(gleis):
+        return gleis
 
     for teil in teile:
         if ENTHAELT_ZIFFER_REGEX.search(teil):
