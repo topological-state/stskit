@@ -111,6 +111,54 @@ class LinienGraph(nx.Graph):
         self.add_node(bft1, **knoten1_daten)
         self.add_node(bft2, **knoten2_daten)
 
+    def schleifen_aufloesen(self):
+        """
+        Schleifen auflösen
+
+        Weil Züge nicht alle Haltestellen bedienen,
+        kann es im Liniengraph mehrere Verbindungen zwischen zwei Knoten geben,
+        die im Graphen eine Schleife (cycle) bilden.
+        Damit eine Strecke möglichst dem tatsächlichen Gleisverlauf folgt,
+        löst diese Funktion solche Schleifen auf, indem sie die längste Kante jeder Schleife entfernt.
+        Die Länge der Kante ist die minimale Fahrzeit zwischen den Knoten.
+
+        Wenn die längste Kante nicht eindeutig bestimmt werden kann, wird die Schleife nicht aufgelöst.
+        Dies kann z.B. der Fall sein, wenn die Fahrzeit zwischen allen Knoten gleich lang ist,
+        weil der durchfahrende Zug die Zeit zum Anhalten und Beschleunigen einspart.
+        Die Funktion versucht, solche Fälle aufzulösen,
+        indem sie Verbindungen zwischen Knoten mit Grad > 2 künstlich verlängert.
+        """
+
+        entfernen = set()
+
+        for schleife in nx.simple_cycles(self):
+            kanten = zip(schleife, schleife[1:] + schleife[:1])
+            laengste_fahrzeit = 0
+            summe_fahrzeit = 0
+            laengste_kante = None
+
+            for kante in kanten:
+                fahrzeit = max(1, self.edges[kante].get("fahrzeit_min", 0))
+                fahrzeit += max(0, self.degree[kante[0]] - 2)
+                fahrzeit += max(0, self.degree[kante[1]] - 2)
+                if self.degree[kante[0]] > 2 and self.degree[kante[1]] > 2:
+                    summe_fahrzeit += fahrzeit
+                    if fahrzeit > laengste_fahrzeit:
+                        laengste_fahrzeit = fahrzeit
+                        laengste_kante = kante
+
+            if laengste_kante is not None:
+                if laengste_fahrzeit > summe_fahrzeit - laengste_fahrzeit - len(schleife):
+                    entfernen.add(laengste_kante)
+                else:
+                    logger.debug(f"symmetrische schleife {schleife}")
+
+        for u, v in entfernen:
+            try:
+                self.remove_edge(u, v)
+            except nx.NetworkXError:
+                pass
+
     def strecke(self, start: Tuple[str, str], ziel: Tuple[str, str]) -> List[Tuple[str, str]]:
         """
         Kürzeste Verbindung zwischen zwei Punkten bestimmen

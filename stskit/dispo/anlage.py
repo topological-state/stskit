@@ -143,6 +143,8 @@ class Anlage:
                     bst2_data = self.bahnhofgraph.nodes[bst2]
                     self.liniengraph.linie_eintragen(ziel1_data, bst1_data, ziel2_data, bst2_data)
 
+        self.liniengraph.schleifen_aufloesen()
+
     def liniengraph_mit_signalgraph_abgleichen(self):
         """
         Liniengraph mittels Signalgraph vereinfachen.
