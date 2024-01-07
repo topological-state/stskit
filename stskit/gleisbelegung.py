@@ -499,9 +499,9 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         kwargs['width'] = 1.0
 
         if self.belegte_gleise_zeigen:
-            gleise = [gleis for gleis in self._gleise if gleis in self.belegung.belegte_gleise]
+            gleise = [gleis for gleis in self.belegung.gleise if gleis in self.belegung.belegte_gleise]
         else:
-            gleise = self._gleise
+            gleise = self.belegung.gleise
         slots = [slot for slot in self.belegung.slots.values() if slot.gleis in gleise]
         x_labels = gleise
         x_labels_pos = list(range(len(x_labels)))

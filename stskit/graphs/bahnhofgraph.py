@@ -261,7 +261,8 @@ class BahnhofGraph(nx.DiGraph):
         self.add_edge(anl_label, bf_label, typ=anl_label[0], auto=True)
 
         for comp in nx.connected_components(bahnsteiggraph):
-            bft = f_bahnsteigname(sorted(comp)[0])
+            gleis = min(comp, key=len)
+            bft = f_bahnsteigname(gleis)
             bf = f_bahnhofname(bft)
             self.add_node(('Bf', bf), name=bf, typ='Bf', auto=True)
             self.add_edge(bf_label, ('Bf', bf), typ=bf_label[0], auto=True)

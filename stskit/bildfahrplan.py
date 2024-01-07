@@ -1,5 +1,6 @@
 import math
 from dataclasses import dataclass
+import itertools
 import logging
 from typing import Dict, List, Optional, Tuple, Type
 
@@ -234,7 +235,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         via = self._strecke_via
         nach = self._strecke_nach
 
-        gruppen_liste = sorted((gr for gr in self.anlage.bahnhofgraph.bahnhoefe()))
+        gruppen_liste = sorted((gr for gr in itertools.chain(self.anlage.bahnhofgraph.bahnhoefe(),
+                                                             self.anlage.bahnhofgraph.anschlussstellen())))
         strecken_liste = sorted(self.anlage.strecken.keys())
 
         self.ui.von_combo.clear()

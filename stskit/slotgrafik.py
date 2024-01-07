@@ -29,7 +29,7 @@ def hour_minutes_formatter(x: Union[int, float], pos: Any) -> str:
     return f"{int(x) // 60:02}:{int(x) % 60:02}"
 
 
-GLEISNAME_REGEXP = re.compile(r"([a-zA-Z ]*)([0-9]*)([a-zA-Z ]*)")
+GLEISNAME_REGEXP = re.compile(r"(\D*)(\d*)(\D*)")
 
 
 def gleisname_sortkey(gleis: str) -> Tuple[str, int, str]:
