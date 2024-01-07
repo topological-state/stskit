@@ -5,6 +5,7 @@ dieses modul ist in entwicklung.
 """
 
 import logging
+import math
 from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, Union
 
 import matplotlib as mpl
@@ -250,13 +251,16 @@ class BahnhofDiagramm:
 
         x_delta = {k: 1 / (len(partition) + 1) for k, partition in partitions.items()}
         x_pos = {k: 0. for k in partitions.keys()}
+        y_dither = {k: 0. for k in partitions.keys()}
 
         for e in edges_gen:
             node = e[1]
             typ = node[0]
             if typ in y_pos:
                 x_pos[typ] = x = x_pos[typ] + x_delta[typ]
-                node_positions[node] = (x, y_pos[typ])
+                dither = 0.02 * math.sin(y_dither[typ])
+                y_dither[typ] += math.pi / 2
+                node_positions[node] = (x, y_pos[typ] + dither)
 
         node_label_fontdict = {"size": 10}
         edge_label_fontdict = {"size": 10, "bbox": {"boxstyle": "circle",
