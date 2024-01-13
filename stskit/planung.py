@@ -1736,12 +1736,6 @@ class Planung:
         if ziel.auto_korrektur is not None:
             # folgekorrektur nicht ueberschreiben
             pass
-        elif ziel.einfahrt:
-            ziel.auto_korrektur = Einfahrtszeit(self)
-        elif ziel.ausfahrt:
-            ziel.auto_korrektur = Durchfahrt(self)
-        elif ziel.durchfahrt():
-            ziel.auto_korrektur = Durchfahrt(self)
         elif zid := ziel.ersatz_zid():
             ziel.auto_korrektur = ErsatzUrsprung(self)
             folge_korrektur = ErsatzZiel(self)
@@ -1754,6 +1748,12 @@ class Planung:
             ziel.auto_korrektur = FluegelungUrsprung(self)
             folge_korrektur = FluegelungZiel(self)
             ziel.mindestaufenthalt = max(ziel.mindestaufenthalt, self.params.mindestaufenthalt_fluegelung)
+        elif ziel.durchfahrt():
+            ziel.auto_korrektur = Durchfahrt(self)
+        elif ziel.einfahrt:
+            ziel.auto_korrektur = Einfahrtszeit(self)
+        elif ziel.ausfahrt:
+            ziel.auto_korrektur = Durchfahrt(self)
         else:
             ziel.auto_korrektur = Planhalt(self)
 
