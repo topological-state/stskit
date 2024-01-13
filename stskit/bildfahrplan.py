@@ -435,12 +435,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             trasse.ziel = plan2
             trasse.titel = format_label(self.zugbeschriftung, trasse.start, trasse.ziel)
 
-            try:
-                gleis1 = self.anlage.bahnhofgraph.find_name(plan1.gleis)
-                gruppe1 = self.anlage.bahnhofgraph.find_superior(gleis1, {'Bf', 'Anst'})
-            except (KeyError, nx.NetworkXError):
-                logger.warning(f"gleis {plan1.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
-                gruppe1 = ""
+            gruppe1 = self._bahnhof_von_gleis(plan1, zug)
+
             try:
                 while strecke[i_gruppe1] != gruppe1:
                     i_gruppe1 += richtung
@@ -451,12 +447,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                 plan1 = plan2
                 continue
 
-            try:
-                gleis2 = self.anlage.bahnhofgraph.find_name(plan2.gleis)
-                gruppe2 = self.anlage.bahnhofgraph.find_superior(gleis2, {'Bf', 'Anst'})
-            except (KeyError, nx.NetworkXError):
-                logger.warning(f"gleis {plan2.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
-                gruppe2 = ""
+            gruppe2 = self._bahnhof_von_gleis(plan2, zug)
+
             try:
                 i_gruppe2 = i_gruppe1
                 while strecke[i_gruppe2] != gruppe2:
@@ -511,6 +503,19 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                 del self._zuglaeufe[(zug.zid, richtung)]
             except KeyError:
                 pass
+
+    def _bahnhof_von_gleis(self, plan, zug):
+        try:
+            gleis1 = ('Gl', plan.gleis)
+            gruppe1 = self.anlage.bahnhofgraph.find_superior(gleis1, {'Bf'})
+        except (KeyError, nx.NetworkXError):
+            gleis1 = ('Agl', plan.gleis)
+            try:
+                gruppe1 = self.anlage.bahnhofgraph.find_superior(gleis1, {'Anst'})
+            except (KeyError, nx.NetworkXError):
+                logger.warning(f"gleis {plan.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
+                gruppe1 = ""
+        return gruppe1
 
     def grafik_update(self):
         self._axes.clear()
