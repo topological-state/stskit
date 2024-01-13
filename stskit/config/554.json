@@ -1,6 +1,6 @@
 {
     "_aid": 554,
-    "_build": 5840,
+    "_build": 5851,
     "_name": "asm / Niederbipp",
     "_region": "Bern - L\u00f6tschberg",
     "_version": 2,
@@ -263,6 +263,14 @@
             "__class__": "Set",
             "data": [
                 "ROSC"
+            ]
+        },
+        "RSA": {
+            "__class__": "Set",
+            "data": [
+                "RSA 33",
+                "RSA 31",
+                "RSA 32"
             ]
         },
         "SIGG": {
