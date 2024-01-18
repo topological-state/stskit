@@ -7,6 +7,11 @@ object Stammzug {
     an = Ankunft erster Zug
     ab = Kupplungszeit
 }
+'Stammzug hat keine Abfahrtszeit
+
+note left of Stammzug
+Zug endet
+end note
 
 object "Stammzug vorheriger Halt" as StammzugPred
 
@@ -31,14 +36,17 @@ object "Anschlusszug 3" as A3 {
 Anschluss 3
 }
 
-StammzugPred "ab" --> "an" Stammzug: P
-Stammzug "ab" --> "ab" Folgezug: K
-FolgezugPred "ab" --> "an,ab" Folgezug: P
-Folgezug "ab" --> "an" FolgezugSucc: P
-FolgezugPred -[dotted]-> Stammzug: Reihenfolge!
+StammzugPred --> Stammzug: P
+Stammzug "t<sub>an</sub>" --> "t<sub>ab</sub>" Folgezug: K
+Stammzug "t<sub>ab</sub>" <-[dotted]- "t<sub>an</sub>" Folgezug: !!!
+FolgezugPred "v<sub>ab</sub>" --> "v<sub>an</sub>" Folgezug: P
+Folgezug --> FolgezugSucc: P
+FolgezugPred -[dotted]-> Stammzug: Reihenfolge?
 
-A1 -[dashed]-> "ab" Folgezug: A
+A1 -[dashed]-> "t<sub>ab</sub>" Folgezug: A
 Folgezug -[dashed]-> A2: A
 Stammzug -[dashed]-> A3: A
+
+note "Kuppeln" as N1
 
 @enduml

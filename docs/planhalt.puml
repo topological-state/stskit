@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object Herkunft {
+    ab = Abfahrtszeit
+}
+object Folgen {
+    Zug folgen
+}
+object "Halt/Durchfahrt" as Ziel {
+    Aufenthaltsdauer
+    --
+    vorzeitige Abfahrt
+    --
+    an = Ankunftszeit
+    ab = Abfahrtszeit
+}
+note right of Ziel::Aufenthaltsdauer
+Bei Durchfahrt:
+Aufenthaltsdauer = 0
+end note
+
+object "Nächstes Ziel" as FolgezugSucc
+object "Zubringer/Kreuzung" as A1 {
+    Ankunft abwarten
+}
+object "Anschluss" as A2
+object "Überholung" as A3 {
+    Abfahrt abwarten
+}
+
+Herkunft "v<sub>ab</sub>" --> "v<sub>an</sub>" Ziel: P
+Folgen "t<sub>an</sub>" -[dashed]-> "t<sub>an</sub>" Ziel: A
+Ziel "v<sub>ab</sub>" --> "v<sub>an</sub>" FolgezugSucc: P
+
+A1 "t<sub>an</sub>" -[dashed]-> "t<sub>ab</sub>" Ziel: A
+A3 "t<sub>ab</sub>" -[dashed]-> "t<sub>ab</sub>" Ziel: A
+Ziel -[dashed]-> A2: A
+
+note "Planhalt" as N1
+
+@enduml

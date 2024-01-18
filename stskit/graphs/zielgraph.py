@@ -57,8 +57,13 @@ class ZielGraphNode(dict):
     flags = dict_property("flags", str, docstring="Originalflags")
 
     # Die folgenden Properties werden nicht vom Simulator geliefert
-    mindestaufenthalt = dict_property("mindestaufenthalt", Union[int, float], docstring="Mindestaufenthaltsdauer in Minuten")
-    status = dict_property("status", str, docstring="Status des Ziels")
+    aufenthalt = dict_property("aufenthalt", Union[int, float], docstring="Aufenthaltsdauer in Minuten")
+    status = dict_property("status", str, docstring="""
+                            Status des Ziels. Bestimmt, ob die Ankunfts- und/oder Abfahrtszeit definitiv ist. 
+                            '': noch nicht erreicht,  
+                            'an': angekommen,
+                            'ab': abgefahren.
+                            """)
     v_an = dict_property("v_an", Union[int, float], docstring="Ankunftsverspätung in Minuten")
     v_ab = dict_property("v_ab", Union[int, float], docstring="Abfahrtsverspätung in Minuten")
     f_an = dict_property("f_an", Union[int, float], docstring="Effektive Ankunftszeit in Minuten")
@@ -107,6 +112,11 @@ class ZielGraphEdge(dict):
                                 'R': vom Fdl angeordnete Rangierfahrt, z.B. bei Lokwechsel,
                                 'A': vom Fdl angeordnete Abhängigkeit,
                                 'O': Hilfskante für Sortierordnung.
+                            """)
+    v = dict_property("v", Union[int, float],
+                      docstring="""
+                            Verspätung auf dieser Verbindung in Minuten. 
+                            Wird in der Prognose verwendet, ist daher nicht persistent.
                             """)
 
 

@@ -6,6 +6,7 @@ object Stammzug {
     --
     ab = Ersatzzeit
 }
+'Stammzug hat keine Abfahrtszeit
 
 object Folgezug {
     Anschluss 1
@@ -13,6 +14,8 @@ object Folgezug {
     an = Ersatzzeit
     ab = Abfahrtszeit
 }
+'Folgezug: Ankunftszeit = Abfahrtszeit
+
 object "Folgezug nächster Halt" as FolgezugSucc
 object "Zubringerzug 1" as A1
 object "Anschlusszug 2" as A2 {
@@ -23,10 +26,12 @@ Anschluss 3
 }
 
 Stammzug "ab" --> "an" Folgezug: E
-Folgezug "ab" -[dashed]-> "an" FolgezugSucc: P
+Folgezug "ab" --> "an" FolgezugSucc: P
 
 A1 -[dashed]-> "ab" Folgezug: A
 Folgezug -[dashed]-> A2: A
 Stammzug -[dashed]-> A3: A
+
+note "Ersatz" as N1
 
 @enduml

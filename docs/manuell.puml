@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object Herkunft {
+    ab = Abfahrtszeit
+}
+object "Halt/Durchfahrt" as Ziel {
+    an = Ankunftszeit
+}
+
+Herkunft "ab" --> "an" Ziel: V(ab, an)
+
+note "Manuelle Verspätung" as N1
+
+@enduml
