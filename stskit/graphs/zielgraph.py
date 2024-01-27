@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import datetime
 import logging
 from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, TypeVar, Union
@@ -10,6 +11,18 @@ from stskit.interface.stsobj import Knoten, FahrplanZeile, ZugDetails
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+
+
+@dataclass
+class PlanungParams:
+    mindestaufenthalt_lokwechsel: int = 5
+    mindestaufenthalt_lokumlauf: int = 2
+    mindestaufenthalt_richtungswechsel: int = 3
+    mindestaufenthalt_ersatz: int = 1
+    mindestaufenthalt_kupplung: int = 1
+    mindestaufenthalt_fluegelung: int = 1
+    wartezeit_ankunft_abwarten: int = 0
+    wartezeit_abfahrt_abwarten: int = 2
 
 
 class ZielGraphNode(dict):
@@ -57,7 +70,8 @@ class ZielGraphNode(dict):
     flags = dict_property("flags", str, docstring="Originalflags")
 
     # Die folgenden Properties werden nicht vom Simulator geliefert
-    aufenthalt = dict_property("aufenthalt", Union[int, float], docstring="Aufenthaltsdauer in Minuten")
+    mindestaufenthalt = dict_property("mindestaufenthalt", Union[int, float],
+                                      docstring="Minimale Aufenthaltsdauer in Minuten")
     status = dict_property("status", str, docstring="""
                             Status des Ziels. Bestimmt, ob die Ankunfts- und/oder Abfahrtszeit definitiv ist. 
                             '': noch nicht erreicht,  
@@ -90,7 +104,8 @@ class ZielGraphNode(dict):
             plan=fahrplanzeile.plan,
             gleis=fahrplanzeile.gleis,
             typ='D' if fahrplanzeile.durchfahrt() else 'H',
-            flags=fahrplanzeile.flags
+            flags=fahrplanzeile.flags,
+            mindestaufenthalt=0
         )
 
         if fahrplanzeile.an is not None:
@@ -265,6 +280,26 @@ class ZielGraph(nx.DiGraph):
         else:
             if fid2 != fid3:
                 self.add_edge(fid2, fid3, typ=typ)
+
+    def mindestaufenthalt_setzen(self, params: PlanungParams):
+        for node, node_data in self.nodes(data=True):
+            if node_data.typ == 'H':
+                node_data.mindestaufenthalt = 1
+            elif node_data.typ == 'E':
+                node_data.mindestaufenthalt = params.mindestaufenthalt_ersatz
+            elif node_data.typ == 'F':
+                node_data.mindestaufenthalt = params.mindestaufenthalt_fluegelung
+            elif node_data.typ == 'K':
+                node_data.mindestaufenthalt = params.mindestaufenthalt_kupplung
+            else:
+                node_data.mindestaufenthalt = 0
+
+            if 'R' in node_data.flags:
+                node_data.mindestaufenthalt += params.mindestaufenthalt_richtungswechsel
+            if 'L' in node_data.flags:
+                node_data.mindestautfenthalt += params.mindestaufenthalt_lokumlauf
+            if 'W' in node_data.flags:
+                node_data.mindestaufenthalt += params.mindestaufenthalt_lokwechsel
 
 
 class ZielGraphUngerichtet(nx.Graph):
