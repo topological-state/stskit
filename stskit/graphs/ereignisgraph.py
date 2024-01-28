@@ -205,9 +205,10 @@ class EreignisGraph(nx.DiGraph):
         node_factories = {}
         for zg1, zg1_data in zg.nodes(data=True):
             factory = ZielEreignisNodeFactory()
-            factory.import_ziel(zg, zg1)
+            factory.import_ziel(zg, zg1_data)
             node_factories[zg1] = factory
 
+        edge_factories = {}
         for zg1, zg2, zge_data in zg.edges(data=True):
             factory = None
 
@@ -224,7 +225,12 @@ class EreignisGraph(nx.DiGraph):
 
             if factory is not None:
                 factory.set_edge(node_factories[zg1], node_factories[zg2])
-                factory.add_to_graph(self)
+                edge_factories[(zg1, zg2)] = factory
+
+        for factory in node_factories.values():
+            factory.add_to_graph(self)
+        for factory in edge_factories.values():
+            factory.add_to_graph(self)
 
     def prognose(self):
         """
@@ -364,7 +370,9 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
     Diese Factory übersetzt alle aktuell definierten Zielgraphknoten in Ereignisknoten und -kanten.
     Bei Ein- und Ausfahrten wird ein Knoten erstellt,
     bei Planhalten und Durchfahrten ein Ankunfts- und ein Abfahrtsknoten mit Verbindungskante.
-    Die Knoten- und Kantenattribute werden entsprechend den Zielattributen gesetzt.
+
+    Die Knoten- und Kantenattribute werden in der import_ziel-Methode entsprechend den Zielattributen gesetzt.
+    Die Knotenlabels sind zu diesem Zeitpunkt noch nicht definitiv!
     """
 
     def __init__(self):
@@ -399,7 +407,7 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
         Daten von Zielnode in Factory übernehmen.
         """
         self.zuganfang = False
-        for p in ziel_graph.predecessors(ziel_node):
+        for p in ziel_graph.predecessors(ziel_node.fid):
             if ziel_graph.nodes[p].zid == ziel_node.zid:
                 break
         else:
@@ -411,10 +419,13 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
                 zid=ziel_node.zid,
                 fid=ziel_node.fid,
                 passiert=ziel_node.status in {"an", "ab"},
-                p=ziel_node.p_an,
-                t=ziel_node.p_an + ziel_node.v_an,
                 s=0
             )
+            try:
+                self.n1d.p = ziel_node.p_an
+                self.n1d.t = ziel_node.p_an + ziel_node.v_an
+            except AttributeError:
+                pass
         else:
             self.n1d = None
 
@@ -424,10 +435,13 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
                 zid=ziel_node.zid,
                 fid=ziel_node.fid,
                 passiert=ziel_node.status in {"ab"},
-                p=ziel_node.p_ab,
-                t=ziel_node.p_ab + ziel_node.v_ab,
                 s=0
             )
+            try:
+                self.n2d.p = ziel_node.p_ab
+                self.n2d.t = ziel_node.p_ab + ziel_node.v_ab
+            except AttributeError:
+                pass
         else:
             self.n2d = None
 
@@ -451,9 +465,9 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
 
         if self.zuganfang:
             if self.n1d is not None:
-                self.n1d._id = (self.n1d.zid, 0)
+                self.n1d._id = 0
             elif self.n2d is not None:
-                self.n2d._id = (self.n2d.zid, 0)
+                self.n2d._id = 0
 
         if self.n1d is not None:
             n1 = self.n1d.node_id()
@@ -471,12 +485,35 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
 
         if self.e2d is not None:
             ereignis_graph.add_edge(n1, n2)
-            ereignis_graph.edges[n1][n2].update(self.e2d)
+            ereignis_graph.edges[(n1, n2)].update(self.e2d)
 
         self.ausgefuehrt = True
 
 
-class ZielEreignisEdgeFactory(EreignisNodeFactory):
+class EreignisEdgeFactory(metaclass=ABCMeta):
+    """
+    Abstrakte Edge Factory
+
+    Eine EreignisEdgeFactory muss die abstrakten Methoden implementieren,
+    die einem Ereignisgraphen die der Klasse entsprechenden Kanten hinzufügt.
+
+    Factories werden nur einmal ausgeführt und dürfen bei weiteren Aufrufen keine weiteren Elemente hinzufügen.
+    """
+    def __init__(self):
+        self.ausgefuehrt = False
+
+    @abstractmethod
+    def add_to_graph(self, ereignis_graph: EreignisGraph):
+        """
+        Knoten und Kanten zum Ereignisgraphen hinzufügen.
+
+        Die Methode fügt die von einer Factory verwalteten Knoten und internen Kanten dem Ereignisgraphen hinzu.
+        Die Methode darf nur beim ersten Aufruf eine Wirkung zeigen.
+        """
+        self.ausgefuehrt = True
+
+
+class ZielEreignisEdgeFactory(EreignisEdgeFactory):
     """
     Zwischenklasse für Edge-Factories
 
@@ -486,18 +523,14 @@ class ZielEreignisEdgeFactory(EreignisNodeFactory):
 
     def __init__(self):
         super().__init__()
-        self.node1_factory: ZielEreignisNodeFactory = None
-        self.node2_factory: ZielEreignisNodeFactory = None
+        self.node1_factory: Optional[ZielEreignisNodeFactory] = None
+        self.node2_factory: Optional[ZielEreignisNodeFactory] = None
+        self.e1d: Optional[EreignisGraphEdge] = None
+        self.e2d: Optional[EreignisGraphEdge] = None
 
     def set_edge(self, node1_factory: EreignisNodeFactory, node2_factory: EreignisNodeFactory):
         self.node1_factory = node1_factory
         self.node2_factory = node2_factory
-
-    def first_label(self) -> EreignisLabelType:
-        return self.node1_factory.first_label()
-
-    def last_label(self) -> EreignisLabelType:
-        return self.node2_factory.last_label()
 
 
 class PlanfahrtFactory(ZielEreignisEdgeFactory):
@@ -508,18 +541,24 @@ class PlanfahrtFactory(ZielEreignisEdgeFactory):
     und em Ankunftsereignis des zweiten Ziels.
     """
 
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
-        self.node1_factory.add_to_graph(ereignis_graph)
-        self.node2_factory.add_to_graph(ereignis_graph)
-        n1 = self.node1_factory.last_label()
-        n2 = self.node2_factory.first_label()
-        ereignis_graph.add_edge(n1, n2)
-        edge_data = EreignisGraphEdge(
+    def set_edge(self, node1_factory: EreignisNodeFactory, node2_factory: EreignisNodeFactory):
+        super().set_edge(node1_factory, node2_factory)
+        self.e1d = EreignisGraphEdge(
             typ='P',
             dt_min=0,
             ds=0
         )
-        ereignis_graph.edges[n1][n2].update(edge_data)
+
+    def add_to_graph(self, ereignis_graph: EreignisGraph):
+        if self.ausgefuehrt:
+            return
+
+        n1 = self.node1_factory.last_label()
+        n2 = self.node2_factory.first_label()
+        ereignis_graph.add_edge(n1, n2)
+        ereignis_graph.edges[(n1, n2)].update(self.e1d)
+
+        self.ausgefuehrt = True
 
 
 class ErsatzFactory(ZielEreignisEdgeFactory):
@@ -529,6 +568,20 @@ class ErsatzFactory(ZielEreignisEdgeFactory):
     Die Factory erstellt ein Ersatzereignis (Typ 'E') zwischen der Ankunft am ersten Ziel
     und der Abfahrt am zweiten Ziel.
     """
+
+    def set_edge(self, node1_factory: EreignisNodeFactory, node2_factory: EreignisNodeFactory):
+        super().set_edge(node1_factory, node2_factory)
+        self.node1_factory.n2d.typ = 'E'
+        self.node1_factory.n2d.p = self.node2_factory.n2d.p
+        self.node1_factory.e2d.typ = 'E'
+        self.node2_factory.n1d = None
+        self.node2_factory.e2d = None
+
+        self.e1d = EreignisGraphEdge(
+            typ='H',
+            dt_min=0,
+            ds=0
+        )
 
     def add_to_graph(self, ereignis_graph: EreignisGraph):
         """
@@ -542,24 +595,15 @@ class ErsatzFactory(ZielEreignisEdgeFactory):
         An1 -E-> E -H-: Ab2
         """
 
-        self.node1_factory.n2d.typ = 'E'
-        self.node1_factory.n2d.p = self.node2_factory.n2d.p
-        self.node1_factory.e2d.typ = 'E'
-        self.node2_factory.n1d = None
-        self.node2_factory.e2d = None
-
-        self.node1_factory.add_to_graph(ereignis_graph)
-        self.node2_factory.add_to_graph(ereignis_graph)
+        if self.ausgefuehrt:
+            return
 
         n1 = self.node1_factory.last_label()
         n2 = self.node2_factory.first_label()
         ereignis_graph.add_edge(n1, n2)
-        edge_data = EreignisGraphEdge(
-            typ='H',
-            dt_min=0,
-            ds=0
-        )
-        ereignis_graph.edges[n1][n2].update(edge_data)
+        ereignis_graph.edges[(n1, n2)].update(self.e1d)
+
+        self.ausgefuehrt = True
 
 
 class KupplungFactory(ZielEreignisEdgeFactory):
@@ -571,6 +615,27 @@ class KupplungFactory(ZielEreignisEdgeFactory):
     und der Abfahrt des gekuppelten Zuges (gegeben durch den Endpunkt der Zielkante).
     """
 
+    def set_edge(self, node1_factory: EreignisNodeFactory, node2_factory: EreignisNodeFactory):
+        super().set_edge(node1_factory, node2_factory)
+
+        self.e1d = EreignisGraphEdge(
+            typ='H',
+            dt_min=self.node2_factory.e2d.dt_min,
+            ds=0
+        )
+
+        self.e2d = EreignisGraphEdge(
+            typ='H',
+            dt_min=0,
+            ds=0
+        )
+
+        self.node1_factory.n2d.typ = 'K'
+        self.node1_factory.n2d.zid = self.node2_factory.n1d.zid
+        self.node1_factory.n2d.p = max(self.node1_factory.n1d.p + self.node1_factory.e2d.dt_min, self.node2_factory.n1d.p + self.node2_factory.e2d.dt_min)
+        self.node1_factory.e2d.typ = 'K'
+        self.node2_factory.e2d = None
+
     def add_to_graph(self, ereignis_graph: EreignisGraph):
         """
         Kupplungsvorgang darstellen
@@ -581,33 +646,18 @@ class KupplungFactory(ZielEreignisEdgeFactory):
         der einlaufenden Züge.
         """
 
-        e1_data = EreignisGraphEdge(
-            typ='H',
-            dt_min=self.node2_factory.e2d.dt_min,
-            ds=0
-        )
-
-        e2_data = EreignisGraphEdge(
-            typ='H',
-            dt_min=0,
-            ds=0
-        )
-
-        self.node1_factory.n2d.typ = 'K'
-        self.node1_factory.n2d.p = max(self.node1_factory.n1d.p + self.node1_factory.e2d.dt_min, self.node2_factory.n1d.p + self.node2_factory.e2d.dt_min)
-        self.node1_factory.e2d.typ = 'K'
-        self.node2_factory.e2d = None
-
-        self.node1_factory.add_to_graph(ereignis_graph)
-        self.node2_factory.add_to_graph(ereignis_graph)
+        if self.ausgefuehrt:
+            return
 
         n1 = self.node2_factory.first_label()
         n2 = self.node1_factory.last_label()
         n3 = self.node2_factory.last_label()
         ereignis_graph.add_edge(n1, n2)
-        ereignis_graph.edges[n1][n2].update(e1_data)
+        ereignis_graph.edges[(n1, n2)].update(self.e1d)
         ereignis_graph.add_edge(n2, n3)
-        ereignis_graph.edges[n2][n3].update(e2_data)
+        ereignis_graph.edges[(n2, n3)].update(self.e2d)
+
+        self.ausgefuehrt = True
 
 
 class FluegelungFactory(ZielEreignisEdgeFactory):
@@ -618,6 +668,27 @@ class FluegelungFactory(ZielEreignisEdgeFactory):
     und den Abfahrten der geflügelten Züge.
     """
 
+    def set_edge(self, node1_factory: EreignisNodeFactory, node2_factory: EreignisNodeFactory):
+        super().set_edge(node1_factory, node2_factory)
+
+        self.e1d = EreignisGraphEdge(
+            typ='F',
+            dt_min=self.node1_factory.e2d.dt_min,
+            ds=0
+        )
+        self.e2d = EreignisGraphEdge(
+            typ='H',
+            dt_min=0,
+            ds=0
+        )
+
+        self.node2_factory.n1d.typ = 'F'
+        self.node2_factory.n1d.zid = self.node1_factory.n1d.zid
+        self.node2_factory.n1d.p = self.node1_factory.n1d.p + self.node1_factory.e2d.dt_min
+        self.node2_factory.e2d.typ = 'H'
+        self.node2_factory.e2d.dt_min = 0
+        self.node1_factory.e2d = None
+
     def add_to_graph(self, ereignis_graph: EreignisGraph):
         """
         Flügelungsvorgang darstellen
@@ -627,33 +698,18 @@ class FluegelungFactory(ZielEreignisEdgeFactory):
         Der Flügelungszeitpunkt entspricht der Ankunftszeit plus Minimalaufenthaltszeit.
         """
 
-        e1_data = EreignisGraphEdge(
-            typ='F',
-            dt_min=self.node1_factory.e2d.dt_min,
-            ds=0
-        )
-        e2_data = EreignisGraphEdge(
-            typ='H',
-            dt_min=0,
-            ds=0
-        )
-
-        self.node2_factory.n1d.typ = 'F'
-        self.node2_factory.n1d.p = self.node1_factory.n1d.p + self.node1_factory.e2d.dt_min
-        self.node2_factory.e2d.typ = 'H'
-        self.node2_factory.e2d.dt_min = 0
-        self.node1_factory.e2d = None
-
-        self.node1_factory.add_to_graph(ereignis_graph)
-        self.node2_factory.add_to_graph(ereignis_graph)
+        if self.ausgefuehrt:
+            return
 
         n1 = self.node1_factory.first_label()
         n2 = self.node2_factory.first_label()
         n3 = self.node1_factory.last_label()
         ereignis_graph.add_edge(n1, n2)
         ereignis_graph.add_edge(n2, n3)
-        ereignis_graph.edges[n1][n2].update(e1_data)
-        ereignis_graph.edges[n2][n3].update(e2_data)
+        ereignis_graph.edges[(n1, n2)].update(self.e1d)
+        ereignis_graph.edges[(n2, n3)].update(self.e2d)
+
+        self.ausgefuehrt = True
 
 
 class AbfahrtAbwartenFactory(ZielEreignisEdgeFactory):
