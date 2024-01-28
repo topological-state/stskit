@@ -179,12 +179,55 @@ class TestEreignisPrognose(unittest.TestCase):
 
     def test_import(self):
         """
-        expected
+        Import aus Zielgraph überprüfen.
 
+        Wir testen summarisch:
+        - Isomorphie mit Referenzgraph
+        - Anzahl Knoten nach Typen
+        - Anzahl Kanten nach Typen
         """
 
+        # nx.write_gml(self.ereignisgraph, "ereignisgraph.gml", stringizer=str)
         self.assertGreaterEqual(len(self.ereignisgraph.nodes), 17)
-        nx.write_gml(self.ereignisgraph, "ereignisgraph.gml", stringizer=str)
+        self.assertGreaterEqual(len(self.ereignisgraph.edges), 16)
+
+        iso_edges = [
+            (1, 2, 'P'),
+            (2, 3, 'D'),
+            (3, 4, 'P'),
+            (4, 5, 'E'),
+            (5, 6, 'H'),
+            (6, 7, 'P'),
+            (7, 12, 'K'),
+
+            (10, 11, 'P'),
+            (11, 12, 'H'),
+            (12, 13, 'H'),
+            (13, 14, 'P'),
+            (14, 15, 'F'),
+            (15, 16, 'H'),
+            (16, 17, 'P'),
+
+            (15, 18, 'H'),
+            (18, 19, 'P')
+        ]
+        iso_graph = nx.DiGraph()
+        for edge in iso_edges:
+            iso_graph.add_edge(edge[0], edge[1], typ=edge[2])
+
+        self.assertTrue(nx.is_isomorphic(self.ereignisgraph, iso_graph), 'isomorphic graph')
+
+        types = {'Ab': 0, 'An': 0, 'E': 0, 'K': 0, 'F': 0}
+        expected_types = {'Ab': 7, 'An': 7, 'E': 1, 'K': 1, 'F': 1}
+        for node, typ in self.ereignisgraph.nodes(data='typ'):
+            types[typ] += 1
+        self.assertDictEqual(types, expected_types, "Knotentypen")
+
+        types = {'P': 0, 'H': 0, 'E': 0, 'K': 0, 'F': 0}
+        expected_types = {'P': 7, 'H': 6, 'E': 1, 'K': 1, 'F': 1}
+        for u, v, typ in self.ereignisgraph.edges(data='typ'):
+            types[typ] += 1
+        self.assertDictEqual(types, expected_types, "Kantentypen")
 
 
 if __name__ == '__main__':

@@ -26,6 +26,7 @@ Der Ablauf ist wie folgt:
 """
 
 from abc import ABCMeta, abstractmethod
+import copy
 import datetime
 import itertools
 import logging
@@ -378,9 +379,8 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
     def __init__(self):
         super().__init__()
         self.zuganfang = False
-        self.n1d: Optional[EreignisGraphNode] = None
-        self.n2d: Optional[EreignisGraphNode] = None
-        self.e2d: Optional[EreignisGraphEdge] = None
+        self.nodes: List[EreignisGraphNode] = []
+        self.edges: List[EreignisGraphEdge] = []
 
     def first_label(self) -> EreignisLabelType:
         """
@@ -389,8 +389,8 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
         Dies ist das Label von n1d oder n2d.
         Das Label ist erst nach Ausführen der add_to_graph-Methode gültig!
         """
-        nodes = [n for n in [self.n1d, self.n2d] if n is not None]
-        return nodes[0].node_id()
+
+        return self.nodes[0].node_id()
 
     def last_label(self) -> EreignisLabelType:
         """
@@ -399,8 +399,8 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
         Dies ist das Label von n2d oder n1d.
         Das Label ist erst nach Ausführen der add_to_graph-Methode gültig!
         """
-        nodes = [n for n in [self.n1d, self.n2d] if n is not None]
-        return nodes[-1].node_id()
+
+        return self.nodes[-1].node_id()
 
     def import_ziel(self, ziel_graph: ZielGraph, ziel_node: ZielGraphNode):
         """
@@ -414,7 +414,7 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
             self.zuganfang = True
 
         if ziel_node.typ != 'E':
-            self.n1d = EreignisGraphNode(
+            n1d = EreignisGraphNode(
                 typ='An',
                 zid=ziel_node.zid,
                 fid=ziel_node.fid,
@@ -422,15 +422,14 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
                 s=0
             )
             try:
-                self.n1d.p = ziel_node.p_an
-                self.n1d.t = ziel_node.p_an + ziel_node.v_an
+                n1d.p = ziel_node.p_an
+                n1d.t = ziel_node.p_an + ziel_node.v_an
             except AttributeError:
                 pass
-        else:
-            self.n1d = None
+            self.nodes.append(n1d)
 
         if ziel_node.typ != 'A':
-            self.n2d = EreignisGraphNode(
+            n2d = EreignisGraphNode(
                 typ='Ab',
                 zid=ziel_node.zid,
                 fid=ziel_node.fid,
@@ -438,21 +437,19 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
                 s=0
             )
             try:
-                self.n2d.p = ziel_node.p_ab
-                self.n2d.t = ziel_node.p_ab + ziel_node.v_ab
+                n2d.p = ziel_node.p_ab
+                n2d.t = ziel_node.p_ab + ziel_node.v_ab
             except AttributeError:
                 pass
-        else:
-            self.n2d = None
+            self.nodes.append(n2d)
 
-        if self.n1d is not None and self.n2d is not None:
-            self.e2d = EreignisGraphEdge(
+        if len(self.nodes) == 2:
+            e2d = EreignisGraphEdge(
                 typ='H',
                 dt_min=ziel_node.mindestaufenthalt,
                 ds=0
             )
-        else:
-            self.e2d = None
+            self.edges.append(e2d)
 
     def add_to_graph(self, ereignis_graph: EreignisGraph):
         """
@@ -464,28 +461,18 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
             return None
 
         if self.zuganfang:
-            if self.n1d is not None:
-                self.n1d._id = 0
-            elif self.n2d is not None:
-                self.n2d._id = 0
+            self.nodes[0]._id = 0
 
-        if self.n1d is not None:
-            n1 = self.n1d.node_id()
-            ereignis_graph.add_node(n1)
-            ereignis_graph.nodes[n1].update(self.n1d)
-        else:
-            n1 = None
+        for node in self.nodes:
+            nid = node.node_id()
+            ereignis_graph.add_node(nid)
+            ereignis_graph.nodes[nid].update(node)
 
-        if self.n2d is not None:
-            n2 = self.n2d.node_id()
-            ereignis_graph.add_node(n2)
-            ereignis_graph.nodes[n2].update(self.n2d)
-        else:
-            n2 = None
-
-        if self.e2d is not None:
+        for n1d, n2d, edge in zip(self.nodes[:-1], self.nodes[1:], self.edges):
+            n1 = n1d.node_id()
+            n2 = n2d.node_id()
             ereignis_graph.add_edge(n1, n2)
-            ereignis_graph.edges[(n1, n2)].update(self.e2d)
+            ereignis_graph.edges[(n1, n2)].update(edge)
 
         self.ausgefuehrt = True
 
@@ -571,11 +558,11 @@ class ErsatzFactory(ZielEreignisEdgeFactory):
 
     def set_edge(self, node1_factory: EreignisNodeFactory, node2_factory: EreignisNodeFactory):
         super().set_edge(node1_factory, node2_factory)
-        self.node1_factory.n2d.typ = 'E'
-        self.node1_factory.n2d.p = self.node2_factory.n2d.p
-        self.node1_factory.e2d.typ = 'E'
-        self.node2_factory.n1d = None
-        self.node2_factory.e2d = None
+        self.node1_factory.nodes[1].typ = 'E'
+        self.node1_factory.nodes[1].p = self.node2_factory.nodes[1].p
+        self.node1_factory.edges[0].typ = 'E'
+        self.node2_factory.nodes.pop(0)
+        self.node2_factory.edges.pop(0)
 
         self.e1d = EreignisGraphEdge(
             typ='H',
@@ -620,7 +607,7 @@ class KupplungFactory(ZielEreignisEdgeFactory):
 
         self.e1d = EreignisGraphEdge(
             typ='H',
-            dt_min=self.node2_factory.e2d.dt_min,
+            dt_min=self.node2_factory.edges[0].dt_min,
             ds=0
         )
 
@@ -630,11 +617,11 @@ class KupplungFactory(ZielEreignisEdgeFactory):
             ds=0
         )
 
-        self.node1_factory.n2d.typ = 'K'
-        self.node1_factory.n2d.zid = self.node2_factory.n1d.zid
-        self.node1_factory.n2d.p = max(self.node1_factory.n1d.p + self.node1_factory.e2d.dt_min, self.node2_factory.n1d.p + self.node2_factory.e2d.dt_min)
-        self.node1_factory.e2d.typ = 'K'
-        self.node2_factory.e2d = None
+        self.node1_factory.nodes[1].typ = 'K'
+        self.node1_factory.nodes[1].zid = self.node2_factory.nodes[0].zid
+        self.node1_factory.nodes[1].p = max(self.node1_factory.nodes[0].p + self.node1_factory.edges[0].dt_min, self.node2_factory.nodes[0].p + self.node2_factory.edges[0].dt_min)
+        self.node1_factory.edges[0].typ = 'K'
+        self.node2_factory.edges.pop(0)
 
     def add_to_graph(self, ereignis_graph: EreignisGraph):
         """
@@ -671,23 +658,30 @@ class FluegelungFactory(ZielEreignisEdgeFactory):
     def set_edge(self, node1_factory: EreignisNodeFactory, node2_factory: EreignisNodeFactory):
         super().set_edge(node1_factory, node2_factory)
 
-        self.e1d = EreignisGraphEdge(
+        e1d = EreignisGraphEdge(
             typ='F',
-            dt_min=self.node1_factory.e2d.dt_min,
+            dt_min=self.node1_factory.edges[0].dt_min,
             ds=0
         )
-        self.e2d = EreignisGraphEdge(
+        e2d = EreignisGraphEdge(
+            typ='H',
+            dt_min=0,
+            ds=0
+        )
+        self.e1d = EreignisGraphEdge(
             typ='H',
             dt_min=0,
             ds=0
         )
 
-        self.node2_factory.n1d.typ = 'F'
-        self.node2_factory.n1d.zid = self.node1_factory.n1d.zid
-        self.node2_factory.n1d.p = self.node1_factory.n1d.p + self.node1_factory.e2d.dt_min
-        self.node2_factory.e2d.typ = 'H'
-        self.node2_factory.e2d.dt_min = 0
-        self.node1_factory.e2d = None
+        fnode = copy.copy(self.node1_factory.nodes[0])
+        fnode.typ = 'F'
+        fnode.p = self.node1_factory.nodes[0].p + self.node1_factory.edges[0].dt_min
+        self.node1_factory.nodes.insert(1, fnode)
+        self.node1_factory.edges = [e1d, e2d]
+        node2 = self.node2_factory.nodes.pop(0)
+        fnode._id = node2._id
+        self.node2_factory.edges.pop(0)
 
     def add_to_graph(self, ereignis_graph: EreignisGraph):
         """
@@ -701,13 +695,10 @@ class FluegelungFactory(ZielEreignisEdgeFactory):
         if self.ausgefuehrt:
             return
 
-        n1 = self.node1_factory.first_label()
+        n1 = self.node1_factory.nodes[1].node_id()
         n2 = self.node2_factory.first_label()
-        n3 = self.node1_factory.last_label()
         ereignis_graph.add_edge(n1, n2)
-        ereignis_graph.add_edge(n2, n3)
         ereignis_graph.edges[(n1, n2)].update(self.e1d)
-        ereignis_graph.edges[(n2, n3)].update(self.e2d)
 
         self.ausgefuehrt = True
 
