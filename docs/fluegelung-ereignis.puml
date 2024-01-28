@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object "Zug 1 an" as zug1an {
+    zid = 1
+    typ = An
+    p = p<sub>an,1</sub>
+}
+
+object "Flügelung" as fluegelung {
+    zid = 1
+    typ = F
+    p = p<sub>an,1</sub> + dt<sub>min</sub>
+}
+
+object "Zug 1 ab" as zug1ab {
+    zid = 1
+    typ = Ab
+    p = p<sub>ab,1</sub>
+}
+
+object "Zug 2 ab" as zug2ab {
+    zid = 2
+    typ = Ab
+    p = p<sub>ab,2</sub>
+}
+
+zug1an -> fluegelung: F (dt<sub>min</sub>)
+fluegelung -> zug1ab: H
+fluegelung -> zug2ab: H
+
+@enduml
