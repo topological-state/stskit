@@ -184,15 +184,15 @@ class EreignisGraph(nx.DiGraph):
         Fahrplanhalte werden in Ankunfts- und Abfahrtsereignisse aufgelöst,
         Betriebsvorgänge werden in entsprechende graphische Muster übersetzt.
 
-        Die Methode arbeitet mit EreignisNodeFactories.
-        In einem ersten Schritt werden alle Zielknoten in ZielEreignisNodeFactories übersetzt.
-        Im zweiten Schritt werden die Zielkanten in ZielEreignisEdgeFactories übersetzt und ausgeführt.
-        Bei der Ausführung der Factories werden die Zielelemente dem Ereignisgraphen hinzugefügt.
+        Die Methode arbeitet mit EreignisNodeBuilder- und EreignisEdgeBuilder-Objekten.
+        In einem ersten Schritt werden alle Zielknoten in ZielEreignisNodeBuilder übersetzt.
+        Im zweiten Schritt werden die Zielkanten in ZielEreignisEdgeBuilder übersetzt und ausgeführt.
+        Bei der Ausführung der Builder werden die Zielelemente dem Ereignisgraphen hinzugefügt.
 
-        Die gestaffelte Übersetzung von Knoten und Kanten in Factories bietet die notwendige Flexibilität
+        Die gestaffelte Übersetzung von Knoten und Kanten in Builders bietet die notwendige Flexibilität
         in den folgenden Situationen:
         - Es gibt keine eindeutige Zuordnung von Zielknoten zu Ereignisknoten,
-          jedoch im Verlauf dieser Methode eine Zuordnung von Zielknoten zu ZielEreignisNodeFactories.
+          jedoch im Verlauf dieser Methode eine Zuordnung von Zielknoten zu ZielEreignisNodeBuilder.
         - Die Labels von Ereignisknoten können nicht aus Zielknoten abgeleitet werden.
           Es wird eine fortlaufende Nummer eingesetzt.
           Lediglich der erste Ereignisknoten eines Zuges wird mit der Nummer 0 markiert.
@@ -203,35 +203,35 @@ class EreignisGraph(nx.DiGraph):
           weil es keine eindeutige Zuordnung von Zielknoten zu Ereignisknoten gibt.
         """
 
-        node_factories = {}
+        node_builders = {}
         for zg1, zg1_data in zg.nodes(data=True):
-            factory = ZielEreignisNodeFactory()
-            factory.import_ziel(zg, zg1_data)
-            node_factories[zg1] = factory
+            builder = ZielEreignisNodeBuilder()
+            builder.import_ziel(zg, zg1_data)
+            node_builders[zg1] = builder
 
-        edge_factories = {}
+        edge_builders = {}
         for zg1, zg2, zge_data in zg.edges(data=True):
-            factory = None
+            builder = None
 
             if zge_data.typ == 'P':
-                factory = PlanfahrtFactory()
+                builder = PlanfahrtEdgeBuilder()
             elif zge_data.typ == 'E':
-                factory = ErsatzFactory()
+                builder = ErsatzEdgeBuilder()
             elif zge_data.typ == 'F':
-                factory = FluegelungFactory()
+                builder = FluegelungEdgeBuilder()
             elif zge_data.typ == 'K':
-                factory = KupplungFactory()
+                builder = KupplungEdgeBuilder()
             else:
                 logger.warning(f"Unbekannter Zielkantentyp {zge_data.typ}")
 
-            if factory is not None:
-                factory.set_edge(node_factories[zg1], node_factories[zg2])
-                edge_factories[(zg1, zg2)] = factory
+            if builder is not None:
+                builder.set_edge(node_builders[zg1], node_builders[zg2])
+                edge_builders[(zg1, zg2)] = builder
 
-        for factory in node_factories.values():
-            factory.add_to_graph(self)
-        for factory in edge_factories.values():
-            factory.add_to_graph(self)
+        for builder in node_builders.values():
+            builder.add_to_graph(self)
+        for builder in edge_builders.values():
+            builder.add_to_graph(self)
 
     def prognose(self):
         """
@@ -321,14 +321,19 @@ class EreignisGraphUngerichtet(nx.Graph):
         return EreignisGraph
 
 
-class EreignisNodeFactory(metaclass=ABCMeta):
+class EreignisNodeBuilder(metaclass=ABCMeta):
     """
-    Abstrakte Node Factory
+    Abstrakter Ersteller von Ereignisblöcken
 
-    Eine EreignisNodeFactory muss die abstrakten Methoden implementieren,
-    die einem Ereignisgraphen die der Klasse entsprechenden Knoten und Kanten hinzufügt.
+    Ein EreignisNodeBuilder erstellt auf Abruf Blöcke (oder Subgraphen) mit Knoten und Kanten in einem EreignisGraph.
+    Die Struktur dieser Blöcke wird durch die abgeleitete Klasse definiert.
+    Bevor die add_to_graph-Methode aufgerufen wird, kann der Builder Informationen zum Aufbau des Blocks erhalten.
+    Erst mittels add_to_graph werden die Knoten und Kanten in den Graphen geschrieben.
 
-    Factories werden nur einmal ausgeführt und dürfen bei weiteren Aufrufen keine weiteren Elemente hinzufügen.
+    Der EreignisNodeBuilder wird eingesetzt, wo im ursprünglichen Graphen ein Knoten übersetzt wird.
+    Der EreignisEdgeBuilder wird eingesetzt, wo im ursprünglichen Graphen eine Kante übersetzt wird.
+
+    Builder werden nur einmal ausgeführt und dürfen bei weiteren Aufrufen keine weiteren Elemente hinzufügen.
     """
     def __init__(self):
         self.ausgefuehrt = False
@@ -336,7 +341,7 @@ class EreignisNodeFactory(metaclass=ABCMeta):
     @abstractmethod
     def first_label(self) -> EreignisLabelType:
         """
-        Label des ersten von der Factory erstellten Ereignisses.
+        Label des ersten erstellten Ereignisses.
 
         Das Ereignislabel wird von einlaufenden Kanten referenziert.
         Das Label ist erst nach Ausführen der add_to_graph-Methode gültig!
@@ -346,7 +351,7 @@ class EreignisNodeFactory(metaclass=ABCMeta):
     @abstractmethod
     def last_label(self) -> EreignisLabelType:
         """
-        Label des letzten von der Factory erstellten Ereignisses.
+        Label des letzten erstellten Ereignisses.
 
         Das Ereignislabel wird von auslaufenden Kanten referenziert.
         Das Label ist erst nach Ausführen der add_to_graph-Methode gültig!
@@ -358,22 +363,24 @@ class EreignisNodeFactory(metaclass=ABCMeta):
         """
         Knoten und Kanten zum Ereignisgraphen hinzufügen.
 
-        Die Methode fügt die von einer Factory verwalteten Knoten und internen Kanten dem Ereignisgraphen hinzu.
+        Die Methode fügt die von dem Builder verantworteten Knoten und internen Kanten dem EreignisGraph hinzu.
         Die Methode darf nur beim ersten Aufruf eine Wirkung zeigen.
         """
         self.ausgefuehrt = True
 
 
-class ZielEreignisNodeFactory(EreignisNodeFactory):
+class ZielEreignisNodeBuilder(EreignisNodeBuilder):
     """
     Zielgraph-Node in Ereignisgraph-Node übersetzen.
 
-    Diese Factory übersetzt alle aktuell definierten Zielgraphknoten in Ereignisknoten und -kanten.
+    Dieser Builder übersetzt einen ZielGraph-Knoten in den enstprechenden Block von Ereignisknoten und -kanten.
     Bei Ein- und Ausfahrten wird ein Knoten erstellt,
     bei Planhalten und Durchfahrten ein Ankunfts- und ein Abfahrtsknoten mit Verbindungskante.
 
     Die Knoten- und Kantenattribute werden in der import_ziel-Methode entsprechend den Zielattributen gesetzt.
-    Die Knotenlabels sind zu diesem Zeitpunkt noch nicht definitiv!
+    Zu diesem Zeitpunkt werden auch die nodes- und edges-Listen mit einem einfachen Ankunft-Abfahrt-Muster initialisiert.
+    Bei komplexen Betriebsvorgängen werden die nodes und edges von den EreignisEdgeBuildern verändert,
+    bevor die Struktur mittels add_to_graph in den EreignisGraph geschrieben wird.
     """
 
     def __init__(self):
@@ -384,7 +391,7 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
 
     def first_label(self) -> EreignisLabelType:
         """
-        Label des ersten von der Factory erstellten Ereignisses.
+        Label des ersten erstellten Ereignisses.
 
         Dies ist das Label von n1d oder n2d.
         Das Label ist erst nach Ausführen der add_to_graph-Methode gültig!
@@ -394,7 +401,7 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
 
     def last_label(self) -> EreignisLabelType:
         """
-        Label des letzten von der Factory erstellten Ereignisses.
+        Label des letzten erstellten Ereignisses.
 
         Dies ist das Label von n2d oder n1d.
         Das Label ist erst nach Ausführen der add_to_graph-Methode gültig!
@@ -404,8 +411,15 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
 
     def import_ziel(self, ziel_graph: ZielGraph, ziel_node: ZielGraphNode):
         """
-        Daten von Zielnode in Factory übernehmen.
+        Daten von Zielnode übernehmen.
+
+        Erstellt bei gewöhnlichen Fahrzielen einen Ankunfts- und einen Abfahrtsknoten.
+        Bei Ein- oder Ausfahrten wird nur ein Abfahrts- resp. Ankunftsknoten erstellt.
+
+        Wenn der ziel_node der erste des Zuges ist, wird zuganfang auf True gesetzt,
+        damit in add_to_graph das Label des ersten Knotens mit (zid, 0) markiert werden kann.
         """
+
         self.zuganfang = False
         for p in ziel_graph.predecessors(ziel_node.fid):
             if ziel_graph.nodes[p].zid == ziel_node.zid:
@@ -477,14 +491,21 @@ class ZielEreignisNodeFactory(EreignisNodeFactory):
         self.ausgefuehrt = True
 
 
-class EreignisEdgeFactory(metaclass=ABCMeta):
+class EreignisEdgeBuilder(metaclass=ABCMeta):
     """
-    Abstrakte Edge Factory
+    Abstrakter Ersteller von Ereignisblöcken basierend auf Kanten
 
-    Eine EreignisEdgeFactory muss die abstrakten Methoden implementieren,
-    die einem Ereignisgraphen die der Klasse entsprechenden Kanten hinzufügt.
+    Ein EreignisEdgeBuilder erstellt auf Abruf Blöcke (oder Subgraphen) mit Knoten und Kanten in einem EreignisGraph.
+    Die Struktur dieser Blöcke wird durch die abgeleitete Klasse definiert.
+    Bevor die add_to_graph-Methode aufgerufen wird, kann der Builder Informationen zum Aufbau des Blocks erhalten.
+    Erst mittels add_to_graph werden die Knoten und Kanten in den Graphen geschrieben.
 
-    Factories werden nur einmal ausgeführt und dürfen bei weiteren Aufrufen keine weiteren Elemente hinzufügen.
+    Der EreignisEdgeBuilder wird eingesetzt, wo im ursprünglichen Graphen eine Kante übersetzt wird.
+    Der EreignisNodeBuilder wird eingesetzt, wo im ursprünglichen Graphen ein Knoten übersetzt wird.
+
+    EreignisEdgeBuild können Zugriff auf bereits erstellte EreignisNodeBuilder haben und diese modifizieren.
+
+    Builder werden nur einmal ausgeführt und dürfen bei weiteren Aufrufen keine weiteren Elemente hinzufügen.
     """
     def __init__(self):
         self.ausgefuehrt = False
@@ -494,42 +515,42 @@ class EreignisEdgeFactory(metaclass=ABCMeta):
         """
         Knoten und Kanten zum Ereignisgraphen hinzufügen.
 
-        Die Methode fügt die von einer Factory verwalteten Knoten und internen Kanten dem Ereignisgraphen hinzu.
+        Die Methode fügt die vom Builder verantworteten Knoten und internen Kanten dem EreignisGraph hinzu.
         Die Methode darf nur beim ersten Aufruf eine Wirkung zeigen.
         """
         self.ausgefuehrt = True
 
 
-class ZielEreignisEdgeFactory(EreignisEdgeFactory):
+class ZielEreignisEdgeBuilder(EreignisEdgeBuilder):
     """
-    Zwischenklasse für Edge-Factories
+    Zwischenklasse zur für Builder, die Zielgraph-Kanten übersetzen.
 
-    Diese Zwischenklasse speichert die zu einer Kante gehörenden EreignisNodeFactories.
+    Diese Zwischenklasse speichert die zu einer Kante gehörenden EreignisNodeBuilder.
     Diese werden in allen abgeleiteten Klassen benötigt.
     """
 
     def __init__(self):
         super().__init__()
-        self.node1_factory: Optional[ZielEreignisNodeFactory] = None
-        self.node2_factory: Optional[ZielEreignisNodeFactory] = None
+        self.node1_builder: Optional[ZielEreignisNodeBuilder] = None
+        self.node2_builder: Optional[ZielEreignisNodeBuilder] = None
         self.e1d: Optional[EreignisGraphEdge] = None
         self.e2d: Optional[EreignisGraphEdge] = None
 
-    def set_edge(self, node1_factory: EreignisNodeFactory, node2_factory: EreignisNodeFactory):
-        self.node1_factory = node1_factory
-        self.node2_factory = node2_factory
+    def set_edge(self, node1_builder: EreignisNodeBuilder, node2_builder: EreignisNodeBuilder):
+        self.node1_builder = node1_builder
+        self.node2_builder = node2_builder
 
 
-class PlanfahrtFactory(ZielEreignisEdgeFactory):
+class PlanfahrtEdgeBuilder(ZielEreignisEdgeBuilder):
     """
-    Factory für eine Planfahrt (normale Fahrt auf Strecke)
+    Builder für eine Planfahrt (normale Fahrt auf Strecke)
 
     Die Planfahrt erstellt eine Kante zwischen dem Abfahrtsereignis des ersten Ziels
     und em Ankunftsereignis des zweiten Ziels.
     """
 
-    def set_edge(self, node1_factory: EreignisNodeFactory, node2_factory: EreignisNodeFactory):
-        super().set_edge(node1_factory, node2_factory)
+    def set_edge(self, node1_builder: EreignisNodeBuilder, node2_builder: EreignisNodeBuilder):
+        super().set_edge(node1_builder, node2_builder)
         self.e1d = EreignisGraphEdge(
             typ='P',
             dt_min=0,
@@ -540,29 +561,29 @@ class PlanfahrtFactory(ZielEreignisEdgeFactory):
         if self.ausgefuehrt:
             return
 
-        n1 = self.node1_factory.last_label()
-        n2 = self.node2_factory.first_label()
+        n1 = self.node1_builder.last_label()
+        n2 = self.node2_builder.first_label()
         ereignis_graph.add_edge(n1, n2)
         ereignis_graph.edges[(n1, n2)].update(self.e1d)
 
         self.ausgefuehrt = True
 
 
-class ErsatzFactory(ZielEreignisEdgeFactory):
+class ErsatzEdgeBuilder(ZielEreignisEdgeBuilder):
     """
-    Factory für einen Ersatzvorgang (E-Flag).
+    Builder für einen Ersatzvorgang (E-Flag).
 
-    Die Factory erstellt ein Ersatzereignis (Typ 'E') zwischen der Ankunft am ersten Ziel
+    Der Builder erstellt ein Ersatzereignis (Typ 'E') zwischen der Ankunft am ersten Ziel
     und der Abfahrt am zweiten Ziel.
     """
 
-    def set_edge(self, node1_factory: EreignisNodeFactory, node2_factory: EreignisNodeFactory):
-        super().set_edge(node1_factory, node2_factory)
-        self.node1_factory.nodes[1].typ = 'E'
-        self.node1_factory.nodes[1].p = self.node2_factory.nodes[1].p
-        self.node1_factory.edges[0].typ = 'E'
-        self.node2_factory.nodes.pop(0)
-        self.node2_factory.edges.pop(0)
+    def set_edge(self, node1_builder: EreignisNodeBuilder, node2_builder: EreignisNodeBuilder):
+        super().set_edge(node1_builder, node2_builder)
+        self.node1_builder.nodes[1].typ = 'E'
+        self.node1_builder.nodes[1].p = self.node2_builder.nodes[1].p
+        self.node1_builder.edges[0].typ = 'E'
+        self.node2_builder.nodes.pop(0)
+        self.node2_builder.edges.pop(0)
 
         self.e1d = EreignisGraphEdge(
             typ='H',
@@ -585,29 +606,29 @@ class ErsatzFactory(ZielEreignisEdgeFactory):
         if self.ausgefuehrt:
             return
 
-        n1 = self.node1_factory.last_label()
-        n2 = self.node2_factory.first_label()
+        n1 = self.node1_builder.last_label()
+        n2 = self.node2_builder.first_label()
         ereignis_graph.add_edge(n1, n2)
         ereignis_graph.edges[(n1, n2)].update(self.e1d)
 
         self.ausgefuehrt = True
 
 
-class KupplungFactory(ZielEreignisEdgeFactory):
+class KupplungEdgeBuilder(ZielEreignisEdgeBuilder):
     """
-    Factory für einen Kupplungsvorgang (K-Flag).
+    Builder für einen Kupplungsvorgang (K-Flag).
 
-    Die Factory erstellt ein Kupplungsereignis (Typ 'K') zwischen den Ankünften der zwei Züge
+    Der Builder erstellt ein Kupplungsereignis (Typ 'K') zwischen den Ankünften der zwei Züge
     (gegeben durch Anfangs- und Endpunkt der Kante im Zielgraph)
     und der Abfahrt des gekuppelten Zuges (gegeben durch den Endpunkt der Zielkante).
     """
 
-    def set_edge(self, node1_factory: EreignisNodeFactory, node2_factory: EreignisNodeFactory):
-        super().set_edge(node1_factory, node2_factory)
+    def set_edge(self, node1_builder: EreignisNodeBuilder, node2_builder: EreignisNodeBuilder):
+        super().set_edge(node1_builder, node2_builder)
 
         self.e1d = EreignisGraphEdge(
             typ='H',
-            dt_min=self.node2_factory.edges[0].dt_min,
+            dt_min=self.node2_builder.edges[0].dt_min,
             ds=0
         )
 
@@ -617,11 +638,11 @@ class KupplungFactory(ZielEreignisEdgeFactory):
             ds=0
         )
 
-        self.node1_factory.nodes[1].typ = 'K'
-        self.node1_factory.nodes[1].zid = self.node2_factory.nodes[0].zid
-        self.node1_factory.nodes[1].p = max(self.node1_factory.nodes[0].p + self.node1_factory.edges[0].dt_min, self.node2_factory.nodes[0].p + self.node2_factory.edges[0].dt_min)
-        self.node1_factory.edges[0].typ = 'K'
-        self.node2_factory.edges.pop(0)
+        self.node1_builder.nodes[1].typ = 'K'
+        self.node1_builder.nodes[1].zid = self.node2_builder.nodes[0].zid
+        self.node1_builder.nodes[1].p = max(self.node1_builder.nodes[0].p + self.node1_builder.edges[0].dt_min, self.node2_builder.nodes[0].p + self.node2_builder.edges[0].dt_min)
+        self.node1_builder.edges[0].typ = 'K'
+        self.node2_builder.edges.pop(0)
 
     def add_to_graph(self, ereignis_graph: EreignisGraph):
         """
@@ -636,9 +657,9 @@ class KupplungFactory(ZielEreignisEdgeFactory):
         if self.ausgefuehrt:
             return
 
-        n1 = self.node2_factory.first_label()
-        n2 = self.node1_factory.last_label()
-        n3 = self.node2_factory.last_label()
+        n1 = self.node2_builder.first_label()
+        n2 = self.node1_builder.last_label()
+        n3 = self.node2_builder.last_label()
         ereignis_graph.add_edge(n1, n2)
         ereignis_graph.edges[(n1, n2)].update(self.e1d)
         ereignis_graph.add_edge(n2, n3)
@@ -647,20 +668,20 @@ class KupplungFactory(ZielEreignisEdgeFactory):
         self.ausgefuehrt = True
 
 
-class FluegelungFactory(ZielEreignisEdgeFactory):
+class FluegelungEdgeBuilder(ZielEreignisEdgeBuilder):
     """
-    Factory für einen Flügelungsvorgang (F-Flag).
+    Builder für einen Flügelungsvorgang (F-Flag).
 
-    Die Factory erstellt ein Flügelungsereignis (Typ 'F') zwischen der Ankunft des ersten Zuges
+    Der Builder erstellt ein Flügelungsereignis (Typ 'F') zwischen der Ankunft des ersten Zuges
     und den Abfahrten der geflügelten Züge.
     """
 
-    def set_edge(self, node1_factory: EreignisNodeFactory, node2_factory: EreignisNodeFactory):
-        super().set_edge(node1_factory, node2_factory)
+    def set_edge(self, node1_builder: EreignisNodeBuilder, node2_builder: EreignisNodeBuilder):
+        super().set_edge(node1_builder, node2_builder)
 
         e1d = EreignisGraphEdge(
             typ='F',
-            dt_min=self.node1_factory.edges[0].dt_min,
+            dt_min=self.node1_builder.edges[0].dt_min,
             ds=0
         )
         e2d = EreignisGraphEdge(
@@ -674,14 +695,14 @@ class FluegelungFactory(ZielEreignisEdgeFactory):
             ds=0
         )
 
-        fnode = copy.copy(self.node1_factory.nodes[0])
+        fnode = copy.copy(self.node1_builder.nodes[0])
         fnode.typ = 'F'
-        fnode.p = self.node1_factory.nodes[0].p + self.node1_factory.edges[0].dt_min
-        self.node1_factory.nodes.insert(1, fnode)
-        self.node1_factory.edges = [e1d, e2d]
-        node2 = self.node2_factory.nodes.pop(0)
+        fnode.p = self.node1_builder.nodes[0].p + self.node1_builder.edges[0].dt_min
+        self.node1_builder.nodes.insert(1, fnode)
+        self.node1_builder.edges = [e1d, e2d]
+        node2 = self.node2_builder.nodes.pop(0)
         fnode._id = node2._id
-        self.node2_factory.edges.pop(0)
+        self.node2_builder.edges.pop(0)
 
     def add_to_graph(self, ereignis_graph: EreignisGraph):
         """
@@ -695,15 +716,15 @@ class FluegelungFactory(ZielEreignisEdgeFactory):
         if self.ausgefuehrt:
             return
 
-        n1 = self.node1_factory.nodes[1].node_id()
-        n2 = self.node2_factory.first_label()
+        n1 = self.node1_builder.nodes[1].node_id()
+        n2 = self.node2_builder.first_label()
         ereignis_graph.add_edge(n1, n2)
         ereignis_graph.edges[(n1, n2)].update(self.e1d)
 
         self.ausgefuehrt = True
 
 
-class AbfahrtAbwartenFactory(ZielEreignisEdgeFactory):
+class AbfahrtAbwartenEdgeBuilder(ZielEreignisEdgeBuilder):
     """
     Nicht verwendet.
     """
@@ -712,7 +733,7 @@ class AbfahrtAbwartenFactory(ZielEreignisEdgeFactory):
         pass
 
 
-class AnkunftAbwartenFactory(ZielEreignisEdgeFactory):
+class AnkunftAbwartenEdgeBuilder(ZielEreignisEdgeBuilder):
     """
     Nicht verwendet.
     """
@@ -721,7 +742,7 @@ class AnkunftAbwartenFactory(ZielEreignisEdgeFactory):
         pass
 
 
-class KreuzungFactory(ZielEreignisEdgeFactory):
+class KreuzungEdgeBuilder(ZielEreignisEdgeBuilder):
     """
     Nicht verwendet.
     """
