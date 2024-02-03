@@ -15,6 +15,7 @@ logger.addHandler(logging.NullHandler())
 
 @dataclass
 class PlanungParams:
+    mindestaufenthalt_planhalt: int = 0
     mindestaufenthalt_lokwechsel: int = 5
     mindestaufenthalt_lokumlauf: int = 2
     mindestaufenthalt_richtungswechsel: int = 3

@@ -68,11 +68,9 @@ class EreignisGraphNode(dict):
                                 'Ab': Abfahrt,
                                 'E': Ersatz,
                                 'F': Flügelung,
-                                'K': Kupplung,
-                                '+': Zuganfang,
-                                '-': Zugende.
+                                'K': Kupplung.
                             """)
-    passiert = dict_property("passiert", bool, "True = Ereignis in Vergangenheit, Zeit t ist festgelegt")
+    fix = dict_property("fix", bool, "True = Zeit t ist festgelegt")
     p = dict_property("p", float, "Fahrplanzeit in Minuten")
     t = dict_property("t", float, "Geschätzte oder erfolgte Uhrzeit in Minuten")
     s = dict_property("s", float, "Ort in Minuten")
@@ -270,16 +268,17 @@ class EreignisGraph(nx.DiGraph):
 
         for zielnode in nodes:
             ziel_data = self.nodes[zielnode]
-            if ziel_data.passiert:
+            if ziel_data.fix:
                 continue
 
             zeit_min = -math.inf
             zeit_max = math.inf
-            for startnode, start_data in self.pred[zielnode]:
+            for startnode in self.pred[zielnode]:
+                start_data = self.nodes[startnode]
                 edge = (startnode, zielnode)
                 edge_data = self.edges[edge]
                 try:
-                    start_zeit = start_data.p
+                    start_zeit = start_data.t
                 except (AttributeError, KeyError):
                     continue
                 try:
@@ -291,10 +290,12 @@ class EreignisGraph(nx.DiGraph):
                 except (AttributeError, KeyError):
                     pass
 
-            try:
-                ziel_zeit = ziel_data.p
-            except (AttributeError, KeyError):
-                ziel_zeit = math.inf
+            ziel_zeit = -math.inf
+            if ziel_data.typ in {'Ab'}:
+                try:
+                    ziel_zeit = ziel_data.p
+                except (AttributeError, KeyError):
+                    pass
 
             ziel_zeit = min(ziel_zeit, zeit_max)
             ziel_zeit = max(ziel_zeit, zeit_min)
@@ -427,12 +428,12 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         else:
             self.zuganfang = True
 
-        if ziel_node.typ != 'E':
+        if ziel_node.typ in {'H', 'D', 'A'}:
             n1d = EreignisGraphNode(
                 typ='An',
                 zid=ziel_node.zid,
                 fid=ziel_node.fid,
-                passiert=ziel_node.status in {"an", "ab"},
+                fix=ziel_node.status in {"an", "ab"},
                 s=0
             )
             try:
@@ -442,12 +443,12 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 pass
             self.nodes.append(n1d)
 
-        if ziel_node.typ != 'A':
+        if ziel_node.typ in {'H', 'E'}:
             n2d = EreignisGraphNode(
                 typ='Ab',
                 zid=ziel_node.zid,
                 fid=ziel_node.fid,
-                passiert=ziel_node.status in {"ab"},
+                fix=ziel_node.status in {"ab"},
                 s=0
             )
             try:
@@ -546,14 +547,15 @@ class PlanfahrtEdgeBuilder(ZielEreignisEdgeBuilder):
     Builder für eine Planfahrt (normale Fahrt auf Strecke)
 
     Die Planfahrt erstellt eine Kante zwischen dem Abfahrtsereignis des ersten Ziels
-    und em Ankunftsereignis des zweiten Ziels.
+    und dem Ankunftsereignis des zweiten Ziels.
     """
 
-    def set_edge(self, node1_builder: EreignisNodeBuilder, node2_builder: EreignisNodeBuilder):
+    def set_edge(self, node1_builder: ZielEreignisNodeBuilder, node2_builder: ZielEreignisNodeBuilder):
         super().set_edge(node1_builder, node2_builder)
+        dt_min = node2_builder.nodes[0].p - node1_builder.nodes[-1].p
         self.e1d = EreignisGraphEdge(
             typ='P',
-            dt_min=0,
+            dt_min=dt_min,
             ds=0
         )
 
@@ -577,7 +579,7 @@ class ErsatzEdgeBuilder(ZielEreignisEdgeBuilder):
     und der Abfahrt am zweiten Ziel.
     """
 
-    def set_edge(self, node1_builder: EreignisNodeBuilder, node2_builder: EreignisNodeBuilder):
+    def set_edge(self, node1_builder: ZielEreignisNodeBuilder, node2_builder: ZielEreignisNodeBuilder):
         super().set_edge(node1_builder, node2_builder)
         self.node1_builder.nodes[1].typ = 'E'
         self.node1_builder.nodes[1].p = self.node2_builder.nodes[1].p
@@ -623,7 +625,7 @@ class KupplungEdgeBuilder(ZielEreignisEdgeBuilder):
     und der Abfahrt des gekuppelten Zuges (gegeben durch den Endpunkt der Zielkante).
     """
 
-    def set_edge(self, node1_builder: EreignisNodeBuilder, node2_builder: EreignisNodeBuilder):
+    def set_edge(self, node1_builder: ZielEreignisNodeBuilder, node2_builder: ZielEreignisNodeBuilder):
         super().set_edge(node1_builder, node2_builder)
 
         self.e1d = EreignisGraphEdge(
@@ -676,7 +678,7 @@ class FluegelungEdgeBuilder(ZielEreignisEdgeBuilder):
     und den Abfahrten der geflügelten Züge.
     """
 
-    def set_edge(self, node1_builder: EreignisNodeBuilder, node2_builder: EreignisNodeBuilder):
+    def set_edge(self, node1_builder: ZielEreignisNodeBuilder, node2_builder: ZielEreignisNodeBuilder):
         super().set_edge(node1_builder, node2_builder)
 
         e1d = EreignisGraphEdge(
