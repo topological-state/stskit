@@ -72,7 +72,15 @@ class ZielGraphNode(dict):
 
     # Die folgenden Properties werden nicht vom Simulator geliefert
     mindestaufenthalt = dict_property("mindestaufenthalt", Union[int, float],
-                                      docstring="Minimale Aufenthaltsdauer in Minuten")
+                                      docstring="""
+                                          Minimale Aufenthaltsdauer in Minuten.
+                                          Schätzung, wie lange sich der Zug mindestens an diesem Ziel aufhält,
+                                          auch wenn er laut Fahrplan früher abfahren müsste.
+                                          
+                                          Die Mindestaufenthaltsdauer wird von der Simulatorschnittstelle nicht angegeben
+                                          und muss von uns geschätzt werden, 
+                                          z.B. mittels konfigurierten Parametern durch mindestaufenthalt_setzen.
+                                          """)
     status = dict_property("status", str, docstring="""
                             Status des Ziels. Bestimmt, ob die Ankunfts- und/oder Abfahrtszeit definitiv ist. 
                             '': noch nicht erreicht,  
@@ -98,6 +106,17 @@ class ZielGraphNode(dict):
 
     @classmethod
     def from_fahrplanzeile(cls, fahrplanzeile: FahrplanZeile):
+        """
+        Daten aus Fahrplanzeile übernehmen.
+
+        Die folgenden Properties werden direkt übernommen:
+        obj, fid, zid, plan, gleis, typ, flags, p_an, p_ab.
+        mindestaufenthalt wird auf 0 gesetzt.
+        Alle anderen müssen separat gesetzt werden.
+
+        :param fahrplanzeile: Fahrplanzeile-Objekt von der Simulatorschnittstelle.
+        """
+
         d = cls(
             obj=fahrplanzeile,
             fid=fahrplanzeile.fid,
@@ -115,6 +134,41 @@ class ZielGraphNode(dict):
             d['p_ab'] = time_to_minutes(fahrplanzeile.ab)
 
         return d
+
+    def mindestaufenthalt_setzen(self, params: Optional[PlanungParams] = None):
+        """
+        Mindestaufenthalt-Property auf Vorgabewert setzen.
+
+        Der Mindestaufenthalt wird gemäss übergebenen Parametern aus dem Zieltyp und den Flags berechnet.
+        Er setzt sich zusammen aus einer Basiskomponente nach Planhalt, Ersatz, Kupplung oder Flügelung,
+        und einer additiven Komponente bei Richtungswechsel, Lokwechsel oder Lokumlauf.
+
+        :param params: Aufenthaltsparameter aus Konfiguration.
+            Wenn das Argument fehlt, werden die Defaultwerte der PlanungParams-Klasse verwendet.
+        """
+
+        if params is None:
+            params = PlanungParams
+
+        if self.typ == 'H':
+            result = params.mindestaufenthalt_planhalt
+        elif 'E' in self.flags:
+            result = params.mindestaufenthalt_ersatz
+        elif 'F' in self.flags:
+            result = params.mindestaufenthalt_fluegelung
+        elif 'K' in self.flags:
+            result = params.mindestaufenthalt_kupplung
+        else:
+            result = 0
+
+        if 'L' in self.flags:
+            result += params.mindestaufenthalt_lokumlauf
+        elif 'R' in self.flags:
+            result += params.mindestaufenthalt_richtungswechsel
+        elif 'W' in self.flags:
+            result += params.mindestaufenthalt_lokwechsel
+
+        self.mindestaufenthalt = result
 
 
 class ZielGraphEdge(dict):
@@ -156,8 +210,11 @@ class ZielGraph(nx.DiGraph):
     def to_directed_class(self):
         return self.__class__
 
-    def zug_details_importieren(self, zug: ZugDetails, einfahrt: Optional[Knoten], ausfahrt: Optional[Knoten],
-                                zugliste: Dict[int, ZugDetails]) -> Set[Tuple[str, int, int]]:
+    def zug_details_importieren(self, zug: ZugDetails,
+                                einfahrt: Optional[Knoten],
+                                ausfahrt: Optional[Knoten],
+                                zugliste: Dict[int, ZugDetails],
+                                params: Optional[PlanungParams]) -> Set[Tuple[str, int, int]]:
         """
         Ziel- und Zuggraphen nach Fahrplan eines Zuges aktualisieren.
 
@@ -172,13 +229,23 @@ class ZielGraph(nx.DiGraph):
         - Der vom Simulator gemeldete Fahrplan enthält nur anzufahrende Ziele.
           Im Zielgraphen werden die abgefahrenen Ziele jedoch beibehalten.
         - Die Methode fügt auch Knoten und Kanten für Einfahrten und Ausfahrten ein,
-          wenn diese in den von- und nach-Feldertn angegeben sind.
+          wenn diese in den von- und nach-Feldern angegeben sind.
           Einfahrten werden nur eingefügt, wenn der Zug noch nicht eingefahren ist.
 
-        :param: zid: Zug-ID. Der Zug muss in der Zugliste enthalten sein.
+        :param zug: ZugDetails-Objekt vom Simulator.
+        :param einfahrt: Einfahrtsknoten, falls im von-Feld angegeben.
+        :param ausfahrt: Ausfahrtssknoten, falls im nach-Feld angegeben.
+        :param zugliste: Referenz auf die Zugliste des PluginClient oder GraphClient.
+            Wird benötigt, um Verknüpfungen mit anderen Zügen aufzulösen.
+        :param params: Parametrisierung der Mindestaufenthaltsdauer nach Zieltyp.
+            Wenn None, werden die Defaultwerte der PlanungParams-Klasse verwendet.
+
         :return: Abgehende Verknüpfungen des Zuges mit anderen Zügen.
             Tupel von Typ ('E', 'K', 'F'), zid des Stammzuges, zid des Folgezuges.
         """
+
+        if params is None:
+            params = PlanungParams
 
         ziel1 = None
         fid1 = None
@@ -189,6 +256,7 @@ class ZielGraph(nx.DiGraph):
         for ziel2 in zug2.fahrplan:
             fid2 = ziel2.fid
             ziel_data = ZielGraphNode.from_fahrplanzeile(ziel2)
+            ziel_data.mindestaufenthalt_setzen(params)
             self.add_node(fid2, **ziel_data)
 
             if ziel1:
@@ -281,26 +349,6 @@ class ZielGraph(nx.DiGraph):
         else:
             if fid2 != fid3:
                 self.add_edge(fid2, fid3, typ=typ)
-
-    def mindestaufenthalt_setzen(self, params: PlanungParams):
-        for node, node_data in self.nodes(data=True):
-            if node_data.typ == 'H':
-                node_data.mindestaufenthalt = 1
-            elif node_data.typ == 'E':
-                node_data.mindestaufenthalt = params.mindestaufenthalt_ersatz
-            elif node_data.typ == 'F':
-                node_data.mindestaufenthalt = params.mindestaufenthalt_fluegelung
-            elif node_data.typ == 'K':
-                node_data.mindestaufenthalt = params.mindestaufenthalt_kupplung
-            else:
-                node_data.mindestaufenthalt = 0
-
-            if 'R' in node_data.flags:
-                node_data.mindestaufenthalt += params.mindestaufenthalt_richtungswechsel
-            if 'L' in node_data.flags:
-                node_data.mindestautfenthalt += params.mindestaufenthalt_lokumlauf
-            if 'W' in node_data.flags:
-                node_data.mindestaufenthalt += params.mindestaufenthalt_lokwechsel
 
 
 class ZielGraphUngerichtet(nx.Graph):
