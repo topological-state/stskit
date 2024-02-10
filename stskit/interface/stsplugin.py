@@ -29,7 +29,7 @@ stsplugin nutzt einen eigenen logger mit dem namen "stsplugin" aus dem logging m
 vorsicht: auf stufe DEBUG wird die gesamte kommunikation mit dem simulator ausgegeben!
 wenn dies nicht gewünscht wird, der rest des programms aber auf DEBUG bleiben soll,
 kann die stufe dieses moduls individuell angepasst werden durch
-"logging.getLogger('stsplugin').setLevel(logging.WARNING)".
+"logging.getLogger('stskit.interface.stsplugin').setLevel(logging.WARNING)".
 """
 import sys
 
