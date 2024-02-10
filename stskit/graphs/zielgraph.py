@@ -26,12 +26,15 @@ class PlanungParams:
     wartezeit_abfahrt_abwarten: int = 2
 
 
+ZielLabelType = Tuple[int, Optional[datetime.time], Optional[datetime.time], Union[int, str]]
+
+
 class ZielGraphNode(dict):
     obj = dict_property("obj", Any,
                         docstring="""
                             Fahrplanziel-Objekt (fehlt bei Ein- und Ausfahrten).
                             """)
-    fid = dict_property("fid", Tuple[int, Optional[datetime.time], Optional[datetime.time], Union[int, str]],
+    fid = dict_property("fid", ZielLabelType,
                         docstring="""
                             Fahrplanziel-ID bestehend aus Zug-ID, Ankunftszeit, Abfahrtszeit, Plangleis. 
                             Siehe stsobj.FahrplanZeile.fid.
@@ -204,11 +207,34 @@ class ZielGraph(nx.DiGraph):
     node_attr_dict_factory = ZielGraphNode
     edge_attr_dict_factory = ZielGraphEdge
 
+    def __init__(self, incoming_graph_data=None, **attr):
+        super().__init__(incoming_graph_data, **attr)
+        self.zug_anfaenge: Dict[int, ZielLabelType] = {}
+
     def to_undirected_class(self):
         return ZielGraphUngerichtet
 
     def to_directed_class(self):
         return self.__class__
+
+    def zugpfad(self, zid: int) -> Iterable[ZielLabelType]:
+        """
+        Generator für die Knoten eines Zuges
+
+        Beginnend mit dem Startknoten liefert der Generator die Knoten-IDs eines Zuges
+        in der Reihenfolge ihres Auftretens.
+        """
+
+        node = self.zug_anfaenge[zid]
+        while node is not None:
+            yield node
+
+            for n in self.successors(node):
+                if n[0] == zid:
+                    node = n
+                    break
+            else:
+                node = None
 
     def zug_details_importieren(self, zug: ZugDetails,
                                 einfahrt: Optional[Knoten],
@@ -249,12 +275,16 @@ class ZielGraph(nx.DiGraph):
 
         ziel1 = None
         fid1 = None
+        anfang = None
         zug2 = zug
         zid2 = zug2.zid
         links = set()
 
         for ziel2 in zug2.fahrplan:
             fid2 = ziel2.fid
+            if anfang is None:
+                anfang = fid2
+
             ziel_data = ZielGraphNode.from_fahrplanzeile(ziel2)
             ziel_data.mindestaufenthalt_setzen(params)
             self.add_node(fid2, **ziel_data)
@@ -299,6 +329,7 @@ class ZielGraph(nx.DiGraph):
                 logger.error(f"Fehler in Einfahrtsdaten {fid1}, Knoten {einfahrt}")
             else:
                 self.add_node(fid1, **ziel_data)
+                anfang = fid1
                 if not self.has_edge(fid1, fid2):
                     self.add_edge(fid1, fid2, typ='P')
 
@@ -323,8 +354,14 @@ class ZielGraph(nx.DiGraph):
                 logger.warning(f"Fehler in Ausfahrtsdaten {fid1}, Knoten {ausfahrt}")
             else:
                 self.add_node(fid1, **ziel_data)
+                if anfang is None:
+                    anfang = fid1
                 if not self.has_edge(fid2, fid1):
                     self.add_edge(fid2, fid1, typ='P')
+
+        if zid2 not in self.zug_anfaenge:
+            self.zug_anfaenge[zid2] = anfang
+        self.ziel_status_von_zug(zug2)
 
         return links
 
@@ -349,6 +386,38 @@ class ZielGraph(nx.DiGraph):
         else:
             if fid2 != fid3:
                 self.add_edge(fid2, fid3, typ=typ)
+
+    def ziel_status_von_zug(self, zug: ZugDetails):
+        """
+        Zielstatusfelder aus ZugDetails übernehmen.
+
+        Die Zielstatusfelder werden anhand der ZugDetails aktualisiert.
+        Von ZugDetails benötigt werden: fahrplan[].fid, ziel_index, amgleis
+
+        Abgefahrene Zielknoten werden mit 'ab' markiert, die noch nicht abgefahrenen mit ''.
+        Wenn der Zug an einem Ziel steht, ist der Status 'an'.
+        """
+
+        status = 'ab' if zug.sichtbar else ''
+        try:
+            fid_aktuell = zug.fahrplan[zug.ziel_index].fid
+        except KeyError:
+            # kein ziel oder kein fahrplan
+            fid_aktuell = None
+            if len(zug.fahrplan):
+                # noch nicht eingefahren
+                status = ''
+            else:
+                # ausgefahren
+                status = 'ab'
+
+        for fid in self.zugpfad(zug.zid):
+            data = self.nodes[fid]
+            if data.fid == fid_aktuell:
+                status = 'an' if zug.amgleis else ''
+            elif status == 'an':
+                status = ''
+            data.status = status
 
 
 class ZielGraphUngerichtet(nx.Graph):
