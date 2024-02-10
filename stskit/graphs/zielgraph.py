@@ -128,6 +128,7 @@ class ZielGraphNode(dict):
             gleis=fahrplanzeile.gleis,
             typ='D' if fahrplanzeile.durchfahrt() else 'H',
             flags=fahrplanzeile.flags,
+            status='',
             mindestaufenthalt=0
         )
 
@@ -362,6 +363,7 @@ class ZielGraph(nx.DiGraph):
         if zid2 not in self.zug_anfaenge:
             self.zug_anfaenge[zid2] = anfang
         self.ziel_status_von_zug(zug2)
+        self.verspaetung_von_zug(zug2)
 
         return links
 
@@ -401,7 +403,7 @@ class ZielGraph(nx.DiGraph):
         status = 'ab' if zug.sichtbar else ''
         try:
             fid_aktuell = zug.fahrplan[zug.ziel_index].fid
-        except KeyError:
+        except (KeyError, TypeError):
             # kein ziel oder kein fahrplan
             fid_aktuell = None
             if len(zug.fahrplan):
@@ -418,6 +420,23 @@ class ZielGraph(nx.DiGraph):
             elif status == 'an':
                 status = ''
             data.status = status
+
+    def verspaetung_von_zug(self, zug: ZugDetails):
+        """
+        Verspätungsfelder von ZugDetails übernehmen.
+
+        Die Verspätungsfelder werden anhand der ZugDetails aktualisiert.
+        Die Statusfelder müssen bereits korrekt gesetzt sein.
+        Es werden nur die noch nicht abgefahrenen Ziele aktualisiert.
+        """
+
+        for fid in self.zugpfad(zug.zid):
+            data = self.nodes[fid]
+            if data.status == '':
+                data.v_an = zug.verspaetung
+                data.v_ab = zug.verspaetung
+            elif data.status == 'an':
+                data.v_ab = zug.verspaetung
 
 
 class ZielGraphUngerichtet(nx.Graph):

@@ -304,6 +304,35 @@ class EreignisGraph(nx.DiGraph):
             else:
                 logger.warning(f"Keine Zeitprognose möglich für Ereignis {zielnode}")
 
+    def verspaetungen_nach_zielgraph(self, zg: ZielGraph):
+        """
+        Schreibt die berechneten Verspätungen in den Zielgraphen.
+
+        Die Verspätungen werden aus der Differenz zwischen den t- und p-Feldern der An- und Ab-Knoten berechnet.
+        Es werden nur die noch nicht erreichten Ziele aktualisiert.
+
+        :param zg: Zielgraph
+        """
+
+        for ereignis_node, ereignis_data in self.nodes(data=True):
+            try:
+                ziel_data = zg.nodes[ereignis_data.fid]
+            except (AttributeError, KeyError):
+                continue
+
+            try:
+                v = ereignis_data.t - ereignis_data.p
+            except AttributeError:
+                logger.warning(f"Unvollständige Zeitinformation für Verspätungsberechnung: {ereignis_data}")
+                return
+
+            if ereignis_data.typ == 'Ab':
+                if ziel_data.status == '' or ziel_data.status == 'an':
+                    ziel_data.v_ab = v
+            elif ereignis_data.typ == 'An':
+                if ziel_data.status == '':
+                    ziel_data.v_an = v
+
 
 class EreignisGraphUngerichtet(nx.Graph):
     """

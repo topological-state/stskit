@@ -13,6 +13,7 @@ from stskit.graphs.signalgraph import SignalGraph
 from stskit.graphs.bahnhofgraph import BahnhofGraph, BahnsteigGraph
 from stskit.graphs.liniengraph import LinienGraph, LinienGraphEdge
 from stskit.graphs.zielgraph import ZielGraph
+from stskit.graphs.ereignisgraph import EreignisGraph
 from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
 from stskit.utils.export import json_object_hook
 from stskit.zugschema import Zugschema
@@ -56,6 +57,7 @@ class Anlage:
         self.bahnhofgraph = BahnhofGraph()
         self.liniengraph = LinienGraph()
         self.zielgraph = ZielGraph()
+        self.ereignisgraph = EreignisGraph()
 
         self.strecken: Dict[str, List[Tuple[str, str]]] = {}
         self.hauptstrecke: Optional[str] = None
@@ -105,6 +107,10 @@ class Anlage:
 
         # todo : zielgraph kann sich zur laufzeit aendern
         self.zielgraph = client.zielgraph.copy(as_view=True)
+        self.ereignisgraph.zielgraph_importieren(self.zielgraph)
+        # todo : einfahrten korrigieren
+        self.ereignisgraph.prognose()
+        self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
 
         if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
             self.liniengraph_konfigurieren()
