@@ -201,7 +201,7 @@ class GraphClient(PluginClient):
                    self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Ausfahrt']].get(zug.von, None)
         ausfahrt = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Ausfahrt']].get(zug.nach, None) or \
                    self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Einfahrt']].get(zug.nach, None)
-        links = self.zielgraph.zug_details_importieren(zug, einfahrt, ausfahrt, self.zugliste)
+        links = self.zielgraph.zug_details_importieren(zug, einfahrt, ausfahrt, self.zugliste, None)
         for link in links:
             self.zuggraph.zuege_verknuepfen(link[0], link[1], link[2])
 

@@ -107,14 +107,13 @@ class Anlage:
 
         # todo : zielgraph kann sich zur laufzeit aendern
         self.zielgraph = client.zielgraph.copy(as_view=True)
-        self.ereignisgraph.zielgraph_importieren(self.zielgraph)
-        # todo : einfahrten korrigieren
-        self.ereignisgraph.prognose()
-        self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
-
         if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
             self.liniengraph_konfigurieren()
             self.liniengraph_mit_signalgraph_abgleichen()
+        self.zielgraph.einfahrtszeiten_korrigieren(self.liniengraph, self.bahnhofgraph)
+        self.ereignisgraph.zielgraph_importieren(self.zielgraph)
+        self.ereignisgraph.prognose()
+        self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
 
         if len(self.strecken) == 0 and self.liniengraph:
             strecken = self.liniengraph.strecken_vorschlagen(2, 3)
@@ -122,13 +121,6 @@ class Anlage:
                 key = f"{strecke[0][1]}-{strecke[-1][1]}"
                 self.strecken[key] = strecke
             self.strecken_konfigurieren()
-
-    def label_aus_zielgleis(self, gleis: Union[int, str]) -> Tuple[str, str]:
-        if isinstance(gleis, int):
-            signal_node = self.signalgraph.nodes[gleis]
-            return 'Agl', signal_node.name
-        else:
-            return 'Gl', gleis
 
     def liniengraph_konfigurieren(self):
         """
@@ -142,8 +134,8 @@ class Anlage:
             if kante.typ == 'P':
                 ziel1_data = self.zielgraph.nodes[node1]
                 ziel2_data = self.zielgraph.nodes[node2]
-                bst1 = self.bahnhofgraph.find_superior(self.label_aus_zielgleis(ziel1_data.plan), {'Bf', 'Anst'})
-                bst2 = self.bahnhofgraph.find_superior(self.label_aus_zielgleis(ziel2_data.plan), {'Bf', 'Anst'})
+                bst1 = self.bahnhofgraph.find_superior(self.bahnhofgraph.ziel_gleis[ziel1_data.plan], {'Bf', 'Anst'})
+                bst2 = self.bahnhofgraph.find_superior(self.bahnhofgraph.ziel_gleis[ziel2_data.plan], {'Bf', 'Anst'})
                 if bst1 != bst2:
                     bst1_data = self.bahnhofgraph.nodes[bst1]
                     bst2_data = self.bahnhofgraph.nodes[bst2]

@@ -6,6 +6,7 @@ from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, TypeVar,
 import networkx as nx
 
 from stskit.graphs.graphbasics import dict_property
+from stskit.graphs.bahnhofgraph import BahnhofGraph
 from stskit.interface.stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
 from stskit.interface.stsobj import Knoten, FahrplanZeile, ZugDetails
 
@@ -437,6 +438,53 @@ class ZielGraph(nx.DiGraph):
                 data.v_ab = zug.verspaetung
             elif data.status == 'an':
                 data.v_ab = zug.verspaetung
+
+    def einfahrtszeiten_korrigieren(self, lg: 'LinienGraph', bg: BahnhofGraph):
+        """
+        Ein- und Ausfahrtszeiten korrigieren.
+
+        Da der Simulator keine Ein- und Ausfahrtszeiten angibt,
+        bietet diese Methode an, sie aus dem nächsten Ziel und der gemessenen Fahrzeit im Liniengraph abzuschätzen.
+
+        :param lg: Der Liniengraph enthält die Fahrzeiten zwischen den Bahnhofteilen.
+        :param bg: Der Bahnhofgraph enthält die Zuordnung von Gleisen zu Bahnhofteilen.
+        """
+
+        for fid1, fid2 in self.edges(data=False):
+            ziel1_data = self.nodes[fid1]
+            ziel2_data = self.nodes[fid2]
+            if ziel1_data.typ == 'E' or ziel2_data.typ == 'A':
+                bst1 = bg.find_superior(bg.ziel_gleis[ziel1_data.plan], {'Anst', 'Bf'})
+                bst2 = bg.find_superior(bg.ziel_gleis[ziel2_data.plan], {'Anst', 'Bf'})
+
+                try:
+                    fahrzeit = lg.edges[bst1][bst2]['fahrzeit_schnitt']
+                    if fahrzeit < 1:
+                        continue
+                except KeyError:
+                    continue
+
+                if ziel1_data.typ == 'E':
+                    try:
+                        dt = datetime.datetime.combine(datetime.datetime.today(), ziel2_data.p_an)
+                    except AttributeError:
+                        continue
+                    else:
+                        dt -= datetime.timedelta(minutes=fahrzeit)
+                        einfahrtszeit = dt.time()
+                        ziel1_data.update(p_an=time_to_minutes(einfahrtszeit),
+                                          p_ab=time_to_minutes(einfahrtszeit))
+
+                elif ziel2_data.typ == 'A':
+                    try:
+                        dt = datetime.datetime.combine(datetime.datetime.today(), ziel1_data.p_ab)
+                    except AttributeError:
+                        continue
+                    else:
+                        dt += datetime.timedelta(minutes=fahrzeit)
+                        ausfahrtszeit = dt.time()
+                        ziel2_data.update(p_an=time_to_minutes(ausfahrtszeit),
+                                          p_ab=time_to_minutes(ausfahrtszeit))
 
 
 class ZielGraphUngerichtet(nx.Graph):

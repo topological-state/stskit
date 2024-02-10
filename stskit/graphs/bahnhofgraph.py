@@ -94,10 +94,19 @@ class BahnhofGraph(nx.DiGraph):
 
     Der Graph ist gerichtet, die Kanten zeigen von Bahnhöfen zu Gleisen.
     Die ungerichtete Variante ist der BahnsteigGraph.
+
+    Attribute
+    ---------
+
+    ziel_gleis: Ordnet jedem Gleisnamen und jeder Anschlussnummer das entsprechende Graphlabel zu.
     """
 
     node_attr_dict_factory = BahnsteigGraphNode
     edge_attr_dict_factory = BahnsteigGraphEdge
+
+    def __init__(self, incoming_graph_data=None, **attr):
+        super().__init__(incoming_graph_data, **attr)
+        self.ziel_gleis: Dict[Union[int, str], Tuple[str, str]] = {}
 
     def to_directed_class(self):
         return self.__class__
@@ -175,6 +184,24 @@ class BahnhofGraph(nx.DiGraph):
                 return v
 
         return None
+
+    def find_gleis_enr(self, name_enr: Union[int, str]) -> Optional[Tuple[str, str]]:
+        """
+        Gleis nach Name oder Anschlussgleis nach enr suchen.
+
+        Der Zielgraph enthält für Anschlussgleise die enr.
+        Mit dieser Methode kann sie in ein Label des Bahnhofgraphs überführt werden.
+        Die Gleise sind indiziert in self.ziel_gleis.
+        Dieser Dictionary kann alternativ verwendet werden.
+
+        :param name_enr: Gleisname oder Elementnummer (enr) aus Signalgraph
+        :return: Gleislabel (typ, name) oder None, wenn nicht gefunden
+        """
+
+        try:
+            return self.ziel_gleis[name_enr]
+        except KeyError:
+            return None
 
     def gleis_bahnsteig(self, gleis: str) -> str:
         """
@@ -273,6 +300,7 @@ class BahnhofGraph(nx.DiGraph):
                 bs = f_bahnsteigname(gleis)
                 self.add_node(('Bs', bs), name=bs, typ='Bs', auto=True)
                 self.add_node(('Gl', gleis), name=gleis, typ='Gl', auto=True)
+                self.ziel_gleis[gleis] = ('Gl', gleis)
                 self.add_edge(('Bft', bft), ('Bs', bs), typ='Bft', auto=True)
                 self.add_edge(('Bs', bs), ('Gl', gleis), typ='Bs', auto=True)
 
@@ -300,6 +328,7 @@ class BahnhofGraph(nx.DiGraph):
                 anst = f_anschlussname(agl)
                 self.add_node(('Agl', agl), **agl_data)
                 self.add_edge(anst_label, ('Anst', anst), typ=anst_label[0], auto=True)
+                self.ziel_gleis[data.enr] = ('Agl', agl)
                 self.add_node(('Anst', anst), name=anst, typ='Anst', auto=True)
                 self.add_edge(('Anst', anst), ('Agl', agl), typ='Anst', auto=True)
 
