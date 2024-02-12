@@ -36,7 +36,7 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set,
 import networkx as nx
 
 from stskit.graphs.graphbasics import dict_property
-from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge
+from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -55,11 +55,13 @@ class EreignisGraphNode(dict):
     auto_inc = itertools.count(1)
 
     zid = dict_property("zid", int, docstring="Zug-ID")
-    fid = dict_property("fid", Tuple[int, Optional[datetime.time], Optional[datetime.time], Union[int, str]],
+    fid = dict_property("fid", ZielLabelType,
                         docstring="""
-                            Fahrplanziel-ID bestehend aus Zug-ID, Ankunftszeit, Abfahrtszeit, Plangleis. 
+                            Fahrplanziel-ID bestehend aus Zug-ID, Ankunfts- oder Abfahrtszeit in Minuten, Plangleis.
+                            Dies ist das Nodelabel im Zielgraph.
                             Siehe stsobj.FahrplanZeile.fid.
-                            Bei Ein- und Ausfahrten wird statt dem Gleiseintrag die Elementnummer (enr) eingesetzt.
+                            Bei Ein- und Ausfahrten wird statt dem Gleiseintrag die Elementnummer (enr) eingesetzt,
+                            und die Zeitkomponente ist MIN_MINUTES (Einfahrt) oder MAX_MINUTES (Ausfahrt).
                             """)
     typ = dict_property("typ", str,
                         docstring="""

@@ -687,19 +687,23 @@ class FahrplanZeile:
         self.kuppelzug: Optional[ZugDetails] = None
 
     @property
-    def fid(self) -> Tuple[int, Optional[datetime.time], Optional[datetime.time], str]:
+    def fid(self) -> Tuple[int, int, str]:
         """
         Fahrplanziel-Identifikation
 
-        Die Identifikation besteht aus den eindeutigen, unveränderlichen Attributen zug.zid, an, ab und plan.
+        Die Identifikation besteht aus den eindeutigen, unveränderlichen Attributen Zug-ID, Zeit in Minuten und Plangleis.
 
-        Die attribute an, ab und plan alleine sind (auch für einen Zug) nicht eindeutig:
+        Die Attribute an, ab und plan alleine sind (auch für einen Zug) nicht eindeutig:
         an oder ab können None sein, das Gleis kann mehrmals angefahren werden.
 
-        :return: Vierertupel (zid, an, ab, plan)
+        :return: Dreiertupel (zid, zeit, plan). zeit ist entweder die Ankunfts- oder Abfahrtszeit in Minuten.
         """
 
-        return self.zug.zid, self.an, self.ab, self.plan
+        try:
+            zeit = time_to_minutes(self.an or self.ab)
+        except (AttributeError, TypeError):
+            zeit = 0
+        return self.zug.zid, zeit, self.plan
 
     def __hash__(self) -> int:
         """

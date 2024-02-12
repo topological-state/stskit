@@ -27,19 +27,22 @@ class PlanungParams:
     wartezeit_abfahrt_abwarten: int = 2
 
 
-ZielLabelType = Tuple[int, Optional[datetime.time], Optional[datetime.time], Union[int, str]]
+MIN_MINUTES = 0
+MAX_MINUTES = 24 * 60
+ZielLabelType = Tuple[int, int, Union[int, str]]
 
 
 class ZielGraphNode(dict):
     obj = dict_property("obj", Any,
                         docstring="""
-                            Fahrplanziel-Objekt (fehlt bei Ein- und Ausfahrten).
+                            stsobj.FahrplanZeile-Objekt (fehlt bei Ein- und Ausfahrten).
                             """)
     fid = dict_property("fid", ZielLabelType,
                         docstring="""
-                            Fahrplanziel-ID bestehend aus Zug-ID, Ankunftszeit, Abfahrtszeit, Plangleis. 
+                            Fahrplanziel-ID bestehend aus Zug-ID, Ankunfts- oder Abfahrtszeit in Minuten, Plangleis.
                             Siehe stsobj.FahrplanZeile.fid.
-                            Bei Ein- und Ausfahrten wird statt dem Gleiseintrag die Elementnummer (enr) eingesetzt.
+                            Bei Ein- und Ausfahrten wird statt dem Gleiseintrag die Elementnummer (enr) eingesetzt,
+                            und die Zeitkomponente ist MIN_MINUTES (Einfahrt) oder MAX_MINUTES (Ausfahrt).
                             """)
     zid = dict_property("zid", int, docstring="Zug-ID")
     typ = dict_property("typ", str,
@@ -93,8 +96,6 @@ class ZielGraphNode(dict):
                             """)
     v_an = dict_property("v_an", Union[int, float], docstring="Ankunftsverspätung in Minuten")
     v_ab = dict_property("v_ab", Union[int, float], docstring="Abfahrtsverspätung in Minuten")
-    f_an = dict_property("f_an", Union[int, float], docstring="Effektive Ankunftszeit in Minuten")
-    f_ab = dict_property("f_ab", Union[int, float], docstring="Effektive Abfahrtszeit in Minuten")
 
     def e_an(self) -> Union[int, float]:
         """
@@ -311,21 +312,20 @@ class ZielGraph(nx.DiGraph):
             fid1 = fid2
 
         if not zug2.sichtbar and zug2.von and not zug2.von.startswith("Gleis"):
-            fid2 = zug2.fahrplan[0].fid
-            dt = datetime.datetime.combine(datetime.datetime.today(), fid2[1])
-            dt -= datetime.timedelta(minutes=1)
-            einfahrtszeit = dt.time()
+            fz2 = zug2.fahrplan[0]
+            fid2 = fz2.fid
+            einfahrtszeit = time_to_minutes(fz2.an or fz2.ab) - 1
 
             try:
-                fid1 = (zid2, einfahrtszeit, einfahrtszeit, einfahrt.enr)
+                fid1 = (zid2, MIN_MINUTES, einfahrt.enr)
                 ziel_data = ZielGraphNode(
                     fid=fid1,
                     zid=zid2,
                     typ='E',
                     plan=einfahrt.enr,
                     gleis=einfahrt.enr,
-                    p_an=time_to_minutes(einfahrtszeit),
-                    p_ab=time_to_minutes(einfahrtszeit)
+                    p_an=einfahrtszeit,
+                    p_ab=einfahrtszeit
                 )
             except (AttributeError, KeyError, TypeError):
                 logger.error(f"Fehler in Einfahrtsdaten {fid1}, Knoten {einfahrt}")
@@ -336,21 +336,20 @@ class ZielGraph(nx.DiGraph):
                     self.add_edge(fid1, fid2, typ='P')
 
         if zug2.nach and not zug2.nach.startswith("Gleis"):
-            fid2 = zug2.fahrplan[-1].fid
-            dt = datetime.datetime.combine(datetime.datetime.today(), fid2[1])
-            dt += datetime.timedelta(minutes=1)
-            ausfahrtszeit = dt.time()
+            fz2 = zug2.fahrplan[-1]
+            fid2 = fz2.fid
+            ausfahrtszeit = time_to_minutes(fz2.ab or fz2.an) + 1
 
             try:
-                fid1 = (zid2, ausfahrtszeit, ausfahrtszeit, ausfahrt.enr)
+                fid1 = (zid2, MAX_MINUTES, ausfahrt.enr)
                 ziel_data = ZielGraphNode(
                     fid=fid1,
                     zid=zid2,
                     typ='A',
                     plan=ausfahrt.enr,
                     gleis=ausfahrt.enr,
-                    p_an=time_to_minutes(ausfahrtszeit),
-                    p_ab=time_to_minutes(ausfahrtszeit)
+                    p_an=ausfahrtszeit,
+                    p_ab=ausfahrtszeit
                 )
             except (AttributeError, KeyError):
                 logger.warning(f"Fehler in Ausfahrtsdaten {fid1}, Knoten {ausfahrt}")
