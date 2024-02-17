@@ -319,13 +319,17 @@ class ZielGraph(nx.DiGraph):
             try:
                 fid1 = (zid2, MIN_MINUTES, einfahrt.enr)
                 ziel_data = ZielGraphNode(
+                    obj=None,
                     fid=fid1,
                     zid=zid2,
                     typ='E',
                     plan=einfahrt.enr,
                     gleis=einfahrt.enr,
+                    flags='',
+                    status='',
                     p_an=einfahrtszeit,
-                    p_ab=einfahrtszeit
+                    p_ab=einfahrtszeit,
+                    mindestaufenthalt=0
                 )
             except (AttributeError, KeyError, TypeError):
                 logger.error(f"Fehler in Einfahrtsdaten {fid1}, Knoten {einfahrt}")
@@ -343,13 +347,17 @@ class ZielGraph(nx.DiGraph):
             try:
                 fid1 = (zid2, MAX_MINUTES, ausfahrt.enr)
                 ziel_data = ZielGraphNode(
+                    obj=None,
                     fid=fid1,
                     zid=zid2,
                     typ='A',
                     plan=ausfahrt.enr,
                     gleis=ausfahrt.enr,
+                    flags='',
+                    status='',
                     p_an=ausfahrtszeit,
-                    p_ab=ausfahrtszeit
+                    p_ab=ausfahrtszeit,
+                    mindestaufenthalt=0
                 )
             except (AttributeError, KeyError):
                 logger.warning(f"Fehler in Ausfahrtsdaten {fid1}, Knoten {ausfahrt}")
