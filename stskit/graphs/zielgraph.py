@@ -212,7 +212,8 @@ class ZielGraph(nx.DiGraph):
 
     def __init__(self, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
-        self.zug_anfaenge: Dict[int, ZielLabelType] = {}
+        self.zuganfaenge: Dict[int, ZielLabelType] = {}
+        self.zugenden: Dict[int, ZielLabelType] = {}
 
     def to_undirected_class(self):
         return ZielGraphUngerichtet
@@ -228,7 +229,7 @@ class ZielGraph(nx.DiGraph):
         in der Reihenfolge ihres Auftretens.
         """
 
-        node = self.zug_anfaenge[zid]
+        node = self.zuganfaenge[zid]
         while node is not None:
             yield node
 
@@ -279,6 +280,7 @@ class ZielGraph(nx.DiGraph):
         ziel1 = None
         fid1 = None
         anfang = None
+        ende = None
         zug2 = zug
         zid2 = zug2.zid
         links = set()
@@ -287,6 +289,7 @@ class ZielGraph(nx.DiGraph):
             fid2 = ziel2.fid
             if anfang is None:
                 anfang = fid2
+            ende = fid2
 
             ziel_data = ZielGraphNode.from_fahrplanzeile(ziel2)
             ziel_data.mindestaufenthalt_setzen(params)
@@ -336,6 +339,8 @@ class ZielGraph(nx.DiGraph):
             else:
                 self.add_node(fid1, **ziel_data)
                 anfang = fid1
+                if ende is None:
+                    ende = fid1
                 if not self.has_edge(fid1, fid2):
                     self.add_edge(fid1, fid2, typ='P')
 
@@ -365,11 +370,13 @@ class ZielGraph(nx.DiGraph):
                 self.add_node(fid1, **ziel_data)
                 if anfang is None:
                     anfang = fid1
+                ende = fid1
                 if not self.has_edge(fid2, fid1):
                     self.add_edge(fid2, fid1, typ='P')
 
-        if zid2 not in self.zug_anfaenge:
-            self.zug_anfaenge[zid2] = anfang
+        if zid2 not in self.zuganfaenge:
+            self.zuganfaenge[zid2] = anfang
+            self.zugenden[zid2] = ende
         self.ziel_status_von_zug(zug2)
         self.verspaetung_von_zug(zug2)
 
