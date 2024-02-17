@@ -91,6 +91,18 @@ def format_verspaetung(verspaetung: Optional[int]) -> str:
         return ""
 
 
+def format_minutes(minutes: Union[int, float]) -> str:
+    """
+    Minuten in Stunden:Minuten formatieren.
+
+    :param minutes: Zeit in Minuten
+    """
+    minutes = round(minutes)
+    h = minutes // 60
+    m = minutes % 60
+    return f"{h:02d}:{m:02d}"
+
+
 class AnlagenInfo:
     """
     objektklasse für anlageninformationen.

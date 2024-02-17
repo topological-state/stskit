@@ -5,8 +5,6 @@ dieses Qt-fenster stellt den fahrplan (zugliste und detailfahrplan eines zuges) 
 import logging
 from typing import Any, Dict, List, Optional
 
-import matplotlib as mpl
-import networkx as nx
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
@@ -14,22 +12,15 @@ from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
 from stskit.zentrale import DatenZentrale
-from stskit.planung import ZugDetailsPlanung, ZugZielPlanung
-from stskit.interface.stsobj import ZugDetails, time_to_minutes, format_verspaetung
+from stskit.interface.stsobj import time_to_minutes, format_verspaetung, format_minutes
 from stskit.qt.ui_fahrplan import Ui_FahrplanWidget
-from stskit.zielgraph import draw_zielgraph, zug_subgraph, format_node_label_name, verarbeitete_stammzuege_entfernen
+from stskit.graphs.bahnhofgraph import BahnhofGraph
+from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielLabelType
+from stskit.graphs.zuggraph import ZugGraph, ZugGraphNode
+from stskit.plots.zielplot import ZielPlot
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
-
-
-def zug_status(zug: ZugDetailsPlanung) -> str:
-    if zug.sichtbar:
-        return "S"
-    elif zug.gleis:
-        return "E"
-    else:
-        return "A"
 
 
 class ZuglisteModell(QtCore.QAbstractTableModel):
@@ -46,40 +37,47 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
     es wird davon ausgegangen, dass die zugliste nicht häufing verändert wird
     und dass änderungen sofort über set_zugliste angezeigt werden.
     """
-    def __init__(self):
+    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph, bahnhofgraph: BahnhofGraph):
         super().__init__()
 
-        self._zugliste: Dict[int, ZugDetailsPlanung] = {}
-        self._reihenfolge: List[int] = []
+        self.bahnhofgraph = bahnhofgraph
+        self.zuggraph = zuggraph
+        self.zielgraph = zielgraph
+        self.zid_liste: List[int] = []
         self._columns: List[str] = ['Zug', 'Status', 'Von', 'Nach', 'Einfahrt', 'Ausfahrt', 'Gleis', 'Verspätung']
         self.zugschema = None
 
-    def set_zugliste(self, zugliste: Dict[int, ZugDetailsPlanung]) -> None:
+    def update(self):
         """
-        zugliste setzen.
+        Zugdaten aktualisieren
 
-        die zugliste darf nur als ganzes über diese methode gesetzt werden.
-        der direkte zugriff auf _zugliste kann einen absturz verursachen!
-
-        :param zugliste: dies muss die zugliste aus dem planungsmodul sein.
+        :param zuggraph:
         :return: None
         """
         self.beginResetModel()
-        self._zugliste = zugliste
-        self._reihenfolge = sorted(self._zugliste.keys())
+        self.zid_liste = sorted(self.zuggraph.nodes())
         self.endResetModel()
 
-    def get_zug(self, row) -> Optional[ZugDetailsPlanung]:
+    def get_zug(self, row: int) -> Optional[ZugGraphNode]:
         """
-        zug einer gewählten zeile auslesen.
+        Zug einer gewählten Tabellenzeile auslesen.
 
-        :param row: tabellenzeile
-        :return: zugdetails aus der zugliste. None, wenn kein entsprechender zug gefunden wird.
+        :param row: Index der Tabellenzeile
+        :return: Zugdaten aus dem Originalgraph. None, wenn kein entsprechender Zug gefunden wird.
         """
         try:
-            return self._zugliste[self._reihenfolge[row]]
+            return self.zuggraph.nodes[self.zid_liste[row]]
         except (KeyError, IndexError):
             return None
+
+    @staticmethod
+    def zug_status(zug: ZugGraphNode) -> str:
+        if zug.sichtbar:
+            return "S"
+        elif zug.gleis:
+            return "E"
+        else:
+            return "A"
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
         """
@@ -97,7 +95,7 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
         :param parent: nicht verwendet
         :return: anzahl dargestellte züge.
         """
-        return len(self._reihenfolge)
+        return len(self.zid_liste)
 
     def data(self, index: QModelIndex, role: int = ...) -> Any:
         """
@@ -117,7 +115,7 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
 
         try:
             row = index.row()
-            zug = self._zugliste[self._reihenfolge[row]]
+            zug = self.zuggraph.nodes[self.zid_liste[row]]
             col = self._columns[index.column()]
         except (IndexError, KeyError):
             return None
@@ -127,13 +125,17 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
                 return zug.zid
             elif col == 'Einfahrt':
                 try:
-                    return time_to_minutes(zug.einfahrtszeit)
-                except AttributeError:
+                    fid = self.zielgraph.zuganfaenge[zug.zid]
+                    ziel = self.zielgraph.nodes[fid]
+                    return ziel.p_an
+                except (AttributeError, KeyError):
                     return None
             elif col == 'Ausfahrt':
                 try:
-                    return time_to_minutes(zug.ausfahrtszeit)
-                except AttributeError:
+                    fid = self.zielgraph.zugenden[zug.zid]
+                    ziel = self.zielgraph.nodes[fid]
+                    return ziel.p_ab
+                except (AttributeError, KeyError):
                     return None
             elif col == 'Zug':
                 return zug.nummer
@@ -146,7 +148,7 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
             elif col == 'Gleis':
                 return zug.gleis
             elif col == 'Status':
-                return zug_status(zug)
+                return self.zug_status(zug)
             else:
                 return None
         
@@ -155,14 +157,18 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
                 return zug.zid
             elif col == 'Einfahrt':
                 try:
-                    return zug.einfahrtszeit.isoformat(timespec='minutes')
-                except AttributeError:
-                    return ""
+                    fid = self.zielgraph.zuganfaenge[zug.zid]
+                    ziel = self.zielgraph.nodes[fid]
+                    return format_minutes(ziel.p_an)
+                except (AttributeError, KeyError, TypeError):
+                    return None
             elif col == 'Ausfahrt':
                 try:
-                    return zug.ausfahrtszeit.isoformat(timespec='minutes')
-                except AttributeError:
-                    return ""
+                    fid = self.zielgraph.zugenden[zug.zid]
+                    ziel = self.zielgraph.nodes[fid]
+                    return format_minutes(ziel.p_ab)
+                except (AttributeError, KeyError, TypeError):
+                    return None
             elif col == 'Zug':
                 return zug.name
             elif col == 'Verspätung':
@@ -180,7 +186,7 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
                 else:
                     return f"{zug.gleis} /{zug.plangleis}/"
             elif col == 'Status':
-                return zug_status(zug)
+                return self.zug_status(zug)
             else:
                 return None
 
@@ -222,7 +228,7 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
             if orientation == QtCore.Qt.Horizontal:
                 return self._columns[section]
             elif orientation == QtCore.Qt.Vertical:
-                return self._zugliste[self._reihenfolge[section]].zid
+                return self.zid_liste[section]
 
 
 class ZuglisteFilterProxy(QSortFilterProxyModel):
@@ -262,34 +268,44 @@ class ZuglisteFilterProxy(QSortFilterProxyModel):
         if self.simzeit <= 0:
             return True
 
+        zugliste_modell: Optional[ZuglisteModell] = None
+        while zugliste_modell is None:
+            source = self.sourceModel()
+            if isinstance(source, ZuglisteModell):
+                zugliste_modell = source
+                break
+
         try:
-            zug = self.sourceModel().get_zug(source_row)
+            zug = zugliste_modell.get_zug(source_row)
         except AttributeError:
-            print("can't get zug")
-            pass
-        else:
-            if zug is None or zug.sichtbar:
+            return True
+
+        if zug is None or zug.sichtbar:
+            return True
+
+        if zug.gleis:
+            if self._vorlaufzeit <= 0:
                 return True
 
-            elif zug.gleis:
-                if self._vorlaufzeit <= 0:
-                    return True
+            try:
+                anfang_id = zugliste_modell.zielgraph.zuganfaenge[zug.zid]
+                anfang = zugliste_modell.zielgraph.nodes[anfang_id]
+                if anfang.p_an + min(0, anfang.v_an) > self.simzeit + self._vorlaufzeit:
+                    return False
+            except (AttributeError, KeyError):
+                pass
 
-                try:
-                    if time_to_minutes(zug.einfahrtszeit) > self.simzeit + self._vorlaufzeit:
-                        return False
-                except AttributeError:
-                    pass
+        else:
+            if self._nachlaufzeit <= 0:
+                return True
 
-            else:
-                if self._nachlaufzeit <= 0:
-                    return True
-
-                try:
-                    if time_to_minutes(zug.ausfahrtszeit) < self.simzeit - self._nachlaufzeit:
-                        return False
-                except AttributeError:
-                    pass
+            try:
+                ende_id = zugliste_modell.zielgraph.zugenden[zug.zid]
+                ende = zugliste_modell.zielgraph.nodes[ende_id]
+                if ende.p_ab + ende.v_ab < self.simzeit - self._nachlaufzeit:
+                    return False
+            except (AttributeError, KeyError):
+                return False
 
         return True
 
@@ -303,21 +319,48 @@ class FahrplanModell(QtCore.QAbstractTableModel):
 
     der anzuzeigende zug wird durch set_zug gesetzt.
     """
-    def __init__(self):
+    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph, bahnhofgraph: BahnhofGraph):
         super().__init__()
 
-        self.zug: Optional[ZugDetails] = None
+        self.bahnhofgraph = bahnhofgraph
+        self.zielgraph = zielgraph
+        self.zuggraph = zuggraph
+        self.zid: int = 0
+        self.zug: Optional[ZugGraphNode] = None
+        self.zugpfad: List[ZielLabelType] = []
+        self.zweige: Dict[ZielLabelType, ZielLabelType] = {}
         self._columns: List[str] = ['Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Vorgang', 'Vermerke']
 
-    def set_zug(self, zug: Optional[ZugDetails]):
+    def set_zug(self, zid: int):
         """
-        anzuzeigenden zug setzen.
+        Anzuzeigenden Zug setzen.
 
-        :param zug: ZugDetails oder ZugDetailsPlanung. None = leerer fahrplan.
+        :param zid: Zug-ID. 0 = leerer Fahrplan.
         :return: None
         """
-        self.zug = zug
-        self.layoutChanged.emit()
+        self.beginResetModel()
+        self.zid = zid
+        self.update()
+        self.endResetModel()
+
+    def update(self):
+        self.beginResetModel()
+        if self.zid:
+            self.zug = self.zuggraph.nodes[self.zid]
+            self.zugpfad = list(self.zielgraph.zugpfad(self.zid))
+        else:
+            self.zug = None
+            self.zugpfad = []
+        self._update_zweige()
+        self.endResetModel()
+
+    def _update_zweige(self):
+        self.zweige = {}
+
+        for fid in self.zugpfad:
+            for u, v, d in self.zielgraph.out_edges(fid, data=True):
+                if d.typ in {"E", "K", "F"}:
+                    self.zweige[fid] = v
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
         """
@@ -335,7 +378,7 @@ class FahrplanModell(QtCore.QAbstractTableModel):
         :param parent: nicht verwendet
         :return:
         """
-        return len(self.zug.fahrplan) if self.zug else 0
+        return len(self.zugpfad)
 
     def data(self, index: QModelIndex, role: int = ...) -> Any:
         """
@@ -351,51 +394,54 @@ class FahrplanModell(QtCore.QAbstractTableModel):
             return None
 
         try:
-            zeile: ZugZielPlanung = self.zug.fahrplan[index.row()]
+            ziel: ZielGraphNode = self.zielgraph.nodes[self.zugpfad[index.row()]]
             col = self._columns[index.column()]
         except IndexError:
             return None
 
         if role == QtCore.Qt.DisplayRole:
-            if col == 'Gleis' and zeile.gleis:
-                if zeile.gleis == zeile.plan:
-                    return zeile.gleis
+            if col == 'Gleis' and ziel.gleis:
+                gleis = self.bahnhofgraph.ziel_gleis[ziel.gleis][1]
+                plan = self.bahnhofgraph.ziel_gleis[ziel.plan][1]
+                if ziel.gleis == ziel.plan:
+                    return gleis
                 else:
-                    return f"{zeile.gleis} /{zeile.plan}/"
-            elif col == 'An' and zeile.an:
-                return zeile.an.isoformat(timespec='minutes')
-            elif col == 'Ab' and zeile.ab:
-                return zeile.ab.isoformat(timespec='minutes')
+                    return f"{gleis} /{plan}/"
+            elif col == 'An':
+                try:
+                    return format_minutes(ziel.p_an)
+                except AttributeError:
+                    return None
+            elif col == 'Ab':
+                try:
+                    return format_minutes(ziel.p_ab)
+                except AttributeError:
+                    return None
             elif col == 'VAn':
                 try:
-                    return format_verspaetung(zeile.verspaetung_an)
+                    return format_verspaetung(ziel.v_an)
                 except AttributeError:
                     return ""
             elif col == 'VAb':
                 try:
-                    return format_verspaetung(zeile.verspaetung_ab)
+                    return format_verspaetung(ziel.v_ab)
                 except AttributeError:
                     return ""
             elif col == 'Flags':
-                return str(zeile.flags)
+                return str(ziel.flags)
             elif col == 'Vorgang':
-                if zeile.auto_korrektur:
-                    return str(zeile.auto_korrektur)
-                else:
-                    return None
+                return self.format_vorgang(ziel)
             elif col == 'Vermerke':
-                abh = []
-                for korrektur in zeile.fdl_korrektur.values():
-                    abh.append(str(korrektur))
-                return ", ".join(abh)
+                # todo
+                return None
             else:
                 return None
 
         elif role == QtCore.Qt.ForegroundRole:
             if self.zug.sichtbar:
-                if zeile.abgefahren:
+                if ziel.status == "ab":
                     return QtGui.QColor("darkCyan")
-                elif zeile.angekommen or zeile.gleis == self.zug.gleis:
+                elif ziel.status == "an" or ziel.gleis == self.zug.gleis:
                     return QtGui.QColor("cyan")
                 else:
                     return None
@@ -406,6 +452,31 @@ class FahrplanModell(QtCore.QAbstractTableModel):
 
         elif role == QtCore.Qt.TextAlignmentRole:
             return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
+
+    def format_vorgang(self, ziel: ZielGraphNode) -> str:
+        operations = []
+
+        for u, v, d in self.zielgraph.in_edges(ziel.fid, data=True):
+            if d.typ in {"E", "K", "F"}:
+                try:
+                    ursprung = self.zuggraph.nodes[u[0]]
+                    ursprung_name = ursprung.name
+                except KeyError:
+                    ursprung_name = "?"
+
+                operations.append(f"{d.typ} ← {ursprung_name}")
+
+        for u, v, d in self.zielgraph.out_edges(ziel.fid, data=True):
+            if d.typ in {"E", "K", "F"}:
+                try:
+                    folge = self.zuggraph.nodes[v[0]]
+                    folge_name = folge.name
+                except KeyError:
+                    folge_name = "?"
+
+                operations.append(f"{d.typ} → {folge_name}")
+
+        return ", ".join(operations)
 
     def headerData(self, section: int, orientation: QtCore.Qt.Orientation, role: int = ...) -> Any:
         """
@@ -449,7 +520,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui.display_layout.setObjectName("display_layout")
         self.ui.display_layout.addWidget(self.display_canvas)
 
-        self.zugliste_modell = ZuglisteModell()
+        self.zugliste_modell = ZuglisteModell(zentrale.client.zuggraph, zentrale.client.zielgraph, zentrale.anlage.bahnhofgraph)
 
         self.zugliste_modell.zugschema = self.zentrale.anlage.zugschema
         self.zugliste_sort_filter = ZuglisteFilterProxy(self)
@@ -471,17 +542,19 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui.suche_zug_edit.textEdited.connect(self.suche_zug_changed)
         self.ui.suche_loeschen_button.clicked.connect(self.suche_loeschen_clicked)
 
-        self.fahrplan_modell = FahrplanModell()
+        self.fahrplan_modell = FahrplanModell(zentrale.client.zuggraph, zentrale.client.zielgraph, zentrale.anlage.bahnhofgraph)
         self.ui.fahrplan_view.setModel(self.fahrplan_modell)
         self.ui.fahrplan_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
         self.ui.fahrplan_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
         self.ui.fahrplan_view.verticalHeader().setVisible(False)
 
-        self.folgezug_modell = FahrplanModell()
+        self.folgezug_modell = FahrplanModell(zentrale.client.zuggraph, zentrale.client.zielgraph, zentrale.anlage.bahnhofgraph)
         self.ui.folgezug_view.setModel(self.folgezug_modell)
         self.ui.folgezug_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
         self.ui.folgezug_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
         self.ui.folgezug_view.verticalHeader().setVisible(False)
+
+        self.zielplot = ZielPlot(zentrale.client.zuggraph, zentrale.client.zielgraph)
 
     def planung_update(self, *args, **kwargs) -> None:
         """
@@ -498,7 +571,9 @@ class FahrplanWindow(QtWidgets.QWidget):
             model_index = None
 
         self.zugliste_sort_filter.simzeit = self.zentrale.planung.simzeit_minuten
-        self.zugliste_modell.set_zugliste(self.zentrale.planung.zugliste)
+        self.zugliste_modell.update()
+        self.fahrplan_modell.update()
+        self.folgezug_modell.update()
 
         if model_index:
             view_index = self.zugliste_sort_filter.mapFromSource(model_index)
@@ -523,7 +598,8 @@ class FahrplanWindow(QtWidgets.QWidget):
             row = index.row()
             zug = self.zugliste_modell.get_zug(row)
             self.ui.fahrplan_label.setText(f"Stammzug {zug.name}")
-            self.fahrplan_modell.set_zug(zug)
+            self.fahrplan_modell.set_zug(zug.zid)
+            self.zielplot.select_zug(zug.zid)
         except IndexError:
             pass
         else:
@@ -533,57 +609,29 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.grafik_update()
 
     def update_folgezug(self):
-        if self.fahrplan_modell.zug:
-            for fpz in self.fahrplan_modell.zug.fahrplan:
-                folgezug = fpz.ersatzzug or fpz.fluegelzug or fpz.kuppelzug
-                if folgezug:
-                    self.folgezug_modell.set_zug(folgezug)
-                    self.ui.folgezug_label.setText(f"Folgezug {folgezug.name}")
+        if self.fahrplan_modell.zid:
+            for fid1 in self.fahrplan_modell.zugpfad:
+                try:
+                    fid2 = self.fahrplan_modell.zweige[fid1]
+                    ziel2 = self.fahrplan_modell.zielgraph.nodes[fid2]
+                    zug2 = self.fahrplan_modell.zuggraph.nodes[ziel2.zid]
+                except KeyError:
+                    continue
+                else:
+                    self.folgezug_modell.set_zug(ziel2.zid)
+                    self.ui.folgezug_label.setText(f"Folgezug {zug2.name}")
                     self.ui.folgezug_view.resizeColumnsToContents()
                     self.ui.folgezug_view.resizeRowsToContents()
                     break
             else:
-                self.folgezug_modell.set_zug(None)
+                self.folgezug_modell.set_zug(0)
                 self.ui.folgezug_label.setText(f"Kein Folgezug")
         else:
-            self.folgezug_modell.set_zug(None)
+            self.folgezug_modell.set_zug(0)
             self.ui.folgezug_label.setText(f"Kein Folgezug")
 
     def grafik_update(self):
-        def node_color(data):
-            farbe = mpl.rcParams['text.color']
-            try:
-                obj: ZugZielPlanung = data['obj']
-                zug = obj.zug
-            except (AttributeError, KeyError):
-                pass
-            else:
-                if zug.sichtbar:
-                    if obj.abgefahren:
-                        farbe = "darkcyan"
-                    elif obj.angekommen or obj.gleis == zug.gleis:
-                        farbe = "cyan"
-                elif not zug.gleis:
-                    farbe = "darkcyan"
-
-            return farbe
-
-        self._axes.clear()
-
-        try:
-            zg = nx.DiGraph(zug_subgraph(self.zentrale.planung.zielgraph, self.fahrplan_modell.zug.zid))
-            verarbeitete_stammzuege_entfernen(zg, self.zentrale.planung.zugbaum, self.fahrplan_modell.zug.zid)
-        except AttributeError:
-            logger.exception("exception in grafik_update")
-            return
-
-        if len(zg):
-            draw_zielgraph(zg, node_format=format_node_label_name, node_color=node_color, ax=self._axes)
-        else:
-            logger.warning(f"leerer zielgraph")
-
-        self._axes.figure.tight_layout()
-        self._axes.figure.canvas.draw()
+        self.zielplot.draw(self._axes)
 
     def on_resize(self, event):
         """
