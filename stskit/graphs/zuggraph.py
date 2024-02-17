@@ -14,6 +14,8 @@ class ZugGraphNode(dict):
     obj = dict_property("obj", ZugDetails, docstring="Zugobjekt")
     zid = dict_property("zid", int, docstring="Zug-ID")
     name = dict_property("name", str)
+    nummer = dict_property("nummer", int)
+    gattung = dict_property("gattung", str)
     von = dict_property("von", str)
     nach = dict_property("nach", str)
     verspaetung = dict_property("verspaetung", Union[int, float], docstring="Verspaetung in Minuten")
@@ -29,10 +31,13 @@ class ZugGraphNode(dict):
             obj=zug_details,
             zid=zug_details.zid,
             name=zug_details.name,
+            nummer=zug_details.nummer,
+            gattung=zug_details.gattung,
             von=zug_details.von,
             nach=zug_details.nach,
             verspaetung=zug_details.verspaetung,
             sichtbar=zug_details.sichtbar,
+            ausgefahren=False,
             gleis=zug_details.gleis,
             plangleis=zug_details.plangleis,
             amgleis=zug_details.amgleis)
