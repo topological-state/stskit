@@ -214,6 +214,7 @@ class ZielGraph(nx.DiGraph):
         super().__init__(incoming_graph_data, **attr)
         self.zuganfaenge: Dict[int, ZielLabelType] = {}
         self.zugenden: Dict[int, ZielLabelType] = {}
+        self._pendente_verbindungen: Set[Tuple[ZielLabelType, int, str]] = set()
 
     def to_undirected_class(self):
         return ZielGraphUngerichtet
@@ -243,7 +244,6 @@ class ZielGraph(nx.DiGraph):
     def zug_details_importieren(self, zug: ZugDetails,
                                 einfahrt: Optional[Knoten],
                                 ausfahrt: Optional[Knoten],
-                                zugliste: Dict[int, ZugDetails],
                                 params: Optional[PlanungParams]) -> Set[Tuple[str, int, int]]:
         """
         Ziel- und Zuggraphen nach Fahrplan eines Zuges aktualisieren.
@@ -300,15 +300,15 @@ class ZielGraph(nx.DiGraph):
                     self.add_edge(fid1, fid2, typ='P')
 
             if zid3 := ziel2.ersatz_zid():
-                self.ziele_verbinden(ziel2, zid3, 'E', zugliste)
+                self._ziele_verbinden(fid2, zid3, 'E')
                 links.add(('E', zid2, zid3))
 
             if zid3 := ziel2.kuppel_zid():
-                self.ziele_verbinden(ziel2, zid3, 'K', zugliste)
+                self._ziele_verbinden(fid2, zid3, 'K')
                 links.add(('K', zid2, zid3))
 
             if zid3 := ziel2.fluegel_zid():
-                self.ziele_verbinden(ziel2, zid3, 'F', zugliste)
+                self._ziele_verbinden(fid2, zid3, 'F')
                 links.add(('F', zid2, zid3))
 
             ziel1 = ziel2
@@ -379,30 +379,104 @@ class ZielGraph(nx.DiGraph):
             self.zugenden[zid2] = ende
         self.ziel_status_von_zug(zug2)
         self.verspaetung_von_zug(zug2)
+        self._verbindungen_herstellen(zid2)
 
         return links
 
-    def ziele_verbinden(self, ziel2: FahrplanZeile, zid3: int, typ: str, zugliste: Dict[int, ZugDetails]):
+    def _ziele_verbinden(self, fid1: ZielLabelType, zid2: int, typ: str):
         """
         Zugziele verknüpfen.
 
         Unterfunktion von zug_details_importieren.
+        Die Funktion sucht zunächst das entsprechende Ziel im Folgezug anhand des Gleisnamens und der Ankunftszeit
+        und erstellt dann eine Kante mit dem angegebenen Typ vom Ursprungsziel zum Folgeziel.
+
+        Wenn der Folgezug noch nicht erfasst ist, kann das Folgeziel nicht aufgelöst werden.
+        Die Verbindung wird dann zu den _pendente_verbindungen hinzugefügt und
+        kann später mittels _verbindungen_herstellen hergestellt werden.
+
+        :param fid1: Label des Ursprungsziels.
+        :param zid2: ID des Folgezuges.
+        :param typ: Verbindungstyp (Typ-Attribut der Verbindungskante)
         """
 
-        fid2 = ziel2.fid
+        _, fid2 = self._verbindung_herstellen(fid1, zid2, typ)
+        if fid2 is None:
+            self._pendente_verbindungen.add((fid1, zid2, typ))
+
+    def _verbindungen_herstellen(self, zid2: Optional[int] = None):
+        """
+        Pendente Zielverbindungen herstellen.
+
+        S. _ziele_verbinden
+
+        :param zid2: Nur Verbindungen, die zu diesen Zug führen, herstellen.
+        """
+
+        erledigt = set()
+        for v in self._pendente_verbindungen:
+            if zid2 is None or v[1] == zid2:
+                fid1, fid2 = self._verbindung_herstellen(*v)
+                if fid2 is not None:
+                    erledigt.add(v)
+
+        self._pendente_verbindungen.difference_update(erledigt)
+
+    def _verbindung_herstellen(self, fid1: ZielLabelType, zid2: int, typ: str) -> Tuple[ZielLabelType, ZielLabelType]:
+        """
+        Einzelne Zielverbindung herstellen.
+
+        Unterfunktion von _ziele_verbinden und _verbindungen_herstellen.
+
+        :param fid1: Label des Ursprungsziels.
+        :param zid2: ID des Folgezugs.
+        :param typ: Verbindungstyp
+
+        :return: Labels der Verbindungskante.
+            Das erste Label entspricht immer fid1, das zweite ist das Folgeziel.
+            Das Folgeziel ist None, wenn es nicht gefunden wurde.
+        """
+
+        ziel1 = self.nodes[fid1]
+        plan1 = ziel1.plan.casefold()
+        zeit1 = ziel1.p_an
 
         try:
-            zug3 = zugliste[zid3]
-            if typ == 'K':
-                _, ziel3 = zug3.find_fahrplan(plan=ziel2.plan, zeit=ziel2.an)
+            fid2 = self.zuganfaenge[zid2]
+        except KeyError:
+            fid2 = None
+            logger.debug(f"Finde kein {typ}-Ziel von Zug {ziel1.zid}, Ziel {fid1} zu Zug {zid2}.")
+
+        if fid2 is not None and typ == 'K':
+            for fid in self.zugpfad(zid2):
+                ziel = self.nodes[fid]
+                try:
+                    if plan1 != ziel.plan.casefold():
+                        continue
+                except (AttributeError, TypeError):
+                    continue
+
+                try:
+                    if ziel.p_an and zeit1 < ziel.p_an:
+                        continue
+                except (AttributeError, TypeError):
+                    continue
+
+                try:
+                    if ziel.p_ab and zeit1 > ziel.p_ab:
+                        continue
+                except (AttributeError, TypeError):
+                    continue
+
+                fid2 = fid
+                break
             else:
-                ziel3 = zug3.fahrplan[0]
-            fid3 = ziel3.fid
-        except (AttributeError, IndexError, KeyError):
-            logger.debug(f"{typ}-Ziel von {fid2} oder Zug {zid3} nicht gefunden")
-        else:
-            if fid2 != fid3:
-                self.add_edge(fid2, fid3, typ=typ)
+                logger.debug(f"Finde kein {typ}-Ziel von Zug {ziel1.zid}, Ziel {fid1} zu Zug {zid2}.")
+
+        if fid2 is not None and fid1 != fid2:
+            self.add_edge(fid1, fid2, typ=typ)
+
+        return fid1, fid2
 
     def ziel_status_von_zug(self, zug: ZugDetails):
         """

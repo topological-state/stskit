@@ -23,7 +23,7 @@ def dict_property(name: str, T, docstring: str = None):
         try:
             return self[name]
         except KeyError as e:
-            raise AttributeError(f"Attribut {name} hat keinen definierten Wert.") from e
+            raise AttributeError(f"Attribut {name} hat keinen definierten Wert.\n{str(self)}") from e
 
     def setter(self, value: T):
         self[name] = value
