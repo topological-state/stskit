@@ -55,15 +55,13 @@ class ZielGraphNode(dict):
                                 'B': Betriebshalt (vom Sim nicht verwendet)
                                 'S': Signalhalt (vom Sim nicht verwendet)
                             """)
-    plan = dict_property("plan", Union[int, str],
+    plan = dict_property("plan", str,
                          docstring="""
-                            Plangleis. 
-                            Bei Ein- und Ausfahrten die Elementnummer des Anschlusses.
+                            Gleis- oder Anschlussname nach Fahrplan.
                             """)
-    gleis = dict_property("gleis", Union[int, str],
+    gleis = dict_property("gleis", str,
                          docstring="""
-                            Geändertes Gleis. 
-                            Bei Ein- und Ausfahrten die Elementnummer des Anschlusses.
+                            Gleis- oder Anschlussname nach aktueller Disposition.
                             """)
     p_an = dict_property("p_an", Union[int, float],
                        docstring="""
@@ -97,17 +95,57 @@ class ZielGraphNode(dict):
     v_an = dict_property("v_an", Union[int, float], docstring="Ankunftsverspätung in Minuten")
     v_ab = dict_property("v_ab", Union[int, float], docstring="Abfahrtsverspätung in Minuten")
 
+    @property
     def e_an(self) -> Union[int, float]:
         """
         Erwartete Ankunftszeit in Minuten
-        """
-        return self['p_an'] + self['v_an']
 
+        AttributeError, wenn keine Ankunftszeit gespeichert ist.
+        Wenn keine Verspätung gespeichert ist, wird 0 angenommen.
+        """
+        return self.p_an + self.get('v_an', 0)
+
+    @property
     def e_ab(self) -> Union[int, float]:
         """
         Erwartete Abfahrtszeit in Minuten
+
+        AttributeError, wenn keine Abfahrtszeit gespeichert ist.
+        Wenn keine Verspätung gespeichert ist, wird 0 angenommen.
         """
-        return self['p_ab'] + self['v_ab']
+        return self.p_ab + self.get('v_ab', 0)
+
+    @property
+    def enr(self) -> Optional[int]:
+        """
+        Elementnummer des Anschlussgleises bei Ein- oder Ausfahrt.
+
+        None, wenn das Ziel ein normales Gleis ist.
+        """
+        try:
+            return int(self.fid[2])
+        except ValueError:
+            return None
+
+    @property
+    def plan_bst(self) -> Tuple[str, str]:
+        """
+        Plangleis in Betriebsstellen-Notation.
+        """
+        if self.typ in {'E', 'A'}:
+            return 'Agl', self.plan
+        else:
+            return 'Gl', self.plan
+
+    @property
+    def gleis_bst(self) -> Tuple[str, str]:
+        """
+        Effektives Gleis in Betriebsstellen-Notation.
+        """
+        if self.typ in {'E', 'A'}:
+            return 'Agl', self.gleis
+        else:
+            return 'Gl', self.gleis
 
     @classmethod
     def from_fahrplanzeile(cls, fahrplanzeile: FahrplanZeile):
@@ -326,8 +364,8 @@ class ZielGraph(nx.DiGraph):
                     fid=fid1,
                     zid=zid2,
                     typ='E',
-                    plan=einfahrt.enr,
-                    gleis=einfahrt.enr,
+                    plan=einfahrt.name,
+                    gleis=einfahrt.name,
                     flags='',
                     status='',
                     p_an=einfahrtszeit,
@@ -356,8 +394,8 @@ class ZielGraph(nx.DiGraph):
                     fid=fid1,
                     zid=zid2,
                     typ='A',
-                    plan=ausfahrt.enr,
-                    gleis=ausfahrt.enr,
+                    plan=ausfahrt.name,
+                    gleis=ausfahrt.name,
                     flags='',
                     status='',
                     p_an=ausfahrtszeit,
@@ -542,8 +580,8 @@ class ZielGraph(nx.DiGraph):
             ziel1_data = self.nodes[fid1]
             ziel2_data = self.nodes[fid2]
             if ziel1_data.typ == 'E' or ziel2_data.typ == 'A':
-                bst1 = bg.find_superior(bg.ziel_gleis[ziel1_data.plan], {'Anst', 'Bf'})
-                bst2 = bg.find_superior(bg.ziel_gleis[ziel2_data.plan], {'Anst', 'Bf'})
+                bst1 = bg.find_superior(ziel1_data.plan_bst, {'Anst', 'Bf'})
+                bst2 = bg.find_superior(ziel2_data.plan_bst, {'Anst', 'Bf'})
 
                 try:
                     fahrzeit = lg.edges[bst1][bst2]['fahrzeit_schnitt']

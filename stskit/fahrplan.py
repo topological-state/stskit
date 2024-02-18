@@ -14,7 +14,6 @@ from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSele
 from stskit.zentrale import DatenZentrale
 from stskit.interface.stsobj import time_to_minutes, format_verspaetung, format_minutes
 from stskit.qt.ui_fahrplan import Ui_FahrplanWidget
-from stskit.graphs.bahnhofgraph import BahnhofGraph
 from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielLabelType
 from stskit.graphs.zuggraph import ZugGraph, ZugGraphNode
 from stskit.plots.zielplot import ZielPlot
@@ -37,10 +36,9 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
     es wird davon ausgegangen, dass die zugliste nicht häufing verändert wird
     und dass änderungen sofort über set_zugliste angezeigt werden.
     """
-    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph, bahnhofgraph: BahnhofGraph):
+    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph):
         super().__init__()
 
-        self.bahnhofgraph = bahnhofgraph
         self.zuggraph = zuggraph
         self.zielgraph = zielgraph
         self.zid_liste: List[int] = []
@@ -319,10 +317,9 @@ class FahrplanModell(QtCore.QAbstractTableModel):
 
     der anzuzeigende zug wird durch set_zug gesetzt.
     """
-    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph, bahnhofgraph: BahnhofGraph):
+    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph):
         super().__init__()
 
-        self.bahnhofgraph = bahnhofgraph
         self.zielgraph = zielgraph
         self.zuggraph = zuggraph
         self.zid: int = 0
@@ -401,12 +398,10 @@ class FahrplanModell(QtCore.QAbstractTableModel):
 
         if role == QtCore.Qt.DisplayRole:
             if col == 'Gleis' and ziel.gleis:
-                gleis = self.bahnhofgraph.ziel_gleis[ziel.gleis][1]
-                plan = self.bahnhofgraph.ziel_gleis[ziel.plan][1]
                 if ziel.gleis == ziel.plan:
-                    return gleis
+                    return ziel.gleis
                 else:
-                    return f"{gleis} /{plan}/"
+                    return f"{ziel.gleis} /{ziel.plan}/"
             elif col == 'An':
                 try:
                     return format_minutes(ziel.p_an)
@@ -520,7 +515,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui.display_layout.setObjectName("display_layout")
         self.ui.display_layout.addWidget(self.display_canvas)
 
-        self.zugliste_modell = ZuglisteModell(zentrale.client.zuggraph, zentrale.client.zielgraph, zentrale.anlage.bahnhofgraph)
+        self.zugliste_modell = ZuglisteModell(zentrale.client.zuggraph, zentrale.client.zielgraph)
 
         self.zugliste_modell.zugschema = self.zentrale.anlage.zugschema
         self.zugliste_sort_filter = ZuglisteFilterProxy(self)
@@ -542,13 +537,13 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui.suche_zug_edit.textEdited.connect(self.suche_zug_changed)
         self.ui.suche_loeschen_button.clicked.connect(self.suche_loeschen_clicked)
 
-        self.fahrplan_modell = FahrplanModell(zentrale.client.zuggraph, zentrale.client.zielgraph, zentrale.anlage.bahnhofgraph)
+        self.fahrplan_modell = FahrplanModell(zentrale.client.zuggraph, zentrale.client.zielgraph)
         self.ui.fahrplan_view.setModel(self.fahrplan_modell)
         self.ui.fahrplan_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
         self.ui.fahrplan_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
         self.ui.fahrplan_view.verticalHeader().setVisible(False)
 
-        self.folgezug_modell = FahrplanModell(zentrale.client.zuggraph, zentrale.client.zielgraph, zentrale.anlage.bahnhofgraph)
+        self.folgezug_modell = FahrplanModell(zentrale.client.zuggraph, zentrale.client.zielgraph)
         self.ui.folgezug_view.setModel(self.folgezug_modell)
         self.ui.folgezug_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
         self.ui.folgezug_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)

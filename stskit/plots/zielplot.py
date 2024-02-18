@@ -168,8 +168,7 @@ class ZielPlot:
             label.append(zug_name)
 
         try:
-            # todo : anschlussgleis-name
-            label.append(str(data.plan))
+            label.append(data.plan)
         except AttributeError:
             label.append('Gleis?')
 
