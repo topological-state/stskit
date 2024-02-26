@@ -117,7 +117,9 @@ class EreignisGraph(nx.DiGraph):
 
     Der Ereignisgraph dient zur Protokollierung von vergangenen Ereignissen
     und zur Abschätzung des Zeitpunkts von zukünftigen Ereignissen.
-    Der Graph ist darauf ausgelegt, dass die Prognose mittels eines einfachen Traverse-Algorithmus berechnet werden kann.
+    Der Graph ist darauf ausgelegt,
+    dass die Prognose mittels eines einfachen Message-Passing-Algorithmus berechnet werden kann,
+    der nicht von Knoten- und Kantentypen abhängt.
 
     Der EreignisGraph ist ein gerichteter Graph, der die einzelnen Betriebsereignisse und ihre Abfolge kodiert.
     Die Knoten sind Ereignisse wie Ankunft, Abfahrt, usw.
@@ -127,9 +129,21 @@ class EreignisGraph(nx.DiGraph):
     Ein Aufenthalt muss daher mit zwei Knoten (Ankunft und Abfahrt) und einer Kante zwischen ihnen dargestellt werden.
 
     Der EreignisGraph ist gerichtet.
+
+    Attribute
+    ---------
+
+    zuege: Verzeichnis (Set) der ID-Nummern der Züge, die im Graph vorkommen.
+        Der Anfangsknoten eines Zuges hat jeweils das Label (zid, 0).
+        Der Pfad eines Zuges (geordnete Abfolge von Knoten mit derselben Zug-ID)
+        wird vom Generator zugpfad angegeben.
     """
     node_attr_dict_factory = EreignisGraphNode
     edge_attr_dict_factory = EreignisGraphEdge
+
+    def __init__(self, incoming_graph_data=None, **attr):
+        super().__init__(incoming_graph_data, **attr)
+        self.zuege: Set[int] = set()
 
     def to_undirected_class(self):
         return EreignisGraphUngerichtet
@@ -203,6 +217,9 @@ class EreignisGraph(nx.DiGraph):
           weil es keine eindeutige Zuordnung von Zielknoten zu Ereignisknoten gibt.
         """
 
+        self.clear()
+        self.zuege = set()
+
         node_builders = {}
         for zg1, zg1_data in zg.nodes(data=True):
             builder = ZielEreignisNodeBuilder()
@@ -265,7 +282,6 @@ class EreignisGraph(nx.DiGraph):
 
         """
 
-        # todo : zyklen auflösen
         nodes = nx.topological_sort(self)
 
         for zielnode in nodes:
@@ -513,6 +529,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
             nid = node.node_id()
             ereignis_graph.add_node(nid)
             ereignis_graph.nodes[nid].update(node)
+            ereignis_graph.zuege.add(node.zid)
 
         for n1d, n2d, edge in zip(self.nodes[:-1], self.nodes[1:], self.edges):
             n1 = n1d.node_id()
