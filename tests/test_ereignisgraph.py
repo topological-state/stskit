@@ -6,10 +6,6 @@ from stskit.graphs.ereignisgraph import EreignisGraph, EreignisGraphEdge, Ereign
 from stskit.graphs.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode, PlanungParams
 
 
-def z(hh, mm):
-    return hh * 60 + mm
-
-
 class TestEreignisPrognose(unittest.TestCase):
     """
     Prognose testen in einem Beispielgraph
@@ -19,139 +15,139 @@ class TestEreignisPrognose(unittest.TestCase):
 
         nodes = [
             ZielGraphNode(
-                fid=(11, 0, 0, 1),
+                fid=(11, 0, 1),
                 zid=11,
                 typ='E',
                 flags='',
                 status='',
-                p_an = z(5, 0),
-                p_ab = z(5, 0),
+                p_an=300,
+                p_ab=300,
                 v_an=0,
                 v_ab=0
             ), # 0
             # P
             ZielGraphNode(
-                fid=(11, 0, 0, "A 1"),
+                fid=(11, 0, "A 1"),
                 zid=11,
                 typ='D',
                 flags='D',
                 mindestaufenthalt=0,
                 status='',
-                p_an=z(5, 22),
-                p_ab=z(5, 22),
+                p_an=322,
+                p_ab=322,
                 v_an=0,
                 v_ab=0
             ), # 1
             # P
             ZielGraphNode(
-                fid=(11, 0, 0, "B 1"),
+                fid=(11, 0, "B 1"),
                 zid=11,
                 typ='H',
                 flags='E(12)',
                 mindestaufenthalt=PlanungParams.mindestaufenthalt_ersatz,
                 status='',
-                p_an=z(5, 32),
+                p_an=332,
                 v_an=0,
                 v_ab=0
             ), # 2
             # E
             ZielGraphNode(
-                fid=(12, 0, 0, "B 1"),
+                fid=(12, 0, "B 1"),
                 zid=12,
                 typ='H',
                 flags='',
                 mindestaufenthalt=0,
                 status='',
-                p_an=z(5, 36),
-                p_ab=z(5, 36),
+                p_an=336,
+                p_ab=336,
                 v_an=0,
                 v_ab=0
             ), # 3
             # P
             ZielGraphNode(
-                fid=(12, 0, 0, "C 1"),
+                fid=(12, 0, "C 1"),
                 zid=12,
                 typ='H',
                 flags='K(13)',
                 mindestaufenthalt=PlanungParams.mindestaufenthalt_kupplung,
                 status='',
-                p_an=z(5, 45),
+                p_an=345,
                 v_an=0,
                 v_ab=0
             ), # 4
             # K -> 13 C 1
             ZielGraphNode(
-                fid=(13, 0, 0, 2),
+                fid=(13, 0, 2),
                 zid=13,
                 typ='E',
                 flags='K(13)',
                 mindestaufenthalt=PlanungParams.mindestaufenthalt_kupplung,
                 status='',
-                p_an=z(5, 30),
-                p_ab=z(5, 30),
+                p_an=330,
+                p_ab=330,
                 v_an=0,
                 v_ab=0
             ), # 5
             # P
             ZielGraphNode(
-                fid=(13, 0, 0, "C 1"),
+                fid=(13, 0, "C 1"),
                 zid=13,
                 typ='H',
                 flags='',
                 mindestaufenthalt=PlanungParams.mindestaufenthalt_planhalt,
                 status='',
-                p_an=z(5, 40),
-                p_ab=z(5, 50),
+                p_an=340,
+                p_ab=350,
                 v_an=0,
                 v_ab=0
             ), # 6
             # P, F -> 14
             ZielGraphNode(
-                fid=(13, 0, 0, "D 1"),
+                fid=(13, 0, "D 1"),
                 zid=13,
                 typ='H',
                 flags='F(14)',
                 mindestaufenthalt=PlanungParams.mindestaufenthalt_fluegelung,
                 status='',
-                p_an=z(6, 0),
-                p_ab=z(6, 5),
+                p_an=360,
+                p_ab=365,
                 v_an=0,
                 v_ab=0
             ), # 7
             #P
             ZielGraphNode(
-                fid=(13, 0, 0, 3),
+                fid=(13, 0, 3),
                 zid=13,
                 typ='A',
                 flags='',
                 mindestaufenthalt=0,
                 status='',
-                p_an=z(6, 10),
+                p_an=370,
                 v_an=0,
                 v_ab=0
             ), # 8
 
             ZielGraphNode(
-                fid=(14, 0, 0, "D 1"),
+                fid=(14, 0, "D 1"),
                 zid=14,
                 typ='H',
                 flags='',
                 mindestaufenthalt=PlanungParams.mindestaufenthalt_planhalt,
                 status='',
-                p_an=z(6, 0),
-                p_ab=z(6, 7),
+                p_an=360,
+                p_ab=367,
                 v_an=0,
                 v_ab=0
             ), # 9
             # P
             ZielGraphNode(
-                fid=(14, 0, 0, 3),
+                fid=(14, 0, 3),
                 zid=14,
                 typ='A',
                 flags='',
                 mindestaufenthalt=0,
                 status='',
-                p_an=z(6, 17),
+                p_an=377,
                 v_an=0,
                 v_ab=0
             ) # 10
