@@ -187,7 +187,7 @@ class TestEreignisPrognose(unittest.TestCase):
 
         self.szenario1()
 
-        # nx.write_gml(self.ereignisgraph, "ereignisgraph.gml", stringizer=str)
+        # nx.write_gml(self.ereignisgraph, "ereignisgraph-szenario1.gml", stringizer=str)
         self.assertGreaterEqual(len(self.ereignisgraph.nodes), 16)
         self.assertGreaterEqual(len(self.ereignisgraph.edges), 15)
 
@@ -381,7 +381,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 5
 
             ZielGraphNode(
-                fid=(3, 0, "C"),
+                fid=(3, 0, "A"),
                 zid=3,
                 typ='H',
                 flags='',
@@ -405,7 +405,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 7
 
             ZielGraphNode(
-                fid=(4, 0, "D"),
+                fid=(4, 0, "B"),
                 zid=4,
                 typ='H',
                 flags='',
@@ -433,11 +433,13 @@ class TestEreignisPrognose(unittest.TestCase):
             (0, 1, 'P'),
             (1, 2, 'P'),
             (1, 6, 'F'),
-            (6, 7, 'K'),
+            (6, 7, 'P'),
+            (7, 4, 'K'),
             (3, 4, 'P'),
             (4, 5, 'P'),
             (4, 8, 'F'),
-            (8, 2, 'K')
+            (8, 9, 'P'),
+            (9, 1, 'K')
         ]
 
         for node in nodes:

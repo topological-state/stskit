@@ -81,6 +81,16 @@ class EreignisGraphNode(dict):
         super().__init__(*args, **kwargs)
         self._id = next(self.auto_inc)
 
+    def __copy__(self) -> 'EreignisGraphNode':
+        """
+        Objekt kopieren, mit neuer ID
+        """
+        new = self.__class__()
+        new.update(self)
+        new._id = next(self.auto_inc)
+        return new
+
+    @property
     def node_id(self) -> EreignisLabelType:
         """
         Identifikation des Ereignisses.
@@ -434,8 +444,13 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
     def __init__(self):
         super().__init__()
         self.zuganfang = False
+        # Speichert den ersten importierten Node, um Kopien herzustellen (new_node)
+        self.node_template: Optional[EreignisGraphNode] = None
+        # Speichert die importierte Kante, um Kopien herzustellen (new_edge)
+        self.edge_template: Optional[EreignisGraphEdge] = None
         self.nodes: List[EreignisGraphNode] = []
         self.edges: List[EreignisGraphEdge] = []
+        self.kupplungen: List[EreignisGraphNode] = []
 
     def first_label(self) -> EreignisLabelType:
         """
@@ -445,7 +460,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         Das Label ist erst nach Ausführen der add_to_graph-Methode gültig!
         """
 
-        return self.nodes[0].node_id()
+        return self.nodes[0].node_id
 
     def last_label(self) -> EreignisLabelType:
         """
@@ -455,7 +470,33 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         Das Label ist erst nach Ausführen der add_to_graph-Methode gültig!
         """
 
-        return self.nodes[-1].node_id()
+        return self.nodes[-1].node_id
+
+    def new_node(self, **attrs) -> EreignisGraphNode:
+        """
+        Neuen Knoten zum gleichen Ziel erstellen
+
+        Mit den Eigenschaften des direkt importierten Ankunfts- oder Abfahrtsknotens (vor der Bearbeitung).
+        Mit den Keyword-Argumenten können einzelne Attribute mit neuen Werten belegt werden.
+
+        :param attrs: Attribute mit neuen Werten initialisieren.
+        """
+        node = copy.copy(self.node_template)
+        node.update(**attrs)
+        return node
+
+    def new_edge(self, **attrs) -> EreignisGraphEdge:
+        """
+        Neue Kante zum gleichen Ziel erstellen
+
+        Mit Typ 'H' und dem Ziel entsprechenden Mindestaufenthalt.
+        Mit den Keyword-Argumenten können einzelne Attribute mit neuen Werten belegt werden.
+
+        :param attrs: Attribute mit neuen Werten initialisieren.
+        """
+        edge = copy.copy(self.edge_template)
+        edge.update(**attrs)
+        return edge
 
     def import_ziel(self, ziel_graph: ZielGraph, ziel_node: ZielGraphNode):
         """
@@ -489,6 +530,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
             except AttributeError:
                 pass
             self.nodes.append(n1d)
+            self.node_template = n1d
 
         if ziel_node.typ in {'H', 'E'}:
             n2d = EreignisGraphNode(
@@ -504,6 +546,8 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
             except AttributeError:
                 pass
             self.nodes.append(n2d)
+            if self.node_template is None:
+                self.node_template = n2d
 
         if len(self.nodes) == 2:
             e2d = EreignisGraphEdge(
@@ -512,6 +556,63 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 ds=0
             )
             self.edges.append(e2d)
+            self.edge_template = e2d
+
+    def vorgang_einfuegen(self, node: EreignisGraphNode, edge: EreignisGraphEdge):
+        """
+        Hilfsknoten für Zugnummernänderung einfügen
+
+        Hilfsknoten sind Zwischenknoten vom Typ E, K oder F.
+
+        Der Knoten wird an Position 1 der nodes-Liste eingefügt, die Kante an Position 0.
+        Aus der ursprünglichen Abfolge A -a-> B wird A -h-> H -a-> B.
+
+        :param node: einzufügender Knoten
+        :param edge: einzufügende Kanten zwischen Hilfs- und Abfahrtsknoten
+        """
+        self.nodes.insert(1, node)
+        self.edges.insert(0, edge)
+
+    def abfahrt_entfernen(self):
+        """
+        Abfahrtsknoten entfernen
+        """
+        try:
+            if self.nodes[-1].typ == "Ab":
+                self.nodes.pop(-1)
+                self.edges.pop(-1)
+        except IndexError:
+            pass
+
+    def ankunft_entfernen(self):
+        """
+        Ankunftsknoten entfernen
+        """
+        try:
+            if self.nodes[0].typ == "An":
+                self.nodes.pop(0)
+                self.edges.pop(0)
+        except IndexError:
+            pass
+
+    def abfahrt_verbinden(self, node: EreignisGraphNode, edge: EreignisGraphEdge):
+        """
+        Abfahrtsknoten mit Knoten von anderem Zug verbinden
+        """
+        if self.nodes[-1].typ == "Ab":
+            self.nodes.insert(-1, node)
+            self.edges.append(edge)
+
+    def kuppeln(self, node: EreignisGraphNode):
+        """
+        Kupplungsknoten einfügen
+
+        Ein Zug kann das Ziel mehrerer Kupplungsvorgänge sein.
+        Die Kupplungsknoten werden gesammelt und erst in der add_to_graph-Methode aufgelöst.
+
+        :param node: Kupplungsknoten (EreignisGraphNode mit Typ "K")
+        """
+        self.kupplungen.append(node)
 
     def add_to_graph(self, ereignis_graph: EreignisGraph):
         """
@@ -522,18 +623,27 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         if self.ausgefuehrt:
             return None
 
-        if self.zuganfang:
-            self.nodes[0]._id = 0
+        for kupplung in sorted(self.kupplungen, key=lambda n: n.p):
+            self.nodes.insert(-1, kupplung)
+            edge = EreignisGraphEdge(
+                typ='H',
+                dt_min=0,
+                ds=0)
+            self.edges.append(edge)
 
+        zid_anfang = self.nodes[-1].zid if self.zuganfang else None
         for node in self.nodes:
-            nid = node.node_id()
+            if node.zid == zid_anfang:
+                node._id = 0
+                zid_anfang = None
+            nid = node.node_id
             ereignis_graph.add_node(nid)
             ereignis_graph.nodes[nid].update(node)
             ereignis_graph.zuege.add(node.zid)
 
         for n1d, n2d, edge in zip(self.nodes[:-1], self.nodes[1:], self.edges):
-            n1 = n1d.node_id()
-            n2 = n2d.node_id()
+            n1 = n1d.node_id
+            n2 = n2d.node_id
             ereignis_graph.add_edge(n1, n2)
             ereignis_graph.edges[(n1, n2)].update(edge)
 
@@ -582,8 +692,7 @@ class ZielEreignisEdgeBuilder(EreignisEdgeBuilder):
         super().__init__()
         self.node1_builder: Optional[ZielEreignisNodeBuilder] = None
         self.node2_builder: Optional[ZielEreignisNodeBuilder] = None
-        self.e1d: Optional[EreignisGraphEdge] = None
-        self.e2d: Optional[EreignisGraphEdge] = None
+        self.edges: List[EreignisGraphEdge] = []
 
     def set_edge(self, node1_builder: EreignisNodeBuilder, node2_builder: EreignisNodeBuilder):
         self.node1_builder = node1_builder
@@ -600,12 +709,12 @@ class PlanfahrtEdgeBuilder(ZielEreignisEdgeBuilder):
 
     def set_edge(self, node1_builder: ZielEreignisNodeBuilder, node2_builder: ZielEreignisNodeBuilder):
         super().set_edge(node1_builder, node2_builder)
-        dt_min = node2_builder.nodes[0].p - node1_builder.nodes[-1].p
-        self.e1d = EreignisGraphEdge(
+
+        edge = EreignisGraphEdge(
             typ='P',
-            dt_min=dt_min,
-            ds=0
+            dt_min=node2_builder.nodes[0].p - node1_builder.nodes[-1].p,
         )
+        self.edges.append(edge)
 
     def add_to_graph(self, ereignis_graph: EreignisGraph):
         if self.ausgefuehrt:
@@ -614,7 +723,7 @@ class PlanfahrtEdgeBuilder(ZielEreignisEdgeBuilder):
         n1 = self.node1_builder.last_label()
         n2 = self.node2_builder.first_label()
         ereignis_graph.add_edge(n1, n2)
-        ereignis_graph.edges[(n1, n2)].update(self.e1d)
+        ereignis_graph.edges[(n1, n2)].update(self.edges[0])
 
         self.ausgefuehrt = True
 
@@ -628,40 +737,35 @@ class ErsatzEdgeBuilder(ZielEreignisEdgeBuilder):
     """
 
     def set_edge(self, node1_builder: ZielEreignisNodeBuilder, node2_builder: ZielEreignisNodeBuilder):
-        super().set_edge(node1_builder, node2_builder)
-        self.node1_builder.nodes[1].typ = 'E'
-        self.node1_builder.nodes[1].p = self.node2_builder.nodes[1].p
-        self.node1_builder.edges[0].typ = 'E'
-        self.node2_builder.nodes.pop(0)
-        self.node2_builder.edges.pop(0)
-
-        self.e1d = EreignisGraphEdge(
-            typ='H',
-            dt_min=0,
-            ds=0
-        )
-
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
         """
         Ersatzvorgang darstellen
 
-        Die Knoten von Helper 1 werden beibehalten, wobei der zweite in Typ E umgewandelt wird.
-        Von Helper 2 wird nur der Abfahrtsknoten behalten.
-        Der Zeitpunkt des Ersatzvorgangs entspricht der Abfahrtszeit von Helper 2.
-
-        Die Kante 1 -E-> 2 aus dem Zielgraph wird damit auf 3 Knoten und 2 Kanten abgebildet:
+        Die Kante 1 -E-> 2 aus dem Zielgraph wird auf 3 Knoten und 2 Kanten abgebildet:
         An1 -E-> E -H-: Ab2
+
+        Dazu wird in node1_builder der Abfahrtsknoten entfernt und ein E-Hilfsknoten angefügt.
+
+        Der Zeitpunkt des Ersatzvorgangs entspricht der Abfahrtszeit von Zug 2.
         """
 
-        if self.ausgefuehrt:
-            return
+        super().set_edge(node1_builder, node2_builder)
 
-        n1 = self.node1_builder.last_label()
-        n2 = self.node2_builder.first_label()
-        ereignis_graph.add_edge(n1, n2)
-        ereignis_graph.edges[(n1, n2)].update(self.e1d)
+        node = self.node1_builder.new_node(typ='E')
+        node.p = self.node2_builder.nodes[-1].p
+        edge = self.node1_builder.new_edge(typ='E')
+        self.node1_builder.vorgang_einfuegen(node, edge)
+        self.node1_builder.abfahrt_entfernen()
 
-        self.ausgefuehrt = True
+        edge = self.node2_builder.new_edge(typ='H', dt_min=0)
+        self.node2_builder.abfahrt_verbinden(node, edge)
+        self.node2_builder.ankunft_entfernen()
+
+    def add_to_graph(self, ereignis_graph: EreignisGraph):
+        """
+        Keine Wirkung
+
+        Alle Graphelemente werden durch die NodeBuilder erstellt.
+        """
 
 
 class KupplungEdgeBuilder(ZielEreignisEdgeBuilder):
@@ -674,27 +778,6 @@ class KupplungEdgeBuilder(ZielEreignisEdgeBuilder):
     """
 
     def set_edge(self, node1_builder: ZielEreignisNodeBuilder, node2_builder: ZielEreignisNodeBuilder):
-        super().set_edge(node1_builder, node2_builder)
-
-        self.e1d = EreignisGraphEdge(
-            typ='H',
-            dt_min=self.node2_builder.edges[0].dt_min,
-            ds=0
-        )
-
-        self.e2d = EreignisGraphEdge(
-            typ='H',
-            dt_min=0,
-            ds=0
-        )
-
-        self.node1_builder.nodes[1].typ = 'K'
-        self.node1_builder.nodes[1].zid = self.node2_builder.nodes[0].zid
-        self.node1_builder.nodes[1].p = max(self.node1_builder.nodes[0].p + self.node1_builder.edges[0].dt_min, self.node2_builder.nodes[0].p + self.node2_builder.edges[0].dt_min)
-        self.node1_builder.edges[0].typ = 'K'
-        self.node2_builder.edges.pop(0)
-
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
         """
         Kupplungsvorgang darstellen
 
@@ -702,20 +785,38 @@ class KupplungEdgeBuilder(ZielEreignisEdgeBuilder):
 
         Der Kupplungszeitpunkt (p-Zeit des K-Knotens) entspricht der letzten Ankunftszeit plus Minimalaufenthalt
         der einlaufenden Züge.
+
+        Der Kupplungsknoten hat die zid des durchgehenden Zugs (2).
         """
 
-        if self.ausgefuehrt:
-            return
+        super().set_edge(node1_builder, node2_builder)
 
-        n1 = self.node2_builder.first_label()
-        n2 = self.node1_builder.last_label()
-        n3 = self.node2_builder.last_label()
-        ereignis_graph.add_edge(n1, n2)
-        ereignis_graph.edges[(n1, n2)].update(self.e1d)
-        ereignis_graph.add_edge(n2, n3)
-        ereignis_graph.edges[(n2, n3)].update(self.e2d)
+        node = self.node2_builder.new_node(typ='K')
+        p1 = self.node1_builder.nodes[0].p
+        try:
+            p1 += self.node1_builder.edges[0].dt_min
+        except IndexError:
+            pass
+        p2 = self.node2_builder.nodes[0].p
+        try:
+            p2 += self.node2_builder.edges[0].dt_min
+        except IndexError:
+            pass
+        node.p = max(p1, p2)
 
-        self.ausgefuehrt = True
+        edge = self.node1_builder.new_edge(typ='K')
+
+        self.node1_builder.vorgang_einfuegen(node, edge)
+        self.node1_builder.abfahrt_entfernen()
+        self.node2_builder.kuppeln(node)
+
+    def add_to_graph(self, ereignis_graph: EreignisGraph):
+        """
+        Keine Wirkung
+
+        Alle Graphelemente werden durch die NodeBuilder erstellt.
+        """
+        pass
 
 
 class FluegelungEdgeBuilder(ZielEreignisEdgeBuilder):
@@ -727,34 +828,6 @@ class FluegelungEdgeBuilder(ZielEreignisEdgeBuilder):
     """
 
     def set_edge(self, node1_builder: ZielEreignisNodeBuilder, node2_builder: ZielEreignisNodeBuilder):
-        super().set_edge(node1_builder, node2_builder)
-
-        e1d = EreignisGraphEdge(
-            typ='F',
-            dt_min=self.node1_builder.edges[0].dt_min,
-            ds=0
-        )
-        e2d = EreignisGraphEdge(
-            typ='H',
-            dt_min=0,
-            ds=0
-        )
-        self.e1d = EreignisGraphEdge(
-            typ='H',
-            dt_min=0,
-            ds=0
-        )
-
-        fnode = copy.copy(self.node1_builder.nodes[0])
-        fnode.typ = 'F'
-        fnode.p = self.node1_builder.nodes[0].p + self.node1_builder.edges[0].dt_min
-        self.node1_builder.nodes.insert(1, fnode)
-        self.node1_builder.edges = [e1d, e2d]
-        node2 = self.node2_builder.nodes.pop(0)
-        fnode._id = node2._id
-        self.node2_builder.edges.pop(0)
-
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
         """
         Flügelungsvorgang darstellen
 
@@ -762,16 +835,32 @@ class FluegelungEdgeBuilder(ZielEreignisEdgeBuilder):
 
         Der Flügelungszeitpunkt entspricht der Ankunftszeit plus Minimalaufenthaltszeit.
         """
+        super().set_edge(node1_builder, node2_builder)
 
-        if self.ausgefuehrt:
-            return
+        node = self.node1_builder.new_node(typ='F')
+        node.p = self.node1_builder.nodes[0].p
+        try:
+            node.p += self.node1_builder.edges[0].dt_min
+        except IndexError:
+            pass
 
-        n1 = self.node1_builder.nodes[1].node_id()
-        n2 = self.node2_builder.first_label()
-        ereignis_graph.add_edge(n1, n2)
-        ereignis_graph.edges[(n1, n2)].update(self.e1d)
+        edge1 = self.node1_builder.new_edge(typ='F')
 
-        self.ausgefuehrt = True
+        self.node1_builder.vorgang_einfuegen(node, edge1)
+        self.node1_builder.edges[-1].dt_min = 0
+
+        edge2 = self.node2_builder.new_edge(typ='H', dt_min=0)
+
+        self.node2_builder.abfahrt_verbinden(node, edge2)
+        self.node2_builder.ankunft_entfernen()
+
+    def add_to_graph(self, ereignis_graph: EreignisGraph):
+        """
+        Keine Wirkung
+
+        Alle Graphelemente werden durch die NodeBuilder erstellt.
+        """
+        pass
 
 
 class AbfahrtAbwartenEdgeBuilder(ZielEreignisEdgeBuilder):
