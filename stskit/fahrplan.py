@@ -277,9 +277,11 @@ class ZuglisteFilterProxy(QSortFilterProxyModel):
             zug = zugliste_modell.get_zug(source_row)
         except AttributeError:
             return True
-
-        if zug is None or zug.sichtbar:
-            return True
+        try:
+            if zug is None or zug.sichtbar:
+                return True
+        except AttributeError:
+            return False
 
         if zug.gleis:
             if self._vorlaufzeit <= 0:
