@@ -215,7 +215,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         if trasse_paar:
             try:
                 trasse_nachbar, _ = self.nachbartrasse_ziel(self._trasse_auswahl[0], self._trasse_auswahl[1])
-            except ValueError:
+            except (KeyError, ValueError):
                 trasse_nachbar = -1
         else:
             trasse_nachbar = -1
@@ -778,7 +778,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             i, z = self.nachbartrasse_ziel(self._trasse_auswahl[0], self._trasse_auswahl[1])
             if i == 0:
                 self.abhaengigkeit_definieren(AbfahrtAbwarten, self._trasse_auswahl[0], z)
-        except (IndexError, ValueError):
+        except (IndexError, KeyError, ValueError):
             pass
         else:
             self.grafik_update()
@@ -790,7 +790,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             i, z = self.nachbartrasse_ziel(self._trasse_auswahl[0], self._trasse_auswahl[1])
             if i == 1:
                 self.abhaengigkeit_definieren(AnkunftAbwarten, self._trasse_auswahl[0], z)
-        except (IndexError, ValueError):
+        except (IndexError, KeyError, ValueError):
             pass
         else:
             self.grafik_update()

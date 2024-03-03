@@ -142,13 +142,18 @@ class BahnhofGraph(nx.DiGraph):
         :param label: Label des Ausgangselements
         :param typen: Set von Elementtypen, z.B. {'Anst', 'Bf'}
         :return: Label des gefundenen Elements
-        :raise: KeyError
+        :raise: KeyError, wenn nicht gefunden
         """
-        for node in nx.ancestors(self, label):
-            if node[0] in typen:
-                return node
-        else:
-            raise KeyError(f"{label} ist keinem übergeordnetem {typen} zugeordnet")
+
+        try:
+            for node in nx.ancestors(self, label):
+                if node[0] in typen:
+                    return node
+            else:
+                raise KeyError(f"{label} ist keinem übergeordnetem {typen} zugeordnet")
+        except nx.NetworkXError as e:
+            logger.exception(e)
+            raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
     def list_children(self, label: Tuple[str, str], typen: Set[str]) -> Iterable[Tuple[str, str]]:
         """
@@ -159,10 +164,16 @@ class BahnhofGraph(nx.DiGraph):
         :param label: Label des Ausgangselements
         :param typen: Set von Elementtypen, z.B. {'Anst', 'Bf'}
         :return: Iterator über gefundene Elemente
+        :raise: KeyError, wenn label nicht gefunden wird
         """
-        for parent, child in nx.bfs_edges(self, label):
-            if child[0] in typen:
-                yield child
+
+        try:
+            for parent, child in nx.bfs_edges(self, label):
+                if child[0] in typen:
+                    yield child
+        except nx.NetworkXError as e:
+            logger.exception(e)
+            raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
     def find_name(self, name: str) -> Optional[Tuple[str, str]]:
         """
@@ -205,67 +216,134 @@ class BahnhofGraph(nx.DiGraph):
 
     def gleis_bahnsteig(self, gleis: str) -> str:
         """
-        Zugeordneten Bahnsteig nachschlagen
+        Zu Gleis zugeordneten Bahnsteig nachschlagen
+
+        Nur für Bahnhofgleise.
+
+        :param: gleis: Gleisname wie im STS
+        :return: Bahnsteigname
+        :raise: KeyError, wenn nicht gefunden
         """
+
         _, bs = self.find_superior(('Gl', gleis), {'Bs'})
         return bs
 
     def gleis_bahnhofteil(self, gleis: str) -> str:
         """
-        Zugeordneten Bahnhofteil nachschlagen
+        Zu Gleis zugeordneten Bahnhofteil nachschlagen
+
+        Nur für Bahnhofgleise.
+
+        :param: gleis: Gleisname wie im STS
+        :return: Bahnhofteilname
+        :raise: KeyError, wenn nicht gefunden
         """
+
         _, bft = self.find_superior(('Gl', gleis), {'Bft'})
         return bft
 
     def gleis_bahnhof(self, gleis: str) -> str:
         """
-        Zugeordneten Bahnhof nachschlagen
+        Zu Gleis zugeordneten Bahnhof nachschlagen
+
+        Nur für Bahnhofgleise.
+
+        :param: gleis: Gleisname wie im STS
+        :return: Bahnhofname
+        :raise: KeyError, wenn nicht gefunden
         """
+
         _, bf = self.find_superior(('Gl', gleis), {'Bf'})
         return bf
 
     def anschlussstelle(self, gleis: str) -> str:
         """
-        Zugeordnete Anschlussstelle nachschlagen
+        Zu Anschlussgleis zugeordnete Anschlussstelle nachschlagen
+
+        Nur für Anschlussgleise.
+
+        :param: gleis: Anschlussgleisname wie im STS
+        :return: Name der Anschlussstelle
+        :raise: KeyError, wenn nicht gefunden
         """
+
         _, anst = self.find_superior(('Agl', gleis), {'Anst'})
         return anst
 
     def bahnhofgleise(self, bahnhof: str) -> Iterable[str]:
         """
         Listet die zu einem Bahnhof gehörenden Gleise auf.
+
+        Nur für Bahnhofgleise.
+
+        :param: bahnhof: Name des Bahnhofs
+        :return: Iterator von Gleisnamen
+        :raise: KeyError, wenn der Bahnhof nicht gefunden wird.
         """
-        for parent, child in nx.dfs_edges(self, ('Bf', bahnhof)):
-            if child[0] == 'Gl':
-                yield child[1]
+
+        try:
+            for parent, child in nx.dfs_edges(self, ('Bf', bahnhof)):
+                if child[0] == 'Gl':
+                    yield child[1]
+        except nx.NetworkXError as e:
+            logger.exception(e)
+            raise KeyError(f"Bf {bahnhof} ist im Bahnhofgraph nicht verzeichnet.")
 
     def bahnhofteilgleise(self, bahnhofteil: str) -> Iterable[str]:
         """
         Listet die zu einem Bahnhofteil gehörenden Gleise auf.
+
+        Nur für Bahnhofgleise.
+
+        :param: bahnhofteil: Name des Bahnhofteils
+        :return: Iterator von Gleisnamen
+        :raise: KeyError, wenn der Bahnhofteil nicht gefunden wird.
         """
-        for parent, child in nx.dfs_edges(self, ('Bft', bahnhofteil)):
-            if child[0] == 'Gl':
-                yield child[1]
+
+        try:
+            for parent, child in nx.dfs_edges(self, ('Bft', bahnhofteil)):
+                if child[0] == 'Gl':
+                    yield child[1]
+        except nx.NetworkXError as e:
+            logger.exception(e)
+            raise KeyError(f"Bft {bahnhofteil} ist im Bahnhofgraph nicht verzeichnet.")
 
     def anschlussgleise(self, anst: str) -> Iterable[str]:
         """
         Listet die zu einer Anschlussstelle gehörenden Gleise auf.
+
+        Nur für Anschlussgleise.
+
+        :param: anst: Name der Anschlussstelle
+        :return: Iterator von Gleisnamen
+        :raise: KeyError, wenn die Anst nicht gefunden wird.
         """
-        for parent, child in nx.dfs_edges(self, ('Anst', anst)):
-            if child[0] == 'Agl':
-                yield child[1]
+
+        try:
+            for parent, child in nx.dfs_edges(self, ('Anst', anst)):
+                if child[0] == 'Agl':
+                    yield child[1]
+        except nx.NetworkXError as e:
+            logger.exception(e)
+            raise KeyError(f"Anst {anst} ist im Bahnhofgraph nicht verzeichnet.")
 
     def bahnhoefe(self) -> Iterable[str]:
         """
         Listet alle Bahnhöfe auf.
+
+        :return: Iterator von Bahnhofnamen
         """
+
         for node in self.list_children(('Bst', 'Bf'), {'Bf'}):
             yield node[1]
 
     def anschlussstellen(self) -> Iterable[str]:
         """
         Listet alle Anschlussstellen auf.
+
+        :return: Iterator von Anschlussstellennamen
         """
+
         for node in self.list_children(('Bst', 'Anst'), {'Anst'}):
             yield node[1]
 

@@ -468,7 +468,7 @@ class Gleisbelegung:
             try:
                 hauptgleis = self.anlage.bahnhofgraph.find_superior(('Gl', gleis), {'Bs'})
                 self.hauptgleis_slots[hauptgleis] = {}
-            except nx.NetworkXException:
+            except KeyError:
                 pass
 
         for slot in self.slots.values():
@@ -479,7 +479,7 @@ class Gleisbelegung:
 
             try:
                 hauptgleis = self.anlage.bahnhofgraph.find_superior(('Gl', gleis), {'Bs'})
-            except nx.NetworkXException:
+            except KeyError:
                 pass
             else:
                 self.hauptgleis_slots[hauptgleis][key] = slot
