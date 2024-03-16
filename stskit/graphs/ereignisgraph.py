@@ -72,6 +72,10 @@ class EreignisGraphNode(dict):
                                 'F': Flügelung,
                                 'K': Kupplung.
                             """)
+    plan = dict_property("plan", str,
+                         docstring="Gleis- oder Anschlussname nach Fahrplan.")
+    gleis = dict_property("gleis", str,
+                          docstring="Gleis- oder Anschlussname nach aktueller Disposition.")
     fix = dict_property("fix", bool, "True = Zeit t ist festgelegt")
     p = dict_property("p", float, "Fahrplanzeit in Minuten")
     t = dict_property("t", float, "Geschätzte oder erfolgte Uhrzeit in Minuten")
@@ -103,6 +107,7 @@ class EreignisGraphNode(dict):
 
 
 class EreignisGraphEdge(dict):
+    zid = dict_property("zid", int)
     typ = dict_property("typ", str,
                         docstring="""
                             Verbindungstyp:
@@ -521,6 +526,8 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 typ='An',
                 zid=ziel_node.zid,
                 fid=ziel_node.fid,
+                plan=ziel_node.plan,
+                gleis=ziel_node.gleis,
                 fix=ziel_node.status in {"an", "ab"},
                 s=0
             )
@@ -537,6 +544,8 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 typ='Ab',
                 zid=ziel_node.zid,
                 fid=ziel_node.fid,
+                plan=ziel_node.plan,
+                gleis=ziel_node.gleis,
                 fix=ziel_node.status in {"ab"},
                 s=0
             )
@@ -552,6 +561,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         if len(self.nodes) == 2:
             e2d = EreignisGraphEdge(
                 typ='H',
+                zid=ziel_node.zid,
                 dt_min=ziel_node.mindestaufenthalt,
                 ds=0
             )
@@ -627,6 +637,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
             self.nodes.insert(-1, kupplung)
             edge = EreignisGraphEdge(
                 typ='H',
+                zid=kupplung[0],
                 dt_min=0,
                 ds=0)
             self.edges.append(edge)
@@ -712,6 +723,7 @@ class PlanfahrtEdgeBuilder(ZielEreignisEdgeBuilder):
 
         edge = EreignisGraphEdge(
             typ='P',
+            zid=node1_builder.nodes[-1].zid,
             dt_min=node2_builder.nodes[0].p - node1_builder.nodes[-1].p,
         )
         self.edges.append(edge)
