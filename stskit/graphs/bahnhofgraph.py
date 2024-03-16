@@ -83,6 +83,9 @@ class BahnsteigGraph(nx.Graph):
                 self.add_edge(bs1.name, bs2.name, typ='Nachbar', distanz=0)
 
 
+BahnhofLabelType = Tuple[str, str]
+
+
 class BahnhofGraph(nx.DiGraph):
     """
     Bahnhöfe und ihre Gleishierarchie
@@ -106,7 +109,7 @@ class BahnhofGraph(nx.DiGraph):
 
     def __init__(self, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
-        self.ziel_gleis: Dict[Union[int, str], Tuple[str, str]] = {}
+        self.ziel_gleis: Dict[Union[int, str], BahnhofLabelType] = {}
 
     def to_directed_class(self):
         return self.__class__
@@ -135,7 +138,7 @@ class BahnhofGraph(nx.DiGraph):
         else:
             raise KeyError('Bahnhofgraph enthält kein Anlagenelement.')
 
-    def find_superior(self, label: Tuple[str, str], typen: Set[str]) -> Tuple[str, str]:
+    def find_superior(self, label: BahnhofLabelType, typen: Set[str]) -> BahnhofLabelType:
         """
         Übergeordnetes Element suchen
 
@@ -155,7 +158,7 @@ class BahnhofGraph(nx.DiGraph):
             logger.exception(e)
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
-    def list_children(self, label: Tuple[str, str], typen: Set[str]) -> Iterable[Tuple[str, str]]:
+    def list_children(self, label: BahnhofLabelType, typen: Set[str]) -> Iterable[BahnhofLabelType]:
         """
         Listet die untergeordneten Elemente bestimmter Typen auf.
 
@@ -175,7 +178,7 @@ class BahnhofGraph(nx.DiGraph):
             logger.exception(e)
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
-    def find_name(self, name: str) -> Optional[Tuple[str, str]]:
+    def find_name(self, name: str) -> Optional[BahnhofLabelType]:
         """
         Betriebsstelle nach Namen suchen.
 
@@ -196,7 +199,7 @@ class BahnhofGraph(nx.DiGraph):
 
         return None
 
-    def find_gleis_enr(self, name_enr: Union[int, str]) -> Optional[Tuple[str, str]]:
+    def find_gleis_enr(self, name_enr: Union[int, str]) -> Optional[BahnhofLabelType]:
         """
         Gleis nach Name oder Anschlussgleis nach enr suchen.
 

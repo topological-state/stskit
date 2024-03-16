@@ -5,7 +5,7 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple, Ty
 import networkx as nx
 
 from stskit.graphs.graphbasics import dict_property
-from stskit.graphs.bahnhofgraph import BahnsteigGraphNode
+from stskit.graphs.bahnhofgraph import BahnsteigGraphNode, BahnhofLabelType
 from stskit.graphs.zielgraph import ZielGraphNode
 
 logger = logging.getLogger(__name__)
@@ -34,6 +34,9 @@ class LinienGraphEdge(dict):
                                      docstring="Mittelwert aller ausgewerteten Fahrzeiten in Minuten")
 
 
+LinienLabelType = BahnhofLabelType
+
+
 class LinienGraph(nx.Graph):
     """
     Zugverbindungen zwischen Bahnhöfen.
@@ -49,13 +52,13 @@ class LinienGraph(nx.Graph):
     def __init__(self, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
 
-        self._strecken_cache: Dict[Tuple[str, str], List[str]] = {}
+        self._strecken_cache: Dict[Tuple[LinienLabelType, LinienLabelType], List[LinienLabelType]] = {}
 
     def to_undirected_class(self):
         return self.__class__
 
     @staticmethod
-    def label(typ: str, name: str) -> Tuple[str, str]:
+    def label(typ: str, name: str) -> LinienLabelType:
         """
         Das Label vom Liniengraph entspricht dem des BahnsteigGraph, i.d.R. auf Stufe Bf und Anst.
         """
@@ -159,7 +162,7 @@ class LinienGraph(nx.Graph):
             except nx.NetworkXError:
                 pass
 
-    def strecke(self, start: Tuple[str, str], ziel: Tuple[str, str]) -> List[Tuple[str, str]]:
+    def strecke(self, start: LinienLabelType, ziel: LinienLabelType) -> List[LinienLabelType]:
         """
         Kürzeste Verbindung zwischen zwei Punkten bestimmen
 
@@ -188,7 +191,7 @@ class LinienGraph(nx.Graph):
         self._strecken_cache[(start, ziel)] = strecke
         return strecke
 
-    def strecken_vorschlagen(self, min_fahrten: int = 0, min_laenge: int = 2) -> List[List[Tuple[str, str]]]:
+    def strecken_vorschlagen(self, min_fahrten: int = 0, min_laenge: int = 2) -> List[List[LinienLabelType]]:
         """
         Strecken aus Liniengraph vorschlagen
 
