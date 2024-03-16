@@ -21,6 +21,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import QModelIndex
 
 from stskit.interface.stsobj import time_to_minutes, ZugDetails
+from stskit.graphs.zuggraph import ZugGraphNode
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -254,7 +255,7 @@ class Zugschema:
             cls.schemadateien[name] = fp
             cls.schematitel[name] = titel
 
-    def kategorie(self, zug: ZugDetails) -> str:
+    def kategorie(self, zug: Union[ZugDetails, ZugGraphNode]) -> str:
         """
         Ermittelt die Kategorie eines Zuges
 
@@ -274,7 +275,7 @@ class Zugschema:
         else:
             return "R"
 
-    def zugfarbe(self, zug: ZugDetails) -> str:
+    def zugfarbe(self, zug: Union[ZugDetails, ZugGraphNode]) -> str:
         """
         Matplotlib-Farbcode eines Zuges
 
@@ -285,7 +286,7 @@ class Zugschema:
         kat = self.kategorie(zug)
         return self.farben[kat]
 
-    def zugfarbe_rgb(self, zug: ZugDetails) -> Tuple[int]:
+    def zugfarbe_rgb(self, zug: Union[ZugDetails, ZugGraphNode]) -> Tuple[int]:
         """
         RGB-Farbcode eines Zuges
 
