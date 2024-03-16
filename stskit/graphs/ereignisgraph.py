@@ -36,6 +36,7 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set,
 import networkx as nx
 
 from stskit.graphs.graphbasics import dict_property
+from stskit.graphs.bahnhofgraph import BahnhofLabelType
 from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType
 
 logger = logging.getLogger(__name__)
@@ -81,6 +82,10 @@ class EreignisGraphNode(dict):
     t = dict_property("t", float, "Geschätzte oder erfolgte Uhrzeit in Minuten")
     s = dict_property("s", float, "Ort in Minuten")
 
+    bst = dict_property("bst", BahnhofLabelType)
+    farbe = dict_property("farbe", str)
+    marker = dict_property("marker", str)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._id = next(self.auto_inc)
@@ -124,6 +129,13 @@ class EreignisGraphEdge(dict):
     dt_max = dict_property("dt_max", float, "Maximale Dauer in Minuten")
     # dt = dict_property("dt", float, "Effektive Dauer in Minuten")
     ds = dict_property("ds", float, "Strecke in Minuten")
+
+    farbe = dict_property("farbe", str)
+    titel = dict_property("titel", str)
+    fontstyle = dict_property("fontstyle", str)
+    linewidth = dict_property("linewidth", int)
+    linestyle = dict_property("linestyle", str)
+    auswahl = dict_property("auswahl", int)
 
 
 class EreignisGraph(nx.DiGraph):
