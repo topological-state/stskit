@@ -77,12 +77,14 @@ class ZielPlot:
                 farbe = mpl.rcParams['text.color']
 
             label_options = {"ec": farbe, "fc": mpl.rcParams['axes.facecolor'], "alpha": 1.0, "pad": 2}
+            if data.zid != self.zid:
+                label_options["ls"] = "--"
             nx.draw_networkx_labels(self.zugzielgraph, self.positionen, labels={node: label},
                                     font_size="x-small", font_color=farbe,
                                     bbox=label_options, ax=ax)
 
         # args: edge_color, alpha
-        nx.draw_networkx_edges(self.zugzielgraph, self.positionen, edge_color=edge_colors, ax=ax)
+        nx.draw_networkx_edges(self.zugzielgraph, self.positionen, edge_color=edge_colors, node_size=500, min_source_margin=20, min_target_margin=20, ax=ax)
 
         label_options = {"ec": mpl.rcParams['axes.facecolor'], "fc": mpl.rcParams['axes.facecolor'], "alpha": 1.0, "pad": 2}
         nx.draw_networkx_edge_labels(self.zugzielgraph, self.positionen, edge_labels=edge_labels,
@@ -191,9 +193,11 @@ class ZielPlot:
         return "\n".join(label)
 
     def node_color(self, data: ZielGraphNode):
-        # todo : ausgewählten zug hervorheben
-        # todo : lokwechsel und -umlauf markieren
-        farbe = mpl.rcParams['text.color']
+        if 'W' in data.flags or 'L' in data.flags:
+            farbe = 'tab:brown'
+        else:
+            farbe = mpl.rcParams['text.color']
+
         try:
             zug: ZugGraphNode = self.zuggraph.nodes[data.zid]
         except KeyError:
