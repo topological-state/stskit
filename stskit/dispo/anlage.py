@@ -198,7 +198,7 @@ class Anlage:
         """
         Streckendefinition aus der Konfiguration übernehmen
         """
-        for titel, konfig in self.config['strecken'].items():
+        for titel, konfig in self.config.get('strecken', {}).items():
             strecke = []
             for name in konfig:
                 if self.bahnhofgraph.has_node(node := ('Bf', name)):
@@ -208,10 +208,10 @@ class Anlage:
             key = f"{strecke[0][1]}-{strecke[-1][1]}"
             self.strecken[key] = strecke
 
-            if titel == self.config['hauptstrecke']:
+            if titel == self.config.get('hauptstrecke', None):
                 self.hauptstrecke = key
 
-        for namen, markierung in self.config['streckenmarkierung'].items():
+        for namen, markierung in self.config.get('streckenmarkierung', {}).items():
             node1 = self.bahnhofgraph.find_name(namen[0])
             node2 = self.bahnhofgraph.find_name(namen[1])
             if node1 is not None and node2 is not None:
