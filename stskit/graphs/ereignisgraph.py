@@ -649,7 +649,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
             self.nodes.insert(-1, kupplung)
             edge = EreignisGraphEdge(
                 typ='H',
-                zid=kupplung[0],
+                zid=kupplung.zid,
                 dt_min=0,
                 ds=0)
             self.edges.append(edge)
