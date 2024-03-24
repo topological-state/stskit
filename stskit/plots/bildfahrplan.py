@@ -302,30 +302,34 @@ class BildfahrplanPlot:
         for u, v, data in self.bildgraph.edges(data=True):
             u_data = self.bildgraph.nodes[u]
             v_data = self.bildgraph.nodes[v]
-            for s_u, s_v, s_key, s_data in self.streckengraph.edges(u_data.bst, keys=True, data=True):
-                if s_v == v_data.bst:
-                    pos_x = [s_data['s0'], s_data['s1']]
-                    pos_y = [u_data.t, v_data.t]
-                    mpl_lines = self._axes.plot(pos_x, pos_y,
-                                                picker=True,
-                                                pickradius=5,
-                                                **self.line_args(u_data, v_data, data))
-                    mpl_lines[0].edge = (u, v, s_key)
 
-                    seg = [[pos_x[0], pos_y[0]], [pos_x[1], pos_y[1]]]
-                    pix = self._axes.transData.transform(seg)
-                    cx = (seg[0][0] + seg[1][0]) / 2 + off_x
-                    cy = (seg[0][1] + seg[1][1]) / 2 + off_y
-                    dx = (seg[1][0] - seg[0][0])
-                    dy = (seg[1][1] - seg[0][1])
-                    if ylim[0] < cy < ylim[1]:
-                        if abs(pix[1][0] - pix[0][0]) > 30:
-                            try:
-                                ang = math.degrees(math.atan(dy / dx))
-                            except ZeroDivisionError:
-                                pass
-                            else:
-                                self._axes.text(cx, cy, data.titel, rotation=ang, **label_args)
+            try:
+                for s_u, s_v, s_key, s_data in self.streckengraph.edges(u_data.bst, keys=True, data=True):
+                    if s_v == v_data.bst:
+                        pos_x = [s_data['s0'], s_data['s1']]
+                        pos_y = [u_data.t, v_data.t]
+                        mpl_lines = self._axes.plot(pos_x, pos_y,
+                                                    picker=True,
+                                                    pickradius=5,
+                                                    **self.line_args(u_data, v_data, data))
+                        mpl_lines[0].edge = (u, v, s_key)
+
+                        seg = [[pos_x[0], pos_y[0]], [pos_x[1], pos_y[1]]]
+                        pix = self._axes.transData.transform(seg)
+                        cx = (seg[0][0] + seg[1][0]) / 2 + off_x
+                        cy = (seg[0][1] + seg[1][1]) / 2 + off_y
+                        dx = (seg[1][0] - seg[0][0])
+                        dy = (seg[1][1] - seg[0][1])
+                        if ylim[0] < cy < ylim[1]:
+                            if abs(pix[1][0] - pix[0][0]) > 30:
+                                try:
+                                    ang = math.degrees(math.atan(dy / dx))
+                                except ZeroDivisionError:
+                                    pass
+                                else:
+                                    self._axes.text(cx, cy, data.titel, rotation=ang, **label_args)
+            except AttributeError as e:
+                logger.debug("Fehlendes Attribut im Bildgraph", exc_info=e)
 
         for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
             item.set_fontsize('small')
