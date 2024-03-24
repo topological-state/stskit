@@ -7,20 +7,13 @@ import matplotlib as mpl
 from PyQt5.QtCore import pyqtSlot
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from matplotlib.lines import Line2D
-import networkx as nx
 from PyQt5 import QtWidgets
 
-from stskit.auswertung import Auswertung
 from stskit.dispo.anlage import Anlage
-from stskit.planung import Planung, ZugDetailsPlanung, ZugZielPlanung, FesteVerspaetung, \
-    AnkunftAbwarten, AbfahrtAbwarten, ZugAbwarten
-from stskit.slotgrafik import hour_minutes_formatter
+from stskit.interface.stsobj import time_to_minutes
 from stskit.interface.stsplugin import PluginClient
-from stskit.interface.stsobj import time_to_minutes, format_verspaetung
 from stskit.plots.bildfahrplan import BildfahrplanPlot
 from stskit.zentrale import DatenZentrale
-from stskit.zugschema import Zugbeschriftung
 
 from stskit.qt.ui_bildfahrplan import Ui_BildfahrplanWindow
 
@@ -87,18 +80,11 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
-        trasse_auswahl = len(self._trasse_auswahl) >= 1
-        trasse_paar = len(self._trasse_auswahl) >= 2
-        if trasse_paar:
-            try:
-                trasse_nachbar, _ = self.nachbartrasse_ziel(self._trasse_auswahl[0], self._trasse_auswahl[1])
-            except (KeyError, ValueError):
-                trasse_nachbar = -1
-        else:
-            trasse_nachbar = -1
+        trasse_auswahl = False
+        trasse_nachbar = None
 
         self.ui.actionSetup.setEnabled(display_mode)
-        self.ui.actionAnzeige.setEnabled(not display_mode and len(self._strecke) >= 2)
+        self.ui.actionAnzeige.setEnabled(not display_mode and len(self.plot.strecke) >= 2)
         self.ui.actionFix.setEnabled(display_mode and False)  # not implemented
         self.ui.actionLoeschen.setEnabled(display_mode and trasse_auswahl)
         self.ui.actionPlusEins.setEnabled(display_mode and trasse_auswahl)
@@ -107,10 +93,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and trasse_nachbar == 1)
 
     def update_widgets(self):
-        name = self._strecken_name
-        von = self._strecke_von
-        via = self._strecke_via
-        nach = self._strecke_nach
+        name = self.plot.strecken_name
+        von = self.plot.strecke_von
+        via = self.plot.strecke_via
+        nach = self.plot.strecke_nach
 
         gruppen_liste = sorted((gr for gr in itertools.chain(self.anlage.bahnhofgraph.bahnhoefe(),
                                                              self.anlage.bahnhofgraph.anschlussstellen())))
@@ -135,9 +121,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         if name:
             self.ui.vordefiniert_combo.setCurrentText(name)
 
-        self.ui.vorlaufzeit_spin.setValue(self.vorlaufzeit)
-        self.ui.nachlaufzeit_spin.setValue(self.nachlaufzeit)
-        if "Name" in self.zugbeschriftung.elemente:
+        self.ui.vorlaufzeit_spin.setValue(self.plot.vorlaufzeit)
+        self.ui.nachlaufzeit_spin.setValue(self.plot.nachlaufzeit)
+        if "Name" in self.plot.zugbeschriftung.elemente:
             self.ui.name_button.setChecked(True)
         else:
             self.ui.nummer_button.setChecked(True)
@@ -151,23 +137,23 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             laengste_strecke = ""
 
         try:
-            self._strecken_name = self.anlage.hauptstrecke
+            self.plot.strecken_name = self.anlage.hauptstrecke
             strecke = self.anlage.strecken[self.anlage.hauptstrecke]
         except KeyError:
-            self._strecken_name = ""
+            self.plot.strecken_name = ""
             try:
                 strecke = self.anlage.strecken[laengste_strecke]
             except KeyError:
                 strecke = []
 
         try:
-            self._strecke_von = strecke[0][1]
-            self._strecke_nach = strecke[-1][1]
-            self._strecke_via = ""
+            self.plot.strecke_von = strecke[0][1]
+            self.plot.strecke_nach = strecke[-1][1]
+            self.plot.strecke_via = ""
         except IndexError:
-            self._strecke_von = ""
-            self._strecke_nach = ""
-            self._strecke_via = ""
+            self.plot.strecke_von = ""
+            self.plot.strecke_nach = ""
+            self.plot.strecke_via = ""
 
         self.update_widgets()
 
@@ -178,14 +164,14 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         via = self.ui.via_combo.currentText()
         nach = self.ui.nach_combo.currentText()
 
-        changed = name != self._strecken_name or \
-            von != self._strecke_von or \
-            nach != self._strecke_nach or \
-            via != self._strecke_via
+        changed = name != self.plot.strecken_name or \
+            von != self.plot.strecke_von or \
+            nach != self.plot.strecke_nach or \
+            via != self.plot.strecke_via
 
         if changed:
             # todo
-            self.update_strecke()
+            self.plot.update_strecke()
 
             enable_detailwahl = not bool(name)
             self.ui.von_combo.setEnabled(enable_detailwahl)
@@ -200,10 +186,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
         if self.ui.name_button.isChecked():
-            self.zugbeschriftung.elemente = ["Name", "Verspätung"]
+            self.plot.zugbeschriftung.elemente = ["Name", "Verspätung"]
         else:
-            self.zugbeschriftung.elemente = ["Nummer", "Verspätung"]
-        if self._strecke_von and self._strecke_nach:
+            self.plot.zugbeschriftung.elemente = ["Nummer", "Verspätung"]
+        if self.plot.strecke_von and self.plot.strecke_nach:
             self.daten_update()
             self.grafik_update()
 
@@ -214,32 +200,34 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def vorlaufzeit_changed(self):
         try:
-            self.vorlaufzeit = self.ui.vorlaufzeit_spin.value()
+            self.plot.vorlaufzeit = self.ui.vorlaufzeit_spin.value()
         except ValueError:
             pass
 
     @pyqtSlot()
     def nachlaufzeit_changed(self):
         try:
-            self.nachlaufzeit = self.ui.nachlaufzeit_spin.value()
+            self.plot.nachlaufzeit = self.ui.nachlaufzeit_spin.value()
         except ValueError:
             pass
 
     def planung_update(self, *args, **kwargs):
         if self.ui.von_combo.count() == 0:
             self.update_widgets()
-        if self._strecke_von and self._strecke_nach:
-            self.update_strecke()
+        if self.plot.strecke_von and self.plot.strecke_nach:
+            self.plot.update_strecke()
             self.daten_update()
             self.grafik_update()
             self.update_actions()
 
     def daten_update(self):
-        pass
+        self.plot.zeit = time_to_minutes(self.client.calc_simzeit())
+        self.plot.update_ereignisgraph()
 
     def grafik_update(self):
         self._axes.clear()
-
+        self.plot.zeit = time_to_minutes(self.client.calc_simzeit())
+        self.plot.draw_graph()
 
         self._axes.figure.tight_layout()
         self._axes.figure.canvas.draw()

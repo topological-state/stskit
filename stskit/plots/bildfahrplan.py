@@ -5,7 +5,6 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set,
 import matplotlib as mpl
 import networkx as nx
 
-from stskit.dispo.anlage import Anlage
 from stskit.graphs.bahnhofgraph import BahnhofGraph, BahnhofLabelType
 from stskit.graphs.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge
 from stskit.graphs.zielgraph import ZielLabelType
@@ -217,18 +216,21 @@ class BildfahrplanPlot:
         except AttributeError:
             args['marker'] = ""
 
-        if data.auswahl == 1:
-            args['color'] = 'yellow'
-            args['alpha'] = 0.5
-            args['linewidth'] = 2
-        elif data.auswahl == 2:
-            args['color'] = 'cyan'
-            args['alpha'] = 0.5
-            args['linewidth'] = 2
+        try:
+            if data.auswahl == 1:
+                args['color'] = 'yellow'
+                args['alpha'] = 0.5
+                args['linewidth'] = 2
+            elif data.auswahl == 2:
+                args['color'] = 'cyan'
+                args['alpha'] = 0.5
+                args['linewidth'] = 2
+        except AttributeError:
+            pass
 
         return args
 
-    def draw_graph(self, zeit):
+    def draw_graph(self):
         self._axes.clear()
 
         x_labels = [s for _, s in self.strecke]
@@ -241,8 +243,7 @@ class BildfahrplanPlot:
         self._axes.yaxis.grid(True, which='major')
         self._axes.xaxis.grid(True)
 
-        self.zeit = zeit
-        ylim = (zeit - self.nachlaufzeit, zeit + self.vorlaufzeit)
+        ylim = (self.zeit - self.nachlaufzeit, self.zeit + self.vorlaufzeit)
         self._axes.set_ylim(top=ylim[0], bottom=ylim[1])
         try:
             self._axes.set_xlim(left=x_labels_pos[0], right=x_labels_pos[-1])
@@ -304,7 +305,9 @@ class BildfahrplanPlot:
             item.set_fontsize('small')
 
         if self.nachlaufzeit > 0:
-            self._axes.axhline(y=zeit, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
+            self._axes.axhline(y=self.zeit,
+                               color=mpl.rcParams['axes.edgecolor'],
+                               linewidth=mpl.rcParams['axes.linewidth'])
 
         self._axes.figure.tight_layout()
         self._axes.figure.canvas.draw()
