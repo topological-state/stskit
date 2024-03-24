@@ -32,8 +32,18 @@ def format_label(zugbeschriftung: Zugbeschriftung, zug: ZugGraphNode, anfang: Er
     :return: (str)
     """
 
-    v1 = anfang.t - anfang.p
-    v2 = ende.t - ende.p
+    try:
+        v1 = anfang.t - anfang.p
+    except AttributeError:
+        v1 = None
+    try:
+        v2 = ende.t - ende.p
+    except AttributeError:
+        v2 = None
+    if v1 is None:
+        v1 = v2 or 0
+    if v2 is None:
+        v2 = v1 or 0
 
     if "Name" in zugbeschriftung.elemente:
         name = zug.name
