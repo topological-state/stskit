@@ -177,6 +177,16 @@ class BildfahrplanPlot:
             except (IndexError, KeyError):
                 return None
 
+        def _add_node(ereignis_label, ereignis_data):
+            bst = bst_von_fid(ereignis_data.fid)
+            if bst in strecke:
+                zug = self.zentrale.client.zuggraph.nodes[ereignis_data.zid]
+                d = ereignis_data.copy()
+                d['bst'] = bst
+                d['farbe'] = self.anlage.zugschema.zugfarbe(zug)
+                d['marker'] = '.'
+                self.bildgraph.add_node(ereignis_label, **d)
+
         self.bildgraph.clear()
         t0 = self.zeit - self.nachlaufzeit
         t1 = self.zeit + self.vorlaufzeit
@@ -184,26 +194,29 @@ class BildfahrplanPlot:
         strecke = set(self.strecke)
 
         for node, data in self.anlage.ereignisgraph.nodes(data=True):
-            if t0 <= node.t <= t1:
-                bst = bst_von_fid(data.fid)
-                if bst in strecke:
-                    zug = self.zentrale.client.zuggraph.nodes[data.zid]
-                    d = data.copy()
-                    d['bst'] = bst
-                    d['farbe'] = self.anlage.zugschema.zugfarbe(zug)
-                    d['marker'] = '.'
-                    self.bildgraph.add_node(node, **data)
+            try:
+                if t0 <= data.t <= t1:
+                    _add_node(node, data)
+            except AttributeError:
+                continue
 
         for u, v, data in self.anlage.ereignisgraph.edges(data=True):
             if u in self.bildgraph or v in self.bildgraph:
                 zug = self.zentrale.client.zuggraph.nodes[data.zid]
                 u_data = self.anlage.ereignisgraph.nodes[u]
                 v_data = self.anlage.ereignisgraph.nodes[v]
-                data.farbe = self.anlage.zugschema.zugfarbe(zug)
-                data.titel = format_label(self.zugbeschriftung, zug, u_data, v_data)
-                data.fontstyle = "normal"
-                data.linewidth = 1
-                data.linestyle = '--' if data.typ == "H" else "-"
+                u_v_data = data.copy()
+                u_v_data['farbe'] = self.anlage.zugschema.zugfarbe(zug)
+                u_v_data['titel'] = format_label(self.zugbeschriftung, zug, u_data, v_data)
+                u_v_data['fontstyle'] = "normal"
+                u_v_data['linewidth'] = 1
+                u_v_data['linestyle'] = '--' if data.typ == "H" else "-"
+
+                if u not in self.bildgraph:
+                    _add_node(u, u_data)
+                if v not in self.bildgraph:
+                    _add_node(v, v_data)
+                self.bildgraph.add_edge(u, v, **u_v_data)
 
     def line_args(self, start: EreignisGraphNode, ziel: EreignisGraphNode, data: EreignisGraphEdge) -> Dict[str, Any]:
         args = {'color': data.farbe,
@@ -274,16 +287,16 @@ class BildfahrplanPlot:
                       'transform_rotates_text': True}
 
         for u, v, data in self.bildgraph.edges(data=True):
-            for s_u, s_v, s_key, s_data in self.streckengraph.edges(u, keys=True, data=True):
-                if s_v == v:
-                    start = self.bildgraph.nodes(s_u)
-                    ziel = self.bildgraph.nodes(s_v)
+            u_data = self.bildgraph.nodes[u]
+            v_data = self.bildgraph.nodes[v]
+            for s_u, s_v, s_key, s_data in self.streckengraph.edges(u_data.bst, keys=True, data=True):
+                if s_v == v_data.bst:
                     pos_x = [s_data['s0'], s_data['s1']]
-                    pos_y = [start.t, ziel.t]
+                    pos_y = [u_data.t, v_data.t]
                     mpl_lines = self._axes.plot(pos_x, pos_y,
                                                 picker=True,
                                                 pickradius=5,
-                                                **self.line_args(start, ziel, data))
+                                                **self.line_args(u_data, v_data, data))
                     mpl_lines[0].edge = (u, v, s_key)
 
                     seg = [[pos_x[0], pos_y[0]], [pos_x[1], pos_y[1]]]
