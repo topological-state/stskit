@@ -90,7 +90,7 @@ class BildfahrplanPlot:
         self.zugbeschriftung = Zugbeschriftung(stil="Bildfahrplan")
 
         self.bildgraph = EreignisGraph()
-        self.streckengraph = nx.MultiGraph()
+        self.streckengraph = nx.MultiDiGraph()
 
         # bahnhofname -> distanz [minuten]
         self.strecke: List[BahnhofLabelType] = []
@@ -154,10 +154,13 @@ class BildfahrplanPlot:
             self.strecke = strecke
             self.distanz = sd
 
-            for a, b, c, d in zip(self.strecke[:-1], self.strecke[1:], self.distanz[:-1], self.distanz[1:]):
-                self.streckengraph.add_edge(a, b, s0=c, s1=d)
-            for a, b in zip(self.strecke, self.distanz):
-                self.streckengraph.add_edge(a, a, s0=b, s1=b)
+            for ia, a in enumerate(zip(self.strecke, self.distanz)):
+                for ib, b in enumerate(zip(self.strecke[ia:], self.distanz[ia:])):
+                    if a[0] != b[0] or ib == 0:
+                        self.streckengraph.add_edge(a[0], b[0], s0=a[1], s1=b[1])
+                        self.streckengraph.add_edge(b[0], a[0], s0=b[1], s1=a[1])
+                    else:
+                        break
 
     def update_ereignisgraph(self):
         """
