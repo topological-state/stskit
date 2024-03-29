@@ -125,16 +125,53 @@ class BildfahrplanPlot:
                 gruppe1 = ""
         return gruppe1
 
+    def default_strecke_waehlen(self):
+        """
+        Hauptstrecke auswählen.
+
+        Die Hauptstrecke ist in der Anlage eingestellt.
+        Wenn keine Hauptstrecke definiert ist, wird die längste Strecke der Anlage übernommen.
+
+        Die Attribute strecken_name, strecke_von, strecke_nach und strecke_via werden entsprechend aktualisiert.
+        Ruft ausserdem update_strecke() auf.
+
+        :return: None
+        """
+
+        strecken = [(name, len(strecke)) for name, strecke in self.anlage.strecken.items()]
+        try:
+            laengste_strecke = max(strecken, key=lambda x: x[1])
+            laengste_strecke = laengste_strecke[0]
+        except (ValueError, IndexError):
+            laengste_strecke = ""
+
+        try:
+            self.strecken_name = self.anlage.hauptstrecke
+            strecke = self.anlage.strecken[self.anlage.hauptstrecke]
+        except KeyError:
+            self.strecken_name = ""
+            try:
+                strecke = self.anlage.strecken[laengste_strecke]
+            except KeyError:
+                strecke = []
+
+        try:
+            self.strecke_von = strecke[0][1]
+            self.strecke_nach = strecke[-1][1]
+            self.strecke_via = ""
+        except IndexError:
+            self.strecke_von = ""
+            self.strecke_nach = ""
+            self.strecke_via = ""
+
+        self.update_strecke()
+
     def update_strecke(self):
         """
-        streckenauswahl von einstellungen übernehmen.
+        Strecke berechnen.
 
-        die einstellungen stehen in _strecken_name, _strecke_von, etc.
-        wenn _strecken_name gesetzt ist, werden die anderen attribute nicht beachtet.
-
-        die methode aktualisert die streckenliste auf der einstellungsseite und den fenstertitel,
-        aktualisiert die werkzeugleiste,
-        stösst aber keine neuberechnung der grafik an.
+        Berechnet die Strecke, Distanzen und den Streckengraphen.
+        Muss nach jeder Änderung der Streckenattribute (strecke_name, strecke_von, etc.) aufgerufen werden.
 
         :return: None
         """
@@ -143,6 +180,14 @@ class BildfahrplanPlot:
 
         if self.strecken_name in self.anlage.strecken:
             strecke = self.anlage.strecken[self.strecken_name]
+            try:
+                self.strecke_von = strecke[0][1]
+                self.strecke_nach = strecke[-1][1]
+            except IndexError:
+                self.strecke_von = ""
+                self.strecke_nach = ""
+            self.strecke_via = ""
+
         elif self.strecke_von and self.strecke_nach:
             if self.strecke_via:
                 von_gleis = self.strecke_von
@@ -156,12 +201,13 @@ class BildfahrplanPlot:
                 von_gleis = self.strecke_von
                 nach_gleis = self.strecke_nach
                 strecke = self.anlage.liniengraph.strecke(von_gleis, nach_gleis)
+
         else:
             strecke = []
 
-        if len(strecke):
+        self.strecke = strecke
+        if strecke:
             sd = self.anlage.liniengraph.strecken_zeitachse(strecke, parameter='fahrzeit_schnitt')
-            self.strecke = strecke
             self.distanz = sd
 
             for ia, a in enumerate(zip(self.strecke, self.distanz)):
@@ -171,6 +217,8 @@ class BildfahrplanPlot:
                         self.streckengraph.add_edge(b[0], a[0], s0=b[1], s1=a[1])
                     else:
                         break
+        else:
+            self.distanz = []
 
     def update_ereignisgraph(self):
         """

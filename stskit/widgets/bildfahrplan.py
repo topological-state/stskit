@@ -35,6 +35,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_BildfahrplanWindow()
         self.ui.setupUi(self)
+        self.update_anlage()
 
         self.setWindowTitle("Streckenfahrplan")
 
@@ -67,7 +68,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         self.plot = BildfahrplanPlot(zentrale, self._axes)
 
-        self.default_strecke_waehlen()
+        self.plot.default_strecke_waehlen()
+        self.update_widgets()
         self.update_actions()
 
     @property
@@ -92,34 +94,57 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and trasse_nachbar == 0)
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and trasse_nachbar == 1)
 
+    def update_anlage(self):
+        """
+        Widget-Inhalte nach Anlagenupdate aktualisieren.
+
+
+        """
+
+        gruppen_liste = sorted((gr for gr in itertools.chain(self.anlage.bahnhofgraph.bahnhoefe(),
+                                                             self.anlage.bahnhofgraph.anschlussstellen())))
+
+        strecken_liste = sorted(self.anlage.strecken.keys())
+
+        self.ui.von_combo.clear()
+        self.ui.von_combo.addItems(["", *gruppen_liste])
+        self.ui.via_combo.clear()
+        self.ui.via_combo.addItems(["", *gruppen_liste])
+        self.ui.nach_combo.clear()
+        self.ui.nach_combo.addItems(["", *gruppen_liste])
+        self.ui.vordefiniert_combo.clear()
+        self.ui.vordefiniert_combo.addItems(["", *strecken_liste])
+
     def update_widgets(self):
+        """
+        Widget-Zustände gemäss Plotattributen aktualisieren.
+        """
+
         name = self.plot.strecken_name
         von = self.plot.strecke_von
         via = self.plot.strecke_via
         nach = self.plot.strecke_nach
 
-        gruppen_liste = sorted((gr for gr in itertools.chain(self.anlage.bahnhofgraph.bahnhoefe(),
-                                                             self.anlage.bahnhofgraph.anschlussstellen())))
-        strecken_liste = sorted(self.anlage.strecken.keys())
+        self.ui.vordefiniert_combo.setCurrentText(name)
+        self.ui.von_combo.setCurrentText(von)
+        self.ui.via_combo.setCurrentText(via)
+        self.ui.nach_combo.setCurrentText(nach)
 
-        self.ui.von_combo.clear()
-        self.ui.von_combo.addItems(gruppen_liste)
-        self.ui.via_combo.clear()
-        self.ui.via_combo.addItems(["", *gruppen_liste])
-        self.ui.nach_combo.clear()
-        self.ui.nach_combo.addItems(gruppen_liste)
-        self.ui.vordefiniert_combo.clear()
-        self.ui.vordefiniert_combo.addItems([""])
-        self.ui.vordefiniert_combo.addItems(strecken_liste)
+        enable_detailwahl = not bool(name)
+        self.ui.von_combo.setEnabled(enable_detailwahl)
+        self.ui.via_combo.setEnabled(enable_detailwahl)
+        self.ui.nach_combo.setEnabled(enable_detailwahl)
 
-        if von:
-            self.ui.von_combo.setCurrentText(von)
-        if via:
-            self.ui.via_combo.setCurrentText(via)
-        if nach:
-            self.ui.nach_combo.setCurrentText(nach)
-        if name:
-            self.ui.vordefiniert_combo.setCurrentText(name)
+        self.ui.strecke_list.clear()
+        self.ui.strecke_list.addItems((p[1] for p in self.plot.strecke))
+
+        if self.plot.strecken_name:
+            titel = f"Bildfahrplan {self.plot.strecken_name}"
+        elif self.plot.strecke_von and self.plot.strecke_nach:
+            titel = f"Bildfahrplan {self.plot.strecke_von}-{self.plot.strecke_nach}"
+        else:
+            titel = "Bildfahrplan (keine Strecke ausgewählt)"
+        self.setWindowTitle(titel)
 
         self.ui.vorlaufzeit_spin.setValue(self.plot.vorlaufzeit)
         self.ui.nachlaufzeit_spin.setValue(self.plot.nachlaufzeit)
@@ -128,55 +153,34 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         else:
             self.ui.nummer_button.setChecked(True)
 
-    def default_strecke_waehlen(self):
-        strecken = [(name, len(strecke)) for name, strecke in self.anlage.strecken.items()]
-        try:
-            laengste_strecke = max(strecken, key=lambda x: x[1])
-            laengste_strecke = laengste_strecke[0]
-        except (ValueError, IndexError):
-            laengste_strecke = ""
-
-        try:
-            self.plot.strecken_name = self.anlage.hauptstrecke
-            strecke = self.anlage.strecken[self.anlage.hauptstrecke]
-        except KeyError:
-            self.plot.strecken_name = ""
-            try:
-                strecke = self.anlage.strecken[laengste_strecke]
-            except KeyError:
-                strecke = []
-
-        try:
-            self.plot.strecke_von = strecke[0][1]
-            self.plot.strecke_nach = strecke[-1][1]
-            self.plot.strecke_via = ""
-        except IndexError:
-            self.plot.strecke_von = ""
-            self.plot.strecke_nach = ""
-            self.plot.strecke_via = ""
-
-        self.update_widgets()
-
     @pyqtSlot()
     def strecke_selection_changed(self):
+        """
+        Neue Streckenwahl von Widgets übernehmen.
+        """
+
         name = self.ui.vordefiniert_combo.currentText()
         von = self.ui.von_combo.currentText()
         via = self.ui.via_combo.currentText()
         nach = self.ui.nach_combo.currentText()
 
-        changed = name != self.plot.strecken_name or \
-            von != self.plot.strecke_von or \
-            nach != self.plot.strecke_nach or \
-            via != self.plot.strecke_via
+        changed = name != self.plot.strecken_name
+        if not name:
+            changed = changed or \
+                      von != self.plot.strecke_von or \
+                      nach != self.plot.strecke_nach or \
+                      via != self.plot.strecke_via
 
         if changed:
-            # todo
-            self.plot.update_strecke()
+            self.plot.strecken_name = name
+            if not name:
+                self.plot.strecke_von = von
+                self.plot.strecke_nach = nach
+                self.plot.strecke_via = via
 
-            enable_detailwahl = not bool(name)
-            self.ui.von_combo.setEnabled(enable_detailwahl)
-            self.ui.via_combo.setEnabled(enable_detailwahl)
-            self.ui.nach_combo.setEnabled(enable_detailwahl)
+            self.plot.update_strecke()
+            self.update_widgets()
+            self.update_actions()
 
     @pyqtSlot()
     def settings_button_clicked(self):
