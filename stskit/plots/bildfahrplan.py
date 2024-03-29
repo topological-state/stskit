@@ -223,7 +223,7 @@ class BildfahrplanPlot:
                 u_v_data['titel'] = format_label(self.zugbeschriftung, zug, u_data, v_data)
                 u_v_data['fontstyle'] = "normal"
                 u_v_data['linewidth'] = 1
-                u_v_data['linestyle'] = '--' if data.typ == "H" else "-"
+                u_v_data['linestyle'] = ':' if data.typ in {"E", "F", "H"} else "-"
 
                 if u not in self.bildgraph:
                     _add_node(u, u_data)
@@ -238,7 +238,7 @@ class BildfahrplanPlot:
                 'marker': start.marker}
 
         try:
-            args['markevery'] = [start.typ == "Ab" or data.typ == "H", data.typ == "H"]
+            args['markevery'] = [start.typ == "Ab" or data.typ in {"E", "F", "H"}, data.typ == "H"]
         except AttributeError:
             args['marker'] = ""
 
@@ -253,6 +253,21 @@ class BildfahrplanPlot:
                 args['linewidth'] = 2
         except AttributeError:
             pass
+
+        return args
+
+    def marker_args(self, start: EreignisGraphNode) -> Dict[str, Any]:
+        args = {'c': start.farbe}
+
+        try:
+            if start.typ == "Ab":
+                args['marker'] = start.marker
+            elif start.typ in {"E", "F", "K"}:
+                args['marker'] = "*"
+            else:
+                args['marker'] = ""
+        except AttributeError:
+            args['marker'] = ""
 
         return args
 
@@ -329,7 +344,19 @@ class BildfahrplanPlot:
                                 else:
                                     self._axes.text(cx, cy, data.titel, rotation=ang, **label_args)
             except AttributeError as e:
-                logger.debug("Fehlendes Attribut im Bildgraph", exc_info=e)
+                logger.debug("Fehlendes Attribut im Bildgraph beim Kantenzeichnen", exc_info=e)
+
+        for u in self.bildgraph.nodes(data=False):
+            u_data = self.bildgraph.nodes[u]
+            try:
+                if u_data.typ in {"E", "F", "K"}:
+                    for s_u, s_v, s_key, s_data in self.streckengraph.edges(u_data.bst, keys=True, data=True):
+                        if s_v == u_data.bst:
+                            pos_x = s_data['s0']
+                            pos_y = u_data.get('t', u_data.p)
+                            self._axes.scatter(pos_x, pos_y, **self.marker_args(u_data))
+            except AttributeError as e:
+                logger.debug("Fehlendes Attribut im Bildgraph beim Knotenzeichnen", exc_info=e)
 
         for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
             item.set_fontsize('small')
