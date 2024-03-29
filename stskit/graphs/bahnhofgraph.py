@@ -154,8 +154,7 @@ class BahnhofGraph(nx.DiGraph):
                     return node
             else:
                 raise KeyError(f"{label} ist keinem übergeordnetem {typen} zugeordnet")
-        except nx.NetworkXError as e:
-            logger.exception(e)
+        except nx.NetworkXError:
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
     def list_children(self, label: BahnhofLabelType, typen: Set[str]) -> Iterable[BahnhofLabelType]:
