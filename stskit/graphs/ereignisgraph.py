@@ -338,7 +338,11 @@ class EreignisGraph(nx.DiGraph):
             ziel_zeit = -math.inf
             if ziel_data.typ in {'Ab'}:
                 try:
-                    ziel_zeit = ziel_data.p
+                    # todo : generalisieren: bei naechstem anstehenden ereignis aktuelle verspaetung nehmen
+                    if zielnode[1] == 0:
+                        ziel_zeit = ziel_data.t
+                    else:
+                        ziel_zeit = ziel_data.p
                 except (AttributeError, KeyError):
                     pass
 
@@ -544,8 +548,8 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 s=0
             )
             try:
-                n1d.p = ziel_node.p_an
-                n1d.t = ziel_node.p_an + ziel_node.v_an
+                n1d.t = n1d.p = ziel_node.p_an
+                n1d.t += ziel_node.get("v_an", 0)
             except AttributeError:
                 pass
             self.nodes.append(n1d)
@@ -562,8 +566,8 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 s=0
             )
             try:
-                n2d.p = ziel_node.p_ab
-                n2d.t = ziel_node.p_ab + ziel_node.v_ab
+                n2d.t = n2d.p = ziel_node.p_ab
+                n2d.t += ziel_node.get("v_ab", 0)
             except AttributeError:
                 pass
             self.nodes.append(n2d)

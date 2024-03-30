@@ -105,14 +105,15 @@ class Anlage:
             except KeyError:
                 logger.warning("keine bahnhofkonfiguration gefunden")
 
-        # todo : zielgraph kann sich zur laufzeit aendern
-        self.zielgraph = client.zielgraph.copy(as_view=True)
+        self.zielgraph = client.zielgraph.copy(as_view=False)
         if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
             self.liniengraph_konfigurieren()
             self.liniengraph_mit_signalgraph_abgleichen()
         self.zielgraph.einfahrtszeiten_korrigieren(self.liniengraph, self.bahnhofgraph)
         self.ereignisgraph.zielgraph_importieren(self.zielgraph)
+        # nx.write_gml(self.zielgraph, "zielgraph.gml", stringizer=str)
         self.ereignisgraph.prognose()
+        # nx.write_gml(self.ereignisgraph, "ereignisgraph.gml", stringizer=str)
         self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
 
         if len(self.strecken) == 0 and self.liniengraph:
