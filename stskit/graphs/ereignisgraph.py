@@ -31,6 +31,7 @@ import datetime
 import itertools
 import logging
 import math
+import numpy as np
 from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set, Tuple, TypeVar, Union
 
 import networkx as nx
@@ -77,10 +78,17 @@ class EreignisGraphNode(dict):
                          docstring="Gleis- oder Anschlussname nach Fahrplan.")
     gleis = dict_property("gleis", str,
                           docstring="Gleis- oder Anschlussname nach aktueller Disposition.")
-    fix = dict_property("fix", bool, "True = Zeit t ist festgelegt")
     p = dict_property("p", float, "Fahrplanzeit in Minuten")
     t = dict_property("t", float, "Geschätzte oder erfolgte Uhrzeit in Minuten")
     s = dict_property("s", float, "Ort in Minuten")
+    progress = dict_property("progress", int,
+                             docstring="Fortschritt der Zugfahrt als Punktabstand zur aktuellen Position des Zuges. "
+                                       "Die Nodes entlang einer Zugfahrt werden durchnummeriert, "
+                                       "wobei die Null das nächste erwartete Ereignis/Ziel anzeigt. "
+                                       ">0: Ereignis in der Zukunft/Fahrziel noch nicht erreicht, "
+                                       "0: nächstes Ereignis/aktuelles Fahrziel, "
+                                       "<0: Ereignis in der Vergangenheit/Fahrziel erreicht."
+                             )
 
     bst = dict_property("bst", BahnhofLabelType)
     farbe = dict_property("farbe", str)
@@ -216,6 +224,30 @@ class EreignisGraph(nx.DiGraph):
 
         nx.relabel_nodes(self, mapping, copy=False)
 
+    def _progress_berechnen(self):
+        """
+        Progress-Attribute berechnen.
+
+        Der Import setzt das Progress-Attribut von vergangenen Ereignissen auf -1 und von nicht vergangenen auf +1.
+        Diese Methode berechnet die Progressfolge gemäss Spezifikation,
+        d.h. den Abstand jedes Ereignisknotens zum nächsten erwarteten.
+        Vergangene Ereignisse erhalten einen negativen Progressindex.
+
+        Das Progress-Attribut wird von der prognose-Methode verwendet.
+        """
+
+        for zid in self.zuege:
+            labels = list(self.zugpfad(zid))
+            progress = np.asarray([self.nodes[label].progress for label in labels])
+            pendent = np.nonzero(progress >= 0)
+            try:
+                aktuell = np.min(pendent)
+            except ValueError:
+                aktuell = len(labels)
+            progress_neu = np.arange(len(progress)) - aktuell
+            for label, p in zip(labels, progress_neu):
+                self.nodes[label].progress = p
+
     def zielgraph_importieren(self, zg: ZielGraph):
         """
         Zielgraph importieren
@@ -277,6 +309,8 @@ class EreignisGraph(nx.DiGraph):
         for builder in edge_builders.values():
             builder.add_to_graph(self)
 
+        self._progress_berechnen()
+
     def prognose(self):
         """
         Zeitprognose durchführen
@@ -313,7 +347,7 @@ class EreignisGraph(nx.DiGraph):
 
         for zielnode in nodes:
             ziel_data = self.nodes[zielnode]
-            if ziel_data.fix:
+            if ziel_data.progress < 0:
                 continue
 
             zeit_min = -math.inf
@@ -336,14 +370,15 @@ class EreignisGraph(nx.DiGraph):
                     pass
 
             ziel_zeit = -math.inf
-            if ziel_data.typ in {'Ab'}:
+            if ziel_data.progress == 0:
                 try:
-                    # todo : generalisieren: bei naechstem anstehenden ereignis aktuelle verspaetung nehmen
-                    if zielnode[1] == 0:
-                        ziel_zeit = ziel_data.t
-                    else:
-                        ziel_zeit = ziel_data.p
-                except (AttributeError, KeyError):
+                    ziel_zeit = ziel_data.t
+                except AttributeError:
+                    pass
+            else:
+                try:
+                    ziel_zeit = ziel_data.p
+                except AttributeError:
                     pass
 
             ziel_zeit = min(ziel_zeit, zeit_max)
@@ -544,7 +579,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 fid=ziel_node.fid,
                 plan=ziel_node.plan,
                 gleis=ziel_node.gleis,
-                fix=ziel_node.status in {"an", "ab"},
+                progress=-1 if ziel_node.status in {"an", "ab"} else +1,
                 s=0
             )
             try:
@@ -562,7 +597,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 fid=ziel_node.fid,
                 plan=ziel_node.plan,
                 gleis=ziel_node.gleis,
-                fix=ziel_node.status in {"ab"},
+                progress=-1 if ziel_node.status in {"ab"} else +1,
                 s=0
             )
             try:
