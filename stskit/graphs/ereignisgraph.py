@@ -399,13 +399,20 @@ class EreignisGraph(nx.DiGraph):
                     pass
 
             ziel_zeit = -math.inf
-            if ziel_data.progress == 0:
+            # beim aktuellen ziel eventuell verspaetung vom simulator uebernehmen (t-attribut)
+            if ziel_data.progress == 0 and (
+                    # zug unterwegs und hat eventuell verspaetung aufgebaut
+                    ziel_data.typ == 'An' or
+                    # zug noch nicht eingefahren
+                    ziel_data.typ == 'Ab' and ziel_data.fid[1] == 0):
                 try:
+                    # verspaetung vom simulator uebernehmen
                     ziel_zeit = ziel_data.t
                 except AttributeError:
                     pass
             else:
                 try:
+                    # fahrplanzeit uebernehmen (p-attribut), verspaetung aus message passing
                     ziel_zeit = ziel_data.p
                 except AttributeError:
                     pass
