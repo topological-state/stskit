@@ -8,7 +8,7 @@ from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set,
 import networkx as nx
 
 from stskit.interface.stsgraph import GraphClient
-from stskit.interface.stsobj import Knoten, AnlagenInfo
+from stskit.interface.stsobj import Ereignis, AnlagenInfo
 from stskit.graphs.signalgraph import SignalGraph
 from stskit.graphs.bahnhofgraph import BahnhofGraph, BahnsteigGraph
 from stskit.graphs.liniengraph import LinienGraph, LinienGraphEdge
@@ -326,3 +326,6 @@ class Anlage:
             self.config['zugschema'] = d['zugschema']
         except KeyError:
             self.config['zugschema'] = ''
+
+    def sim_ereignis_uebernehmen(self, ereignis: Ereignis):
+        self.ereignisgraph.sim_ereignis_uebernehmen(ereignis)

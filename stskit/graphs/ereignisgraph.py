@@ -36,6 +36,8 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set,
 
 import networkx as nx
 
+from stskit.interface.stsobj import Ereignis
+from stskit.interface.stsobj import time_to_minutes
 from stskit.graphs.graphbasics import dict_property
 from stskit.graphs.bahnhofgraph import BahnhofLabelType
 from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType
@@ -248,6 +250,33 @@ class EreignisGraph(nx.DiGraph):
             for label, p in zip(labels, progress_neu):
                 self.nodes[label].progress = p
 
+    def _ereignis_erreicht(self, label: EreignisLabelType):
+        zid = label[0]
+        progress = 0
+        node = label
+        while node is not None:
+            for n in self.successors(node):
+                if n[0] == zid:
+                    self.nodes[n].progress = progress
+                    progress += 1
+                    node = n
+                    break
+            else:
+                node = None
+
+        self.nodes[label].progress = -1
+        progress = -2
+        node = label
+        while node is not None:
+            for n in self.predecessors(node):
+                if n[0] == zid:
+                    self.nodes[n].progress = progress
+                    progress -= 1
+                    node = n
+                    break
+            else:
+                node = None
+
     def zielgraph_importieren(self, zg: ZielGraph):
         """
         Zielgraph importieren
@@ -416,6 +445,79 @@ class EreignisGraph(nx.DiGraph):
             elif ereignis_data.typ == 'An':
                 if ziel_data.status == '':
                     ziel_data.v_an = v
+
+    def sim_ereignis_uebernehmen(self, ereignis: Ereignis):
+        """
+        Daten von einem Sim-Ereignis übernehmen.
+
+        Aktualisiert die Verspätung und Status-Flags anhand eines Ereignisses im Simulator.
+
+        Aktualisiert werden die folgenden Attribute:
+        - t
+        - progress
+
+        :param ereignis: Ereignis-objekt vom PluginClient
+        :return:
+        """
+
+        t = time_to_minutes(ereignis.zeit)
+        if ereignis.art == 'einfahrt':
+            label = (ereignis.zid, 0)
+            data = self.nodes[label]
+            data.t = t
+            self._ereignis_erreicht(label)
+        elif ereignis.art == 'ausfahrt':
+            label = list(self.zugpfad(ereignis.zid))[-1]
+            data = self.nodes[label]
+            data.t = t
+            self._ereignis_erreicht(label)
+        elif ereignis.art == 'ankunft':
+            try:
+                label = self.label_of(ereignis.zid, plan=ereignis.plangleis, typ="An")
+            except ValueError:
+                pass
+            else:
+                data = self.nodes[label]
+                data.t = t
+                self._ereignis_erreicht(label)
+        elif ereignis.art == 'abfahrt':
+            try:
+                label = self.label_of(ereignis.zid, plan=ereignis.plangleis, typ="Ab")
+            except ValueError:
+                pass
+            else:
+                data = self.nodes[label]
+                data.t = t
+                if ereignis.amgleis:
+                    # abfahrbereit
+                    pass
+                else:
+                    self._ereignis_erreicht(label)
+        elif ereignis.art == 'rothalt' or ereignis.art == 'wurdegruen':
+            try:
+                label = self.label_of(ereignis.zid, plan=ereignis.plangleis, progress=0)
+            except ValueError:
+                pass
+            else:
+                data = self.nodes[label]
+                data.t = data.p + ereignis.verspaetung
+        else:
+            pass
+
+    def label_of(self, zid, gleis=None, plan=None, typ=None, progress=None) -> EreignisLabelType:
+        for label in self.zugpfad(zid):
+            data = self.nodes[label]
+            if gleis is not None and data.gleis != gleis:
+                continue
+            if plan is not None and data.plan != plan:
+                continue
+            if typ is not None and data.typ != typ:
+                continue
+            if progress is not None and data.progress != progress:
+                continue
+            return label
+
+        raise ValueError(f"No label for {zid}")
 
 
 class EreignisGraphUngerichtet(nx.Graph):

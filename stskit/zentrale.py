@@ -145,6 +145,8 @@ class DatenZentrale:
         :return:
         """
 
+        if self.anlage:
+            self.anlage.sim_ereignis_uebernehmen(ereignis)
         if self.planung:
             self.planung.ereignis_uebernehmen(ereignis)
         if self.auswertung:
