@@ -27,11 +27,9 @@ Der Ablauf ist wie folgt:
 
 from abc import ABCMeta, abstractmethod
 import copy
-import datetime
 import itertools
 import logging
 import math
-import numpy as np
 from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set, Tuple, TypeVar, Union
 
 import networkx as nx
@@ -80,17 +78,10 @@ class EreignisGraphNode(dict):
                          docstring="Gleis- oder Anschlussname nach Fahrplan.")
     gleis = dict_property("gleis", str,
                           docstring="Gleis- oder Anschlussname nach aktueller Disposition.")
-    p = dict_property("p", float, "Fahrplanzeit in Minuten")
-    t = dict_property("t", float, "Geschätzte oder erfolgte Uhrzeit in Minuten")
+    t_plan = dict_property("t_plan", Optional[float], "Geplante Uhrzeit in Minuten")
+    t_prog = dict_property("t_prog", Optional[float], "Geschätzte Uhrzeit in Minuten")
+    t_mess = dict_property("t_mess", Optional[float], "Gemessene Uhrzeit in Minuten")
     s = dict_property("s", float, "Ort in Minuten")
-    progress = dict_property("progress", int,
-                             docstring="Fortschritt der Zugfahrt als Punktabstand zur aktuellen Position des Zuges. "
-                                       "Die Nodes entlang einer Zugfahrt werden durchnummeriert, "
-                                       "wobei die Null das nächste erwartete Ereignis/Ziel anzeigt. "
-                                       ">0: Ereignis in der Zukunft/Fahrziel noch nicht erreicht, "
-                                       "0: nächstes Ereignis/aktuelles Fahrziel, "
-                                       "<0: Ereignis in der Vergangenheit/Fahrziel erreicht."
-                             )
 
     bst = dict_property("bst", BahnhofLabelType)
     farbe = dict_property("farbe", str)
@@ -119,6 +110,21 @@ class EreignisGraphNode(dict):
         Bei allen anderen Knoten hat die zweite Komponente keine Bedeutung, nicht mal in Bezug auf eine Reihenfolge.
         """
         return self.zid, self._id
+
+    @property
+    def t_eff(self) -> float:
+        """
+        Effektive Uhrzeit des Ereignisses.
+
+        Dies ist entweder die gemessene, prognostizierte oder geplante Zeit - je nachdem welches Attribut definiert ist.
+
+        @raise AttributeError wenn keines der Attribute gesetzt ist.
+        """
+        result = self.get("t_mess") or self.get("t_prog") or self.get("t_plan")
+        if result is not None:
+            return result
+        else:
+            raise AttributeError(f"Ereignis ({self.zid}, {self._id}) hat kein Zeitattribut.")
 
 
 class EreignisGraphEdge(dict):
@@ -226,57 +232,6 @@ class EreignisGraph(nx.DiGraph):
 
         nx.relabel_nodes(self, mapping, copy=False)
 
-    def _progress_berechnen(self):
-        """
-        Progress-Attribute berechnen.
-
-        Der Import setzt das Progress-Attribut von vergangenen Ereignissen auf -1 und von nicht vergangenen auf +1.
-        Diese Methode berechnet die Progressfolge gemäss Spezifikation,
-        d.h. den Abstand jedes Ereignisknotens zum nächsten erwarteten.
-        Vergangene Ereignisse erhalten einen negativen Progressindex.
-
-        Das Progress-Attribut wird von der prognose-Methode verwendet.
-        """
-
-        for zid in self.zuege:
-            labels = list(self.zugpfad(zid))
-            progress = np.asarray([self.nodes[label].progress for label in labels])
-            pendent = np.nonzero(progress >= 0)
-            try:
-                aktuell = np.min(pendent)
-            except ValueError:
-                aktuell = len(labels)
-            progress_neu = np.arange(len(progress)) - aktuell
-            for label, p in zip(labels, progress_neu):
-                self.nodes[label].progress = p
-
-    def _ereignis_erreicht(self, label: EreignisLabelType):
-        zid = label[0]
-        progress = 0
-        node = label
-        while node is not None:
-            for n in self.successors(node):
-                if n[0] == zid:
-                    self.nodes[n].progress = progress
-                    progress += 1
-                    node = n
-                    break
-            else:
-                node = None
-
-        self.nodes[label].progress = -1
-        progress = -2
-        node = label
-        while node is not None:
-            for n in self.predecessors(node):
-                if n[0] == zid:
-                    self.nodes[n].progress = progress
-                    progress -= 1
-                    node = n
-                    break
-            else:
-                node = None
-
     def zielgraph_importieren(self, zg: ZielGraph):
         """
         Zielgraph importieren
@@ -338,8 +293,6 @@ class EreignisGraph(nx.DiGraph):
         for builder in edge_builders.values():
             builder.add_to_graph(self)
 
-        self._progress_berechnen()
-
     def prognose(self):
         """
         Zeitprognose durchführen
@@ -376,7 +329,7 @@ class EreignisGraph(nx.DiGraph):
 
         for zielnode in nodes:
             ziel_data = self.nodes[zielnode]
-            if ziel_data.progress < 0:
+            if ziel_data.get("t_mess") is not None:
                 continue
 
             zeit_min = -math.inf
@@ -386,7 +339,7 @@ class EreignisGraph(nx.DiGraph):
                 edge = (startnode, zielnode)
                 edge_data = self.edges[edge]
                 try:
-                    start_zeit = start_data.t
+                    start_zeit = start_data.t_eff
                 except (AttributeError, KeyError):
                     continue
                 try:
@@ -399,28 +352,16 @@ class EreignisGraph(nx.DiGraph):
                     pass
 
             ziel_zeit = -math.inf
-            # beim aktuellen ziel eventuell verspaetung vom simulator uebernehmen (t-attribut)
-            if ziel_data.progress == 0 and (
-                    # zug unterwegs und hat eventuell verspaetung aufgebaut
-                    ziel_data.typ == 'An' or
-                    # zug noch nicht eingefahren
-                    ziel_data.typ == 'Ab' and ziel_data.fid[1] == 0):
-                try:
-                    # verspaetung vom simulator uebernehmen
-                    ziel_zeit = ziel_data.t
-                except AttributeError:
-                    pass
-            else:
-                try:
-                    # fahrplanzeit uebernehmen (p-attribut), verspaetung aus message passing
-                    ziel_zeit = ziel_data.p
-                except AttributeError:
-                    pass
+            try:
+                if ziel_data.typ in {'Ab'}:
+                    ziel_zeit = ziel_data.t_plan
+            except AttributeError:
+                pass
 
             ziel_zeit = min(ziel_zeit, zeit_max)
             ziel_zeit = max(ziel_zeit, zeit_min)
             if not math.isinf(ziel_zeit):
-                ziel_data.t = ziel_zeit
+                ziel_data.t_prog = ziel_zeit
             else:
                 logger.warning(f"Keine Zeitprognose möglich für Ereignis {zielnode}")
 
@@ -428,8 +369,7 @@ class EreignisGraph(nx.DiGraph):
         """
         Schreibt die berechneten Verspätungen in den Zielgraphen.
 
-        Die Verspätungen werden aus der Differenz zwischen den t- und p-Feldern der An- und Ab-Knoten berechnet.
-        Es werden nur die noch nicht erreichten Ziele aktualisiert.
+        Die Verspätungen werden aus der Differenz zwischen den t_eff- und t_plan-Feldern der An- und Ab-Knoten berechnet.
 
         :param zg: Zielgraph
         """
@@ -441,17 +381,15 @@ class EreignisGraph(nx.DiGraph):
                 continue
 
             try:
-                v = ereignis_data.t - ereignis_data.p
+                v = ereignis_data.t_eff - ereignis_data.t_plan
             except AttributeError:
                 logger.warning(f"Unvollständige Zeitinformation für Verspätungsberechnung: {ereignis_data}")
                 return
 
             if ereignis_data.typ == 'Ab':
-                if ziel_data.status == '' or ziel_data.status == 'an':
-                    ziel_data.v_ab = v
+                ziel_data.v_ab = v
             elif ereignis_data.typ == 'An':
-                if ziel_data.status == '':
-                    ziel_data.v_an = v
+                ziel_data.v_an = v
 
     def sim_ereignis_uebernehmen(self, ereignis: Ereignis):
         """
@@ -460,8 +398,7 @@ class EreignisGraph(nx.DiGraph):
         Aktualisiert die Verspätung und Status-Flags anhand eines Ereignisses im Simulator.
 
         Aktualisiert werden die folgenden Attribute:
-        - t
-        - progress
+        - t_mess
 
         :param ereignis: Ereignis-objekt vom PluginClient
         :return:
@@ -471,13 +408,11 @@ class EreignisGraph(nx.DiGraph):
         if ereignis.art == 'einfahrt':
             label = (ereignis.zid, 0)
             data = self.nodes[label]
-            data.t = t
-            self._ereignis_erreicht(label)
+            data.t_mess = t
         elif ereignis.art == 'ausfahrt':
             label = list(self.zugpfad(ereignis.zid))[-1]
             data = self.nodes[label]
-            data.t = t
-            self._ereignis_erreicht(label)
+            data.t_mess = t
         elif ereignis.art == 'ankunft':
             try:
                 label = self.label_of(ereignis.zid, plan=ereignis.plangleis, typ="An")
@@ -485,33 +420,28 @@ class EreignisGraph(nx.DiGraph):
                 pass
             else:
                 data = self.nodes[label]
-                data.t = t
-                self._ereignis_erreicht(label)
+                data.t_mess = t
         elif ereignis.art == 'abfahrt':
             try:
+                # todo : dies ergibt das label des nächsten ziels!
                 label = self.label_of(ereignis.zid, plan=ereignis.plangleis, typ="Ab")
             except ValueError:
                 pass
             else:
                 data = self.nodes[label]
-                data.t = t
-                if ereignis.amgleis:
-                    # abfahrbereit
-                    pass
-                else:
-                    self._ereignis_erreicht(label)
+                data.t_mess = t
         elif ereignis.art == 'rothalt' or ereignis.art == 'wurdegruen':
             try:
-                label = self.label_of(ereignis.zid, plan=ereignis.plangleis, progress=0)
+                label = self.label_of(ereignis.zid, plan=ereignis.plangleis)
             except ValueError:
                 pass
             else:
                 data = self.nodes[label]
-                data.t = data.p + ereignis.verspaetung
+                data.t_mess = data.t_plan + ereignis.verspaetung
         else:
             pass
 
-    def label_of(self, zid, gleis=None, plan=None, typ=None, progress=None) -> EreignisLabelType:
+    def label_of(self, zid, gleis=None, plan=None, typ=None) -> EreignisLabelType:
         for label in self.zugpfad(zid):
             data = self.nodes[label]
             if gleis is not None and data.gleis != gleis:
@@ -519,8 +449,6 @@ class EreignisGraph(nx.DiGraph):
             if plan is not None and data.plan != plan:
                 continue
             if typ is not None and data.typ != typ:
-                continue
-            if progress is not None and data.progress != progress:
                 continue
             return label
 
@@ -688,12 +616,11 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 fid=ziel_node.fid,
                 plan=ziel_node.plan,
                 gleis=ziel_node.gleis,
-                progress=-1 if ziel_node.status in {"an", "ab"} else +1,
                 s=0
             )
             try:
-                n1d.t = n1d.p = ziel_node.p_an
-                n1d.t += ziel_node.get("v_an", 0)
+                n1d.t_prog = n1d.t_plan = ziel_node.p_an
+                n1d.t_prog += ziel_node.get("v_an", 0)
             except AttributeError:
                 pass
             self.nodes.append(n1d)
@@ -706,12 +633,11 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 fid=ziel_node.fid,
                 plan=ziel_node.plan,
                 gleis=ziel_node.gleis,
-                progress=-1 if ziel_node.status in {"ab"} else +1,
                 s=0
             )
             try:
-                n2d.t = n2d.p = ziel_node.p_ab
-                n2d.t += ziel_node.get("v_ab", 0)
+                n2d.t_prog = n2d.t_plan = ziel_node.p_ab
+                n2d.t_prog += ziel_node.get("v_ab", 0)
             except AttributeError:
                 pass
             self.nodes.append(n2d)
@@ -793,7 +719,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         if self.ausgefuehrt:
             return None
 
-        for kupplung in sorted(self.kupplungen, key=lambda n: n.p):
+        for kupplung in sorted(self.kupplungen, key=lambda n: n.t_plan):
             self.nodes.insert(-1, kupplung)
             edge = EreignisGraphEdge(
                 typ='H',
@@ -884,7 +810,7 @@ class PlanfahrtEdgeBuilder(ZielEreignisEdgeBuilder):
         edge = EreignisGraphEdge(
             typ='P',
             zid=node1_builder.nodes[-1].zid,
-            dt_min=node2_builder.nodes[0].p - node1_builder.nodes[-1].p,
+            dt_min=node2_builder.nodes[0].t_plan - node1_builder.nodes[-1].t_plan,
         )
         self.edges.append(edge)
 
@@ -923,7 +849,7 @@ class ErsatzEdgeBuilder(ZielEreignisEdgeBuilder):
         super().set_edge(node1_builder, node2_builder)
 
         node = self.node1_builder.new_node(typ='E')
-        node.p = self.node2_builder.nodes[-1].p
+        node.t_plan = self.node2_builder.nodes[-1].t_plan
         edge = self.node1_builder.new_edge(typ='E')
         self.node1_builder.vorgang_einfuegen(node, edge)
         self.node1_builder.abfahrt_entfernen()
@@ -955,7 +881,7 @@ class KupplungEdgeBuilder(ZielEreignisEdgeBuilder):
 
         An1 -K-> K, An2 -H-> K -H-> Ab2
 
-        Der Kupplungszeitpunkt (p-Zeit des K-Knotens) entspricht der letzten Ankunftszeit plus Minimalaufenthalt
+        Der Kupplungszeitpunkt (Planzeit des K-Knotens) entspricht der letzten Ankunftszeit plus Minimalaufenthalt
         der einlaufenden Züge.
 
         Der Kupplungsknoten hat die zid des durchgehenden Zugs (2).
@@ -964,17 +890,17 @@ class KupplungEdgeBuilder(ZielEreignisEdgeBuilder):
         super().set_edge(node1_builder, node2_builder)
 
         node = self.node2_builder.new_node(typ='K')
-        p1 = self.node1_builder.nodes[0].p
+        p1 = self.node1_builder.nodes[0].t_plan
         try:
             p1 += self.node1_builder.edges[0].dt_min
         except IndexError:
             pass
-        p2 = self.node2_builder.nodes[0].p
+        p2 = self.node2_builder.nodes[0].t_plan
         try:
             p2 += self.node2_builder.edges[0].dt_min
         except IndexError:
             pass
-        node.p = max(p1, p2)
+        node.t_plan = max(p1, p2)
 
         edge = self.node1_builder.new_edge(typ='K')
 
@@ -1010,9 +936,9 @@ class FluegelungEdgeBuilder(ZielEreignisEdgeBuilder):
         super().set_edge(node1_builder, node2_builder)
 
         node = self.node1_builder.new_node(typ='F')
-        node.p = self.node1_builder.nodes[0].p
+        node.t_plan = self.node1_builder.nodes[0].t_plan
         try:
-            node.p += self.node1_builder.edges[0].dt_min
+            node.t_plan += self.node1_builder.edges[0].dt_min
         except IndexError:
             pass
 

@@ -249,16 +249,16 @@ class TestEreignisPrognose(unittest.TestCase):
         """
         self.szenario1()
         self.ereignisgraph.prognose()
-        act = [self.ereignisgraph.nodes(data='t', default='?')[n] for n in self.ereignisgraph.zugpfad(11)]
+        act = [self.ereignisgraph.nodes(data='t_prog', default='?')[n] for n in self.ereignisgraph.zugpfad(11)]
         exp = [300, 322, 332, 332 + PlanungParams.mindestaufenthalt_ersatz]
         self.assertListEqual(act, exp, "Zug 11")
-        act = [self.ereignisgraph.nodes(data='t', default='?')[n] for n in self.ereignisgraph.zugpfad(12)]
+        act = [self.ereignisgraph.nodes(data='t_prog', default='?')[n] for n in self.ereignisgraph.zugpfad(12)]
         exp = [336, 345]
         self.assertListEqual(act, exp, "Zug 12")
-        act = [self.ereignisgraph.nodes(data='t', default='?')[n] for n in self.ereignisgraph.zugpfad(13)]
+        act = [self.ereignisgraph.nodes(data='t_prog', default='?')[n] for n in self.ereignisgraph.zugpfad(13)]
         exp = [330, 340, 345 + PlanungParams.mindestaufenthalt_kupplung, 350, 360, 361, 365, 370]
         self.assertListEqual(act, exp, "Zug 13")
-        act = [self.ereignisgraph.nodes(data='t', default='?')[n] for n in self.ereignisgraph.zugpfad(14)]
+        act = [self.ereignisgraph.nodes(data='t_prog', default='?')[n] for n in self.ereignisgraph.zugpfad(14)]
         exp = [367, 377]
         self.assertListEqual(act, exp, "Zug 14")
 
@@ -269,17 +269,16 @@ class TestEreignisPrognose(unittest.TestCase):
 
         def _test(v):
             start_node = self.ereignisgraph.nodes[(11, 0)]
-            start_node.t = start_node.p + v
-            start_node.fix = True
+            start_node.t_mess = start_node.t_plan + v
             self.ereignisgraph.prognose()
             exp = [300 + v, 322 + v, 332 + v]
             e_zeit = 332 + v + PlanungParams.mindestaufenthalt_ersatz
             exp.append(e_zeit)
-            act = [self.ereignisgraph.nodes(data='t', default='?')[n] for n in self.ereignisgraph.zugpfad(11)]
+            act = [self.ereignisgraph.nodes[n].t_eff for n in self.ereignisgraph.zugpfad(11)]
             self.assertListEqual(act, exp, f"Zug 11, v = {v}")
             exp = [max(e_zeit, 336)]
             exp.append(exp[0] + 9)
-            act = [self.ereignisgraph.nodes(data='t', default='?')[n] for n in self.ereignisgraph.zugpfad(12)]
+            act = [self.ereignisgraph.nodes[n].t_eff for n in self.ereignisgraph.zugpfad(12)]
             self.assertListEqual(act, exp, f"Zug 12, v = {v}")
             k_zeit = exp[-1] + PlanungParams.mindestaufenthalt_kupplung
             exp = [330, 340, k_zeit]
@@ -289,10 +288,10 @@ class TestEreignisPrognose(unittest.TestCase):
             exp.append(f_zeit)
             exp.append(max(365, f_zeit))
             exp.append(max(370, f_zeit + 5))
-            act = [self.ereignisgraph.nodes(data='t', default='?')[n] for n in self.ereignisgraph.zugpfad(13)]
+            act = [self.ereignisgraph.nodes[n].t_eff for n in self.ereignisgraph.zugpfad(13)]
             self.assertListEqual(act, exp, f"Zug 13, v = {v}")
             exp = [max(367, f_zeit), max(377, f_zeit + 10)]
-            act = [self.ereignisgraph.nodes(data='t', default='?')[n] for n in self.ereignisgraph.zugpfad(14)]
+            act = [self.ereignisgraph.nodes[n].t_eff for n in self.ereignisgraph.zugpfad(14)]
             self.assertListEqual(act, exp, f"Zug 14, v = {v}")
 
         self.szenario1()

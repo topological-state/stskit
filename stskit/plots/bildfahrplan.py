@@ -33,11 +33,11 @@ def format_label(zugbeschriftung: Zugbeschriftung, zug: ZugGraphNode, anfang: Er
     """
 
     try:
-        v1 = anfang.t - anfang.p
+        v1 = anfang.t_eff - anfang.t_plan
     except AttributeError:
         v1 = None
     try:
-        v2 = ende.t - ende.p
+        v2 = ende.t_eff - ende.t_plan
     except AttributeError:
         v2 = None
     if v1 is None:
@@ -77,10 +77,10 @@ def format_zuginfo(zug: ZugGraphNode, abfahrt: EreignisGraphNode, ankunft: Ereig
     :return: (str)
     """
 
-    z1 = format_minutes(abfahrt.p)
-    z2 = format_minutes(ankunft.p)
-    v1 = f"{abfahrt.t - abfahrt.p:+}"
-    v2 = f"{ankunft.t - ankunft.p:+}"
+    z1 = format_minutes(abfahrt.t_plan)
+    z2 = format_minutes(ankunft.t_plan)
+    v1 = f"{abfahrt.t_eff - abfahrt.t_plan:+}"
+    v2 = f"{ankunft.t_eff - ankunft.t_plan:+}"
     name = zug.name
     von = zug.von
     nach = zug.nach
@@ -256,7 +256,7 @@ class BildfahrplanPlot:
 
         for node, data in self.anlage.ereignisgraph.nodes(data=True):
             try:
-                if t0 <= data.t <= t1:
+                if t0 <= data.t_eff <= t1:
                     _add_node(node, data)
             except AttributeError:
                 continue
@@ -370,7 +370,7 @@ class BildfahrplanPlot:
                 for s_u, s_v, s_key, s_data in self.streckengraph.edges(u_data.bst, keys=True, data=True):
                     if s_v == v_data.bst:
                         pos_x = [s_data['s0'], s_data['s1']]
-                        pos_y = [u_data.t, v_data.t]
+                        pos_y = [u_data.t_eff, v_data.t_eff]
                         mpl_lines = self._axes.plot(pos_x, pos_y,
                                                     picker=True,
                                                     pickradius=5,
@@ -401,7 +401,7 @@ class BildfahrplanPlot:
                     for s_u, s_v, s_key, s_data in self.streckengraph.edges(u_data.bst, keys=True, data=True):
                         if s_v == u_data.bst:
                             pos_x = s_data['s0']
-                            pos_y = u_data.get('t', u_data.p)
+                            pos_y = u_data.t_eff
                             self._axes.scatter(pos_x, pos_y, **self.marker_args(u_data))
             except AttributeError as e:
                 logger.debug("Fehlendes Attribut im Bildgraph beim Knotenzeichnen", exc_info=e)
