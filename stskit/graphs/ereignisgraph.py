@@ -187,6 +187,7 @@ class EreignisGraph(nx.DiGraph):
     def __init__(self, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
         self.zuege: Set[int] = set()
+        self.zug_next: Dict[int, EreignisLabelType] = {}
 
     def to_undirected_class(self):
         return EreignisGraphUngerichtet
@@ -212,6 +213,30 @@ class EreignisGraph(nx.DiGraph):
                     break
             else:
                 node = None
+
+    def prev_ereignis(self, label: EreignisLabelType) -> Optional[EreignisLabelType]:
+        """
+        Vorheriges Ereignislabel eines Zuges suchen
+
+        :param label: Label des Ereignisnodes
+        :return Label des gefundenen Ereignisses oder None
+        """
+        for n in self.predecessors(label):
+            if n[0] == label[0]:
+                return n
+        return None
+
+    def next_ereignis(self, label: EreignisLabelType) -> Optional[EreignisLabelType]:
+        """
+        Nächstes Ereignislabel eines Zuges suchen
+
+        :param label: Label des Ereignisnodes
+        :return Label des gefundenen Ereignisses oder None
+        """
+        for n in self.successors(label):
+            if n[0] == label[0]:
+                return n
+        return None
 
     def _zugstart_markieren(self):
         """
@@ -410,48 +435,92 @@ class EreignisGraph(nx.DiGraph):
         :return:
         """
 
+        prev_label = self.zug_next.get(ereignis.zid)
+
         t = time_to_minutes(ereignis.zeit)
         if ereignis.art == 'einfahrt':
-            label = (ereignis.zid, 0)
-            data = self.nodes[label]
-            data.t_mess = t
+            cur_label = (ereignis.zid, 0)
+            cur_data = self.nodes[cur_label]
+            cur_data.t_mess = t
+            next_label = self.label_of(ereignis.zid, start=cur_label, typ="An")
+            self.zug_next[ereignis.zid] = next_label
+
         elif ereignis.art == 'ausfahrt':
-            label = list(self.zugpfad(ereignis.zid))[-1]
-            data = self.nodes[label]
-            data.t_mess = t
+            cur_label = list(self.zugpfad(ereignis.zid))[-1]
+            cur_data = self.nodes[cur_label]
+            cur_data.t_mess = t
+            try:
+                del self.zug_next[ereignis.zid]
+            except KeyError:
+                pass
+
         elif ereignis.art == 'ankunft':
-            try:
-                label = self.label_of(ereignis.zid, plan=ereignis.plangleis, typ="An")
-            except ValueError:
-                pass
+            if ereignis.amgleis:
+                # halt
+                try:
+                    cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="An")
+                    cur_data = self.nodes[cur_label]
+                except (AttributeError, ValueError):
+                    pass
+                else:
+                    cur_data.t_mess = t
+                    self.zug_next[ereignis.zid] = self.next_ereignis(cur_label)
             else:
-                data = self.nodes[label]
-                data.t_mess = t
+                # durchfahrt
+                try:
+                    next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
+                except (AttributeError, ValueError):
+                    pass
+                else:
+                    self.zug_next[ereignis.zid] = next_label
+                    cur_label = self.prev_ereignis(next_label)
+                    if cur_label is not None:
+                        cur_data = self.nodes[cur_label]
+                        cur_data.t_mess = t
+
         elif ereignis.art == 'abfahrt':
-            try:
-                # todo : dies ergibt das label des nächsten ziels!
-                label = self.label_of(ereignis.zid, plan=ereignis.plangleis, typ="Ab")
-            except ValueError:
-                pass
+            if ereignis.amgleis:
+                # abfahrbereit
+                try:
+                    cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="Ab")
+                    cur_data = self.nodes[cur_label]
+                except ValueError:
+                    pass
+                else:
+                    cur_data.t_mess = t
+
             else:
-                data = self.nodes[label]
-                data.t_mess = t
+                # abfahrt
+                try:
+                    next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
+                except (AttributeError, ValueError):
+                    pass
+                else:
+                    self.zug_next[ereignis.zid] = next_label
+                    cur_label = self.prev_ereignis(next_label)  # typ = "Ab"?
+                    if cur_label is not None:
+                        cur_data = self.nodes[cur_label]
+                        cur_data.t_mess = t
+
         elif ereignis.art == 'rothalt' or ereignis.art == 'wurdegruen':
             try:
-                label = self.label_of(ereignis.zid, plan=ereignis.plangleis)
+                next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
+                next_data = self.nodes[next_label]
             except ValueError:
                 pass
             else:
-                data = self.nodes[label]
-                data.t_mess = data.t_plan + ereignis.verspaetung
+                self.zug_next[ereignis.zid] = next_label
+                next_data.t_mess = next_data.t_plan + ereignis.verspaetung
+
         else:
             pass
 
-    def label_of(self, zid, **kwargs) -> EreignisLabelType:
+    def label_of(self, zid, start: EreignisLabelType = None, **kwargs) -> EreignisLabelType:
         """
         Node label mit gegebenen Attributen suchen.
 
         :param zid: Zug-ID.
+        #param start: Startnode.
         :param kwargs: Gesuchte Attributwerte.
             Die Keys müssen Attributnamen von EreignisGraphNode entsprechen.
         :raise KeyError: Zug wird nicht gefunden.
@@ -459,6 +528,12 @@ class EreignisGraph(nx.DiGraph):
         """
 
         for label in self.zugpfad(zid):
+            if start is not None:
+                if label == start:
+                    start = None
+                else:
+                    continue
+
             data = self.nodes[label]
             for kw, arg in kwargs.items():
                 if data.get(kw) != arg:
