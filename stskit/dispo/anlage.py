@@ -105,7 +105,7 @@ class Anlage:
             except KeyError:
                 logger.warning("keine bahnhofkonfiguration gefunden")
 
-        self.zielgraph = client.zielgraph.copy(as_view=False)
+        self.zielgraph = client.zielgraph.copy(as_view=True)
         if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
             self.liniengraph_konfigurieren()
             self.liniengraph_mit_signalgraph_abgleichen()

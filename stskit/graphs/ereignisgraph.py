@@ -232,11 +232,11 @@ class EreignisGraph(nx.DiGraph):
 
         nx.relabel_nodes(self, mapping, copy=False)
 
-    def zielgraph_importieren(self, zg: ZielGraph):
+    def zielgraph_importieren(self, zg: ZielGraph, clean=False):
         """
         Zielgraph importieren
 
-        Der Ereignisgraph wird anhand eines vollständigen Zielgraphs aufgebaut.
+        Der Ereignisgraph wird anhand eines vollständigen Zielgraphs aufgebaut oder aktualisiert.
 
         Fahrplanhalte werden in Ankunfts- und Abfahrtsereignisse aufgelöst,
         Betriebsvorgänge werden in entsprechende graphische Muster übersetzt.
@@ -258,14 +258,20 @@ class EreignisGraph(nx.DiGraph):
         - Beim Iterieren über Kanten kommen Knoten mehrmals vor.
           Knoten dürfen aber nur einmal in den Graphen eingesetzt werden,
           weil es keine eindeutige Zuordnung von Zielknoten zu Ereignisknoten gibt.
+
+        :param zg: Zielgraph enthält die Ursprungsdaten
+        :param clean: Ereignisgraph vollständig neu aufbauen (True)
+            oder nur neue Züge hinzufügen (False, default).
+            Bei True gehen Änderungen an den Attributen verloren, bei False werden sie beibehalten.
         """
 
-        self.clear()
-        self.zuege = set()
+        if clean:
+            self.clear()
+            self.zuege = set()
 
         node_builders = {}
         for zg1, zg1_data in zg.nodes(data=True):
-            builder = ZielEreignisNodeBuilder()
+            builder = ZielEreignisNodeBuilder(self)
             builder.import_ziel(zg, zg1_data)
             node_builders[zg1] = builder
 
@@ -274,13 +280,13 @@ class EreignisGraph(nx.DiGraph):
             builder = None
 
             if zge_data.typ == 'P':
-                builder = PlanfahrtEdgeBuilder()
+                builder = PlanfahrtEdgeBuilder(self)
             elif zge_data.typ == 'E':
-                builder = ErsatzEdgeBuilder()
+                builder = ErsatzEdgeBuilder(self)
             elif zge_data.typ == 'F':
-                builder = FluegelungEdgeBuilder()
+                builder = FluegelungEdgeBuilder(self)
             elif zge_data.typ == 'K':
-                builder = KupplungEdgeBuilder()
+                builder = KupplungEdgeBuilder(self)
             else:
                 logger.warning(f"Unbekannter Zielkantentyp {zge_data.typ}")
 
@@ -289,9 +295,9 @@ class EreignisGraph(nx.DiGraph):
                 edge_builders[(zg1, zg2)] = builder
 
         for builder in node_builders.values():
-            builder.add_to_graph(self)
+            builder.add_to_graph()
         for builder in edge_builders.values():
-            builder.add_to_graph(self)
+            builder.add_to_graph()
 
     def prognose(self):
         """
@@ -441,16 +447,24 @@ class EreignisGraph(nx.DiGraph):
         else:
             pass
 
-    def label_of(self, zid, gleis=None, plan=None, typ=None) -> EreignisLabelType:
+    def label_of(self, zid, **kwargs) -> EreignisLabelType:
+        """
+        Node label mit gegebenen Attributen suchen.
+
+        :param zid: Zug-ID.
+        :param kwargs: Gesuchte Attributwerte.
+            Die Keys müssen Attributnamen von EreignisGraphNode entsprechen.
+        :raise KeyError: Zug wird nicht gefunden.
+        :raise ValueError: Attributwerte werden nicht gefunden.
+        """
+
         for label in self.zugpfad(zid):
             data = self.nodes[label]
-            if gleis is not None and data.gleis != gleis:
-                continue
-            if plan is not None and data.plan != plan:
-                continue
-            if typ is not None and data.typ != typ:
-                continue
-            return label
+            for kw, arg in kwargs.items():
+                if data.get(kw) != arg:
+                    break
+            else:
+                return label
 
         raise ValueError(f"No label for {zid}")
 
@@ -486,7 +500,8 @@ class EreignisNodeBuilder(metaclass=ABCMeta):
 
     Builder werden nur einmal ausgeführt und dürfen bei weiteren Aufrufen keine weiteren Elemente hinzufügen.
     """
-    def __init__(self):
+    def __init__(self, graph: EreignisGraph):
+        self.graph = graph
         self.ausgefuehrt = False
 
     @abstractmethod
@@ -510,7 +525,7 @@ class EreignisNodeBuilder(metaclass=ABCMeta):
         return None
 
     @abstractmethod
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
+    def add_to_graph(self):
         """
         Knoten und Kanten zum Ereignisgraphen hinzufügen.
 
@@ -534,8 +549,8 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
     bevor die Struktur mittels add_to_graph in den EreignisGraph geschrieben wird.
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, graph: EreignisGraph):
+        super().__init__(graph)
         self.zuganfang = False
         # Speichert den ersten importierten Node, um Kopien herzustellen (new_node)
         self.node_template: Optional[EreignisGraphNode] = None
@@ -710,12 +725,16 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         """
         self.kupplungen.append(node)
 
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
+    def add_to_graph(self):
         """
         Knoten und Kanten einem Ereignisgraphen hinzufügen.
 
         Die Methode hat nur beim ersten Aufruf eine Wirkung.
+
+        Wenn bereits Ereignisknoten gleichen Typs zum ursprünglichen Zielknoten existieren, werden diese beibehalten.
+        Die nodes und edges-Listen werden ggf. mit den effektiven Daten aktualisiert.
         """
+
         if self.ausgefuehrt:
             return None
 
@@ -729,20 +748,41 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
             self.edges.append(edge)
 
         zid_anfang = self.nodes[-1].zid if self.zuganfang else None
+        final_nodes = []
         for node in self.nodes:
             if node.zid == zid_anfang:
                 node._id = 0
                 zid_anfang = None
-            nid = node.node_id
-            ereignis_graph.add_node(nid)
-            ereignis_graph.nodes[nid].update(node)
-            ereignis_graph.zuege.add(node.zid)
 
+            try:
+                nid = self.graph.label_of(node.zid, fid=node.fid, typ=node.typ)
+                final_node = self.graph.nodes[nid]
+                final_node.gleis = node.gleis
+                try:
+                    final_node.t_prog = node.t_prog
+                except AttributeError:
+                    pass
+            except (KeyError, ValueError):
+                nid = node.node_id
+                final_node = node
+                self.graph.add_node(nid)
+                self.graph.nodes[nid].update(node)
+                self.graph.zuege.add(node.zid)
+            final_nodes.append(final_node)
+        self.nodes = final_nodes
+
+        final_edges = []
         for n1d, n2d, edge in zip(self.nodes[:-1], self.nodes[1:], self.edges):
             n1 = n1d.node_id
             n2 = n2d.node_id
-            ereignis_graph.add_edge(n1, n2)
-            ereignis_graph.edges[(n1, n2)].update(edge)
+            try:
+                final_edge = self.graph.edges[(n1, n2)]
+            except KeyError:
+                self.graph.add_edge(n1, n2)
+                self.graph.edges[(n1, n2)].update(edge)
+                final_edge = edge
+            final_edges.append(final_edge)
+        self.edges = final_edges
 
         self.ausgefuehrt = True
 
@@ -763,11 +803,12 @@ class EreignisEdgeBuilder(metaclass=ABCMeta):
 
     Builder werden nur einmal ausgeführt und dürfen bei weiteren Aufrufen keine weiteren Elemente hinzufügen.
     """
-    def __init__(self):
+    def __init__(self, graph: EreignisGraph):
+        self.graph = graph
         self.ausgefuehrt = False
 
     @abstractmethod
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
+    def add_to_graph(self):
         """
         Knoten und Kanten zum Ereignisgraphen hinzufügen.
 
@@ -785,8 +826,8 @@ class ZielEreignisEdgeBuilder(EreignisEdgeBuilder):
     Diese werden in allen abgeleiteten Klassen benötigt.
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, graph: EreignisGraph):
+        super().__init__(graph)
         self.node1_builder: Optional[ZielEreignisNodeBuilder] = None
         self.node2_builder: Optional[ZielEreignisNodeBuilder] = None
         self.edges: List[EreignisGraphEdge] = []
@@ -814,14 +855,15 @@ class PlanfahrtEdgeBuilder(ZielEreignisEdgeBuilder):
         )
         self.edges.append(edge)
 
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
+    def add_to_graph(self):
         if self.ausgefuehrt:
             return
 
         n1 = self.node1_builder.last_label()
         n2 = self.node2_builder.first_label()
-        ereignis_graph.add_edge(n1, n2)
-        ereignis_graph.edges[(n1, n2)].update(self.edges[0])
+        if not self.graph.has_edge(n1, n2):
+            self.graph.add_edge(n1, n2)
+            self.graph.edges[(n1, n2)].update(self.edges[0])
 
         self.ausgefuehrt = True
 
@@ -858,7 +900,7 @@ class ErsatzEdgeBuilder(ZielEreignisEdgeBuilder):
         self.node2_builder.abfahrt_verbinden(node, edge)
         self.node2_builder.ankunft_entfernen()
 
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
+    def add_to_graph(self):
         """
         Keine Wirkung
 
@@ -908,7 +950,7 @@ class KupplungEdgeBuilder(ZielEreignisEdgeBuilder):
         self.node1_builder.abfahrt_entfernen()
         self.node2_builder.kuppeln(node)
 
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
+    def add_to_graph(self):
         """
         Keine Wirkung
 
@@ -952,7 +994,7 @@ class FluegelungEdgeBuilder(ZielEreignisEdgeBuilder):
         self.node2_builder.abfahrt_verbinden(node, edge2)
         self.node2_builder.ankunft_entfernen()
 
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
+    def add_to_graph(self):
         """
         Keine Wirkung
 
@@ -966,7 +1008,7 @@ class AbfahrtAbwartenEdgeBuilder(ZielEreignisEdgeBuilder):
     Nicht verwendet.
     """
 
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
+    def add_to_graph(self):
         pass
 
 
@@ -975,7 +1017,7 @@ class AnkunftAbwartenEdgeBuilder(ZielEreignisEdgeBuilder):
     Nicht verwendet.
     """
 
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
+    def add_to_graph(self):
         pass
 
 
@@ -984,5 +1026,5 @@ class KreuzungEdgeBuilder(ZielEreignisEdgeBuilder):
     Nicht verwendet.
     """
 
-    def add_to_graph(self, ereignis_graph: EreignisGraph):
+    def add_to_graph(self):
         pass
