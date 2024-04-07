@@ -385,7 +385,10 @@ class EreignisGraph(nx.DiGraph):
             ziel_zeit = -math.inf
             try:
                 if ziel_data.typ in {'Ab'}:
-                    ziel_zeit = ziel_data.t_plan
+                    if zielnode[1] == 0:
+                        ziel_zeit = ziel_data.t_eff
+                    else:
+                        ziel_zeit = ziel_data.t_plan
             except AttributeError:
                 pass
 
