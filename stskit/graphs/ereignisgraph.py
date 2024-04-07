@@ -420,10 +420,15 @@ class EreignisGraph(nx.DiGraph):
                 logger.warning(f"Unvollständige Zeitinformation für Verspätungsberechnung: {ereignis_data}")
                 return
 
+            # todo : E/F/K beachten
             if ereignis_data.typ == 'Ab':
-                ziel_data.v_ab = v
+                if ziel_data.typ in {'H', 'D'}:
+                    ziel_data.v_ab = v
             elif ereignis_data.typ == 'An':
-                ziel_data.v_an = v
+                if ziel_data.typ in {'H', 'D', 'A'}:
+                    ziel_data.v_an = v
+                if ziel_data.typ in {'D', 'A'}:
+                    ziel_data.v_ab = v
 
     def sim_ereignis_uebernehmen(self, ereignis: Ereignis):
         """
