@@ -472,7 +472,13 @@ class EreignisGraph(nx.DiGraph):
                     pass
                 else:
                     cur_data.t_mess = t
-                    self.zug_next[ereignis.zid] = self.next_ereignis(cur_label)
+                    next_label = self.next_ereignis(cur_label)
+                    if next_label is not None:
+                        next_data = self.nodes[next_label]
+                        if next_data.typ == 'E':
+                            del self.zug_next[ereignis.zid]
+                        else:
+                            self.zug_next[ereignis.zid] = next_label
             else:
                 # durchfahrt
                 try:
