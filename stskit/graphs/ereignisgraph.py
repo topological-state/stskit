@@ -737,7 +737,11 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 n2d.t_prog = n2d.t_plan = ziel_node.p_ab
                 n2d.t_prog += ziel_node.get("v_ab", 0)
             except AttributeError:
-                pass
+                try:
+                    n2d.t_prog = n2d.t_plan = ziel_node.p_an
+                    n2d.t_prog += ziel_node.get("v_an", 0)
+                except AttributeError:
+                    pass
             self.nodes.append(n2d)
             if self.node_template is None:
                 self.node_template = n2d
