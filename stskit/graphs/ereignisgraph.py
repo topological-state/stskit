@@ -65,6 +65,10 @@ class EreignisGraphNode(dict):
                             Bei Ein- und Ausfahrten wird statt dem Gleiseintrag die Elementnummer (enr) eingesetzt,
                             und die Zeitkomponente ist MIN_MINUTES (Einfahrt) oder MAX_MINUTES (Ausfahrt).
                             """)
+    eid = dict_property("eid", int, docstring="""Ereignis-ID. 
+        Muss zusammen mit der zid ein eindeutiges Knotenlabel ergeben.
+        Die generate_eid-Methode kann verwendet werden, um eine eindeutige Autoincrement-ID zu erzeugen.
+        """)
     typ = dict_property("typ", str,
                         docstring="""
                             Vorgang:
@@ -87,29 +91,25 @@ class EreignisGraphNode(dict):
     farbe = dict_property("farbe", str)
     marker = dict_property("marker", str)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._id = next(self.auto_inc)
+    def generate_eid(self):
+        """
+        Generiere eine neue Ereignis-ID.
 
-    def __copy__(self) -> 'EreignisGraphNode':
+        Die Ereignis-ID wird aus einem klasseneigenen Zähler gebildet.
         """
-        Objekt kopieren, mit neuer ID
-        """
-        new = self.__class__()
-        new.update(self)
-        new._id = next(self.auto_inc)
-        return new
+        self.eid = next(self.auto_inc)
 
     @property
     def node_id(self) -> EreignisLabelType:
         """
         Identifikation des Ereignisses.
 
-        Die ID besteht aus der Zugnummer und einer beliebigen Nummer zur Unterscheidung.
+        Die ID besteht aus der Zug-ID und der Ereignis-ID.
         Der erste Knoten eines Zuges erhält die ID (zid, 0), damit der Anfang eines Zuges schnell gefunden werden kann.
-        Bei allen anderen Knoten hat die zweite Komponente keine Bedeutung, nicht mal in Bezug auf eine Reihenfolge.
+        Bei allen anderen Knoten hat der Wert der zweiten Komponente keine Bedeutung.
+        Die Sequenz der EID muss nicht geordnet sein.
         """
-        return self.zid, self._id
+        return self.zid, self.eid
 
     @property
     def t_eff(self) -> float:
@@ -124,7 +124,7 @@ class EreignisGraphNode(dict):
         if result is not None:
             return result
         else:
-            raise AttributeError(f"Ereignis ({self.zid}, {self._id}) hat kein Zeitattribut.")
+            raise AttributeError(f"Ereignis {self.node_id} hat kein Zeitattribut.")
 
 
 class EreignisGraphEdge(dict):
@@ -679,6 +679,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         :param attrs: Attribute mit neuen Werten initialisieren.
         """
         node = copy.copy(self.node_template)
+        node.generate_eid()
         node.update(**attrs)
         return node
 
@@ -722,6 +723,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 gleis=ziel_node.gleis,
                 s=0
             )
+            n1d.generate_eid()
             try:
                 n1d.t_prog = n1d.t_plan = ziel_node.p_an
                 n1d.t_prog += ziel_node.get("v_an", 0)
@@ -739,6 +741,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 gleis=ziel_node.gleis,
                 s=0
             )
+            n2d.generate_eid()
             try:
                 n2d.t_prog = n2d.t_plan = ziel_node.p_ab
                 n2d.t_prog += ziel_node.get("v_ab", 0)
@@ -844,7 +847,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         final_nodes = []
         for node in self.nodes:
             if node.zid == zid_anfang:
-                node._id = 0
+                node.eid = 0
                 zid_anfang = None
 
             try:
