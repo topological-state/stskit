@@ -444,6 +444,11 @@ class EreignisGraph(nx.DiGraph):
                 if ziel_data.typ in {'D', 'A'}:
                     ziel_data.v_ab = v
 
+    def messzeit_setzen(self, label: EreignisLabelType, zeit: int, verspaetung: int):
+        if label is not None:
+            data = self.nodes[label]
+            data.t_mess = zeit
+
     def sim_ereignis_uebernehmen(self, ereignis: Ereignis):
         """
         Daten von einem Sim-Ereignis übernehmen.
@@ -469,8 +474,7 @@ class EreignisGraph(nx.DiGraph):
 
         elif ereignis.art == 'ausfahrt':
             cur_label = list(self.zugpfad(ereignis.zid))[-1]
-            cur_data = self.nodes[cur_label]
-            cur_data.t_mess = t
+            self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
             try:
                 del self.zug_next[ereignis.zid]
             except KeyError:
@@ -481,16 +485,18 @@ class EreignisGraph(nx.DiGraph):
                 # halt
                 try:
                     cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="An")
-                    cur_data = self.nodes[cur_label]
                 except (AttributeError, ValueError):
                     pass
                 else:
-                    cur_data.t_mess = t
+                    self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
                     next_label = self.next_ereignis(cur_label)
                     if next_label is not None:
                         next_data = self.nodes[next_label]
                         if next_data.typ == 'E':
-                            del self.zug_next[ereignis.zid]
+                            try:
+                                del self.zug_next[ereignis.zid]
+                            except KeyError:
+                                pass
                         else:
                             self.zug_next[ereignis.zid] = next_label
             else:
@@ -502,20 +508,17 @@ class EreignisGraph(nx.DiGraph):
                 else:
                     self.zug_next[ereignis.zid] = next_label
                     cur_label = self.prev_ereignis(next_label)
-                    if cur_label is not None:
-                        cur_data = self.nodes[cur_label]
-                        cur_data.t_mess = t
+                    self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
 
         elif ereignis.art == 'abfahrt':
             if ereignis.amgleis:
                 # abfahrbereit
                 try:
                     cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="Ab")
-                    cur_data = self.nodes[cur_label]
                 except ValueError:
                     pass
                 else:
-                    cur_data.t_mess = t
+                    self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
 
             else:
                 # abfahrt
@@ -526,9 +529,7 @@ class EreignisGraph(nx.DiGraph):
                 else:
                     self.zug_next[ereignis.zid] = next_label
                     cur_label = self.prev_ereignis(next_label)  # typ = "Ab"?
-                    if cur_label is not None:
-                        cur_data = self.nodes[cur_label]
-                        cur_data.t_mess = t
+                    self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
 
         elif ereignis.art == 'rothalt' or ereignis.art == 'wurdegruen':
             try:
@@ -538,7 +539,29 @@ class EreignisGraph(nx.DiGraph):
                 pass
             else:
                 self.zug_next[ereignis.zid] = next_label
-                next_data.t_mess = next_data.t_plan + ereignis.verspaetung
+
+        elif ereignis.art == 'kuppeln':
+            try:
+                cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="K")
+            except ValueError:
+                pass
+            else:
+                self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+                try:
+                    del self.zug_next[ereignis.zid]
+                except KeyError:
+                    pass
+
+        elif ereignis.art == 'fluegeln':
+            try:
+                cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="F")
+            except ValueError:
+                pass
+            else:
+                self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+                next_label = self.next_ereignis(cur_label)
+                if next_label is not None:
+                    self.zug_next[ereignis.zid] = next_label
 
         else:
             pass
