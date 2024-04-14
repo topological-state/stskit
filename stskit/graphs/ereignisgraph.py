@@ -751,7 +751,8 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         else:
             self.zuganfang = True
 
-        if ziel_node.typ in {'H', 'D', 'A'}:
+        # Am Zuganfang durch E/F keinen Ankunftsknoten erzeugen. todo : auf K verallgemeinern.
+        if not self.zuganfang and ziel_node.typ in {'H', 'D', 'A'}:
             n1d = EreignisGraphNode(
                 typ='An',
                 zid=ziel_node.zid,
@@ -792,15 +793,15 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
             if self.node_template is None:
                 self.node_template = n2d
 
+        e2d = EreignisGraphEdge(
+            typ='H',
+            zid=ziel_node.zid,
+            dt_min=ziel_node.mindestaufenthalt,
+            ds=0
+        )
+        self.edge_template = e2d
         if len(self.nodes) == 2:
-            e2d = EreignisGraphEdge(
-                typ='H',
-                zid=ziel_node.zid,
-                dt_min=ziel_node.mindestaufenthalt,
-                ds=0
-            )
             self.edges.append(e2d)
-            self.edge_template = e2d
 
     def vorgang_einfuegen(self, node: EreignisGraphNode, edge: EreignisGraphEdge):
         """
