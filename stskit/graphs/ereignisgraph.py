@@ -218,6 +218,9 @@ class EreignisGraph(nx.DiGraph):
                 start = None
             if node == stop:
                 return
+            if not self.has_node(node):
+                logger.debug(f"EreignisGraph.zugpfad(zid={zid}, start={start}, stop={stop}), node {node} fehlt.")
+                return
             if start is None:
                 yield node
 
@@ -446,8 +449,12 @@ class EreignisGraph(nx.DiGraph):
 
     def messzeit_setzen(self, label: EreignisLabelType, zeit: int, verspaetung: int):
         if label is not None:
-            data = self.nodes[label]
-            data.t_mess = zeit
+            try:
+                data = self.nodes[label]
+            except KeyError:
+                pass
+            else:
+                data.t_mess = zeit
 
     def sim_ereignis_uebernehmen(self, ereignis: Ereignis):
         """
@@ -467,14 +474,21 @@ class EreignisGraph(nx.DiGraph):
         t = time_to_minutes(ereignis.zeit)
         if ereignis.art == 'einfahrt':
             cur_label = (ereignis.zid, 0)
-            cur_data = self.nodes[cur_label]
-            cur_data.t_mess = t
-            next_label = self.label_of(ereignis.zid, start=cur_label, typ="An")
-            self.zug_next[ereignis.zid] = next_label
+            self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+            try:
+                next_label = self.label_of(ereignis.zid, start=cur_label, typ="An")
+            except (AttributeError, ValueError, KeyError):
+                pass
+            else:
+                self.zug_next[ereignis.zid] = next_label
 
         elif ereignis.art == 'ausfahrt':
-            cur_label = list(self.zugpfad(ereignis.zid))[-1]
-            self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+            try:
+                cur_label = list(self.zugpfad(ereignis.zid))[-1]
+            except IndexError:
+                pass
+            else:
+                self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
             try:
                 del self.zug_next[ereignis.zid]
             except KeyError:
@@ -485,7 +499,7 @@ class EreignisGraph(nx.DiGraph):
                 # halt
                 try:
                     cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="An")
-                except (AttributeError, ValueError):
+                except (AttributeError, ValueError, KeyError):
                     pass
                 else:
                     self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
@@ -503,7 +517,7 @@ class EreignisGraph(nx.DiGraph):
                 # durchfahrt
                 try:
                     next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
-                except (AttributeError, ValueError):
+                except (AttributeError, ValueError, KeyError):
                     pass
                 else:
                     self.zug_next[ereignis.zid] = next_label
@@ -515,7 +529,7 @@ class EreignisGraph(nx.DiGraph):
                 # abfahrbereit
                 try:
                     cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="Ab")
-                except ValueError:
+                except (AttributeError, ValueError, KeyError):
                     pass
                 else:
                     self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
@@ -524,7 +538,7 @@ class EreignisGraph(nx.DiGraph):
                 # abfahrt
                 try:
                     next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
-                except (AttributeError, ValueError):
+                except (AttributeError, ValueError, KeyError):
                     pass
                 else:
                     self.zug_next[ereignis.zid] = next_label
@@ -535,7 +549,7 @@ class EreignisGraph(nx.DiGraph):
             try:
                 next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
                 next_data = self.nodes[next_label]
-            except ValueError:
+            except (AttributeError, ValueError, KeyError):
                 pass
             else:
                 self.zug_next[ereignis.zid] = next_label
@@ -543,7 +557,7 @@ class EreignisGraph(nx.DiGraph):
         elif ereignis.art == 'kuppeln':
             try:
                 cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="K")
-            except ValueError:
+            except (AttributeError, ValueError, KeyError):
                 pass
             else:
                 self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
@@ -555,7 +569,7 @@ class EreignisGraph(nx.DiGraph):
         elif ereignis.art == 'fluegeln':
             try:
                 cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="F")
-            except ValueError:
+            except (AttributeError, ValueError, KeyError):
                 pass
             else:
                 self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
@@ -678,6 +692,10 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
     def __init__(self, graph: EreignisGraph):
         super().__init__(graph)
         self.zuganfang = False
+        # Diagnostik
+        self.zid: Optional[int] = None
+        # Diagnostik
+        self.fid: Optional[ZielLabelType] = None
         # Speichert den ersten importierten Node, um Kopien herzustellen (new_node)
         self.node_template: Optional[EreignisGraphNode] = None
         # Speichert die importierte Kante, um Kopien herzustellen (new_edge)
@@ -745,6 +763,9 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         """
 
         self.zuganfang = False
+        self.zid = ziel_node.zid
+        self.fid = ziel_node.fid
+
         for p in ziel_graph.predecessors(ziel_node.fid):
             if ziel_graph.nodes[p].zid == ziel_node.zid:
                 break
@@ -871,6 +892,9 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
 
         if self.ausgefuehrt:
             return None
+        if not self.nodes:
+            logger.debug(f"ZielEreignisNodeBuilder.add_to_graph(zid={self.zid}, fid={self.fid}): keine Nodes.")
+            return
 
         for kupplung in sorted(self.kupplungen, key=lambda n: n.t_plan):
             self.nodes.insert(-1, kupplung)
@@ -982,22 +1006,30 @@ class PlanfahrtEdgeBuilder(ZielEreignisEdgeBuilder):
     def set_edge(self, node1_builder: ZielEreignisNodeBuilder, node2_builder: ZielEreignisNodeBuilder):
         super().set_edge(node1_builder, node2_builder)
 
-        edge = EreignisGraphEdge(
-            typ='P',
-            zid=node1_builder.nodes[-1].zid,
-            dt_min=node2_builder.nodes[0].t_plan - node1_builder.nodes[-1].t_plan,
-        )
-        self.edges.append(edge)
+        try:
+            edge = EreignisGraphEdge(
+                typ='P',
+                zid=node1_builder.nodes[-1].zid,
+                dt_min=node2_builder.nodes[0].t_plan - node1_builder.nodes[-1].t_plan,
+            )
+        except IndexError:
+            logger.debug(f"PlanfahrtEdgeBuilder.set_edge(): keine Nodes")
+        else:
+            self.edges.append(edge)
 
     def add_to_graph(self):
         if self.ausgefuehrt:
             return
 
-        n1 = self.node1_builder.last_label()
-        n2 = self.node2_builder.first_label()
-        if not self.graph.has_edge(n1, n2):
-            self.graph.add_edge(n1, n2)
-            self.graph.edges[(n1, n2)].update(self.edges[0])
+        try:
+            n1 = self.node1_builder.last_label()
+            n2 = self.node2_builder.first_label()
+        except IndexError:
+            pass
+        else:
+            if not self.graph.has_edge(n1, n2):
+                self.graph.add_edge(n1, n2)
+                self.graph.edges[(n1, n2)].update(self.edges[0])
 
         self.ausgefuehrt = True
 
