@@ -195,17 +195,31 @@ class EreignisGraph(nx.DiGraph):
     def to_directed_class(self):
         return self.__class__
 
-    def zugpfad(self, zid: int) -> Iterable[EreignisLabelType]:
+    def zugpfad(self, zid: int,
+                start: Optional[EreignisLabelType] = None,
+                stop: Optional[EreignisLabelType] = None) -> Iterable[EreignisLabelType]:
         """
         Generator für die Knoten eines Zuges
         
         Beginnend mit dem Startknoten liefert der Generator die Knoten-IDs eines Zuges
         in der Reihenfolge ihres Auftretens.
+
+        :param zid: Zug-ID
+        :param start: Knoten-ID des ersten Knotens.
+            Falls None (default) der erste Knoten des Zuges mit ID (zid, 0).
+        :param stop: Knoten-ID des ersten nicht mehr gelieferten Knotens.
+            Falls None (default) werden die Knoten bis einschliesslich des letzten des Zuges geliefert.
+        :return: Generator von Knoten-IDs.
         """
 
         node = (zid, 0)
         while node is not None:
-            yield node
+            if node == start:
+                start = None
+            if node == stop:
+                return
+            if start is None:
+                yield node
 
             for n in self.successors(node):
                 if n[0] == zid:
