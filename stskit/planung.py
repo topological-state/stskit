@@ -1802,8 +1802,17 @@ class Planung:
             if ziel2.auto_korrektur is None or folge_korrektur.rang > ziel2.auto_korrektur.rang:
                 ziel2.auto_korrektur = folge_korrektur
             if typ in {'E', 'K'}:
-                an1 = minutes_to_time(time_to_minutes(stamm_ziel.an) + stamm_ziel.mindestaufenthalt)
-                stamm_ziel.ab = max(ziel2.an, an1)
+                if stamm_ziel.an:
+                    an1 = minutes_to_time(time_to_minutes(stamm_ziel.an) + stamm_ziel.mindestaufenthalt)
+                else:
+                    an1 = minutes_to_time(0)
+                if ziel2.an:
+                    an2 = ziel2.an
+                else:
+                    an2 = minutes_to_time(0)
+                ab1 = max(an1, an2)
+                if ab1 > minutes_to_time(0):
+                    stamm_ziel.ab = max(an2, an1)
             try:
                 del self._haengige_folgekorrekturen[stamm_zzid]
             except KeyError:
