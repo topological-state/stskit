@@ -1,0 +1,308 @@
+{
+    "_aid": 142,
+    "_build": 5851,
+    "_name": "G\u00f6rlitz",
+    "_region": "Sachsen",
+    "_version": 2,
+    "zugschema": "deutschland",
+    "anschlussgruppen": {
+        "Bautzen": {
+            "__class__": "Set",
+            "data": [
+                "Bautzen"
+            ]
+        },
+        "Bombardier": {
+            "__class__": "Set",
+            "data": [
+                "Bombardier"
+            ]
+        },
+        "Eisenbahnfreunde": {
+            "__class__": "Set",
+            "data": [
+                "Eisenbahnfreunde"
+            ]
+        },
+        "G\u00fcterbereich": {
+            "__class__": "Set",
+            "data": [
+                "G\u00fcterbereich"
+            ]
+        },
+        "Horka": {
+            "__class__": "Set",
+            "data": [
+                "Horka"
+            ]
+        },
+        "Niedercunnersdorf": {
+            "__class__": "Set",
+            "data": [
+                "Niedercunnersdorf"
+            ]
+        },
+        "ODEG": {
+            "__class__": "Set",
+            "data": [
+                "ODEG"
+            ]
+        },
+        "Turosz\u00f3w": {
+            "__class__": "Set",
+            "data": [
+                "Turosz\u00f3w"
+            ]
+        },
+        "T\u00dcV S\u00fcd Rail": {
+            "__class__": "Set",
+            "data": [
+                "T\u00dcV S\u00fcd Rail"
+            ]
+        },
+        "Wilka": {
+            "__class__": "Set",
+            "data": [
+                "Wilka"
+            ]
+        },
+        "Zgorzelec": {
+            "__class__": "Set",
+            "data": [
+                "Zgorzelec"
+            ]
+        },
+        "Zittau": {
+            "__class__": "Set",
+            "data": [
+                "Zittau"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BCL": {
+            "__class__": "Set",
+            "data": [
+                "BCL 1",
+                "BCL 2"
+            ]
+        },
+        "DG": {
+            "__class__": "Set",
+            "data": [
+                "DG 5",
+                "DG 7",
+                "DG 8",
+                "DG 9",
+                "DG 9G",
+                "DG 10",
+                "DG 10G",
+                "DG 11",
+                "DG 11G",
+                "DG 12",
+                "DG 12G",
+                "DG 13",
+                "DG 114",
+                "DG 116",
+                "DG 117",
+                "DG 118",
+                "DG 122",
+                "DG 123",
+                "DG 124",
+                "DG 133",
+                "DG 137",
+                "DG-R1",
+                "DG-R2"
+            ]
+        },
+        "DGD": {
+            "__class__": "Set",
+            "data": [
+                "DGD 1",
+                "DGD 2"
+            ]
+        },
+        "DGRA": {
+            "__class__": "Set",
+            "data": [
+                "DGRA 1",
+                "DGRA 2"
+            ]
+        },
+        "DGWH": {
+            "__class__": "Set",
+            "data": [
+                "DGWH"
+            ]
+        },
+        "DHW": {
+            "__class__": "Set",
+            "data": [
+                "DHW 1",
+                "DHW 1G",
+                "DHW 2",
+                "DHW 2G"
+            ]
+        },
+        "DL": {
+            "__class__": "Set",
+            "data": [
+                "DL 1",
+                "DL 2",
+                "DL 2G",
+                "DL 3",
+                "DL 17"
+            ]
+        },
+        "DRCH": {
+            "__class__": "Set",
+            "data": [
+                "DRCH 1",
+                "DRCH 1G",
+                "DRCH 2",
+                "DRCH 2G",
+                "DRCH 3"
+            ]
+        },
+        "DZL": {
+            "__class__": "Set",
+            "data": [
+                "DZL 1",
+                "DZL 2"
+            ]
+        },
+        "XPKZG": {
+            "__class__": "Set",
+            "data": [
+                "XPKZG 1",
+                "XPKZG 1G",
+                "XPKZG 2",
+                "XPKZG 2G",
+                "XPKZG 4"
+            ]
+        },
+        "XPRCY": {
+            "__class__": "Set",
+            "data": [
+                "XPRCY"
+            ]
+        },
+        "XPTRZ": {
+            "__class__": "Set",
+            "data": [
+                "XPTRZ"
+            ]
+        }
+    },
+    "sektoren": {
+        "DG 10": {
+            "__class__": "Set",
+            "data": [
+                "DG 10",
+                "DG 10G"
+            ]
+        },
+        "DG 11": {
+            "__class__": "Set",
+            "data": [
+                "DG 11",
+                "DG 11G"
+            ]
+        },
+        "DG 12": {
+            "__class__": "Set",
+            "data": [
+                "DG 12",
+                "DG 12G"
+            ]
+        },
+        "DG 9": {
+            "__class__": "Set",
+            "data": [
+                "DG 9",
+                "DG 9G"
+            ]
+        },
+        "DHW 1": {
+            "__class__": "Set",
+            "data": [
+                "DHW 1",
+                "DHW 1G"
+            ]
+        },
+        "DHW 2": {
+            "__class__": "Set",
+            "data": [
+                "DHW 2",
+                "DHW 2G"
+            ]
+        },
+        "DL 2": {
+            "__class__": "Set",
+            "data": [
+                "DL 2",
+                "DL 2G"
+            ]
+        },
+        "DRCH 1": {
+            "__class__": "Set",
+            "data": [
+                "DRCH 1",
+                "DRCH 1G"
+            ]
+        },
+        "XPKZG 1": {
+            "__class__": "Set",
+            "data": [
+                "XPKZG 1",
+                "XPKZG 1G"
+            ]
+        },
+        "XPKZG 2": {
+            "__class__": "Set",
+            "data": [
+                "XPKZG 2",
+                "XPKZG 2G"
+            ]
+        }
+    },
+    "hauptstrecke": "Bautzen-Zgorzelec",
+    "strecken": {
+        "Bautzen-Zgorzelec": [
+            "Bautzen",
+            "DL",
+            "DZL",
+            "DRCH",
+            "DGD",
+            "DGRA",
+            "DG",
+            "Zgorzelec"
+        ],
+        "Horka-Zgorzelec": [
+            "Horka",
+            "BCL",
+            "DG",
+            "Zgorzelec"
+        ],
+        "Horka-Zittau": [
+            "Horka",
+            "BCL",
+            "DG",
+            "DGWH",
+            "DHW",
+            "XPRCY",
+            "XPKZG",
+            "XPTRZ",
+            "Zittau"
+        ],
+        "Wilka-Turosz\u00f3w": [
+            "Wilka",
+            "XPRCY",
+            "XPKZG",
+            "XPTRZ",
+            "Turosz\u00f3w"
+        ]
+    },
+    "streckenmarkierung": []
+}

@@ -1,0 +1,245 @@
+{
+    "_aid": 137,
+    "_build": 5851,
+    "_name": "Horka",
+    "_region": "Sachsen",
+    "_version": 2,
+    "zugschema": "deutschland",
+    "anschlussgruppen": {
+        "Awanst Quitzdorf": {
+            "__class__": "Set",
+            "data": [
+                "Awanst Quitzdorf"
+            ]
+        },
+        "BHG": {
+            "__class__": "Set",
+            "data": [
+                "BHG 7",
+                "BHG 8"
+            ]
+        },
+        "G\u00f6rlitz": {
+            "__class__": "Set",
+            "data": [
+                "G\u00f6rlitz"
+            ]
+        },
+        "Hoyerswerda": {
+            "__class__": "Set",
+            "data": [
+                "Hoyerswerda "
+            ]
+        },
+        "Klausner Holz": {
+            "__class__": "Set",
+            "data": [
+                "Klausner Holz"
+            ]
+        },
+        "Lodenau (DRE)": {
+            "__class__": "Set",
+            "data": [
+                "Lodenau (DRE)"
+            ]
+        },
+        "Stahlbau": {
+            "__class__": "Set",
+            "data": [
+                "Stahlbau"
+            ]
+        },
+        "Waggonbau": {
+            "__class__": "Set",
+            "data": [
+                "Waggonbau"
+            ]
+        },
+        "Wegliniec (PL)": {
+            "__class__": "Set",
+            "data": [
+                "Wegliniec (PL) "
+            ]
+        },
+        "Wei\u00dfwasser": {
+            "__class__": "Set",
+            "data": [
+                "Wei\u00dfwasser"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Awanst Quitzdorf": {
+            "__class__": "Set",
+            "data": [
+                "Awanst R"
+            ]
+        },
+        "BHG": {
+            "__class__": "Set",
+            "data": [
+                "BHG 1",
+                "BHG 2",
+                "BHG 3",
+                "BHG 4",
+                "BHG 5",
+                "BHG 6",
+                "BHG 14",
+                "BHG 17",
+                "BHG 18",
+                "BHG 22",
+                "BHG 23",
+                "BHG 203",
+                "BHG 204"
+            ]
+        },
+        "BHR": {
+            "__class__": "Set",
+            "data": [
+                "BHR 1",
+                "BHR 1G",
+                "BHR 2",
+                "BHR 2G",
+                "BHR 3"
+            ]
+        },
+        "BKL": {
+            "__class__": "Set",
+            "data": [
+                "BKL 1",
+                "BKL 2"
+            ]
+        },
+        "BKLO": {
+            "__class__": "Set",
+            "data": [
+                "BKLO"
+            ]
+        },
+        "BKLW": {
+            "__class__": "Set",
+            "data": [
+                "BKLW"
+            ]
+        },
+        "BKOD": {
+            "__class__": "Set",
+            "data": [
+                "BKOD"
+            ]
+        },
+        "BLOH": {
+            "__class__": "Set",
+            "data": [
+                "BLOH 1",
+                "BLOH 2"
+            ]
+        },
+        "BMC": {
+            "__class__": "Set",
+            "data": [
+                "BMC 1",
+                "BMC 2"
+            ]
+        },
+        "BMH": {
+            "__class__": "Set",
+            "data": [
+                "BMH"
+            ]
+        },
+        "BNY": {
+            "__class__": "Set",
+            "data": [
+                "BNY 1",
+                "BNY 2",
+                "BNY 3",
+                "BNY 4",
+                "BNY R"
+            ]
+        },
+        "BPE": {
+            "__class__": "Set",
+            "data": [
+                "BPE 1",
+                "BPE 2"
+            ]
+        },
+        "BSAE": {
+            "__class__": "Set",
+            "data": [
+                "BSAE"
+            ]
+        },
+        "BUS": {
+            "__class__": "Set",
+            "data": [
+                "BUS 1",
+                "BUS 2"
+            ]
+        }
+    },
+    "sektoren": {
+        "BHR 1": {
+            "__class__": "Set",
+            "data": [
+                "BHR 1",
+                "BHR 1G"
+            ]
+        },
+        "BHR 2": {
+            "__class__": "Set",
+            "data": [
+                "BHR 2",
+                "BHR 2G"
+            ]
+        }
+    },
+    "hauptstrecke": "Hoyerswerda-Wegliniec (PL)",
+    "strecken": {
+        "Hoyerswerda-G\u00f6rlitz": [
+            "Hoyerswerda",
+            "BLOH",
+            "BUS",
+            "BKL",
+            "BKLW",
+            "BKLO",
+            "BMC",
+            "BPE",
+            "BNY",
+            "BSAE",
+            "BMH",
+            "BKOD",
+            "G\u00f6rlitz"
+        ],
+        "Hoyerswerda-Wegliniec (PL)": [
+            "Hoyerswerda",
+            "BLOH",
+            "BUS",
+            "BKL",
+            "BKLW",
+            "BKLO",
+            "BMC",
+            "BPE",
+            "BNY",
+            "BSAE",
+            "BHG",
+            "Wegliniec (PL)"
+        ],
+        "Wei\u00dfwasser-G\u00f6rlitz": [
+            "Wei\u00dfwasser",
+            "BHR",
+            "BMH",
+            "BKOD",
+            "G\u00f6rlitz"
+        ],
+        "Wei\u00dfwasser-Wegliniec (PL)": [
+            "Wei\u00dfwasser",
+            "BHR",
+            "BHG",
+            "Wegliniec (PL)"
+        ]
+    },
+    "streckenmarkierung": []
+}

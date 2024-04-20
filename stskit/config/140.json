@@ -1,0 +1,251 @@
+{
+    "_aid": 140,
+    "_build": 5851,
+    "_name": "Bautzen - Wilthen",
+    "_region": "Sachsen",
+    "_version": 2,
+    "zugschema": "deutschland",
+    "anschlussgruppen": {
+        "Bischofswerda B": {
+            "__class__": "Set",
+            "data": [
+                "Bischofswerda B"
+            ]
+        },
+        "Bischofswerda N": {
+            "__class__": "Set",
+            "data": [
+                "Bischofswerda N"
+            ]
+        },
+        "Bombardier": {
+            "__class__": "Set",
+            "data": [
+                "Bombardier"
+            ]
+        },
+        "Ebersbach (Sachs)": {
+            "__class__": "Set",
+            "data": [
+                "Ebersbach (Sachs)"
+            ]
+        },
+        "Gbf Bautzen": {
+            "__class__": "Set",
+            "data": [
+                "Gbf Bautzen"
+            ]
+        },
+        "Granodiorit": {
+            "__class__": "Set",
+            "data": [
+                "Granodiorit"
+            ]
+        },
+        "Holzverarbeitung": {
+            "__class__": "Set",
+            "data": [
+                "Holzverarbeitung"
+            ]
+        },
+        "L\u00f6bau": {
+            "__class__": "Set",
+            "data": [
+                "L\u00f6bau"
+            ]
+        },
+        "Weinbrennerei": {
+            "__class__": "Set",
+            "data": [
+                "Weinbrennerei"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "Breitendorf": {
+            "__class__": "Set",
+            "data": [
+                "Breitendorf"
+            ]
+        },
+        "DBZ": {
+            "__class__": "Set",
+            "data": [
+                "DBZ 1",
+                "DBZ 2",
+                "DBZ 3",
+                "DBZ 3A",
+                "DBZ 3B",
+                "DBZ 4",
+                "DBZ 6",
+                "DBZ 17",
+                "DBZ 18",
+                "DBZ 81",
+                "DBZ 82",
+                "DBZ 83",
+                "DBZ 84"
+            ]
+        },
+        "DNKW": {
+            "__class__": "Set",
+            "data": [
+                "DNKW 1",
+                "DNKW 2"
+            ]
+        },
+        "DOD": {
+            "__class__": "Set",
+            "data": [
+                "DOD",
+                "DOD A",
+                "DOD B",
+                "DOD C",
+                "DOD D",
+                "DOD E",
+                "DOD R"
+            ]
+        },
+        "DSOH": {
+            "__class__": "Set",
+            "data": [
+                "DSOH 1",
+                "DSOH 2",
+                "DSOH 3"
+            ]
+        },
+        "DWT": {
+            "__class__": "Set",
+            "data": [
+                "DWT 1",
+                "DWT 2",
+                "DWT 6G",
+                "DWT 6",
+                "DWT 8G",
+                "DWT 8"
+            ]
+        },
+        "Demitz-Thumitz": {
+            "__class__": "Set",
+            "data": [
+                "Demitz-Thumitz"
+            ]
+        },
+        "Kubsch\u00fctz": {
+            "__class__": "Set",
+            "data": [
+                "Kubsch\u00fctz"
+            ]
+        },
+        "Neukirch Ost": {
+            "__class__": "Set",
+            "data": [
+                "Neukirch Ost"
+            ]
+        },
+        "Neusalza": {
+            "__class__": "Set",
+            "data": [
+                "Neusalza"
+            ]
+        },
+        "Oberottendorf": {
+            "__class__": "Set",
+            "data": [
+                "Oberottendorf"
+            ]
+        },
+        "Pommritz": {
+            "__class__": "Set",
+            "data": [
+                "Pommritz"
+            ]
+        },
+        "Putzkau": {
+            "__class__": "Set",
+            "data": [
+                "Putzkau"
+            ]
+        },
+        "Schirgiswalde": {
+            "__class__": "Set",
+            "data": [
+                "Schirgiswalde"
+            ]
+        },
+        "Schm\u00f6lln": {
+            "__class__": "Set",
+            "data": [
+                "Schm\u00f6lln"
+            ]
+        },
+        "Seitschen": {
+            "__class__": "Set",
+            "data": [
+                "Seitschen"
+            ]
+        },
+        "Taubenheim": {
+            "__class__": "Set",
+            "data": [
+                "Taubenheim"
+            ]
+        }
+    },
+    "sektoren": {
+        "DBZ 3": {
+            "__class__": "Set",
+            "data": [
+                "DBZ 3",
+                "DBZ 3A",
+                "DBZ 3B"
+            ]
+        },
+        "DWT 6": {
+            "__class__": "Set",
+            "data": [
+                "DWT 6",
+                "DWT 6G"
+            ]
+        },
+        "DWT 8": {
+            "__class__": "Set",
+            "data": [
+                "DWT 8",
+                "DWT 8G"
+            ]
+        }
+    },
+    "hauptstrecke": "Bischofswerda B-L\u00f6bau",
+    "strecken": {
+        "Bischofswerda B-L\u00f6bau": [
+            "Bischofswerda B",
+            "Demitz-Thumitz",
+            "Seitschen",
+            "DBZ",
+            "Kubsch\u00fctz",
+            "Pommritz",
+            "Breitendorf",
+            "L\u00f6bau"
+        ],
+        "Bischofswerda N-Ebersbach (Sachs)": [
+            "Bischofswerda N",
+            "Schm\u00f6lln",
+            "Putzkau",
+            "DNKW",
+            "Neukirch Ost",
+            "DWT",
+            "Schirgiswalde",
+            "DSOH",
+            "Taubenheim",
+            "Neusalza",
+            "Ebersbach (Sachs)"
+        ],
+        "Neukirch (Lausitz) West-Oberottendorf": [
+            "DNKW",
+            "DOD",
+            "Oberottendorf"
+        ]
+    },
+    "streckenmarkierung": []
+}
