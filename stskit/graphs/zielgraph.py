@@ -352,7 +352,7 @@ class ZielGraph(nx.DiGraph):
             ziel1 = ziel2
             fid1 = fid2
 
-        if not zug2.sichtbar and zug2.von and not zug2.von.startswith("Gleis"):
+        if not zug2.sichtbar and einfahrt is not None:
             fz2 = zug2.fahrplan[0]
             fid2 = fz2.fid
             einfahrtszeit = time_to_minutes(fz2.an or fz2.ab) - 1
@@ -382,7 +382,7 @@ class ZielGraph(nx.DiGraph):
                 if not self.has_edge(fid1, fid2):
                     self.add_edge(fid1, fid2, typ='P')
 
-        if zug2.nach and not zug2.nach.startswith("Gleis"):
+        if zug2.nach and ausfahrt is not None:
             fz2 = zug2.fahrplan[-1]
             fid2 = fz2.fid
             ausfahrtszeit = time_to_minutes(fz2.ab or fz2.an) + 1
