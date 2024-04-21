@@ -130,6 +130,28 @@ class ZugGraph(nx.DiGraph):
         if zid1 != zid2:
             self.add_edge(zid1, zid2, typ=typ)
 
+    def zug_ausfahren(self, zid: int):
+        """
+        Markiert einen Zug als ausgefahren.
+
+        Das ausgefahren-Attribut wird True, das sichtbar-Attribut False.
+        Die Änderung wird im aenderungen-Dictionary eingetragen.
+        """
+
+        zug_data = ZugGraphNode(sichtbar=False, ausgefahren=True)
+
+        changed = False
+        if self.has_node(zid):
+            old_data = self.nodes[zid]
+            for key, data in zug_data.items():
+                if key != "obj" and key in old_data:
+                    if data != old_data[key]:
+                        changed = True
+
+            if changed:
+                self.nodes[zid].update(**zug_data)
+                self.aenderungen[zid] = zug_data
+
 
 class ZugGraphUngerichtet(nx.Graph):
     """

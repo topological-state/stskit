@@ -57,9 +57,7 @@ class GraphClient(PluginClient):
 
     Der Zuggraph verändert sich im Laufe eines Spiels.
     Neue Züge werden hinzugefügt.
-
-    In der aktuellen Entwicklerversion werden ausgefahrene Züge beibehalten.
-    Falls sich das als nicht praktikabel erweist, werden die Züge wie in der Zugliste gelöscht.
+    Ausgefahrene und ersetzte Züge werden beibehalten und als "ausgefahren" markiert.
 
     Zielgraph
     =========
@@ -167,6 +165,8 @@ class GraphClient(PluginClient):
         Bestehende Knoten werden nicht verändert.
         Um den Graphen neu aufzubauen, sollte clean=True übergeben werden.
 
+        Diese Methode markiert auch ausgefahrene Züge.
+
         :return: None
         """
 
@@ -174,6 +174,12 @@ class GraphClient(PluginClient):
             self.zuggraph.clear()
 
         self.zuggraph.reset_aenderungen()
+
+        bisherige_zuege = {zid for zid, data in self.zuggraph.nodes(data=True) if not data.get('ausgefahren', True)}
+        aktuelle_zuege = set(self.zugliste.keys())
+        ausgefahrene_zuege = bisherige_zuege.difference(aktuelle_zuege)
+        for zug in ausgefahrene_zuege:
+            self.zuggraph.zug_ausfahren(zug)
 
         for zug in self.zugliste.values():
             self.zuggraph.zug_details_importieren(zug)
