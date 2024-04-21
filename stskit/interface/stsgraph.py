@@ -173,6 +173,8 @@ class GraphClient(PluginClient):
         if clean:
             self.zuggraph.clear()
 
+        self.zuggraph.reset_aenderungen()
+
         for zug in self.zugliste.values():
             self.zuggraph.zug_details_importieren(zug)
 

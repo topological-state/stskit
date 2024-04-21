@@ -64,9 +64,20 @@ class ZugGraph(nx.DiGraph):
 
     Der Zuggraph ist gerichtet.
 
-    In der aktuellen Entwicklerversion werden ausgefahrene Züge beibehalten.
-    Falls sich das als nicht praktikabel erweist, werden die Züge wie in der Zugliste gelöscht.
+    Attribute
+    =========
+
+    aenderungen: Dictionary Zug-ID -> ZugGraphNode.
+        Der ZugGraphNode enthält die alten Werte der Attribute, die bei der letzten Aktualisierung geändert worden sind.
+        Unveränderte Attribute sind nicht verzeichnet.
+        Wenn der Zug neu ist, ist der Wert None.
+
+        Der Besitzer darf Einträge des Dictionary löschen, z.B. via reset_aenderungen,
+        sollte aber die Objekte nicht verändern.
+
+        Die ZugGraphNode-Objekte sind unvollständig und sollten daher nicht direkt in den Graphen übernommen werden.
     """
+
     node_attr_dict_factory = ZugGraphNode
     edge_attr_dict_factory = ZugGraphEdge
 
@@ -76,15 +87,44 @@ class ZugGraph(nx.DiGraph):
     def to_directed_class(self):
         return self.__class__
 
-    def zug_details_importieren(self, zug: ZugDetails):
+    def __init__(self, incoming_graph_data=None, **attr):
+        super().__init__(incoming_graph_data, **attr)
+        self.aenderungen: Dict[int, ZugGraphNode] = {}
+
+    def reset_aenderungen(self):
+        self.aenderungen = {}
+
+    def zug_details_importieren(self, zug: ZugDetails) -> Optional[ZugGraphNode]:
         """
         Einzelnen Zug im Zuggraph aktualisieren.
 
         Wenn der Zugknoten existiert wird er aktualisiert, sonst neu erstellt.
+
+        Die Änderungen werden in self.aenderungen verzeichnet und als Resultat zurückgegeben.
+
+        :param zug: Zugdetails von der Pluginschnittstelle.
+
+        :return: Wenn der Knoten bereits existiert hat, gibt die Methode ein ZugGraphNode-Objekt zurück,
+            das nur die geänderten Attribute mit ihren vorherigen Werten enthält.
+            Wenn der Knoten neu ist, wird None zurückgegeben.
+            Das Objekt wird ausserdem in das aenderungen-Dictionary übernommen.
         """
 
+        changes = {}
         zug_data = ZugGraphNode.from_zug_details(zug)
+        if self.has_node(zug.zid):
+            old_data = self.nodes(zug.zid)
+            for key, data in zug_data.items():
+                if key != "obj" and key in old_data:
+                    if data != old_data[key]:
+                        changes[key] = old_data[key]
+
         self.add_node(zug.zid, **zug_data)
+
+        changed = ZugGraphNode(**changes) if changes else None
+        self.aenderungen[zug.zid] = changed
+
+        return changed
 
     def zuege_verknuepfen(self, typ: str, zid1: int, zid2: int):
         if zid1 != zid2:
