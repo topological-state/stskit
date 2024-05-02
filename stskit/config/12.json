@@ -1,0 +1,296 @@
+{
+    "_aid": 12,
+    "_build": 5851,
+    "_name": "Spremberg",
+    "_region": "Berlin-Brandenburg",
+    "_version": 2,
+    "zugschema": "deutschland",
+    "anschlussgruppen": {
+        "Anschluss": {
+            "__class__": "Set",
+            "data": [
+                "Anschluss"
+            ]
+        },
+        "Anst": {
+            "__class__": "Set",
+            "data": [
+                "Anst"
+            ]
+        },
+        "Cottbus": {
+            "__class__": "Set",
+            "data": [
+                "Cottbus"
+            ]
+        },
+        "Horka": {
+            "__class__": "Set",
+            "data": [
+                "Horka"
+            ]
+        },
+        "Industrie": {
+            "__class__": "Set",
+            "data": [
+                "Industrie"
+            ]
+        },
+        "Knappenrode": {
+            "__class__": "Set",
+            "data": [
+                "Knappenrode"
+            ]
+        },
+        "NB": {
+            "__class__": "Set",
+            "data": [
+                "NB1",
+                "NB2"
+            ]
+        },
+        "Schwarze Pumpe": {
+            "__class__": "Set",
+            "data": [
+                "Schwarze Pumpe 1",
+                "Schwarze Pumpe 2",
+                "Schwarze Pumpe 3"
+            ]
+        },
+        "Umspannwerk": {
+            "__class__": "Set",
+            "data": [
+                "Umspannwerk"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "BBG": {
+            "__class__": "Set",
+            "data": [
+                "BBG 1",
+                "BBG 1G",
+                "BBG 2",
+                "BBG 2G"
+            ]
+        },
+        "BGRA": {
+            "__class__": "Set",
+            "data": [
+                "BGRA 1",
+                "BGRA 2",
+                "BGRA 3",
+                "BGRA 4"
+            ]
+        },
+        "BHAH": {
+            "__class__": "Set",
+            "data": [
+                "BHAH 1",
+                "BHAH 1G",
+                "BHAH 2",
+                "BHAH 2G"
+            ]
+        },
+        "BKB": {
+            "__class__": "Set",
+            "data": [
+                "BKB"
+            ]
+        },
+        "BNH": {
+            "__class__": "Set",
+            "data": [
+                "BNH 1",
+                "BNH 1G",
+                "BNH 2",
+                "BNH 2G"
+            ]
+        },
+        "BRI": {
+            "__class__": "Set",
+            "data": [
+                "BRI"
+            ]
+        },
+        "BSFE": {
+            "__class__": "Set",
+            "data": [
+                "BSFE 1",
+                "BSFE 1G",
+                "BSFE 2",
+                "BSFE 2G"
+            ]
+        },
+        "BSP": {
+            "__class__": "Set",
+            "data": [
+                "BSP 1",
+                "BSP 2",
+                "BSP-R"
+            ]
+        },
+        "BSPE": {
+            "__class__": "Set",
+            "data": [
+                "BSPE 2",
+                "BSPE 3",
+                "BSPE 4",
+                "BSPE 5",
+                "BSPE 6",
+                "BSPE 7",
+                "BSPE 8",
+                "BSPE 9",
+                "BSPE 11",
+                "BSPE 14",
+                "BSPE 33"
+            ]
+        },
+        "BSPS": {
+            "__class__": "Set",
+            "data": [
+                "BSPS"
+            ]
+        },
+        "BUD": {
+            "__class__": "Set",
+            "data": [
+                "BUD"
+            ]
+        },
+        "BWKL": {
+            "__class__": "Set",
+            "data": [
+                "BWKL 1",
+                "BWKL 2"
+            ]
+        },
+        "BWKM": {
+            "__class__": "Set",
+            "data": [
+                "BWKM"
+            ]
+        },
+        "BWW": {
+            "__class__": "Set",
+            "data": [
+                "BWW 1",
+                "BWW 1G",
+                "BWW 2",
+                "BWW 2G",
+                "BWW-R1",
+                "BWW-R2"
+            ]
+        }
+    },
+    "sektoren": {
+        "BBG 1": {
+            "__class__": "Set",
+            "data": [
+                "BBG 1",
+                "BBG 1G"
+            ]
+        },
+        "BBG 2": {
+            "__class__": "Set",
+            "data": [
+                "BBG 2",
+                "BBG 2G"
+            ]
+        },
+        "BHAH 1": {
+            "__class__": "Set",
+            "data": [
+                "BHAH 1",
+                "BHAH 1G"
+            ]
+        },
+        "BHAH 2": {
+            "__class__": "Set",
+            "data": [
+                "BHAH 2",
+                "BHAH 2G"
+            ]
+        },
+        "BNH 1": {
+            "__class__": "Set",
+            "data": [
+                "BNH 1",
+                "BNH 1G"
+            ]
+        },
+        "BNH 2": {
+            "__class__": "Set",
+            "data": [
+                "BNH 2",
+                "BNH 2G"
+            ]
+        },
+        "BSFE 1": {
+            "__class__": "Set",
+            "data": [
+                "BSFE 1",
+                "BSFE 1G"
+            ]
+        },
+        "BSFE 2": {
+            "__class__": "Set",
+            "data": [
+                "BSFE 2",
+                "BSFE 2G"
+            ]
+        },
+        "BWW 1": {
+            "__class__": "Set",
+            "data": [
+                "BWW 1",
+                "BWW 1G"
+            ]
+        },
+        "BWW 2": {
+            "__class__": "Set",
+            "data": [
+                "BWW 2",
+                "BWW 2G"
+            ]
+        }
+    },
+    "hauptstrecke": "Cottbus-Horka",
+    "strecken": {
+        "Cottbus-Horka": [
+            "Cottbus",
+            "BKB",
+            "BNH",
+            "BBG",
+            "BSP",
+            "BGRA",
+            "BSFE",
+            "BWW",
+            "BWKL",
+            "BRI",
+            "BHAH",
+            "BUD",
+            "Horka"
+        ],
+        "Cottbus-Knappenrode": [
+            "Cottbus",
+            "BKB",
+            "BNH",
+            "BBG",
+            "BSP",
+            "BGRA",
+            "BSPS",
+            "BWKM",
+            "Knappenrode"
+        ],
+        "Schwarze Pumpe-Knappenrode": [
+            "Schwarze Pumpe",
+            "BSPE",
+            "BSPS",
+            "BWKM",
+            "Knappenrode"
+        ]
+    },
+    "streckenmarkierung": []
+}

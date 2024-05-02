@@ -1,0 +1,170 @@
+{
+    "_aid": 90,
+    "_build": 5851,
+    "_name": "Kamenz (Sachs)",
+    "_region": "Sachsen",
+    "_version": 2,
+    "zugschema": "deutschland",
+    "anschlussgruppen": {
+        "Arnsdorfer Kurve": {
+            "__class__": "Set",
+            "data": [
+                "Arnsdorf",
+                "Radeberg"
+            ]
+        },
+        "BW": {
+            "__class__": "Set",
+            "data": [
+                "BW"
+            ]
+        },
+        "Baustoffwerke": {
+            "__class__": "Set",
+            "data": [
+                "Baustoffwerke"
+            ]
+        },
+        "Gbf": {
+            "__class__": "Set",
+            "data": [
+                "Gbf"
+            ]
+        },
+        "Gl": {
+            "__class__": "Set",
+            "data": [
+                "Gl 10",
+                "Gl 14-15"
+            ]
+        },
+        "Grauwacke": {
+            "__class__": "Set",
+            "data": [
+                "Grauwacke"
+            ]
+        },
+        "Hosena": {
+            "__class__": "Set",
+            "data": [
+                "Hosena"
+            ]
+        },
+        "Lokschuppen": {
+            "__class__": "Set",
+            "data": [
+                "Lokschuppen"
+            ]
+        },
+        "Tanklager": {
+            "__class__": "Set",
+            "data": [
+                "Tanklager"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "DBH": {
+            "__class__": "Set",
+            "data": [
+                "DBH 1",
+                "DBH 2"
+            ]
+        },
+        "DCF": {
+            "__class__": "Set",
+            "data": [
+                "DCF 1",
+                "DCF 2",
+                "DCF 3",
+                "DCF 4",
+                "DCF 5",
+                "DCF 6",
+                "DCF 7",
+                "DCF R1",
+                "DCF R2",
+                "DCF R3"
+            ]
+        },
+        "DGRF": {
+            "__class__": "Set",
+            "data": [
+                "DGRF 1",
+                "DGRF 2"
+            ]
+        },
+        "DKA": {
+            "__class__": "Set",
+            "data": [
+                "DKA 1",
+                "DKA 2",
+                "DKA 5",
+                "DKA R"
+            ]
+        },
+        "DKRD": {
+            "__class__": "Set",
+            "data": [
+                "DKRD"
+            ]
+        },
+        "DPUL": {
+            "__class__": "Set",
+            "data": [
+                "DPUL"
+            ]
+        },
+        "DSTR": {
+            "__class__": "Set",
+            "data": [
+                "DSTR 1",
+                "DSTR 1a",
+                "DSTR 2",
+                "DSTR 4",
+                "DSTR 5",
+                "DSTR 6",
+                "DSTR 7",
+                "DSTR 8",
+                "DSTR 11",
+                "DSTR 12",
+                "DSTR 13",
+                "DSTR N7",
+                "DSTR R1",
+                "DSTR R2"
+            ]
+        },
+        "DWID": {
+            "__class__": "Set",
+            "data": [
+                "DWID 1",
+                "DWID 2"
+            ]
+        }
+    },
+    "sektoren": {
+        "DSTR 1": {
+            "__class__": "Set",
+            "data": [
+                "DSTR 1",
+                "DSTR 1a"
+            ]
+        }
+    },
+    "hauptstrecke": "Arnsdorfer Kurve-Hosena",
+    "strecken": {
+        "Arnsdorfer Kurve-Hosena": [
+            "Arnsdorfer Kurve",
+            "DKRD",
+            "DGRF",
+            "DPUL",
+            "DBH",
+            "DKA",
+            "DCF",
+            "DSTR",
+            "DWID",
+            "Hosena"
+        ]
+    },
+    "streckenmarkierung": []
+}

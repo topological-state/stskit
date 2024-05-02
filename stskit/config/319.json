@@ -1,0 +1,149 @@
+{
+    "_aid": 319,
+    "_build": 5851,
+    "_name": "Bischofswerda - Klotzsche",
+    "_region": "Sachsen",
+    "_version": 2,
+    "zugschema": "deutschland",
+    "anschlussgruppen": {
+        "Kamenz": {
+            "__class__": "Set",
+            "data": [
+                "Arnsdorfer Kurve",
+                "Kamenz"
+            ]
+        },
+        "Bautzen": {
+            "__class__": "Set",
+            "data": [
+                "Bautzen"
+            ]
+        },
+        "Dresden-Neustadt": {
+            "__class__": "Set",
+            "data": [
+                "Dresden-Neustadt"
+            ]
+        },
+        "K\u00f6nigsbr\u00fcck": {
+            "__class__": "Set",
+            "data": [
+                "K\u00f6nigsbr\u00fcck"
+            ]
+        },
+        "Neukirch": {
+            "__class__": "Set",
+            "data": [
+                "Neukirch"
+            ]
+        },
+        "Recycling": {
+            "__class__": "Set",
+            "data": [
+                "Recycling"
+            ]
+        }
+    },
+    "anschlusslage": {},
+    "bahnsteiggruppen": {
+        "DAF": {
+            "__class__": "Set",
+            "data": [
+                "DAF 1",
+                "DAF 2",
+                "DAF 3",
+                "DAF 4",
+                "DAF 5",
+                "DAF 6"
+            ]
+        },
+        "DBW": {
+            "__class__": "Set",
+            "data": [
+                "DBW 1",
+                "DBW 2",
+                "DBW 3",
+                "DBW 8",
+                "DBW 10",
+                "DBW R"
+            ]
+        },
+        "DGRS": {
+            "__class__": "Set",
+            "data": [
+                "DGRS 1",
+                "DGRS 2"
+            ]
+        },
+        "DKT": {
+            "__class__": "Set",
+            "data": [
+                "DKT 1",
+                "DKT 2",
+                "DKT 3",
+                "DKT 4",
+                "DKT 122",
+                "DKT 123",
+                "DKT 124",
+                "DKT 126",
+                "DKT 125"
+            ]
+        },
+        "DKTF": {
+            "__class__": "Set",
+            "data": [
+                "DKTF 1",
+                "DKTF 2"
+            ]
+        },
+        "DRAG": {
+            "__class__": "Set",
+            "data": [
+                "DRAG 1",
+                "DRAG 2",
+                "DRAG 4",
+                "DRAG 7"
+            ]
+        },
+        "Gro\u00dfhartau": {
+            "__class__": "Set",
+            "data": [
+                "Gro\u00dfhartau"
+            ]
+        },
+        "Langebr\u00fcck": {
+            "__class__": "Set",
+            "data": [
+                "Langebr\u00fcck"
+            ]
+        },
+        "Weickersdorf": {
+            "__class__": "Set",
+            "data": [
+                "Weickersdorf"
+            ]
+        }
+    },
+    "sektoren": {},
+    "hauptstrecke": "Dresden-Neustadt-Bautzen",
+    "strecken": {
+        "Dresden-Neustadt-Bautzen": [
+            "Dresden-Neustadt",
+            "DKT",
+            "Langebr\u00fcck",
+            "DRAG",
+            "DAF",
+            "Gro\u00dfhartau",
+            "Weickersdorf",
+            "DBW",
+            "Bautzen"
+        ],
+        "Dresden-Neustadt-DKTF": [
+            "Dresden-Neustadt",
+            "DKT",
+            "DGRS",
+            "DKTF"
+        ]
+    },
+    "streckenmarkierung": []
+}
