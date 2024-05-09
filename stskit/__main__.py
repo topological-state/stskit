@@ -26,7 +26,7 @@ from stskit.zentrale import DatenZentrale
 from stskit.anschlussmatrix import AnschlussmatrixWindow
 from stskit.bildfahrplan import BildFahrplanWindow
 from stskit.einstellungen import EinstellungenWindow
-from stskit.gleisbelegung import GleisbelegungWindow
+from stskit.widgets.gleisbelegung import GleisbelegungWindow
 from stskit.gleisnetz import GleisnetzWindow
 from stskit.qticker import TickerWindow
 from stskit.fahrplan import FahrplanWindow
