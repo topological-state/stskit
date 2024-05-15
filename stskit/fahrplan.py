@@ -72,10 +72,12 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
     def zug_status(zug: ZugGraphNode) -> str:
         if zug.sichtbar:
             return "S"
+        elif zug.ausgefahren:
+            return "A"
         elif zug.gleis:
             return "E"
         else:
-            return "A"
+            return "?"
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
         """
@@ -442,10 +444,12 @@ class FahrplanModell(QtCore.QAbstractTableModel):
                     return QtGui.QColor("cyan")
                 else:
                     return None
+            elif self.zug.ausgefahren:
+                return QtGui.QColor("darkCyan")
             elif self.zug.gleis:
                 return None
             else:
-                return QtGui.QColor("darkCyan")
+                return QtGui.QColor("red")
 
         elif role == QtCore.Qt.TextAlignmentRole:
             return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
