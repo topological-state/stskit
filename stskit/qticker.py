@@ -23,6 +23,7 @@ logger.addHandler(logging.NullHandler())
 EREIGNISART_QCOLOR_SVG = {
     "einfahrt": QtGui.QColor("orchid"),
     "ausfahrt": QtGui.QColor("dodgerblue"),
+    "ersatz": QtGui.QColor("dodgerblue"),
     "rothalt": QtGui.QColor("tomato"),
     "fahrt": QtGui.QColor("limegreen"),
     "ankunft": QtGui.QColor("skyblue"),

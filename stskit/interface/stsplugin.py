@@ -579,13 +579,16 @@ class PluginClient:
 
         - Die vom Simulator gelieferte Zugliste enthält nicht alle Folgezüge.
         - Ausgefahrene Züge werden von der Liste entfernt.
+          Für ersetzte Züge wird ein ersatz-Ereignis erzeugt.
         - Die Zugobjekte sind nach dieser Abfrage schon ziemlich komplett.
           Einzig die aktuelle Verspätung fehlt und muss per request_zugdetails angefragt werden.
 
         :return: None
         """
 
+        alte_zugliste = self.zugliste
         self.zugliste = {}
+        zeit = self.calc_simzeit()
 
         await self._send_request("zugliste")
         response = await self._antwort_channel_out.receive()
@@ -600,6 +603,21 @@ class PluginClient:
                     logger.error(f"request_zugliste: fehlerhafter zug-eintrag: {zug}")
         except AttributeError:
             log_status_warning("request_zugliste", response)
+
+        for zid in set(alte_zugliste.keys()) - set(self.zugliste.keys()):
+            zug = alte_zugliste[zid]
+            try:
+                letztes_ziel = zug.fahrplan[-1]
+            except IndexError:
+                pass
+            else:
+                if 'E' in letztes_ziel.flags:
+                    attr = dict(zug.__dict__)
+                    attr['art'] = "ersatz"
+                    ereignis = Ereignis().update(attr)
+                    ereignis.zeit = zeit
+                    ereignis.sichtbar = False
+                    await self._ereignis_channel_in.send(ereignis)
 
     async def request_zug(self, zid: int) -> Optional[ZugDetails]:
         """

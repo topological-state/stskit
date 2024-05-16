@@ -17,7 +17,7 @@ import logging
 import networkx as nx
 import numpy as np
 import re
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
 import untangle
 
 logger = logging.getLogger(__name__)
@@ -125,7 +125,7 @@ class AnlagenInfo:
         network = "online" if self.online else "offline"
         return f"{self.region} - {self.name} ({self.aid}, {self.build}, {network})"
 
-    def update(self, item: untangle.Element) -> 'AnlagenInfo':
+    def update(self, item: Mapping) -> 'AnlagenInfo':
         """
         attributwerte vom xml-dokument übernehmen.
 
@@ -257,7 +257,7 @@ class Knoten:
     def __repr__(self) -> str:
         return f"Knoten('{self.key}': enr={self.enr}, typ={self.typ}, name='{self.name}')"
 
-    def update(self, shape: untangle.Element) -> 'Knoten':
+    def update(self, shape: Mapping) -> 'Knoten':
         """
         attributwerte vom xml-dokument übernehmen.
 
@@ -346,7 +346,7 @@ class ZugDetails:
         return f"ZugDetails({self.zid}, {self.name}, {self.von}, {self.nach}, {self.verspaetung:+}," \
                f"{self.sichtbar}, {self.gleis}/{self.plangleis}, {self.amgleis})"
 
-    def update(self, zugdetails: untangle.Element) -> 'ZugDetails':
+    def update(self, zugdetails: Mapping) -> 'ZugDetails':
         """
         attributwerte vom xml-dokument übernehmen.
 
@@ -600,6 +600,11 @@ class Ereignis(ZugDetails):
     ~~~~~~
 
     der tag enthält dieselben daten wie ein zugdetails-tag und zusätzlich die art des ereignisses.
+    die zeit wird vom PluginClient gesetzt.
+
+    zusätzlich zu den von der plugin-schnittstelle gemeldeten ereignissen (in Ereignis.arten),
+    erzeugt der PluginClient ein ereignis 'ersatz', wenn ein zug durch ersatz/nummernwechsel unsichtbar wird.
+    der zugdetails-inhalt entspricht in diesem fall dem letzten ankunftsereignis, wobei sichtbar = False.
     """
 
     # xml-tagname
@@ -649,7 +654,7 @@ class Ereignis(ZugDetails):
         """
         return (self.art, self.zid, self.gleis).__hash__()
 
-    def update(self, ereignis: untangle.Element) -> 'Ereignis':
+    def update(self, ereignis: Mapping) -> 'Ereignis':
         """
         attributwerte vom xml-dokument übernehmen.
 
@@ -749,7 +754,7 @@ class FahrplanZeile:
     def __repr__(self):
         return f"FahrplanZeile({self.gleis}, {self.plan}, {self.an}, {self.ab}, {self.flags})"
 
-    def update(self, item: untangle.Element) -> 'FahrplanZeile':
+    def update(self, item: Mapping) -> 'FahrplanZeile':
         self.gleis = item['name']
         self.plan = item['plan']
         try:
