@@ -113,7 +113,7 @@ class ZugGraph(nx.DiGraph):
         changes = {}
         zug_data = ZugGraphNode.from_zug_details(zug)
         if self.has_node(zug.zid):
-            old_data = self.nodes(zug.zid)
+            old_data = self.nodes[zug.zid]
             for key, data in zug_data.items():
                 if key != "obj" and key in old_data:
                     if data != old_data[key]:
