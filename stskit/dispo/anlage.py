@@ -111,9 +111,10 @@ class Anlage:
             self.liniengraph_mit_signalgraph_abgleichen()
         self.zielgraph.einfahrtszeiten_korrigieren(self.liniengraph, self.bahnhofgraph)
         self.ereignisgraph.zielgraph_importieren(self.zielgraph)
-        # nx.write_gml(self.zielgraph, "zielgraph.gml", stringizer=str)
         self.ereignisgraph.prognose()
-        # nx.write_gml(self.ereignisgraph, "ereignisgraph.gml", stringizer=str)
+        if logger.isEnabledFor(logging.DEBUG):
+            nx.write_gml(self.zielgraph, "zielgraph.gml", stringizer=str)
+            nx.write_gml(self.ereignisgraph, "ereignisgraph.gml", stringizer=str)
         self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
 
         if len(self.strecken) == 0 and self.liniengraph:
