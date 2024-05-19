@@ -829,7 +829,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         e2d = EreignisGraphEdge(
             typ='H',
             zid=ziel_node.zid,
-            dt_min=ziel_node.mindestaufenthalt,
+            dt_min=ziel_node.get('mindestaufenthalt', 0),
             ds=0
         )
         self.edge_template = e2d
