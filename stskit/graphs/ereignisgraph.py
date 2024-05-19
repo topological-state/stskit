@@ -554,6 +554,18 @@ class EreignisGraph(nx.DiGraph):
             else:
                 self.zug_next[ereignis.zid] = next_label
 
+        elif ereignis.art == 'ersatz':
+            try:
+                cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="E")
+            except (AttributeError, ValueError, KeyError):
+                pass
+            else:
+                self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+                try:
+                    del self.zug_next[ereignis.zid]
+                except KeyError:
+                    pass
+
         elif ereignis.art == 'kuppeln':
             try:
                 cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="K")
