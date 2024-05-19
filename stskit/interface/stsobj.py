@@ -17,7 +17,7 @@ import logging
 import networkx as nx
 import numpy as np
 import re
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Dict, Iterable, List, Mapping, NamedTuple, Optional, Set, Tuple, Union
 import untangle
 
 logger = logging.getLogger(__name__)
@@ -670,6 +670,12 @@ class Ereignis(ZugDetails):
         return {attr: getattr(self, attr) for attr in self.attribute}
 
 
+class FahrplanZeileID(NamedTuple):
+    zid: int
+    zeit: int
+    plan: str
+
+
 class FahrplanZeile:
     """
     fahrplanzeile
@@ -690,7 +696,14 @@ class FahrplanZeile:
 
     def __init__(self, zug: ZugDetails):
         super().__init__()
+
+        # übergeordnetes zug-objekt
         self.zug: ZugDetails = zug
+
+        # diese attribut wird beim ersten property-aufruf erzeugt
+        self._fid: Optional[FahrplanZeileID] = None
+
+        # die folgenden attribute werden von der plugin-schnittstelle geliefert
         self.gleis: str = ""
         self.plan: str = ""
         self.an: Optional[datetime.time] = None
@@ -704,29 +717,35 @@ class FahrplanZeile:
         self.kuppelzug: Optional[ZugDetails] = None
 
     @property
-    def fid(self) -> Tuple[int, int, str]:
+    def fid(self) -> FahrplanZeileID:
         """
         Fahrplanziel-Identifikation
 
-        Die Identifikation besteht aus den eindeutigen, unveränderlichen Attributen Zug-ID, Zeit in Minuten und Plangleis.
+        Die Identifikation besteht aus den eindeutigen Attributen Zug-ID, Zeit in Minuten und Plangleis.
+        Die ID wird beim ersten Gebrauch aus den genannten Attributen generiert und bleibt danach konstant.
+        Das Property sollte daher nicht verwendet werden, bevor die Attribute ausgefüllt sind.
 
         Die Attribute an, ab und plan alleine sind (auch für einen Zug) nicht eindeutig:
         an oder ab können None sein, das Gleis kann mehrmals angefahren werden.
+        an kann sich beim Nummernwechsel ändern.
 
         :return: Dreiertupel (zid, zeit, plan). zeit ist entweder die Ankunfts- oder Abfahrtszeit in Minuten.
         """
 
-        try:
-            zeit = time_to_minutes(self.an or self.ab)
-        except (AttributeError, TypeError):
-            zeit = 0
-        return self.zug.zid, zeit, self.plan
+        if self._fid is None:
+            try:
+                zeit = time_to_minutes(self.an or self.ab)
+            except (AttributeError, TypeError):
+                zeit = 0
+            self._fid = FahrplanZeileID(self.zug.zid, zeit, self.plan)
+
+        return self._fid
 
     def __hash__(self) -> int:
         """
         Zugziel-Hash
 
-        Der Hash basiert auf den eindeutigen, unveränderlichen Attributen zug.zid, an, ab und plan.
+        Der Hash basiert auf der fid.
 
         :return: Hash-Wert
         """
@@ -755,18 +774,48 @@ class FahrplanZeile:
         return f"FahrplanZeile({self.gleis}, {self.plan}, {self.an}, {self.ab}, {self.flags})"
 
     def update(self, item: Mapping) -> 'FahrplanZeile':
-        self.gleis = item['name']
+        """
+        Daten von untangle-Element oder anderer FahrplanZeile übernehmen.
+
+        Es werden nur die Attribute übernommen, die von der Pluginschnittstelle geliefert werden.
+
+        :param item: eines von folgenden Objekten:
+            - untangle.Element mit dem gleis-Tag von der Simulatorschnittstelle,
+            - ein anderes FahrplanZeile-Objekt,
+            - Dictionary mit Werten, die den Attributen dieser Klasse entsprechen.
+
+        :return: self
+        """
+
+        if isinstance(item, self.__class__):
+            item = item.__dict__
+
+        if isinstance(item, untangle.Element):
+            self.gleis = item['name']
+        else:
+            self.gleis = item['gleis']
+
         self.plan = item['plan']
+
         try:
-            self.an = datetime.time.fromisoformat(item['an'])
-        except ValueError:
+            if item['an'] is None or isinstance(item['an'], datetime.time):
+                self.an = item['an']
+            else:
+                self.an = datetime.time.fromisoformat(item['an'])
+        except (TypeError, ValueError):
             self.an = None
+
         try:
-            self.ab = datetime.time.fromisoformat(item['ab'])
-        except ValueError:
+            if item['an'] is None or isinstance(item['ab'], datetime.time):
+                self.ab = item['ab']
+            else:
+                self.ab = datetime.time.fromisoformat(item['ab'])
+        except (TypeError, ValueError):
             self.ab = None
+
         self.flags = item['flags']
         self.hinweistext = item['hinweistext']
+
         return self
 
     def durchfahrt(self) -> bool:

@@ -530,7 +530,7 @@ class ZielGraph(nx.DiGraph):
         status = 'ab' if zug.sichtbar else ''
         try:
             fid_aktuell = zug.fahrplan[zug.ziel_index].fid
-        except (KeyError, TypeError):
+        except (IndexError, KeyError, TypeError):
             # kein ziel oder kein fahrplan
             fid_aktuell = None
             if len(zug.fahrplan):

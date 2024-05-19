@@ -549,22 +549,41 @@ class PluginClient:
         """
 
         zug = self.zugliste[zid]
-        zug.fahrplan = []
+        akt_ziel_index = None
 
         await self._send_request("zugfahrplan", zid=zid)
         response = await self._antwort_channel_out.receive()
 
         try:
-            zug.ziel_index = None
+            neuer_fahrplan = []
             for gleis in response.zugfahrplan.gleis:
                 zeile = FahrplanZeile(zug).update(gleis)
-                zug.fahrplan.append(zeile)
+                neuer_fahrplan.append(zeile)
                 if zug.plangleis == zeile.plan:
-                    zug.ziel_index = len(zug.fahrplan) - 1
+                    akt_ziel_index = len(neuer_fahrplan) - 1
                 logger.debug(f"request_zugfahrplan: {zeile}")
         except AttributeError:
             log_status_warning("request_zugfahrplan", response)
             return False
+
+        if not zug.fahrplan:
+            zug.fahrplan = neuer_fahrplan
+            zug.ziel_index = akt_ziel_index
+            return True
+
+        for zeile_alt, zeile_neu in zip(reversed(zug.fahrplan), reversed(neuer_fahrplan)):
+            if zeile_neu.plan == zeile_alt.plan:
+                zeile_alt.update(zeile_neu.__dict__)
+            else:
+                logger.warning(f"ersetze fahrplan von {zug}, weil {zeile_alt.plan} ungleich {zeile_neu.plan}")
+                zug.fahrplan = neuer_fahrplan
+                zug.ziel_index = akt_ziel_index
+                break
+        else:
+            if akt_ziel_index is not None:
+                zug.ziel_index = akt_ziel_index + len(zug.fahrplan) - len(neuer_fahrplan)
+            else:
+                zug.ziel_index = None
 
         return True
 
@@ -572,7 +591,7 @@ class PluginClient:
         """
         Zugliste anfragen.
 
-        Die Zugliste wird angefragt und neu aufgebaut.
+        Die Zugliste wird angefragt und aktualisiert.
 
         Bemerkungen
         -----------
@@ -581,13 +600,15 @@ class PluginClient:
         - Ausgefahrene Züge werden von der Liste entfernt.
           Für ersetzte Züge wird ein ersatz-Ereignis erzeugt.
         - Die Zugobjekte sind nach dieser Abfrage schon ziemlich komplett.
-          Einzig die aktuelle Verspätung fehlt und muss per request_zugdetails angefragt werden.
+          Es fehlen die aktuelle Verspätung fehlt (request_zugdetails)
+          und Gleisänderungen im Fahrplan (request_zugfahrplan).
+        - Die Objektinstanzen werden bei Aktualisierung beibehalten.
 
         :return: None
         """
 
-        alte_zugliste = self.zugliste
-        self.zugliste = {}
+        alte_zugliste = set(self.zugliste.keys())
+        aktuelle_zugliste = set()
         zeit = self.calc_simzeit()
 
         await self._send_request("zugliste")
@@ -597,15 +618,22 @@ class PluginClient:
             for zug in response.zugliste.zug:
                 try:
                     zid = int(zug['zid'])
-                    if zid > 0:
+                    if zid <= 0:
+                        logger.warning(f"request_zugliste: ungültige zug-id {zid}")
+                        return
+                    if zid in self.zugliste:
+                        self.zugliste[zid].update(zug)
+                    else:
                         self.zugliste[zid] = ZugDetails().update(zug)
+                    aktuelle_zugliste.add(zid)
                 except (KeyError, ValueError):
                     logger.error(f"request_zugliste: fehlerhafter zug-eintrag: {zug}")
         except AttributeError:
             log_status_warning("request_zugliste", response)
 
-        for zid in set(alte_zugliste.keys()) - set(self.zugliste.keys()):
-            zug = alte_zugliste[zid]
+        # ausgefahrene und ersetzte züge
+        for zid in alte_zugliste - aktuelle_zugliste:
+            zug = self.zugliste[zid]
             try:
                 letztes_ziel = zug.fahrplan[-1]
             except IndexError:
@@ -618,6 +646,10 @@ class PluginClient:
                     ereignis.zeit = zeit
                     ereignis.sichtbar = False
                     await self._ereignis_channel_in.send(ereignis)
+            try:
+                del self.zugliste[zid]
+            except KeyError:
+                pass
 
     async def request_zug(self, zid: int) -> Optional[ZugDetails]:
         """

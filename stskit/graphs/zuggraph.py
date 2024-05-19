@@ -138,7 +138,7 @@ class ZugGraph(nx.DiGraph):
         Die Änderung wird im aenderungen-Dictionary eingetragen.
         """
 
-        zug_data = ZugGraphNode(sichtbar=False, ausgefahren=True)
+        zug_data = ZugGraphNode(sichtbar=False, ausgefahren=True, amgleis=False, gleis="", plangleis="")
 
         changed = False
         if self.has_node(zid):
