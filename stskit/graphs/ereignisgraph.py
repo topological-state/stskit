@@ -703,6 +703,9 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
 
     def __init__(self, graph: EreignisGraph):
         super().__init__(graph)
+        # Zeigt an, ob dieser Builder den ersten Knoten eines Zuges bauen wird.
+        # Die Knoten-ID muss dann auf 0 gesetzt werden.
+        # Vorsicht: Der Zuganfang sagt nichts über die Art des Knotens (z.B. ob Einfahrt) aus.
         self.zuganfang = False
         # Diagnostik
         self.zid: Optional[int] = None
@@ -784,8 +787,8 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         else:
             self.zuganfang = True
 
-        # Am Zuganfang durch E/F keinen Ankunftsknoten erzeugen. todo : auf K verallgemeinern.
-        if not self.zuganfang and ziel_node.typ in {'H', 'D', 'A'}:
+        # todo : Am Zuganfang durch E/F/K keinen Ankunftsknoten erzeugen.
+        if ziel_node.typ in {'H', 'D', 'A'}:
             n1d = EreignisGraphNode(
                 typ='An',
                 zid=ziel_node.zid,
