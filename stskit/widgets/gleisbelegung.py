@@ -8,6 +8,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from stskit.dispo.anlage import Anlage
+from stskit.graphs.bahnhofgraph import Zielort
 from stskit.interface.stsplugin import PluginClient
 from stskit.plots.gleisbelegung import GleisbelegungPlot
 from stskit.qt.ui_gleisbelegung import Ui_GleisbelegungWindow
@@ -137,10 +138,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
                                                 anschluesse=self.plot.show_anschluesse,
                                                 bahnsteige=self.plot.show_bahnsteige)
             self.gleisauswahl.set_auswahl(self.gleisauswahl.alle_gleise)
-            self.gleisauswahl.set_sperrungen(self.anlage.gleissperrungen)
-            self.set_gleise(self.gleisauswahl.get_auswahl())
+            sperrungen = {Zielort(gleis[0], gleis[1]) for gleis in self.anlage.gleissperrungen}
+            self.gleisauswahl.set_sperrungen(sperrungen)
 
-        self.plot.belegung.gleise_auswaehlen(self.plot._gleise)
+        self.plot.belegung.gleise_auswaehlen(self.gleisauswahl.get_auswahl())
         self.plot.belegung.update()
 
     def grafik_update(self):
@@ -161,9 +162,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def settings_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(0)
-        self.gleisauswahl.gleise_definieren(self.anlage, zufahrten=self.show_zufahrten, bahnsteige=self.show_bahnsteige)
-        self.gleisauswahl.set_auswahl(self._gleise)
-        self.gleisauswahl.set_sperrungen(self.anlage.gleissperrungen)
         self.ui.gleisView.expandAll()
         self.ui.gleisView.resizeColumnToContents(0)
         self.update_widgets()
@@ -171,17 +169,13 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
-        self.set_gleise(self.gleisauswahl.get_auswahl())
         self.anlage.gleissperrungen = self.gleisauswahl.get_sperrungen()
         if self.ui.name_button.isChecked():
-            self.belegung.zugbeschriftung.elemente = ["Name"]
+            self.plot.belegung.zugbeschriftung.elemente = ["Name"]
         else:
-            self.belegung.zugbeschriftung.elemente = ["Nummer"]
+            self.plot.belegung.zugbeschriftung.elemente = ["Nummer"]
         self.daten_update()
         self.grafik_update()
-
-    def set_gleise(self, gleise):
-        self._gleise = list(gleise)
 
     @pyqtSlot()
     def page_changed(self):
@@ -189,7 +183,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def action_belegte_gleise(self):
-        self.belegte_gleise_zeigen = not self.belegte_gleise_zeigen
+        self.plot.belegte_gleise_zeigen = not self.plot.belegte_gleise_zeigen
         self.grafik_update()
         self.update_actions()
 

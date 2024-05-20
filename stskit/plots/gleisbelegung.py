@@ -28,6 +28,7 @@ from matplotlib.figure import Figure
 
 from stskit.dispo.anlage import Anlage
 from stskit.graphs.graphbasics import dict_property
+from stskit.graphs.bahnhofgraph import Zielort
 from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType
 from stskit.interface.stsobj import time_to_minutes
 from stskit.plots.plotbasics import hour_minutes_formatter
@@ -86,18 +87,18 @@ def gleis_sektor_sortkey(gleis_sektor: Tuple[str, str]) -> Tuple[str, int, str, 
 @dataclass
 class Slot:
     """
-    repräsentation eines zugslots im belegungsplan.
+    Zugslot im Belegungsplan.
 
-    dieses objekt enthält alle daten für die darstellung in der slotgrafik.
-    die daten sind fertig verarbeitet, zugpaarung ist eingetragen, konflikte sind markiert oder gelöst.
+    Dieses Objekt enthält alle Daten für die Darstellung im Belegungsplan.
+    Die Daten sind fertig verarbeitet, Zugpaarung ist eingetragen, Konflikte sind markiert oder gelöst.
 
-    properties berechnen gewisse statische darstellungsmerkmale wie farben.
+    Properties berechnen gewisse statische Darstellungsmerkmale wie Farbe.
 
-    attribute
+    Attribute
     ---------
 
-    zugstamm : set von zid-nummern von allen zügen, die über flags miteinander verknüpft sind.
-        bei zügen aus demselben stamm werden keine gleiskonflikte angezeigt.
+    zugstamm : Set von zid-Nummern von allen Zügen, die miteinander verknüpft sind.
+        Bei zügen aus demselben Stamm werden keine Gleiskonflikte angezeigt.
     """
 
     zid: int
@@ -105,20 +106,18 @@ class Slot:
     zugname: str
     zugstamm: Set[int] = field(default_factory=set)
     zieltyp: str = ""
-    gleistyp: str = ""
-    gleis: str = ""
+    gleis: Zielort = ("", "")
     durchfahrt: bool = False
     zeit: int = 0
     dauer: int = 0
     verspaetung_an: int = 0
     verspaetung_ab: int = 0
     titel: str = ""
+    farbe: str = "gray"
     randfarbe: str = "k"
     linestyle: str = "-"
     linewidth: int = 1
     fontstyle: str = "normal"
-    verbindung = None
-    verbindungsart: str = ""
     verbunden: bool = False
 
     def __init__(self, ziel_id: ZielLabelType, ziel_data: ZielGraphNode):
@@ -126,28 +125,13 @@ class Slot:
         self.fid = ziel_id
         self.zugstamm = set([])
         self.zieltyp = ziel_data.typ
-        self.gleistyp = "Agl" if ziel_data.typ in {'A', 'E'} else "Gl"
-        self.gleis = ziel_data.gleis
+        self.gleis = Zielort("Agl" if ziel_data.typ in {'A', 'E'} else "Gl", ziel_data.gleis)
         self.zeit = 0
         self.dauer = 0
         self.titel = ""
 
-        # todo : unvollstaendig
-        if 'E' in ziel_data.flags:
-            self.verbindung = None
-            self.verbindungsart = "E"
-        elif 'K' in ziel_data.flags:
-            self.verbindung = None
-            self.verbindungsart = "K"
-        elif 'F' in ziel_data.flags:
-            self.verbindung = None
-            self.verbindungsart = "F"
-        else:
-            self.verbindung = None
-            self.verbindungsart = ""
-
     @property
-    def key(self) -> Tuple[str, int, int]:
+    def key(self) -> Tuple[Zielort, int, int]:
         """
         identifikationsschlüssel des slots
 
@@ -159,7 +143,7 @@ class Slot:
         return self.gleis, self.fid[0], self.fid[1]
 
     @staticmethod
-    def build_key(gleis: str, fid: ZielLabelType):
+    def build_key(gleis: Zielort, fid: ZielLabelType):
         """
         identifikationsschlüssel wie key-property aufbauen
 
@@ -241,7 +225,7 @@ class SlotWarnung:
     properties berechnen gewisse statische darstellungsmerkmale wie farben.
     """
 
-    gleise: Set[str] = field(default_factory=set)
+    gleise: Set[Zielort] = field(default_factory=set)
     zeit: int = 0
     dauer: int = 0
     status: str = "undefiniert"
@@ -304,32 +288,32 @@ class SlotWarnung:
 
 class Gleisbelegung:
     """
-    gleisbelegungsmodell
+    Gleisbelegungsmodell
 
-    diese klasse stellt die gleisbelegung für eine auswahl von gleisen dar.
-    ausserdem wertet sie die gleisbelegung aus und erstellt warnungen bei konflikten oder betrieblichen vorgängen.
+    Diese klasse stellt die Gleisbelegung für eine Auswahl von Gleisen dar.
+    Ausserdem wertet sie die Gleisbelegung aus und erstellt Warnungen bei Konflikten oder betrieblichen Vorgängen.
 
-    in einem model-view-controller-muster implementiert diese klasse das modell.
-    view und controller werden im gleisbelegungsfenster implementiert.
+    In einer Model-View-Controller-Architektur implementiert diese Klasse das Modell.
+    Der View wird im GleisbelegungPlot und der Controller im GleisbelegungWidget implementiert.
 
-    verwendung
+    Verwendung
     ----------
 
-    1. zu beobachtende gleise auswaehlen (gleise_auswaehlen methode)
-    2. (wiederholt) daten von zugliste übernehmen (update methode)
-    3. daten aus den relevanten attributen auslesen.
-       die daten sollten nicht verändert werden, da sie bis auf ein paar ausnahmen beim update überschrieben werden.
-       die ausnahmen sind: status-attribut von warnungen.
-    4. schritte 2-3 nach bedarf wiederholen.
+    1. Zu beobachtende Gleise auswählen (gleise_auswaehlen methode).
+    2. (Wiederholt) Daten von Zuggraph und Zielgraph übernehmen (update-Methode).
+    3. Daten aus den relevanten Attributen auslesen.
+       Die Daten sollten nicht verändert werden, da sie bis auf ein paar Ausnahmen beim Update überschrieben werden.
+       Die ausnahmen sind: Status-Attribut von Warnungen.
+    4. Schritte 2-3 nach Bedarf wiederholen.
 
-    attribute
+    Attribute
     ---------
 
-    anlage: link zum anlagenobjekt. wird für gleiszuordnung benötigt.
+    anlage: Link zum Anlagenobjekt. Wird für die Gleiszuordnung benötigt.
 
-    gleise: liste von verwalteten gleisen. sortiert nach gleisname_sortkey.
+    gleise: Liste von verwalteten Gleisen. Sortiert nach gleisname_sortkey.
 
-    slots: dict von slots. keys sind Slot.key.
+    slots: Dict von slots. keys sind Slot.key.
 
     gleis_slots: slots aufgeschlüsselt nach gleis.
         werte sind dict von slots mit Slot.key als schlüssel.
@@ -337,19 +321,20 @@ class Gleisbelegung:
     hauptgleis_slots: slots aufgeschlüsselt nach hauptgleis (union von sektorgleisen).
         werte sind dict von slots mit Slot.key als schlüssel.
 
-    belegte_gleise: namen der gleise, die irgendwann von einem zug belegt sind.
+    belegte_gleise: Namen der Gleise, die im Beobachtungszeitfenster von einem Zug belegt sind.
 
-    warnungen: dict von warnungen. keys sind SlotWarnung.key.
+    warnungen: Dict von Warnungen. keys sind SlotWarnung.key.
     """
 
     def __init__(self, zentrale: DatenZentrale):
         self.zentrale: DatenZentrale = zentrale
         self.anlage = zentrale.anlage
-        self.gleise: List[str] = []
+        self.undirected_zug_graph = self.zentrale.client.zuggraph.to_undirected(as_view=True)
+        self.gleise: List[Zielort] = []
         self.slots: Dict[Any, Slot] = {}
-        self.gleis_slots: Dict[str, Dict[Any, Slot]] = {}
-        self.hauptgleis_slots: Dict[str, Dict[Any, Slot]] = {}
-        self.belegte_gleise: Set[str] = set([])
+        self.gleis_slots: Dict[Zielort, Dict[Any, Slot]] = {}
+        self.hauptgleis_slots: Dict[Zielort, Dict[Any, Slot]] = {}
+        self.belegte_gleise: Set[Zielort] = set()
         self.warnungen: Dict[Any, SlotWarnung] = {}
         self.zugbeschriftung = Zugbeschriftung(stil="Gleisbelegung")
 
@@ -365,40 +350,36 @@ class Gleisbelegung:
             if slot in w.slots:
                 yield w
 
-    def update(self, planung: Any):
+    def update(self):
         """
-        daten einlesen und slotliste neu aufbauen.
+        Daten einlesen und Slotliste aufbauen.
 
-        diese methode liest die zugdaten neu ein und baut die attribute neu auf.
-        in einem zweiten schritt, werden pro gleis, allfällige konflikte gelöst.
-
-        :param planung: planungsmodul
+        Diese Methode liest die Zugdaten ein und baut die Attribute neu auf.
+        In einem zweiten Schritt werden pro Gleis mögliche Konflikte identifiziert.
 
         :return: None
         """
-
-        # todo : gleisbelegung
 
         if len(self.gleise) == 0:
             root_label = self.anlage.bahnhofgraph.root()
             self.gleise_auswaehlen(self.anlage.bahnhofgraph.list_children(root_label, {'Agl', 'Gl'}))
-        self.slots_erstellen(self.anlage.zuggraph, self.anlage.zielgraph)
+        self.slots_erstellen()
         self.slots_formatieren()
         self.warnungen_aktualisieren()
 
-    def gleise_auswaehlen(self, gleise: Iterable[str]):
+    def gleise_auswaehlen(self, gleise: Iterable[Zielort]):
         """
-        zu beobachtende gleise wählen.
+        Zu beobachtende Gleise wählen.
 
-        :param gleise: sequenz von gleisnamen.
+        :param gleise: Sequenz von Gleisnamen.
         :return: None
         """
 
-        self.gleise = sorted(gleise, key=gleisname_sortkey)
+        self.gleise = sorted(gleise, key=lambda x: gleisname_sortkey(x.name))
 
     def slots_erstellen(self):
         """
-        slotliste aus zugdaten erstellen/aktualisieren.
+        Slotliste aus Zugdaten erstellen/aktualisieren.
 
         :return: None
         """
@@ -417,8 +398,9 @@ class Gleisbelegung:
                 plan_ab = plan_an + 1
 
             slot = Slot(fid, ziel_data)
+            gl = slot.gleis
             key = slot.key
-            if ziel_data.gleis in self.gleise:
+            if slot.gleis in self.gleise:
                 try:
                     # slot existiert schon?
                     slot = self.slots[key]
@@ -426,15 +408,15 @@ class Gleisbelegung:
                     # neuen slot übernehmen
                     self.slots[key] = slot
                 # aktuellen fahrplan übernehmen
-                slot.gleis = ziel_data.gleis
+                slot.gleis = gl
                 slot.zeit = plan_an
-                slot.verspaetung_an = ziel_data.v_an
-                slot.verspaetung_ab = ziel_data.v_ab
-                if slot.gleistyp == 'Agl':
+                slot.verspaetung_an = ziel_data.get('v_an', 0)
+                slot.verspaetung_ab = ziel_data.get('v_ab', 0)
+                if slot.gleis.typ == 'Agl':
                     slot.dauer = 1
                 else:
                     slot.dauer = max(1, plan_ab - plan_an)
-                # slot.zugstamm = planung.zugstamm[zug.zid]
+                slot.zugstamm = {zid for zid in nx.node_connected_component(self.undirected_zug_graph, slot.zid)}
                 keys_bisherige.discard(key)
 
         for key in keys_bisherige:
@@ -444,14 +426,12 @@ class Gleisbelegung:
 
     def _kataloge_aktualisieren(self):
         """
-        aktualisiert die gleis_slots und hauptgleis_slots kataloge.
+        Aktualisiert die gleis_slots und hauptgleis_slots Kataloge.
 
-        untermethode von slots_erstellen.
+        Untermethode von slots_erstellen.
 
         :return: None
         """
-
-        # todo : gleisbelegung
 
         self.gleis_slots = {}
         self.hauptgleis_slots = {}
@@ -460,7 +440,7 @@ class Gleisbelegung:
         for gleis in self.gleise:
             self.gleis_slots[gleis] = {}
             try:
-                hauptgleis = self.anlage.bahnhofgraph.find_superior(('Gl', gleis), {'Bs'})
+                hauptgleis = self.anlage.bahnhofgraph.find_superior(gleis, {'Bs'})
                 self.hauptgleis_slots[hauptgleis] = {}
             except KeyError:
                 pass
@@ -472,27 +452,29 @@ class Gleisbelegung:
             self.belegte_gleise.add(gleis)
 
             try:
-                hauptgleis = self.anlage.bahnhofgraph.find_superior(('Gl', gleis), {'Bs'})
+                hauptgleis = self.anlage.bahnhofgraph.find_superior(gleis, {'Bs'})
             except KeyError:
                 pass
             else:
                 self.hauptgleis_slots[hauptgleis][key] = slot
 
     def slots_formatieren(self):
-        # todo : erweitern und bereinigen
         for slot in self.slots.values():
-            slot.titel = self.zugbeschriftung.format(slot=slot)
+            zug_data = self.zentrale.client.zuggraph.nodes[slot.zid]
+            ziel_data = self.zentrale.anlage.zielgraph.nodes[slot.fid]
+            slot.titel = self.zugbeschriftung.format(zug_data=zug_data, ziel_data=ziel_data)
 
             if "Name" in self.zugbeschriftung.elemente:
-                s = slot.zug.name
+                s = zug_data.name
             else:
-                s = str(slot.zug.nummer)
+                s = str(zug_data.nummer)
             if slot.zieltyp == 'E':
                 s = "→ " + s
             elif slot.zieltyp == 'A':
                 s = s + " →"
             slot.titel = s
 
+            slot.farbe = self.anlage.zugschema.zugfarbe(zug_data)
             slot.randfarbe = "k"
             slot.fontstyle = "italic" if slot.zieltyp == 'D' else "normal"
             slot.linestyle = "--" if slot.zieltyp == 'D' else "-"
@@ -541,12 +523,10 @@ class Gleisbelegung:
 
         for gleis, slot_dict in self.gleis_slots.items():
             slots = slot_dict.values()
-            gl = self.anlage.bahnhofgraph.find_name(gleis)
-            if gl is not None:
-                if gl[0] == 'Agl':
-                    yield from self._zufahrtwarnungen(slots)
-                else:
-                    yield from self._gleiswarnungen(slots)
+            if gleis.typ == 'Agl':
+                yield from self._zufahrtwarnungen(slots)
+            else:
+                yield from self._gleiswarnungen(slots)
 
         for gleis, slot_dict in self.hauptgleis_slots.items():
             slots = slot_dict.values()
@@ -563,13 +543,14 @@ class Gleisbelegung:
         """
 
         for s1, s2 in itertools.permutations(slots, 2):
-            if s1.zug == s2.zug:
+            if s1.zid == s2.zid:
                 continue
-            if s1.verbindung is not None and s1.verbindung == s2.zug:
-                if s1.verbindungsart in {'E', 'F'}:
+            elif self.zentrale.anlage.zielgraph.has_edge(s1.fid, s2.fid):
+                verbindungsdaten = self.zentrale.anlage.zielgraph.get_edge_data(s1.fid, s2.fid)
+                if verbindungsdaten.typ in {'E', 'F'}:
                     s2.verbunden = True
-                yield from self._zugfolgewarnung(s1, s2)
-            elif s2.zug.zid in s1.zugstamm:
+                yield from self._zugfolgewarnung(s1, s2, verbindungsdaten.typ)
+            elif s2.zid in s1.zugstamm:
                 pass
             elif s1.zeit <= s2.zeit <= s1.zeit + s1.dauer:
                 k = SlotWarnung(gleise={s1.gleis, s2.gleis}, zeit=s1.zeit, status="gleis")
@@ -588,9 +569,9 @@ class Gleisbelegung:
         """
 
         for s1, s2 in itertools.permutations(slots, 2):
-            if s1.zug == s2.zug or s1.gleis == s2.gleis:
+            if s1.zid == s2.zid or s1.gleis == s2.gleis:
                 continue
-            if s2.zug.zid in s1.zugstamm:
+            if s2.zid in s1.zugstamm:
                 pass
             elif s1.zeit <= s2.zeit <= s1.zeit + s1.dauer:
                 k = SlotWarnung(gleise={s1.gleis, s2.gleis}, status="bahnsteig")
@@ -641,7 +622,7 @@ class Gleisbelegung:
         if konflikt is not None:
             yield konflikt
 
-    def _zugfolgewarnung(self, s1: Slot, s2: Slot) -> Iterable[SlotWarnung]:
+    def _zugfolgewarnung(self, s1: Slot, s2: Slot, verbindungsart: str) -> Iterable[SlotWarnung]:
         """
         verbindet zwei slots und erstellt eine warnung
 
@@ -655,12 +636,8 @@ class Gleisbelegung:
         :return: generator von SlotWarnung
         """
 
-        # todo : prozedur behelfsmaessig abgeaendert. funktioniert moegl. nicht mehr richtig.
-        if s1.verbindungsart == "K":
+        if verbindungsart == "K":
             pass
-        # zielnr gibt es nicht mehr:
-        # elif s2.ziel.zielnr > 0:
-        #     return
 
         try:
             d = s2.zeit - s1.zeit
@@ -668,7 +645,7 @@ class Gleisbelegung:
                 s1.dauer = d
 
             k = SlotWarnung(gleise={s1.gleis, s2.gleis})
-            k.status = WARNUNG_VERBINDUNG[s1.verbindungsart]
+            k.status = WARNUNG_VERBINDUNG[verbindungsart]
             k.zeit = min(s1.zeit, s2.zeit)
             k.dauer = max(s1.zeit + s1.dauer - k.zeit, s2.zeit + s2.dauer - k.zeit)
             k.slots = {s1, s2}
@@ -692,7 +669,7 @@ class GleisbelegungPlot:
         self.show_bahnsteige: bool = True
         self.belegte_gleise_zeigen = False
 
-        self._gleise: List[str] = []
+        self._gleise: List[Zielort] = []
         self._balken = None
         self._labels = []
         self._slot_auswahl: List[Slot] = []
@@ -729,7 +706,7 @@ class GleisbelegungPlot:
         else:
             gleise = self.belegung.gleise
         slots = [slot for slot in self.belegung.slots.values() if slot.gleis in gleise]
-        x_labels = gleise
+        x_labels = [gleis.name for gleis in gleise]
         x_labels_pos = list(range(len(x_labels)))
         x_pos = np.asarray([gleise.index(slot.gleis) for slot in slots])
 
@@ -737,7 +714,7 @@ class GleisbelegungPlot:
         y_hgt = np.asarray([slot.dauer for slot in slots])
         labels = [slot.titel for slot in slots]
 
-        colors = {slot: self.anlage.zugschema.zugfarbe(slot.zug) for slot in slots}
+        colors = {slot: slot.farbe for slot in slots}
         if len(self._slot_auswahl) == 2:
             colors[self._slot_auswahl[0]] = 'yellow'
             colors[self._slot_auswahl[1]] = 'cyan'
@@ -797,7 +774,7 @@ class GleisbelegungPlot:
         for gleis in sperrungen:
             ylim = self._axes.get_ylim()
             try:
-                x = x_labels_pos[x_labels.index(gleis)]
+                x = x_labels_pos[x_labels.index(gleis.name)]
                 xy = (x - kwargs['width'] / 2, min(ylim))
                 w = kwargs['width']
             except ValueError:
@@ -827,7 +804,7 @@ class GleisbelegungPlot:
         for warnung in self.belegung.warnungen.values():
             warnung_gleise = [gleis for gleis in warnung.gleise if gleis in self._gleise]
             try:
-                x = [x_labels_pos[x_labels.index(gleis)] for gleis in warnung_gleise]
+                x = [x_labels_pos[x_labels.index(gleis.name)] for gleis in warnung_gleise]
                 xy = (min(x) - kwargs['width'] / 2, warnung.zeit)
                 w = max(x) - min(x) + kwargs['width']
             except ValueError:
