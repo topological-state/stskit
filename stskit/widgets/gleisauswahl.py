@@ -8,9 +8,13 @@ mit der in einem Qt5-Treeview-Widget Gleise asugewählt werden können.
 import logging
 from typing import AbstractSet, Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple, Type, Union
 
+import networkx as nx
+
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex
+
+from stskit.dispo.anlage import Anlage
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

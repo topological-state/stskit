@@ -29,7 +29,10 @@ from matplotlib.figure import Figure
 from stskit.dispo.anlage import Anlage
 from stskit.graphs.graphbasics import dict_property
 from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType
+from stskit.interface.stsobj import time_to_minutes
+from stskit.plots.plotbasics import hour_minutes_formatter
 from stskit.zugschema import Zugbeschriftung
+from stskit.zentrale import DatenZentrale
 
 mpl.use('Qt5Agg')
 
@@ -114,7 +117,7 @@ class Slot:
     linestyle: str = "-"
     linewidth: int = 1
     fontstyle: str = "normal"
-    verbindung: Optional[ZugDetailsPlanung] = None
+    verbindung = None
     verbindungsart: str = ""
     verbunden: bool = False
 
@@ -339,8 +342,9 @@ class Gleisbelegung:
     warnungen: dict von warnungen. keys sind SlotWarnung.key.
     """
 
-    def __init__(self, anlage: Anlage):
-        self.anlage: Anlage = anlage
+    def __init__(self, zentrale: DatenZentrale):
+        self.zentrale: DatenZentrale = zentrale
+        self.anlage = zentrale.anlage
         self.gleise: List[str] = []
         self.slots: Dict[Any, Slot] = {}
         self.gleis_slots: Dict[str, Dict[Any, Slot]] = {}
@@ -361,7 +365,7 @@ class Gleisbelegung:
             if slot in w.slots:
                 yield w
 
-    def update(self, planung: Planung):
+    def update(self, planung: Any):
         """
         daten einlesen und slotliste neu aufbauen.
 
@@ -378,7 +382,7 @@ class Gleisbelegung:
         if len(self.gleise) == 0:
             root_label = self.anlage.bahnhofgraph.root()
             self.gleise_auswaehlen(self.anlage.bahnhofgraph.list_children(root_label, {'Agl', 'Gl'}))
-        self.slots_erstellen(planung)
+        self.slots_erstellen(self.anlage.zuggraph, self.anlage.zielgraph)
         self.slots_formatieren()
         self.warnungen_aktualisieren()
 
@@ -392,18 +396,16 @@ class Gleisbelegung:
 
         self.gleise = sorted(gleise, key=gleisname_sortkey)
 
-    def slots_erstellen(self, zug_graph, ziel_graph: ZielGraph):
+    def slots_erstellen(self):
         """
         slotliste aus zugdaten erstellen/aktualisieren.
-
-        :param planung: Planungsmodul
 
         :return: None
         """
 
         keys_bisherige = set(self.slots.keys())
 
-        for fid, ziel_data in ziel_graph.nodes(data=True):
+        for fid, ziel_data in self.anlage.zielgraph.nodes(data=True):
             try:
                 plan_an = ziel_data.p_an
             except AttributeError:
@@ -432,7 +434,7 @@ class Gleisbelegung:
                     slot.dauer = 1
                 else:
                     slot.dauer = max(1, plan_ab - plan_an)
-                slot.zugstamm = planung.zugstamm[zug.zid]
+                # slot.zugstamm = planung.zugstamm[zug.zid]
                 keys_bisherige.discard(key)
 
         for key in keys_bisherige:
@@ -479,7 +481,7 @@ class Gleisbelegung:
     def slots_formatieren(self):
         # todo : erweitern und bereinigen
         for slot in self.slots.values():
-            #slot.titel = self.zugbeschriftung.format(slot=slot)
+            slot.titel = self.zugbeschriftung.format(slot=slot)
 
             if "Name" in self.zugbeschriftung.elemente:
                 s = slot.zug.name
@@ -696,7 +698,7 @@ class GleisbelegungPlot:
         self._slot_auswahl: List[Slot] = []
         self._warnung_auswahl: List[SlotWarnung] = []
 
-        self.belegung: Optional[Gleisbelegung] = None
+        self.belegung = Gleisbelegung(self.zentrale)
 
         self.zugbeschriftung = Zugbeschriftung(stil="Gleisbelegung")
 
@@ -751,7 +753,7 @@ class GleisbelegungPlot:
         self._axes.yaxis.grid(True, which='major')
         self._axes.xaxis.grid(True)
 
-        zeit = time_to_minutes(self.client.calc_simzeit())
+        zeit = time_to_minutes(self.zentrale.client.calc_simzeit())
         self._axes.set_ylim(bottom=zeit + self.vorlaufzeit, top=zeit - self.nachlaufzeit, auto=False)
 
         self._plot_sperrungen(x_labels, x_labels_pos, kwargs)

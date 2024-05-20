@@ -1,19 +1,18 @@
 import logging
 from typing import AbstractSet, Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple, Type, Union
 
-import matplotlib as mpl
-import networkx as nx
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtCore import QModelIndex
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-import numpy as np
 
 from stskit.dispo.anlage import Anlage
-from stskit.widgets.gleiswauswahl import Gleiswauswahl
+from stskit.interface.stsplugin import PluginClient
+from stskit.plots.gleisbelegung import GleisbelegungPlot
 from stskit.qt.ui_gleisbelegung import Ui_GleisbelegungWindow
+from stskit.widgets.gleisauswahl import GleisauswahlModell
+from stskit.zentrale import DatenZentrale
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -37,6 +36,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Gleisbelegung")
 
         self.display_canvas = FigureCanvas(Figure(figsize=(5, 3)))
+        self.axes = self.display_canvas.figure.subplots()
+
         self.ui.displayLayout = QtWidgets.QHBoxLayout(self.ui.grafikWidget)
         self.ui.displayLayout.setObjectName("displayLayout")
         self.ui.displayLayout.addWidget(self.display_canvas)
@@ -57,11 +58,12 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.vorlaufzeit_spin.valueChanged.connect(self.vorlaufzeit_changed)
         self.ui.nachlaufzeit_spin.valueChanged.connect(self.nachlaufzeit_changed)
 
-        self._axes = self.display_canvas.figure.subplots()
         self.display_canvas.mpl_connect("button_press_event", self.on_button_press)
         self.display_canvas.mpl_connect("button_release_event", self.on_button_release)
         self.display_canvas.mpl_connect("pick_event", self.on_pick)
         self.display_canvas.mpl_connect("resize_event", self.on_resize)
+
+        self.plot = GleisbelegungPlot(self.zentrale, self.axes)
 
         self.update_widgets()
         self.update_actions()
@@ -80,20 +82,20 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.actionSetup.setEnabled(display_mode)
         self.ui.actionAnzeige.setEnabled(not display_mode)
         self.ui.actionBelegteGleise.setEnabled(display_mode)
-        self.ui.actionBelegteGleise.setChecked(self.belegte_gleise_zeigen)
-        self.ui.actionWarnungSetzen.setEnabled(display_mode and len(self._slot_auswahl))
-        self.ui.actionWarnungReset.setEnabled(display_mode and len(self._warnung_auswahl))
-        self.ui.actionWarnungIgnorieren.setEnabled(display_mode and len(self._warnung_auswahl))
+        self.ui.actionBelegteGleise.setChecked(self.plot.belegte_gleise_zeigen)
+        self.ui.actionWarnungSetzen.setEnabled(display_mode and len(self.plot._slot_auswahl))
+        self.ui.actionWarnungReset.setEnabled(display_mode and len(self.plot._warnung_auswahl))
+        self.ui.actionWarnungIgnorieren.setEnabled(display_mode and len(self.plot._warnung_auswahl))
         self.ui.actionFix.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionLoeschen.setEnabled(display_mode and len(self._slot_auswahl))
-        self.ui.actionPlusEins.setEnabled(display_mode and len(self._slot_auswahl))
-        self.ui.actionMinusEins.setEnabled(display_mode and len(self._slot_auswahl))
-        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and len(self._slot_auswahl) == 2)
-        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and len(self._slot_auswahl) == 2)
+        self.ui.actionLoeschen.setEnabled(display_mode and len(self.plot._slot_auswahl))
+        self.ui.actionPlusEins.setEnabled(display_mode and len(self.plot._slot_auswahl))
+        self.ui.actionMinusEins.setEnabled(display_mode and len(self.plot._slot_auswahl))
+        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and len(self.plot._slot_auswahl) == 2)
+        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and len(self.plot._slot_auswahl) == 2)
 
     def update_widgets(self):
-        self.ui.vorlaufzeit_spin.setValue(self.vorlaufzeit)
-        self.ui.nachlaufzeit_spin.setValue(self.nachlaufzeit)
+        self.ui.vorlaufzeit_spin.setValue(self.plot.vorlaufzeit)
+        self.ui.nachlaufzeit_spin.setValue(self.plot.nachlaufzeit)
         try:
             if "Name" in self.belegung.zugbeschriftung.elemente:
                 self.ui.name_button.setChecked(True)
@@ -130,19 +132,19 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.grafik_update()
 
     def daten_update(self):
-        if self.belegung is None:
-            self.belegung = Gleisbelegung(self.anlage)
-            self.gleisauswahl.gleise_definieren(self.anlage, zufahrten=self.show_zufahrten,
-                                                bahnsteige=self.show_bahnsteige)
+        if not self.plot.belegung.gleise:
+            self.gleisauswahl.gleise_definieren(self.anlage,
+                                                anschluesse=self.plot.show_anschluesse,
+                                                bahnsteige=self.plot.show_bahnsteige)
             self.gleisauswahl.set_auswahl(self.gleisauswahl.alle_gleise)
             self.gleisauswahl.set_sperrungen(self.anlage.gleissperrungen)
             self.set_gleise(self.gleisauswahl.get_auswahl())
 
-        self.belegung.gleise_auswaehlen(self._gleise)
-        try:
-            self.belegung.update(self.planung)
-        except AttributeError:
-            pass
+        self.plot.belegung.gleise_auswaehlen(self.plot._gleise)
+        self.plot.belegung.update()
+
+    def grafik_update(self):
+        self.plot.grafik_update()
 
     def on_resize(self, event):
         self.grafik_update()
