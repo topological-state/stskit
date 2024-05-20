@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Optional, Set, Tuple, TypeVar, Union
 
 import networkx as nx
 
@@ -9,6 +9,12 @@ from stskit.graphs.signalgraph import SignalGraph
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+
+
+# todo : nomenklatur
+class Zielort(NamedTuple):
+    typ: str
+    name: str
 
 
 class BahnsteigGraphNode(dict):
@@ -83,7 +89,7 @@ class BahnsteigGraph(nx.Graph):
                 self.add_edge(bs1.name, bs2.name, typ='Nachbar', distanz=0)
 
 
-BahnhofLabelType = Tuple[str, str]
+BahnhofLabelType = Zielort
 
 
 class BahnhofGraph(nx.DiGraph):
@@ -118,13 +124,13 @@ class BahnhofGraph(nx.DiGraph):
         return BahnsteigGraph
 
     @staticmethod
-    def label(typ: str, name: str) -> Tuple[str, str]:
+    def label(typ: str, name: str) -> BahnhofLabelType:
         """
         Das Label Besteht aus Typ und Name des BahnsteigGraphNode.
         """
-        return typ, name
+        return BahnhofLabelType(typ, name)
 
-    def root(self) -> Tuple[str, str]:
+    def root(self) -> BahnhofLabelType:
         """
         Label des obersten Knoten
 
@@ -133,7 +139,7 @@ class BahnhofGraph(nx.DiGraph):
         :return: Label ('Anl', Anlagenname)
         """
         for node in self.nodes():
-            if node[0] == 'Anl':
+            if node.typ == 'Anl':
                 return node
         else:
             raise KeyError('Bahnhofgraph enthält kein Anlagenelement.')
@@ -150,7 +156,7 @@ class BahnhofGraph(nx.DiGraph):
 
         try:
             for node in nx.ancestors(self, label):
-                if node[0] in typen:
+                if node.typ in typen:
                     return node
             else:
                 raise KeyError(f"{label} ist keinem übergeordnetem {typen} zugeordnet")
@@ -171,7 +177,7 @@ class BahnhofGraph(nx.DiGraph):
 
         try:
             for parent, child in nx.bfs_edges(self, label):
-                if child[0] in typen:
+                if child.typ in typen:
                     yield child
         except nx.NetworkXError as e:
             logger.exception(e)
@@ -189,11 +195,11 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         for u, v in nx.bfs_edges(self, ('Bst', 'Bf')):
-            if v[1] == name:
+            if v.name == name:
                 return v
 
         for u, v in nx.bfs_edges(self, ('Bst', 'Anst')):
-            if v[1] == name:
+            if v.name == name:
                 return v
 
         return None
@@ -227,8 +233,8 @@ class BahnhofGraph(nx.DiGraph):
         :raise: KeyError, wenn nicht gefunden
         """
 
-        _, bs = self.find_superior(('Gl', gleis), {'Bs'})
-        return bs
+        bs = self.find_superior(BahnhofLabelType('Gl', gleis), {'Bs'})
+        return bs.name
 
     def gleis_bahnhofteil(self, gleis: str) -> str:
         """
@@ -241,8 +247,8 @@ class BahnhofGraph(nx.DiGraph):
         :raise: KeyError, wenn nicht gefunden
         """
 
-        _, bft = self.find_superior(('Gl', gleis), {'Bft'})
-        return bft
+        bft = self.find_superior(BahnhofLabelType('Gl', gleis), {'Bft'})
+        return bft.name
 
     def gleis_bahnhof(self, gleis: str) -> str:
         """
@@ -255,8 +261,8 @@ class BahnhofGraph(nx.DiGraph):
         :raise: KeyError, wenn nicht gefunden
         """
 
-        _, bf = self.find_superior(('Gl', gleis), {'Bf'})
-        return bf
+        bf = self.find_superior(BahnhofLabelType('Gl', gleis), {'Bf'})
+        return bf.name
 
     def anschlussstelle(self, gleis: str) -> str:
         """
@@ -269,8 +275,8 @@ class BahnhofGraph(nx.DiGraph):
         :raise: KeyError, wenn nicht gefunden
         """
 
-        _, anst = self.find_superior(('Agl', gleis), {'Anst'})
-        return anst
+        anst = self.find_superior(BahnhofLabelType('Agl', gleis), {'Anst'})
+        return anst.name
 
     def bahnhofgleise(self, bahnhof: str) -> Iterable[str]:
         """
@@ -285,8 +291,8 @@ class BahnhofGraph(nx.DiGraph):
 
         try:
             for parent, child in nx.dfs_edges(self, ('Bf', bahnhof)):
-                if child[0] == 'Gl':
-                    yield child[1]
+                if child.typ == 'Gl':
+                    yield child.name
         except nx.NetworkXError as e:
             logger.exception(e)
             raise KeyError(f"Bf {bahnhof} ist im Bahnhofgraph nicht verzeichnet.")
@@ -303,9 +309,9 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         try:
-            for parent, child in nx.dfs_edges(self, ('Bft', bahnhofteil)):
-                if child[0] == 'Gl':
-                    yield child[1]
+            for parent, child in nx.dfs_edges(self, BahnhofLabelType('Bft', bahnhofteil)):
+                if child.typ == 'Gl':
+                    yield child.name
         except nx.NetworkXError as e:
             logger.exception(e)
             raise KeyError(f"Bft {bahnhofteil} ist im Bahnhofgraph nicht verzeichnet.")
@@ -322,9 +328,9 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         try:
-            for parent, child in nx.dfs_edges(self, ('Anst', anst)):
-                if child[0] == 'Agl':
-                    yield child[1]
+            for parent, child in nx.dfs_edges(self, BahnhofLabelType('Anst', anst)):
+                if child.typ == 'Agl':
+                    yield child.name
         except nx.NetworkXError as e:
             logger.exception(e)
             raise KeyError(f"Anst {anst} ist im Bahnhofgraph nicht verzeichnet.")
@@ -336,8 +342,8 @@ class BahnhofGraph(nx.DiGraph):
         :return: Iterator von Bahnhofnamen
         """
 
-        for node in self.list_children(('Bst', 'Bf'), {'Bf'}):
-            yield node[1]
+        for node in self.list_children(BahnhofLabelType('Bst', 'Bf'), {'Bf'}):
+            yield node.name
 
     def anschlussstellen(self) -> Iterable[str]:
         """
@@ -346,12 +352,12 @@ class BahnhofGraph(nx.DiGraph):
         :return: Iterator von Anschlussstellennamen
         """
 
-        for node in self.list_children(('Bst', 'Anst'), {'Anst'}):
-            yield node[1]
+        for node in self.list_children(BahnhofLabelType('Bst', 'Anst'), {'Anst'}):
+            yield node.name
 
     def import_anlageninfo(self, anlageninfo: AnlagenInfo):
-        anl_label = ('Anl', anlageninfo.name)
-        self.add_node(anl_label, typ=anl_label[0], name=anl_label[1], auto=True, aid=anlageninfo.aid,
+        anl_label = BahnhofLabelType('Anl', anlageninfo.name)
+        self.add_node(anl_label, typ=anl_label.typ, name=anl_label.name, auto=True, aid=anlageninfo.aid,
                       region=anlageninfo.region, build=anlageninfo.build, online=anlageninfo.online)
 
     def import_bahnsteiggraph(self,
@@ -363,26 +369,26 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         anl_label = self.root()
-        bf_label = ('Bst', 'Bf')
-        self.add_node(bf_label, typ=bf_label[0], name=bf_label[1], auto=True)
-        self.add_edge(anl_label, bf_label, typ=anl_label[0], auto=True)
+        bf_label = BahnhofLabelType('Bst', 'Bf')
+        self.add_node(bf_label, typ=bf_label.typ, name=bf_label.name, auto=True)
+        self.add_edge(anl_label, bf_label, typ=anl_label.typ, auto=True)
 
         for comp in nx.connected_components(bahnsteiggraph):
             gleis = min(comp, key=len)
             bft = f_bahnsteigname(gleis)
             bf = f_bahnhofname(bft)
-            self.add_node(('Bf', bf), name=bf, typ='Bf', auto=True)
-            self.add_edge(bf_label, ('Bf', bf), typ=bf_label[0], auto=True)
-            self.add_node(('Bft', bft), name=bft, typ='Bft', auto=True)
-            self.add_edge(('Bf', bf), ('Bft', bft), typ='Bf', auto=True)
+            self.add_node(BahnhofLabelType('Bf', bf), name=bf, typ='Bf', auto=True)
+            self.add_edge(bf_label, BahnhofLabelType('Bf', bf), typ=bf_label.typ, auto=True)
+            self.add_node(BahnhofLabelType('Bft', bft), name=bft, typ='Bft', auto=True)
+            self.add_edge(BahnhofLabelType('Bf', bf), BahnhofLabelType('Bft', bft), typ='Bf', auto=True)
 
             for gleis in comp:
                 bs = f_bahnsteigname(gleis)
-                self.add_node(('Bs', bs), name=bs, typ='Bs', auto=True)
-                self.add_node(('Gl', gleis), name=gleis, typ='Gl', auto=True)
-                self.ziel_gleis[gleis] = ('Gl', gleis)
-                self.add_edge(('Bft', bft), ('Bs', bs), typ='Bft', auto=True)
-                self.add_edge(('Bs', bs), ('Gl', gleis), typ='Bs', auto=True)
+                self.add_node(BahnhofLabelType('Bs', bs), name=bs, typ='Bs', auto=True)
+                self.add_node(BahnhofLabelType('Gl', gleis), name=gleis, typ='Gl', auto=True)
+                self.ziel_gleis[gleis] = BahnhofLabelType('Gl', gleis)
+                self.add_edge(BahnhofLabelType('Bft', bft), BahnhofLabelType('Bs', bs), typ='Bft', auto=True)
+                self.add_edge(BahnhofLabelType('Bs', bs), BahnhofLabelType('Gl', gleis), typ='Bs', auto=True)
 
     def import_signalgraph(self,
                            signalgraph: SignalGraph,
@@ -392,9 +398,9 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         anl_label = self.root()
-        anst_label = ('Bst', 'Anst')
-        self.add_node(anst_label, typ=anst_label[0], name=anst_label[1], auto=True)
-        self.add_edge(anl_label, anst_label, typ=anl_label[0], auto=True)
+        anst_label = BahnhofLabelType('Bst', 'Anst')
+        self.add_node(anst_label, typ=anst_label.typ, name=anst_label.name, auto=True)
+        self.add_edge(anl_label, anst_label, typ=anl_label.typ, auto=True)
 
         for anschluss, data in signalgraph.nodes(data=True):
             if data.typ in {Knoten.TYP_NUMMER['Einfahrt'], Knoten.TYP_NUMMER['Ausfahrt']}:
@@ -406,11 +412,11 @@ class BahnhofGraph(nx.DiGraph):
                     agl_data['ausfahrt'] = True
 
                 anst = f_anschlussname(agl)
-                self.add_node(('Agl', agl), **agl_data)
-                self.add_edge(anst_label, ('Anst', anst), typ=anst_label[0], auto=True)
-                self.ziel_gleis[data.enr] = ('Agl', agl)
-                self.add_node(('Anst', anst), name=anst, typ='Anst', auto=True)
-                self.add_edge(('Anst', anst), ('Agl', agl), typ='Anst', auto=True)
+                self.add_node(BahnhofLabelType('Agl', agl), **agl_data)
+                self.add_edge(anst_label, BahnhofLabelType('Anst', anst), typ=anst_label.typ, auto=True)
+                self.ziel_gleis[data.enr] = BahnhofLabelType('Agl', agl)
+                self.add_node(BahnhofLabelType('Anst', anst), name=anst, typ='Anst', auto=True)
+                self.add_edge(BahnhofLabelType('Anst', anst), BahnhofLabelType('Agl', agl), typ='Anst', auto=True)
 
     def konfigurieren(self, config: Dict[Tuple[str, str], Tuple[str, ...]]) -> None:
         """
@@ -421,7 +427,7 @@ class BahnhofGraph(nx.DiGraph):
 
         relabeling = {}
 
-        def bahnhof_ast(graph: nx.Graph, gl: Tuple[str, str]) -> Optional[List[Tuple[str, str]]]:
+        def bahnhof_ast(graph: nx.Graph, gl: BahnhofLabelType) -> Optional[List[BahnhofLabelType]]:
             """
             Finde den Bf bzw. Anst-Knoten und gib den Pfad zum Gleisknoten zurück.
             :param graph: Bahnhofgraph
@@ -435,11 +441,11 @@ class BahnhofGraph(nx.DiGraph):
                 return None
 
             for key, pfad in pfade.items():
-                if key[0] in {'Bf', 'Anst'}:
+                if key.typ in {'Bf', 'Anst'}:
                     return pfad
 
         for gleis, bf_bft_bs in config.items():
-            ast = bahnhof_ast(self, gleis)
+            ast = bahnhof_ast(self, BahnhofLabelType(gleis[0], gleis[1]))
             if ast:
                 for label_alt, name_neu in zip(ast, bf_bft_bs):
                     # die alten konfigurationsdaten unterscheiden nicht zwischen Bf und Bft.
@@ -449,13 +455,13 @@ class BahnhofGraph(nx.DiGraph):
                         continue
                     typ, name_alt = label_alt
                     if name_neu != name_alt:
-                        relabeling[label_alt] = (typ, name_neu)
+                        relabeling[label_alt] = BahnhofLabelType(typ, name_neu)
 
         nx.relabel_nodes(self, relabeling, copy=False)
 
         for node, data in self.nodes(data=True):
-            if data['name'] != node[1]:
-                data['name'] = node[1]
+            if data['name'] != node.name:
+                data['name'] = node.name
                 data['auto'] = False
 
     def bereinigen(self):
