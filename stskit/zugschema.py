@@ -20,6 +20,7 @@ import matplotlib as mpl
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import QModelIndex
 
+from stskit.graphs.zielgraph import ZielGraphNode
 from stskit.interface.stsobj import time_to_minutes, ZugDetails
 from stskit.graphs.zuggraph import ZugGraphNode
 
@@ -730,7 +731,9 @@ class Zugbeschriftung:
         self._elemente = set(elemente)
 
     def format(self,
-               ziel: 'ZugZielPlanung',
+               ziel: Optional['ZugZielPlanung'] = None,
+               zug_data: Optional[ZugGraphNode] = None,
+               ziel_data: Optional[ZugGraphNode] = None,
                situation: Optional[Union[str, Set[str]]] = None) -> str:
 
         """
@@ -748,41 +751,68 @@ class Zugbeschriftung:
         elif isinstance(situation, str):
             situation = {situation}
 
-        args = {'Name': ziel.zug.name,
-                'Nummer': str(ziel.zug.nummer),
-                'Gleis': ziel.gleis + ':',
+        if ziel is not None:
+            zug_data = ZugGraphNode(
+                name=ziel.zug.name,
+                nummer=ziel.zug.nummer,
+                von=ziel.zug.von,
+                nach=ziel.zug.nach,
+            )
+
+            ziel_data = ZielGraphNode(
+                gleis=ziel.gleis,
+                v_an=ziel.verspaetung_an,
+                v_ab=ziel.verspaetung_ab
+            )
+
+            try:
+                ziel_data.p_an = time_to_minutes(ziel.an)
+            except (AttributeError, ValueError):
+                pass
+            try:
+                ziel_data.p_ab = time_to_minutes(ziel.ab)
+            except (AttributeError, ValueError):
+                pass
+
+        args = {'Name': zug_data.name,
+                'Nummer': str(zug_data.nummer),
+                'Gleis': ziel_data.gleis + ':',
                 'Richtung': '',
                 'Zeit': None,
                 'Verspätung': None
                 }
 
         if 'Ankunft' in situation:
-            args['Richtung'] = ziel.zug.von.replace("Gleis ", "").split(" ")[0]
-            args['Zeit'] = ziel.an
-            args['Verspätung'] = ziel.verspaetung_an
+            args['Richtung'] = zug_data.von.replace("Gleis ", "").split(" ")[0]
+            try:
+                args['Zeit'] = ziel_data.p_an
+            except AttributeError:
+                pass
+            try:
+                args['Verspätung'] = ziel_data.v_an
+            except AttributeError:
+                pass
 
         if 'Abfahrt' in situation:
-            args['Richtung'] = ziel.zug.nach.replace("Gleis ", "").split(" ")[0]
-            args['Zeit'] = ziel.ab
-            args['Verspätung'] = ziel.verspaetung_ab
-
-        try:
-            args['Zeit'] = time_to_minutes(args['Zeit'])
-        except AttributeError:
+            args['Richtung'] = zug_data.nach.replace("Gleis ", "").split(" ")[0]
             try:
-                del args["Zeit"]
-            except ValueError:
+                args['Zeit'] = ziel_data.p_ab
+            except AttributeError:
                 pass
-        else:
+            try:
+                args['Verspätung'] = ziel_data.v_ab
+            except AttributeError:
+                pass
+
+        if args['Zeit']:
             args['Zeit'] = f"{int(args['Zeit']) // 60:02}:{int(args['Zeit']) % 60:02}"
+        else:
+            del args['Zeit']
 
         if args['Verspätung']:
             args['Verspätung'] = f"({int(args['Verspätung']):+})"
         else:
-            try:
-                del args["Verspätung"]
-            except ValueError:
-                pass
+            del args["Verspätung"]
 
         beschriftung = " ".join((args[element] for element in self._muster if element in self._elemente and element in args))
         return beschriftung
