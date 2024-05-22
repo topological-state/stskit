@@ -28,7 +28,7 @@ from matplotlib.figure import Figure
 
 from stskit.dispo.anlage import Anlage
 from stskit.graphs.graphbasics import dict_property
-from stskit.graphs.bahnhofgraph import Zielort
+from stskit.graphs.bahnhofgraph import BahnhofElement
 from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType
 from stskit.interface.stsobj import time_to_minutes
 from stskit.plots.plotbasics import hour_minutes_formatter
@@ -106,7 +106,7 @@ class Slot:
     zugname: str
     zugstamm: Set[int] = field(default_factory=set)
     zieltyp: str = ""
-    gleis: Zielort = ("", "")
+    gleis: BahnhofElement = ("", "")
     durchfahrt: bool = False
     zeit: int = 0
     dauer: int = 0
@@ -125,13 +125,13 @@ class Slot:
         self.fid = ziel_id
         self.zugstamm = set([])
         self.zieltyp = ziel_data.typ
-        self.gleis = Zielort("Agl" if ziel_data.typ in {'A', 'E'} else "Gl", ziel_data.gleis)
+        self.gleis = BahnhofElement("Agl" if ziel_data.typ in {'A', 'E'} else "Gl", ziel_data.gleis)
         self.zeit = 0
         self.dauer = 0
         self.titel = ""
 
     @property
-    def key(self) -> Tuple[Zielort, int, int]:
+    def key(self) -> Tuple[BahnhofElement, int, int]:
         """
         identifikationsschlüssel des slots
 
@@ -143,7 +143,7 @@ class Slot:
         return self.gleis, self.fid[0], self.fid[1]
 
     @staticmethod
-    def build_key(gleis: Zielort, fid: ZielLabelType):
+    def build_key(gleis: BahnhofElement, fid: ZielLabelType):
         """
         identifikationsschlüssel wie key-property aufbauen
 
@@ -225,7 +225,7 @@ class SlotWarnung:
     properties berechnen gewisse statische darstellungsmerkmale wie farben.
     """
 
-    gleise: Set[Zielort] = field(default_factory=set)
+    gleise: Set[BahnhofElement] = field(default_factory=set)
     zeit: int = 0
     dauer: int = 0
     status: str = "undefiniert"
@@ -330,11 +330,11 @@ class Gleisbelegung:
         self.zentrale: DatenZentrale = zentrale
         self.anlage = zentrale.anlage
         self.undirected_zug_graph = self.zentrale.client.zuggraph.to_undirected(as_view=True)
-        self.gleise: List[Zielort] = []
+        self.gleise: List[BahnhofElement] = []
         self.slots: Dict[Any, Slot] = {}
-        self.gleis_slots: Dict[Zielort, Dict[Any, Slot]] = {}
-        self.hauptgleis_slots: Dict[Zielort, Dict[Any, Slot]] = {}
-        self.belegte_gleise: Set[Zielort] = set()
+        self.gleis_slots: Dict[BahnhofElement, Dict[Any, Slot]] = {}
+        self.hauptgleis_slots: Dict[BahnhofElement, Dict[Any, Slot]] = {}
+        self.belegte_gleise: Set[BahnhofElement] = set()
         self.warnungen: Dict[Any, SlotWarnung] = {}
         self.zugbeschriftung = Zugbeschriftung(stil="Gleisbelegung")
 
@@ -367,7 +367,7 @@ class Gleisbelegung:
         self.slots_formatieren()
         self.warnungen_aktualisieren()
 
-    def gleise_auswaehlen(self, gleise: Iterable[Zielort]):
+    def gleise_auswaehlen(self, gleise: Iterable[BahnhofElement]):
         """
         Zu beobachtende Gleise wählen.
 
@@ -667,7 +667,7 @@ class GleisbelegungPlot:
 
         self.belegte_gleise_zeigen = False
 
-        self._gleise: List[Zielort] = []
+        self._gleise: List[BahnhofElement] = []
         self._balken = None
         self._labels = []
         self._slot_auswahl: List[Slot] = []

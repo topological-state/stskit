@@ -15,7 +15,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex
 
 from stskit.dispo.anlage import Anlage
-from stskit.graphs.bahnhofgraph import Zielort
+from stskit.graphs.bahnhofgraph import BahnhofElement
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -161,7 +161,7 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
         super(GleisauswahlModell, self).__init__(parent)
         self._root = GleisauswahlItem(self, "root", "")
 
-        self.alle_gleise: Set[Zielort] = set()
+        self.alle_gleise: Set[BahnhofElement] = set()
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
         return 2
@@ -313,7 +313,7 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
             else:
                 yield item
 
-    def set_auswahl(self, gleise: Union[AbstractSet[Zielort], Iterable[Zielort]]) -> None:
+    def set_auswahl(self, gleise: Union[AbstractSet[BahnhofElement], Iterable[BahnhofElement]]) -> None:
         """
         Auswahlstatus aller Gleise auf einmal setzen.
 
@@ -323,13 +323,13 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
 
         gleise = set(gleise)
         for item in self.gleis_items():
-            state = QtCore.Qt.Checked if Zielort(item.typ, item.name) in gleise else QtCore.Qt.Unchecked
+            state = QtCore.Qt.Checked if BahnhofElement(item.typ, item.name) in gleise else QtCore.Qt.Unchecked
             item.setCheckState(state)
 
         self.dataChanged.emit(self.index(0, 0, QModelIndex()),
                               self.index(self._root.columnCount() - 1, self._root.childCount() - 1, QModelIndex()))
 
-    def get_auswahl(self) -> Set[Zielort]:
+    def get_auswahl(self) -> Set[BahnhofElement]:
         """
         Auswahlstatus aller Gleise auf einmal auslesen.
 
@@ -338,14 +338,14 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
 
         gleise = set()
         for item in self.gleis_items():
-            element = Zielort(item.typ, item.name)
+            element = BahnhofElement(item.typ, item.name)
             state = item.checkState()
             if element in self.alle_gleise and state == QtCore.Qt.Checked:
                 gleise.add(element)
 
         return gleise
 
-    def set_sperrungen(self, gleissperrungen: AbstractSet[Zielort]) -> None:
+    def set_sperrungen(self, gleissperrungen: AbstractSet[BahnhofElement]) -> None:
         """
         Sperrungsstatus aller Gleise auf einmal setzen.
 
@@ -355,9 +355,9 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
         """
 
         for item in self.gleis_items():
-            item.sperrung = Zielort(item.typ, item.name) in gleissperrungen
+            item.sperrung = BahnhofElement(item.typ, item.name) in gleissperrungen
 
-    def get_sperrungen(self) -> Set[Zielort]:
+    def get_sperrungen(self) -> Set[BahnhofElement]:
         """
         Sperrungsstatus aller Gleise auf einmal auslesen..
 
@@ -366,5 +366,5 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
         :return:
         """
 
-        sperrungen = (Zielort(item.typ, item.name) for item in self.gleis_items() if item.sperrung and item.typ == "Gl")
+        sperrungen = (BahnhofElement(item.typ, item.name) for item in self.gleis_items() if item.sperrung and item.typ == "Gl")
         return set(sperrungen)

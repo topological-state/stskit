@@ -8,7 +8,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from stskit.dispo.anlage import Anlage
-from stskit.graphs.bahnhofgraph import Zielort
+from stskit.graphs.bahnhofgraph import BahnhofElement
 from stskit.interface.stsplugin import PluginClient
 from stskit.plots.gleisbelegung import GleisbelegungPlot
 from stskit.qt.ui_gleisbelegung import Ui_GleisbelegungWindow
@@ -144,7 +144,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
                                                 anschluesse=self.ansicht == "Agl", bahnsteige=self.ansicht != "Agl")
             self.gleisauswahl.set_auswahl(self.gleisauswahl.alle_gleise)
             self.plot.belegung.gleise_auswaehlen(self.gleisauswahl.alle_gleise)
-            sperrungen = {Zielort(gleis[0], gleis[1]) for gleis in self.anlage.gleissperrungen}
+            sperrungen = {BahnhofElement(gleis[0], gleis[1]) for gleis in self.anlage.gleissperrungen}
             self.gleisauswahl.set_sperrungen(sperrungen)
 
         self.plot.belegung.update()

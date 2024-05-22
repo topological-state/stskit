@@ -11,8 +11,17 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-# todo : nomenklatur
-class Zielort(NamedTuple):
+class BahnhofElement(NamedTuple):
+    """
+    Vollständige Bahnhofelementbezeichnung (Typ und Name)
+
+    Bahnhofelemente sind alle benannten Gleise, Bahnsteige, etc., die im Bahnhofgraph als Knoten vorkommen.
+    Dazu gehören also in Erweiterung des üblichen Sprachgebrauchs ausdrücklich auch Anschlussgleise und Haltepunkte.
+
+    Eine Bahnhofelementbezeichnung enthält den Typ und den Namen des Elements,
+    die auch als Property im BahnsteigGraphNode vorkommen.
+    Typ und Namen werden verwendet, weil Anschlussgleise und Bahnhofgleise den gleichen Namen tragen können.
+    """
     typ: str
     name: str
 
@@ -89,7 +98,7 @@ class BahnsteigGraph(nx.Graph):
                 self.add_edge(bs1.name, bs2.name, typ='Nachbar', distanz=0)
 
 
-BahnhofLabelType = Zielort
+BahnhofLabelType = BahnhofElement
 
 
 class BahnhofGraph(nx.DiGraph):
