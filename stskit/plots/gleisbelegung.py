@@ -361,8 +361,7 @@ class Gleisbelegung:
         """
 
         if len(self.gleise) == 0:
-            root_label = self.anlage.bahnhofgraph.root()
-            self.gleise_auswaehlen(self.anlage.bahnhofgraph.list_children(root_label, {'Agl', 'Gl'}))
+            return
         self.slots_erstellen()
         self.slots_formatieren()
         self.warnungen_aktualisieren()
@@ -667,7 +666,6 @@ class GleisbelegungPlot:
 
         self.belegte_gleise_zeigen = False
 
-        self._gleise: List[BahnhofElement] = []
         self._balken = None
         self._labels = []
         self._slot_auswahl: List[Slot] = []
@@ -800,7 +798,7 @@ class GleisbelegungPlot:
 
     def _plot_warnungen(self, x_labels, x_labels_pos, kwargs):
         for warnung in self.belegung.warnungen.values():
-            warnung_gleise = [gleis for gleis in warnung.gleise if gleis in self._gleise]
+            warnung_gleise = [gleis for gleis in warnung.gleise if gleis in self.belegung.gleise]
             try:
                 x = [x_labels_pos[x_labels.index(gleis.name)] for gleis in warnung_gleise]
                 xy = (min(x) - kwargs['width'] / 2, warnung.zeit)
