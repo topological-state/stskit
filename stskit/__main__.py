@@ -24,13 +24,12 @@ from stskit.interface.stsplugin import PluginClient, TaskDone, DEFAULT_HOST, DEF
 from stskit.interface.stsgraph import GraphClient
 from stskit.zentrale import DatenZentrale
 from stskit.anschlussmatrix import AnschlussmatrixWindow
-from stskit.bildfahrplan import BildFahrplanWindow
 from stskit.einstellungen import EinstellungenWindow
 from stskit.widgets.gleisbelegung import GleisbelegungWindow
 from stskit.gleisnetz import GleisnetzWindow
 from stskit.qticker import TickerWindow
 from stskit.fahrplan import FahrplanWindow
-from stskit.widgets.bildfahrplan import BildFahrplanWindow as NewBildFahrplanWindow
+from stskit.widgets.bildfahrplan import BildFahrplanWindow
 
 logger = logging.getLogger(__name__)
 
@@ -179,11 +178,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ticker_button.clicked.connect(self.ticker_clicked)
         layout.addWidget(self.ticker_button)
 
-        self.test_button = QtWidgets.QPushButton("Neuer Streckenfahrplan", self)
-        self.test_button.setEnabled(False)
-        self.test_button.clicked.connect(self.test_clicked)
-        layout.addWidget(self.test_button)
-
         self.einstellungen_button = QtWidgets.QPushButton("Einstellungen", self)
         self.einstellungen_button.setEnabled(False)
         self.einstellungen_button.clicked.connect(self.einstellungen_clicked)
@@ -202,9 +196,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.windows.add(window)
 
     def einfahrten_clicked(self):
-        window = GleisbelegungWindow(self.zentrale)
-        window.show_zufahrten = True
-        window.show_bahnsteige = False
+        window = GleisbelegungWindow(self.zentrale, "Agl")
         window.setWindowTitle("Einfahrten/Ausfahrten")
         window.vorlaufzeit = 25
         window.planung_update()
@@ -212,7 +204,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.windows.add(window)
 
     def gleisbelegung_clicked(self):
-        window = GleisbelegungWindow(self.zentrale)
+        window = GleisbelegungWindow(self.zentrale, "Gl")
         window.planung_update()
         window.show()
         self.windows.add(window)
@@ -244,12 +236,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def einstellungen_clicked(self):
         window = EinstellungenWindow(self.zentrale)
         window.update()
-        window.show()
-        self.windows.add(window)
-
-    def test_clicked(self):
-        window = NewBildFahrplanWindow(self.zentrale)
-        window.planung_update()
         window.show()
         self.windows.add(window)
 
@@ -295,7 +281,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.fahrplan_button.setEnabled(self.enable_update)
                 self.netz_button.setEnabled(self.enable_update)
                 self.ticker_button.setEnabled(self.enable_update)
-                self.test_button.setEnabled(self.enable_update)
                 self.einstellungen_button.setEnabled(self.enable_update)
 
             self.statusfeld.setText("")
