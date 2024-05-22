@@ -71,6 +71,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.display_canvas.mpl_connect("resize_event", self.on_resize)
 
         self.plot = GleisbelegungPlot(self.zentrale, self.axes)
+        if ansicht == "Agl":
+            self.plot.vorlaufzeit = 15
 
         self.update_widgets()
         self.update_actions()
