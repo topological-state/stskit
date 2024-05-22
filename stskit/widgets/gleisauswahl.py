@@ -267,7 +267,7 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
         items: Dict[Tuple[str, str], GleisauswahlItem] = {}
 
         if anschluesse:
-            alle_agl = (node for node in anlage.bahnhofgraph.nodes if node[0] == 'Agl')
+            alle_agl = (node for node in anlage.bahnhofgraph.nodes if node.typ == 'Agl')
             self.alle_gleise.update(alle_agl)
 
             anschluesse_item = GleisauswahlItem(self, "Kat", "Anschlüsse")
@@ -281,7 +281,7 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
                     anst_item.addChild(agl_item)
 
         if bahnsteige:
-            alle_gl = (node for node in anlage.bahnhofgraph.nodes if node[0] == 'Gl')
+            alle_gl = (node for node in anlage.bahnhofgraph.nodes if node.typ == 'Gl')
             self.alle_gleise.update(alle_gl)
 
             bahnsteige_item = GleisauswahlItem(self, "Kat", "Bahnsteige")
@@ -323,7 +323,7 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
 
         gleise = set(gleise)
         for item in self.gleis_items():
-            state = QtCore.Qt.Checked if item.name in gleise else QtCore.Qt.Unchecked
+            state = QtCore.Qt.Checked if Zielort(item.typ, item.name) in gleise else QtCore.Qt.Unchecked
             item.setCheckState(state)
 
         self.dataChanged.emit(self.index(0, 0, QModelIndex()),

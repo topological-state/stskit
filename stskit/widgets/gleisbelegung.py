@@ -21,11 +21,17 @@ logger.addHandler(logging.NullHandler())
 
 class GleisbelegungWindow(QtWidgets.QMainWindow):
 
-    def __init__(self, zentrale: DatenZentrale):
+    def __init__(self, zentrale: DatenZentrale, ansicht: str = "Gl"):
+        """
+        :param zentrale: DatenZentrale
+        :param ansicht: "Gl" für Gleisbelegung von Bahnhöfen oder "Agl" für Ein- und Ausfahrten
+        """
+
         super().__init__()
 
         self.zentrale = zentrale
         self.zentrale.planung_update.register(self.planung_update)
+        self.ansicht = ansicht
 
         self._pick_event = False
 
@@ -135,13 +141,12 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     def daten_update(self):
         if not self.plot.belegung.gleise:
             self.gleisauswahl.gleise_definieren(self.anlage,
-                                                anschluesse=self.plot.show_anschluesse,
-                                                bahnsteige=self.plot.show_bahnsteige)
+                                                anschluesse=self.ansicht == "Agl", bahnsteige=self.ansicht != "Agl")
             self.gleisauswahl.set_auswahl(self.gleisauswahl.alle_gleise)
+            self.plot.belegung.gleise_auswaehlen(self.gleisauswahl.alle_gleise)
             sperrungen = {Zielort(gleis[0], gleis[1]) for gleis in self.anlage.gleissperrungen}
             self.gleisauswahl.set_sperrungen(sperrungen)
 
-        self.plot.belegung.gleise_auswaehlen(self.gleisauswahl.get_auswahl())
         self.plot.belegung.update()
 
     def grafik_update(self):
@@ -164,11 +169,13 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(0)
         self.ui.gleisView.expandAll()
         self.ui.gleisView.resizeColumnToContents(0)
+        self.gleisauswahl.set_auswahl(self.plot.belegung.gleise)
         self.update_widgets()
 
     @pyqtSlot()
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
+        self.plot.belegung.gleise_auswaehlen(self.gleisauswahl.get_auswahl())
         self.anlage.gleissperrungen = self.gleisauswahl.get_sperrungen()
         if self.ui.name_button.isChecked():
             self.plot.belegung.zugbeschriftung.elemente = ["Name"]

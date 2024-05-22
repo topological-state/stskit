@@ -665,8 +665,6 @@ class GleisbelegungPlot:
         self.zentrale = zentrale
         self.anlage = zentrale.anlage
 
-        self.show_anschluesse: bool = False
-        self.show_bahnsteige: bool = True
         self.belegte_gleise_zeigen = False
 
         self._gleise: List[Zielort] = []
