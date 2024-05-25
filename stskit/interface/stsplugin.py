@@ -603,6 +603,7 @@ class PluginClient:
           Es fehlen die aktuelle Verspätung fehlt (request_zugdetails)
           und Gleisänderungen im Fahrplan (request_zugfahrplan).
         - Die Objektinstanzen werden bei Aktualisierung beibehalten.
+        - Züge mit negativer ID (Ersatzloks) werden ignoriert.
 
         :return: None
         """
@@ -619,8 +620,8 @@ class PluginClient:
                 try:
                     zid = int(zug['zid'])
                     if zid <= 0:
-                        logger.warning(f"request_zugliste: ungültige zug-id {zid}")
-                        return
+                        # Ersatzlok
+                        continue
                     if zid in self.zugliste:
                         self.zugliste[zid].update(zug)
                     else:
