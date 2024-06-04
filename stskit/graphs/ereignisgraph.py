@@ -373,7 +373,13 @@ class EreignisGraph(nx.DiGraph):
 
         """
 
-        nodes = nx.topological_sort(self)
+        self._schleifen_aufbrechen()
+        try:
+            nodes = nx.topological_sort(self)
+        except nx.NetworkXUnfeasible as e:
+            logger.error("Fehler beim Sortieren des Zielgraphen")
+            logger.exception(e)
+            return
 
         for zielnode in nodes:
             ziel_data = self.nodes[zielnode]
@@ -415,6 +421,33 @@ class EreignisGraph(nx.DiGraph):
                 ziel_data.t_prog = ziel_zeit
             else:
                 logger.warning(f"Keine Zeitprognose möglich für Ereignis {zielnode}")
+
+    def _schleifen_aufbrechen(self):
+        """
+        Schleifen aufbrechen
+
+        Der Ereignisgraph ist ein gerichteter Graph und darf keine Schleifen enthalten.
+        Wenn aus irgendeinem Grund, auch Fehlern in Programm oder Daten, Schleifen vorkommen,
+        darf das Programm nicht abstürzen und sollte seine Arbeit so weit wie möglich trotzdem verrichten.
+        Diese Funktion bricht etwaige Schleifen an einem willkürlichen Punkt auf und gibt eine Warnung im Log aus.
+        """
+
+        while True:
+            try:
+                cycle = nx.find_cycle(self)
+            except nx.NetworkXNoCycle:
+                break
+
+            msg = ", ".join((str(edge) for edge in cycle))
+            logger.error("Verbotene Schleife im Ereignisgraph: " + msg)
+            for edge in cycle:
+                if edge[0].zid != edge[1].zid:
+                    break
+            else:
+                edge = cycle[-1]
+
+            self.remove_edge(edge[0], edge[1])
+            logger.warning(f"Verbindung {edge} entfernt.")
 
     def verspaetungen_nach_zielgraph(self, zg: ZielGraph):
         """
