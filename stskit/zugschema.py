@@ -103,7 +103,7 @@ class Zugschema:
         self.name = ""
         self.titel = ""
         self.pfad = None
-        self.gattungen = {}
+        self.gattungen = {"Ersatzlok": "R", "Lok": "R"}
         self.nummern = {}
 
         d = {"kategorien": self.DEFAULT_KATEGORIEN}
