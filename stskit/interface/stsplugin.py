@@ -540,6 +540,8 @@ class PluginClient:
         -----------
 
         - Abgefahrene Wegpunkte sind im Fahrplan nicht mehr vorhanden.
+        - Ersatzloks haben im XML keine Plangleis- und Gleisangabe.
+          Wir übernehmen beim ersten Auftreten den ersten Fahrplaneintrag.
 
         :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
         :return: True (Erfolg) oder False (Fehler)
@@ -562,6 +564,15 @@ class PluginClient:
         except AttributeError:
             log_status_warning("request_zugfahrplan", response)
             return False
+
+        if zid < 0 and not zug.plangleis:
+            # ersatzlok
+            try:
+                zug.plangleis = neuer_fahrplan[0].plan
+                zug.gleis = neuer_fahrplan[0].gleis
+                akt_ziel_index = 0
+            except IndexError:
+                pass
 
         if not zug.fahrplan:
             zug.fahrplan = neuer_fahrplan

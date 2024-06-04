@@ -362,8 +362,8 @@ class ZugDetails:
             self.verspaetung = int(zugdetails['verspaetung'])
         except TypeError:
             pass
-        self.gleis = zugdetails['gleis']
-        self.plangleis = zugdetails['plangleis']
+        self.gleis = zugdetails['gleis'] or self.gleis
+        self.plangleis = zugdetails['plangleis'] or self.plangleis
         self.von = zugdetails['von']
         self.nach = zugdetails['nach']
         self.sichtbar = str(zugdetails['sichtbar']).lower() == 'true'
