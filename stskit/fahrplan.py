@@ -285,17 +285,21 @@ class ZuglisteFilterProxy(QSortFilterProxyModel):
         except AttributeError:
             return False
 
-        if zug.gleis:
+        if zug.gleis or zug.zid < 0:
             if self._vorlaufzeit <= 0:
                 return True
 
             try:
                 anfang_id = zugliste_modell.zielgraph.zuganfaenge[zug.zid]
                 anfang = zugliste_modell.zielgraph.nodes[anfang_id]
-                if anfang.p_an + min(0, anfang.v_an) > self.simzeit + self._vorlaufzeit:
-                    return False
-            except (AttributeError, KeyError):
+            except KeyError:
                 pass
+            else:
+                try:
+                    if anfang.p_an + min(0, anfang.v_an) > self.simzeit + self._vorlaufzeit:
+                        return False
+                except AttributeError:
+                    pass
 
         else:
             if self._nachlaufzeit <= 0:
@@ -304,10 +308,14 @@ class ZuglisteFilterProxy(QSortFilterProxyModel):
             try:
                 ende_id = zugliste_modell.zielgraph.zugenden[zug.zid]
                 ende = zugliste_modell.zielgraph.nodes[ende_id]
-                if ende.p_ab + ende.v_ab < self.simzeit - self._nachlaufzeit:
-                    return False
-            except (AttributeError, KeyError):
+            except KeyError:
                 return False
+            else:
+                try:
+                    if ende.p_ab + ende.v_ab < self.simzeit - self._nachlaufzeit:
+                        return False
+                except AttributeError:
+                    pass
 
         return True
 
