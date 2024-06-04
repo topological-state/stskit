@@ -450,10 +450,7 @@ class PluginClient:
             zids = list(self.zugliste.keys())
 
         for zid in sorted(map(int, zids)):
-            if zid > 0:
-                await self.request_zugdetails_einzeln(zid)
-            else:
-                logger.warning(f"request_zugdetails: anfrage mit zid={zid} ignoriert.")
+            await self.request_zugdetails_einzeln(zid)
 
     async def request_zugdetails_einzeln(self, zid: int) -> bool:
         """
@@ -600,10 +597,10 @@ class PluginClient:
         - Ausgefahrene Züge werden von der Liste entfernt.
           Für ersetzte Züge wird ein ersatz-Ereignis erzeugt.
         - Die Zugobjekte sind nach dieser Abfrage schon ziemlich komplett.
-          Es fehlen die aktuelle Verspätung fehlt (request_zugdetails)
+          Es fehlen die aktuelle Verspätung (request_zugdetails)
           und Gleisänderungen im Fahrplan (request_zugfahrplan).
         - Die Objektinstanzen werden bei Aktualisierung beibehalten.
-        - Züge mit negativer ID (Ersatzloks) werden ignoriert.
+        - Ersatzloks haben eine negative ID.
 
         :return: None
         """
@@ -619,9 +616,6 @@ class PluginClient:
             for zug in response.zugliste.zug:
                 try:
                     zid = int(zug['zid'])
-                    if zid <= 0:
-                        # Ersatzlok
-                        continue
                     if zid in self.zugliste:
                         self.zugliste[zid].update(zug)
                     else:
