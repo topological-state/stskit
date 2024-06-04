@@ -411,10 +411,10 @@ class Gleisbelegung:
                 slot.verspaetung_an = ziel_data.get('v_an', 0)
                 slot.verspaetung_ab = ziel_data.get('v_ab', 0)
                 slot.zeit = plan_an + slot.verspaetung_an
-                if slot.gleis.typ == 'Agl':
+                if ziel_data.typ == 'D' or slot.gleis.typ == 'Agl':
                     slot.dauer = 1
                 else:
-                    slot.dauer = max(1, plan_ab + slot.verspaetung_ab - slot.zeit)
+                    slot.dauer = max(1, plan_ab + 1 + slot.verspaetung_ab - slot.zeit)
                 slot.zugstamm = {zid for zid in nx.node_connected_component(self.undirected_zug_graph, slot.zid)}
                 keys_bisherige.discard(key)
 
