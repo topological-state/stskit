@@ -23,7 +23,7 @@ import qtrio
 from stskit.interface.stsplugin import PluginClient, TaskDone, DEFAULT_HOST, DEFAULT_PORT
 from stskit.interface.stsgraph import GraphClient
 from stskit.zentrale import DatenZentrale
-from stskit.anschlussmatrix import AnschlussmatrixWindow
+from stskit.widgets.anschlussmatrix import AnschlussmatrixWindow
 from stskit.einstellungen import EinstellungenWindow
 from stskit.widgets.gleisbelegung import GleisbelegungWindow
 from stskit.gleisnetz import GleisnetzWindow
