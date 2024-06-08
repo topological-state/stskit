@@ -50,6 +50,7 @@ def bahnhofgraph_konfig_umdrehen(gleis_konfig, anschluss_konfig):
 class Anlage:
     def __init__(self):
         self.anlageninfo: Optional[AnlagenInfo] = None
+        self.simzeit_minuten: int = 0
         self.config: Dict[str, Any] = {}
 
         self.signalgraph = SignalGraph()
@@ -68,6 +69,7 @@ class Anlage:
 
     def update(self, client: GraphClient, config_path: os.PathLike):
         # todo : konfiguration speichern
+        self.simzeit_minuten = client.calc_simzeit()
 
         if self.anlageninfo is None:
             self.anlageninfo = client.anlageninfo
@@ -112,9 +114,6 @@ class Anlage:
         self.zielgraph.einfahrtszeiten_korrigieren(self.liniengraph, self.bahnhofgraph)
         self.ereignisgraph.zielgraph_importieren(self.zielgraph)
         self.ereignisgraph.prognose()
-        if logger.isEnabledFor(logging.DEBUG):
-            nx.write_gml(self.zielgraph, "zielgraph.gml", stringizer=str)
-            nx.write_gml(self.ereignisgraph, "ereignisgraph.gml", stringizer=str)
         self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
 
         if len(self.strecken) == 0 and self.liniengraph:

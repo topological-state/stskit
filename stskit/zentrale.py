@@ -1,3 +1,11 @@
+"""
+Zentrale Datenschnittstelle
+
+Die einzelnen Benutzermodule dürfen nicht direkt auf die Pluginschnittstelle zugreifen.
+Dieses Modul stellt die zentrale Datenschnittstelle bereit.
+Ziel dieser Trennung ist, dass auch andere PluginClients oder sogar andere Simulatoren verwendet werden können.
+"""
+
 import logging
 import os
 from typing import Any, Optional
@@ -6,8 +14,8 @@ import weakref
 from stskit.interface.stsobj import Ereignis, time_to_minutes
 from stskit.interface.stsgraph import GraphClient
 from stskit.dispo.anlage import Anlage
+from stskit.dispo.betrieb import Betrieb
 from stskit.auswertung import Auswertung
-from stskit.planung import Planung
 
 logger = logging.getLogger(__name__)
 
@@ -61,36 +69,50 @@ class Observable:
 
 class DatenZentrale:
     """
-    zentrale datenschnittstelle zu simulator, planung und auswertung
+    Zentrale Datenschnittstelle zum Simulator
 
-    die datenzentrale ist unterteilt in:
-    - die plugin-schnittstelle hält die daten vom simulator bereit, s. stsplugin-modul.
-    - die anlage beschreibt das stellwerk, s. anlage-modul.
-    - die planung enthält die aktuellen fahrplandaten, s. planung-modul.
-    - die auswertung führt statistik über die zugbewegungen, s. auswertung-modul.
+    Die Datenzentrale ist unterteilt in:
+    - Die Plugin-Schnittstelle hält die Daten vom Simulator bereit, s. Modul stsgraph.
+      Die Benutzermodule dürfen nicht direkt auf diese Objekte zugreifen.
+    - Die Anlage beschreibt das Stellwerk, s. Modul anlage.
+    - Der Betrieb enthält die aktuellen Fahrplandaten, s. Modul betrieb.
+      Das Objekt betrieb ersetzt das Objekt planung aus Version 1.
+    - Die Auswertung wertet erfolgte Zugbewegungen aus, s. Modul auswertung.
 
-    die klasse implementiert methoden, die die plugin-schnittstelle abfragen
-    und ereignisse vom simulator weiterleiten.
-    die kommunikationsschleifen liegen jedoch ausserhalb dieser klasse.
+    Die Klasse implementiert asynchrone Methoden, die die Plugin-Schnittstelle abfragen
+    und Ereignisse vom Simulator weiterleiten.
+    Die Kommunikationsschleifen müssen jedoch vom Besitzer unterhalten werden.
 
-    die klasse stellt für jedes modul eine observer-schnittstelle bereit,
-    die registrierte beobachter nach einer aktualisierung benachrichtigen.
+    Für die Benutzermodule stellt die Klasse Observer-Schnittstellen bereit.
+    Benutzermodule registrieren sich bei den passenden Beobachtern und
+    werden über die periodische Aktualisierung benachrichtigt.
+    Folgende Observer stehen zur Verfügung:
+
+    - anlage_update: Änderungen an der Anlage, die für das Anlagemodul interessant sind.
+    - betrieb_update: Änderungen am Fahrplan, die für das Betriebsmodul interessant sind.
+    - auswertung_update: Änderungen am Fahrplan, die für das Auswertungsmodul interessant sind.
+    - planung_update: obsolet, wird in einer der nächsten Versionen entfernt.
+    - plugin_ereignis: Ereignismeldung vom Simulator.
     """
 
     def __init__(self, config_path: Optional[os.PathLike] = None):
+        self.simzeit_minuten: int = 0
         self.config_path: os.PathLike = config_path
         self.client: Optional[GraphClient] = None
         self.anlage: Optional[Anlage] = None
-        self.planung: Optional[Planung] = None
+        self.betrieb: Optional[Betrieb] = None
         self.auswertung: Optional[Auswertung] = None
         self.planung_update = Observable(self)
         self.anlage_update = Observable(self)
+        self.betrieb_update = Observable(self)
         self.auswertung_update = Observable(self)
         self.plugin_ereignis = Observable(self)
 
     async def update(self):
         """
-        aktuelle daten von der plugin-schnittstelle abfragen und datenmodule aktualisieren.
+        Aktuelle Daten von der Plugin-Schnittstelle abfragen.
+
+        Die eigenen Objekte werden aktualisiert und die Observer aufgerufen.
 
         :return: None
         """
@@ -99,29 +121,42 @@ class DatenZentrale:
         for art in Ereignis.arten:
             await self.client.request_ereignis(art, self.client.zugliste.keys())
 
+        self.simzeit_minuten = time_to_minutes(self.client.calc_simzeit())
+
         if not self.anlage:
             self.anlage = Anlage()
         self.anlage.update(self.client, self.config_path)
-
-        if not self.planung:
-            self.planung = Planung()
-
+        if not self.betrieb:
+            self.betrieb = Betrieb()
+            # voruebergehender parallelbetrieb
+            self.betrieb.zuggraph = self.client.zuggraph
+            self.betrieb.zielgraph = self.anlage.zielgraph
+            self.betrieb.ereignisgraph = self.anlage.ereignisgraph
+        self.betrieb.update(self.client, self.anlage, self.config_path)
         if not self.auswertung:
             self.auswertung = Auswertung(self.anlage)
-            self.planung.auswertung = self.auswertung
-
-        self.planung.simzeit_minuten = time_to_minutes(self.client.calc_simzeit())
-        self.planung.zuege_uebernehmen(self.client.zugliste.values())
-        self.planung.einfahrten_korrigieren()
-        self.planung.verspaetungen_korrigieren()
-
         self.auswertung.zuege_uebernehmen(self.client.zugliste.values())
 
         self.anlage_update.notify()
+        self.betrieb_update.notify()
         self.planung_update.notify()
         self.auswertung_update.notify()
 
     async def _get_sts_data(self, alles=False):
+        """
+        Aktuelle Daten von der Plugin-Schnittstelle abfragen (Unterprozedur von update).
+
+        Ruft den Pluginclient auf, um die Daten abzufragen.
+        Die Anlageninformation inkl. Bahnsteige und Signalgraph werden standardmässig nur beim ersten Mal angefragt.
+
+        :param alles: Bei False (default) wird die Anlageninformation nur angefragt,
+            wenn die entsprechenden Objekte wie zu Beginn leer sind.
+            Bei True wird die Anlageninformation unbedingt angefragt.
+        :return: None
+        """
+
+        await self.client.request_simzeit()
+
         if alles or not self.client.anlageninfo:
             await self.client.request_anlageninfo()
         if alles or not self.client.bahnsteigliste:
@@ -134,12 +169,9 @@ class DatenZentrale:
         await self.client.request_zugfahrplan()
         await self.client.resolve_zugflags()
 
-        self.client.update_bahnsteig_zuege()
-        self.client.update_wege_zuege()
-
     async def ereignis(self, ereignis):
         """
-        ereignisdaten übernehmen.
+        Ereignisdaten übernehmen.
 
         :param ereignis:
         :return:
@@ -147,8 +179,8 @@ class DatenZentrale:
 
         if self.anlage:
             self.anlage.sim_ereignis_uebernehmen(ereignis)
-        if self.planung:
-            self.planung.ereignis_uebernehmen(ereignis)
+        if self.betrieb:
+            self.betrieb.ereignis_uebernehmen(ereignis)
         if self.auswertung:
             self.auswertung.ereignis_uebernehmen(ereignis)
 

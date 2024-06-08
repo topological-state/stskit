@@ -579,7 +579,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         except IndexError:
             model_index = None
 
-        self.zugliste_sort_filter.simzeit = self.zentrale.planung.simzeit_minuten
+        self.zugliste_sort_filter.simzeit = self.zentrale.simzeit_minuten
         self.zugliste_modell.update()
         self.fahrplan_modell.update()
         self.folgezug_modell.update()
