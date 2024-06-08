@@ -20,6 +20,7 @@ import matplotlib as mpl
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import QModelIndex
 
+from stskit.graphs.ereignisgraph import EreignisGraphNode
 from stskit.graphs.zielgraph import ZielGraphNode
 from stskit.interface.stsobj import time_to_minutes, ZugDetails
 from stskit.graphs.zuggraph import ZugGraphNode
@@ -731,17 +732,17 @@ class Zugbeschriftung:
         self._elemente = set(elemente)
 
     def format(self,
-               ziel: Optional['ZugZielPlanung'] = None,
-               zug_data: Optional[ZugGraphNode] = None,
-               ziel_data: Optional[ZugGraphNode] = None,
+               zug_data: ZugGraphNode,
+               ziel_data: Union[ZielGraphNode, EreignisGraphNode],
                situation: Optional[Union[str, Set[str]]] = None) -> str:
 
         """
-        zugbeschriftung nach ankunfts- oder abfahrtsmuster formatieren
+        Zugbeschriftung nach Ankunfts- oder Abfahrtsmuster formatieren
 
         Gleis Name Nummer Richtung Zeit (Verspätung)
 
-        :param ziel: zugziel
+        :param zug_data: Zugdaten
+        :param ziel_data: Zieldaten
         :param situation: 'Abfahrt' (default) und/oder 'Ankunft'
         :return: str
         """
@@ -750,29 +751,6 @@ class Zugbeschriftung:
             situation = {'Abfahrt'}
         elif isinstance(situation, str):
             situation = {situation}
-
-        if ziel is not None:
-            zug_data = ZugGraphNode(
-                name=ziel.zug.name,
-                nummer=ziel.zug.nummer,
-                von=ziel.zug.von,
-                nach=ziel.zug.nach,
-            )
-
-            ziel_data = ZielGraphNode(
-                gleis=ziel.gleis,
-                v_an=ziel.verspaetung_an,
-                v_ab=ziel.verspaetung_ab
-            )
-
-            try:
-                ziel_data.p_an = time_to_minutes(ziel.an)
-            except (AttributeError, ValueError):
-                pass
-            try:
-                ziel_data.p_ab = time_to_minutes(ziel.ab)
-            except (AttributeError, ValueError):
-                pass
 
         args = {'Name': zug_data.name,
                 'Nummer': str(zug_data.nummer),
@@ -785,22 +763,34 @@ class Zugbeschriftung:
         if 'Ankunft' in situation:
             args['Richtung'] = zug_data.von.replace("Gleis ", "").split(" ")[0]
             try:
-                args['Zeit'] = ziel_data.p_an
+                if ziel_data.typ == 'An':
+                    args['Zeit'] = ziel_data.t_plan
+                else:
+                    args['Zeit'] = ziel_data.p_an
             except AttributeError:
                 pass
             try:
-                args['Verspätung'] = ziel_data.v_an
+                if ziel_data.typ == 'An':
+                    args['Zeit'] = ziel_data.t_eff - ziel_data.t_plan
+                else:
+                    args['Verspätung'] = ziel_data.v_an
             except AttributeError:
                 pass
 
         if 'Abfahrt' in situation:
             args['Richtung'] = zug_data.nach.replace("Gleis ", "").split(" ")[0]
             try:
-                args['Zeit'] = ziel_data.p_ab
+                if ziel_data.typ == 'Ab':
+                    args['Zeit'] = ziel_data.t_plan
+                else:
+                    args['Zeit'] = ziel_data.p_ab
             except AttributeError:
                 pass
             try:
-                args['Verspätung'] = ziel_data.v_ab
+                if ziel_data.typ == 'Ab':
+                    args['Zeit'] = ziel_data.t_eff - ziel_data.t_plan
+                else:
+                    args['Verspätung'] = ziel_data.v_ab
             except AttributeError:
                 pass
 
