@@ -30,7 +30,7 @@ import copy
 import itertools
 import logging
 import math
-from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Optional, Sequence, Set, Tuple, TypeVar, Union
 
 import networkx as nx
 
@@ -44,7 +44,17 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-EreignisLabelType = Tuple[int, int]
+class EreignisLabelType(NamedTuple):
+    """
+    Identifikation des Ereignisses.
+
+    Die ID besteht aus der Zug-ID und der Ereignis-ID.
+    Der erste Knoten eines Zuges erhält die ID (zid, 0), damit der Anfang eines Zuges schnell gefunden werden kann.
+    Bei allen anderen Knoten hat der Wert der zweiten Komponente keine spezifische Bedeutung.
+    Die Sequenz der EID muss nicht monoton sein.
+    """
+    zid: int
+    eid: int
 
 
 class EreignisGraphNode(dict):
@@ -109,7 +119,7 @@ class EreignisGraphNode(dict):
         Bei allen anderen Knoten hat der Wert der zweiten Komponente keine Bedeutung.
         Die Sequenz der EID muss nicht geordnet sein.
         """
-        return self.zid, self.eid
+        return EreignisLabelType(self.zid, self.eid)
 
     @property
     def t_eff(self) -> float:
@@ -212,7 +222,7 @@ class EreignisGraph(nx.DiGraph):
         :return: Generator von Knoten-IDs.
         """
 
-        node = (zid, 0)
+        node = EreignisLabelType(zid, 0)
         while node is not None:
             if node == start:
                 start = None
@@ -225,7 +235,7 @@ class EreignisGraph(nx.DiGraph):
                 yield node
 
             for n in self.successors(node):
-                if n[0] == zid:
+                if n.zid == zid:
                     node = n
                     break
             else:
@@ -239,7 +249,7 @@ class EreignisGraph(nx.DiGraph):
         :return Label des gefundenen Ereignisses oder None
         """
         for n in self.predecessors(label):
-            if n[0] == label[0]:
+            if n.zid == label.zid:
                 return n
         return None
 
@@ -251,7 +261,7 @@ class EreignisGraph(nx.DiGraph):
         :return Label des gefundenen Ereignisses oder None
         """
         for n in self.successors(label):
-            if n[0] == label[0]:
+            if n.zid == label.zid:
                 return n
         return None
 
@@ -267,10 +277,10 @@ class EreignisGraph(nx.DiGraph):
         mapping = {}
         for node in self.nodes:
             for p in self.predecessors(node):
-                if p[0] == node[0]:
+                if p.zid == node.zid:
                     break
             else:
-                mapping[node] = (node[0], 0)
+                mapping[node] = EreignisLabelType(node.zid, 0)
 
         nx.relabel_nodes(self, mapping, copy=False)
 
@@ -408,7 +418,7 @@ class EreignisGraph(nx.DiGraph):
             ziel_zeit = -math.inf
             try:
                 if ziel_data.typ in {'Ab'}:
-                    if zielnode[1] == 0:
+                    if zielnode.eid == 0:
                         ziel_zeit = ziel_data.t_eff
                     else:
                         ziel_zeit = ziel_data.t_plan
