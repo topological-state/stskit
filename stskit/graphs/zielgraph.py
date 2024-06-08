@@ -1,14 +1,14 @@
 from dataclasses import dataclass
 import datetime
 import logging
-from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, Iterable, NamedTuple, Optional, Set, Tuple, TypeVar, Union
 
 import networkx as nx
 
 from stskit.graphs.graphbasics import dict_property
 from stskit.graphs.bahnhofgraph import BahnhofGraph
 from stskit.interface.stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
-from stskit.interface.stsobj import Knoten, FahrplanZeile, ZugDetails
+from stskit.interface.stsobj import Knoten, FahrplanZeile, ZugDetails, FahrplanZeileID
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -29,7 +29,27 @@ class PlanungParams:
 
 MIN_MINUTES = 0
 MAX_MINUTES = 24 * 60
-ZielLabelType = Tuple[int, int, Union[int, str]]
+
+
+class ZielLabelType(NamedTuple):
+    """
+    Ziellabelklasse
+
+    Das Ziellabel ist ähnlich wie die FahrplanZeileID aufgebaut.
+    Für Ein- und Ausfahrten wird jedoch die Elementnummer statt des Anschlussnamens verwendet.
+    """
+    zid: int
+    zeit: int
+    ort: Union[int, str]
+
+    @classmethod
+    def from_fahrplanzeile(cls, fid: FahrplanZeileID) -> 'ZielLabelType':
+        """
+        Konstruktor aus einer Fahrplanzeilen-ID.
+
+        Der Ortsteil einer Fahrplanzeilen-ID bezieht sich immer auf ein Bahnhofsgleis (kein Anschlussgleis).
+        """
+        return cls(fid.zid, fid.zeit, fid.plan)
 
 
 class ZielGraphNode(dict):
@@ -123,7 +143,7 @@ class ZielGraphNode(dict):
         None, wenn das Ziel ein normales Gleis ist.
         """
         try:
-            return int(self.fid[2])
+            return int(self.fid.ort)
         except ValueError:
             return None
 
@@ -273,7 +293,7 @@ class ZielGraph(nx.DiGraph):
             yield node
 
             for n in self.successors(node):
-                if n[0] == zid:
+                if n.zid == zid:
                     node = n
                     break
             else:
@@ -324,7 +344,7 @@ class ZielGraph(nx.DiGraph):
         links = set()
 
         for ziel2 in zug2.fahrplan:
-            fid2 = ziel2.fid
+            fid2 = ZielLabelType.from_fahrplanzeile(ziel2.fid)
             if anfang is None:
                 anfang = fid2
             ende = fid2
@@ -354,11 +374,11 @@ class ZielGraph(nx.DiGraph):
 
         if not zug2.sichtbar and einfahrt is not None:
             fz2 = zug2.fahrplan[0]
-            fid2 = fz2.fid
+            fid2 = ZielLabelType.from_fahrplanzeile(fz2.fid)
             einfahrtszeit = time_to_minutes(fz2.an or fz2.ab) - 1
 
             try:
-                fid1 = (zid2, MIN_MINUTES, einfahrt.enr)
+                fid1 = ZielLabelType(zid2, MIN_MINUTES, einfahrt.enr)
                 ziel_data = ZielGraphNode(
                     obj=None,
                     fid=fid1,
@@ -384,11 +404,11 @@ class ZielGraph(nx.DiGraph):
 
         if zug2.nach and ausfahrt is not None:
             fz2 = zug2.fahrplan[-1]
-            fid2 = fz2.fid
+            fid2 = ZielLabelType.from_fahrplanzeile(fz2.fid)
             ausfahrtszeit = time_to_minutes(fz2.ab or fz2.an) + 1
 
             try:
-                fid1 = (zid2, MAX_MINUTES, ausfahrt.enr)
+                fid1 = ZielLabelType(zid2, MAX_MINUTES, ausfahrt.enr)
                 ziel_data = ZielGraphNode(
                     obj=None,
                     fid=fid1,
@@ -529,7 +549,7 @@ class ZielGraph(nx.DiGraph):
 
         status = 'ab' if zug.sichtbar else ''
         try:
-            fid_aktuell = zug.fahrplan[zug.ziel_index].fid
+            fid_aktuell = ZielLabelType.from_fahrplanzeile(zug.fahrplan[zug.ziel_index].fid)
         except (IndexError, KeyError, TypeError):
             # kein ziel oder kein fahrplan
             fid_aktuell = None
