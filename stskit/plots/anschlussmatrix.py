@@ -191,20 +191,22 @@ class Anschlussmatrix:
                               if data.typ == "Ab"
                               and data.zid in zids_ab
                               and data.t_plan < endzeit + min_umsteigezeit}
+        zids_abgefahren = {data.zid for label, data in ereignisgraph.nodes(data=True)
+                           if data.typ == "Ab"
+                           and data.zid in zids_ab
+                           and data.get('t_mess', startzeit) < startzeit - 1}
+
+        self.zid_ankuenfte_set.update((label.zid for label in ankunftsereignisse.keys()))
+        self.zid_abfahrten_set.update((label.zid for label in abfahrtsereignisse.keys()))
+        self.zid_abfahrten_set.difference_update(zids_abgefahren)
 
         for label, data in ankunftsereignisse.items():
-            if label.zid in zids_an:
-                self.zid_ankuenfte_set.add(label.zid)
-                self.zuege[label.zid] = zuggraph.nodes[label.zid]
-                self.ankunft_ziele[label.zid] = data
+            self.zuege[label.zid] = zuggraph.nodes[label.zid]
+            self.ankunft_ziele[label.zid] = data
 
         for label, data in abfahrtsereignisse.items():
-            if label.zid in zids_ab:
-                self.zid_abfahrten_set.add(label.zid)
-                self.zuege[label.zid] = zuggraph.nodes[label.zid]
-                self.abfahrt_ziele[label.zid] = data
-            else:
-                self.zid_abfahrten_set.discard(label.zid)
+            self.zuege[label.zid] = zuggraph.nodes[label.zid]
+            self.abfahrt_ziele[label.zid] = data
 
         self.zid_ankuenfte_set.difference_update(self.ankuenfte_ausblenden)
         self.zid_abfahrten_set.difference_update(self.abfahrten_ausblenden)
