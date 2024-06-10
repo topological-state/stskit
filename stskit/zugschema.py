@@ -761,7 +761,10 @@ class Zugbeschriftung:
                 }
 
         if 'Ankunft' in situation:
-            args['Richtung'] = zug_data.von.replace("Gleis ", "").split(" ")[0]
+            try:
+                args['Richtung'] = zug_data.von.replace("Gleis ", "").split(" ")[0]
+            except AttributeError:
+                pass
             try:
                 if ziel_data.typ == 'An':
                     args['Zeit'] = ziel_data.t_plan
@@ -778,7 +781,10 @@ class Zugbeschriftung:
                 pass
 
         if 'Abfahrt' in situation:
-            args['Richtung'] = zug_data.nach.replace("Gleis ", "").split(" ")[0]
+            try:
+                args['Richtung'] = zug_data.nach.replace("Gleis ", "").split(" ")[0]
+            except AttributeError:
+                pass
             try:
                 if ziel_data.typ == 'Ab':
                     args['Zeit'] = ziel_data.t_plan
