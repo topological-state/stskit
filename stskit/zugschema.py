@@ -774,7 +774,7 @@ class Zugbeschriftung:
                 pass
             try:
                 if ziel_data.typ == 'An':
-                    args['Zeit'] = ziel_data.t_eff - ziel_data.t_plan
+                    args['Verspätung'] = ziel_data.t_eff - ziel_data.t_plan
                 else:
                     args['Verspätung'] = ziel_data.v_an
             except AttributeError:
@@ -794,7 +794,7 @@ class Zugbeschriftung:
                 pass
             try:
                 if ziel_data.typ == 'Ab':
-                    args['Zeit'] = ziel_data.t_eff - ziel_data.t_plan
+                    args['Verspätung'] = ziel_data.t_eff - ziel_data.t_plan
                 else:
                     args['Verspätung'] = ziel_data.v_ab
             except AttributeError:
