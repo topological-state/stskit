@@ -195,10 +195,14 @@ class Anschlussmatrix:
                            if data.typ == "Ab"
                            and data.zid in zids_ab
                            and data.get('t_mess', startzeit) < startzeit - 1}
+        zids_ausgefahren = {zid for zid, zug in zuggraph.nodes(data=True)
+                            if zug.ausgefahren}
 
         self.zid_ankuenfte_set.update((label.zid for label in ankunftsereignisse.keys()))
+        self.zid_ankuenfte_set.difference_update(zids_ausgefahren)
         self.zid_abfahrten_set.update((label.zid for label in abfahrtsereignisse.keys()))
         self.zid_abfahrten_set.difference_update(zids_abgefahren)
+        self.zid_abfahrten_set.difference_update(zids_ausgefahren)
 
         for label, data in ankunftsereignisse.items():
             self.zuege[label.zid] = zuggraph.nodes[label.zid]
