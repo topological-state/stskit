@@ -251,6 +251,7 @@ class Anschlussmatrix:
                         verspaetung -= min_umsteigezeit
                     else:
                         status = ANSCHLUSS_SELBST
+                        verspaetung -= min_umsteigezeit
                 elif self.anschlusszeit >= plan_umsteigezeit >= min_umsteigezeit:
                     try:
                         freigabe = startzeit >= ereignis_an.get('t_mess', startzeit) + min_umsteigezeit
@@ -361,7 +362,7 @@ class Anschlussmatrix:
         for i in range(n_ab):
             for j in range(n_an):
                 v = self.verspaetung[i, j]
-                if self.anschlussstatus[i, j] in ANSCHLUESSE_VERSPAETET and v > 0:
+                if self.anschlussstatus[i, j] in ANSCHLUESSE_VERSPAETET | {ANSCHLUSS_SELBST} and v > 0:
                     text = ax.text(j, i, round(v),
                                    ha="center", va="center", color="w", fontsize="small")
 
