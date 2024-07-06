@@ -321,19 +321,16 @@ class Anschlussmatrix:
         a_ab, a_an = self.anschlussstatus.shape
         n_ab, n_an = len(self.zid_abfahrten_index), len(self.zid_ankuenfte_index)
         self.anzeigematrix = self.anschlussstatus + self._make_auswahl_matrix(self.anschluss_auswahl)
-        im = ax.imshow(self.anzeigematrix, **kwargs)
+        extent = (-0.5, a_an - 0.5, a_ab - 0.5, -0.5)
+        im = ax.imshow(self.anzeigematrix, extent=extent, **kwargs)
         im.set_clim((0., 19.))
         ax.set_ylabel('Abfahrt')
         ax.set_xlabel('Ankunft')
         try:
             x_labels = [self.ankunft_labels[zid] for zid in self.zid_ankuenfte_index] + [''] * (a_an - n_an)
-            x_labels_colors = [self.zentrale.anlage.zugschema.zugfarbe(self.zuege[zid])
-                               for zid in self.zid_ankuenfte_index] + ['w'] * (a_an - n_an)
             x_labels_weigths = ['bold' if self.zuege[zid].amgleis and self.zuege[zid].gleis in self.gleisnamen else 'normal'
                                 for zid in self.zid_ankuenfte_index] + ['normal'] * (a_an - n_an)
             y_labels = [self.abfahrt_labels[zid] for zid in self.zid_abfahrten_index] + [''] * (a_ab - n_ab)
-            y_labels_colors = [self.zentrale.anlage.zugschema.zugfarbe(self.zuege[zid])
-                               for zid in self.zid_abfahrten_index] + ['w'] * (a_ab - n_ab)
             y_labels_weigths = ['bold' if self.zuege[zid].amgleis and self.zuege[zid].gleis in self.gleisnamen else 'normal'
                                 for zid in self.zid_abfahrten_index] + ['normal'] * (a_ab - n_ab)
         except KeyError as e:
@@ -345,15 +342,13 @@ class Anschlussmatrix:
         ax.set_yticks(np.arange(a_ab), labels=y_labels)
         ax.tick_params(top=True, bottom=False, labeltop=True, labelbottom=False)
 
-        for zid, label, color, weight in zip(self.zid_ankuenfte_index, ax.get_xticklabels(), x_labels_colors,
+        for zid, label, weight in zip(self.zid_ankuenfte_index, ax.get_xticklabels(),
                                              x_labels_weigths):
-            label.set_color(color)
             label.set_fontweight(weight)
             label.set_picker(True)
             label.zids = (-1, zid)
-        for zid, label, color, weight in zip(self.zid_abfahrten_index, ax.get_yticklabels(), y_labels_colors,
+        for zid, label, weight in zip(self.zid_abfahrten_index, ax.get_yticklabels(),
                                              y_labels_weigths):
-            label.set_color(color)
             label.set_fontweight(weight)
             label.set_picker(True)
             label.zids = (zid, -1)
@@ -373,8 +368,59 @@ class Anschlussmatrix:
         for item in (ax.get_xticklabels() + ax.get_yticklabels()):
             item.set_fontsize('small')
 
+        self._plot_zugleisten(ax)
+
         ax.figure.tight_layout()
         ax.figure.canvas.draw()
+
+    def _plot_zugleisten(self, ax):
+        """
+        Zugleisten entlang den Ankunfts- und Abfahrtsachsen zeichnen.
+
+        :param ax: matplotlib-Axes
+        :return: None
+        """
+
+        zugschema = self.zentrale.anlage.zugschema
+
+        image_args = {'alpha': 0.5,
+                      'cmap': zugschema.farbtabelle,
+                      'vmin': 0.,
+                      'vmax': 1.,
+                      'picker': True}
+
+        label_args = {'ha': 'center',
+                      'va': 'center',
+                      'fontsize': 'small',
+                      'fontstretch': 'condensed',
+                      'color': 'w',
+                      'rotation_mode': 'anchor',
+                      'transform_rotates_text': True}
+
+        ankunft_matrix = np.atleast_2d(np.asarray([zugschema.zug_farbwert(self.zuege[zid])
+                                                   for zid in self.zid_ankuenfte_index]))   # shape (1, n)
+        abfahrt_matrix = np.atleast_2d(np.asarray([zugschema.zug_farbwert(self.zuege[zid])
+                                                   for zid in self.zid_abfahrten_index])).T   # shape (n, 1)
+
+        n_an, n_ab = ankunft_matrix.shape[1], abfahrt_matrix.shape[0]
+
+        # main_extent = (-0.5, n_an - 0.5, -0.5, n_ab - 0.5)  # left, right, bottom, top
+        ankunft_extent = (-0.5, n_an - 0.5, n_ab - 0.5, n_ab)
+        abfahrt_extent = (-1.0, -0.5, -0.5, n_ab - 0.5)
+        # total_extent = (-1.0, n_an - 0.5, -0.5, n_ab)
+
+        ax.imshow(ankunft_matrix, extent=ankunft_extent, **image_args)
+        ax.imshow(abfahrt_matrix, extent=abfahrt_extent, **image_args)
+        ax.set_xlim(-1.0, n_an - 0.5)
+        ax.set_ylim(-0.5, n_ab)
+
+        for j, zid in enumerate(self.zid_ankuenfte_index):
+            label = self.zuege[zid].nummer
+            ax.text(j, n_ab - 0.25, label, **label_args)
+        for j, zid in enumerate(self.zid_abfahrten_index):
+            label = self.zuege[zid].nummer
+            ax.text(-0.75, j, label, rotation=90, **label_args)
+
 
     def _make_auswahl_matrix(self, auswahl: Iterable[Tuple[int, int]]):
         """

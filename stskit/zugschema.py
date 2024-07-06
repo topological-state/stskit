@@ -87,6 +87,10 @@ class Zugschema:
         self.kategorien: Dict[str, str] = {}
         # Farbschema: Kategorienkürzel -> Matplotlib-Farben
         self.farben: Dict[str, str] = {}
+        # Farbschema: Kategorienkürzel -> Index in Farbtabelle
+        self.farbwert: Dict[str, float] = {}
+        # Farbschema in Matplotlib-Colormap: kategorienindex -> Farbe
+        self.farbtabelle: Optional[mpl.Colormap] = None
 
         d = {"kategorien": self.DEFAULT_KATEGORIEN}
         self.set_config(d)
@@ -109,6 +113,12 @@ class Zugschema:
 
         d = {"kategorien": self.DEFAULT_KATEGORIEN}
         self.set_config(d)
+
+    def _update_farbtabelle(self):
+        n = len(self.farben) - 1
+        self.farbwert = {kat: idx / n for idx, kat in enumerate(self.farben.keys())}
+        farben = [farbe for farbe in self.farben.values()]
+        self.farbtabelle = mpl.colors.ListedColormap(farben)
 
     def set_config(self, config: Dict):
         """
@@ -151,6 +161,8 @@ class Zugschema:
                     pass
         except KeyError:
             pass
+
+        self._update_farbtabelle()
 
     def get_config(self) -> Dict:
         """
@@ -300,6 +312,19 @@ class Zugschema:
         frgb = mpl.colors.to_rgb(farbe)
         rgb = [round(255 * v) for v in frgb]
         return tuple(rgb)
+
+    def zug_farbwert(self, zug: Union[ZugDetails, ZugGraphNode]) -> float:
+        """
+        Farbwert eines Zuges
+        """
+        kat = self.kategorie(zug)
+        return self.farbwert[kat]
+
+    def kategorie_farbwert(self, kat: str) -> float:
+        """
+        Farbwert einer Zugkategorie
+        """
+        return self.farbwert[kat]
 
     def kategorie_farbe(self, kat: str) -> str:
         """
