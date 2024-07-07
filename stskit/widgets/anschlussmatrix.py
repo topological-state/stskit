@@ -305,14 +305,14 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         info = []
         try:
-            ziel_an = self.anschlussmatrix.ankunft_ziele[zids[1]]
+            ziel_an = self.anschlussmatrix.ankunft_ereignisse[zids[1]]
             zug_data = self.zentrale.betrieb.zuggraph.nodes[ziel_an.zid]
             info_an = self.zugbeschriftung.format(zug_data, ziel_an, "Ankunft")
             info.append(info_an)
         except (IndexError, KeyError):
             pass
         try:
-            ziel_ab = self.anschlussmatrix.abfahrt_ziele[zids[0]]
+            ziel_ab = self.anschlussmatrix.abfahrt_ereignisse[zids[0]]
             zug_data = self.zentrale.betrieb.zuggraph.nodes[ziel_ab.zid]
             info_ab = self.zugbeschriftung.format(zug_data, ziel_ab, "Abfahrt")
             info.append(info_ab)
@@ -341,8 +341,8 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                     if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in\
                             {ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK}:
                         self.abhaengigkeit_definieren(None,
-                                                      self.anschlussmatrix.abfahrt_ziele[_zid_ab],
-                                                      self.anschlussmatrix.ankunft_ziele[zid_an],
+                                                      self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
+                                                      self.anschlussmatrix.ankunft_ereignisse[zid_an],
                                                       self.anschlussmatrix.umsteigezeit)
 
         self.daten_update()
@@ -378,8 +378,8 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                     if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in \
                             {ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK}:
                         self.abhaengigkeit_definieren(None,
-                                                      self.anschlussmatrix.abfahrt_ziele[_zid_ab],
-                                                      self.anschlussmatrix.abfahrt_ziele[_zid_an])
+                                                      self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
+                                                      self.anschlussmatrix.abfahrt_ereignisse[_zid_an])
 
         self.daten_update()
         self.grafik_update()
@@ -394,8 +394,8 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
             i_an = self.anschlussmatrix.zid_ankuenfte_index.index(zid_an)
             if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in {ANSCHLUSS_ABWARTEN}:
                 self.abhaengigkeit_definieren(None,
-                                              self.anschlussmatrix.abfahrt_ziele[zid_ab],
-                                              self.anschlussmatrix.ankunft_ziele[zid_an])
+                                              self.anschlussmatrix.abfahrt_ereignisse[zid_ab],
+                                              self.anschlussmatrix.ankunft_ereignisse[zid_an])
 
         self.daten_update()
         self.grafik_update()
@@ -416,7 +416,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
     def action_plus_eins(self):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         for zid_ab, zid_an in auswahl:
-            self.verspaetung_aendern(self.anschlussmatrix.abfahrt_ziele[zid_ab], 1, True)
+            self.verspaetung_aendern(self.anschlussmatrix.abfahrt_ereignisse[zid_ab], 1, True)
 
         self.daten_update()
         self.grafik_update()
@@ -426,7 +426,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
     def action_minus_eins(self):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         for zid_ab, zid_an in auswahl:
-            self.verspaetung_aendern(self.anschlussmatrix.abfahrt_ziele[zid_ab], -1, True)
+            self.verspaetung_aendern(self.anschlussmatrix.abfahrt_ereignisse[zid_ab], -1, True)
 
         self.daten_update()
         self.grafik_update()

@@ -124,8 +124,8 @@ class Anschlussmatrix:
         self.zid_ankuenfte_index: List[int] = []
         self.zid_abfahrten_index: List[int] = []
         self.zuege: Dict[int, ZugGraphNode] = {}
-        self.ankunft_ziele: Dict[int, EreignisGraphNode] = {}
-        self.abfahrt_ziele: Dict[int, EreignisGraphNode] = {}
+        self.ankunft_ereignisse: Dict[int, EreignisGraphNode] = {}
+        self.abfahrt_ereignisse: Dict[int, EreignisGraphNode] = {}
         self.anschlussstatus = np.zeros((0, 0), dtype=float)
         self.anschlussplan = np.zeros_like(self.anschlussstatus)
         self.verspaetung = np.zeros_like(self.anschlussstatus)
@@ -206,16 +206,16 @@ class Anschlussmatrix:
 
         for label, data in ankunftsereignisse.items():
             self.zuege[label.zid] = zuggraph.nodes[label.zid]
-            self.ankunft_ziele[label.zid] = data
+            self.ankunft_ereignisse[label.zid] = data
 
         for label, data in abfahrtsereignisse.items():
             self.zuege[label.zid] = zuggraph.nodes[label.zid]
-            self.abfahrt_ziele[label.zid] = data
+            self.abfahrt_ereignisse[label.zid] = data
 
         self.zid_ankuenfte_set.difference_update(self.ankuenfte_ausblenden)
         self.zid_abfahrten_set.difference_update(self.abfahrten_ausblenden)
-        self.zid_ankuenfte_index = sorted(self.zid_ankuenfte_set, key=lambda z: self.ankunft_ziele[z].t_plan)
-        self.zid_abfahrten_index = sorted(self.zid_abfahrten_set, key=lambda z: self.abfahrt_ziele[z].t_plan)
+        self.zid_ankuenfte_index = sorted(self.zid_ankuenfte_set, key=lambda z: self.ankunft_ereignisse[z].t_plan)
+        self.zid_abfahrten_index = sorted(self.zid_abfahrten_set, key=lambda z: self.abfahrt_ereignisse[z].t_plan)
 
         n_ab, n_an = len(self.zid_abfahrten_index), len(self.zid_ankuenfte_index)
         a_ab, a_an = n_ab, n_an
@@ -224,12 +224,12 @@ class Anschlussmatrix:
         self.verspaetung = np.zeros((a_ab, a_an), dtype=float)
 
         for i_ab, zid_ab in enumerate(self.zid_abfahrten_index):
-            ereignis_ab = self.abfahrt_ziele[zid_ab]
+            ereignis_ab = self.abfahrt_ereignisse[zid_ab]
             zeit_ab = ereignis_ab.t_plan
             verspaetung_ab = ereignis_ab.t_prog - ereignis_ab.t_plan
 
             for i_an, zid_an in enumerate(self.zid_ankuenfte_index):
-                ereignis_an = self.ankunft_ziele[zid_an]
+                ereignis_an = self.ankunft_ereignisse[zid_an]
                 zeit_an = ereignis_an.t_plan
                 verspaetung_an = ereignis_an.t_prog - ereignis_an.t_plan
 
@@ -289,20 +289,20 @@ class Anschlussmatrix:
         aufgabe_auswahl = np.logical_and(aufgabe_auswahl, aufgabe_maske)
         self.anschlussstatus = np.where(aufgabe_auswahl, ANSCHLUSS_AUFGEBEN, self.anschlussstatus)
 
-        self.ankunft_labels = {zid: self.ankunft_beschriftung.format(self.zuege[zid], self.ankunft_ziele[zid], 'Ankunft')
+        self.ankunft_labels = {zid: self.ankunft_beschriftung.format(self.zuege[zid], self.ankunft_ereignisse[zid], 'Ankunft')
                                for zid in self.zid_ankuenfte_index}
-        self.abfahrt_labels = {zid: self.abfahrt_beschriftung.format(self.zuege[zid], self.abfahrt_ziele[zid], 'Abfahrt')
+        self.abfahrt_labels = {zid: self.abfahrt_beschriftung.format(self.zuege[zid], self.abfahrt_ereignisse[zid], 'Abfahrt')
                                for zid in self.zid_abfahrten_index}
 
         loeschen = set(self.zuege.keys()) - self.zid_ankuenfte_set - self.zid_abfahrten_set
         for zid in loeschen:
             del self.zuege[zid]
             try:
-                del self.ankunft_ziele[zid]
+                del self.ankunft_ereignisse[zid]
             except KeyError:
                 pass
             try:
-                del self.abfahrt_ziele[zid]
+                del self.abfahrt_ereignisse[zid]
             except KeyError:
                 pass
 
