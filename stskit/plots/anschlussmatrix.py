@@ -57,52 +57,57 @@ ANSCHLUESSE_VERSPAETET = {ANSCHLUSS_WARNUNG, ANSCHLUSS_ABWARTEN, ANSCHLUSS_AUFGE
 
 class Anschlussmatrix:
     """
-    attribute
+    Attribute
     ---------
 
-    - bahnhof: name des bahnhofs in anlage.bahnsteiggruppen.
-    - umsteigezeit: minimal nötige umsteigezeit in minuten im bahnhof.
-        dies bestimmt einerseits, ob ein zugspaar als anschluss erkannt wird,
-        und andererseits um wie viel sich ein abganszug verspätet, wenn er den anschluss abwartet.
-    - anschlusszeit: zeitfenster in minuten, in dem anschlüsse erkannt werden.
-        definiert damit indirekt auch die länge der matrix.
-    - anschlussplan (matrix): umsteigezeit in minuten nach fahrplan.
-        ein anschluss besteht, wenn die umsteigezeit grösser als `min_umsteigezeit` und kleiner als `anschlusszeit` ist.
-    - anschlussstatus (matrix): status des anschlusses.
-        dies ist gleichzeitig auch der numerische wert für die grafische darstellung.
-        der automatische status ist eine gerade zahl.
-        wenn der status vom fdl quittiert worden ist, wird die nächsthöhere ungerade zahl eingetragen,
-        was in der grafik die farbe ausbleicht.
-        mögliche werte sind als ANSCHLUSS_XXXX konstanten deklariert.
+    Die folgenden Attribute dienen zur Konfiguration:
 
-        nan: kein anschluss
-        0/1: anschluss erfüllt
-        2/3: anschluss abwarten
-        4/5: wartezeit erreicht, zug kann fahren
-        6/7: anschlusswarnung
-        8/9: anschluss aufgeben
+    - bahnhof: Typ und Name des Bahnhofs.
+    - umsteigezeit: Minimal nötige Umsteigezeit in Minuten.
+        Diese bestimmt einerseits, ob ein Zugspaar als Anschluss erkannt wird,
+        und andererseits um wie viel sich ein Abganszug verspätet, wenn er den Anschluss abwartet.
+    - anschlusszeit: Zeitfenster in minuten, in dem anschlüsse erkannt werden.
+        Definiert damit indirekt auch die Länge der Matrix.
+    - ankunft_filter_kategorien: Zugskategorien (s. Anlage.zugschema), die auf der Ankunftsachse erscheinen
+    - abfahrt_filter_kategorien: Zugskategorien (s. Anlage.zugschema), die auf der Abfahrtsachse erscheinen
+
+    Die folgenden Attribute werden von der Anlage abgeleitet:
+
+    - gleisnamen: Set von Gleisen, die zum Bahnhof gehören (von anlage übernommen)
+    - zuege: ZugGraphNode-Objekte der in der Matrix enthaltenen Züge, indiziert nach zid.
+    - zid_ankuenfte_set, zid_abfahrten_set: zid von Zügen, die in der Matrix dargestellt sind.
+    - zid_ankuenfte_index, zid_abfahrten_index: Geordnete Liste von Zügen, die in der Matrix dargestellt sind.
+        Diese Listen definieren die Achsen der Matrix,
+        Abfahrten in Dimension 0 (Zeilen), Ankünfte in Dimension 1 (Spalten).
+    - ankunft_ereignisse, abfahrt_ereignisse: Ereignisobjekte der in der Matrix enthaltenen Anschlüsse, indiziert nach zid.
+
+    Die folgenden Attribute werden in der grafischen Darstellung verwendet:
+
+    - anschlussplan (matrix): Umsteigezeit in Minuten nach Fahrplan.
+        Ein Anschluss besteht, wenn die planmässige verfügbare Zeit zwischen Ankunft und Abfahrt der Züge
+        grösser als `min_umsteigezeit` und kleiner als `anschlusszeit` ist.
+    - anschlussstatus (matrix): Status des Anschlusses.
+        Dies ist gleichzeitig auch der numerische Wert für die grafische Darstellung.
+        Der automatische Status ist eine gerade Zahl.
+        wenn der Status vom Fdl quittiert worden ist, wird die nächsthöhere ungerade Zahl eingetragen,
+        was in der Grafik die Farbe ausbleicht.
+        Mögliche Werte sind als ANSCHLUSS_XXXX-Konstanten deklariert.
+
+        nan: kein Anschluss
+        0/1: Anschluss erfüllt
+        2/3: Anschluss abwarten
+        4/5: Wartezeit erreicht, Zug kann fahren
+        6/7: Anschlusswarnung
+        8/9: Anschluss aufgeben
         10/11:
-        12/13: flag
-        14/15: selber zug
-        16/17: auswahlfarbe 1
-        18/19: auswahlfarbe 2
+        12/13: Flag-gesteuerter Anschluss
+        14/15: gleicher Zug
+        16/17: Auswahlfarbe 1
+        18/19: Auswahlfarbe 2
 
-    - verspaetung (matrix): geschätzte abgangsverspätung des abgängers in minuten
-    - ankunft_label_muster, abfahrt_label_muster: liste von ZUG_SCHILDER,
-        die den inhalt der zugbeschriftungen definieren.
-    - gleise: set von gleisen, die zum bahnhof gehören (von anlage übernommen)
-    - zid_ankuenfte_set, zid_abfahrten_set: zid von zügen, die in der matrix dargestellt sind.
-    - zid_ankuenfte_index, zid_abfahrten_index: geordnete liste von zügen, die in der matrix dargestellt sind.
-        diese listen definieren die achsen der matrix,
-        abfahrten in dimension 0 (zeilen), ankünfte in dimension 1 (spalten).
-    - zuege: ZugGraphNode-objekte der in der matrix enthaltenen züge, indiziert nach zid.
-    - ankunft_ziele, abfahrt_ziele: ZugZielPlanung-objekte der inder matrix enthaltenen anschlüsse, indiziert nach zid.
-    - eff_ankunftszeiten: effektive ankunftszeiten der züge in der matrix, indiziert nach zid.
-        die zeit wird in minuten ab mitternacht gemessen.
-        dient zur freigabe von anschlüssen nach der min_umsteigezeit.
-    - ankunft_labels, abfahrt_labels: zugbeschriftungen, indiziert nach zid.
-    - ankunft_filter_kategorien: zugskategorien (s. Anlage.zugschema), die auf der ankunftsachse erscheinen
-    - abfahrt_filter_kategorien: zugskategorien (s. Anlage.zugschema), die auf der abfahrtsachse erscheinen
+    - verspaetung (matrix): Geschätzte Abgangsverspätung in Minuten
+    - ankunft_labels, abfahrt_labels: Achsenbeschriftungen, indiziert nach zid.
+    - ankunft_insets, abfahrt_insets: Inset-Zugbeschriftungen, indiziert nach zid.
     """
 
     def __init__(self, zentrale: DatenZentrale):
