@@ -20,6 +20,7 @@ from stskit.zentrale import DatenZentrale
 from stskit.graphs.bahnhofgraph import BahnhofElement
 from stskit.graphs.ereignisgraph import EreignisGraphNode
 from stskit.graphs.zuggraph import ZugGraphNode
+from stskit.interface.stsobj import format_minutes, format_verspaetung
 from stskit.zugschema import Zugbeschriftung
 
 logger = logging.getLogger(__name__)
@@ -132,6 +133,8 @@ class Anschlussmatrix:
         self.anzeigematrix = np.zeros_like(self.anschlussstatus)
         self.ankunft_labels: Dict[int, str] = {}
         self.abfahrt_labels: Dict[int, str] = {}
+        self.ankunft_insets: Dict[int, str] = {}
+        self.abfahrt_insets: Dict[int, str] = {}
 
     def set_bahnhof(self, bahnhof: BahnhofElement):
         """
@@ -214,8 +217,16 @@ class Anschlussmatrix:
 
         self.zid_ankuenfte_set.difference_update(self.ankuenfte_ausblenden)
         self.zid_abfahrten_set.difference_update(self.abfahrten_ausblenden)
-        self.zid_ankuenfte_index = sorted(self.zid_ankuenfte_set, key=lambda z: self.ankunft_ereignisse[z].t_plan)
-        self.zid_abfahrten_index = sorted(self.zid_abfahrten_set, key=lambda z: self.abfahrt_ereignisse[z].t_plan)
+
+        def _sortierung(ereignis_dict: Dict[int, EreignisGraphNode]):
+            def _key(zid) -> Tuple[int, int]:
+                ereignis = ereignis_dict[zid]
+                zug = self.zuege[zid]
+                return ereignis.t_plan, zug.nummer
+            return _key
+
+        self.zid_ankuenfte_index = sorted(self.zid_ankuenfte_set, key=_sortierung(self.ankunft_ereignisse))
+        self.zid_abfahrten_index = sorted(self.zid_abfahrten_set, key=_sortierung(self.abfahrt_ereignisse), reverse=True)
 
         n_ab, n_an = len(self.zid_abfahrten_index), len(self.zid_ankuenfte_index)
         a_ab, a_an = n_ab, n_an
@@ -289,9 +300,32 @@ class Anschlussmatrix:
         aufgabe_auswahl = np.logical_and(aufgabe_auswahl, aufgabe_maske)
         self.anschlussstatus = np.where(aufgabe_auswahl, ANSCHLUSS_AUFGEBEN, self.anschlussstatus)
 
-        self.ankunft_labels = {zid: self.ankunft_beschriftung.format(self.zuege[zid], self.ankunft_ereignisse[zid], 'Ankunft')
+        def _format_label(zug: ZugGraphNode, richtung: str) -> str:
+            zeilen = [zug.name]
+            anst = self.zentrale.anlage.bahnhofgraph.find_superior(("Agl", zug.get(richtung)), {"Anst"})
+            zeilen.append(anst.name)
+            return "\n".join(zeilen)
+
+        def _format_inset(ereignis: EreignisGraphNode) -> str:
+            if ereignis.get("t_mess"):
+                return ""
+            t_plan = ereignis.t_plan
+            v = ereignis.t_eff - ereignis.t_plan
+            zeilen = [format_minutes(t_plan)]
+            if v > 0:
+                zeilen.append(format_verspaetung(v))
+            else:
+                zeilen.append("")
+
+            return "\n".join(zeilen)
+
+        self.ankunft_labels = {zid: _format_label(self.zuege[zid], "von")
                                for zid in self.zid_ankuenfte_index}
-        self.abfahrt_labels = {zid: self.abfahrt_beschriftung.format(self.zuege[zid], self.abfahrt_ereignisse[zid], 'Abfahrt')
+        self.abfahrt_labels = {zid: _format_label(self.zuege[zid], "nach")
+                               for zid in self.zid_abfahrten_index}
+        self.ankunft_insets = {zid: _format_inset(self.ankunft_ereignisse[zid])
+                               for zid in self.zid_ankuenfte_index}
+        self.abfahrt_insets = {zid: _format_inset(self.abfahrt_ereignisse[zid])
                                for zid in self.zid_abfahrten_index}
 
         loeschen = set(self.zuege.keys()) - self.zid_ankuenfte_set - self.zid_abfahrten_set
@@ -329,11 +363,7 @@ class Anschlussmatrix:
         ax.set_xlabel('Ankunft')
         try:
             x_labels = [self.ankunft_labels[zid] for zid in self.zid_ankuenfte_index] + [''] * (a_an - n_an)
-            x_labels_weigths = ['bold' if self.zuege[zid].amgleis and self.zuege[zid].gleis in self.gleisnamen else 'normal'
-                                for zid in self.zid_ankuenfte_index] + ['normal'] * (a_an - n_an)
             y_labels = [self.abfahrt_labels[zid] for zid in self.zid_abfahrten_index] + [''] * (a_ab - n_ab)
-            y_labels_weigths = ['bold' if self.zuege[zid].amgleis and self.zuege[zid].gleis in self.gleisnamen else 'normal'
-                                for zid in self.zid_abfahrten_index] + ['normal'] * (a_ab - n_ab)
         except KeyError as e:
             logger.warning(e)
             return
@@ -343,14 +373,10 @@ class Anschlussmatrix:
         ax.set_yticks(np.arange(a_ab), labels=y_labels)
         ax.tick_params(top=True, bottom=False, labeltop=True, labelbottom=False)
 
-        for zid, label, weight in zip(self.zid_ankuenfte_index, ax.get_xticklabels(),
-                                             x_labels_weigths):
-            label.set_fontweight(weight)
+        for zid, label in zip(self.zid_ankuenfte_index, ax.get_xticklabels()):
             label.set_picker(True)
             label.zids = (-1, zid)
-        for zid, label, weight in zip(self.zid_abfahrten_index, ax.get_yticklabels(),
-                                             y_labels_weigths):
-            label.set_fontweight(weight)
+        for zid, label in zip(self.zid_abfahrten_index, ax.get_yticklabels()):
             label.set_picker(True)
             label.zids = (zid, -1)
 
@@ -405,23 +431,23 @@ class Anschlussmatrix:
 
         n_an, n_ab = ankunft_matrix.shape[1], abfahrt_matrix.shape[0]
 
-        # main_extent = (-0.5, n_an - 0.5, -0.5, n_ab - 0.5)  # left, right, bottom, top
-        ankunft_extent = (-0.5, n_an - 0.5, n_ab - 0.5, n_ab)
-        abfahrt_extent = (-1.0, -0.5, -0.5, n_ab - 0.5)
-        # total_extent = (-1.0, n_an - 0.5, -0.5, n_ab)
+        # main_extent = (-0.5, n_an - 0.5, n_ab - 0.5, -0.5)  # left, right, bottom, top
+        ankunft_extent = (-0.5, n_an - 0.5, n_ab + 0.5, n_ab - 0.5)
+        abfahrt_extent = (-1.5, -0.5, n_ab - 0.5, -0.5)
+        # total_extent = (-1.5, n_an - 0.5, n_ab, -1.0)
 
         ax.imshow(ankunft_matrix, extent=ankunft_extent, **image_args)
         ax.imshow(abfahrt_matrix, extent=abfahrt_extent, **image_args)
-        ax.set_xlim(-1.0, n_an - 0.5)
-        ax.set_ylim(-0.5, n_ab)
+        ax.set_xlim(-1.5, n_an - 0.5)
+        ax.set_ylim(-0.5, n_ab + 0.5)
 
         for j, zid in enumerate(self.zid_ankuenfte_index):
-            label = self.zuege[zid].nummer
-            ax.text(j, n_ab - 0.25, label, **label_args)
+            ax.text(j, n_ab, self.ankunft_insets[zid], **label_args)
         for j, zid in enumerate(self.zid_abfahrten_index):
-            label = self.zuege[zid].nummer
-            ax.text(-0.75, j, label, rotation=90, **label_args)
+            ax.text(-1.0, j, self.abfahrt_insets[zid], rotation=90, **label_args)
 
+        ax.axhline(y=n_ab - 0.5, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
+        ax.axvline(x=-0.5, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
 
     def _make_auswahl_matrix(self, auswahl: Iterable[Tuple[int, int]]):
         """
