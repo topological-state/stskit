@@ -10,10 +10,6 @@ import logging
 from typing import Dict, Iterable, List, Optional, Set, Tuple, Type
 
 import matplotlib as mpl
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
-from matplotlib.image import AxesImage
-from matplotlib.text import Text
 import numpy as np
 
 from stskit.zentrale import DatenZentrale
