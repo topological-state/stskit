@@ -303,8 +303,12 @@ class Anschlussmatrix:
 
         def _format_label(zug: ZugGraphNode, richtung: str) -> str:
             zeilen = [zug.name]
-            anst = self.zentrale.anlage.bahnhofgraph.find_superior(("Agl", zug.get(richtung)), {"Anst"})
-            zeilen.append(anst.name)
+            try:
+                anst = self.zentrale.anlage.bahnhofgraph.find_superior(("Agl", zug.get(richtung)), {"Anst"})
+                zeilen.append(anst.name)
+            except KeyError:
+                pass
+
             return "\n".join(zeilen)
 
         def _format_inset(ereignis: EreignisGraphNode) -> str:
