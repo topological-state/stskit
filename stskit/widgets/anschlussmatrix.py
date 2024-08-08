@@ -7,7 +7,6 @@ import itertools
 import logging
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Type
 
-import matplotlib as mpl
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.image import AxesImage
@@ -17,6 +16,7 @@ import numpy as np
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
+from stskit.graphs.ereignisgraph import EreignisGraphEdge, EreignisGraphNode
 from stskit.plots.anschlussmatrix import Anschlussmatrix, \
     ANSCHLUSS_KEIN, ANSCHLUSS_OK, ANSCHLUSS_ABWARTEN, ANSCHLUSS_ERFOLGT, ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, \
     ANSCHLUSS_FLAG, ANSCHLUSS_SELBST, ANSCHLUSS_AUSWAHL_1, ANSCHLUSS_AUSWAHL_2, \
@@ -340,8 +340,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                 else:
                     if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in\
                             {ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK}:
-                        self.abhaengigkeit_definieren(None,
-                                                      self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
+                        self.abhaengigkeit_definieren(self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
                                                       self.anschlussmatrix.ankunft_ereignisse[zid_an],
                                                       self.anschlussmatrix.umsteigezeit)
 
@@ -377,8 +376,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                 else:
                     if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in \
                             {ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK}:
-                        self.abhaengigkeit_definieren(None,
-                                                      self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
+                        self.abhaengigkeit_definieren(self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
                                                       self.anschlussmatrix.abfahrt_ereignisse[_zid_an])
 
         self.daten_update()
@@ -393,9 +391,8 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
             i_ab = self.anschlussmatrix.zid_abfahrten_index.index(zid_ab)
             i_an = self.anschlussmatrix.zid_ankuenfte_index.index(zid_an)
             if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in {ANSCHLUSS_ABWARTEN}:
-                self.abhaengigkeit_definieren(None,
-                                              self.anschlussmatrix.abfahrt_ereignisse[zid_ab],
-                                              self.anschlussmatrix.ankunft_ereignisse[zid_an])
+                self.abhaengigkeit_loeschen(self.anschlussmatrix.abfahrt_ereignisse[zid_ab],
+                                            self.anschlussmatrix.ankunft_ereignisse[zid_an])
 
         self.daten_update()
         self.grafik_update()
@@ -457,8 +454,22 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
     def verspaetung_aendern(self, ziel: Any, verspaetung: int, relativ: bool = False):
         pass
 
-    def abhaengigkeit_definieren(self, klasse: Any,
-                                 ziel: Any,
-                                 referenz: Any,
+    def abhaengigkeit_definieren(self,
+                                 ziel: EreignisGraphNode,
+                                 referenz: EreignisGraphNode,
                                  wartezeit: Optional[int] = None):
-        pass
+
+        edge = EreignisGraphEdge(typ="A", zid=ziel.zid, dt_min=wartezeit or 0)
+        eg = self.zentrale.betrieb.ereignisgraph
+        if eg.has_node(referenz.node_id) and eg.has_node(ziel.node_id):
+            eg.add_edge(referenz.node_id, ziel.node_id, **edge)
+
+    def abhaengigkeit_loeschen(self,
+                                 ziel: EreignisGraphNode,
+                                 referenz: EreignisGraphNode):
+
+        eg = self.zentrale.betrieb.ereignisgraph
+        try:
+            eg.remove_edge(referenz.node_id, ziel.node_id)
+        except KeyError:
+            pass

@@ -270,9 +270,7 @@ class Anschlussmatrix:
                     except AttributeError:
                         freigabe = False
 
-                    # todo : fdl-korrektur
-                    # abwarten = True
-                    abwarten = False
+                    abwarten = self.zentrale.betrieb.ereignisgraph.has_edge(ereignis_an.node_id, ereignis_ab.node_id)
 
                     if freigabe:
                         status = ANSCHLUSS_ERFOLGT
