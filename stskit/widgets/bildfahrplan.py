@@ -87,7 +87,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
-        trasse_auswahl = False
+        trasse_auswahl = len(self._selected_edges) >= 1
         trasse_nachbar = None
 
         self.ui.actionSetup.setEnabled(display_mode)
@@ -96,8 +96,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionLoeschen.setEnabled(display_mode and trasse_auswahl)
         self.ui.actionPlusEins.setEnabled(display_mode and trasse_auswahl)
         self.ui.actionMinusEins.setEnabled(display_mode and trasse_auswahl)
-        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and trasse_nachbar == 0)
-        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and trasse_nachbar == 1)
+        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and self.kann_abfahrt_abwarten() is not None)
+        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and self.kann_ankunft_abwarten() is not None)
 
     def update_anlage(self):
         """
@@ -268,10 +268,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.grafik_update()
             self.update_actions()
         else:
-            while self._selected_edges:
-                edge = self._selected_edges[-1]
-                self.select_edge(edge[0], edge[1], False)
-
+            self.clear_selection()
             self.ui.zuginfoLabel.setText("")
             self.grafik_update()
             self.update_actions()
@@ -335,6 +332,18 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             edge = self._selected_edges[1]
             self.select_edge(edge[0], edge[1], False)
 
+    def clear_selection(self):
+        """
+        Trassenauswahl löschen
+
+        Löscht alle gewählten Trassen.
+        Die Grafik wird nicht aktualisiert.
+        """
+
+        while self._selected_edges:
+            edge = self._selected_edges[-1]
+            self.select_edge(edge[0], edge[1], False)
+
     def format_zuginfo(self, u: EreignisLabelType, v: EreignisLabelType):
         """
         zug-trasseninfo formatieren
@@ -374,8 +383,95 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def action_abfahrt_abwarten(self):
-        pass
+        """
+        Abfahrt des zweiten Zuges abwarten (Anschluss/Kreuzung)
+
+        Bedingungen
+        - Zwei Kanten selektiert.
+        - Beide Kanten gehen vom gleichen Bahnhof ab.
+        """
+
+        nodes = self.kann_abfahrt_abwarten()
+        if nodes is None:
+            return
+        else:
+            ziel, referenz = nodes
+
+        edge = EreignisGraphEdge(typ="A", zid=ziel.zid, dt_min=0)
+        eg = self.zentrale.betrieb.ereignisgraph
+        if eg.has_node(referenz.node_id) and eg.has_node(ziel.node_id):
+            eg.add_edge(referenz.node_id, ziel.node_id, **edge)
+
+        self.clear_selection()
+        self.grafik_update()
+        self.update_actions()
+
+    def kann_abfahrt_abwarten(self) -> Optional[Tuple[EreignisGraphNode, EreignisGraphNode]]:
+        """
+        Prüfen ob "Abfahrt abwarten" für aktuelle Auswahl möglich ist
+
+        Bedingungen
+        - Zwei Kanten selektiert.
+        - Beide Kanten gehen vom gleichen Bahnhof ab.
+
+        :return: Zielereignis und Referenzereignis wenn Befehl mäglich ist, sonst None
+        """
+
+        try:
+            ziel = self.plot.bildgraph.nodes[self._selected_edges[0][0]]
+            referenz = self.plot.bildgraph.nodes[self._selected_edges[1][0]]
+        except (IndexError, KeyError):
+            return None
+
+        if ziel.bst != referenz.bst:
+            return None
+
+        return ziel, referenz
 
     @pyqtSlot()
     def action_ankunft_abwarten(self):
-        pass
+        """
+        Ankunft des zweiten Zuges abwarten (Anschluss/Kreuzung)
+
+        Bedingungen
+        - Zwei Kanten selektiert.
+        - Zweite Kante endet im Bahnhof, wo die erste Kante abgeht.
+        """
+
+        nodes = self.kann_ankunft_abwarten()
+        if nodes is None:
+            return
+        else:
+            ziel, referenz = nodes
+
+        edge = EreignisGraphEdge(typ="A", zid=ziel.zid, dt_min=0)
+        eg = self.zentrale.betrieb.ereignisgraph
+        if eg.has_node(referenz.node_id) and eg.has_node(ziel.node_id):
+            eg.add_edge(referenz.node_id, ziel.node_id, **edge)
+
+        self.clear_selection()
+        self.grafik_update()
+        self.update_actions()
+
+    def kann_ankunft_abwarten(self) -> Optional[Tuple[EreignisGraphNode, EreignisGraphNode]]:
+        """
+        Prüfen ob "Ankunft abwarten" für aktuelle Auswahl möglich ist
+
+        Bedingungen
+        - Zwei Kanten selektiert.
+        - Zweite Kante endet im Bahnhof, wo die erste Kante abgeht.
+
+        :return: Zielereignis und Referenzereignis wenn Befehl mäglich ist, sonst None
+        """
+
+        try:
+            ziel = self.plot.bildgraph.nodes[self._selected_edges[0][0]]
+            referenz = self.plot.bildgraph.nodes[self._selected_edges[1][1]]
+        except (IndexError, KeyError):
+            return
+
+        if ziel.bst != referenz.bst:
+            return
+
+        return ziel, referenz
+
