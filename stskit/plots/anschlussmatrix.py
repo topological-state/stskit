@@ -10,6 +10,7 @@ import logging
 from typing import Dict, Iterable, List, Optional, Set, Tuple, Type
 
 import matplotlib as mpl
+import networkx as nx
 import numpy as np
 
 from stskit.zentrale import DatenZentrale
@@ -169,7 +170,7 @@ class Anschlussmatrix:
         startzeit = self.zentrale.simzeit_minuten
         endzeit = startzeit + self.anschlusszeit
         min_umsteigezeit = self.umsteigezeit
-        zuggraph = self.zentrale.betrieb.zuggraph
+        zuggraph = self.zentrale.betrieb.zuggraph.vollstaendige_zuege()
         ereignisgraph = self.zentrale.betrieb.ereignisgraph
         zielgraph = self.zentrale.betrieb.zielgraph
 

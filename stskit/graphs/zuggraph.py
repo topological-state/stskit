@@ -91,6 +91,21 @@ class ZugGraph(nx.DiGraph):
         super().__init__(incoming_graph_data, **attr)
         self.aenderungen: Dict[int, ZugGraphNode] = {}
 
+
+    def vollstaendige_zuege(self) -> 'ZugGraph':
+        """
+        View des ZugGraph nur mit vollständigen Zügen
+
+        Vollständige Züge haben alle deklarierten ZugGraphNode-Attribute gesetzt.
+        Züge, von denen z.B. nur der Knoten aber keine Zugdetails bekannt sind, werden gefiltert.
+        """
+
+        def filter_vollstaendige_zuege(node: ZugGraphNode):
+            zug_data = self.nodes[node]
+            return 'ausgefahren' in zug_data
+
+        return nx.subgraph_view(self, filter_vollstaendige_zuege)
+
     def reset_aenderungen(self):
         self.aenderungen = {}
 
