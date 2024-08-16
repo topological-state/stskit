@@ -97,7 +97,10 @@ class EreignisGraphNode(dict):
     t_mess = dict_property("t_mess", Optional[float], "Gemessene Uhrzeit in Minuten")
     s = dict_property("s", float, "Ort in Minuten")
 
-    bst = dict_property("bst", BahnhofLabelType)
+    # todo : die folgenden properties werden vom bildfahrplan genutzt. ev. verallgemeinern?
+    bst = dict_property("bst", BahnhofLabelType,
+                        "Betriebsstelle (Bahnhof oder Anschlussgruppe), in der das Ereignis stattfindet. "
+                        "Wird vom Bildfahrplan genutzt.")
     farbe = dict_property("farbe", str)
     marker = dict_property("marker", str)
 
