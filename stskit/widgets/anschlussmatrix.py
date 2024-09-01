@@ -451,8 +451,27 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    def verspaetung_aendern(self, ziel: Any, verspaetung: int, relativ: bool = False):
-        pass
+    def verspaetung_aendern(self,
+                            ziel: EreignisGraphNode,
+                            verspaetung: int,
+                            relativ: bool = False):
+
+        eg = self.zentrale.betrieb.ereignisgraph
+        n = ziel.node_id
+        for pre in eg.predecessors(n):
+            edge_data = eg.edges[(pre, n)]
+            print(pre, edge_data)
+            if edge_data.typ != 'A':
+                continue
+
+            if relativ:
+                try:
+                    startwert = edge_data.dt_fdl
+                except (AttributeError, KeyError):
+                    startwert = 0
+                edge_data.dt_fdl = startwert + verspaetung
+            else:
+                edge_data.dt_fdl = verspaetung
 
     def abhaengigkeit_definieren(self,
                                  ziel: EreignisGraphNode,

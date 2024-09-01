@@ -156,6 +156,7 @@ class EreignisGraphEdge(dict):
                             """)
     dt_min = dict_property("dt_min", float, "Minimale Dauer in Minuten")
     dt_max = dict_property("dt_max", float, "Maximale Dauer in Minuten")
+    dt_fdl = dict_property("dt_fdl", float, "Fdl-Korrektur: positiv erhöht dt_min, negativ erniedrigt dt_max")
     # dt = dict_property("dt", float, "Effektive Dauer in Minuten")
     ds = dict_property("ds", float, "Strecke in Minuten")
 
@@ -414,7 +415,15 @@ class EreignisGraph(nx.DiGraph):
                 except (AttributeError, KeyError):
                     pass
                 try:
+                    zeit_min += max(0, edge_data.dt_fdl)
+                except (AttributeError, KeyError):
+                    pass
+                try:
                     zeit_max = min(zeit_max, start_zeit + edge_data.dt_max)
+                except (AttributeError, KeyError):
+                    pass
+                try:
+                    zeit_max += min(0, edge_data.dt_fdl)
                 except (AttributeError, KeyError):
                     pass
 
