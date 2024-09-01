@@ -403,7 +403,11 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         self.anschlussmatrix.anschluss_aufgabe.difference_update(auswahl)
         for zid_ab, zid_an in auswahl:
-            pass
+            i_ab = self.anschlussmatrix.zid_abfahrten_index.index(zid_ab)
+            i_an = self.anschlussmatrix.zid_ankuenfte_index.index(zid_an)
+            if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in {ANSCHLUSS_ABWARTEN}:
+                self.abhaengigkeit_loeschen(self.anschlussmatrix.abfahrt_ereignisse[zid_ab],
+                                            self.anschlussmatrix.ankunft_ereignisse[zid_an])
 
         self.daten_update()
         self.grafik_update()
