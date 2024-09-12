@@ -68,6 +68,9 @@ class Anlage:
         self.zugschema = Zugschema()
 
     def update(self, client: GraphClient, config_path: os.PathLike):
+        config_path = Path(config_path)
+        debug_path = config_path / "debug"
+
         # todo : konfiguration speichern
         self.simzeit_minuten = client.calc_simzeit()
 
@@ -75,7 +78,6 @@ class Anlage:
             self.anlageninfo = client.anlageninfo
 
         if not self.config and config_path:
-            config_path = Path(config_path)
             default_path = Path(__file__).parent.parent / "config"
             try:
                 logger.info(f"Konfiguration laden von {config_path}")
@@ -96,8 +98,14 @@ class Anlage:
 
         if not self.signalgraph:
             self.signalgraph = client.signalgraph.copy(as_view=False)
+            if logger.isEnabledFor(logging.DEBUG):
+                debug_path.mkdir(exist_ok=True)
+                nx.write_gml(self.signalgraph, debug_path / f"{self.anlageninfo.aid}.signalgraph.gml", stringizer=str)
         if not self.bahnsteiggraph:
             self.bahnsteiggraph = client.bahnsteiggraph.copy(as_view=False)
+            if logger.isEnabledFor(logging.DEBUG):
+                nx.write_gml(self.bahnsteiggraph, debug_path / f"{self.anlageninfo.aid}.bahnsteiggraph.gml", stringizer=str)
+
         if not self.bahnhofgraph and self.signalgraph and self.bahnsteiggraph:
             self.bahnhofgraph.import_anlageninfo(self.anlageninfo)
             self.bahnhofgraph.import_bahnsteiggraph(self.bahnsteiggraph, default_bahnsteigname, default_bahnhofname)
@@ -106,6 +114,8 @@ class Anlage:
                 self.bahnhofgraph.konfigurieren(self.config['bahnhofgraph'])
             except KeyError:
                 logger.warning("keine bahnhofkonfiguration gefunden")
+            if logger.isEnabledFor(logging.DEBUG):
+                nx.write_gml(self.bahnhofgraph, debug_path / f"{self.anlageninfo.aid}.bahnhofgraph.gml", stringizer=str)
 
         self.zielgraph = client.zielgraph.copy(as_view=True)
         if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
@@ -122,6 +132,12 @@ class Anlage:
                 key = f"{strecke[0][1]}-{strecke[-1][1]}"
                 self.strecken[key] = strecke
             self.strecken_konfigurieren()
+
+        if logger.isEnabledFor(logging.DEBUG):
+            nx.write_gml(self.zielgraph, debug_path / f"{self.anlageninfo.aid}.zielgraph.gml", stringizer=str)
+            nx.write_gml(self.ereignisgraph, debug_path / f"{self.anlageninfo.aid}.ereignisgraph.gml", stringizer=str)
+            with open(debug_path / f"{self.anlageninfo.aid}.strecken.json", "w") as f:
+                json.dump(self.strecken, f)
 
     def liniengraph_konfigurieren(self):
         """
