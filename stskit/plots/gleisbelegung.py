@@ -23,9 +23,7 @@ import matplotlib as mpl
 import numpy as np
 import networkx as nx
 
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
-
+from stskit.utils.observer import Observable
 from stskit.dispo.anlage import Anlage
 from stskit.graphs.graphbasics import dict_property
 from stskit.graphs.bahnhofgraph import BahnhofElement
@@ -660,7 +658,7 @@ class Gleisbelegung:
 
 
 class GleisbelegungPlot:
-    def __init__(self, zentrale: DatenZentrale, axes):
+    def __init__(self, zentrale: DatenZentrale, canvas: mpl.backend_bases.FigureCanvasBase) -> None:
         self.zentrale = zentrale
         self.anlage = zentrale.anlage
 
@@ -678,7 +676,18 @@ class GleisbelegungPlot:
         self.vorlaufzeit = 55
         self.nachlaufzeit = 5
 
-        self._axes = axes
+        self.selection_changed = Observable(self)
+        self.selection_text: List[str] = []
+
+        self._canvas = canvas
+        self._axes = self._canvas.figure.subplots()
+        self._pick_event = False
+
+        self._canvas.mpl_connect("button_press_event", self.on_button_press)
+        self._canvas.mpl_connect("button_release_event", self.on_button_release)
+        self._canvas.mpl_connect("pick_event", self.on_pick)
+        self._canvas.mpl_connect("resize_event", self.on_resize)
+
 
     def grafik_update(self):
         """
@@ -809,3 +818,58 @@ class GleisbelegungPlot:
             r = mpl.patches.Rectangle(xy, w, h, fill=False, linestyle=warnung.linestyle, linewidth=warnung.linewidth,
                                       edgecolor=warnung.randfarbe, picker=True)
             self._axes.add_patch(r)
+
+    def on_resize(self, event):
+        self.grafik_update()
+
+    def on_button_press(self, event):
+        if self._pick_event:
+            self.grafik_update()
+        else:
+            if self._slot_auswahl:
+                self._slot_auswahl = []
+                self._warnung_auswahl = []
+                self.selection_text = []
+                self.grafik_update()
+
+        self._pick_event = False
+        self.selection_changed.notify()
+
+    def on_button_release(self, event):
+        pass
+
+    def on_pick(self, event):
+        if event.mouseevent.inaxes == self._axes:
+            # gleis = self.belegung.gleise[round(event.mouseevent.xdata)]
+            # zeit = event.mouseevent.ydata
+            auswahl = list(self._slot_auswahl)
+            self._pick_event = True
+
+            if isinstance(event.artist, mpl.patches.Rectangle):
+                try:
+                    slot = event.artist.slot
+                except AttributeError:
+                    pass
+                else:
+                    try:
+                        auswahl.remove(slot)
+                    except ValueError:
+                        auswahl.append(slot)
+            elif isinstance(event.artist, mpl.patches.FancyArrowPatch):
+                try:
+                    auswahl = [event.artist.ziel_slot, event.artist.ref_slot]
+                except AttributeError:
+                    pass
+
+            warnungen = set([])
+            for slot in auswahl:
+                warnungen = warnungen | set(self.belegung.slot_warnungen(slot))
+            self._warnung_auswahl = list(warnungen)
+
+            slots = set(auswahl)
+            for warnung in warnungen:
+                slots = slots | warnung.slots
+
+            self.selection_text = [str(slot) for slot in sorted(slots, key=lambda s: s.zeit)]
+
+            self._slot_auswahl = auswahl

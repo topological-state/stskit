@@ -43,7 +43,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Gleisbelegung")
 
         self.display_canvas = FigureCanvas(Figure(figsize=(5, 3)))
-        self.axes = self.display_canvas.figure.subplots()
 
         self.ui.displayLayout = QtWidgets.QHBoxLayout(self.ui.grafikWidget)
         self.ui.displayLayout.setObjectName("displayLayout")
@@ -65,12 +64,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.vorlaufzeit_spin.valueChanged.connect(self.vorlaufzeit_changed)
         self.ui.nachlaufzeit_spin.valueChanged.connect(self.nachlaufzeit_changed)
 
-        self.display_canvas.mpl_connect("button_press_event", self.on_button_press)
-        self.display_canvas.mpl_connect("button_release_event", self.on_button_release)
-        self.display_canvas.mpl_connect("pick_event", self.on_pick)
-        self.display_canvas.mpl_connect("resize_event", self.on_resize)
-
-        self.plot = GleisbelegungPlot(self.zentrale, self.axes)
+        self.plot = GleisbelegungPlot(self.zentrale, self.display_canvas)
+        self.plot.selection_changed.register(self.plot_selection_changed)
         if ansicht == "Agl":
             self.plot.vorlaufzeit = 15
 
@@ -154,17 +149,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     def grafik_update(self):
         self.plot.grafik_update()
 
-    def on_resize(self, event):
-        self.grafik_update()
-
-    def on_button_press(self, event):
-        self._pick_event = False
-
-    def on_button_release(self, event):
-        pass
-
-    def on_pick(self, event):
-        pass
+    def plot_selection_changed(self, *args, **kwargs):
+        text = "\n".join(self.plot.selection_text)
+        self.ui.zuginfoLabel.setText(text)
+        self.update_actions()
 
     @pyqtSlot()
     def settings_button_clicked(self):
