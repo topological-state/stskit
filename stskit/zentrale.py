@@ -9,8 +9,8 @@ Ziel dieser Trennung ist, dass auch andere PluginClients oder sogar andere Simul
 import logging
 import os
 from typing import Any, Optional
-import weakref
 
+from stskit.utils.observer import Observable
 from stskit.interface.stsobj import Ereignis, time_to_minutes
 from stskit.interface.stsgraph import GraphClient
 from stskit.dispo.anlage import Anlage
@@ -18,53 +18,6 @@ from stskit.dispo.betrieb import Betrieb
 from stskit.auswertung import Auswertung
 
 logger = logging.getLogger(__name__)
-
-
-class Observable:
-    """
-    notify observers of events
-
-    - observers are bound methods of object instances.
-    - the object keeps weak references - observers don't need to unregister.
-    """
-
-    def __init__(self, owner: Any):
-        self.owner = owner
-        self._observers = weakref.WeakKeyDictionary()
-
-    def register(self, observer):
-        """
-        register an observer
-
-        :param observer: must be a bound method.
-
-        :return: None
-        """
-
-        try:
-            obj = observer.__self__
-            func = observer.__func__
-            name = observer.__name__
-        except AttributeError:
-            raise
-        else:
-            self._observers[obj] = name
-
-    def notify(self, *args, **kwargs):
-        """
-        notify observers
-
-        the first two positional arguments sent to the observers are the instance of observable and the owner.
-        the remaining arguments are copied from the call arguments.
-
-        :param args: positional arguments to be passed to the observers.
-        :param kwargs: keyword arguments to be passed to the observers
-        :return: None
-        """
-
-        for obs, name in self._observers.items():
-            meth = getattr(obs, name)  # bound method
-            meth(self, *args, **kwargs)
 
 
 class DatenZentrale:
