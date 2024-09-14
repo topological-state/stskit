@@ -24,11 +24,9 @@ import numpy as np
 import networkx as nx
 
 from stskit.utils.observer import Observable
-from stskit.dispo.anlage import Anlage
-from stskit.graphs.graphbasics import dict_property
 from stskit.graphs.bahnhofgraph import BahnhofElement
 from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType
-from stskit.interface.stsobj import time_to_minutes
+from stskit.interface.stsobj import time_to_minutes, format_minutes, format_verspaetung
 from stskit.plots.plotbasics import hour_minutes_formatter
 from stskit.zugschema import Zugbeschriftung
 from stskit.zentrale import DatenZentrale
@@ -187,8 +185,25 @@ class Slot:
         return hash(self.key)
 
     def __str__(self) -> str:
-        # todo : fahrplandaten nicht verfuegbar
-        return str(self.fid)
+        v_an = format_verspaetung(self.verspaetung_an) if self.verspaetung_an else ""
+        v_ab = format_verspaetung(self.verspaetung_ab) if self.verspaetung_ab else ""
+        if v_an or v_ab:
+            v_an = v_an or "+0"
+            v_ab = v_ab or "+0"
+        if v_an == v_ab:
+            v_ab = ""
+        if v_an and v_ab:
+            v = f"{v_an}/{v_ab}"
+        else:
+            v = v_an or v_ab
+        if v:
+            v = f" ({v})"
+
+        s = (f"{self.titel}"
+             f" @ {self.gleis.name}:"
+             f" {format_minutes(self.zeit)} - {format_minutes(self.zeit + self.dauer)}{v}")
+
+        return s
 
 
 WARNUNG_STATUS = ['undefiniert', 'gleis', 'bahnsteig', 'ersatz', 'kuppeln', 'flügeln', 'fdl-markiert', 'fdl-ignoriert']
