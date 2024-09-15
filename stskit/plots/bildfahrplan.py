@@ -3,10 +3,12 @@ import logging
 from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set, Tuple, TypeVar, Union
 
 import matplotlib as mpl
+from matplotlib.lines import Line2D
 import networkx as nx
 
+from stskit.utils.observer import Observable
 from stskit.graphs.bahnhofgraph import BahnhofGraph, BahnhofLabelType
-from stskit.graphs.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge
+from stskit.graphs.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
 from stskit.graphs.zielgraph import ZielLabelType
 from stskit.graphs.zuggraph import ZugGraphNode
 from stskit.interface.stsobj import format_verspaetung, format_minutes
@@ -89,7 +91,7 @@ def format_zuginfo(zug: ZugGraphNode, abfahrt: EreignisGraphNode, ankunft: Ereig
 
 
 class BildfahrplanPlot:
-    def __init__(self, zentrale: DatenZentrale, axes):
+    def __init__(self, zentrale: DatenZentrale, canvas: mpl.backend_bases.FigureCanvasBase):
         self.zentrale = zentrale
         self.anlage = zentrale.anlage
 
@@ -110,7 +112,19 @@ class BildfahrplanPlot:
         self.vorlaufzeit = 55
         self.nachlaufzeit = 5
 
-        self._axes = axes
+        self.selection_changed = Observable(self)
+        self.selection_text: List[str] = []
+
+        self._pick_event: bool = False
+        self._selected_edges: List[Tuple[EreignisLabelType, ...]] = []
+
+        self._canvas = canvas
+        self._axes = self._canvas.figure.subplots()
+        self._canvas.mpl_connect("button_press_event", self.on_button_press)
+        self._canvas.mpl_connect("button_release_event", self.on_button_release)
+        self._canvas.mpl_connect("pick_event", self.on_pick)
+        self._canvas.mpl_connect("resize_event", self.on_resize)
+
 
     def _bahnhof_von_gleis(self, plan, zug):
         try:
@@ -446,3 +460,139 @@ class BildfahrplanPlot:
             color = mpl.rcParams['grid.color']
             r = mpl.patches.Rectangle(xy, w, h, color=color, alpha=0.1, linewidth=None)
             self._axes.add_patch(r)
+
+    def on_resize(self, event):
+        """
+        Matplotlib Resize-Event
+
+        Zeichnet die Grafik neu.
+
+        :param event:
+        :return:
+        """
+
+        self.draw_graph()
+
+
+    def on_button_press(self, event):
+        """
+        Matplotlib Button-Press Event
+
+        Aktualisiert die Grafik, wenn zuvor ein Pick-Event stattgefunden hat.
+        Wenn kein Pick-Event stattgefunden hat, wird die aktuelle Trassenauswahl gelöscht.
+
+        :param event:
+        :return:
+        """
+
+        if self._pick_event:
+            self.draw_graph()
+        else:
+            self.clear_selection()
+            self.draw_graph()
+
+        self._pick_event = False
+        self.selection_changed.notify()
+
+    def on_button_release(self, event):
+        """
+        Matplotlib Button-Release Event
+
+        Hat im Moment keine Wirkung.
+
+        :param event:
+        :return:
+        """
+
+        pass
+
+    def on_pick(self, event):
+        """
+        Matplotlib Pick-Event wählt Liniensegmente (Trassen) aus oder ab
+
+        Die Auswahl wird in _selected_edges gespeichert.
+        Es können maximal zwei Trassen gewählt sein.
+
+        :param event:
+        :return:
+        """
+
+        if event.mouseevent.inaxes == self._axes:
+            self._pick_event = True
+            if isinstance(event.artist, Line2D):
+                try:
+                    edge = event.artist.edge
+                except AttributeError:
+                    return
+                else:
+                    self.select_edge(edge[0], edge[1], True)
+
+            self.selection_text = [self.format_zuginfo(*tr) for tr in self._selected_edges]
+
+    def select_edge(self, u: EreignisLabelType, v: EreignisLabelType, sel: bool):
+        """
+        Zugtrasse selektieren
+
+        :param u: Ausgangspunkt der Trasse im Ereignisgraph
+        :param v: Zielpunkt der Trasse im Ereignisgraph
+        :return: None
+        """
+
+        if not sel:
+            try:
+                self._selected_edges.remove((u, v))
+            except ValueError:
+                pass
+
+        edge_data = self.bildgraph.get_edge_data(u, v)
+        if edge_data is not None:
+            if sel:
+                self._selected_edges.append((u, v))
+                idx = min(2, len(self._selected_edges))
+                edge_data.auswahl = idx
+            else:
+                edge_data.auswahl = 0
+
+        if len(self._selected_edges) > 2:
+            edge = self._selected_edges[1]
+            self.select_edge(edge[0], edge[1], False)
+
+    def clear_selection(self):
+        """
+        Trassenauswahl löschen
+
+        Löscht alle gewählten Trassen.
+        Die Grafik wird nicht aktualisiert.
+        Observers werden nicht benachrichtigt.
+        """
+
+        while self._selected_edges:
+            edge = self._selected_edges[-1]
+            self.select_edge(edge[0], edge[1], False)
+        self.selection_text = []
+
+    def format_zuginfo(self, u: EreignisLabelType, v: EreignisLabelType):
+        """
+        Zugtrasseninfo formatieren
+
+        Beispiel:
+        ICE 573 A-D: B 2 ab 15:30 +3, C 3 an 15:40 +3
+
+        :param u: Ausgangspunkt der Trasse im Ereignisgraph
+        :param v: Zielpunkt der Trasse im Ereignisgraph
+        :return: (str)
+        """
+
+        abfahrt = self.bildgraph.nodes[u]
+        ankunft = self.bildgraph.nodes[v]
+        zug = self.zentrale.betrieb.zuggraph.nodes[abfahrt.zid]
+
+        z1 = format_minutes(abfahrt.t_eff)
+        z2 = format_minutes(ankunft.t_eff)
+        v1 = format_verspaetung(round(abfahrt.t_eff - abfahrt.t_plan))
+        v2 = format_verspaetung(round(ankunft.t_eff - ankunft.t_plan))
+        name = zug.name
+        von = zug.von
+        nach = zug.nach
+
+        return f"{name} ({von} - {nach}): {abfahrt.gleis} ab {z1}{v1}, {ankunft.gleis} an {z2}{v2}"

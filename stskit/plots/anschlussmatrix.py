@@ -23,8 +23,6 @@ from stskit.zugschema import Zugbeschriftung
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
-mpl.use('Qt5Agg')
-
 
 class Anschluss(IntFlag):
     OK = 0

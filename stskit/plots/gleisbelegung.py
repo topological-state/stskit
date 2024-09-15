@@ -31,8 +31,6 @@ from stskit.plots.plotbasics import hour_minutes_formatter
 from stskit.zugschema import Zugbeschriftung
 from stskit.zentrale import DatenZentrale
 
-mpl.use('Qt5Agg')
-
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 

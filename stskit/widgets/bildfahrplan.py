@@ -3,28 +3,22 @@ import itertools
 import logging
 from typing import Dict, List, Optional, Tuple, Type
 
-import matplotlib as mpl
 from PyQt5.QtCore import pyqtSlot
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from matplotlib.lines import Line2D
 from PyQt5 import QtWidgets
 
 from stskit.dispo.anlage import Anlage
 from stskit.graphs.ereignisgraph import EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
-from stskit.graphs.zuggraph import ZugGraphNode
 from stskit.interface.stsobj import time_to_minutes
 from stskit.interface.stsplugin import PluginClient
 from stskit.plots.bildfahrplan import BildfahrplanPlot
-from stskit.interface.stsobj import format_minutes, format_verspaetung
 from stskit.zentrale import DatenZentrale
 
 from stskit.qt.ui_bildfahrplan import Ui_BildfahrplanWindow
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
-
-mpl.use('Qt5Agg')
 
 
 class BildFahrplanWindow(QtWidgets.QMainWindow):
@@ -34,9 +28,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         self.zentrale = zentrale
         self.zentrale.planung_update.register(self.planung_update)
-
-        self._pick_event: bool = False
-        self._selected_edges: List[Tuple[EreignisLabelType, ...]] = []
 
         self.ui = Ui_BildfahrplanWindow()
         self.ui.setupUi(self)
@@ -65,13 +56,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.vorlaufzeit_spin.valueChanged.connect(self.vorlaufzeit_changed)
         self.ui.nachlaufzeit_spin.valueChanged.connect(self.nachlaufzeit_changed)
 
-        self._axes = self.display_canvas.figure.subplots()
-        self.display_canvas.mpl_connect("button_press_event", self.on_button_press)
-        self.display_canvas.mpl_connect("button_release_event", self.on_button_release)
-        self.display_canvas.mpl_connect("pick_event", self.on_pick)
-        self.display_canvas.mpl_connect("resize_event", self.on_resize)
-
-        self.plot = BildfahrplanPlot(zentrale, self._axes)
+        self.plot = BildfahrplanPlot(zentrale, self.display_canvas)
+        self.plot.selection_changed.register(self.plot_selection_changed)
 
         self.plot.default_strecke_waehlen()
         self.update_widgets()
@@ -87,7 +73,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
-        trasse_auswahl = len(self._selected_edges) >= 1
+        trasse_auswahl = len(self.plot._selected_edges) >= 1
         trasse_nachbar = None
 
         self.ui.actionSetup.setEnabled(display_mode)
@@ -234,140 +220,13 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.plot.update_ereignisgraph()
 
     def grafik_update(self):
-        self._axes.clear()
         self.plot.zeit = time_to_minutes(self.client.calc_simzeit())
         self.plot.draw_graph()
 
-        self._axes.figure.tight_layout()
-        self._axes.figure.canvas.draw()
-
-    def on_resize(self, event):
-        """
-        matplotlib resize-event
-
-        zeichnet die grafik neu.
-
-        :param event:
-        :return:
-        """
-
-        self.grafik_update()
-
-    def on_button_press(self, event):
-        """
-        matplotlib button-press event
-
-        aktualisiert die grafik, wenn zuvor ein pick-event stattgefunden hat.
-        wenn kein pick-event stattgefunden hat, wird die aktuelle trassenauswahl gelöscht.
-
-        :param event:
-        :return:
-        """
-
-        if self._pick_event:
-            self.grafik_update()
-            self.update_actions()
-        else:
-            self.clear_selection()
-            self.ui.zuginfoLabel.setText("")
-            self.grafik_update()
-            self.update_actions()
-
-        self._pick_event = False
-
-    def on_button_release(self, event):
-        """
-        matplotlib button-release event
-
-        hat im moment keine wirkung.
-
-        :param event:
-        :return:
-        """
-
-        pass
-
-    def on_pick(self, event):
-        """
-        matplotlib pick-event wählt liniensegmente (trassen) aus oder ab
-
-        die auswahl wird in _selected_edges gespeichert.
-        es können maximal zwei trassen gewählt sein.
-
-        :param event:
-        :return:
-        """
-
-        if event.mouseevent.inaxes == self._axes:
-            self._pick_event = True
-            if isinstance(event.artist, Line2D):
-                try:
-                    edge = event.artist.edge
-                except AttributeError:
-                    return
-                else:
-                    self.select_edge(edge[0], edge[1], True)
-
-            l = [self.format_zuginfo(*tr) for tr in self._selected_edges]
-            s = "\n".join(l)
-            self.ui.zuginfoLabel.setText(s)
-
-    def select_edge(self, u: EreignisLabelType, v: EreignisLabelType, sel: bool):
-        if not sel:
-            try:
-                self._selected_edges.remove((u, v))
-            except ValueError:
-                pass
-
-        edge_data = self.plot.bildgraph.get_edge_data(u, v)
-        if edge_data is not None:
-            if sel:
-                self._selected_edges.append((u, v))
-                idx = min(2, len(self._selected_edges))
-                edge_data.auswahl = idx
-            else:
-                edge_data.auswahl = 0
-
-        if len(self._selected_edges) > 2:
-            edge = self._selected_edges[1]
-            self.select_edge(edge[0], edge[1], False)
-
-    def clear_selection(self):
-        """
-        Trassenauswahl löschen
-
-        Löscht alle gewählten Trassen.
-        Die Grafik wird nicht aktualisiert.
-        """
-
-        while self._selected_edges:
-            edge = self._selected_edges[-1]
-            self.select_edge(edge[0], edge[1], False)
-
-    def format_zuginfo(self, u: EreignisLabelType, v: EreignisLabelType):
-        """
-        zug-trasseninfo formatieren
-
-        beispiel:
-        ICE 573 A-D: B 2 ab 15:30 +3, C 3 an 15:40 +3
-
-        :param trasse: ausgewaehlte trasse
-        :return: (str)
-        """
-
-        abfahrt = self.plot.bildgraph.nodes[u]
-        ankunft = self.plot.bildgraph.nodes[v]
-        zug = self.zentrale.betrieb.zuggraph.nodes[abfahrt.zid]
-
-        z1 = format_minutes(abfahrt.t_eff)
-        z2 = format_minutes(ankunft.t_eff)
-        v1 = format_verspaetung(round(abfahrt.t_eff - abfahrt.t_plan))
-        v2 = format_verspaetung(round(ankunft.t_eff - ankunft.t_plan))
-        name = zug.name
-        von = zug.von
-        nach = zug.nach
-
-        return f"{name} ({von} - {nach}): {abfahrt.gleis} ab {z1}{v1}, {ankunft.gleis} an {z2}{v2}"
+    def plot_selection_changed(self, *args, **kwargs):
+        text = "\n".join(self.plot.selection_text)
+        self.ui.zuginfoLabel.setText(text)
+        self.update_actions()
 
     @pyqtSlot()
     def action_plus_eins(self):
@@ -402,7 +261,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         if eg.has_node(referenz.node_id) and eg.has_node(ziel.node_id):
             eg.add_edge(referenz.node_id, ziel.node_id, **edge)
 
-        self.clear_selection()
+        self.plot.clear_selection()
         self.grafik_update()
         self.update_actions()
 
@@ -418,8 +277,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         """
 
         try:
-            ziel = self.plot.bildgraph.nodes[self._selected_edges[0][0]]
-            referenz = self.plot.bildgraph.nodes[self._selected_edges[1][0]]
+            ziel = self.plot.bildgraph.nodes[self.plot._selected_edges[0][0]]
+            referenz = self.plot.bildgraph.nodes[self.plot._selected_edges[1][0]]
         except (IndexError, KeyError):
             return None
 
@@ -449,7 +308,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         if eg.has_node(referenz.node_id) and eg.has_node(ziel.node_id):
             eg.add_edge(referenz.node_id, ziel.node_id, **edge)
 
-        self.clear_selection()
+        self.plot.clear_selection()
         self.grafik_update()
         self.update_actions()
 
@@ -465,8 +324,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         """
 
         try:
-            ziel = self.plot.bildgraph.nodes[self._selected_edges[0][0]]
-            referenz = self.plot.bildgraph.nodes[self._selected_edges[1][1]]
+            ziel = self.plot.bildgraph.nodes[self.plot._selected_edges[0][0]]
+            referenz = self.plot.bildgraph.nodes[self.plot._selected_edges[1][1]]
         except (IndexError, KeyError):
             return
 
