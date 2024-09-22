@@ -61,7 +61,7 @@ import math
 import networkx as nx
 import numpy as np
 
-from stskit.graphs.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode
+from stskit.model.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode
 
 docstring = """
     Verbindungstyp:

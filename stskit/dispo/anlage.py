@@ -3,20 +3,20 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import networkx as nx
 
-from stskit.interface.stsgraph import GraphClient
-from stskit.interface.stsobj import Ereignis, AnlagenInfo
-from stskit.graphs.signalgraph import SignalGraph
-from stskit.graphs.bahnhofgraph import BahnhofGraph, BahnsteigGraph
-from stskit.graphs.liniengraph import LinienGraph, LinienGraphEdge
-from stskit.graphs.zielgraph import ZielGraph
-from stskit.graphs.ereignisgraph import EreignisGraph
+from stskit.plugin.stsgraph import GraphClient
+from stskit.plugin.stsobj import Ereignis, AnlagenInfo
+from stskit.model.signalgraph import SignalGraph
+from stskit.model.bahnhofgraph import BahnhofGraph, BahnsteigGraph
+from stskit.model.liniengraph import LinienGraph, LinienGraphEdge
+from stskit.model.zielgraph import ZielGraph
+from stskit.model.ereignisgraph import EreignisGraph
 from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
 from stskit.utils.export import json_object_hook
-from stskit.zugschema import Zugschema
+from stskit.model.zugschema import Zugschema
 
 
 logger = logging.getLogger(__name__)

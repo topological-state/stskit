@@ -3,9 +3,8 @@ datenstrukturen und fenster für anschlussmatrix
 
 
 """
-import itertools
 import logging
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Type
+from typing import Optional
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -16,12 +15,10 @@ import numpy as np
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
-from stskit.graphs.ereignisgraph import EreignisGraphEdge, EreignisGraphNode
+from stskit.model.ereignisgraph import EreignisGraphEdge, EreignisGraphNode
 from stskit.plots.anschlussmatrix import Anschlussmatrix, \
-    ANSCHLUSS_KEIN, ANSCHLUSS_OK, ANSCHLUSS_ABWARTEN, ANSCHLUSS_ERFOLGT, ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, \
-    ANSCHLUSS_FLAG, ANSCHLUSS_SELBST, ANSCHLUSS_AUSWAHL_1, ANSCHLUSS_AUSWAHL_2, \
-    ANSCHLUESSE_VERSPAETET
-from stskit.zugschema import Zugbeschriftung, ZugbeschriftungAuswahlModell, ZugschemaAuswahlModell
+    ANSCHLUSS_OK, ANSCHLUSS_ABWARTEN, ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN
+from stskit.model.zugschema import Zugbeschriftung, ZugbeschriftungAuswahlModell, ZugschemaAuswahlModell
 
 from stskit.qt.ui_anschlussmatrix import Ui_AnschlussmatrixWindow
 

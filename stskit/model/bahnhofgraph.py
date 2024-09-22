@@ -3,9 +3,9 @@ from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Optional, Se
 
 import networkx as nx
 
-from stskit.graphs.graphbasics import dict_property
-from stskit.interface.stsobj import AnlagenInfo, BahnsteigInfo, Knoten
-from stskit.graphs.signalgraph import SignalGraph
+from stskit.model.graphbasics import dict_property
+from stskit.plugin.stsobj import AnlagenInfo, BahnsteigInfo, Knoten
+from stskit.model.signalgraph import SignalGraph
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

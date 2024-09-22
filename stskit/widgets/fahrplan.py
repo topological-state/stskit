@@ -12,10 +12,10 @@ from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
 from stskit.zentrale import DatenZentrale
-from stskit.interface.stsobj import time_to_minutes, format_verspaetung, format_minutes
+from stskit.plugin.stsobj import format_verspaetung, format_minutes
 from stskit.qt.ui_fahrplan import Ui_FahrplanWidget
-from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielLabelType
-from stskit.graphs.zuggraph import ZugGraph, ZugGraphNode
+from stskit.model.zielgraph import ZielGraph, ZielGraphNode, ZielLabelType
+from stskit.model.zuggraph import ZugGraph, ZugGraphNode
 from stskit.plots.zielplot import ZielPlot
 
 logger = logging.getLogger(__name__)

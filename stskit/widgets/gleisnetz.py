@@ -6,7 +6,7 @@ dieses modul ist in entwicklung.
 
 import logging
 import math
-from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, Union
+from typing import Callable, Iterable, Optional
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -18,11 +18,11 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
 from stskit.dispo.anlage import Anlage
-from stskit.graphs.bahnhofgraph import BahnhofGraph
-from stskit.graphs.liniengraph import LinienGraph
-from stskit.graphs.signalgraph import (graph_weichen_ersetzen, graph_anschluesse_pruefen,
-                                       graph_bahnsteigsignale_ersetzen, graph_signalpaare_ersetzen,
-                                       graph_schleifen_aufloesen, graph_zwischensignale_entfernen)
+from stskit.model.bahnhofgraph import BahnhofGraph
+from stskit.model.liniengraph import LinienGraph
+from stskit.model.signalgraph import (graph_weichen_ersetzen, graph_anschluesse_pruefen,
+                                      graph_bahnsteigsignale_ersetzen, graph_signalpaare_ersetzen,
+                                      graph_schleifen_aufloesen, graph_zwischensignale_entfernen)
 
 from stskit.zentrale import DatenZentrale
 from stskit.qt.ui_gleisnetz import Ui_GleisnetzWindow

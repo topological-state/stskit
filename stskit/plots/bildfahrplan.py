@@ -1,19 +1,19 @@
 import math
 import logging
-from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set, Tuple, TypeVar, Union
+from typing import Any, Dict, List, Optional, Tuple
 
 import matplotlib as mpl
 from matplotlib.lines import Line2D
 import networkx as nx
 
 from stskit.utils.observer import Observable
-from stskit.graphs.bahnhofgraph import BahnhofGraph, BahnhofLabelType
-from stskit.graphs.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
-from stskit.graphs.zielgraph import ZielLabelType
-from stskit.graphs.zuggraph import ZugGraphNode
-from stskit.interface.stsobj import format_verspaetung, format_minutes
+from stskit.model.bahnhofgraph import BahnhofLabelType
+from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
+from stskit.model.zielgraph import ZielLabelType
+from stskit.model.zuggraph import ZugGraphNode
+from stskit.plugin.stsobj import format_verspaetung, format_minutes
 from stskit.plots.plotbasics import hour_minutes_formatter
-from stskit.zugschema import Zugbeschriftung
+from stskit.model.zugschema import Zugbeschriftung
 from stskit.zentrale import DatenZentrale
 
 

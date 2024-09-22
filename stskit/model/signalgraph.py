@@ -3,8 +3,8 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple, Ty
 
 import networkx as nx
 
-from stskit.graphs.graphbasics import dict_property
-from stskit.interface.stsobj import Knoten
+from stskit.model.graphbasics import dict_property
+from stskit.plugin.stsobj import Knoten
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

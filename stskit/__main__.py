@@ -20,15 +20,15 @@ from PyQt5.QtCore import pyqtSlot
 import trio
 import qtrio
 
-from stskit.interface.stsplugin import PluginClient, TaskDone, DEFAULT_HOST, DEFAULT_PORT
-from stskit.interface.stsgraph import GraphClient
+from stskit.plugin.stsplugin import TaskDone, DEFAULT_HOST, DEFAULT_PORT
+from stskit.plugin.stsgraph import GraphClient
 from stskit.zentrale import DatenZentrale
 from stskit.widgets.anschlussmatrix import AnschlussmatrixWindow
-from stskit.einstellungen import EinstellungenWindow
+from stskit.widgets.einstellungen import EinstellungenWindow
 from stskit.widgets.gleisbelegung import GleisbelegungWindow
-from stskit.gleisnetz import GleisnetzWindow
-from stskit.qticker import TickerWindow
-from stskit.fahrplan import FahrplanWindow
+from stskit.widgets.gleisnetz import GleisnetzWindow
+from stskit.widgets.qticker import TickerWindow
+from stskit.widgets.fahrplan import FahrplanWindow
 from stskit.widgets.bildfahrplan import BildFahrplanWindow
 
 logger = logging.getLogger(__name__)

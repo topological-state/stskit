@@ -3,8 +3,8 @@ from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, TypeVar,
 
 import networkx as nx
 
-from stskit.graphs.graphbasics import dict_property
-from stskit.interface.stsobj import ZugDetails
+from stskit.model.graphbasics import dict_property
+from stskit.plugin.stsobj import ZugDetails
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

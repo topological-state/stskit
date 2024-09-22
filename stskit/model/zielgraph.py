@@ -5,10 +5,10 @@ from typing import Any, Callable, Dict, Iterable, NamedTuple, Optional, Set, Tup
 
 import networkx as nx
 
-from stskit.graphs.graphbasics import dict_property
-from stskit.graphs.bahnhofgraph import BahnhofGraph
-from stskit.interface.stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
-from stskit.interface.stsobj import Knoten, FahrplanZeile, ZugDetails, FahrplanZeileID
+from stskit.model.graphbasics import dict_property
+from stskit.model.bahnhofgraph import BahnhofGraph
+from stskit.plugin.stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
+from stskit.plugin.stsobj import Knoten, FahrplanZeile, ZugDetails, FahrplanZeileID
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

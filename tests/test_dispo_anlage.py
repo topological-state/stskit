@@ -1,7 +1,7 @@
 import unittest
 import networkx as nx
 import stskit.dispo.anlage as anlage
-from stskit.interface.stsobj import AnlagenInfo
+from stskit.plugin.stsobj import AnlagenInfo
 from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
 
 

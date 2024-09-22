@@ -8,14 +8,14 @@ Ziel dieser Trennung ist, dass auch andere PluginClients oder sogar andere Simul
 
 import logging
 import os
-from typing import Any, Optional
+from typing import Optional
 
 from stskit.utils.observer import Observable
-from stskit.interface.stsobj import Ereignis, time_to_minutes
-from stskit.interface.stsgraph import GraphClient
+from stskit.plugin.stsobj import Ereignis, time_to_minutes
+from stskit.plugin.stsgraph import GraphClient
 from stskit.dispo.anlage import Anlage
 from stskit.dispo.betrieb import Betrieb
-from stskit.auswertung import Auswertung
+from stskit.dispo.auswertung import Auswertung
 
 logger = logging.getLogger(__name__)
 

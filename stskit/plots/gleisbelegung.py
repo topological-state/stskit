@@ -17,18 +17,18 @@ import functools
 import itertools
 import logging
 import re
-from typing import AbstractSet, Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple, Type, Union
+from typing import Any, Dict, Iterable, List, Set, Tuple
 
 import matplotlib as mpl
 import numpy as np
 import networkx as nx
 
 from stskit.utils.observer import Observable
-from stskit.graphs.bahnhofgraph import BahnhofElement
-from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType
-from stskit.interface.stsobj import time_to_minutes, format_minutes, format_verspaetung
+from stskit.model.bahnhofgraph import BahnhofElement
+from stskit.model.zielgraph import ZielGraphNode, ZielLabelType
+from stskit.plugin.stsobj import time_to_minutes, format_minutes, format_verspaetung
 from stskit.plots.plotbasics import hour_minutes_formatter
-from stskit.zugschema import Zugbeschriftung
+from stskit.model.zugschema import Zugbeschriftung
 from stskit.zentrale import DatenZentrale
 
 logger = logging.getLogger(__name__)

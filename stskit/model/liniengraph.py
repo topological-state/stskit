@@ -4,9 +4,9 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple, Ty
 
 import networkx as nx
 
-from stskit.graphs.graphbasics import dict_property
-from stskit.graphs.bahnhofgraph import BahnsteigGraphNode, BahnhofLabelType
-from stskit.graphs.zielgraph import ZielGraphNode
+from stskit.model.graphbasics import dict_property
+from stskit.model.bahnhofgraph import BahnsteigGraphNode, BahnhofLabelType
+from stskit.model.zielgraph import ZielGraphNode
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

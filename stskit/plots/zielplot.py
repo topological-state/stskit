@@ -5,8 +5,8 @@ import matplotlib as mpl
 import networkx as nx
 import numpy as np
 
-from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode
-from stskit.graphs.zuggraph import ZugGraph, ZugGraphNode
+from stskit.model.zielgraph import ZielGraph, ZielGraphNode
+from stskit.model.zuggraph import ZugGraph, ZugGraphNode
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

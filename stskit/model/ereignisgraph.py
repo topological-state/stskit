@@ -34,11 +34,11 @@ from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Optional, Se
 
 import networkx as nx
 
-from stskit.interface.stsobj import Ereignis
-from stskit.interface.stsobj import time_to_minutes
-from stskit.graphs.graphbasics import dict_property
-from stskit.graphs.bahnhofgraph import BahnhofLabelType
-from stskit.graphs.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType
+from stskit.plugin.stsobj import Ereignis
+from stskit.plugin.stsobj import time_to_minutes
+from stskit.model.graphbasics import dict_property
+from stskit.model.bahnhofgraph import BahnhofLabelType
+from stskit.model.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

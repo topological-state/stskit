@@ -1,7 +1,6 @@
-import math
 import itertools
 import logging
-from typing import Dict, List, Optional, Tuple, Type
+from typing import Optional, Tuple
 
 from PyQt5.QtCore import pyqtSlot
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -9,9 +8,9 @@ from matplotlib.figure import Figure
 from PyQt5 import QtWidgets
 
 from stskit.dispo.anlage import Anlage
-from stskit.graphs.ereignisgraph import EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
-from stskit.interface.stsobj import time_to_minutes
-from stskit.interface.stsplugin import PluginClient
+from stskit.model.ereignisgraph import EreignisGraphNode, EreignisGraphEdge
+from stskit.plugin.stsobj import time_to_minutes
+from stskit.plugin.stsplugin import PluginClient
 from stskit.plots.bildfahrplan import BildfahrplanPlot
 from stskit.zentrale import DatenZentrale
 

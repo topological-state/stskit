@@ -7,18 +7,17 @@ Datenstrukturen für Anschlussmatrix
 from enum import IntFlag
 import itertools
 import logging
-from typing import Dict, Iterable, List, Optional, Set, Tuple, Type
+from typing import Dict, Iterable, List, Optional, Set, Tuple
 
 import matplotlib as mpl
-import networkx as nx
 import numpy as np
 
 from stskit.zentrale import DatenZentrale
-from stskit.graphs.bahnhofgraph import BahnhofElement
-from stskit.graphs.ereignisgraph import EreignisGraphNode
-from stskit.graphs.zuggraph import ZugGraphNode
-from stskit.interface.stsobj import format_minutes, format_verspaetung
-from stskit.zugschema import Zugbeschriftung
+from stskit.model.bahnhofgraph import BahnhofElement
+from stskit.model.ereignisgraph import EreignisGraphNode
+from stskit.model.zuggraph import ZugGraphNode
+from stskit.plugin.stsobj import format_minutes, format_verspaetung
+from stskit.model.zugschema import Zugbeschriftung
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

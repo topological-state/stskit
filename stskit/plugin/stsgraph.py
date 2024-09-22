@@ -6,12 +6,12 @@ from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, TypeVar,
 
 import networkx as nx
 
-from stskit.interface.stsobj import Knoten
-from stskit.interface.stsplugin import PluginClient, TaskDone
-from stskit.graphs.signalgraph import SignalGraph
-from stskit.graphs.bahnhofgraph import BahnsteigGraph
-from stskit.graphs.zuggraph import ZugGraph
-from stskit.graphs.zielgraph import ZielGraph
+from stskit.plugin.stsobj import Knoten
+from stskit.plugin.stsplugin import PluginClient, TaskDone
+from stskit.model.signalgraph import SignalGraph
+from stskit.model.bahnhofgraph import BahnsteigGraph
+from stskit.model.zuggraph import ZugGraph
+from stskit.model.zielgraph import ZielGraph
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

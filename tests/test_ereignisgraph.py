@@ -2,8 +2,8 @@ import unittest
 
 import networkx as nx
 
-from stskit.graphs.ereignisgraph import EreignisGraph, EreignisGraphEdge, EreignisGraphNode
-from stskit.graphs.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode, PlanungParams
+from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphEdge, EreignisGraphNode
+from stskit.model.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode, PlanungParams
 
 
 class TestEreignisPrognose(unittest.TestCase):

@@ -11,8 +11,8 @@ die ausgabe erfolgt auf stdout.
 import argparse
 import trio
 
-from stskit.interface.stsplugin import PluginClient
-from stskit.interface.stsobj import Ereignis
+from stskit.plugin.stsplugin import PluginClient
+from stskit.plugin.stsobj import Ereignis
 
 
 COLORCODES = {

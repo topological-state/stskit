@@ -20,10 +20,10 @@ import matplotlib as mpl
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import QModelIndex
 
-from stskit.graphs.ereignisgraph import EreignisGraphNode
-from stskit.graphs.zielgraph import ZielGraphNode
-from stskit.interface.stsobj import time_to_minutes, ZugDetails
-from stskit.graphs.zuggraph import ZugGraphNode
+from stskit.model.ereignisgraph import EreignisGraphNode
+from stskit.model.zielgraph import ZielGraphNode
+from stskit.plugin.stsobj import time_to_minutes, ZugDetails
+from stskit.model.zuggraph import ZugGraphNode
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

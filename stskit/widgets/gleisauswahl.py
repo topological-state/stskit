@@ -15,7 +15,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex
 
 from stskit.dispo.anlage import Anlage
-from stskit.graphs.bahnhofgraph import BahnhofElement
+from stskit.model.bahnhofgraph import BahnhofElement
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

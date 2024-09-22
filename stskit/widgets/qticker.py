@@ -14,7 +14,7 @@ from typing import Any, List
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QModelIndex
 
-from stskit.interface.stsobj import Ereignis
+from stskit.plugin.stsobj import Ereignis
 from stskit.zentrale import DatenZentrale
 
 logger = logging.getLogger(__name__)

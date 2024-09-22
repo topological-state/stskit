@@ -7,7 +7,7 @@ from typing import Any, Dict, Iterable, Mapping
 import networkx as nx
 import numpy as np
 
-from stskit.interface.stsobj import ZugDetails, FahrplanZeile, Ereignis, time_to_seconds
+from stskit.plugin.stsobj import ZugDetails, FahrplanZeile, Ereignis, time_to_seconds
 from stskit.dispo.anlage import Anlage
 from stskit.utils.export import JSONEncoder
 

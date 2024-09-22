@@ -1,19 +1,16 @@
-import collections
-import json
 import logging
 import os
-from pathlib import Path
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Dict
 
 import networkx as nx
 
 from stskit.dispo.anlage import Anlage
-from stskit.interface.stsgraph import GraphClient
-from stskit.interface.stsobj import Ereignis
-from stskit.graphs.ereignisgraph import EreignisGraph
-from stskit.graphs.zielgraph import ZielGraph
-from stskit.graphs.zuggraph import ZugGraph
-from stskit.zugschema import Zugschema
+from stskit.plugin.stsgraph import GraphClient
+from stskit.plugin.stsobj import Ereignis
+from stskit.model.ereignisgraph import EreignisGraph
+from stskit.model.zielgraph import ZielGraph
+from stskit.model.zuggraph import ZugGraph
+from stskit.model.zugschema import Zugschema
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())

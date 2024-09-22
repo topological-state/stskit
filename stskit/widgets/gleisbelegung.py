@@ -1,15 +1,14 @@
 import logging
-from typing import AbstractSet, Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple, Type, Union
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from stskit.dispo.anlage import Anlage
-from stskit.graphs.bahnhofgraph import BahnhofElement
-from stskit.interface.stsplugin import PluginClient
+from stskit.model.bahnhofgraph import BahnhofElement
+from stskit.plugin.stsplugin import PluginClient
 from stskit.plots.gleisbelegung import GleisbelegungPlot
 from stskit.qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 from stskit.widgets.gleisauswahl import GleisauswahlModell

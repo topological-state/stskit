@@ -6,12 +6,11 @@ Einstellungsfenster
 """
 
 import logging
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Set, Tuple, Type, Union
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
-from stskit.zugschema import Zugschema, ZugschemaBearbeitungModell
+from stskit.model.zugschema import Zugschema, ZugschemaBearbeitungModell
 from stskit.dispo.anlage import Anlage
 from stskit.zentrale import DatenZentrale
 
