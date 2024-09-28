@@ -256,7 +256,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             ziel, referenz = nodes
 
         edge = EreignisGraphEdge(typ="A", zid=ziel.zid, dt_min=0)
-        eg = self.zentrale.betrieb.ereignisgraph
+        eg = self.zentrale.anlage.ereignisgraph
         if eg.has_node(referenz.node_id) and eg.has_node(ziel.node_id):
             eg.add_edge(referenz.node_id, ziel.node_id, **edge)
 
@@ -303,7 +303,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             ziel, referenz = nodes
 
         edge = EreignisGraphEdge(typ="A", zid=ziel.zid, dt_min=0)
-        eg = self.zentrale.betrieb.ereignisgraph
+        eg = self.zentrale.anlage.ereignisgraph
         if eg.has_node(referenz.node_id) and eg.has_node(ziel.node_id):
             eg.add_edge(referenz.node_id, ziel.node_id, **edge)
 

@@ -303,14 +303,14 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         info = []
         try:
             ziel_an = self.anschlussmatrix.ankunft_ereignisse[zids[1]]
-            zug_data = self.zentrale.betrieb.zuggraph.nodes[ziel_an.zid]
+            zug_data = self.zentrale.anlage.zuggraph.nodes[ziel_an.zid]
             info_an = self.zugbeschriftung.format(zug_data, ziel_an, "Ankunft")
             info.append(info_an)
         except (IndexError, KeyError):
             pass
         try:
             ziel_ab = self.anschlussmatrix.abfahrt_ereignisse[zids[0]]
-            zug_data = self.zentrale.betrieb.zuggraph.nodes[ziel_ab.zid]
+            zug_data = self.zentrale.anlage.zuggraph.nodes[ziel_ab.zid]
             info_ab = self.zugbeschriftung.format(zug_data, ziel_ab, "Abfahrt")
             info.append(info_ab)
         except (IndexError, KeyError):
@@ -457,7 +457,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                             verspaetung: int,
                             relativ: bool = False):
 
-        eg = self.zentrale.betrieb.ereignisgraph
+        eg = self.zentrale.anlage.ereignisgraph
         n = ziel.node_id
         for pre in eg.predecessors(n):
             edge_data = eg.edges[(pre, n)]
@@ -480,7 +480,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                                  wartezeit: Optional[int] = None):
 
         edge = EreignisGraphEdge(typ="A", zid=ziel.zid, dt_min=wartezeit or 0)
-        eg = self.zentrale.betrieb.ereignisgraph
+        eg = self.zentrale.anlage.ereignisgraph
         if eg.has_node(referenz.node_id) and eg.has_node(ziel.node_id):
             eg.add_edge(referenz.node_id, ziel.node_id, **edge)
 
@@ -488,7 +488,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                                  ziel: EreignisGraphNode,
                                  referenz: EreignisGraphNode):
 
-        eg = self.zentrale.betrieb.ereignisgraph
+        eg = self.zentrale.anlage.ereignisgraph
         try:
             eg.remove_edge(referenz.node_id, ziel.node_id)
         except KeyError:

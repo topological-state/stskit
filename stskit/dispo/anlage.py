@@ -1,3 +1,11 @@
+"""
+Aktuelle Stellwerk- und Fahrplandaten
+
+Das Anlageobjekt hält die aktuellen Stellwerk- und Fahrplandaten in graphbasierten Datenstrukturen.
+Alle Daten können jederzeit ausgelesen werden,
+dürfen jedoch nur von Modulen aus dem dispo-Package direkt verändert werden.
+"""
+
 import collections
 import json
 import logging
@@ -12,6 +20,7 @@ from stskit.plugin.stsobj import Ereignis, AnlagenInfo
 from stskit.model.signalgraph import SignalGraph
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnsteigGraph
 from stskit.model.liniengraph import LinienGraph, LinienGraphEdge
+from stskit.model.zuggraph import ZugGraph
 from stskit.model.zielgraph import ZielGraph
 from stskit.model.ereignisgraph import EreignisGraph
 from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
@@ -57,6 +66,7 @@ class Anlage:
         self.bahnsteiggraph = BahnsteigGraph()
         self.bahnhofgraph = BahnhofGraph()
         self.liniengraph = LinienGraph()
+        self.zuggraph = ZugGraph()
         self.zielgraph = ZielGraph()
         self.ereignisgraph = EreignisGraph()
 
@@ -117,6 +127,7 @@ class Anlage:
             if logger.isEnabledFor(logging.DEBUG):
                 nx.write_gml(self.bahnhofgraph, debug_path / f"{self.anlageninfo.aid}.bahnhofgraph.gml", stringizer=str)
 
+        self.zuggraph = client.zuggraph.copy(as_view=True)
         self.zielgraph = client.zielgraph.copy(as_view=True)
         if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
             self.liniengraph_konfigurieren()

@@ -167,9 +167,9 @@ class Anschlussmatrix:
         startzeit = self.zentrale.simzeit_minuten
         endzeit = startzeit + self.anschlusszeit
         min_umsteigezeit = self.umsteigezeit
-        zuggraph = self.zentrale.betrieb.zuggraph.vollstaendige_zuege()
-        ereignisgraph = self.zentrale.betrieb.ereignisgraph
-        zielgraph = self.zentrale.betrieb.zielgraph
+        zuggraph = self.zentrale.anlage.zuggraph.vollstaendige_zuege()
+        ereignisgraph = self.zentrale.anlage.ereignisgraph
+        zielgraph = self.zentrale.anlage.zielgraph
 
         kats = {zid: self.zentrale.anlage.zugschema.kategorie(zug)
                 for zid, zug in zuggraph.nodes(data=True)
@@ -268,7 +268,7 @@ class Anschlussmatrix:
                     except AttributeError:
                         freigabe = False
 
-                    abwarten = self.zentrale.betrieb.ereignisgraph.has_edge(ereignis_an.node_id, ereignis_ab.node_id)
+                    abwarten = self.zentrale.anlage.ereignisgraph.has_edge(ereignis_an.node_id, ereignis_ab.node_id)
 
                     if freigabe:
                         status = ANSCHLUSS_ERFOLGT

@@ -1,9 +1,9 @@
 """
-Zentrale Datenschnittstelle
+Nachrichtenzentrale
 
-Die einzelnen Benutzermodule dürfen nicht direkt auf die Pluginschnittstelle zugreifen.
-Dieses Modul stellt die zentrale Datenschnittstelle bereit.
-Ziel dieser Trennung ist, dass auch andere PluginClients oder sogar andere Simulatoren verwendet werden können.
+Die Nachrichtenzentrale hält die Anlage- und Betriebsobjekte
+und stellt die Schnittstelle zu den Benutzermodulen bereit.
+Änderungen an den Betriebsdaten werden über Observer gemeldet.
 """
 
 import logging
@@ -27,9 +27,9 @@ class DatenZentrale:
     Die Datenzentrale ist unterteilt in:
     - Die Plugin-Schnittstelle hält die Daten vom Simulator bereit, s. Modul stsgraph.
       Die Benutzermodule dürfen nicht direkt auf diese Objekte zugreifen.
-    - Die Anlage beschreibt das Stellwerk, s. Modul anlage.
-    - Der Betrieb enthält die aktuellen Fahrplandaten, s. Modul betrieb.
-      Das Objekt betrieb ersetzt das Objekt planung aus Version 1.
+    - Die Anlage beschreibt das Stellwerk und die aktuellen Fahrplandaten, s. Modul dispo.anlage.
+    - Der Betrieb verwaltet die Änderungen des Benutzers, s. Modul dispo.betrieb.
+      Alle Anlagen- und Fahrplanänderungen müssen über diese Schnittstelle beantragt werden.
     - Die Auswertung wertet erfolgte Zugbewegungen aus, s. Modul auswertung.
 
     Die Klasse implementiert asynchrone Methoden, die die Plugin-Schnittstelle abfragen
@@ -81,11 +81,7 @@ class DatenZentrale:
         self.anlage.update(self.client, self.config_path)
         if not self.betrieb:
             self.betrieb = Betrieb()
-            # voruebergehender parallelbetrieb
-            self.betrieb.zuggraph = self.client.zuggraph
-            self.betrieb.zielgraph = self.anlage.zielgraph
-            self.betrieb.ereignisgraph = self.anlage.ereignisgraph
-        self.betrieb.update(self.client, self.anlage, self.config_path)
+        self.betrieb.update(self.anlage, self.config_path)
         if not self.auswertung:
             self.auswertung = Auswertung(self.anlage)
         self.auswertung.zuege_uebernehmen(self.client.zugliste.values())
@@ -132,8 +128,6 @@ class DatenZentrale:
 
         if self.anlage:
             self.anlage.sim_ereignis_uebernehmen(ereignis)
-        if self.betrieb:
-            self.betrieb.ereignis_uebernehmen(ereignis)
         if self.auswertung:
             self.auswertung.ereignis_uebernehmen(ereignis)
 

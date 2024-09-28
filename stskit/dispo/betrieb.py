@@ -18,23 +18,7 @@ logger.addHandler(logging.NullHandler())
 
 class Betrieb:
     def __init__(self):
-        self.config: Dict[str, Any] = {}
+        pass
 
-        self.zuggraph = ZugGraph()
-        self.zielgraph = ZielGraph()
-        self.ereignisgraph = EreignisGraph()
-
-        self.zugschema = Zugschema()
-
-    def update(self, client: GraphClient, anlage: Anlage, config_path: os.PathLike):
-        self.zielgraph = client.zielgraph.copy(as_view=True)
-        self.zielgraph.einfahrtszeiten_korrigieren(anlage.liniengraph, anlage.bahnhofgraph)
-        self.ereignisgraph.zielgraph_importieren(self.zielgraph)
-        self.ereignisgraph.prognose()
-        if logger.isEnabledFor(logging.DEBUG):
-            nx.write_gml(self.zielgraph, "zielgraph.gml", stringizer=str)
-            nx.write_gml(self.ereignisgraph, "ereignisgraph.gml", stringizer=str)
-        self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
-
-    def ereignis_uebernehmen(self, ereignis: Ereignis):
+    def update(self, anlage: Anlage, config_path: os.PathLike):
         pass

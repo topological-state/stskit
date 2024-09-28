@@ -585,7 +585,7 @@ class BildfahrplanPlot:
 
         abfahrt = self.bildgraph.nodes[u]
         ankunft = self.bildgraph.nodes[v]
-        zug = self.zentrale.betrieb.zuggraph.nodes[abfahrt.zid]
+        zug = self.zentrale.anlage.zuggraph.nodes[abfahrt.zid]
 
         z1 = format_minutes(abfahrt.t_eff)
         z2 = format_minutes(ankunft.t_eff)
