@@ -585,14 +585,20 @@ class BildfahrplanPlot:
 
         abfahrt = self.bildgraph.nodes[u]
         ankunft = self.bildgraph.nodes[v]
-        zug = self.zentrale.anlage.zuggraph.nodes[abfahrt.zid]
+
+        try:
+            zug = self.zentrale.anlage.zuggraph.nodes[abfahrt.zid]
+            name = zug.name
+            von = zug.von
+            nach = zug.nach
+        except KeyError:
+            name = f"[{abfahrt.zid}]"
+            von = "?"
+            nach = "?"
 
         z1 = format_minutes(abfahrt.t_eff)
         z2 = format_minutes(ankunft.t_eff)
         v1 = format_verspaetung(round(abfahrt.t_eff - abfahrt.t_plan))
         v2 = format_verspaetung(round(ankunft.t_eff - ankunft.t_plan))
-        name = zug.name
-        von = zug.von
-        nach = zug.nach
 
         return f"{name} ({von} - {nach}): {abfahrt.gleis} ab {z1}{v1}, {ankunft.gleis} an {z2}{v2}"
