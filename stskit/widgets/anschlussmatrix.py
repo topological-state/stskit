@@ -337,9 +337,9 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                 else:
                     if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in\
                             {ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK}:
-                        self.abhaengigkeit_definieren(self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
-                                                      self.anschlussmatrix.ankunft_ereignisse[zid_an],
-                                                      self.anschlussmatrix.umsteigezeit)
+                        self.zentrale.betrieb.abfahrt_abwarten(self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
+                                                               self.anschlussmatrix.ankunft_ereignisse[zid_an],
+                                                               self.anschlussmatrix.umsteigezeit)
 
         self.daten_update()
         self.grafik_update()
@@ -373,8 +373,8 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                 else:
                     if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in \
                             {ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK}:
-                        self.abhaengigkeit_definieren(self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
-                                                      self.anschlussmatrix.abfahrt_ereignisse[_zid_an])
+                        self.zentrale.betrieb.abfahrt_abwarten(self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
+                                                               self.anschlussmatrix.abfahrt_ereignisse[_zid_an])
 
         self.daten_update()
         self.grafik_update()
@@ -388,8 +388,8 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
             i_ab = self.anschlussmatrix.zid_abfahrten_index.index(zid_ab)
             i_an = self.anschlussmatrix.zid_ankuenfte_index.index(zid_an)
             if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in {ANSCHLUSS_ABWARTEN}:
-                self.abhaengigkeit_loeschen(self.anschlussmatrix.abfahrt_ereignisse[zid_ab],
-                                            self.anschlussmatrix.ankunft_ereignisse[zid_an])
+                self.zentrale.betrieb.abfahrt_zuruecksetzen(self.anschlussmatrix.abfahrt_ereignisse[zid_ab],
+                                                            self.anschlussmatrix.ankunft_ereignisse[zid_an])
 
         self.daten_update()
         self.grafik_update()
@@ -403,8 +403,8 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
             i_ab = self.anschlussmatrix.zid_abfahrten_index.index(zid_ab)
             i_an = self.anschlussmatrix.zid_ankuenfte_index.index(zid_an)
             if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in {ANSCHLUSS_ABWARTEN}:
-                self.abhaengigkeit_loeschen(self.anschlussmatrix.abfahrt_ereignisse[zid_ab],
-                                            self.anschlussmatrix.ankunft_ereignisse[zid_an])
+                self.zentrale.betrieb.abfahrt_zuruecksetzen(self.anschlussmatrix.abfahrt_ereignisse[zid_ab],
+                                                            self.anschlussmatrix.ankunft_ereignisse[zid_an])
 
         self.daten_update()
         self.grafik_update()
@@ -414,7 +414,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
     def action_plus_eins(self):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         for zid_ab, zid_an in auswahl:
-            self.verspaetung_aendern(self.anschlussmatrix.abfahrt_ereignisse[zid_ab], 1, True)
+            self.zentrale.betrieb.wartezeit_aendern(self.anschlussmatrix.abfahrt_ereignisse[zid_ab], 1, True)
 
         self.daten_update()
         self.grafik_update()
@@ -424,7 +424,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
     def action_minus_eins(self):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         for zid_ab, zid_an in auswahl:
-            self.verspaetung_aendern(self.anschlussmatrix.abfahrt_ereignisse[zid_ab], -1, True)
+            self.zentrale.betrieb.wartezeit_aendern(self.anschlussmatrix.abfahrt_ereignisse[zid_ab], -1, True)
 
         self.daten_update()
         self.grafik_update()
@@ -451,45 +451,3 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.daten_update()
         self.grafik_update()
         self.update_actions()
-
-    def verspaetung_aendern(self,
-                            ziel: EreignisGraphNode,
-                            verspaetung: int,
-                            relativ: bool = False):
-
-        eg = self.zentrale.anlage.ereignisgraph
-        n = ziel.node_id
-        for pre in eg.predecessors(n):
-            edge_data = eg.edges[(pre, n)]
-            print(pre, edge_data)
-            if edge_data.typ != 'A':
-                continue
-
-            if relativ:
-                try:
-                    startwert = edge_data.dt_fdl
-                except (AttributeError, KeyError):
-                    startwert = 0
-                edge_data.dt_fdl = startwert + verspaetung
-            else:
-                edge_data.dt_fdl = verspaetung
-
-    def abhaengigkeit_definieren(self,
-                                 ziel: EreignisGraphNode,
-                                 referenz: EreignisGraphNode,
-                                 wartezeit: Optional[int] = None):
-
-        edge = EreignisGraphEdge(typ="A", zid=ziel.zid, dt_min=wartezeit or 0)
-        eg = self.zentrale.anlage.ereignisgraph
-        if eg.has_node(referenz.node_id) and eg.has_node(ziel.node_id):
-            eg.add_edge(referenz.node_id, ziel.node_id, **edge)
-
-    def abhaengigkeit_loeschen(self,
-                                 ziel: EreignisGraphNode,
-                                 referenz: EreignisGraphNode):
-
-        eg = self.zentrale.anlage.ereignisgraph
-        try:
-            eg.remove_edge(referenz.node_id, ziel.node_id)
-        except KeyError:
-            pass

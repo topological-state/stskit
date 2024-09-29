@@ -229,15 +229,42 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def action_plus_eins(self):
-        pass
+        try:
+            ziel = self.plot.bildgraph.nodes[self.plot._selected_edges[0][0]]
+        except (IndexError, KeyError):
+            return None
+        else:
+            self.zentrale.betrieb.wartezeit_aendern(ziel, 1, True)
+
+        self.plot.clear_selection()
+        self.grafik_update()
+        self.update_actions()
 
     @pyqtSlot()
     def action_minus_eins(self):
-        pass
+        try:
+            ziel = self.plot.bildgraph.nodes[self.plot._selected_edges[0][0]]
+        except (IndexError, KeyError):
+            return None
+        else:
+            self.zentrale.betrieb.wartezeit_aendern(ziel, -1, True)
+
+        self.plot.clear_selection()
+        self.grafik_update()
+        self.update_actions()
 
     @pyqtSlot()
     def action_loeschen(self):
-        pass
+        try:
+            ziel = self.plot.bildgraph.nodes[self.plot._selected_edges[0][0]]
+        except (IndexError, KeyError):
+            return None
+        else:
+            self.zentrale.betrieb.abfahrt_zuruecksetzen(ziel)
+
+        self.plot.clear_selection()
+        self.grafik_update()
+        self.update_actions()
 
     @pyqtSlot()
     def action_abfahrt_abwarten(self):
@@ -254,11 +281,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             return
         else:
             ziel, referenz = nodes
-
-        edge = EreignisGraphEdge(typ="A", zid=ziel.zid, dt_min=0)
-        eg = self.zentrale.anlage.ereignisgraph
-        if eg.has_node(referenz.node_id) and eg.has_node(ziel.node_id):
-            eg.add_edge(referenz.node_id, ziel.node_id, **edge)
+            self.zentrale.betrieb.abfahrt_abwarten(ziel, referenz)
 
         self.plot.clear_selection()
         self.grafik_update()
@@ -301,11 +324,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             return
         else:
             ziel, referenz = nodes
-
-        edge = EreignisGraphEdge(typ="A", zid=ziel.zid, dt_min=0)
-        eg = self.zentrale.anlage.ereignisgraph
-        if eg.has_node(referenz.node_id) and eg.has_node(ziel.node_id):
-            eg.add_edge(referenz.node_id, ziel.node_id, **edge)
+            self.zentrale.betrieb.ankunft_abwarten(ziel, referenz)
 
         self.plot.clear_selection()
         self.grafik_update()
