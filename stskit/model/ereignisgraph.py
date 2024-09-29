@@ -652,9 +652,10 @@ class EreignisGraph(nx.DiGraph):
         Node label mit gegebenen Attributen suchen.
 
         :param zid: Zug-ID.
-        #param start: Startnode.
+        :param start: Startnode.
         :param kwargs: Gesuchte Attributwerte.
             Die Keys müssen Attributnamen von EreignisGraphNode entsprechen.
+            Bei float-Attributen gilt eine Toleranz von 0.0001.
         :raise KeyError: Zug wird nicht gefunden.
         :raise ValueError: Attributwerte werden nicht gefunden.
         """
@@ -668,7 +669,10 @@ class EreignisGraph(nx.DiGraph):
 
             data = self.nodes[label]
             for kw, arg in kwargs.items():
-                if data.get(kw) != arg:
+                if kw in {'t_mess', 't_plan', 't_prog', 's'}:
+                    if abs(arg - data.get(kw)) > 0.0001:
+                        break
+                elif data.get(kw) != arg:
                     break
             else:
                 return label
