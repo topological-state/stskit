@@ -38,7 +38,7 @@ from stskit.plugin.stsobj import Ereignis
 from stskit.plugin.stsobj import time_to_minutes
 from stskit.model.graphbasics import dict_property
 from stskit.model.bahnhofgraph import BahnhofLabelType
-from stskit.model.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType
+from stskit.model.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType, MIN_MINUTES
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -48,23 +48,17 @@ class EreignisLabelType(NamedTuple):
     """
     Identifikation des Ereignisses.
 
-    Die ID besteht aus der Zug-ID und der Ereignis-ID.
-    Der erste Knoten eines Zuges erhält die ID (zid, 0), damit der Anfang eines Zuges schnell gefunden werden kann.
-    Bei allen anderen Knoten hat der Wert der zweiten Komponente keine spezifische Bedeutung.
-    Die Sequenz der EID muss nicht monoton sein.
     """
     zid: int
-    eid: int
+    zeit: float
+    typ: str
 
 
 class EreignisGraphNode(dict):
     """
     EreignisGraphNode
 
-    Die Node-ID besteht aus Zug-ID und einer beliebigen Nummer.
-    Der Startpunkt jedes Zuges erhält die ID (zid, 0), so dass der Zug einfach gefunden werden kann.
     """
-    auto_inc = itertools.count(1)
 
     zid = dict_property("zid", int, docstring="Zug-ID")
     fid = dict_property("fid", ZielLabelType,
@@ -75,10 +69,6 @@ class EreignisGraphNode(dict):
                             Bei Ein- und Ausfahrten wird statt dem Gleiseintrag die Elementnummer (enr) eingesetzt,
                             und die Zeitkomponente ist MIN_MINUTES (Einfahrt) oder MAX_MINUTES (Ausfahrt).
                             """)
-    eid = dict_property("eid", int, docstring="""Ereignis-ID. 
-        Muss zusammen mit der zid ein eindeutiges Knotenlabel ergeben.
-        Die generate_eid-Methode kann verwendet werden, um eine eindeutige Autoincrement-ID zu erzeugen.
-        """)
     typ = dict_property("typ", str,
                         docstring="""
                             Vorgang:
@@ -92,6 +82,12 @@ class EreignisGraphNode(dict):
                          docstring="Gleis- oder Anschlussname nach Fahrplan.")
     gleis = dict_property("gleis", str,
                           docstring="Gleis- oder Anschlussname nach aktueller Disposition.")
+    zeit = dict_property("zeit", float,
+                         docstring="""Zeitwert, der in der Knoten-ID verwendet wird.
+                            Dieser entspricht, wo möglich, dem t_plan-Property,
+                            kann aber auch davon abweichen, damit die ID eindeutig ist.
+                            Der Wert muss vom Ersteller gesetzt werden.
+                            """)
     t_plan = dict_property("t_plan", Optional[float], "Geplante Uhrzeit in Minuten")
     t_prog = dict_property("t_prog", Optional[float], "Geschätzte Uhrzeit in Minuten")
     t_mess = dict_property("t_mess", Optional[float], "Gemessene Uhrzeit in Minuten")
@@ -104,25 +100,14 @@ class EreignisGraphNode(dict):
     farbe = dict_property("farbe", str)
     marker = dict_property("marker", str)
 
-    def generate_eid(self):
-        """
-        Generiere eine neue Ereignis-ID.
-
-        Die Ereignis-ID wird aus einem klasseneigenen Zähler gebildet.
-        """
-        self.eid = next(self.auto_inc)
-
     @property
     def node_id(self) -> EreignisLabelType:
         """
         Identifikation des Ereignisses.
 
-        Die ID besteht aus der Zug-ID und der Ereignis-ID.
-        Der erste Knoten eines Zuges erhält die ID (zid, 0), damit der Anfang eines Zuges schnell gefunden werden kann.
-        Bei allen anderen Knoten hat der Wert der zweiten Komponente keine Bedeutung.
-        Die Sequenz der EID muss nicht geordnet sein.
         """
-        return EreignisLabelType(self.zid, self.eid)
+
+        return EreignisLabelType(self.zid, self.zeit, self.typ)
 
     @property
     def t_eff(self) -> float:
@@ -191,7 +176,6 @@ class EreignisGraph(nx.DiGraph):
     ---------
 
     zuege: Verzeichnis (Set) der ID-Nummern der Züge, die im Graph vorkommen.
-        Der Anfangsknoten eines Zuges hat jeweils das Label (zid, 0).
         Der Pfad eines Zuges (geordnete Abfolge von Knoten mit derselben Zug-ID)
         wird vom Generator zugpfad angegeben.
     """
@@ -201,6 +185,7 @@ class EreignisGraph(nx.DiGraph):
     def __init__(self, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
         self.zuege: Set[int] = set()
+        self.zuganfaenge: Dict[int, EreignisLabelType] = {}
         self.zug_next: Dict[int, EreignisLabelType] = {}
 
     def to_undirected_class(self):
@@ -226,7 +211,7 @@ class EreignisGraph(nx.DiGraph):
         :return: Generator von Knoten-IDs.
         """
 
-        node = EreignisLabelType(zid, 0)
+        node = self.zuganfaenge[zid]
         while node is not None:
             if node == start:
                 start = None
@@ -269,24 +254,21 @@ class EreignisGraph(nx.DiGraph):
                 return n
         return None
 
-    def _zugstart_markieren(self):
+    def _zuganfaenge_suchen(self):
         """
         Startknoten jedes Zuges markieren
 
-        Der Startknoten eines Zuges hat die Form (zid, 0).
+        Der Startknoten eines Zuges ist in zuganfaenge verzeichnet.
         Dies ist unabhängig davon, ob der Startknoten aus einer Einfahrt, Startaufstellung oder
         einem anderen Zug hervorgeht.
         """
 
-        mapping = {}
         for node in self.nodes:
             for p in self.predecessors(node):
                 if p.zid == node.zid:
                     break
             else:
-                mapping[node] = EreignisLabelType(node.zid, 0)
-
-        nx.relabel_nodes(self, mapping, copy=False)
+                self.zuganfaenge[node.zid] = node
 
     def zielgraph_importieren(self, zg: ZielGraph, clean=False):
         """
@@ -355,6 +337,8 @@ class EreignisGraph(nx.DiGraph):
         for builder in edge_builders.values():
             builder.add_to_graph()
 
+        self._zuganfaenge_suchen()
+
     def prognose(self):
         """
         Zeitprognose durchführen
@@ -408,34 +392,32 @@ class EreignisGraph(nx.DiGraph):
                 edge_data = self.edges[edge]
                 try:
                     start_zeit = start_data.t_eff
-                except (AttributeError, KeyError):
+                except (AttributeError, KeyError, TypeError):
                     continue
                 try:
                     zeit_min = max(zeit_min, start_zeit + edge_data.dt_min)
-                except (AttributeError, KeyError):
+                except (AttributeError, KeyError, TypeError):
                     pass
                 try:
                     zeit_min += max(0, edge_data.dt_fdl)
-                except (AttributeError, KeyError):
+                except (AttributeError, KeyError, TypeError):
                     pass
                 try:
                     zeit_max = min(zeit_max, start_zeit + edge_data.dt_max)
-                except (AttributeError, KeyError):
+                except (AttributeError, KeyError, TypeError):
                     pass
                 try:
                     zeit_max += min(0, edge_data.dt_fdl)
-                except (AttributeError, KeyError):
+                except (AttributeError, KeyError, TypeError):
                     pass
 
             ziel_zeit = -math.inf
-            try:
-                if ziel_data.typ in {'Ab'}:
-                    if zielnode.eid == 0:
-                        ziel_zeit = ziel_data.t_eff
-                    else:
-                        ziel_zeit = ziel_data.t_plan
-            except AttributeError:
-                pass
+            if ziel_data.typ in {'Ab'}:
+                if zielnode.zeit == MIN_MINUTES:
+                    # einfahrt
+                    ziel_zeit = ziel_data.get("t_mess") or ziel_data.get("t_prog") or ziel_data.get("t_plan") or ziel_zeit
+                else:
+                    ziel_zeit = ziel_data.get("t_plan") or ziel_zeit
 
             ziel_zeit = min(ziel_zeit, zeit_max)
             ziel_zeit = max(ziel_zeit, zeit_min)
@@ -528,7 +510,7 @@ class EreignisGraph(nx.DiGraph):
 
         t = time_to_minutes(ereignis.zeit)
         if ereignis.art == 'einfahrt':
-            cur_label = (ereignis.zid, 0)
+            cur_label = self.zuganfaenge[ereignis.zid]
             self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
             try:
                 next_label = self.label_of(ereignis.zid, start=cur_label, typ="An")
@@ -762,10 +744,6 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
 
     def __init__(self, graph: EreignisGraph):
         super().__init__(graph)
-        # Zeigt an, ob dieser Builder den ersten Knoten eines Zuges bauen wird.
-        # Die Knoten-ID muss dann auf 0 gesetzt werden.
-        # Vorsicht: Der Zuganfang sagt nichts über die Art des Knotens (z.B. ob Einfahrt) aus.
-        self.zuganfang = False
         # Diagnostik
         self.zid: Optional[int] = None
         # Diagnostik
@@ -808,7 +786,6 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         :param attrs: Attribute mit neuen Werten initialisieren.
         """
         node = copy.copy(self.node_template)
-        node.generate_eid()
         node.update(**attrs)
         return node
 
@@ -832,19 +809,11 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         Erstellt bei gewöhnlichen Fahrzielen einen Ankunfts- und einen Abfahrtsknoten.
         Bei Ein- oder Ausfahrten wird nur ein Abfahrts- resp. Ankunftsknoten erstellt.
 
-        Wenn der ziel_node der erste des Zuges ist, wird zuganfang auf True gesetzt,
-        damit in add_to_graph das Label des ersten Knotens mit (zid, 0) markiert werden kann.
+        Wenn der ziel_node der erste des Zuges ist, wird zuganfang auf True gesetzt.
         """
 
-        self.zuganfang = False
         self.zid = ziel_node.zid
         self.fid = ziel_node.fid
-
-        for p in ziel_graph.predecessors(ziel_node.fid):
-            if ziel_graph.nodes[p].zid == ziel_node.zid:
-                break
-        else:
-            self.zuganfang = True
 
         # todo : Am Zuganfang durch E/F/K keinen Ankunftsknoten erzeugen.
         if ziel_node.typ in {'H', 'D', 'A'}:
@@ -852,11 +821,11 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 typ='An',
                 zid=ziel_node.zid,
                 fid=ziel_node.fid,
+                zeit=ziel_node.fid.zeit,
                 plan=ziel_node.plan,
                 gleis=ziel_node.gleis,
                 s=0
             )
-            n1d.generate_eid()
             try:
                 n1d.t_prog = n1d.t_plan = ziel_node.p_an
                 n1d.t_prog += ziel_node.get("v_an", 0)
@@ -870,11 +839,11 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 typ='Ab',
                 zid=ziel_node.zid,
                 fid=ziel_node.fid,
+                zeit=ziel_node.fid.zeit,
                 plan=ziel_node.plan,
                 gleis=ziel_node.gleis,
                 s=0
             )
-            n2d.generate_eid()
             try:
                 n2d.t_prog = n2d.t_plan = ziel_node.p_ab
                 n2d.t_prog += ziel_node.get("v_ab", 0)
@@ -979,13 +948,8 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 ds=0)
             self.edges.append(edge)
 
-        zid_anfang = self.nodes[-1].zid if self.zuganfang else None
         final_nodes = []
         for node in self.nodes:
-            if node.zid == zid_anfang:
-                node.eid = 0
-                zid_anfang = None
-
             try:
                 nid = self.graph.label_of(node.zid, fid=node.fid, typ=node.typ)
                 final_node = self.graph.nodes[nid]
@@ -1240,31 +1204,4 @@ class FluegelungEdgeBuilder(ZielEreignisEdgeBuilder):
 
         Alle Graphelemente werden durch die NodeBuilder erstellt.
         """
-        pass
-
-
-class AbfahrtAbwartenEdgeBuilder(ZielEreignisEdgeBuilder):
-    """
-    Nicht verwendet.
-    """
-
-    def add_to_graph(self):
-        pass
-
-
-class AnkunftAbwartenEdgeBuilder(ZielEreignisEdgeBuilder):
-    """
-    Nicht verwendet.
-    """
-
-    def add_to_graph(self):
-        pass
-
-
-class KreuzungEdgeBuilder(ZielEreignisEdgeBuilder):
-    """
-    Nicht verwendet.
-    """
-
-    def add_to_graph(self):
         pass

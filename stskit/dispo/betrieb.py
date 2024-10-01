@@ -88,7 +88,7 @@ class Betrieb:
         Ereignislabel zu Ziel- oder Ereignis-Argument herausfinden
 
         Unterscheidung von Argumenten:
-        Ereignislabel: NamedTuple(zid, eid)
+        Ereignislabel: NamedTuple(zid, zeit, typ)
         Ereignisdaten: Attribut node_id
         Ziellabel: NamedTuple(zid, zeit, ort)
         Zieldaten: Attribut fid
