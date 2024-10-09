@@ -46,6 +46,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionLoeschen.triggered.connect(self.action_loeschen)
         self.ui.actionAnkunftAbwarten.triggered.connect(self.action_ankunft_abwarten)
         self.ui.actionAbfahrtAbwarten.triggered.connect(self.action_abfahrt_abwarten)
+        self.ui.actionBetriebshaltEinfuegen.triggered.connect(self.action_betriebshalt_einfuegen)
+        self.ui.actionActionBetriebshaltLoeschen.triggered.connect(self.action_betriebshalt_loeschen)
+
         self.ui.stackedWidget.currentChanged.connect(self.page_changed)
         self.ui.vordefiniert_combo.currentIndexChanged.connect(self.strecke_selection_changed)
         self.ui.von_combo.currentIndexChanged.connect(self.strecke_selection_changed)
@@ -56,7 +59,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.nachlaufzeit_spin.valueChanged.connect(self.nachlaufzeit_changed)
 
         self.plot = BildfahrplanPlot(zentrale, self.display_canvas)
-        self.plot.selection_changed.register(self.plot_selection_changed)
+        self.plot.auswahl_geaendert.register(self.plot_selection_changed)
 
         self.plot.default_strecke_waehlen()
         self.update_widgets()
@@ -72,7 +75,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
-        trasse_auswahl = len(self.plot._selected_edges) >= 1
+        trasse_auswahl = len(self.plot.auswahl_kanten) >= 1
         trasse_nachbar = None
 
         self.ui.actionSetup.setEnabled(display_mode)
@@ -223,14 +226,14 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.plot.draw_graph()
 
     def plot_selection_changed(self, *args, **kwargs):
-        text = "\n".join(self.plot.selection_text)
+        text = "\n".join(self.plot.auswahl_text)
         self.ui.zuginfoLabel.setText(text)
         self.update_actions()
 
     @pyqtSlot()
     def action_plus_eins(self):
         try:
-            ziel = self.plot.bildgraph.nodes[self.plot._selected_edges[0][0]]
+            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
         except (IndexError, KeyError):
             return None
         else:
@@ -243,7 +246,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def action_minus_eins(self):
         try:
-            ziel = self.plot.bildgraph.nodes[self.plot._selected_edges[0][0]]
+            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
         except (IndexError, KeyError):
             return None
         else:
@@ -256,7 +259,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def action_loeschen(self):
         try:
-            ziel = self.plot.bildgraph.nodes[self.plot._selected_edges[0][0]]
+            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
         except (IndexError, KeyError):
             return None
         else:
@@ -299,8 +302,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         """
 
         try:
-            ziel = self.plot.bildgraph.nodes[self.plot._selected_edges[0][0]]
-            referenz = self.plot.bildgraph.nodes[self.plot._selected_edges[1][0]]
+            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
+            referenz = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[1][0]]
         except (IndexError, KeyError):
             return None
 
@@ -342,8 +345,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         """
 
         try:
-            ziel = self.plot.bildgraph.nodes[self.plot._selected_edges[0][0]]
-            referenz = self.plot.bildgraph.nodes[self.plot._selected_edges[1][1]]
+            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
+            referenz = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[1][1]]
         except (IndexError, KeyError):
             return
 
@@ -352,3 +355,28 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         return ziel, referenz
 
+    @pyqtSlot()
+    def action_betriebshalt_einfuegen(self):
+        try:
+            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
+        except (IndexError, KeyError):
+            return
+
+        self.zentrale.betrieb.betriebshalt_einfuegen(ziel, self.plot.auswahl_bahnhoefe[0], wartezeit=1)
+
+        self.plot.clear_selection()
+        self.grafik_update()
+        self.update_actions()
+
+    @pyqtSlot()
+    def action_betriebshalt_loeschen(self):
+        try:
+            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
+        except (IndexError, KeyError):
+            return
+
+        self.zentrale.betrieb.betriebshalt_loeschen(ziel)
+
+        self.plot.clear_selection()
+        self.grafik_update()
+        self.update_actions()
