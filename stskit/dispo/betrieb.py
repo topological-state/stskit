@@ -12,11 +12,14 @@ Dank der zentralen Schnittstelle werden:
 - ...
 """
 
+import copy
 import logging
+import math
 import os
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
 from stskit.dispo.anlage import Anlage
+from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
 from stskit.model.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode, ZielLabelType
 from stskit.model.zuggraph import ZugGraph
@@ -249,11 +252,227 @@ class Betrieb:
         if update_noetig:
             self.anlage.ereignisgraph.prognose()
 
-    def betriebshalt_einfuegen(self, vorheriges_ziel, bst, ankunftszeit, abfahrtszeit):
-        pass
+    def _betriebshalt_statt_durchfahrt(self,
+                                       durchfahrt: EreignisLabelType,
+                                       wartezeit: int = 1):
 
-    def betriebshalt_loeschen(self, subjekt):
-        pass
+        """
+        Betriebshalt statt Durchfahrt
+
+        Ersetzt die Ereignisfolge `Ab1 --P--> An2 --P--> An3` (Durchfahrt in 2)
+        durch `Ab1 --P--> An2 --B--> Ab2 --P--> An3`
+        Es werden ein neuer Knoten und zwei neue Kanten eingefuegt.
+        Die Kante von An2 nach An3 wird entfernt.
+
+        durchfahrt: Durchfahrtsereignis An2
+        """
+
+        eg = self.anlage.ereignisgraph
+
+        an2_label = durchfahrt
+        an3_label = eg.next_ereignis(an2_label)
+
+        an2_node = eg.nodes[an2_label]
+        an3_node = eg.nodes[an3_label]
+        edge_alt = eg.edges[(an2_label, an3_label)]
+
+        if edge_alt.typ != 'P':
+            raise ValueError(f"Kante {an2_label}-{an3_label} (Typ {edge_alt.typ}) ist keine Planfahrt.")
+        if an2_node.typ != 'An':
+            raise ValueError(f"Ursprungsereignis {an2_label} ist keine Ankunft.")
+        if an3_node.typ != 'An':
+            raise ValueError(f"Folgeereignis {an3_label} ist keine Ankunft.")
+
+        ab2_node = copy.copy(an2_node)
+        ab2_node.typ = 'Ab'
+        ab2_label = ab2_node.node_id
+
+        halt_edge = copy.copy(edge_alt)
+        halt_edge.typ = 'B'
+        halt_edge.dt_min = 0
+        halt_edge.dt_max = math.inf
+        halt_edge.dt_fdl = wartezeit
+        halt_edge.ds = 0
+
+        abfahrt_edge = copy.copy(edge_alt)
+
+        eg.add_node(ab2_label, **ab2_node)
+        eg.add_edge(an2_label, ab2_label, **halt_edge)
+        eg.add_edge(ab2_label, an3_label, **abfahrt_edge)
+        eg.remove_edge(an2_label, an3_label)
+
+    def _betriebshalt_auf_strecke(self,
+                                  vorher: EreignisLabelType,
+                                  bst: BahnhofElement,
+                                  wartezeit: int = 1):
+
+        """
+        Betriebshalt unterwegs (Bst nicht im Fahrplan)
+
+        Ersetzt die Ereignisfolge `Ab1 --P-> An3`
+        durch `Ab1 --P--> An2 --B--> Ab2 --P--> An3`.
+        Es werden zwei neue Knoten und drei neue Kanten eingefuegt.
+        Die Kante von Ab1 nach An3 wird entfernt.
+        """
+
+        eg = self.anlage.ereignisgraph
+
+        ab1_label = vorher
+        an3_label = eg.next_ereignis(ab1_label)
+
+        ab1_node = eg.nodes[ab1_label]
+        an3_node = eg.nodes[an3_label]
+        alt_edge = eg.edges[(ab1_label, an3_label)]
+
+        if alt_edge.typ != 'P':
+            raise ValueError(f"Abfolge {ab1_label}-{an3_label} ist keine Planfahrt.")
+        if ab1_node.typ != 'Ab':
+            raise ValueError(f"Ursprungsereignis {ab1_label} ist keine Abfahrt.")
+        if an3_node.typ != 'An':
+            raise ValueError(f"Folgeereignis {ab1_label} ist keine Ankunft.")
+
+        teiler: float = 0.5
+
+        an2_node = copy.copy(ab1_node)
+        an2_node.quelle = 'fdl'
+        an2_node.typ = 'An'
+        an2_node.fid = None
+        an2_node.plan = an2_node.gleis = bst.name
+        an2_node.t_plan = an2_node.zeit = ab1_node.zeit + teiler * (an3_node.zeit - ab1_node.zeit)
+        an2_node.t_mess = None
+        an2_node.s = an2_node.zeit = ab1_node.s + teiler * (an3_node.s - ab1_node.s)
+        an2_node.bst = self.anlage.bahnhofgraph.find_superior(bst, {"Bft"})
+        an2_label = an2_node.node_id
+
+        ab2_node = copy.copy(an2_node)
+        ab2_node.typ = 'Ab'
+        an2_node.t_plan = an2_node.zeit = ab1_node.zeit + (1. - teiler) * (an3_node.zeit - ab1_node.zeit)
+        an2_node.s = an2_node.zeit = ab1_node.s + (1. - teiler) * (an3_node.s - ab1_node.s)
+        ab2_label = ab2_node.node_id
+
+        ankunft_edge = copy.copy(alt_edge)
+        ankunft_edge.quelle = 'fdl'
+        ankunft_edge.dt_min = alt_edge.dt_min * teiler
+        ankunft_edge.ds = alt_edge.ds * teiler
+        ankunft_edge.dt_max = math.inf
+        ankunft_edge.dt_fdl = 0
+
+        halt_edge = copy.copy(alt_edge)
+        halt_edge.typ = 'B'
+        halt_edge.dt_min = 0
+        halt_edge.dt_max = math.inf
+        halt_edge.dt_fdl = max(alt_edge.dt_fdl, wartezeit)
+        halt_edge.ds = 0
+
+        abfahrt_edge = copy.copy(alt_edge)
+        abfahrt_edge.dt_min = alt_edge.dt_min * (1. - teiler)
+        abfahrt_edge.ds = alt_edge.ds * (1. - teiler)
+        abfahrt_edge.dt_max = math.inf
+        abfahrt_edge.dt_fdl = 0
+
+        eg.add_node(ab2_label, **ab2_node)
+        eg.add_node(an2_label, **an2_node)
+        eg.add_edge(ab1_label, an2_label, **ankunft_edge)
+        eg.add_edge(an2_label, ab2_label, **halt_edge)
+        eg.add_edge(ab2_label, an3_label, **abfahrt_edge)
+        eg.remove_edge(ab1_label, an3_label)
+
+    def _betriebshalt_loeschen(self, halt_ereignis: EreignisLabelType):
+        """
+        Betriebshalt aus Ereignisgraph loeschen
+
+        Ersetzt die Ereignisfolge `Ab1 --P-> An2 --B-> Ab2 --P-> An3`
+        durch `Ab1 --P--> An2 --P--> An3`, wenn An2 im Fahrplan ist,
+        sonst `Ab1 --P--> An3`.
+
+        halt_ereignis: Ereignislabel von An2 oder Ab2
+        """
+        eg = self.anlage.ereignisgraph
+
+        halt_node = eg.nodes[halt_ereignis]
+        if halt_node.typ == 'An':
+            an2_label = halt_ereignis
+            ab2_label = eg.next_ereignis(halt_ereignis)
+        elif halt_node.typ == 'Ab':
+            ab2_label = halt_ereignis
+            an2_label = eg.prev_ereignis(halt_ereignis)
+        else:
+            raise ValueError(f"{halt_ereignis} ist kein Betriebshalt.")
+
+        halt_edge = eg.edges[(an2_label, ab2_label)]
+
+        an2_node = eg.nodes[an2_label]
+        ab2_node = eg.nodes[ab2_label]
+
+        ab1_label = eg.prev_ereignis(an2_label)
+        an3_label = eg.next_ereignis(ab2_label)
+        ab1_node = eg.nodes[ab1_label]
+        an3_node = eg.nodes[an3_label]
+
+        ankunft_edge = eg.edges[(ab1_label, an2_label)]
+        abfahrt_edge = eg.edges[(ab2_label, an3_label)]
+
+        if ankunft_edge.typ != 'P':
+            raise ValueError(f"Abfolge {ab1_label}-{an2_label} ist keine Planfahrt.")
+        if abfahrt_edge.typ != 'P':
+            raise ValueError(f"Abfolge {ab2_label}-{an3_label} ist keine Planfahrt.")
+        if ab1_node.typ != 'Ab':
+            raise ValueError(f"Ursprungsereignis {ab1_label} ist keine Abfahrt.")
+        if an3_node.typ != 'An':
+            raise ValueError(f"Folgeereignis {ab1_label} ist keine Ankunft.")
+        if halt_edge.typ != 'B':
+            raise ValueError(f"Abfolge {an2_label}-{ab2_label} ist kein Betriebshalt.")
+
+        if an2_node.fid:
+            # An2 ist im Fahrplan
+            edge_neu = copy.copy(abfahrt_edge)
+            eg.remove_node(ab2_label)
+            eg.add_edge(an2_label, an3_label, **edge_neu)
+        else:
+            # An2 ist nicht im Fahrplan
+            edge_neu = copy.copy(ankunft_edge)
+            edge_neu.dt_min = ankunft_edge.dt_min + abfahrt_edge.dt_min
+            edge_neu.ds = ankunft_edge.ds + abfahrt_edge.ds
+            edge_neu.dt_max = math.inf
+            edge_neu.dt_fdl = 0
+
+            eg.remove_node(an2_label)
+            eg.remove_node(ab2_label)
+            eg.add_edge(ab1_label, an3_label, **edge_neu)
+
+    def betriebshalt_einfuegen(self,
+                               vorheriges_ziel: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                               gleis: Union[str, BahnhofElement],
+                               wartezeit: int = 1):
+        """
+        Betriebshalt einfügen
+
+        Wenn das angegebene Fahrziel/Ereignis eine Durchfahrt bezeichnet,
+        wird die Durchfahrt in einen Betriebshalt umgewandelt.
+        Ansonsten wird ein neues Fahrziel eingefügt.
+
+        vorheriges_ziel: Vorheriges Abfahrts- oder Durchfahrtsereignis.
+        gleis: Gleis, an dem gehalten wird.
+        wartezeit: Wartezeit in Minuten
+        """
+
+        vorher_label = self._get_ereignis_label(vorheriges_ziel, {'Ab'})
+        if vorher_label is None:
+            vorher_label = self._get_ereignis_label(vorheriges_ziel, {'An'})
+        if vorher_label is None:
+            raise ValueError(f"Ereignis {vorheriges_ziel} nicht gefunden.")
+
+        if vorher_label.typ == 'Ab':
+            if not hasattr(gleis, 'typ'):
+                gleis = BahnhofElement('Gl', gleis)
+            self._betriebshalt_auf_strecke(vorher_label, gleis, wartezeit)
+        elif vorher_label.typ == 'An':
+            self._betriebshalt_statt_durchfahrt(vorher_label, wartezeit)
+        else:
+            raise  ValueError(f"Kann nach Ereignis {vorheriges_ziel} keinen Betriebshalt einfügen.")
+
+    def betriebshalt_loeschen(self, betriebshalt: EreignisLabelType):
+        self._betriebshalt_loeschen(betriebshalt)
 
     def bst_verbinden(self):
         pass
