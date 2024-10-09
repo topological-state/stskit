@@ -31,5 +31,21 @@
         <file alias="chain--cross.png">../icons/chain--cross.png</file>
         <file alias="flag-purple.png">../icons/flag-purple.png</file>
         <file alias="train--return.png">../icons/train--return.png</file>
+        <file alias="node-insert.png">../icons/node-insert.png</file>
+        <file alias="node-delete-child.png">../icons/node-delete-child.png</file>
+        <file alias="node-delete-next.png">../icons/node-delete-next.png</file>
+        <file alias="node-delete-previous.png">../icons/node-delete-previous.png</file>
+        <file alias="node-delete.png">../icons/node-delete.png</file>
+        <file alias="node-design.png">../icons/node-design.png</file>
+        <file alias="node-insert-child.png">../icons/node-insert-child.png</file>
+        <file alias="node-insert-next.png">../icons/node-insert-next.png</file>
+        <file alias="node-insert-previous.png">../icons/node-insert-previous.png</file>
+        <file alias="node-magnifier.png">../icons/node-magnifier.png</file>
+        <file alias="node-select-all.png">../icons/node-select-all.png</file>
+        <file alias="node-select-child.png">../icons/node-select-child.png</file>
+        <file alias="node-select-next.png">../icons/node-select-next.png</file>
+        <file alias="node-select-previous.png">../icons/node-select-previous.png</file>
+        <file alias="node-select.png">../icons/node-select.png</file>
+        <file alias="node.png">../icons/node.png</file>
     </qresource>
 </RCC>
