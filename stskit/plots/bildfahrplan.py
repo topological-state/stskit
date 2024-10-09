@@ -254,6 +254,20 @@ class BildfahrplanPlot:
         - zuege nach zeit filtern
         - zuege nach strecke filtern
         - koordinaten ausrechnen
+        - Grafikstil bestimmen
+
+        Verwendete Marker
+        -----------------
+
+        '.' (Punkt) Planmaessiger Halt
+        '*' (Stern) E/F/K
+        'P' (fettes plus) Betriebshalt
+
+        Verwendete Linienstile
+        ----------------------
+
+        ':' (gepunktet) Halt
+        '-' (ausgezogen) Fahrt
         """
 
         def bst_von_fid(fid: ZielLabelType) -> Optional[BahnhofLabelType]:
@@ -264,8 +278,16 @@ class BildfahrplanPlot:
             except (IndexError, KeyError):
                 return None
 
+        def bst_von_gleis(gl: str) -> Optional[BahnhofLabelType]:
+            try:
+                bst = self.anlage.bahnhofgraph.find_gleis_enr(gl)
+                bst = self.anlage.bahnhofgraph.find_superior(bst, {'Bf', 'Anst'})
+                return bst
+            except (IndexError, KeyError):
+                return None
+
         def _add_node(ereignis_label, ereignis_data):
-            bst = bst_von_fid(ereignis_data.fid)
+            bst = bst_von_gleis(ereignis_data.gleis)
             if bst in strecke:
                 zug = self.zentrale.client.zuggraph.nodes[ereignis_data.zid]
                 d = ereignis_data.copy()
@@ -297,13 +319,16 @@ class BildfahrplanPlot:
                 u_v_data['titel'] = format_label(self.zugbeschriftung, zug, u_data, v_data)
                 u_v_data['fontstyle'] = "normal"
                 u_v_data['linewidth'] = 1
-                u_v_data['linestyle'] = ':' if data.typ in {"E", "F", "H"} else "-"
+                u_v_data['linestyle'] = ':' if data.typ in {"B", "E", "F", "H"} else "-"
 
                 if u not in self.bildgraph:
                     _add_node(u, u_data)
                 if v not in self.bildgraph:
                     _add_node(v, v_data)
                 self.bildgraph.add_edge(u, v, **u_v_data)
+
+                if data.typ == "B":
+                    self.bildgraph.nodes[v]['marker'] = 'P'
 
     def line_args(self, start: EreignisGraphNode, ziel: EreignisGraphNode, data: EreignisGraphEdge) -> Dict[str, Any]:
         args = {'color': data.farbe,
