@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 import networkx as nx
 
+from stskit.model.journal import GraphJournal
 from stskit.plugin.stsgraph import GraphClient
 from stskit.plugin.stsobj import Ereignis, AnlagenInfo
 from stskit.model.signalgraph import SignalGraph
@@ -69,6 +70,9 @@ class Anlage:
         self.zuggraph = ZugGraph()
         self.zielgraph = ZielGraph()
         self.ereignisgraph = EreignisGraph()
+
+        self.zielgraph_journal = GraphJournal()
+        self.ereignisgraph_journal = GraphJournal()
 
         self.strecken: Dict[str, List[Tuple[str, str]]] = {}
         self.hauptstrecke: Optional[str] = None
@@ -134,6 +138,8 @@ class Anlage:
             self.liniengraph_mit_signalgraph_abgleichen()
         self.zielgraph.einfahrtszeiten_korrigieren(self.liniengraph, self.bahnhofgraph)
         self.ereignisgraph.zielgraph_importieren(self.zielgraph)
+        self.zielgraph_journal.replay(self.zielgraph)
+        self.ereignisgraph_journal.replay(self.ereignisgraph)
         self.ereignisgraph.prognose()
         self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
 
