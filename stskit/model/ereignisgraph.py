@@ -37,7 +37,7 @@ import networkx as nx
 from stskit.plugin.stsobj import Ereignis
 from stskit.plugin.stsobj import time_to_minutes
 from stskit.model.graphbasics import dict_property
-from stskit.model.bahnhofgraph import BahnhofLabelType
+from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType, MIN_MINUTES
 
 logger = logging.getLogger(__name__)
@@ -83,8 +83,12 @@ class EreignisGraphNode(dict):
                            """)
     plan = dict_property("plan", str,
                          docstring="Gleis- oder Anschlussname nach Fahrplan.")
+    plan_bst = dict_property("plan_bst", BahnhofElement,
+                             docstring="Plangleis in Betriebsstellen-Notation.")
     gleis = dict_property("gleis", str,
                           docstring="Gleis- oder Anschlussname nach aktueller Disposition.")
+    gleis_bst = dict_property("gleis_bst", BahnhofElement,
+                              docstring="Effektives Gleis in Betriebsstellen-Notation.")
     zeit = dict_property("zeit", float,
                          docstring="""Zeitwert, der in der Knoten-ID verwendet wird.
                             Dieser entspricht, wo möglich, dem t_plan-Property,
@@ -96,12 +100,18 @@ class EreignisGraphNode(dict):
     t_mess = dict_property("t_mess", Optional[float], "Gemessene Uhrzeit in Minuten")
     s = dict_property("s", float, "Ort in Minuten")
 
-    # todo : die folgenden properties werden vom bildfahrplan genutzt. ev. verallgemeinern?
-    bst = dict_property("bst", BahnhofLabelType,
+    # die folgenden properties werden vom bildfahrplan genutzt und sind ausserhalb undefiniert!
+    # der bahnhofgraph kann sich zur laufzeit ändern.
+    # wir definieren daher keine statischen bf und bft properties.
+    bst = dict_property("bst", BahnhofElement,
                         "Betriebsstelle (Bahnhof oder Anschlussgruppe), in der das Ereignis stattfindet. "
-                        "Wird vom Bildfahrplan genutzt.")
-    farbe = dict_property("farbe", str)
-    marker = dict_property("marker", str)
+                        "Wird vom Bildfahrplan genutzt. Sonst undefiniert!")
+    farbe = dict_property("farbe", str,
+                        "Linienfarbe in Matplotlib-Notation. "
+                        "Wird vom Bildfahrplan genutzt. Sonst undefiniert!")
+    marker = dict_property("marker", str,
+                           "Grafiksymbol nach Matplotlib-Notation. "
+                           "Wird vom Bildfahrplan genutzt. Sonst undefiniert!")
 
     @property
     def node_id(self) -> EreignisLabelType:
@@ -836,7 +846,9 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 fid=ziel_node.fid,
                 zeit=ziel_node.fid.zeit,
                 plan=ziel_node.plan,
+                plan_bst=ziel_node.plan_bst,
                 gleis=ziel_node.gleis,
+                gleis_bst=ziel_node.gleis_bst,
                 s=0
             )
             try:
@@ -855,7 +867,9 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 fid=ziel_node.fid,
                 zeit=ziel_node.fid.zeit,
                 plan=ziel_node.plan,
+                plan_bst=ziel_node.plan_bst,
                 gleis=ziel_node.gleis,
+                gleis_bst=ziel_node.gleis_bst,
                 s=0
             )
             try:
