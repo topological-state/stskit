@@ -14,7 +14,7 @@ Dank der zentralen Schnittstelle werden:
 
 import logging
 import os
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
@@ -35,8 +35,8 @@ class Betrieb:
         self.anlage = anlage
 
     def abfahrt_abwarten(self,
-                         subjekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                         objekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                         wartend: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                         abzuwarten: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                          wartezeit: int = 1,
                          dry_run: bool = False) -> Optional[Tuple[EreignisLabelType, EreignisLabelType]]:
         """
@@ -47,19 +47,30 @@ class Betrieb:
         - Überholung durch einen anderen Zug.
         - Herstellung der gewünschten Zugreihenfolge.
 
-        subjekt: Wartendes Abfahrtsereignis (Label oder zugeordnete node data)
-        objekt: Abzuwartendes Abfahrtsereignis (Label oder zugeordnete node data).
+        Ereignisse können als Ereignisse oder Fahrplanziele angegeben werden.
+        In letzterem Fall wird zuerst das zugehörige Abfahrtsereignis (oder Ankunftsereignis bei Durchfahrt) gesucht.
+        Ereignisse und Ziele können als Label oder Node Data angegeben werden.
+
+        Bemerkung: Bei Durchfahrt kann ein Zug nicht warten.
+        In diesem Fall ist vorher ein Betriebshalt zu erstellen.
+
+        wartend: Wartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten)
+        abzuwarten: Abzuwartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten).
         wartezeit: Zusätzliche Wartezeit
         dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
         """
 
-        subjekt = self._get_ereignis_label(subjekt, 'Ab')
-        objekt = self._get_ereignis_label(objekt, 'Ab')
-        return self._abhaengigkeit_setzen(subjekt, objekt, wartezeit, dry_run)
+        wartend2 = self._get_ereignis_label(wartend, {'Ab'})
+        abzuwarten2 = self._get_ereignis_label(abzuwarten, {'Ab'})
+        if abzuwarten2 is None:
+            abzuwarten2 = self._get_ereignis_label(abzuwarten, {'An'})
+            wartezeit = max(1, wartezeit)
+        if wartend2 and abzuwarten2:
+            return self._abhaengigkeit_setzen(wartend2, abzuwarten2, wartezeit, dry_run)
 
     def ankunft_abwarten(self,
-                         subjekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                         objekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                         wartend: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                         abzuwarten: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                          wartezeit: int = 1,
                          dry_run: bool = False) -> Optional[Tuple[EreignisLabelType, EreignisLabelType]]:
         """
@@ -71,19 +82,27 @@ class Betrieb:
         - Kreuzung auf eingleisiger Strecke.
         - Herstellung der gewünschten Zugreihenfolge.
 
-        subjekt: Wartendes Abfahrtsereignis (Label oder zugeordnete node data)
-        objekt: Abzuwartendes Ankunftsereignis (Label oder zugeordnete node data).
+        Ereignisse können als Ereignisse oder Fahrplanziele angegeben werden.
+        In letzterem Fall wird zuerst das zugehörige Ankunftsereignis gesucht.
+        Ereignisse und Ziele können als Label oder Node Data angegeben werden.
+
+        Bemerkung: Bei Durchfahrt kann ein Zug nicht warten.
+        In diesem Fall ist vorher ein Betriebshalt zu erstellen.
+
+        wartend: Wartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten)
+        abzuwarten: Abzuwartende Ankunft (Ereignis- oder Ziel-, -Label oder -Daten).
         wartezeit: Zusätzliche Wartezeit
         dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
         """
 
-        subjekt = self._get_ereignis_label(subjekt, 'Ab')
-        objekt = self._get_ereignis_label(objekt, 'An')
-        return self._abhaengigkeit_setzen(subjekt, objekt, wartezeit, dry_run)
+        wartend2 = self._get_ereignis_label(wartend, {'Ab'})
+        abzuwarten2 = self._get_ereignis_label(abzuwarten, {'An'})
+        if wartend2 and abzuwarten2:
+            return self._abhaengigkeit_setzen(wartend2, abzuwarten2, wartezeit, dry_run)
 
     def _get_ereignis_label(self,
                             objekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                            typ: str):
+                            typen: Set[str]):
         """
         Ereignislabel zu Ziel- oder Ereignis-Argument herausfinden
 
@@ -103,13 +122,13 @@ class Betrieb:
         if hasattr(objekt, "fid"):
             for label in self.anlage.ereignisgraph.zugpfad(objekt.zid):
                 data = self.anlage.ereignisgraph.nodes[label]
-                if (data.typ == typ and
+                if (data.typ in typen and
                         data.plan == objekt.plan and
                         objekt.p_an - 0.001 <= data.t_plan <= objekt.p_ab + 0.001):
                     objekt = label
                     break
             else:
-                return None
+                objekt = None
 
         return objekt
 
@@ -123,40 +142,42 @@ class Betrieb:
         """
 
         eg = self.anlage.ereignisgraph
-        edge = EreignisGraphEdge(typ="A", zid=subjekt.zid, dt_fdl=wartezeit or 0)
+        edge = EreignisGraphEdge(typ="A", zid=subjekt.zid, dt_fdl=wartezeit or 0, quelle='fdl')
         if eg.has_node(objekt) and eg.has_node(subjekt):
             if not dry_run:
                 eg.add_edge(objekt, subjekt, **edge)
                 self.abhaengigkeiten.add_edge(objekt, subjekt, dt_fdl=edge.dt_fdl)
                 self.anlage.ereignisgraph.prognose()
-                print("abhängigkeit gesetzt:", subjekt, objekt, edge)
+                print("Abhängigkeit gesetzt:", subjekt, objekt, edge)
             return objekt, subjekt
         else:
             return None
 
     def vorzeitige_abfahrt(self,
-                           subjekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                           abfahrt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                            verfruehung: int,
                            relativ: bool = False):
 
-        subjekt = self._get_ereignis_label(subjekt, 'Ab')
-        return self._wartezeit_aendern(subjekt, "H", -verfruehung, relativ=relativ)
+        abfahrt = self._get_ereignis_label(abfahrt, {'Ab'})
+        if abfahrt:
+            return self._wartezeit_aendern(abfahrt, "H", -verfruehung, relativ=relativ)
 
     def wartezeit_aendern(self,
-                          subjekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                          abfahrt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                           wartezeit: int,
                           relativ: bool = False):
 
-        subjekt = self._get_ereignis_label(subjekt, 'Ab')
-        return self._wartezeit_aendern(subjekt, "A", wartezeit, relativ=relativ)
+        abfahrt = self._get_ereignis_label(abfahrt, {'Ab'})
+        if abfahrt:
+            return self._wartezeit_aendern(abfahrt, "A", wartezeit, relativ=relativ)
 
     def _wartezeit_aendern(self,
-                           subjekt: EreignisLabelType,
+                           ereignis: EreignisLabelType,
                            kantentyp: str,
                            wartezeit: int,
                            relativ: bool = False):
 
-        n = subjekt
+        n = ereignis
         eg = self.anlage.ereignisgraph
         update_noetig = False
         for pre in eg.predecessors(n):
@@ -173,47 +194,47 @@ class Betrieb:
             else:
                 edge_data.dt_fdl = wartezeit
             self.abhaengigkeiten.add_edge(pre, n, dt_fdl=edge_data.dt_fdl)
-            print("wartezeit geändert:", subjekt, pre, edge_data)
+            print("Wartezeit geändert:", ereignis, pre, edge_data)
             update_noetig = True
 
         if update_noetig:
             self.anlage.ereignisgraph.prognose()
 
     def abfahrt_zuruecksetzen(self,
-                              subjekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                              objekt: Optional[Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode]] = None):
+                              wartend: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                              abzuwarten: Optional[Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode]] = None):
         """
         Abfahrtsabhängigkeit zurücksetzen
 
-        subjekt: Wartendes Abfahrtsereignis (Label oder zugeordnete node data)
-        objekt: Abzuwartendes Ankunftsereignis (Label oder zugeordnete node data).
+        subjekt: Wartende Abfahrt
+        objekt: Abzuwartendes Ereignis (Label oder zugeordnete node data).
             Wenn None (default), werden alle eingehenden Abhängigkeiten des Abfahrtsereignisses gelöscht.
         """
 
-        subjekt = self._get_ereignis_label(subjekt, 'Ab')
-        if objekt is not None:
-            objekt = self._get_ereignis_label(objekt, 'An')
+        wartend = self._get_ereignis_label(wartend, {'Ab'})
+        if abzuwarten is not None:
+            abzuwarten = self._get_ereignis_label(abzuwarten, {'An'})
 
         eg = self.anlage.ereignisgraph
         update_noetig = False
 
-        if objekt is None:
-            preds = eg.predecessors(subjekt)
+        if abzuwarten is None:
+            preds = eg.predecessors(wartend)
         else:
-            preds = [objekt]
+            preds = [abzuwarten]
 
         loeschen = []
         for pre in preds:
             try:
-                edge_data = eg.edges[(pre, subjekt)]
+                edge_data = eg.edges[(pre, wartend)]
             except KeyError:
                 continue
             if edge_data.typ != 'A':
                 continue
 
-            loeschen.append((pre, subjekt))
+            loeschen.append((pre, wartend))
             update_noetig = True
-            print("abhängigkeit gelöscht:", subjekt, pre, edge_data)
+            print("Abhängigkeit gelöscht:", wartend, pre, edge_data)
 
         for edge in loeschen:
             try:
