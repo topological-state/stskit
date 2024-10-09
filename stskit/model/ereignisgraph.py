@@ -64,10 +64,8 @@ class EreignisGraphNode(dict):
     fid = dict_property("fid", ZielLabelType,
                         docstring="""
                             Fahrplanziel-ID bestehend aus Zug-ID, Ankunfts- oder Abfahrtszeit in Minuten, Plangleis.
-                            Dies ist das Nodelabel im Zielgraph.
-                            Siehe stsobj.FahrplanZeile.fid.
-                            Bei Ein- und Ausfahrten wird statt dem Gleiseintrag die Elementnummer (enr) eingesetzt,
-                            und die Zeitkomponente ist MIN_MINUTES (Einfahrt) oder MAX_MINUTES (Ausfahrt).
+                            Dies ist das Nodelabel im Zielgraph, siehe stsobj.FahrplanZeile.fid.
+                            Vom Fdl eingefügte Ereignisse haben kein fid.
                             """)
     typ = dict_property("typ", str,
                         docstring="""
@@ -78,6 +76,11 @@ class EreignisGraphNode(dict):
                                 'F': Flügelung,
                                 'K': Kupplung.
                             """)
+    quelle = dict_property("quelle", str,
+                           docstring="""Quelle des Eintrags:
+                            'sts': Zugdetails vom Simulator,
+                            'fdl': Fahrdienstleiter
+                           """)
     plan = dict_property("plan", str,
                          docstring="Gleis- oder Anschlussname nach Fahrplan.")
     gleis = dict_property("gleis", str,
@@ -132,6 +135,7 @@ class EreignisGraphEdge(dict):
                             Verbindungstyp:
                                 'P': planmässige Fahrt,
                                 'H': Halt,
+                                'B': Betriebshalt, vom Fdl angeordneter, ungeplanter Halt,
                                 'E': Ersatz (Kante von E-Flag nach E-Knoten),
                                 'F': Flügelung (Kante von F-Flag nach F-Knoten),
                                 'K': Kupplung (Kante von K-Flag nach K-Knoten),
@@ -139,6 +143,11 @@ class EreignisGraphEdge(dict):
                                 'A': vom Fdl angeordnete Abhängigkeit,
                                 'O': Hilfskante für Sortierordnung.
                             """)
+    quelle = dict_property("quelle", str,
+                           docstring="""Quelle des Eintrags:
+                            'sts': Zugdetails vom Simulator,
+                            'fdl': Fahrdienstleiter
+                           """)
     dt_min = dict_property("dt_min", float, "Minimale Dauer in Minuten")
     dt_max = dict_property("dt_max", float, "Maximale Dauer in Minuten")
     dt_fdl = dict_property("dt_fdl", float, "Fdl-Korrektur: positiv erhöht dt_min, negativ erniedrigt dt_max")
@@ -270,7 +279,7 @@ class EreignisGraph(nx.DiGraph):
             else:
                 self.zuganfaenge[node.zid] = node
 
-    def zielgraph_importieren(self, zg: ZielGraph, clean=False):
+    def zielgraph_importieren(self, zg: ZielGraph, clean=False, quelle='sts'):
         """
         Zielgraph importieren
 
@@ -311,6 +320,7 @@ class EreignisGraph(nx.DiGraph):
         for zg1, zg1_data in zg.nodes(data=True):
             builder = ZielEreignisNodeBuilder(self)
             builder.import_ziel(zg, zg1_data)
+            builder.quelle = quelle
             node_builders[zg1] = builder
 
         edge_builders = {}
@@ -330,6 +340,7 @@ class EreignisGraph(nx.DiGraph):
 
             if builder is not None:
                 builder.set_edge(node_builders[zg1], node_builders[zg2])
+                builder.quelle = quelle
                 edge_builders[(zg1, zg2)] = builder
 
         for builder in node_builders.values():
@@ -695,6 +706,7 @@ class EreignisNodeBuilder(metaclass=ABCMeta):
     """
     def __init__(self, graph: EreignisGraph):
         self.graph = graph
+        self.quelle: str = ''
         self.ausgefuehrt = False
 
     @abstractmethod
@@ -818,6 +830,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         # todo : Am Zuganfang durch E/F/K keinen Ankunftsknoten erzeugen.
         if ziel_node.typ in {'H', 'D', 'A'}:
             n1d = EreignisGraphNode(
+                quelle=self.quelle,
                 typ='An',
                 zid=ziel_node.zid,
                 fid=ziel_node.fid,
@@ -836,6 +849,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
 
         if ziel_node.typ in {'H', 'E'}:
             n2d = EreignisGraphNode(
+                quelle=self.quelle,
                 typ='Ab',
                 zid=ziel_node.zid,
                 fid=ziel_node.fid,
@@ -858,6 +872,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 self.node_template = n2d
 
         e2d = EreignisGraphEdge(
+            quelle=self.quelle,
             typ='H',
             zid=ziel_node.zid,
             dt_min=ziel_node.get('mindestaufenthalt', 0),
@@ -942,6 +957,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         for kupplung in sorted(self.kupplungen, key=lambda n: n.t_plan):
             self.nodes.insert(-1, kupplung)
             edge = EreignisGraphEdge(
+                quelle=self.quelle,
                 typ='H',
                 zid=kupplung.zid,
                 dt_min=0,
@@ -1001,6 +1017,7 @@ class EreignisEdgeBuilder(metaclass=ABCMeta):
     """
     def __init__(self, graph: EreignisGraph):
         self.graph = graph
+        self.quelle: str = ''
         self.ausgefuehrt = False
 
     @abstractmethod
@@ -1046,6 +1063,7 @@ class PlanfahrtEdgeBuilder(ZielEreignisEdgeBuilder):
 
         try:
             edge = EreignisGraphEdge(
+                quelle=self.quelle,
                 typ='P',
                 zid=node1_builder.nodes[-1].zid,
                 dt_min=node2_builder.nodes[0].t_plan - node1_builder.nodes[-1].t_plan,
