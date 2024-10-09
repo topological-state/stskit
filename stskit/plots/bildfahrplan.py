@@ -3,7 +3,10 @@ import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import matplotlib as mpl
+import numpy as np
 from matplotlib.lines import Line2D
+from matplotlib.image import AxesImage
+from matplotlib.text import Text
 import networkx as nx
 
 from stskit.utils.observer import Observable
@@ -107,19 +110,21 @@ class BildfahrplanPlot:
         # bahnhofname -> distanz [minuten]
         self.strecke: List[BahnhofLabelType] = []
         self.distanz: List[float] = []
+        # ortskoordinate der segmentmitte -> linker bahnhof
+        self.naechster_bahnhof: Dict[float, BahnhofLabelType] = {}
 
         self.zeit = 0
         self.vorlaufzeit = 55
         self.nachlaufzeit = 5
 
-        self.selection_changed = Observable(self)
-        self.selection_text: List[str] = []
-
-        self._pick_event: bool = False
-        self._selected_edges: List[Tuple[EreignisLabelType, ...]] = []
+        self.auswahl_geaendert = Observable(self)
+        self.auswahl_text: List[str] = []
+        self.auswahl_kanten: List[Tuple[EreignisLabelType, ...]] = []
+        self.auswahl_bahnhoefe: List[BahnhofLabelType] = []
 
         self._canvas = canvas
         self._axes = self._canvas.figure.subplots()
+        self._pick_event: bool = False
         self._canvas.mpl_connect("button_press_event", self.on_button_press)
         self._canvas.mpl_connect("button_release_event", self.on_button_release)
         self._canvas.mpl_connect("pick_event", self.on_pick)
@@ -233,6 +238,13 @@ class BildfahrplanPlot:
                         break
         else:
             self.distanz = []
+
+        try:
+            mitten = [(s1 + s2) / 2 for s1, s2 in zip(self.distanz[:-1], self.distanz[1:])]
+            mitten.append(self.distanz[-1] + (self.distanz[-1] - self.distanz[-2]) / 2)
+        except IndexError:
+            mitten = []
+        self.naechster_bahnhof = {s: bf for s, bf in zip(mitten, self.strecke)}
 
     def update_ereignisgraph(self):
         """
@@ -492,7 +504,7 @@ class BildfahrplanPlot:
             self.draw_graph()
 
         self._pick_event = False
-        self.selection_changed.notify()
+        self.auswahl_geaendert.notify()
 
     def on_button_release(self, event):
         """
@@ -525,37 +537,48 @@ class BildfahrplanPlot:
                 except AttributeError:
                     return
                 else:
-                    self.select_edge(edge[0], edge[1], True)
+                    self.select_edge(edge[0], edge[1], event.mouseevent.xdata, event.mouseevent.ydata)
+            elif isinstance(event.artist, Text):
+                pass
 
-            self.selection_text = [self.format_zuginfo(*tr) for tr in self._selected_edges]
+            self.auswahl_text = [self.format_zuginfo(*tr) for tr in self.auswahl_kanten]
 
-    def select_edge(self, u: EreignisLabelType, v: EreignisLabelType, sel: bool):
+    def select_edge(self,
+                    u: EreignisLabelType,
+                    v: EreignisLabelType,
+                    x: Optional[float],
+                    t: Optional[float]):
         """
         Zugtrasse selektieren
 
+        Die Trasse wird zusätzlich zu ev. bereits ausgewählten Trassen ausgewählt.
+        Die erste Trasse erhält das auswahl-Attribut 1, die weiteren 2.
+        Der Aufrufer bestimmt, wie viele Trassen ausgewählt sein dürfen.
+        Um Trassen zu deselektieren, die clear_selection-Methode aufrufen.
+
+        Die Grafik wird nicht aktualisiert.
+        Observers werden nicht benachrichtigt.
+
         :param u: Ausgangspunkt der Trasse im Ereignisgraph
         :param v: Zielpunkt der Trasse im Ereignisgraph
+        :param x: Ortskoordinate des Mausklicks
+        :param t: Zeitkoordinate des Mausklicks (im Moment nicht verwendet)
         :return: None
         """
 
-        if not sel:
-            try:
-                self._selected_edges.remove((u, v))
-            except ValueError:
-                pass
+        bahnhof = None
+        if x is not None:
+            for s, bf in self.naechster_bahnhof.items():
+                if x < s:
+                    bahnhof = bf
+                    break
 
         edge_data = self.bildgraph.get_edge_data(u, v)
-        if edge_data is not None:
-            if sel:
-                self._selected_edges.append((u, v))
-                idx = min(2, len(self._selected_edges))
-                edge_data.auswahl = idx
-            else:
-                edge_data.auswahl = 0
-
-        if len(self._selected_edges) > 2:
-            edge = self._selected_edges[1]
-            self.select_edge(edge[0], edge[1], False)
+        if edge_data is not None and bahnhof is not None:
+            self.auswahl_kanten.append((u, v))
+            self.auswahl_bahnhoefe.append(bahnhof)
+            idx = min(2, len(self.auswahl_kanten))
+            edge_data.auswahl = idx
 
     def clear_selection(self):
         """
@@ -566,10 +589,14 @@ class BildfahrplanPlot:
         Observers werden nicht benachrichtigt.
         """
 
-        while self._selected_edges:
-            edge = self._selected_edges[-1]
-            self.select_edge(edge[0], edge[1], False)
-        self.selection_text = []
+        for edge in self.auswahl_kanten:
+            edge_data = self.bildgraph.get_edge_data(*edge)
+            if edge_data is not None:
+                edge_data.auswahl = 0
+
+        self.auswahl_kanten = []
+        self.auswahl_bahnhoefe = []
+        self.auswahl_text = []
 
     def format_zuginfo(self, u: EreignisLabelType, v: EreignisLabelType):
         """
