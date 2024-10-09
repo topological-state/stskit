@@ -4,9 +4,11 @@ Diese Änderungen können z.B. nach einem neuen Import vom Simulator auf die jew
 um den Betriebszustand wiederherzustellen.
 """
 
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
+from typing import Any, Dict, Iterable, List, Mapping, NamedTuple, Optional, Sequence, Set, Tuple, Union
 
 import networkx as nx
+
+from stskit.model.bahnhofgraph import BahnhofElement
 
 
 class GraphJournal:
@@ -31,7 +33,11 @@ class GraphJournal:
     Änderungen wirken auf einzelne Attribute. Die Änderungen werden gesammelt.
     """
 
-    def __init__(self):
+    def __init__(self,
+                 target_graph: Optional[nx.Graph] = None,
+                 target_node: Optional[Any] = None):
+        self.target_graph = target_graph
+        self.target_node = target_node
         self.removed_nodes: Set[Any] = set()
         self.added_nodes: Dict[Any, Any] = {}
         self.changed_nodes: Dict[Any, Any] = {}
@@ -131,7 +137,7 @@ class GraphJournal:
         for node, data in other.changed_nodes.items():
             self.change_node(node, **data)
 
-    def replay(self, graph: nx.Graph):
+    def replay(self, graph: Optional[nx.Graph] = None):
         """
         Journal abspielen
 
@@ -157,6 +163,9 @@ class GraphJournal:
 
         Dictionary mit Fehlermeldungen.
         """
+
+        if graph is None:
+            graph = self.target_graph
 
         failed_remove_edge = set()
         failed_change_edge = set()
@@ -208,3 +217,46 @@ class GraphJournal:
             fails['change_nodes'] = failed_change_node
 
         return fails
+
+
+class JournalIDType(NamedTuple):
+    """
+    Identifikation des Journals
+
+    Ein Journal wird durch Typ, Zug, Bst identifiziert.
+    """
+
+    typ: str  # Betriebshalt, Ankunft, Abfahrt
+    zid: int
+    bst: BahnhofElement
+
+    def __str__(self):
+        return f"{self.typ}, {self.zid}, {self.bst}"
+
+class JournalCollection:
+    """
+    Kollektion von Journals.
+
+    JournalCollection wird zum Erfassen von Fdl-Korrekturen an den Graphdaten verwendet.
+    Es erlaubt, Journals von verschiedenen Graphen unter einer Korrektur-ID zusammenzufassen.
+
+    Anhand der Korrektur-ID können Journals wiedergefunden und gelöscht werden.
+    Es werden dann jeweils alle zu einem Ereignis gehörenden Korrekturen gelöscht.
+    """
+    
+    def __init__(self):
+        self.collection: Dict[JournalIDType, List[GraphJournal]] = {}
+
+    def replay(self):
+        for journal_list in self.collection.values():
+            for journal in journal_list:
+                journal.replay(journal.target_graph)
+
+    def add_journal(self, id_, *journals: GraphJournal):
+        if id_ not in self.collection:
+            self.collection[id_] = []
+        for journal in journals:
+            self.collection[id_].append(journal)
+
+    def delete_journal(self, id_):
+        del self.collection[id_]
