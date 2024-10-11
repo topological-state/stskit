@@ -94,6 +94,14 @@ class ZielGraphNode(dict):
                             Bei Ein- und Ausfahrten wird die Ankunfts- und Abfahrtszeit geschätzt.
                             """)
     flags = dict_property("flags", str, docstring="Originalflags")
+    lokwechsel = dict_property("lokwechsel", Optional[Tuple[int, int]],
+                               docstring="""
+                               Lokwechselflag mit Nummern der Ein- und Ausfahrtsgleisen der Ersatzlok/Abstelllok.
+                               """)
+    lokumlauf = dict_property("lokumlauf", bool,
+                              docstring="""
+                              Lokumlaufflag.
+                              """)
 
     # Die folgenden Properties werden nicht vom Simulator geliefert
     mindestaufenthalt = dict_property("mindestaufenthalt", Union[int, float],
@@ -188,6 +196,8 @@ class ZielGraphNode(dict):
             gleis=fahrplanzeile.gleis,
             typ='D' if fahrplanzeile.durchfahrt() else 'H',
             flags=fahrplanzeile.flags,
+            lokumlauf=fahrplanzeile.lokumlauf(),
+            lokwechsel=fahrplanzeile.lokwechsel(),
             status='',
             mindestaufenthalt=0
         )
@@ -387,6 +397,8 @@ class ZielGraph(nx.DiGraph):
                     plan=einfahrt.name,
                     gleis=einfahrt.name,
                     flags='',
+                    lokumlauf=False,
+                    lokwechsel=None,
                     status='',
                     p_an=einfahrtszeit,
                     p_ab=einfahrtszeit,
@@ -417,6 +429,8 @@ class ZielGraph(nx.DiGraph):
                     plan=ausfahrt.name,
                     gleis=ausfahrt.name,
                     flags='',
+                    lokumlauf=False,
+                    lokwechsel=None,
                     status='',
                     p_an=ausfahrtszeit,
                     p_ab=ausfahrtszeit,

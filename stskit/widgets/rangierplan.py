@@ -8,11 +8,12 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, 
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
-from plugin.stsobj import format_minutes, format_verspaetung
-from stskit.qt.ui_rangierplan import Ui_RangierplanWidget
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement
+from stskit.model.signalgraph import SignalGraph
 from stskit.model.zielgraph import ZielGraph, ZielGraphNode, ZielLabelType
 from stskit.model.zuggraph import ZugGraph, ZugGraphNode
+from stskit.plugin.stsobj import format_minutes, format_verspaetung
+from stskit.qt.ui_rangierplan import Ui_RangierplanWidget
 
 
 # fragen
@@ -70,8 +71,9 @@ class Rangierdaten:
 
 
 class Rangiertabelle:
-    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph, bahnhofgraph: BahnhofGraph):
+    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph, bahnhofgraph: BahnhofGraph, signalgraph: SignalGraph):
         self.bahnhofgraph = bahnhofgraph
+        self.signalgraph = signalgraph
         self.zuggraph = zuggraph
         self.zielgraph = zielgraph
         self.rangierliste: Dict[ZielLabelType, Rangierdaten] = {}
@@ -111,24 +113,25 @@ class Rangiertabelle:
             if fid in self.rangierliste:
                 continue
 
-            if ziel.obj.lokumlauf:
+            if ziel.lokumlauf:
                 zug = self.zuggraph.nodes[fid.zid]
                 rd = self._neue_rangierdaten(zug, ziel, vorgang="Lokumlauf")
                 rd.ersatzlok_von = rd.lok_nach = BahnhofElement("Gl", ziel.gleis)
                 self._init_zugstatus(rd, zug)
                 self.rangierliste[fid] = rd
 
-            elif enrs := ziel.obj.lokwechsel is not None:
+            elif (enrs := ziel.lokwechsel) is not None:
                 zug = self.zuggraph.nodes[fid.zid]
                 rd = self._neue_rangierdaten(zug, ziel, vorgang="Lokwechsel")
-
                 # anhand der enr herausfinden, welches die ersatzlok ist!
                 abstellgleise = [self.bahnhofgraph.find_gleis_enr(enr) for enr in enrs]
-                abstellgleisdaten = {agl: self.bahnhofgraph.nodes[agl] for agl in abstellgleise if agl is not None}
-                for agl, agld in abstellgleisdaten.items():
-                    if agld.einfahrt:
+                #abstellgleisdaten = {agl: self.bahnhofgraph.nodes[agl] for agl in abstellgleise if agl is not None}
+                anschluesse = [self.signalgraph.nodes[enr] for enr in enrs]
+
+                for agl, anschluss in zip(abstellgleise, anschluesse):
+                    if anschluss.typ == 6:
                         rd.ersatzlok_von = agl
-                    elif agld.ausfahrt:
+                    elif anschluss.typ == 7:
                         rd.lok_nach = agl
 
                 self._init_zugstatus(rd, zug)
@@ -238,7 +241,7 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
     Datenmodell für Rangiertabelle
     """
 
-    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph, bahnhofgraph: BahnhofGraph):
+    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph, bahnhofgraph: BahnhofGraph, signalgraph: SignalGraph):
         super().__init__()
 
         self._columns: List[str] = ['Zug',
@@ -253,22 +256,24 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
                                     'Lok Status',
                                     'Ersatzlok von',
                                     'Ersatzlok Status']
-
+        self._rangierziele: List[ZielLabelType] = []
         self.zuggraph = zuggraph
         self.zielgraph = zielgraph
         self.bahnhofgraph = bahnhofgraph
-        self.rangiertabelle = Rangiertabelle(zuggraph, zielgraph, bahnhofgraph)
+        self.signalgraph = signalgraph
+        self.rangiertabelle = Rangiertabelle(zuggraph, zielgraph, bahnhofgraph, signalgraph)
 
     def update(self):
         self.beginResetModel()
         self.rangiertabelle.update()
+        self._rangierziele = list(self.rangiertabelle.rangierliste.keys())
         self.endResetModel()
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
         return len(self._columns)
 
     def rowCount(self, parent: QModelIndex = ...) -> int:
-        return len(self.rangiertabelle.rangierliste)
+        return len(self._rangierziele)
 
     def data(self, index: QModelIndex, role: int = ...) -> Any:
         """
@@ -288,8 +293,8 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             return None
 
         try:
-            row = index.row()
-            rd = self.rangiertabelle.rangierliste[row]
+            fid = self._rangierziele[index.row()]
+            rd = self.rangiertabelle.rangierliste[fid]
             col = self._columns[index.column()]
         except (IndexError, KeyError):
             return None
@@ -402,7 +407,7 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             if orientation == QtCore.Qt.Horizontal:
                 return self._columns[section]
             elif orientation == QtCore.Qt.Vertical:
-                return self.zid_liste[section]
+                return self._rangierziele[section]
 
 
 class RangierplanWindow(QtWidgets.QWidget):
@@ -423,7 +428,7 @@ class RangierplanWindow(QtWidgets.QWidget):
         self.setWindowTitle("Rangierplan")
 
         self.rangiertabelle_modell = RangiertabelleModell(zentrale.anlage.zuggraph, zentrale.anlage.zielgraph,
-                                                          zentrale.anlage.bahnhofgraph)
+                                                          zentrale.anlage.bahnhofgraph, zentrale.anlage.signalgraph)
         self.rangiertabelle_modell.zugschema = self.zentrale.anlage.zugschema
 
         self.ui.zugliste_view.setModel(self.rangiertabelle_modell)
