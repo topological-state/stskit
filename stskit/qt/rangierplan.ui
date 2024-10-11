@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FahrplanWidget</class>
- <widget class="QWidget" name="FahrplanWidget">
+ <class>RangierplanWidget</class>
+ <widget class="QWidget" name="RangierplanWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -181,7 +181,7 @@
       </property>
       <widget class="QWidget" name="fahrplan_tab">
        <attribute name="title">
-        <string>Fahrplan</string>
+        <string>Rangierplan</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -191,7 +191,7 @@
           </property>
           <widget class="QLabel" name="fahrplan_label">
            <property name="text">
-            <string>Fahrplan</string>
+            <string>Rangierplan</string>
            </property>
            <property name="buddy">
             <cstring>fahrplan_view</cstring>

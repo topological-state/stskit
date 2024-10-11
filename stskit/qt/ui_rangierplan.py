@@ -11,13 +11,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_FahrplanWidget(object):
-    def setupUi(self, FahrplanWidget):
-        FahrplanWidget.setObjectName("FahrplanWidget")
-        FahrplanWidget.resize(1101, 803)
-        self.verticalLayout = QtWidgets.QVBoxLayout(FahrplanWidget)
+class Ui_RangierplanWidget(object):
+    def setupUi(self, RangierplanWidget):
+        RangierplanWidget.setObjectName("RangierplanWidget")
+        RangierplanWidget.resize(1101, 803)
+        self.verticalLayout = QtWidgets.QVBoxLayout(RangierplanWidget)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.splitter = QtWidgets.QSplitter(FahrplanWidget)
+        self.splitter = QtWidgets.QSplitter(RangierplanWidget)
         self.splitter.setOrientation(QtCore.Qt.Horizontal)
         self.splitter.setObjectName("splitter")
         self.zugliste_widget = QtWidgets.QTabWidget(self.splitter)
@@ -123,23 +123,23 @@ class Ui_FahrplanWidget(object):
         self.fahrplan_label.setBuddy(self.fahrplan_view)
         self.folgezug_label.setBuddy(self.folgezug_view)
 
-        self.retranslateUi(FahrplanWidget)
+        self.retranslateUi(RangierplanWidget)
         self.tabWidget_2.setCurrentIndex(0)
-        QtCore.QMetaObject.connectSlotsByName(FahrplanWidget)
+        QtCore.QMetaObject.connectSlotsByName(RangierplanWidget)
 
-    def retranslateUi(self, FahrplanWidget):
+    def retranslateUi(self, RangierplanWidget):
         _translate = QtCore.QCoreApplication.translate
-        FahrplanWidget.setWindowTitle(_translate("FahrplanWidget", "Form"))
-        self.suche_zug_label.setText(_translate("FahrplanWidget", "Suche Zug"))
-        self.suche_loeschen_button.setText(_translate("FahrplanWidget", "x"))
-        self.vorlaufzeit_label.setText(_translate("FahrplanWidget", "V&orlaufzeit"))
-        self.vorlaufzeit_spin.setSpecialValueText(_translate("FahrplanWidget", "unbegrenzt"))
-        self.vorlaufzeit_spin.setSuffix(_translate("FahrplanWidget", " Min."))
-        self.nachlaufzeit_label.setText(_translate("FahrplanWidget", "N&achlaufzeit"))
-        self.nachlaufzeit_spin.setSpecialValueText(_translate("FahrplanWidget", "unbegrenzt"))
-        self.nachlaufzeit_spin.setSuffix(_translate("FahrplanWidget", " Min."))
-        self.zugliste_widget.setTabText(self.zugliste_widget.indexOf(self.zugliste_tab), _translate("FahrplanWidget", "Lokwechsel"))
-        self.fahrplan_label.setText(_translate("FahrplanWidget", "Fahrplan"))
-        self.folgezug_label.setText(_translate("FahrplanWidget", "Folgezug"))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.fahrplan_tab), _translate("FahrplanWidget", "Fahrplan"))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.grafik_tab), _translate("FahrplanWidget", "Grafik"))
+        RangierplanWidget.setWindowTitle(_translate("RangierplanWidget", "Form"))
+        self.suche_zug_label.setText(_translate("RangierplanWidget", "Suche Zug"))
+        self.suche_loeschen_button.setText(_translate("RangierplanWidget", "x"))
+        self.vorlaufzeit_label.setText(_translate("RangierplanWidget", "V&orlaufzeit"))
+        self.vorlaufzeit_spin.setSpecialValueText(_translate("RangierplanWidget", "unbegrenzt"))
+        self.vorlaufzeit_spin.setSuffix(_translate("RangierplanWidget", " Min."))
+        self.nachlaufzeit_label.setText(_translate("RangierplanWidget", "N&achlaufzeit"))
+        self.nachlaufzeit_spin.setSpecialValueText(_translate("RangierplanWidget", "unbegrenzt"))
+        self.nachlaufzeit_spin.setSuffix(_translate("RangierplanWidget", " Min."))
+        self.zugliste_widget.setTabText(self.zugliste_widget.indexOf(self.zugliste_tab), _translate("RangierplanWidget", "Lokwechsel"))
+        self.fahrplan_label.setText(_translate("RangierplanWidget", "Rangierplan"))
+        self.folgezug_label.setText(_translate("RangierplanWidget", "Folgezug"))
+        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.fahrplan_tab), _translate("RangierplanWidget", "Rangierplan"))
+        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.grafik_tab), _translate("RangierplanWidget", "Grafik"))

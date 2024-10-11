@@ -29,6 +29,7 @@ from stskit.widgets.gleisbelegung import GleisbelegungWindow
 from stskit.widgets.gleisnetz import GleisnetzWindow
 from stskit.widgets.qticker import TickerWindow
 from stskit.widgets.fahrplan import FahrplanWindow
+from stskit.widgets.rangierplan import RangierplanWindow
 from stskit.widgets.bildfahrplan import BildFahrplanWindow
 
 logger = logging.getLogger(__name__)
@@ -168,6 +169,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.fahrplan_button.clicked.connect(self.fahrplan_clicked)
         layout.addWidget(self.fahrplan_button)
 
+        self.rangierplan_button = QtWidgets.QPushButton("Rangierplan", self)
+        self.rangierplan_button.setEnabled(False)
+        self.rangierplan_button.clicked.connect(self.rangierplan_clicked)
+        layout.addWidget(self.rangierplan_button)
+
         self.netz_button = QtWidgets.QPushButton("Gleisplan (Geduld!)", self)
         self.netz_button.setEnabled(False)
         self.netz_button.clicked.connect(self.netz_clicked)
@@ -227,6 +233,12 @@ class MainWindow(QtWidgets.QMainWindow):
         window.show()
         self.windows.add(window)
 
+    def rangierplan_clicked(self):
+        window = RangierplanWindow(self.zentrale)
+        window.planung_update()
+        window.show()
+        self.windows.add(window)
+
     def bildfahrplan_clicked(self):
         window = BildFahrplanWindow(self.zentrale)
         window.planung_update()
@@ -276,6 +288,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.bildfahrplan_button.setEnabled(self.enable_update)
                 self.matrix_button.setEnabled(self.enable_update)
                 self.fahrplan_button.setEnabled(self.enable_update)
+                self.rangierplan_button.setEnabled(self.enable_update)
                 self.netz_button.setEnabled(self.enable_update)
                 self.ticker_button.setEnabled(self.enable_update)
                 self.einstellungen_button.setEnabled(self.enable_update)
