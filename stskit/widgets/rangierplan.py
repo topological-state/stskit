@@ -156,7 +156,7 @@ class Rangiertabelle:
                 except KeyError:
                     pass
                 else:
-                    self._init_lokstatus(rd)
+                    self._init_lokstatus(rd, self.zuggraph.nodes[rd.lok_zid])
 
             if rd.ersatzlok_zid is None:
                 try:
@@ -165,7 +165,7 @@ class Rangiertabelle:
                 except KeyError:
                     pass
                 else:
-                    self._init_ersatzlokstatus(rd)
+                    self._init_ersatzlokstatus(rd, self.zuggraph.nodes[rd.ersatzlok_zid])
 
     def _init_zugstatus(self, rd: Rangierdaten, zug: ZugGraphNode):
         """
@@ -192,42 +192,59 @@ class Rangiertabelle:
         rd.zug_status = status
         return status
 
-    def _init_lokstatus(self, rd: Rangierdaten):
+    def _init_lokstatus(self, rd: Rangierdaten, lok: ZugGraphNode):
         """
-
-                 "unsichtbar",  # zug ist noch nicht im stellwerk
-                 "bereit",      # zug/lok ist abfahrbereit
-                 "fahrt",       # zug/lok fährt
-                 "halt",        # zug/lok hält vor signal oder sonstwo
-                 "erledigt"]    # lok gekuppelt bzw. abgestellt, zug abgefahren
+        lokstqtus initialisieren
 
         :param rd:
+        :param lok:
         :return:
         """
 
-        # todo
-        pass
+        if rd.lok_status != "unbekannt":
+            return rd.lok_status
+        if lok.sichtbar:
+            status = "bereit"
+        elif lok.ausgefahren:
+            status = "erledigt"
+        else:
+            status = "unsichtbar"
 
-    def _init_ersatzlokstatus(self, rd: Rangierdaten):
+        rd.zug_status = status
+        return status
+
+    def _init_ersatzlokstatus(self, rd: Rangierdaten, lok: ZugGraphNode):
         """
-
-                 "gleisfehler", # lokgleis stimmt nicht mit zuggleis überein (können wir das erkennen?)
-                 "unsichtbar",  # zug ist noch nicht im stellwerk
-                 "bereit",      # zug/lok ist abfahrbereit
-                 "fahrt",       # zug/lok fährt
-                 "halt",        # zug/lok hält vor signal oder sonstwo
-                 "erledigt"]    # lok gekuppelt bzw. abgestellt, zug abgefahren
+        ersatzlokstatus initialisieren
 
         :param rd:
+        :param lok:
         :return:
         """
 
-        # todo
-        pass
+        if rd.ersatzlok_status != "unbekannt":
+            return rd.ersatzlok_status
+        if lok.sichtbar:
+            status = "bereit"
+        elif lok.ausgefahren:
+            status = "erledigt"
+        else:
+            status = "unsichtbar"
+
+        rd.zug_status = status
+        return status
 
     def loks_suchen(self):
-         for zid, zug in self.zuggraph.nodes(data=True):
-            parts = zug.name.split()
+        """
+        Loks und Ersatzloks im Zuggraph suchen
+
+        """
+        for zid, zug in self.zuggraph.nodes(data=True):
+            try:
+                parts = zug.name.split()
+            except AttributeError:
+                continue
+
             if parts[0] == "Lok":
                 zug_name = " ".join(parts[1:])
                 self.loks[zug_name] = zid
