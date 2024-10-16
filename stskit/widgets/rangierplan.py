@@ -2,12 +2,13 @@
 Qt-Fenster Rangierplan
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
+from plugin.stsobj import Ereignis
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement
 from stskit.model.signalgraph import SignalGraph
 from stskit.model.zielgraph import ZielGraph, ZielGraphNode, ZielLabelType
@@ -21,26 +22,263 @@ from stskit.qt.ui_rangierplan import Ui_RangierplanWidget
 #   rothalt erhalten wir, aber ohne ortsangabe
 # - erkennen wir, ob die lok auf das falsche gleis programmiert ist?
 
-RANGIERSTATUS = ["unbekannt",   # zustand unbekannt
-                 "gleisfehler", # lokgleis stimmt nicht mit zuggleis überein (können wir das erkennen?)
-                 "unsichtbar",  # zug ist noch nicht im stellwerk
-                 "bereit",      # zug/lok ist abfahrbereit
-                 "fahrt",       # zug/lok fährt
-                 "halt",        # zug/lok hält vor signal oder sonstwo
-                 "am gleis",    # zug ist am gleis, wo der rangiervorgang stattfinden soll
-                 "erledigt"]    # lok gekuppelt bzw. abgestellt, zug abgefahren
 
-# SVG colors: https://www.w3.org/TR/SVG11/types.html#ColorKeywords
-STATUSFARBE = {"unbekannt": QtGui.QColor("white"),
-               "gleisfehler": QtGui.QColor("orangered"),
-               "unsichtbar": QtGui.QColor("white"),
-               "bereit": QtGui.QColor("khaki"),
-               "fahrt": QtGui.QColor("limegreen"),
-               "halt": QtGui.QColor("tomato"),
-               "am gleis": QtGui.QColor("skyblue"),
-               "erledigt": QtGui.QColor("gray"),
-               "default": QtGui.QColor("white")
-                }
+class Lokstatus:
+    """
+    Status von rangierenden Loks
+
+    Der Status setzt sich aus zwei Elementen zusammen:
+    1. Fahrzustand
+    2. Gleisfehlerwarnung
+
+    Die Gleisfehlerwarnung überlagert den Fahrzustand.
+    """
+
+    WERTEBEREICH = {"unbekannt",  # zustand unbekannt
+                    "gleisfehler",  # lokgleis stimmt nicht mit zuggleis überein (können wir das erkennen?)
+                    "unsichtbar",  # zug ist noch nicht im stellwerk
+                    "unterwegs",  # zug/lok fährt
+                    "halt",  # zug/lok hält vor signal oder sonstwo
+                    "am gleis",  # zug ist am gleis, wo der rangiervorgang stattfinden soll
+                    "erledigt"}
+
+    DARSTELLUNGSTEXT = {"unbekannt": "unbekannt",
+                        "gleisfehler": "Gleisfehler",
+                        "unsichtbar": "unsichtbar",
+                        "unterwegs": "unterwegs",
+                        "halt": "Halt",
+                        "am gleis": "am Gleis",
+                        "erledigt": "erledigt"}
+
+    # SVG colors: https://www.w3.org/TR/SVG11/types.html#ColorKeywords
+    DARSTELLUNGSFARBE = {"unbekannt": QtGui.QColor("white"),
+                         "gleisfehler": QtGui.QColor("orangered"),
+                         "unsichtbar": QtGui.QColor("white"),
+                         "unterwegs": QtGui.QColor("limegreen"),
+                         "halt": QtGui.QColor("tomato"),
+                         "am gleis": QtGui.QColor("skyblue"),
+                         "erledigt": QtGui.QColor("gray")}
+
+    EREIGNIS_STATUS_MAP = {
+        'einfahrt': 'unterwegs',
+        'ausfahrt': 'erledigt',
+        'ankunft': 'am gleis',
+        'abfahrt': 'unterwegs',
+        'rothalt': 'halt',
+        'wurdegruen': 'unterwegs',
+        'kuppeln': 'erledigt'
+
+    }
+
+    def __init__(self):
+        self._status = "unbekannt"
+        self._letztes_gleis = ""
+        self._gleisfehler = False
+
+    def __str__(self) -> str:
+        return self.DARSTELLUNGSTEXT[self.status]
+
+    @property
+    def status(self) -> str:
+        """
+        Zusammenfassender Status einer Lok
+
+        Der Status setzt sich aus zwei Elementen zusammen:
+        1. Fahrzustand als String-Wert im Attribut _status
+        2. Gleisfehlerwarnung als Bool-Wert im Attribut _gleisfehler
+
+        Die Gleisfehlerwarnung überlagert den Fahrzustand.
+
+        Der Property-Setter kann den Gleisfehlerzustand nur setzen, aber nicht löschen.
+        Der Gleisfehler sollte daher nur über das Gleisfehler-Property geändert werden.
+        """
+
+        if self._gleisfehler:
+            return "gleisfehler"
+        else:
+            return self._status
+
+    @status.setter
+    def status(self, status: str) -> None:
+        if status not in self.WERTEBEREICH:
+            raise ValueError(f"{status} ist kein erlaubter Lokstatus.")
+        if status == "gleisfehler":
+            self._gleisfehler = True
+        else:
+            self._status = status
+
+    @property
+    def gleisfehler(self) -> bool:
+        """
+        Gleisfehlerwarnung
+
+        Ein Gleisfehler zeigt an, ob die Lok auf das falsche Gleis programmiert ist.
+        Solange der Gleisfehler gesetzt ist, zeigt der Status "gleisfehler".
+        Wenn er zurückgesetzt wird, zeigt der Status wieder den Fahrzustand.
+
+        Der Gleisfehler muss von extern gesetzt werden, die Klasse selber kann ihn nicht erkennen.
+
+        :return: True, wenn ein Gleisfehler vorliegt, sonst False.
+        """
+
+        return self._gleisfehler
+
+    @gleisfehler.setter
+    def gleisfehler(self, gleisfehler: bool) -> None:
+        self._gleisfehler = gleisfehler
+
+    @property
+    def qt_farbe(self) -> QtGui.QColor:
+        """
+        In Qt-Farbe codierter Status.
+
+        :return: QColor
+        """
+
+        return self.DARSTELLUNGSFARBE[self.status]
+
+    def update_von_zug(self, lok: ZugGraphNode):
+        """
+        lokstqtus aus Zugdaten aktualisieren.
+
+        :param lok:
+        :return: Neuer Statuswert
+        """
+
+        if self.status in {"erledigt", "halt"}:
+            return self.status
+
+        if lok.sichtbar:
+            status = "unterwegs"
+        elif lok.ausgefahren:
+            status = "erledigt"
+        else:
+            status = "unsichtbar"
+
+        self.status = status
+        return self.status
+
+    def update_von_ereignis(self, ereignis: Ereignis) -> str:
+        """
+        Lokstatus aus Ereignisdaten aktualisieren.
+
+        :param ereignis:
+        :return: Neuer Statuswert
+        """
+
+        if self.status in {"erledigt"}:
+            pass
+        elif not ereignis.sichtbar:
+            self.status = 'unsichtbar'
+        else:
+            self.status = self.EREIGNIS_STATUS_MAP[ereignis.art]
+        return self.status
+
+
+class Zugstatus:
+    """
+    Status des rangierenden Zuges
+    """
+
+    WERTEBEREICH = {"unbekannt",
+                    "unsichtbar",
+                    "unterwegs",
+                    "halt",
+                    "am gleis",
+                    "bereit",
+                    "erledigt"}
+
+    DARSTELLUNGSTEXT = {"unbekannt": "unbekannt",
+                        "unsichtbar": "unsichtbar",
+                        "unterwegs": "unterwegs",
+                        "halt": "Halt",
+                        "am gleis": "am Gleis",
+                        "bereit": "bereit",
+                        "erledigt": "erledigt"}
+
+    DARSTELLUNGSFARBE = {"unbekannt": QtGui.QColor("white"),
+                         "unsichtbar": QtGui.QColor("white"),
+                         "bereit": QtGui.QColor("khaki"),
+                         "unterwegs": QtGui.QColor("limegreen"),
+                         "halt": QtGui.QColor("tomato"),
+                         "am gleis": QtGui.QColor("skyblue"),
+                         "erledigt": QtGui.QColor("gray")}
+
+    EREIGNIS_STATUS_MAP = {
+        'einfahrt': 'unterwegs',
+        'ausfahrt': 'erledigt',
+        'ankunft': 'unterwegs', # ausser ankunft am zielgleis -> am gleis
+        'abfahrt': 'unterwegs', # ausser abfahrt vom zielgleis -> bereit oder erledigt
+        'rothalt': 'halt',
+        'wurdegruen': 'unterwegs',
+    }
+
+    def __init__(self):
+        self._status = "unbekannt"
+        self._letztes_gleis = ""
+
+    def __str__(self) -> str:
+        return self.DARSTELLUNGSTEXT[self.status]
+
+    @property
+    def status(self) -> str:
+        return self._status
+
+    @status.setter
+    def status(self, status: str) -> None:
+        if status not in self.WERTEBEREICH:
+            raise ValueError(f"{status} ist kein erlaubter Zugstatus.")
+        self._status = status
+
+    @property
+    def qt_farbe(self) -> QtGui.QColor:
+        return self.DARSTELLUNGSFARBE[self.status]
+
+    def update_von_zug(self, zug: ZugGraphNode, plangleis: str) -> str:
+        """
+        Status anhand von Zugdaten aktualisieren.
+
+        :param zug: Zugdaten
+        :param plangleis: Geplantes Gleis des Rangiervorgangs
+        :return: Neuer Status
+        """
+
+        if self.status in {"erledigt", "halt", "bereit"}:
+            return self.status
+
+        if zug.sichtbar:
+            if zug.amgleis and zug.plangleis == plangleis:
+                status = "am gleis"
+            else:
+                status = "unterwegs"
+        elif zug.ausgefahren:
+            status = "erledigt"
+        else:
+            status = "unsichtbar"
+
+        self.status = status
+        return self.status
+
+
+    def update_von_ereignis(self, ereignis: Ereignis, plangleis: str) -> str:
+        if self.status in {"erledigt"}:
+            return self.status
+
+        status = self.EREIGNIS_STATUS_MAP.get(ereignis.art, 'unterwegs') if ereignis.sichtbar else 'unsichtbar'
+
+        if ereignis.art == 'ankunft':
+            self._letztes_gleis = ereignis.plangleis
+            if ereignis.amgleis and ereignis.plangleis == plangleis:
+                status = 'am gleis'
+        elif ereignis.art == 'abfahrt' and self._letztes_gleis == plangleis:
+            if ereignis.amgleis:
+                status = 'bereit'
+            else:
+                status = 'erledigt'
+
+        self.status = status
+        return self.status
+
 
 @dataclass
 class Rangierdaten:
@@ -59,15 +297,15 @@ class Rangierdaten:
     v_ab: Union[int, float] = 0
     t_an: Union[int, float] = 0
 
-    zug_status: str = "unbekannt"
+    zug_status: Zugstatus = field(default_factory=Zugstatus)
     # die lok-id wird erst beim abkuppeln bekannt
     lok_zid: Optional[int] = None
     lok_nach: Optional[BahnhofElement] = None
-    lok_status: str = "unbekannt"
+    lok_status: Lokstatus = field(default_factory=Lokstatus)
     # die ersatzlok wird erst bei der abfrage bekannt
     ersatzlok_zid: Optional[int] = None
     ersatzlok_von: Optional[BahnhofElement] = None
-    ersatzlok_status: str = "unbekannt"
+    ersatzlok_status: Lokstatus = field(default_factory=Lokstatus)
 
 
 class Rangiertabelle:
@@ -77,10 +315,26 @@ class Rangiertabelle:
         self.zuggraph = zuggraph
         self.zielgraph = zielgraph
         self.rangierliste: Dict[ZielLabelType, Rangierdaten] = {}
+        # zugname, zid
         self.loks: Dict[str, int] = {}
+        # zugname, zid
         self.ersatzloks: Dict[str, int] = {}
+        # lok-zid, key of rangierliste (loks und ersatzloks)
+        self.lok_index: Dict[int, ZielLabelType] = {}
+        # zug-zid, keys of rangierliste
+        self.zug_index: Dict[int, Set[ZielLabelType]] = {}
 
     def update(self):
+        """
+        Reguläre Aktualisierung der Rangiertabelle.
+
+        1. Sucht neue Loks im Zuggraphen.
+        2. Sucht Zuege, die Rangiervorgänge im Fahrplan haben.
+        3. Aktualisert die Zug- und Lokstatusdaten.
+
+        Views der Rangiertabelle müssen nachher neu eingelesen werden.
+        """
+
         self.loks_suchen()
         self.zuege_suchen()
         self.zuege_aktualisieren()
@@ -109,6 +363,14 @@ class Rangiertabelle:
         return rd
 
     def zuege_suchen(self):
+        """
+        Züge suchen, die einen Rangiervorgang im Fahrplan haben.
+
+        Die Fahrziele mit Lokumlauf oder Lokwechsel werden in die Rangierlieste geschrieben.
+        Die Rangierdaten-Objekt werden so weit wie möglich ausgefüllt.
+        Die Lokdaten (zid und status) werden hier offen gelassen..
+        """
+
         for fid, ziel in self.zielgraph.nodes(data=True):
             if fid in self.rangierliste:
                 continue
@@ -116,8 +378,8 @@ class Rangiertabelle:
             if ziel.lokumlauf:
                 zug = self.zuggraph.nodes[fid.zid]
                 rd = self._neue_rangierdaten(zug, ziel, vorgang="Lokumlauf")
-                rd.ersatzlok_von = rd.lok_nach = BahnhofElement("Gl", ziel.gleis)
-                self._init_zugstatus(rd, zug)
+                rd.lok_nach = BahnhofElement("Gl", ziel.gleis)
+                rd.zug_status.update_von_zug(zug)
                 self.rangierliste[fid] = rd
 
             elif (enrs := ziel.lokwechsel) is not None:
@@ -134,7 +396,7 @@ class Rangiertabelle:
                     elif anschluss.typ == 7:
                         rd.lok_nach = agl
 
-                self._init_zugstatus(rd, zug)
+                rd.zug_status.update_von_zug(zug)
                 self.rangierliste[fid] = rd
 
     def zuege_aktualisieren(self):
@@ -149,97 +411,62 @@ class Rangiertabelle:
             rd.v_ab = ziel.v_ab
             rd.t_an = ziel.p_an + ziel.v_an
 
+            if fid.zid in self.zug_index:
+                self.zug_index[fid.zid].add(fid)
+            else:
+                self.zug_index[fid.zid] = {fid}
+
             if rd.lok_zid is None:
                 try:
                     rd.lok_zid = self.loks[rd.name]
-                    rd.lok_status = "unbekannt"
+                    rd.lok_status.status = "unbekannt"
                 except KeyError:
                     pass
                 else:
-                    self._init_lokstatus(rd, self.zuggraph.nodes[rd.lok_zid])
+                    self.lok_index[rd.lok_zid] = fid
+            if rd.lok_zid is not None:
+                rd.lok_status.update_von_zug(self.zuggraph.nodes[rd.lok_zid])
 
             if rd.ersatzlok_zid is None:
                 try:
                     rd.ersatzlok_zid = self.ersatzloks[rd.name]
-                    rd.ersatzlok_status = "unbekannt"
+                    rd.ersatzlok_status.status = "unbekannt"
                 except KeyError:
                     pass
                 else:
-                    self._init_ersatzlokstatus(rd, self.zuggraph.nodes[rd.ersatzlok_zid])
+                    self.lok_index[rd.ersatzlok_zid] = fid
+            if rd.ersatzlok_zid is not None:
+                rd.ersatzlok_status.update_von_zug(self.zuggraph.nodes[rd.ersatzlok_zid])
+                self.gleisfehler_pruefen(rd)
 
-    def _init_zugstatus(self, rd: Rangierdaten, zug: ZugGraphNode):
+    def gleisfehler_pruefen(self, rd: Rangierdaten):
+        """
+        Rangiervoraang auf Gleisfehler prüfen.
+
+        Prüft, ob die Ersatzlok auf das gleiche Gleis wie ihr Zielzug programmiert ist.
+        Wenn nicht wird ein Gleisfehler gemeldet, so dass der Fdl die Lok auf das richtige Gleis leiten kann.
+
+        :param rd: Rangierdaten des Zuges.
         """
 
-        :param rd:
-        :return:
-        """
-
-        if rd.zug_status != "unbekannt":
-            return rd.zug_status
-
-        if zug.sichtbar:
-            if rd.ersatzlok_zid and rd.ersatzlok_status == "erledigt":
-                status = "erledigt"
-            elif zug.amgleis and zug.plangleis == rd.plan:
-                status = "am gleis"
-            else:
-                status = "fahrt"
-        elif zug.ausgefahren:
-            status = "erledigt"
-        else:
-            status = "unsichtbar"
-
-        rd.zug_status = status
-        return status
-
-    def _init_lokstatus(self, rd: Rangierdaten, lok: ZugGraphNode):
-        """
-        lokstqtus initialisieren
-
-        :param rd:
-        :param lok:
-        :return:
-        """
-
-        if rd.lok_status != "unbekannt":
-            return rd.lok_status
-        if lok.sichtbar:
-            status = "bereit"
-        elif lok.ausgefahren:
-            status = "erledigt"
-        else:
-            status = "unsichtbar"
-
-        rd.zug_status = status
-        return status
-
-    def _init_ersatzlokstatus(self, rd: Rangierdaten, lok: ZugGraphNode):
-        """
-        ersatzlokstatus initialisieren
-
-        :param rd:
-        :param lok:
-        :return:
-        """
-
-        if rd.ersatzlok_status != "unbekannt":
-            return rd.ersatzlok_status
-        if lok.sichtbar:
-            status = "bereit"
-        elif lok.ausgefahren:
-            status = "erledigt"
-        else:
-            status = "unsichtbar"
-
-        rd.zug_status = status
-        return status
+        for fid in self.zielgraph.zugpfad(rd.ersatzlok_zid):
+            ziel = self.zielgraph.nodes[fid]
+            if ziel.plan == rd.plan:
+                rd.ersatzlok_status.gleisfehler = ziel.gleis != rd.gleis
+                break
 
     def loks_suchen(self):
         """
         Loks und Ersatzloks im Zuggraph suchen
 
+        Sucht Züge im Zuggraph, die mit dem Präfix 'Lok' oder 'Ersatzlok' beginnen und eine negative zid haben.
+        Der Präfix wird abgetrennt und die Lok in den loks- bzw. ersatzloks-Dictionaries eingetragen.
         """
+
         for zid, zug in self.zuggraph.nodes(data=True):
+            if zid >= 0:
+                continue
+
             try:
                 parts = zug.name.split()
             except AttributeError:
@@ -251,6 +478,55 @@ class Rangiertabelle:
             elif parts[0] == "Ersatzlok":
                 zug_name = " ".join(parts[1:])
                 self.ersatzloks[zug_name] = zid
+
+    def plugin_ereignis(self, ereignis: Ereignis):
+        """
+        Lokstatus nach Plugin-Ereignis aktualisieren
+        """
+
+        if ereignis.zid in self.lok_index:
+            self.lok_ereignis(ereignis)
+        elif ereignis.zid in self.zug_index:
+            self.zug_ereignis(ereignis)
+
+    def lok_ereignis(self, ereignis: Ereignis):
+        """
+        Lok- bzw. Ersatzlokstatus gemäss Plugin-Ereignis aktualisieren.
+
+        :param ereignis:
+        :return:
+        """
+
+        try:
+            fid = self.lok_index[ereignis.zid]
+            rd = self.rangierliste[fid]
+        except KeyError:
+            return
+
+        if ereignis.zid in self.loks.values():
+            if rd.lok_status.status != 'erledigt':
+                rd.lok_status.update_von_ereignis(ereignis)
+        elif ereignis.zid in self.ersatzloks.values():
+            if rd.ersatzlok_status.status != 'erledigt':
+                rd.ersatzlok_status.update_von_ereignis(ereignis)
+
+    def zug_ereignis(self, ereignis: Ereignis):
+        """
+        Zugstatus gemäss Plugin-Ereignis aktualisieren.
+
+        :param ereignis:
+        :return:
+        """
+
+        try:
+            fids = self.zug_index[ereignis.zid]
+        except KeyError:
+            return
+
+        for fid in fids:
+            rd = self.rangierliste[fid]
+            if rd.zug_status.status != 'erledigt':
+                rd.zug_status.update_von_ereignis(ereignis, rd.plan)
 
 
 class RangiertabelleModell(QtCore.QAbstractTableModel):
@@ -285,6 +561,11 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
         self.rangiertabelle.update()
         self._rangierziele = list(self.rangiertabelle.rangierliste.keys())
         self.endResetModel()
+
+    def plugin_ereignis(self, ereignis: Ereignis):
+        self.rangiertabelle.plugin_ereignis(ereignis)
+        # todo : update view
+        self.dataChanged()
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
         return len(self._columns)
@@ -338,11 +619,11 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             elif col == 'Lok nach':
                 return rd.lok_nach
             elif col == 'Lok Status':
-                return rd.lok_status
+                return rd.lok_status.status
             elif col == 'Ersatzlok von':
                 return rd.ersatzlok_von
             elif col == 'Ersatzlok Status':
-                return rd.ersatzlok_status
+                return rd.ersatzlok_status.status
             else:
                 return None
 
@@ -368,11 +649,11 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             elif col == 'Lok nach':
                 return rd.lok_nach.name
             elif col == 'Lok Status':
-                return rd.lok_status
+                return str(rd.lok_status)
             elif col == 'Ersatzlok von':
                 return rd.ersatzlok_von.name
             elif col == 'Ersatzlok Status':
-                return rd.ersatzlok_status
+                return str(rd.ersatzlok_status)
             else:
                 return None
 
@@ -381,31 +662,31 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             # farbe = QtGui.QColor(*rgb)
 
             if col == 'ID':
-                return STATUSFARBE["default"]
+                return None
             elif col == 'Zug':
-                return STATUSFARBE[getattr(rd, "zug_status", "default")]
+                return rd.zug_status.qt_farbe
             elif col == 'Von':
-                return STATUSFARBE[getattr(rd, "zug_status", "default")]
+                return rd.zug_status.qt_farbe
             elif col == 'Ankunft':
-                return STATUSFARBE[getattr(rd, "zug_status", "default")]
+                return rd.zug_status.qt_farbe
             elif col == 'Abfahrt':
-                return STATUSFARBE[getattr(rd, "zug_status", "default")]
+                return rd.zug_status.qt_farbe
             elif col == 'Gleis':
-                return STATUSFARBE[getattr(rd, "zug_status", "default")]
+                return rd.zug_status.qt_farbe
             elif col == 'Status':
-                return STATUSFARBE[getattr(rd, "zug_status", "default")]
+                return rd.zug_status.qt_farbe
             elif col == 'Verspätung':
-                return STATUSFARBE[getattr(rd, "zug_status", "default")]
+                return rd.zug_status.qt_farbe
             elif col == 'Vorgang':
-                return STATUSFARBE[getattr(rd, "zug_status", "default")]
+                return rd.zug_status.qt_farbe
             elif col == 'Lok nach':
-                return STATUSFARBE[getattr(rd, "lok_status", "default")]
+                return rd.lok_status.qt_farbe
             elif col == 'Lok Status':
-                return STATUSFARBE[getattr(rd, "lok_status", "default")]
+                return rd.lok_status.qt_farbe
             elif col == 'Ersatzlok von':
-                return STATUSFARBE[getattr(rd, "ersatzlok_status", "default")]
+                return rd.ersatzlok_status.qt_farbe
             elif col == 'Ersatzlok Status':
-                return STATUSFARBE[getattr(rd, "ersatzlok_status", "default")]
+                return rd.ersatzlok_status.qt_farbe
             else:
                 return None
 
@@ -438,6 +719,7 @@ class RangierplanWindow(QtWidgets.QWidget):
 
         self.zentrale = zentrale
         self.zentrale.planung_update.register(self.planung_update)
+        self.zentrale.plugin_ereignis.register(self.plugin_ereignis)
 
         self.ui = Ui_RangierplanWidget()
         self.ui.setupUi(self)
@@ -459,3 +741,6 @@ class RangierplanWindow(QtWidgets.QWidget):
 
         self.ui.zugliste_view.resizeColumnsToContents()
         self.ui.zugliste_view.resizeRowsToContents()
+
+    def plugin_ereignis(self, *args, **kwargs) -> None:
+        self.rangiertabelle_modell.plugin_ereignis(kwargs["ereignis"])
