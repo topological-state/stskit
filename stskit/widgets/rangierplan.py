@@ -42,9 +42,9 @@ class Lokstatus:
                     "am gleis",  # zug ist am gleis, wo der rangiervorgang stattfinden soll
                     "erledigt"}
 
-    DARSTELLUNGSTEXT = {"unbekannt": "unbekannt",
+    DARSTELLUNGSTEXT = {"unbekannt": "",
                         "gleisfehler": "Gleisfehler",
-                        "unsichtbar": "unsichtbar",
+                        "unsichtbar": "",
                         "unterwegs": "unterwegs",
                         "halt": "Halt",
                         "am gleis": "am Gleis",
@@ -188,8 +188,8 @@ class Zugstatus:
                     "bereit",
                     "erledigt"}
 
-    DARSTELLUNGSTEXT = {"unbekannt": "unbekannt",
-                        "unsichtbar": "unsichtbar",
+    DARSTELLUNGSTEXT = {"unbekannt": "",
+                        "unsichtbar": "",
                         "unterwegs": "unterwegs",
                         "halt": "Halt",
                         "am gleis": "am Gleis",
