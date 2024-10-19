@@ -482,55 +482,69 @@ class Rangiertabelle:
                 zug_name = " ".join(parts[1:])
                 self.ersatzloks[zug_name] = zid
 
-    def plugin_ereignis(self, ereignis: Ereignis):
+    def plugin_ereignis(self, ereignis: Ereignis) -> Set[ZielLabelType]:
         """
         Lokstatus nach Plugin-Ereignis aktualisieren
         """
 
-        if ereignis.zid in self.lok_index:
-            self.lok_ereignis(ereignis)
-        elif ereignis.zid in self.zug_index:
-            self.zug_ereignis(ereignis)
+        rd_ids = set()
 
-    def lok_ereignis(self, ereignis: Ereignis):
+        if ereignis.zid in self.lok_index:
+            rd_ids.update(self.lok_ereignis(ereignis))
+        elif ereignis.zid in self.zug_index:
+            rd_ids.update(self.zug_ereignis(ereignis))
+
+        return rd_ids
+
+    def lok_ereignis(self, ereignis: Ereignis) -> Set[ZielLabelType]:
         """
         Lok- bzw. Ersatzlokstatus gemäss Plugin-Ereignis aktualisieren.
 
         :param ereignis:
-        :return:
+        :return: fid der geänderten Rangierdatensätze oder None, wenn das Ereignis keine Auswirkung hatte.
         """
+
+        rd_ids = set()
 
         try:
             fid = self.lok_index[ereignis.zid]
             rd = self.rangierliste[fid]
         except KeyError:
-            return
+            return rd_ids
 
         if ereignis.zid in self.loks.values():
             if rd.lok_status.status != 'erledigt':
                 rd.lok_status.update_von_ereignis(ereignis)
+                rd_ids.add(fid)
         elif ereignis.zid in self.ersatzloks.values():
             if rd.ersatzlok_status.status != 'erledigt':
                 rd.ersatzlok_status.update_von_ereignis(ereignis)
+                rd_ids.add(fid)
 
-    def zug_ereignis(self, ereignis: Ereignis):
+        return rd_ids
+
+    def zug_ereignis(self, ereignis: Ereignis) -> Set[ZielLabelType]:
         """
         Zugstatus gemäss Plugin-Ereignis aktualisieren.
 
         :param ereignis:
-        :return:
+        :return: fid der geänderten Rangierdatensätze oder None, wenn das Ereignis keine Auswirkung hatte.
         """
+
+        rd_ids = set()
 
         try:
             fids = self.zug_index[ereignis.zid]
         except KeyError:
-            return
+            return rd_ids
 
         for fid in fids:
             rd = self.rangierliste[fid]
             if rd.zug_status.status != 'erledigt':
                 rd.zug_status.update_von_ereignis(ereignis, rd.plan)
+                rd_ids.add(fid)
 
+        return rd_ids
 
 class RangiertabelleModell(QtCore.QAbstractTableModel):
     """
@@ -566,9 +580,16 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
         self.endResetModel()
 
     def plugin_ereignis(self, ereignis: Ereignis):
-        self.rangiertabelle.plugin_ereignis(ereignis)
-        # todo : update view
-        self.dataChanged()
+        fids = self.rangiertabelle.plugin_ereignis(ereignis)
+
+        for fid in fids:
+            try:
+                row = self._rangierziele.index(fid)
+            except ValueError:
+                return
+            index1 = self.index(row, self._columns.index('Status'))
+            index2 = self.index(row, len(self._columns)-1)
+            self.dataChanged.emit(index1, index2)
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
         return len(self._columns)
