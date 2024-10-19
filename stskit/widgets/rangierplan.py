@@ -687,28 +687,10 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
 
             if col == 'ID':
                 return None
-            elif col == 'Zug':
-                return rd.zug_status.qt_farbe
-            elif col == 'Von':
-                return rd.zug_status.qt_farbe
-            elif col == 'Ankunft':
-                return rd.zug_status.qt_farbe
-            elif col == 'Abfahrt':
-                return rd.zug_status.qt_farbe
-            elif col == 'Gleis':
-                return rd.zug_status.qt_farbe
             elif col == 'Status':
                 return rd.zug_status.qt_farbe
-            elif col == 'Verspätung':
-                return rd.zug_status.qt_farbe
-            elif col == 'Vorgang':
-                return rd.zug_status.qt_farbe
-            elif col == 'Lok nach':
-                return rd.lok_status.qt_farbe
             elif col == 'Lok Status':
                 return rd.lok_status.qt_farbe
-            elif col == 'Ersatzlok von':
-                return rd.ersatzlok_status.qt_farbe
             elif col == 'Ersatzlok Status':
                 return rd.ersatzlok_status.qt_farbe
             else:
