@@ -8,7 +8,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, 
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
-from plugin.stsobj import Ereignis
+from stskit.plugin.stsobj import Ereignis
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement
 from stskit.model.signalgraph import SignalGraph
 from stskit.model.zielgraph import ZielGraph, ZielGraphNode, ZielLabelType
@@ -379,7 +379,7 @@ class Rangiertabelle:
                 zug = self.zuggraph.nodes[fid.zid]
                 rd = self._neue_rangierdaten(zug, ziel, vorgang="Lokumlauf")
                 rd.lok_nach = BahnhofElement("Gl", ziel.gleis)
-                rd.zug_status.update_von_zug(zug)
+                rd.zug_status.update_von_zug(zug, ziel.plan)
                 self.rangierliste[fid] = rd
 
             elif (enrs := ziel.lokwechsel) is not None:
@@ -396,7 +396,7 @@ class Rangiertabelle:
                     elif anschluss.typ == 7:
                         rd.lok_nach = agl
 
-                rd.zug_status.update_von_zug(zug)
+                rd.zug_status.update_von_zug(zug, ziel.plan)
                 self.rangierliste[fid] = rd
 
     def zuege_aktualisieren(self):
@@ -448,6 +448,9 @@ class Rangiertabelle:
 
         :param rd: Rangierdaten des Zuges.
         """
+
+        if rd.ersatzlok_zid not in self.zielgraph.zuganfaenge:
+            return
 
         for fid in self.zielgraph.zugpfad(rd.ersatzlok_zid):
             ziel = self.zielgraph.nodes[fid]
@@ -611,7 +614,7 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             elif col == 'Gleis':
                 return rd.gleis
             elif col == 'Status':
-                return rd.zug_status
+                return rd.zug_status.status
             elif col == 'Verspätung':
                 return rd.v_an
             elif col == 'Vorgang':
@@ -641,7 +644,7 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             elif col == 'Gleis':
                 return rd.gleis
             elif col == 'Status':
-                return rd.zug_status
+                return str(rd.zug_status)
             elif col == 'Verspätung':
                 return format_verspaetung(rd.v_an)
             elif col == 'Vorgang':
