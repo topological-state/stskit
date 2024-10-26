@@ -418,7 +418,16 @@ class Rangiertabelle:
 
             rd.gleis = ziel.gleis
             rd.p_an = ziel.p_an
-            rd.p_ab = ziel.p_ab
+            try:
+                rd.p_ab = ziel.p_ab
+            except AttributeError:
+                try:
+                    fid2 = self.zielgraph.next_node(fid, ersatz_erlaubt=True)
+                    ziel2 = self.zielgraph.nodes[fid2]
+                    rd.p_ab = ziel2.p_an
+                except (AttributeError, KeyError, ValueError):
+                    rd.p_ab = None
+
             rd.v_an = ziel.v_an
             rd.v_ab = ziel.v_ab
             rd.t_an = ziel.p_an + ziel.v_an
