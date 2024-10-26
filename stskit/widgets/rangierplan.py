@@ -368,7 +368,13 @@ class Rangiertabelle:
 
         Die Fahrziele mit Lokumlauf oder Lokwechsel werden in die Rangierlieste geschrieben.
         Die Rangierdaten-Objekt werden so weit wie möglich ausgefüllt.
-        Die Lokdaten (zid und status) werden hier offen gelassen..
+        Die Lokdaten (zid und status) werden hier offen gelassen.
+
+        Die Methode sucht die Einfahrts- und Ausfahrtsknoten aus dem Lokwechselflag,
+        um Ziel und Herkunft der Lok bzw. Ersatzlok zu bestimmen.
+        Dies ist leider nicht immer möglich, weil die Daten von der Pluginschnittstelle oft unvollständig sind.
+        Wenn nur die Relation einer Lok fehlt, kann der Name dieses Anschlusses nicht angezeigt werden.
+        Wenn beide Relationen fehlen, können die Ursprungs- und Ersatzloks nicht zugeordnet werden.
         """
 
         for fid, ziel in self.zielgraph.nodes(data=True):
@@ -386,15 +392,19 @@ class Rangiertabelle:
                 zug = self.zuggraph.nodes[fid.zid]
                 rd = self._neue_rangierdaten(zug, ziel, vorgang="Lokwechsel")
                 # anhand der enr herausfinden, welches die ersatzlok ist!
-                abstellgleise = [self.bahnhofgraph.find_gleis_enr(enr) for enr in enrs]
-                #abstellgleisdaten = {agl: self.bahnhofgraph.nodes[agl] for agl in abstellgleise if agl is not None}
-                anschluesse = [self.signalgraph.nodes[enr] for enr in enrs]
+                abstellgleise = {enr: self.bahnhofgraph.find_gleis_enr(enr) or BahnhofElement("Agl", f"{enr}?") for enr in enrs}
+                typen = {enr: self.signalgraph.nodes[enr]['typ'] if self.signalgraph.has_node(enr) else 999 for enr in enrs}
+                sortierte_enrs = sorted(enrs, key=lambda enr: typen[enr])
 
-                for agl, anschluss in zip(abstellgleise, anschluesse):
-                    if anschluss.typ == 6:
-                        rd.ersatzlok_von = agl
-                    elif anschluss.typ == 7:
-                        rd.lok_nach = agl
+                for enr, renr in zip(sortierte_enrs, reversed(sortierte_enrs)):
+                    if typen[enr] == 6:
+                        rd.ersatzlok_von = abstellgleise[enr]
+                        if rd.lok_nach is None:
+                            rd.lok_nach = abstellgleise[renr]
+                    elif typen[enr] == 7:
+                        rd.lok_nach = abstellgleise[enr]
+                        if rd.ersatzlok_von is None:
+                            rd.ersatzlok_von = abstellgleise[renr]
 
                 rd.zug_status.update_von_zug(zug, ziel.plan)
                 self.rangierliste[fid] = rd
