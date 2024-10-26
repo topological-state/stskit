@@ -45,7 +45,7 @@ class Lokstatus:
     DARSTELLUNGSTEXT = {"unbekannt": "",
                         "gleisfehler": "Gleisfehler",
                         "unsichtbar": "",
-                        "unterwegs": "unterwegs",
+                        "unterwegs": "Fahrt",
                         "halt": "Halt",
                         "am gleis": "am Gleis",
                         "erledigt": "erledigt"}
@@ -168,10 +168,11 @@ class Lokstatus:
 
         if self.status in {"erledigt"}:
             pass
-        elif not ereignis.sichtbar:
-            self.status = 'unsichtbar'
         else:
-            self.status = self.EREIGNIS_STATUS_MAP[ereignis.art]
+            status = self.EREIGNIS_STATUS_MAP.get(ereignis.art, '')
+            if status:
+                self.status = status
+
         return self.status
 
 
@@ -190,7 +191,7 @@ class Zugstatus:
 
     DARSTELLUNGSTEXT = {"unbekannt": "",
                         "unsichtbar": "",
-                        "unterwegs": "unterwegs",
+                        "unterwegs": "Fahrt",
                         "halt": "Halt",
                         "am gleis": "am Gleis",
                         "bereit": "bereit",
@@ -264,7 +265,7 @@ class Zugstatus:
         if self.status in {"erledigt"}:
             return self.status
 
-        status = self.EREIGNIS_STATUS_MAP.get(ereignis.art, 'unterwegs') if ereignis.sichtbar else 'unsichtbar'
+        status = self.EREIGNIS_STATUS_MAP.get(ereignis.art, '')
 
         if ereignis.art == 'ankunft':
             self._letztes_gleis = ereignis.plangleis
@@ -276,7 +277,8 @@ class Zugstatus:
             else:
                 status = 'erledigt'
 
-        self.status = status
+        if status:
+            self.status = status
         return self.status
 
 
@@ -530,6 +532,8 @@ class Rangiertabelle:
             if rd.ersatzlok_status.status != 'erledigt':
                 rd.ersatzlok_status.update_von_ereignis(ereignis)
                 rd_ids.add(fid)
+        if rd_ids and ereignis.art == 'kuppeln':
+            rd.zug_status.status = 'erledigt'
 
         return rd_ids
 
@@ -685,7 +689,8 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             elif col == 'Lok Status':
                 return str(rd.lok_status)
             elif col == 'Ersatzlok von':
-                return rd.ersatzlok_von.name
+                if rd.ersatzlok_von is not None:
+                    return rd.ersatzlok_von.name
             elif col == 'Ersatzlok Status':
                 return str(rd.ersatzlok_status)
             else:
