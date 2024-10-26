@@ -309,6 +309,44 @@ class ZielGraph(nx.DiGraph):
             else:
                 node = None
 
+    def next_node(self, node: ZielLabelType, ersatz_erlaubt: bool = False) -> ZielLabelType:
+        """
+        Nächster Zielknoten eines Zuges
+
+        :param node: Label des Ursprungknotens
+        :param ersatz_erlaubt: Neuen Zug nach Ersatz- oder Kuppelflags verfolgen.
+        :raise: ValueError, wenn es keinen nächsten Knoten gibt.
+        """
+
+        zid = node.zid
+        for n in self.successors(node):
+            if n.zid == zid:
+                return n
+            elif ersatz_erlaubt:
+                if self.edges[(node, n)]['typ'] in {'E', 'K'}:
+                    return n
+
+        raise ValueError(f"Kein nächster Node zu {node}")
+
+    def prev_node(self, node: ZielLabelType, ersatz_erlaubt: bool = False) -> ZielLabelType:
+        """
+        Vorheriger Zielknoten eines Zuges
+
+        :param node: Label des Ursprungknotens
+        :param ersatz_erlaubt: Stammzug vor Ersatz- oder Flügelflags verfolgen.
+        :raise: ValueError, wenn es keinen nächsten Knoten gibt.
+        """
+
+        zid = node.zid
+        for n in self.predecessors(node):
+            if n.zid == zid:
+                return n
+            elif ersatz_erlaubt:
+                if self.edges[(n, node)]['typ'] in {'E', 'F'}:
+                    return n
+
+        raise ValueError(f"Kein vorheriger Node zu {node}")
+
     def zug_details_importieren(self, zug: ZugDetails,
                                 einfahrt: Optional[Knoten],
                                 ausfahrt: Optional[Knoten],
