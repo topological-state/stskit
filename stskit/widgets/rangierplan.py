@@ -729,6 +729,75 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
                 return self._rangierziele[section]
 
 
+class RangiertabelleFilterProxy(QSortFilterProxyModel):
+
+    def __init__(self, parent=...):
+        super().__init__(parent)
+        self._simzeit: int = 0
+        self._vorlaufzeit: int = 0
+        self._nachlaufzeit: int = 15
+        self._rangiertabelle_modell: RangiertabelleModell = None
+
+    @property
+    def simzeit(self) -> int:
+        return self._simzeit
+
+    @simzeit.setter
+    def simzeit(self, minuten: int):
+        self._simzeit = minuten
+
+    @property
+    def vorlaufzeit(self) -> int:
+        return self._vorlaufzeit
+
+    @vorlaufzeit.setter
+    def vorlaufzeit(self, minuten: int):
+        self._vorlaufzeit = minuten
+
+    @property
+    def nachlaufzeit(self) -> int:
+        return self._nachlaufzeit
+
+    @nachlaufzeit.setter
+    def nachlaufzeit(self, minuten: int):
+        self._nachlaufzeit = minuten
+
+    def filterAcceptsRow(self, source_row, source_parent):
+        if self.simzeit <= 0:
+            return True
+
+        rangiertabelle_modell: Optional[RangiertabelleModell] = None
+        while rangiertabelle_modell is None:
+            source = self.sourceModel()
+            if isinstance(source, RangiertabelleModell):
+                rangiertabelle_modell = source
+                break
+
+        try:
+            fid = rangiertabelle_modell._rangierziele[source_row]
+            rd = rangiertabelle_modell.rangiertabelle.rangierliste[fid]
+        except (IndexError, KeyError):
+            return False
+
+        if rd.zug_status in {"unbekannt"}:
+            return False
+
+        elif rd.zug_status in {"unsichtbar"}:
+            if self._vorlaufzeit <= 0:
+                return True
+
+            if rd.t_an > self.simzeit + self._vorlaufzeit:
+                return False
+
+        elif rd.zug_status in {"bereit", "erledigt"}:
+            if self._nachlaufzeit <= 0:
+                return True
+
+            return False
+
+        return True
+
+
 class RangierplanWindow(QtWidgets.QWidget):
     """
     Rangierplanwidget
@@ -751,13 +820,25 @@ class RangierplanWindow(QtWidgets.QWidget):
                                                           zentrale.anlage.bahnhofgraph, zentrale.anlage.signalgraph)
         self.rangiertabelle_modell.zugschema = self.zentrale.anlage.zugschema
 
-        self.ui.zugliste_view.setModel(self.rangiertabelle_modell)
+        self.rangiertabelle_sort_filter = RangiertabelleFilterProxy(self)
+        self.rangiertabelle_sort_filter.setSourceModel(self.rangiertabelle_modell)
+        self.rangiertabelle_sort_filter.setSortRole(QtCore.Qt.UserRole)
+        self.ui.zugliste_view.setModel(self.rangiertabelle_sort_filter)
         self.ui.zugliste_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
         self.ui.zugliste_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
-        self.ui.zugliste_view.sortByColumn(0, 0)
+        self.ui.zugliste_view.sortByColumn(self.rangiertabelle_modell._columns.index('Ankunft'), 0)
         self.ui.zugliste_view.setSortingEnabled(True)
 
+        self.ui.vorlaufzeit_spin.setValue(self.rangiertabelle_sort_filter.vorlaufzeit)
+        self.ui.nachlaufzeit_spin.setValue(self.rangiertabelle_sort_filter.nachlaufzeit)
+        self.ui.vorlaufzeit_spin.valueChanged.connect(self.vorlaufzeit_changed)
+        self.ui.nachlaufzeit_spin.valueChanged.connect(self.nachlaufzeit_changed)
+
+        self.ui.suche_zug_edit.textEdited.connect(self.suche_zug_changed)
+        self.ui.suche_loeschen_button.clicked.connect(self.suche_loeschen_clicked)
+
     def planung_update(self, *args, **kwargs) -> None:
+        self.rangiertabelle_sort_filter.simzeit = self.zentrale.simzeit_minuten
         self.rangiertabelle_modell.update()
 
         self.ui.zugliste_view.resizeColumnsToContents()
@@ -765,3 +846,40 @@ class RangierplanWindow(QtWidgets.QWidget):
 
     def plugin_ereignis(self, *args, **kwargs) -> None:
         self.rangiertabelle_modell.plugin_ereignis(kwargs["ereignis"])
+
+    @pyqtSlot()
+    def vorlaufzeit_changed(self):
+        try:
+            self.rangiertabelle_sort_filter.vorlaufzeit = self.ui.vorlaufzeit_spin.value()
+        except ValueError:
+            pass
+
+    @pyqtSlot()
+    def nachlaufzeit_changed(self):
+        try:
+            self.rangiertabelle_sort_filter.nachlaufzeit = self.ui.nachlaufzeit_spin.value()
+        except ValueError:
+            pass
+
+    @pyqtSlot()
+    def suche_zug_changed(self):
+        text = self.ui.suche_zug_edit.text()
+        if not text:
+            return
+
+        column = self.rangiertabelle_modell._columns.index("Zug")
+        start = self.rangiertabelle_sort_filter.index(0, column)
+        matches = self.rangiertabelle_sort_filter.match(start, QtCore.Qt.DisplayRole, text, 1, QtCore.Qt.MatchContains)
+
+        for index in matches:
+            if index.column() == column:
+                self.ui.zugliste_view.selectionModel().clear()
+                self.ui.zugliste_view.selectionModel().select(index, QItemSelectionModel.SelectionFlag.Select |
+                                                              QItemSelectionModel.SelectionFlag.Rows)
+                break
+        else:
+            self.ui.zugliste_view.selectionModel().clear()
+
+    @pyqtSlot()
+    def suche_loeschen_clicked(self):
+        self.ui.suche_zug_edit.clear()
