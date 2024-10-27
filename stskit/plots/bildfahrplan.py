@@ -280,7 +280,7 @@ class BildfahrplanPlot:
 
         def bst_von_gleis(gl: str) -> Optional[BahnhofLabelType]:
             try:
-                bst = self.anlage.bahnhofgraph.find_gleis_enr(gl)
+                bst = self.anlage.bahnhofgraph.find_name(gl)
                 bst = self.anlage.bahnhofgraph.find_superior(bst, {'Bf', 'Anst'})
                 return bst
             except (IndexError, KeyError):
