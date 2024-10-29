@@ -207,6 +207,20 @@ class EreignisGraph(nx.DiGraph):
         self.zuganfaenge: Dict[int, EreignisLabelType] = {}
         self.zug_next: Dict[int, EreignisLabelType] = {}
 
+    def copy(self, as_view=False):
+        obj = super().copy(as_view)
+
+        if as_view:
+            obj.zuege = self.zuege
+            obj.zuganfaenge = self.zuganfaenge
+            obj.zug_next = self.zug_next
+        else:
+            obj.zuege = self.zuege.copy()
+            obj.zuganfaenge = self.zuganfaenge.copy()
+            obj.zug_next = self.zug_next.copy()
+
+        return obj
+
     def to_undirected_class(self):
         return EreignisGraphUngerichtet
 
