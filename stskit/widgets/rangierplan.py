@@ -684,7 +684,8 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             elif col == 'Ankunft':
                 return format_minutes(rd.t_an)
             elif col == 'Abfahrt':
-                return format_minutes(rd.p_ab)
+                if rd.p_ab is not None:
+                    return format_minutes(rd.p_ab)
             elif col == 'Gleis':
                 return rd.gleis
             elif col == 'Status':
