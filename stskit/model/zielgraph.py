@@ -290,6 +290,18 @@ class ZielGraph(nx.DiGraph):
     def to_directed_class(self):
         return self.__class__
 
+    def copy(self, as_view=False):
+        obj = super().copy(as_view)
+
+        if as_view:
+            obj.zuganfaenge = self.zuganfaenge
+            obj.zugenden = self.zugenden
+        else:
+            obj.zuganfaenge = self.zuganfaenge.copy()
+            obj.zugenden = self.zugenden.copy()
+
+        return obj
+
     def zugpfad(self, zid: int) -> Iterable[ZielLabelType]:
         """
         Generator für die Knoten eines Zuges
