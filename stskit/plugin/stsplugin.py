@@ -667,7 +667,7 @@ class PluginClient:
         :return: ZugDetails inkl. fahrplan
         """
         zid = int(zid)
-        if zid > 0:
+        if zid:
             await self.request_zugdetails(zid)
             await self.request_zugfahrplan(zid)
         else:
