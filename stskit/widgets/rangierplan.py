@@ -8,6 +8,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, 
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
+from stskit.dispo.anlage import Anlage
 from stskit.plugin.stsobj import Ereignis
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement
 from stskit.model.signalgraph import SignalGraph
@@ -311,11 +312,8 @@ class Rangierdaten:
 
 
 class Rangiertabelle:
-    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph, bahnhofgraph: BahnhofGraph, signalgraph: SignalGraph):
-        self.bahnhofgraph = bahnhofgraph
-        self.signalgraph = signalgraph
-        self.zuggraph = zuggraph
-        self.zielgraph = zielgraph
+    def __init__(self, anlage: Anlage):
+        self.anlage = anlage
         self.rangierliste: Dict[ZielLabelType, Rangierdaten] = {}
         # zugname, zid
         self.loks: Dict[str, int] = {}
@@ -379,23 +377,23 @@ class Rangiertabelle:
         Wenn beide Relationen fehlen, können die Ursprungs- und Ersatzloks nicht zugeordnet werden.
         """
 
-        for fid, ziel in self.zielgraph.nodes(data=True):
+        for fid, ziel in self.anlage.zielgraph.nodes(data=True):
             if fid in self.rangierliste:
                 continue
 
             if ziel.lokumlauf:
-                zug = self.zuggraph.nodes[fid.zid]
+                zug = self.anlage.zuggraph.nodes[fid.zid]
                 rd = self._neue_rangierdaten(zug, ziel, vorgang="Lokumlauf")
                 rd.lok_nach = BahnhofElement("Gl", ziel.gleis)
                 rd.zug_status.update_von_zug(zug, ziel.plan)
                 self.rangierliste[fid] = rd
 
             elif (enrs := ziel.lokwechsel) is not None:
-                zug = self.zuggraph.nodes[fid.zid]
+                zug = self.anlage.zuggraph.nodes[fid.zid]
                 rd = self._neue_rangierdaten(zug, ziel, vorgang="Lokwechsel")
                 # anhand der enr herausfinden, welches die ersatzlok ist!
-                abstellgleise = {enr: self.bahnhofgraph.find_gleis_enr(enr) or BahnhofElement("Agl", f"{enr}?") for enr in enrs}
-                typen = {enr: self.signalgraph.nodes[enr]['typ'] if self.signalgraph.has_node(enr) else 999 for enr in enrs}
+                abstellgleise = {enr: self.anlage.bahnhofgraph.find_gleis_enr(enr) or BahnhofElement("Agl", f"{enr}?") for enr in enrs}
+                typen = {enr: self.anlage.signalgraph.nodes[enr]['typ'] if self.anlage.signalgraph.has_node(enr) else 999 for enr in enrs}
                 sortierte_enrs = sorted(enrs, key=lambda enr: typen[enr])
 
                 for enr, renr in zip(sortierte_enrs, reversed(sortierte_enrs)):
@@ -413,8 +411,7 @@ class Rangiertabelle:
 
     def zuege_aktualisieren(self):
         for fid, rd in self.rangierliste.items():
-            ziel = self.zielgraph.nodes[fid]
-            zug = self.zuggraph.nodes[fid.zid]
+            ziel = self.anlage.zielgraph.nodes[fid]
 
             rd.gleis = ziel.gleis
             rd.p_an = ziel.p_an
@@ -422,8 +419,8 @@ class Rangiertabelle:
                 rd.p_ab = ziel.p_ab
             except AttributeError:
                 try:
-                    fid2 = self.zielgraph.next_node(fid, ersatz_erlaubt=True)
-                    ziel2 = self.zielgraph.nodes[fid2]
+                    fid2 = self.anlage.zielgraph.next_node(fid, ersatz_erlaubt=True)
+                    ziel2 = self.anlage.zielgraph.nodes[fid2]
                     rd.p_ab = ziel2.p_an
                 except (AttributeError, KeyError, ValueError):
                     rd.p_ab = None
@@ -446,7 +443,7 @@ class Rangiertabelle:
                 else:
                     self.lok_index[rd.lok_zid] = fid
             if rd.lok_zid is not None:
-                rd.lok_status.update_von_zug(self.zuggraph.nodes[rd.lok_zid])
+                rd.lok_status.update_von_zug(self.anlage.zuggraph.nodes[rd.lok_zid])
 
             if rd.ersatzlok_zid is None:
                 try:
@@ -457,7 +454,7 @@ class Rangiertabelle:
                 else:
                     self.lok_index[rd.ersatzlok_zid] = fid
             if rd.ersatzlok_zid is not None:
-                rd.ersatzlok_status.update_von_zug(self.zuggraph.nodes[rd.ersatzlok_zid])
+                rd.ersatzlok_status.update_von_zug(self.anlage.zuggraph.nodes[rd.ersatzlok_zid])
                 self.gleisfehler_pruefen(rd)
 
     def gleisfehler_pruefen(self, rd: Rangierdaten):
@@ -470,11 +467,11 @@ class Rangiertabelle:
         :param rd: Rangierdaten des Zuges.
         """
 
-        if rd.ersatzlok_zid not in self.zielgraph.zuganfaenge:
+        if rd.ersatzlok_zid not in self.anlage.zielgraph.zuganfaenge:
             return
 
-        for fid in self.zielgraph.zugpfad(rd.ersatzlok_zid):
-            ziel = self.zielgraph.nodes[fid]
+        for fid in self.anlage.zielgraph.zugpfad(rd.ersatzlok_zid):
+            ziel = self.anlage.zielgraph.nodes[fid]
             if ziel.plan == rd.plan:
                 rd.ersatzlok_status.gleisfehler = ziel.gleis != rd.gleis
                 break
@@ -487,7 +484,7 @@ class Rangiertabelle:
         Der Präfix wird abgetrennt und die Lok in den loks- bzw. ersatzloks-Dictionaries eingetragen.
         """
 
-        for zid, zug in self.zuggraph.nodes(data=True):
+        for zid, zug in self.anlage.zuggraph.nodes(data=True):
             if zid >= 0:
                 continue
 
@@ -574,7 +571,7 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
     Datenmodell für Rangiertabelle
     """
 
-    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph, bahnhofgraph: BahnhofGraph, signalgraph: SignalGraph):
+    def __init__(self, anlage: Anlage):
         super().__init__()
 
         self._columns: List[str] = ['Zug',
@@ -590,11 +587,7 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
                                     'Ersatzlok von',
                                     'Ersatzlok Status']
         self._rangierziele: List[ZielLabelType] = []
-        self.zuggraph = zuggraph
-        self.zielgraph = zielgraph
-        self.bahnhofgraph = bahnhofgraph
-        self.signalgraph = signalgraph
-        self.rangiertabelle = Rangiertabelle(zuggraph, zielgraph, bahnhofgraph, signalgraph)
+        self.rangiertabelle = Rangiertabelle(anlage)
 
     def update(self):
         self.beginResetModel()
@@ -826,8 +819,7 @@ class RangierplanWindow(QtWidgets.QWidget):
 
         self.setWindowTitle("Rangierplan")
 
-        self.rangiertabelle_modell = RangiertabelleModell(zentrale.anlage.zuggraph, zentrale.anlage.zielgraph,
-                                                          zentrale.anlage.bahnhofgraph, zentrale.anlage.signalgraph)
+        self.rangiertabelle_modell = RangiertabelleModell(zentrale.anlage)
         self.rangiertabelle_modell.zugschema = self.zentrale.anlage.zugschema
 
         self.rangiertabelle_sort_filter = RangiertabelleFilterProxy(self)
