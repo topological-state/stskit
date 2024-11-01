@@ -17,7 +17,7 @@ import networkx as nx
 
 from stskit.model.journal import JournalCollection, JournalIDType, GraphJournal
 from stskit.plugin.stsgraph import GraphClient
-from stskit.plugin.stsobj import Ereignis, AnlagenInfo
+from stskit.plugin.stsobj import Ereignis, AnlagenInfo, time_to_minutes
 from stskit.model.signalgraph import SignalGraph
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnsteigGraph
 from stskit.model.liniengraph import LinienGraph, LinienGraphEdge
@@ -85,7 +85,7 @@ class Anlage:
         debug_path = config_path / "debug"
 
         # todo : konfiguration speichern
-        self.simzeit_minuten = client.calc_simzeit()
+        self.simzeit_minuten = time_to_minutes(client.calc_simzeit())
 
         if self.anlageninfo is None:
             self.anlageninfo = client.anlageninfo

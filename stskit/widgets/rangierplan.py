@@ -299,6 +299,7 @@ class Rangierdaten:
     v_an: Union[int, float] = 0
     v_ab: Union[int, float] = 0
     t_an: Union[int, float] = 0
+    t_erledigt: Union[int, float] = 0
 
     zug_status: Zugstatus = field(default_factory=Zugstatus)
     # die lok-id wird erst beim abkuppeln bekannt
@@ -456,6 +457,12 @@ class Rangiertabelle:
             if rd.ersatzlok_zid is not None:
                 rd.ersatzlok_status.update_von_zug(self.anlage.zuggraph.nodes[rd.ersatzlok_zid])
                 self.gleisfehler_pruefen(rd)
+
+            if rd.t_erledigt == 0:
+                if (rd.zug_status.status == "erledigt" and
+                        (rd.lok_zid is None or rd.lok_status.status == "erledigt") and
+                        (rd.ersatzlok_zid is None or rd.ersatzlok_status.status == "erledigt")):
+                    rd.t_erledigt = self.anlage.simzeit_minuten
 
     def gleisfehler_pruefen(self, rd: Rangierdaten):
         """
@@ -739,7 +746,6 @@ class RangiertabelleFilterProxy(QSortFilterProxyModel):
         self._simzeit: int = 0
         self._vorlaufzeit: int = 0
         self._nachlaufzeit: int = 15
-        self._rangiertabelle_modell: RangiertabelleModell = None
 
     @property
     def simzeit(self) -> int:
@@ -782,21 +788,20 @@ class RangiertabelleFilterProxy(QSortFilterProxyModel):
         except (IndexError, KeyError):
             return False
 
-        if rd.zug_status in {"unbekannt"}:
+        status = rd.zug_status.status
+        if status in {"unbekannt"}:
             return False
-
-        elif rd.zug_status in {"unsichtbar"}:
+        elif status in {"unsichtbar"}:
             if self._vorlaufzeit <= 0:
                 return True
 
             if rd.t_an > self.simzeit + self._vorlaufzeit:
                 return False
-
-        elif rd.zug_status in {"bereit", "erledigt"}:
-            if self._nachlaufzeit <= 0:
+        elif status in {"bereit", "erledigt"}:
+            if self._nachlaufzeit <= 0 or rd.t_erledigt == 0:
                 return True
-
-            return False
+            if self.simzeit - rd.t_erledigt > self._nachlaufzeit:
+                return False
 
         return True
 
