@@ -5,6 +5,7 @@ import matplotlib as mpl
 import networkx as nx
 import numpy as np
 
+from stskit.dispo.anlage import Anlage
 from stskit.model.zielgraph import ZielGraph, ZielGraphNode
 from stskit.model.zuggraph import ZugGraph, ZugGraphNode
 
@@ -20,12 +21,19 @@ def format_zeit(minuten: int, verspaetung: int) -> str:
 
 
 class ZielPlot:
-    def __init__(self, zuggraph: ZugGraph, zielgraph: ZielGraph):
-        self.zuggraph = zuggraph
-        self.zielgraph = zielgraph
+    def __init__(self, anlage: Anlage):
+        self.anlage = anlage
         self.zugzielgraph = ZielGraph()
         self.zid: Optional[int] = None
         self.positionen = {}
+
+    @property
+    def zuggraph(self) -> ZugGraph:
+        return self.anlage.zuggraph
+
+    @property
+    def zielgraph(self) -> ZielGraph:
+        return self.anlage.zielgraph
 
     def select_zug(self, zid: int):
         """
