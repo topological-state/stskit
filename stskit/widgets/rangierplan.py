@@ -15,6 +15,7 @@ from stskit.model.zielgraph import ZielGraphNode, ZielLabelType
 from stskit.model.zuggraph import ZugGraphNode
 from stskit.plugin.stsobj import format_minutes, format_verspaetung
 from stskit.qt.ui_rangierplan import Ui_RangierplanWidget
+from stskit.widgets.fahrplan import FahrplanModell
 
 
 class Lokstatus:
@@ -879,9 +880,11 @@ class RangierplanWindow(QtWidgets.QWidget):
         self.rangiertabelle_sort_filter.setSourceModel(self.rangiertabelle_modell)
         self.rangiertabelle_sort_filter.setSortRole(QtCore.Qt.UserRole)
         self.ui.zugliste_view.setModel(self.rangiertabelle_sort_filter)
+        self.ui.zugliste_view.selectionModel().selectionChanged.connect(
+            self.zugliste_selection_changed)
         self.ui.zugliste_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
         self.ui.zugliste_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
-        self.ui.zugliste_view.sortByColumn(self.rangiertabelle_modell._columns.index('Ankunft'), 0)
+        self.ui.zugliste_view.sortByColumn(self.rangiertabelle_modell._columns.index('An'), 0)
         self.ui.zugliste_view.setSortingEnabled(True)
 
         self.ui.vorlaufzeit_spin.setValue(self.rangiertabelle_sort_filter.vorlaufzeit)
@@ -892,9 +895,19 @@ class RangierplanWindow(QtWidgets.QWidget):
         self.ui.suche_zug_edit.textEdited.connect(self.suche_zug_changed)
         self.ui.suche_loeschen_button.clicked.connect(self.suche_loeschen_clicked)
 
+        self.fahrplan_modell = FahrplanModell(zentrale.anlage)
+        self.fahrplan_modell._columns = ['An', 'VAn', 'Gleis', 'Flags']
+        self.ui.fahrplan_view.setModel(self.fahrplan_modell)
+        self.ui.fahrplan_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
+        self.ui.fahrplan_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
+        self.ui.fahrplan_view.verticalHeader().setVisible(False)
+
+        self.ui.splitter.setSizes([800, 200])
+
     def planung_update(self, *args, **kwargs) -> None:
         self.rangiertabelle_sort_filter.simzeit = self.zentrale.simzeit_minuten
         self.rangiertabelle_modell.update()
+        self.fahrplan_modell.update()
 
         self.ui.zugliste_view.resizeColumnsToContents()
         self.ui.zugliste_view.resizeRowsToContents()
@@ -938,3 +951,27 @@ class RangierplanWindow(QtWidgets.QWidget):
     @pyqtSlot()
     def suche_loeschen_clicked(self):
         self.ui.suche_zug_edit.clear()
+
+    @QtCore.pyqtSlot('QItemSelection', 'QItemSelection')
+    def zugliste_selection_changed(self, selected, deselected):
+        """
+        Fahrplan eines angewählten Zuges darstellen.
+
+        :param selected: nicht verwendet (die auswahl wird aus dem widget ausgelesen).
+        :param deselected: nicht verwendet
+        :return: None
+        """
+
+        try:
+            index = self.ui.zugliste_view.selectedIndexes()[0]
+            index = self.rangiertabelle_sort_filter.mapToSource(index)
+            row = index.row()
+            fid = self.rangiertabelle_modell.rangierziele[row]
+            self.fahrplan_modell.set_zug(fid.zid)
+            rd = self.rangiertabelle_modell.rangierplan.rangierliste[fid]
+            self.ui.fahrplan_label.setText(rd.name)
+        except (IndexError, KeyError):
+            pass
+        else:
+            self.ui.fahrplan_view.resizeColumnsToContents()
+            self.ui.fahrplan_view.resizeRowsToContents()

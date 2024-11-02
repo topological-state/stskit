@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1101</width>
-    <height>803</height>
+    <width>967</width>
+    <height>278</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -175,70 +175,36 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QTabWidget" name="tabWidget_2">
+     <widget class="QTabWidget" name="fahrplan_widget">
       <property name="currentIndex">
        <number>0</number>
       </property>
       <widget class="QWidget" name="fahrplan_tab">
        <attribute name="title">
-        <string>Rangierplan</string>
-       </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QSplitter" name="fahrplan_splitter">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <widget class="QLabel" name="fahrplan_label">
-           <property name="text">
-            <string>Rangierplan</string>
-           </property>
-           <property name="buddy">
-            <cstring>fahrplan_view</cstring>
-           </property>
-          </widget>
-          <widget class="QTableView" name="fahrplan_view">
-           <property name="alternatingRowColors">
-            <bool>true</bool>
-           </property>
-          </widget>
-          <widget class="QLabel" name="folgezug_label">
-           <property name="text">
-            <string>Folgezug</string>
-           </property>
-           <property name="buddy">
-            <cstring>folgezug_view</cstring>
-           </property>
-          </widget>
-          <widget class="QTableView" name="folgezug_view">
-           <property name="alternatingRowColors">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="grafik_tab">
-       <attribute name="title">
-        <string>Grafik</string>
+        <string>Fahrplan</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QScrollArea" name="grafik_area">
-          <property name="widgetResizable">
+         <widget class="QLabel" name="fahrplan_label">
+          <property name="text">
+           <string>Zugfahrplan</string>
+          </property>
+          <property name="buddy">
+           <cstring>fahrplan_view</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableView" name="fahrplan_view">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="alternatingRowColors">
            <bool>true</bool>
           </property>
-          <widget class="QWidget" name="grafik_widget">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>405</width>
-             <height>736</height>
-            </rect>
-           </property>
-          </widget>
          </widget>
         </item>
        </layout>
