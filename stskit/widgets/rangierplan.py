@@ -632,16 +632,16 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
 
         self._columns: List[str] = ['Zug',
                                     'Von',
-                                    'Ankunft',
-                                    'Abfahrt',
+                                    'An',
+                                    'Ab',
                                     'Gleis',
                                     'Status',
-                                    'Verspätung',
+                                    'VAn',
                                     'Vorgang',
-                                    'Lok nach',
-                                    'Lok Status',
-                                    'Ersatzlok von',
-                                    'Ersatzlok Status']
+                                    'L nach',
+                                    'L Status',
+                                    'E von',
+                                    'E Status']
         self.rangierziele: List[ZielLabelType] = []
         self.rangierplan = Rangierplan(anlage)
 
@@ -700,25 +700,25 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
                 return rd.name
             elif col == 'Von':
                 return rd.von
-            elif col == 'Ankunft':
+            elif col == 'An':
                 return rd.t_an
-            elif col == 'Abfahrt':
+            elif col == 'Ab':
                 return rd.p_ab
             elif col == 'Gleis':
                 return rd.gleis
             elif col == 'Status':
                 return rd.zug_status.status
-            elif col == 'Verspätung':
+            elif col == 'VAn':
                 return rd.v_an
             elif col == 'Vorgang':
                 return rd.vorgang
-            elif col == 'Lok nach':
+            elif col == 'L nach':
                 return rd.lok_nach
-            elif col == 'Lok Status':
+            elif col == 'L Status':
                 return rd.lok_status.status
-            elif col == 'Ersatzlok von':
+            elif col == 'E von':
                 return rd.ersatzlok_von
-            elif col == 'Ersatzlok Status':
+            elif col == 'E Status':
                 return rd.ersatzlok_status.status
             else:
                 return None
@@ -730,27 +730,27 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
                 return rd.name
             elif col == 'Von':
                 return rd.von
-            elif col == 'Ankunft':
+            elif col == 'An':
                 return format_minutes(rd.t_an)
-            elif col == 'Abfahrt':
+            elif col == 'Ab':
                 if rd.p_ab is not None:
                     return format_minutes(rd.p_ab)
             elif col == 'Gleis':
                 return rd.gleis
             elif col == 'Status':
                 return str(rd.zug_status)
-            elif col == 'Verspätung':
+            elif col == 'VAn':
                 return format_verspaetung(rd.v_an)
             elif col == 'Vorgang':
                 return rd.vorgang
-            elif col == 'Lok nach':
+            elif col == 'L nach':
                 return rd.lok_nach
-            elif col == 'Lok Status':
+            elif col == 'L Status':
                 return str(rd.lok_status)
-            elif col == 'Ersatzlok von':
+            elif col == 'E von':
                 if rd.ersatzlok_von is not None:
                     return rd.ersatzlok_von
-            elif col == 'Ersatzlok Status':
+            elif col == 'E Status':
                 return str(rd.ersatzlok_status)
             else:
                 return None
@@ -763,9 +763,9 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
                 return None
             elif col == 'Status':
                 return rd.zug_status.qt_farbe
-            elif col == 'Lok Status':
+            elif col == 'L Status':
                 return rd.lok_status.qt_farbe
-            elif col == 'Ersatzlok Status':
+            elif col == 'E Status':
                 return rd.ersatzlok_status.qt_farbe
             else:
                 return None
