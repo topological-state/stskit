@@ -664,8 +664,11 @@ class ZielGraph(nx.DiGraph):
             ziel1_data = self.nodes[fid1]
             ziel2_data = self.nodes[fid2]
             if ziel1_data.typ == 'E' or ziel2_data.typ == 'A':
-                bst1 = bg.find_superior(ziel1_data.plan_bst, {'Anst', 'Bf'})
-                bst2 = bg.find_superior(ziel2_data.plan_bst, {'Anst', 'Bf'})
+                try:
+                    bst1 = bg.find_superior(ziel1_data.plan_bst, {'Anst', 'Bf'})
+                    bst2 = bg.find_superior(ziel2_data.plan_bst, {'Anst', 'Bf'})
+                except KeyError:
+                    continue
 
                 try:
                     fahrzeit = lg.edges[bst1][bst2]['fahrzeit_schnitt']

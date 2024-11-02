@@ -167,8 +167,11 @@ class Anlage:
             if kante.typ == 'P':
                 ziel1_data = self.zielgraph.nodes[node1]
                 ziel2_data = self.zielgraph.nodes[node2]
-                bst1 = self.bahnhofgraph.find_superior(ziel1_data.plan_bst, {'Bf', 'Anst'})
-                bst2 = self.bahnhofgraph.find_superior(ziel2_data.plan_bst, {'Bf', 'Anst'})
+                try:
+                    bst1 = self.bahnhofgraph.find_superior(ziel1_data.plan_bst, {'Bf', 'Anst'})
+                    bst2 = self.bahnhofgraph.find_superior(ziel2_data.plan_bst, {'Bf', 'Anst'})
+                except KeyError:
+                    continue
                 if bst1 != bst2:
                     bst1_data = self.bahnhofgraph.nodes[bst1]
                     bst2_data = self.bahnhofgraph.nodes[bst2]
