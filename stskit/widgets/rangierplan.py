@@ -10,18 +10,11 @@ from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSele
 
 from stskit.dispo.anlage import Anlage
 from stskit.plugin.stsobj import Ereignis
-from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement
-from stskit.model.signalgraph import SignalGraph
-from stskit.model.zielgraph import ZielGraph, ZielGraphNode, ZielLabelType
-from stskit.model.zuggraph import ZugGraph, ZugGraphNode
+from stskit.model.bahnhofgraph import BahnhofElement
+from stskit.model.zielgraph import ZielGraphNode, ZielLabelType
+from stskit.model.zuggraph import ZugGraphNode
 from stskit.plugin.stsobj import format_minutes, format_verspaetung
 from stskit.qt.ui_rangierplan import Ui_RangierplanWidget
-
-
-# fragen
-# - erhalten wir ereignisse fuer loks? speziell: einfahrt, ausfahrt, kuppeln
-#   rothalt erhalten wir, aber ohne ortsangabe
-# - erkennen wir, ob die lok auf das falsche gleis programmiert ist?
 
 
 class Lokstatus:
@@ -284,9 +277,44 @@ class Zugstatus:
 
 
 @dataclass
-class Rangierdaten:
+class Rangiervorgang:
+    """
+    Zug- und Lokdaten für einen Rangiervorgang.
+
+    Attribute
+    ---------
+    vorgang: "Lokwechsel" oder "Lokumlauf" gemäss Sim-Flag.
+    zid: Zug-ID vom Sim.
+    name: Zugname (Gattung und Nummer)
+    von: Name des Einfahrtsgleises
+    nach: Name des Ausfahrtsgleises
+
+    fid: Ziel-ID (zid, Zeit, Ort) entsprechenden dem Label im Zielgraphen.
+    gleis: Name des effektiven Zielgleises, wo der Vorgang stattfindet.
+    plan: Name des fahrplanmässigen Zielgleises, wo der Vorgang stattfindet.
+    p_an, p_ab: Planmässige Ankunfts- und Abfahrtszeit am Zielgleis in Minuten.
+    v_an, v_ab: Ankunfts- und Abfahrtsverspätung am Zielgleis in Minuten.
+    t_an: Geschätzte oder erfolgte Ankunftszeit am Zielgleis in Minuten.
+    t_erledigt: Zeitpunkt der vollständigen Erledigung am Zielgleis in Minuten.
+        Vollständig heisst: Ersatzlok gekuppelt, Ursprungslok ausgefahren.
+
+    zug_status: Status des Zuges.
+    lok_zid: Zug-ID der Ursprungslok, verfügbar nach dem Abkuppeln. lok_zid sind negativ.
+    lok_nach: Name des Ziel-Anschlussgleises der Ursprungslok.
+    lok_status: Status der Ursprungslok.
+    ersatzlok_zid: Zug-ID der Ersatzlok, verfügbar nach dem ersten Annahmeangebot. ersatzlok_zid sind negativ.
+    ersatzlok_von: Name des Herkunfts-Anschlussgleis der Ersatzlok.
+    ersatzlok_status: Status der Ersatzlok.
+
+    Bemerkung:
+    Das Lokziel und Ersatzlokherkunft werden im Fahrplan numerisch als enr angegeben.
+    Es wird in mehreren Stellwerken beobachtet, dass diese enr im Signalgraphen nicht verzeichnet ist.
+    Wenn der Gleisname verzeichnet ist, enthalten die lok_nach und ersatzlok_von den Gleisnamen,
+    ansonsten in Klammern die enr.
+    """
+
     vorgang: str = ""
-    zid: int = ""
+    zid: int = None
     name: str = ""
     von: str = ""
     nach: str = ""
@@ -304,18 +332,18 @@ class Rangierdaten:
     zug_status: Zugstatus = field(default_factory=Zugstatus)
     # die lok-id wird erst beim abkuppeln bekannt
     lok_zid: Optional[int] = None
-    lok_nach: Optional[BahnhofElement] = None
+    lok_nach: Optional[str] = None
     lok_status: Lokstatus = field(default_factory=Lokstatus)
     # die ersatzlok wird erst bei der abfrage bekannt
     ersatzlok_zid: Optional[int] = None
-    ersatzlok_von: Optional[BahnhofElement] = None
+    ersatzlok_von: Optional[str] = None
     ersatzlok_status: Lokstatus = field(default_factory=Lokstatus)
 
 
-class Rangiertabelle:
+class Rangierplan:
     def __init__(self, anlage: Anlage):
         self.anlage = anlage
-        self.rangierliste: Dict[ZielLabelType, Rangierdaten] = {}
+        self.rangierliste: Dict[ZielLabelType, Rangiervorgang] = {}
         # zugname, zid
         self.loks: Dict[str, int] = {}
         # zugname, zid
@@ -340,10 +368,10 @@ class Rangiertabelle:
         self.zuege_suchen()
         self.zuege_aktualisieren()
 
-    def _neue_rangierdaten(self,
-                           zug: ZugGraphNode,
-                           ziel: ZielGraphNode,
-                           **kwargs) -> Rangierdaten:
+    def _vorang_erstellen(self,
+                          zug: ZugGraphNode,
+                          ziel: ZielGraphNode,
+                          **kwargs) -> Rangiervorgang:
         """
         unveraenderliche attribute einmalig initialisieren
         :param zug:
@@ -352,7 +380,7 @@ class Rangiertabelle:
         :return:
         """
 
-        rd = Rangierdaten(**kwargs)
+        rd = Rangiervorgang(**kwargs)
         rd.zid = zug.zid
         rd.fid = ziel.fid
         rd.name = zug.name
@@ -384,33 +412,48 @@ class Rangiertabelle:
 
             if ziel.lokumlauf:
                 zug = self.anlage.zuggraph.nodes[fid.zid]
-                rd = self._neue_rangierdaten(zug, ziel, vorgang="Lokumlauf")
-                rd.lok_nach = BahnhofElement("Gl", ziel.gleis)
+                rd = self._vorang_erstellen(zug, ziel, vorgang="Lokumlauf")
+                rd.lok_nach = ziel.gleis
                 rd.zug_status.update_von_zug(zug, ziel.plan)
                 self.rangierliste[fid] = rd
 
             elif (enrs := ziel.lokwechsel) is not None:
                 zug = self.anlage.zuggraph.nodes[fid.zid]
-                rd = self._neue_rangierdaten(zug, ziel, vorgang="Lokwechsel")
+                rd = self._vorang_erstellen(zug, ziel, vorgang="Lokwechsel")
                 # anhand der enr herausfinden, welches die ersatzlok ist!
-                abstellgleise = {enr: self.anlage.bahnhofgraph.find_gleis_enr(enr) or BahnhofElement("Agl", f"{enr}?") for enr in enrs}
-                typen = {enr: self.anlage.signalgraph.nodes[enr]['typ'] if self.anlage.signalgraph.has_node(enr) else 999 for enr in enrs}
+                abstellgleise = {enr: self.anlage.bahnhofgraph.find_gleis_enr(enr) or
+                                      BahnhofElement("Agl", f"({enr})")
+                                      for enr in enrs}
+                typen = {enr: self.anlage.signalgraph.nodes[enr]['typ']
+                              if self.anlage.signalgraph.has_node(enr) else 999
+                              for enr in enrs}
                 sortierte_enrs = sorted(enrs, key=lambda enr: typen[enr])
 
                 for enr, renr in zip(sortierte_enrs, reversed(sortierte_enrs)):
                     if typen[enr] == 6:
-                        rd.ersatzlok_von = abstellgleise[enr]
+                        rd.ersatzlok_von = abstellgleise[enr].name
                         if rd.lok_nach is None:
-                            rd.lok_nach = abstellgleise[renr]
+                            rd.lok_nach = abstellgleise[renr].name
                     elif typen[enr] == 7:
-                        rd.lok_nach = abstellgleise[enr]
+                        rd.lok_nach = abstellgleise[enr].name
                         if rd.ersatzlok_von is None:
-                            rd.ersatzlok_von = abstellgleise[renr]
+                            rd.ersatzlok_von = abstellgleise[renr].name
 
                 rd.zug_status.update_von_zug(zug, ziel.plan)
                 self.rangierliste[fid] = rd
 
     def zuege_aktualisieren(self):
+        """
+        Laufende Rangiervorgänge aus den Anlagedaten aktualisieren.
+
+        Überprüft den Status der in der Rangierliste verzeichneten Vorgänge:
+        - Aktualisiert Zielgleis, Zeiten und Verspätung
+        - Verknüpft Lok und Ersatzlok mit den Lokdaten aus dem loks-Verzeichnis falls noch nicht geschehen.
+        - Aktualisiert den Status von Lok und Ersatzlok.
+        - Prüft auf Übereinstimmung der Zielgleise von Zug und Ersatzlok.
+        - Setzt die Erledigungszeit, wenn Zug, Lok und Ersatzlok neu alle erledigt sind.
+        """
+
         for fid, rd in self.rangierliste.items():
             ziel = self.anlage.zielgraph.nodes[fid]
 
@@ -464,7 +507,7 @@ class Rangiertabelle:
                         (rd.ersatzlok_zid is None or rd.ersatzlok_status.status == "erledigt")):
                     rd.t_erledigt = self.anlage.simzeit_minuten
 
-    def gleisfehler_pruefen(self, rd: Rangierdaten):
+    def gleisfehler_pruefen(self, rd: Rangiervorgang):
         """
         Rangiervoraang auf Gleisfehler prüfen.
 
@@ -489,6 +532,9 @@ class Rangiertabelle:
 
         Sucht Züge im Zuggraph, die mit dem Präfix 'Lok' oder 'Ersatzlok' beginnen und eine negative zid haben.
         Der Präfix wird abgetrennt und die Lok in den loks- bzw. ersatzloks-Dictionaries eingetragen.
+
+        Die Loks werden hier nicht mit einem Rangiervorgang verknüpft.
+        Dies erledigt die Methode zuege_aktualisieren.
         """
 
         for zid, zug in self.anlage.zuggraph.nodes(data=True):
@@ -509,7 +555,9 @@ class Rangiertabelle:
 
     def plugin_ereignis(self, ereignis: Ereignis) -> Set[ZielLabelType]:
         """
-        Lokstatus nach Plugin-Ereignis aktualisieren
+        Lokstatus nach Plugin-Ereignis aktualisieren.
+
+        Verteilt die Ereignisnachricht auf die lok_ereignis- und zug_ereignis-Methoden.
         """
 
         rd_ids = set()
@@ -593,21 +641,21 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
                                     'Lok Status',
                                     'Ersatzlok von',
                                     'Ersatzlok Status']
-        self._rangierziele: List[ZielLabelType] = []
-        self.rangiertabelle = Rangiertabelle(anlage)
+        self.rangierziele: List[ZielLabelType] = []
+        self.rangierplan = Rangierplan(anlage)
 
     def update(self):
         self.beginResetModel()
-        self.rangiertabelle.update()
-        self._rangierziele = list(self.rangiertabelle.rangierliste.keys())
+        self.rangierplan.update()
+        self.rangierziele = list(self.rangierplan.rangierliste.keys())
         self.endResetModel()
 
     def plugin_ereignis(self, ereignis: Ereignis):
-        fids = self.rangiertabelle.plugin_ereignis(ereignis)
+        fids = self.rangierplan.plugin_ereignis(ereignis)
 
         for fid in fids:
             try:
-                row = self._rangierziele.index(fid)
+                row = self.rangierziele.index(fid)
             except ValueError:
                 return
             index1 = self.index(row, self._columns.index('Status'))
@@ -618,7 +666,7 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
         return len(self._columns)
 
     def rowCount(self, parent: QModelIndex = ...) -> int:
-        return len(self._rangierziele)
+        return len(self.rangierziele)
 
     def data(self, index: QModelIndex, role: int = ...) -> Any:
         """
@@ -638,8 +686,8 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             return None
 
         try:
-            fid = self._rangierziele[index.row()]
-            rd = self.rangiertabelle.rangierliste[fid]
+            fid = self.rangierziele[index.row()]
+            rd = self.rangierplan.rangierliste[fid]
             col = self._columns[index.column()]
         except (IndexError, KeyError):
             return None
@@ -695,12 +743,12 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             elif col == 'Vorgang':
                 return rd.vorgang
             elif col == 'Lok nach':
-                return rd.lok_nach.name
+                return rd.lok_nach
             elif col == 'Lok Status':
                 return str(rd.lok_status)
             elif col == 'Ersatzlok von':
                 if rd.ersatzlok_von is not None:
-                    return rd.ersatzlok_von.name
+                    return rd.ersatzlok_von
             elif col == 'Ersatzlok Status':
                 return str(rd.ersatzlok_status)
             else:
@@ -736,7 +784,7 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             if orientation == QtCore.Qt.Horizontal:
                 return self._columns[section]
             elif orientation == QtCore.Qt.Vertical:
-                return self._rangierziele[section]
+                return self.rangierziele[section]
 
 
 class RangiertabelleFilterProxy(QSortFilterProxyModel):
@@ -783,8 +831,8 @@ class RangiertabelleFilterProxy(QSortFilterProxyModel):
                 break
 
         try:
-            fid = rangiertabelle_modell._rangierziele[source_row]
-            rd = rangiertabelle_modell.rangiertabelle.rangierliste[fid]
+            fid = rangiertabelle_modell.rangierziele[source_row]
+            rd = rangiertabelle_modell.rangierplan.rangierliste[fid]
         except (IndexError, KeyError):
             return False
 
