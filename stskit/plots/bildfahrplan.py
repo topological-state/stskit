@@ -289,7 +289,7 @@ class BildfahrplanPlot:
         def _add_node(ereignis_label, ereignis_data):
             bst = bst_von_gleis(ereignis_data.gleis)
             if bst in strecke:
-                zug = self.zentrale.client.zuggraph.nodes[ereignis_data.zid]
+                zug = self.anlage.zuggraph.nodes[ereignis_data.zid]
                 d = ereignis_data.copy()
                 d['bst'] = bst
                 d['farbe'] = self.anlage.zugschema.zugfarbe(zug)
@@ -311,7 +311,7 @@ class BildfahrplanPlot:
 
         for u, v, data in self.anlage.ereignisgraph.edges(data=True):
             if u in self.bildgraph or v in self.bildgraph:
-                zug = self.zentrale.client.zuggraph.nodes[data.zid]
+                zug = self.anlage.zuggraph.nodes[data.zid]
                 u_data = self.anlage.ereignisgraph.nodes[u]
                 v_data = self.anlage.ereignisgraph.nodes[v]
                 u_v_data = data.copy()
