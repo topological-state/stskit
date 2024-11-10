@@ -429,14 +429,9 @@ class EreignisGraph(nx.DiGraph):
                     start_zeit = start_data.t_eff
                 except (AttributeError, KeyError, TypeError):
                     continue
-                try:
-                    zeit_min = max(zeit_min, start_zeit + edge_data.dt_min)
-                except (AttributeError, KeyError, TypeError):
-                    pass
-                try:
-                    zeit_min += max(0, edge_data.dt_fdl)
-                except (AttributeError, KeyError, TypeError):
-                    pass
+
+                zeit_min = max(zeit_min, start_zeit + edge_data.get("dt_min", 0) + max(0, edge_data.get("dt_fdl", 0)))
+
                 try:
                     zeit_max = min(zeit_max, start_zeit + edge_data.dt_max)
                 except (AttributeError, KeyError, TypeError):
@@ -454,10 +449,11 @@ class EreignisGraph(nx.DiGraph):
                 else:
                     ziel_zeit = ziel_data.get("t_plan") or ziel_zeit
 
-            ziel_zeit = min(ziel_zeit, zeit_max)
-            ziel_zeit = max(ziel_zeit, zeit_min)
-            if not math.isinf(ziel_zeit):
-                ziel_data.t_prog = ziel_zeit
+            result = ziel_zeit
+            result = min(result, zeit_max)
+            result = max(result, zeit_min)
+            if not math.isinf(result):
+                ziel_data.t_prog = result
             else:
                 logger.warning(f"Keine Zeitprognose möglich für Ereignis {zielnode}")
 
