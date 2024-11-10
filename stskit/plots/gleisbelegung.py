@@ -340,7 +340,6 @@ class Gleisbelegung:
     def __init__(self, zentrale: DatenZentrale):
         self.zentrale: DatenZentrale = zentrale
         self.anlage = zentrale.anlage
-        self.undirected_zug_graph = self.zentrale.client.zuggraph.to_undirected(as_view=True)
         self.gleise: List[BahnhofElement] = []
         self.slots: Dict[Any, Slot] = {}
         self.gleis_slots: Dict[BahnhofElement, Dict[Any, Slot]] = {}
@@ -395,6 +394,7 @@ class Gleisbelegung:
         """
 
         keys_bisherige = set(self.slots.keys())
+        undirected_zuggraph = self.anlage.zuggraph.to_undirected(as_view=True)
 
         for fid, ziel_data in self.anlage.zielgraph.nodes(data=True):
             try:
@@ -426,7 +426,7 @@ class Gleisbelegung:
                     slot.dauer = 1
                 else:
                     slot.dauer = max(1, plan_ab + 1 + slot.verspaetung_ab - slot.zeit)
-                slot.zugstamm = {zid for zid in nx.node_connected_component(self.undirected_zug_graph, slot.zid)}
+                slot.zugstamm = {zid for zid in nx.node_connected_component(undirected_zuggraph, slot.zid)}
                 keys_bisherige.discard(key)
 
         for key in keys_bisherige:
@@ -470,8 +470,8 @@ class Gleisbelegung:
 
     def slots_formatieren(self):
         for slot in self.slots.values():
-            zug_data = self.zentrale.client.zuggraph.nodes[slot.zid]
-            ziel_data = self.zentrale.anlage.zielgraph.nodes[slot.fid]
+            zug_data = self.anlage.zuggraph.nodes[slot.zid]
+            ziel_data = self.anlage.zielgraph.nodes[slot.fid]
             slot.titel = self.zugbeschriftung.format(zug_data=zug_data, ziel_data=ziel_data)
 
             if "Name" in self.zugbeschriftung.elemente:
@@ -748,7 +748,7 @@ class GleisbelegungPlot:
         self._axes.yaxis.grid(True, which='major')
         self._axes.xaxis.grid(True)
 
-        zeit = time_to_minutes(self.zentrale.client.calc_simzeit())
+        zeit = self.anlage.simzeit_minuten
         self._axes.set_ylim(bottom=zeit + self.vorlaufzeit, top=zeit - self.nachlaufzeit, auto=False)
 
         self._plot_sperrungen(x_labels, x_labels_pos, kwargs)

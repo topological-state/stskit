@@ -75,10 +75,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     def anlage(self) -> Anlage:
         return self.zentrale.anlage
 
-    @property
-    def client(self) -> PluginClient:
-        return self.zentrale.client
-
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
 
