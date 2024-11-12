@@ -270,14 +270,6 @@ class BildfahrplanPlot:
         '-' (ausgezogen) Fahrt
         """
 
-        def bst_von_fid(fid: ZielLabelType) -> Optional[BahnhofLabelType]:
-            try:
-                gl = self.anlage.bahnhofgraph.ziel_gleis[fid[-1]]
-                bst = self.anlage.bahnhofgraph.find_superior(gl, {'Bf', 'Anst'})
-                return bst
-            except (IndexError, KeyError):
-                return None
-
         def bst_von_gleis(gl: str) -> Optional[BahnhofLabelType]:
             try:
                 bst = self.anlage.bahnhofgraph.find_name(gl)
@@ -290,15 +282,13 @@ class BildfahrplanPlot:
             except (IndexError, KeyError):
                 return None
 
-        def _add_node(ereignis_label, ereignis_data):
-            bst = bst_von_gleis(ereignis_data.gleis)
-            if bst in strecke:
-                zug = self.anlage.zuggraph.nodes[ereignis_data.zid]
-                d = ereignis_data.copy()
-                d['bst'] = bst
-                d['farbe'] = self.anlage.zugschema.zugfarbe(zug)
-                d['marker'] = '.'
-                self.bildgraph.add_node(ereignis_label, **d)
+        def _add_node(ereignis_label, ereignis_data, bst):
+            zug = self.anlage.zuggraph.nodes[ereignis_data.zid]
+            d = ereignis_data.copy()
+            d['bst'] = bst
+            d['farbe'] = self.anlage.zugschema.zugfarbe(zug)
+            d['marker'] = '.'
+            self.bildgraph.add_node(ereignis_label, **d)
 
         self.bildgraph.clear()
         t0 = self.zeit - self.nachlaufzeit
@@ -309,7 +299,9 @@ class BildfahrplanPlot:
         for node, data in self.anlage.ereignisgraph.nodes(data=True):
             try:
                 if t0 <= data.t_eff <= t1:
-                    _add_node(node, data)
+                    bst = bst_von_gleis(data.gleis)
+                    if bst is not None:
+                        _add_node(node, data, bst)
             except AttributeError:
                 continue
 
@@ -326,9 +318,17 @@ class BildfahrplanPlot:
                 u_v_data['linestyle'] = ':' if data.typ in {"B", "E", "F", "H"} else "-"
 
                 if u not in self.bildgraph:
-                    _add_node(u, u_data)
+                    bst = bst_von_gleis(u_data.gleis)
+                    if bst is not None:
+                        _add_node(u, u_data, bst)
+                    else:
+                        continue
                 if v not in self.bildgraph:
-                    _add_node(v, v_data)
+                    bst = bst_von_gleis(v_data.gleis)
+                    if bst is not None:
+                        _add_node(v, v_data, bst)
+                    else:
+                        continue
                 self.bildgraph.add_edge(u, v, **u_v_data)
 
                 if data.typ == "B":
@@ -448,6 +448,10 @@ class BildfahrplanPlot:
                                     self._axes.text(cx, cy, data.titel, rotation=ang, **label_args)
             except AttributeError as e:
                 logger.debug("Fehlendes Attribut im Bildgraph beim Kantenzeichnen", exc_info=e)
+                logger.debug(u)
+                logger.debug(u_data)
+                logger.debug(v)
+                logger.debug(v_data)
 
         for u in self.bildgraph.nodes(data=False):
             u_data = self.bildgraph.nodes[u]
