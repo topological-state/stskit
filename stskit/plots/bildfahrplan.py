@@ -281,8 +281,12 @@ class BildfahrplanPlot:
         def bst_von_gleis(gl: str) -> Optional[BahnhofLabelType]:
             try:
                 bst = self.anlage.bahnhofgraph.find_name(gl)
-                bst = self.anlage.bahnhofgraph.find_superior(bst, {'Bf', 'Anst'})
-                return bst
+                if bst.typ not in {'Bf', 'Anst'}:
+                    bst = self.anlage.bahnhofgraph.find_superior(bst, {'Bf', 'Anst'})
+                if bst in strecke:
+                    return bst
+                else:
+                    return None
             except (IndexError, KeyError):
                 return None
 
