@@ -425,12 +425,12 @@ class EreignisGraph(nx.DiGraph):
                 start_data = self.nodes[startnode]
                 edge = (startnode, zielnode)
                 edge_data = self.edges[edge]
-                try:
-                    start_zeit = start_data.t_eff
-                except (AttributeError, KeyError, TypeError):
+
+                start_zeit = start_data.get("t_mess") or start_data.get("t_prog") or start_data.get("t_plan")
+                if start_zeit is None:
                     continue
 
-                zeit_min = max(zeit_min, start_zeit + edge_data.get("dt_min", 0) + max(0, edge_data.get("dt_fdl", 0)))
+                zeit_min = max(zeit_min, start_zeit + edge_data.get("dt_min", 0) + edge_data.get("dt_fdl", 0))
 
                 try:
                     zeit_max = min(zeit_max, start_zeit + edge_data.dt_max)
