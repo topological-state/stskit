@@ -259,15 +259,17 @@ class BildfahrplanPlot:
         Verwendete Marker
         -----------------
 
-        '.' (Punkt) Planmaessiger Halt
+        '.' (Punkt) Planmässiger Halt
         '*' (Stern) E/F/K
         'P' (fettes plus) Betriebshalt
+        'v' (Dreieck unten) abhängiger Halt
 
         Verwendete Linienstile
         ----------------------
 
-        ':' (gepunktet) Halt
+        '--' (gestrichelt) Halt
         '-' (ausgezogen) Fahrt
+        ':' (gepunktet) Abhängigkeit
         """
 
         def bst_von_gleis(gl: str) -> Optional[BahnhofLabelType]:
@@ -306,7 +308,7 @@ class BildfahrplanPlot:
                 continue
 
         for u, v, data in self.anlage.ereignisgraph.edges(data=True):
-            if u in self.bildgraph or v in self.bildgraph:
+            if data.typ in {'P', 'H', 'B', 'E', 'F', 'K', 'A'} and (u in self.bildgraph or v in self.bildgraph):
                 zug = self.anlage.zuggraph.nodes[data.zid]
                 u_data = self.anlage.ereignisgraph.nodes[u]
                 v_data = self.anlage.ereignisgraph.nodes[v]
@@ -315,7 +317,10 @@ class BildfahrplanPlot:
                 u_v_data['titel'] = format_label(self.zugbeschriftung, zug, u_data, v_data)
                 u_v_data['fontstyle'] = "normal"
                 u_v_data['linewidth'] = 1
-                u_v_data['linestyle'] = ':' if data.typ in {"B", "E", "F", "H"} else "-"
+                u_v_data['linestyle'] = '--' if data.typ in {"B", "E", "F", "H"} else "-"
+                if data.typ == 'A':
+                    u_v_data['linestyle'] = ':'
+                    u_v_data['farbe'] = 'silver'
 
                 if u not in self.bildgraph:
                     bst = bst_von_gleis(u_data.gleis)
@@ -333,6 +338,8 @@ class BildfahrplanPlot:
 
                 if data.typ == "B":
                     self.bildgraph.nodes[v]['marker'] = 'P'
+                elif data.typ == 'A':
+                    self.bildgraph.nodes[v]['marker'] = 'v'
 
     def line_args(self, start: EreignisGraphNode, ziel: EreignisGraphNode, data: EreignisGraphEdge) -> Dict[str, Any]:
         args = {'color': data.farbe,
