@@ -595,13 +595,7 @@ class EreignisGraph(nx.DiGraph):
         elif ereignis.art == 'abfahrt':
             if ereignis.amgleis:
                 # abfahrbereit
-                try:
-                    cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="Ab")
-                except (AttributeError, ValueError, KeyError):
-                    pass
-                else:
-                    self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
-
+                pass
             else:
                 # abfahrt
                 try:
