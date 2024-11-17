@@ -263,28 +263,32 @@ class EreignisGraph(nx.DiGraph):
             else:
                 node = None
 
-    def prev_ereignis(self, label: EreignisLabelType) -> Optional[EreignisLabelType]:
+    def prev_ereignis(self, label: EreignisLabelType, typ: Optional[str] = None) -> Optional[EreignisLabelType]:
         """
         Vorheriges Ereignislabel eines Zuges suchen
 
         :param label: Label des Ereignisnodes
+        :param typ: Ereignistyp (EreignisGraphNode.typ)
         :return Label des gefundenen Ereignisses oder None
         """
         for n in self.predecessors(label):
             if n.zid == label.zid:
-                return n
+                if typ is None or self.nodes[n]['typ'] == self.nodes[label]['typ']:
+                    return n
         return None
 
-    def next_ereignis(self, label: EreignisLabelType) -> Optional[EreignisLabelType]:
+    def next_ereignis(self, label: EreignisLabelType, typ: Optional[str] = None) -> Optional[EreignisLabelType]:
         """
         Nächstes Ereignislabel eines Zuges suchen
 
         :param label: Label des Ereignisnodes
+        :param typ: Ereignistyp (EreignisGraphNode.typ)
         :return Label des gefundenen Ereignisses oder None
         """
         for n in self.successors(label):
             if n.zid == label.zid:
-                return n
+                if typ is None or self.nodes[n]['typ'] == self.nodes[label]['typ']:
+                    return n
         return None
 
     def _zuganfaenge_suchen(self):
@@ -584,13 +588,14 @@ class EreignisGraph(nx.DiGraph):
             else:
                 # durchfahrt
                 try:
-                    next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
+                    next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='An')
                 except (AttributeError, ValueError, KeyError):
                     pass
                 else:
                     self.zug_next[ereignis.zid] = next_label
-                    cur_label = self.prev_ereignis(next_label)
-                    self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+                    cur_label = self.prev_ereignis(next_label, typ='An')
+                    if cur_label is not None:
+                        self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
 
         elif ereignis.art == 'abfahrt':
             if ereignis.amgleis:
@@ -599,13 +604,14 @@ class EreignisGraph(nx.DiGraph):
             else:
                 # abfahrt
                 try:
-                    next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
+                    next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='An')
                 except (AttributeError, ValueError, KeyError):
                     pass
                 else:
                     self.zug_next[ereignis.zid] = next_label
-                    cur_label = self.prev_ereignis(next_label)  # typ = "Ab"?
-                    self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+                    cur_label = self.prev_ereignis(next_label, typ='Ab')
+                    if cur_label is not None:
+                        self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
 
         elif ereignis.art == 'rothalt' or ereignis.art == 'wurdegruen':
             try:
