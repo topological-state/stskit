@@ -423,28 +423,6 @@ class EreignisGraph(nx.DiGraph):
             if ziel_data.get("t_mess") is not None:
                 continue
 
-            zeit_min = -math.inf
-            zeit_max = math.inf
-            for startnode in self.pred[zielnode]:
-                start_data = self.nodes[startnode]
-                edge = (startnode, zielnode)
-                edge_data = self.edges[edge]
-
-                start_zeit = start_data.get("t_mess") or start_data.get("t_prog") or start_data.get("t_plan")
-                if start_zeit is None:
-                    continue
-
-                zeit_min = max(zeit_min, start_zeit + edge_data.get("dt_min", 0) + edge_data.get("dt_fdl", 0))
-
-                try:
-                    zeit_max = min(zeit_max, start_zeit + edge_data.dt_max)
-                except (AttributeError, KeyError, TypeError):
-                    pass
-                try:
-                    zeit_max += min(0, edge_data.dt_fdl)
-                except (AttributeError, KeyError, TypeError):
-                    pass
-
             ziel_zeit = -math.inf
             if ziel_data.typ in {'Ab'}:
                 if zielnode.zeit == MIN_MINUTES:
@@ -452,6 +430,31 @@ class EreignisGraph(nx.DiGraph):
                     ziel_zeit = ziel_data.get("t_mess") or ziel_data.get("t_prog") or ziel_data.get("t_plan") or ziel_zeit
                 else:
                     ziel_zeit = ziel_data.get("t_plan") or ziel_zeit
+
+            zeit_min = -math.inf
+            zeit_max = math.inf
+            for startnode in self.pred[zielnode]:
+                start_data = self.nodes[startnode]
+                edge = (startnode, zielnode)
+                edge_data = self.edges[edge]
+                dt_min = edge_data.get("dt_min", 0)
+                dt_max = edge_data.get("dt_max", 0)
+                dt_fdl = edge_data.get("dt_fdl", 0)
+
+                start_zeit = start_data.get("t_mess") or start_data.get("t_prog") or start_data.get("t_plan")
+                if start_zeit is None:
+                    continue
+
+                zeit_min = max(zeit_min, start_zeit + dt_min + dt_fdl)
+
+                # das analoge für dt_max ist problematisch: was ist der defaultwert von dt_max?
+                # zeit_max = min(zeit_max, start_zeit + edge_data.get("dt_max", math.inf) + min(0, edge_data.get("dt_fdl", 0)))
+
+                # lösungsvorschlag:
+                if dt_max > 0:
+                    zeit_max = min(zeit_max, start_zeit + dt_max)
+                if dt_fdl < 0:
+                    zeit_max = min(zeit_max, ziel_zeit + dt_fdl)
 
             result = ziel_zeit
             result = min(result, zeit_max)
