@@ -273,7 +273,7 @@ class EreignisGraph(nx.DiGraph):
         """
         for n in self.predecessors(label):
             if n.zid == label.zid:
-                if typ is None or self.nodes[n]['typ'] == self.nodes[label]['typ']:
+                if typ is None or self.nodes[n]['typ'] == typ:
                     return n
         return None
 
@@ -287,7 +287,7 @@ class EreignisGraph(nx.DiGraph):
         """
         for n in self.successors(label):
             if n.zid == label.zid:
-                if typ is None or self.nodes[n]['typ'] == self.nodes[label]['typ']:
+                if typ is None or self.nodes[n]['typ'] == typ:
                     return n
         return None
 
