@@ -229,7 +229,8 @@ class EreignisGraph(nx.DiGraph):
 
     def zugpfad(self, zid: int,
                 start: Optional[EreignisLabelType] = None,
-                stop: Optional[EreignisLabelType] = None) -> Iterable[EreignisLabelType]:
+                stop: Optional[EreignisLabelType] = None,
+                kuppeln: bool = False) -> Iterable[EreignisLabelType]:
         """
         Generator für die Knoten eines Zuges
         
@@ -241,6 +242,8 @@ class EreignisGraph(nx.DiGraph):
             Falls None (default) der erste Knoten des Zuges mit ID (zid, 0).
         :param stop: Knoten-ID des ersten nicht mehr gelieferten Knotens.
             Falls None (default) werden die Knoten bis einschliesslich des letzten des Zuges geliefert.
+        :param kuppeln: Wenn True, wird ein allfälliges Kuppelereignis am Schluss inkludiert.
+            Per default wird es weggelassen, weil es die zid des Zielzuges trägt.
         :return: Generator von Knoten-IDs.
         """
 
@@ -260,33 +263,48 @@ class EreignisGraph(nx.DiGraph):
                 if n.zid == zid:
                     node = n
                     break
+                elif kuppeln and self.nodes[n]['typ'] == 'K':
+                    node = n
+                    break
             else:
                 node = None
 
     def prev_ereignis(self, label: EreignisLabelType, typ: Optional[str] = None) -> Optional[EreignisLabelType]:
         """
-        Vorheriges Ereignislabel eines Zuges suchen
+        Vorheriges Ereignislabel eines Zuges
+
+        Diese Methode gibt das vorherige Ereignis des Zuges zurück.
+        Das vorherige Ereignis ist der Vorfahrknoten mit der gleichen zid oder vom Typ F.
+        Wenn das typ-Argument gesetzt ist, wird das Ereignis nur zurückgegeben, wenn der Typ übereinstimmt.
+
+        Vorsicht: Diese Methode sucht nicht nach einem bestimmten Ereignis!
 
         :param label: Label des Ereignisnodes
         :param typ: Ereignistyp (EreignisGraphNode.typ)
         :return Label des gefundenen Ereignisses oder None
         """
         for n in self.predecessors(label):
-            if n.zid == label.zid:
+            if n.zid == label.zid or self.nodes[n]['typ'] == 'F':
                 if typ is None or self.nodes[n]['typ'] == typ:
                     return n
         return None
 
     def next_ereignis(self, label: EreignisLabelType, typ: Optional[str] = None) -> Optional[EreignisLabelType]:
         """
-        Nächstes Ereignislabel eines Zuges suchen
+        Nächstes Ereignislabel eines Zuges
+
+        Diese Methode gibt das nächste Ereignis des Zuges zurück.
+        Das nächste Ereignis ist der Nachfolgeknoten mit der gleichen zid oder vom Typ K.
+        Wenn das typ-Argument gesetzt ist, wird das Ereignis nur zurückgegeben, wenn der Typ übereinstimmt.
+
+        Vorsicht: Diese Methode sucht nicht nach einem bestimmten Ereignis!
 
         :param label: Label des Ereignisnodes
         :param typ: Ereignistyp (EreignisGraphNode.typ)
         :return Label des gefundenen Ereignisses oder None
         """
         for n in self.successors(label):
-            if n.zid == label.zid:
+            if n.zid == label.zid or self.nodes[n]['typ'] == 'K':
                 if typ is None or self.nodes[n]['typ'] == typ:
                     return n
         return None
@@ -609,7 +627,10 @@ class EreignisGraph(nx.DiGraph):
                 try:
                     next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='An')
                 except (AttributeError, ValueError, KeyError):
-                    pass
+                    if prev_label:
+                        prev_data = self.nodes[prev_label]
+                        if prev_data.get('typ') == 'Ab' and prev_data.get('t_mess') is None:
+                            self.messzeit_setzen(prev_label, t, ereignis.verspaetung)
                 else:
                     self.zug_next[ereignis.zid] = next_label
                     cur_label = self.prev_ereignis(next_label, typ='Ab')
@@ -620,6 +641,7 @@ class EreignisGraph(nx.DiGraph):
             try:
                 next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
                 next_data = self.nodes[next_label]
+                # todo : hier betriebshalt verarbeiten
             except (AttributeError, ValueError, KeyError):
                 pass
             else:
@@ -676,7 +698,7 @@ class EreignisGraph(nx.DiGraph):
         :raise ValueError: Attributwerte werden nicht gefunden.
         """
 
-        for label in self.zugpfad(zid):
+        for label in self.zugpfad(zid, kuppeln=True):
             if start is not None:
                 if label == start:
                     start = None
