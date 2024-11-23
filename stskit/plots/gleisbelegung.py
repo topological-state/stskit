@@ -397,6 +397,9 @@ class Gleisbelegung:
         undirected_zuggraph = self.anlage.zuggraph.to_undirected(as_view=True)
 
         for fid, ziel_data in self.anlage.zielgraph.nodes(data=True):
+            if fid.zid < 0:
+                continue
+
             try:
                 plan_an = ziel_data.p_an
             except AttributeError:
@@ -485,7 +488,7 @@ class Gleisbelegung:
             slot.titel = s
 
             slot.farbe = self.anlage.zugschema.zugfarbe(zug_data)
-            slot.randfarbe = "k"
+            slot.randfarbe = "magenta" if ziel_data.lokwechsel or ziel_data.lokumlauf else "k"
             slot.fontstyle = "italic" if slot.zieltyp == 'D' else "normal"
             slot.linestyle = "--" if slot.zieltyp == 'D' else "-"
             slot.linewidth = 1
