@@ -562,128 +562,157 @@ class EreignisGraph(nx.DiGraph):
         :return:
         """
 
-        prev_label = self.zug_next.get(ereignis.zid)
+        try:
+            meth = getattr(self, "sim_ereignis_" + ereignis.art)
+        except AttributeError:
+            pass
+        else:
+            meth(ereignis)
 
+    def sim_ereignis_einfahrt(self, ereignis: Ereignis):
         t = time_to_minutes(ereignis.zeit)
-        if ereignis.art == 'einfahrt':
-            cur_label = self.zuganfaenge[ereignis.zid]
+        cur_label = self.zuganfaenge[ereignis.zid]
+        self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+        try:
+            next_label = self.label_of(ereignis.zid, start=cur_label, typ="An")
+        except (AttributeError, ValueError, KeyError):
+            pass
+        else:
+            self.zug_next[ereignis.zid] = next_label
+
+    def sim_ereignis_ausfahrt(self, ereignis: Ereignis):
+        t = time_to_minutes(ereignis.zeit)
+        try:
+            cur_label = list(self.zugpfad(ereignis.zid))[-1]
+        except IndexError:
+            pass
+        else:
             self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
-            try:
-                next_label = self.label_of(ereignis.zid, start=cur_label, typ="An")
-            except (AttributeError, ValueError, KeyError):
-                pass
-            else:
-                self.zug_next[ereignis.zid] = next_label
+        try:
+            del self.zug_next[ereignis.zid]
+        except KeyError:
+            pass
 
-        elif ereignis.art == 'ausfahrt':
+    def sim_ereignis_ankunft(self, ereignis: Ereignis):
+        prev_label = self.zug_next.get(ereignis.zid)
+        t = time_to_minutes(ereignis.zeit)
+        if ereignis.amgleis:
+            # halt
             try:
-                cur_label = list(self.zugpfad(ereignis.zid))[-1]
-            except IndexError:
-                pass
-            else:
-                self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
-            try:
-                del self.zug_next[ereignis.zid]
-            except KeyError:
-                pass
-
-        elif ereignis.art == 'ankunft':
-            if ereignis.amgleis:
-                # halt
-                try:
-                    cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="An")
-                except (AttributeError, ValueError, KeyError):
-                    pass
-                else:
-                    self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
-                    next_label = self.next_ereignis(cur_label)
-                    if next_label is not None:
-                        next_data = self.nodes[next_label]
-                        if next_data.typ == 'E':
-                            try:
-                                del self.zug_next[ereignis.zid]
-                            except KeyError:
-                                pass
-                        else:
-                            self.zug_next[ereignis.zid] = next_label
-            else:
-                # durchfahrt
-                try:
-                    next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='An')
-                except (AttributeError, ValueError, KeyError):
-                    pass
-                else:
-                    self.zug_next[ereignis.zid] = next_label
-                    cur_label = self.prev_ereignis(next_label, typ='An')
-                    if cur_label is not None:
-                        self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
-
-        elif ereignis.art == 'abfahrt':
-            if ereignis.amgleis:
-                # abfahrbereit
-                pass
-            else:
-                # abfahrt
-                try:
-                    next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='An')
-                except (AttributeError, ValueError, KeyError):
-                    if prev_label:
-                        prev_data = self.nodes[prev_label]
-                        if prev_data.get('typ') == 'Ab' and prev_data.get('t_mess') is None:
-                            self.messzeit_setzen(prev_label, t, ereignis.verspaetung)
-                else:
-                    self.zug_next[ereignis.zid] = next_label
-                    cur_label = self.prev_ereignis(next_label, typ='Ab')
-                    if cur_label is not None:
-                        self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
-
-        elif ereignis.art == 'rothalt' or ereignis.art == 'wurdegruen':
-            try:
-                next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
-                next_data = self.nodes[next_label]
-                # todo : hier betriebshalt verarbeiten
-            except (AttributeError, ValueError, KeyError):
-                pass
-            else:
-                self.zug_next[ereignis.zid] = next_label
-
-        elif ereignis.art == 'ersatz':
-            try:
-                cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="E")
-            except (AttributeError, ValueError, KeyError):
-                pass
-            else:
-                self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
-                try:
-                    del self.zug_next[ereignis.zid]
-                except KeyError:
-                    pass
-
-        elif ereignis.art == 'kuppeln':
-            try:
-                cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="K")
-            except (AttributeError, ValueError, KeyError):
-                pass
-            else:
-                self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
-                try:
-                    del self.zug_next[ereignis.zid]
-                except KeyError:
-                    pass
-
-        elif ereignis.art == 'fluegeln':
-            try:
-                cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="F")
+                cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="An")
             except (AttributeError, ValueError, KeyError):
                 pass
             else:
                 self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
                 next_label = self.next_ereignis(cur_label)
                 if next_label is not None:
-                    self.zug_next[ereignis.zid] = next_label
-
+                    next_data = self.nodes[next_label]
+                    if next_data.typ == 'E':
+                        try:
+                            del self.zug_next[ereignis.zid]
+                        except KeyError:
+                            pass
+                    else:
+                        self.zug_next[ereignis.zid] = next_label
         else:
+            # durchfahrt
+            try:
+                next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='An')
+            except (AttributeError, ValueError, KeyError):
+                pass
+            else:
+                self.zug_next[ereignis.zid] = next_label
+                cur_label = self.prev_ereignis(next_label, typ='An')
+                if cur_label is not None:
+                    self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+
+
+    def sim_ereignis_abfahrt(self, ereignis: Ereignis):
+        prev_label = self.zug_next.get(ereignis.zid)
+        t = time_to_minutes(ereignis.zeit)
+        if ereignis.amgleis:
+            # abfahrbereit
             pass
+        else:
+            # abfahrt
+            try:
+                next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='An')
+            except (AttributeError, ValueError, KeyError):
+                if prev_label:
+                    prev_data = self.nodes[prev_label]
+                    if prev_data.get('typ') == 'Ab' and prev_data.get('t_mess') is None:
+                        self.messzeit_setzen(prev_label, t, ereignis.verspaetung)
+            else:
+                self.zug_next[ereignis.zid] = next_label
+                cur_label = self.prev_ereignis(next_label, typ='Ab')
+                if cur_label is not None:
+                    self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+
+
+    def sim_ereignis_rothalt(self, ereignis: Ereignis):
+        prev_label = self.zug_next.get(ereignis.zid)
+        t = time_to_minutes(ereignis.zeit)
+        try:
+            next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
+            next_data = self.nodes[next_label]
+            # todo : hier betriebshalt verarbeiten
+        except (AttributeError, ValueError, KeyError):
+            pass
+        else:
+            self.zug_next[ereignis.zid] = next_label
+
+    def sim_ereignis_wurdegruen(self, ereignis: Ereignis):
+        prev_label = self.zug_next.get(ereignis.zid)
+        t = time_to_minutes(ereignis.zeit)
+        try:
+            next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
+            next_data = self.nodes[next_label]
+            # todo : hier betriebshalt verarbeiten
+        except (AttributeError, ValueError, KeyError):
+            pass
+        else:
+            self.zug_next[ereignis.zid] = next_label
+
+    def sim_ereignis_ersatz(self, ereignis: Ereignis):
+        prev_label = self.zug_next.get(ereignis.zid)
+        t = time_to_minutes(ereignis.zeit)
+        try:
+            cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="E")
+        except (AttributeError, ValueError, KeyError):
+            pass
+        else:
+            self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+            try:
+                del self.zug_next[ereignis.zid]
+            except KeyError:
+                pass
+
+    def sim_ereignis_kuppeln(self, ereignis: Ereignis):
+        prev_label = self.zug_next.get(ereignis.zid)
+        t = time_to_minutes(ereignis.zeit)
+        try:
+            cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="K")
+        except (AttributeError, ValueError, KeyError):
+            pass
+        else:
+            self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+            try:
+                del self.zug_next[ereignis.zid]
+            except KeyError:
+                pass
+
+    def sim_ereignis_fluegeln(self, ereignis: Ereignis):
+        prev_label = self.zug_next.get(ereignis.zid)
+        t = time_to_minutes(ereignis.zeit)
+        try:
+            cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="F")
+        except (AttributeError, ValueError, KeyError):
+            pass
+        else:
+            self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
+            next_label = self.next_ereignis(cur_label)
+            if next_label is not None:
+                self.zug_next[ereignis.zid] = next_label
 
     def label_of(self, zid, start: EreignisLabelType = None, **kwargs) -> EreignisLabelType:
         """
