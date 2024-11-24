@@ -609,7 +609,7 @@ class EreignisGraph(nx.DiGraph):
         cur_label = self.zuganfaenge[ereignis.zid]
         self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
         try:
-            next_label = self.label_of(ereignis.zid, start=cur_label, typ="An")
+            next_label = self.zug_ereignis_suchen(ereignis.zid, start=cur_label, typ="An")
         except (AttributeError, ValueError, KeyError):
             pass
         else:
@@ -634,7 +634,7 @@ class EreignisGraph(nx.DiGraph):
         if ereignis.amgleis:
             # halt
             try:
-                cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="An")
+                cur_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="An")
             except (AttributeError, ValueError, KeyError):
                 pass
             else:
@@ -652,7 +652,7 @@ class EreignisGraph(nx.DiGraph):
         else:
             # durchfahrt
             try:
-                next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='An')
+                next_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='An')
             except (AttributeError, ValueError, KeyError):
                 pass
             else:
@@ -660,7 +660,6 @@ class EreignisGraph(nx.DiGraph):
                 cur_label = self.prev_ereignis(next_label, typ='An')
                 if cur_label is not None:
                     self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
-
 
     def sim_ereignis_abfahrt(self, ereignis: Ereignis):
         prev_label = self.zug_next.get(ereignis.zid)
@@ -671,7 +670,7 @@ class EreignisGraph(nx.DiGraph):
         else:
             # abfahrt
             try:
-                next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='An')
+                next_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='An')
             except (AttributeError, ValueError, KeyError):
                 if prev_label:
                     prev_data = self.nodes[prev_label]
@@ -683,12 +682,11 @@ class EreignisGraph(nx.DiGraph):
                 if cur_label is not None:
                     self.messzeit_setzen(cur_label, t, ereignis.verspaetung)
 
-
     def sim_ereignis_rothalt(self, ereignis: Ereignis):
         prev_label = self.zug_next.get(ereignis.zid)
         t = time_to_minutes(ereignis.zeit)
         try:
-            next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
+            next_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
             next_data = self.nodes[next_label]
             # todo : hier betriebshalt verarbeiten
         except (AttributeError, ValueError, KeyError):
@@ -700,7 +698,7 @@ class EreignisGraph(nx.DiGraph):
         prev_label = self.zug_next.get(ereignis.zid)
         t = time_to_minutes(ereignis.zeit)
         try:
-            next_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
+            next_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis)
             next_data = self.nodes[next_label]
             # todo : hier betriebshalt verarbeiten
         except (AttributeError, ValueError, KeyError):
@@ -712,7 +710,7 @@ class EreignisGraph(nx.DiGraph):
         prev_label = self.zug_next.get(ereignis.zid)
         t = time_to_minutes(ereignis.zeit)
         try:
-            cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="E")
+            cur_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="E")
         except (AttributeError, ValueError, KeyError):
             pass
         else:
@@ -726,7 +724,7 @@ class EreignisGraph(nx.DiGraph):
         prev_label = self.zug_next.get(ereignis.zid)
         t = time_to_minutes(ereignis.zeit)
         try:
-            cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="K")
+            cur_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="K")
         except (AttributeError, ValueError, KeyError):
             pass
         else:
@@ -740,7 +738,7 @@ class EreignisGraph(nx.DiGraph):
         prev_label = self.zug_next.get(ereignis.zid)
         t = time_to_minutes(ereignis.zeit)
         try:
-            cur_label = self.label_of(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="F")
+            cur_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="F")
         except (AttributeError, ValueError, KeyError):
             pass
         else:
@@ -749,9 +747,13 @@ class EreignisGraph(nx.DiGraph):
             if next_label is not None:
                 self.zug_next[ereignis.zid] = next_label
 
-    def label_of(self, zid, start: EreignisLabelType = None, **kwargs) -> EreignisLabelType:
+    def zug_ereignis_suchen(self, zid, start: EreignisLabelType = None, **kwargs) -> EreignisLabelType:
         """
-        Node label mit gegebenen Attributen suchen.
+        Ereignis im Zug mit gegebenen Attributen suchen.
+
+        Suche in einem Zug ab einem wählbaren Startpunkt nach einem Ereignis mit den gegebenen Attributen.
+        Die Suche folgt der Richtung des Graphen und endet am letzten Ereignis des Zuges
+        (Ausfahrt, Ersatz oder Kuppeln).
 
         :param zid: Zug-ID.
         :param start: Startnode.
@@ -1080,7 +1082,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         final_nodes = []
         for node in self.nodes:
             try:
-                nid = self.graph.label_of(node.zid, fid=node.fid, typ=node.typ)
+                nid = self.graph.zug_ereignis_suchen(node.zid, fid=node.fid, typ=node.typ)
                 final_node = self.graph.nodes[nid]
                 final_node.gleis = node.gleis
                 try:
