@@ -34,7 +34,7 @@ from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Optional, Se
 
 import networkx as nx
 
-from stskit.plugin.stsobj import Ereignis
+from stskit.plugin.stsobj import Ereignis, format_minutes
 from stskit.plugin.stsobj import time_to_minutes
 from stskit.model.graphbasics import dict_property
 from stskit.model.bahnhofgraph import BahnhofElement
@@ -226,6 +226,41 @@ class EreignisGraph(nx.DiGraph):
 
     def to_directed_class(self):
         return self.__class__
+
+    def node_info(self, node: EreignisLabelType) -> str:
+        """
+        Information zu Ereignisknoten für Log
+        """
+
+        try:
+            data = self.nodes[node]
+        except KeyError:
+            return f"Ereignisknoten {node} nicht im Ereignisgraph."
+
+        result = (f"Ereignisknoten {node}: {data.get('typ', '?')}, "
+                  f"ds = {data.get('ds', '-')}, "
+                  f"dt_min = {data.get('dt_min', '-')}, "
+                  f"dt_max = {data.get('dt_max', '-')}, "
+                  f"dt_fdl = {data.get('dt_fdl', '-')}")
+
+        return result
+
+    def edge_info(self, u: EreignisLabelType, v: EreignisLabelType) -> str:
+        """
+        Information zu Ereigniskante für Log
+        """
+
+        try:
+            data = self.edges[(u, v)]
+        except KeyError:
+            return f"Kante {u},{v} nicht im Ereignisgraph."
+
+        result = (f"Kante {u}, {v}: {data.get('plan', '?')}, "
+                  f"t_plan = {format_minutes(data.get('t_plan', 0))}, "
+                  f"t_prog = {format_minutes(data.get('t_prog', 0))}, "
+                  f"t_mess = {format_minutes(data.get('t_mess', 0))}")
+
+        return result
 
     def zugpfad(self, zid: int,
                 start: Optional[EreignisLabelType] = None,
