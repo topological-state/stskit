@@ -81,10 +81,10 @@ def seconds_to_time(seconds: float) -> datetime.time:
     return datetime.time(hour=h, minute=m, second=s)
 
 
-def format_verspaetung(verspaetung: Optional[int]) -> str:
+def format_verspaetung(verspaetung: Optional[Union[int, float]]) -> str:
     if verspaetung is not None:
         if verspaetung:
-            return f"{verspaetung:+}"
+            return f"{int(verspaetung):+}"
         else:
             return "0"
     else:

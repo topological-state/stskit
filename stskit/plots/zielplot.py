@@ -15,7 +15,7 @@ logger.addHandler(logging.NullHandler())
 
 def format_zeit(minuten: int, verspaetung: int) -> str:
     if verspaetung:
-        return f"{int(minuten) // 60:02}:{int(minuten) % 60:02}{verspaetung:+}"
+        return f"{int(minuten) // 60:02}:{int(minuten) % 60:02}{int(verspaetung):+}"
     else:
         return f"{int(minuten) // 60:02}:{int(minuten) % 60:02}"
 

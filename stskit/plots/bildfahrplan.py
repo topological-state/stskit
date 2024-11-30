@@ -57,6 +57,8 @@ def format_label(zugbeschriftung: Zugbeschriftung, zug: ZugGraphNode, anfang: Er
     else:
         name = ""
 
+    v1 = int(v1)
+    v2 = int(v2)
     if v1 == v2:
         if v1 == 0:
             v = ""
@@ -84,8 +86,8 @@ def format_zuginfo(zug: ZugGraphNode, abfahrt: EreignisGraphNode, ankunft: Ereig
 
     z1 = format_minutes(abfahrt.t_plan)
     z2 = format_minutes(ankunft.t_plan)
-    v1 = f"{abfahrt.t_eff - abfahrt.t_plan:+}"
-    v2 = f"{ankunft.t_eff - ankunft.t_plan:+}"
+    v1 = f"{int(abfahrt.t_eff - abfahrt.t_plan):+}"
+    v2 = f"{int(ankunft.t_eff - ankunft.t_plan):+}"
     name = zug.name
     von = zug.von
     nach = zug.nach
