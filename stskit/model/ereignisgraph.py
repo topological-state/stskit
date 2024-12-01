@@ -199,10 +199,13 @@ class EreignisGraph(nx.DiGraph):
         wird vom Generator zugpfad angegeben.
 
     zugpositionen: Letztes passiertes Ereignis der sichtbaren Züge.
-        Wird für die Ereignisauswertung in sim_ereignis_uebernehmen gebraucht.
+        Wird von der Ereignisauswertung in sim_ereignis_uebernehmen verwaltet und gebraucht.
 
     zugplangleise: Letzte vom Sim gemeldeten Plangleise der sichtbaren Züge.
-        Wird für die Ereignisauswertung in sim_ereignis_uebernehmen gebraucht.
+        Wird von der Ereignisauswertung in sim_ereignis_uebernehmen verwaltet und gebraucht.
+
+    zugplanereignisse: Nächste erwartete Ereignisse der sichtbaren Züge.
+        Wird von der Ereignisauswertung in sim_ereignis_uebernehmen verwaltet und gebraucht.
     """
 
     node_attr_dict_factory = EreignisGraphNode
@@ -214,7 +217,7 @@ class EreignisGraph(nx.DiGraph):
         self.zuganfaenge: Dict[int, EreignisLabelType] = {}
         self.zugpositionen: Dict[int, EreignisLabelType] = {}
         self.zugplangleise: Dict[int, str] = {}
-        self.zugplanziele: Dict[int, EreignisLabelType] = {}
+        self.zugplanereignisse: Dict[int, EreignisLabelType] = {}
 
     def copy(self, as_view=False):
         obj = super().copy(as_view)
@@ -224,13 +227,13 @@ class EreignisGraph(nx.DiGraph):
             obj.zuganfaenge = self.zuganfaenge
             obj.zugpositionen = self.zugpositionen
             obj.zugplangleise = self.zugplangleise
-            obj.zugplanziele = self.zugplanziele
+            obj.zugplanereignisse = self.zugplanereignisse
         else:
             obj.zuege = self.zuege.copy()
             obj.zuganfaenge = self.zuganfaenge.copy()
             obj.zugpositionen = self.zugpositionen.copy()
             obj.zugplangleise = self.zugplangleise.copy()
-            obj.zugplanziele = self.zugplanziele.copy()
+            obj.zugplanereignisse = self.zugplanereignisse.copy()
 
         return obj
 
@@ -588,17 +591,6 @@ class EreignisGraph(nx.DiGraph):
                 if ziel_data.typ in {'D', 'A'}:
                     ziel_data.v_ab = v
 
-    def messzeit_setzen(self, label: EreignisLabelType, ereignis: Ereignis):
-        print("messzeit setzen", label, ereignis.zid, ereignis.zeit, ereignis.plangleis)
-        if label is not None:
-            try:
-                data = self.nodes[label]
-            except KeyError:
-                pass
-            else:
-                data.t_mess = ereignis.zeit.hour * 60 + ereignis.zeit.minute + ereignis.zeit.second / 60
-                print(f"    {data.plan}, {data.t_mess}")
-
     def sim_ereignis_uebernehmen(self, ereignis: Ereignis):
         """
         Daten von einem Sim-Ereignis übernehmen.
@@ -619,9 +611,82 @@ class EreignisGraph(nx.DiGraph):
         else:
             meth(ereignis)
 
+    def _sim_ereignis_messzeit(self, label: EreignisLabelType, ereignis: Ereignis):
+        """
+        Gemessene Eintreffenszeit eines Ereignisses notieren.
+
+        Die Zeit des Ereignisses wird in das t_mess-Attribut des Ereignisknotens geschrieben.
+
+        Die Messzeit wird nicht geschrieben, wenn das Label None ist,
+        der Knoten keine Daten hat, oder
+        die Zeit des Labels vor dem letzten registrierten Ereignis des Zuges liegt.
+
+        Untermethode der sim_ereignis-Methoden.
+
+        :param label: Label des Ereignisknotens.
+        :param ereignis: Ereignisobjekt vom PluginClient.
+            Benötigt werden die Attribute `zid` und `zeit`.
+        """
+
+        if label is None:
+            return
+
+        try:
+            data = self.nodes[label]
+        except KeyError:
+            logger.error(f"Ereignis {label} hat keine Daten.")
+            return
+
+        prev_label = self.zugpositionen.get(ereignis.zid)
+        if prev_label is None or label.zeit >= prev_label.zeit:
+            data.t_mess = ereignis.zeit.hour * 60 + ereignis.zeit.minute + ereignis.zeit.second / 60
+            print(f"messzeit setzen {label}, {data.plan}, {data.t_mess}")
+
+    def _sim_ereignis_update_planereignis(self, ereignis: Ereignis,
+                                          prev_label: EreignisLabelType,
+                                          cur_label: EreignisLabelType,
+                                          next_typ: str = 'An'):
+        """
+        Plangleis und Planereignis aus Sim-Ereignis aktualisieren.
+
+        Aktualisiert die self.zugplangleise und self.zugplanereignisse Dictionaries.
+        Ersteres wird bedingungslos vom Ereignis übernommen,
+        bei letzterem erfolgt eine Konsistenzprüfung aus folgenden Gründen.
+
+        ereignis.plangleis zeigt normalerweise auf Fahrt das nächste (planmässig) anzufahrende Gleis
+        oder bei einem Halt (amgleis-Attribut) die (planmässige) Position des Zuges an.
+        Das Attribut ist aber leider nicht immer korrekt gesetzt,
+        kann also u.U. bei Fahrt noch das letzte Haltegleis anzeigen oder bei Halt bereits das nächste Ziel.
+
+        Die Methode verlangt deshalb ein früher passiertes Ereignis und das letzte passierte Ereignis.
+        Sie sucht dann das nächste erwartete Ereignis nach Typ und Plangleis.
+        Wenn keines gefunden wird (weil Plangleis mit dem erwarteten Typ bereits abgefahren wurde)
+        wird das Planereignis nicht verändert und bleibt u.U. hinter der aktuellen Position zurück,
+        bis das nächste Ereignis gemeldet wird.
+
+        Untermethode der sim_ereignis-Methoden.
+
+        :param ereignis: Ereignisobjekt vom PluginClient
+            Benötigt werden die Attribute `zid` und `plangleis`.
+        :param prev_label: vorheriges passiertes Ereignislabel
+        :param cur_label: gerade passiertes Ereignis entsprechend dem Sim-Ereignis.
+        :param next_typ: Typ des nächsten erwarteten Ereignisses, 'An' oder 'Ab'.
+        """
+
+        self.zugplangleise[ereignis.zid] = ereignis.plangleis
+        try:
+            start_label = cur_label or prev_label
+            next_label = self.zug_ereignis_suchen(ereignis.zid, start=start_label, plan=ereignis.plangleis, typ=next_typ)
+        except ValueError:
+            next_label = None
+        else:
+            if next_label.zeit > start_label.zeit:
+                self.zugplanereignisse[ereignis.zid] = next_label
+        return next_label
+
     def sim_ereignis_einfahrt(self, ereignis: Ereignis):
         cur_label = self.zuganfaenge[ereignis.zid]
-        self.messzeit_setzen(cur_label, ereignis)
+        self._sim_ereignis_messzeit(cur_label, ereignis)
         self.zugpositionen[ereignis.zid] = cur_label
         self.zugplangleise[ereignis.zid] = ereignis.plangleis
         try:
@@ -629,7 +694,7 @@ class EreignisGraph(nx.DiGraph):
         except ValueError:
             pass
         else:
-            self.zugplanziele[ereignis.zid] = next_label
+            self.zugplanereignisse[ereignis.zid] = next_label
 
     def sim_ereignis_ausfahrt(self, ereignis: Ereignis):
         try:
@@ -637,11 +702,11 @@ class EreignisGraph(nx.DiGraph):
         except IndexError:
             pass
         else:
-            self.messzeit_setzen(cur_label, ereignis)
+            self._sim_ereignis_messzeit(cur_label, ereignis)
         try:
             del self.zugpositionen[ereignis.zid]
             del self.zugplangleise[ereignis.zid]
-            del self.zugplanziele[ereignis.zid]
+            del self.zugplanereignisse[ereignis.zid]
         except KeyError:
             pass
 
@@ -659,20 +724,16 @@ class EreignisGraph(nx.DiGraph):
                 print(e)
                 pass
             else:
-                self.messzeit_setzen(cur_label, ereignis)
+                self._sim_ereignis_messzeit(cur_label, ereignis)
                 self.zugpositionen[ereignis.zid] = cur_label
-            self.zugplangleise[ereignis.zid] = ereignis.plangleis
-            try:
-                next_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='Ab')
-            except ValueError:
-                pass
-            else:
-                self.zugplanziele[ereignis.zid] = next_label
+
+            next_label = self._sim_ereignis_update_planereignis(ereignis, prev_label, cur_label, 'Ab')
+
         else:
             # durchfahrt
             print("durchfahrt", ereignis.zid, ereignis.plangleis, ereignis.amgleis)
             try:
-                cur_label = self.zugplanziele.get(ereignis.zid)
+                cur_label = self.zugplanereignisse.get(ereignis.zid)
                 if cur_label is None and prev_label is not None:
                     cur_label = self.next_ereignis(prev_label)
                 cur_label = self.zug_ereignis_suchen(ereignis.zid, start=cur_label, typ='An', quelle='sts')
@@ -681,19 +742,10 @@ class EreignisGraph(nx.DiGraph):
                 print(e)
                 pass
             else:
-                self.messzeit_setzen(cur_label, ereignis)
+                self._sim_ereignis_messzeit(cur_label, ereignis)
                 self.zugpositionen[ereignis.zid] = cur_label
-            self.zugplangleise[ereignis.zid] = ereignis.plangleis
-            try:
-                next_label = cur_label or prev_label
-                next_label = self.zug_ereignis_suchen(ereignis.zid, start=next_label, plan=ereignis.plangleis, typ='An')
-            except ValueError:
-                pass
-            else:
-                if next_label != prev_label and next_label != cur_label:
-                    self.zugplanziele[ereignis.zid] = next_label
-                else:
-                    print("*** retrolabel ***", next_label)
+
+            next_label = self._sim_ereignis_update_planereignis(ereignis, prev_label, cur_label, 'An')
 
         print(f"    prev_label: {self.node_info(prev_label)}")
         print(f"    cur_label: {self.node_info(cur_label)}")
@@ -702,7 +754,7 @@ class EreignisGraph(nx.DiGraph):
         print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
 
     def sim_ereignis_abfahrt(self, ereignis: Ereignis):
-        prev_label = next_label = cur_label = None
+        prev_label = cur_label = None
 
         if ereignis.amgleis:
             # abfahrbereit
@@ -728,21 +780,10 @@ class EreignisGraph(nx.DiGraph):
                 print(e)
                 pass
             else:
-                self.messzeit_setzen(cur_label, ereignis)
+                self._sim_ereignis_messzeit(cur_label, ereignis)
                 self.zugpositionen[ereignis.zid] = cur_label
 
-            # plangleis kann noch das gleis vom halt anzeigen
-            self.zugplangleise[ereignis.zid] = ereignis.plangleis
-            try:
-                next_label = cur_label or prev_label
-                next_label = self.zug_ereignis_suchen(ereignis.zid, start=next_label, plan=ereignis.plangleis, typ='An')
-            except ValueError:
-                pass
-            else:
-                if next_label != prev_label and next_label != cur_label:
-                    self.zugplanziele[ereignis.zid] = next_label
-                else:
-                    print("*** retrolabel ***", next_label)
+            next_label = self._sim_ereignis_update_planereignis(ereignis, prev_label, cur_label, 'An')
 
             print(f"    prev_label: {self.node_info(prev_label)}")
             print(f"    cur_label: {self.node_info(cur_label)}")
@@ -834,24 +875,18 @@ class EreignisGraph(nx.DiGraph):
             try:
                 if self.edges[(prev_label, cur_label)]['typ'] == "B":
                     print("Abfahrt von Betriebshalt")
-                    self.messzeit_setzen(cur_label, ereignis)
+                    self._sim_ereignis_messzeit(cur_label, ereignis)
                     self.zugpositionen[ereignis.zid] = cur_label
             except KeyError:
                 pass
+
+        next_label = self._sim_ereignis_update_planereignis(ereignis, prev_label, cur_label, 'An')
 
         print(f"    prev_label: {self.node_info(prev_label)}")
         print(f"    cur_label: {self.node_info(cur_label)}")
         print(f"    next_label: {self.node_info(next_label)}")
         print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
         print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
-
-        self.zugplangleise[ereignis.zid] = ereignis.plangleis
-        try:
-            next_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ='An')
-        except ValueError:
-            pass
-        else:
-            self.zugplanziele[ereignis.zid] = next_label
 
     def sim_ereignis_ersatz(self, ereignis: Ereignis):
         prev_label = self.zugpositionen.get(ereignis.zid)
@@ -860,11 +895,11 @@ class EreignisGraph(nx.DiGraph):
         except (AttributeError, ValueError, KeyError):
             pass
         else:
-            self.messzeit_setzen(cur_label, ereignis)
+            self._sim_ereignis_messzeit(cur_label, ereignis)
         try:
             del self.zugpositionen[ereignis.zid]
             del self.zugplangleise[ereignis.zid]
-            del self.zugplanziele[ereignis.zid]
+            del self.zugplanereignisse[ereignis.zid]
         except KeyError:
             pass
 
@@ -875,11 +910,11 @@ class EreignisGraph(nx.DiGraph):
         except (AttributeError, ValueError, KeyError):
             pass
         else:
-            self.messzeit_setzen(cur_label, ereignis)
+            self._sim_ereignis_messzeit(cur_label, ereignis)
         try:
             del self.zugpositionen[ereignis.zid]
             del self.zugplangleise[ereignis.zid]
-            del self.zugplanziele[ereignis.zid]
+            del self.zugplanereignisse[ereignis.zid]
         except KeyError:
             pass
 
@@ -890,7 +925,7 @@ class EreignisGraph(nx.DiGraph):
         except (AttributeError, ValueError, KeyError):
             pass
         else:
-            self.messzeit_setzen(cur_label, ereignis)
+            self._sim_ereignis_messzeit(cur_label, ereignis)
             self.zugpositionen[ereignis.zid] = cur_label
 
         self.zugplangleise[ereignis.zid] = ereignis.plangleis
@@ -899,7 +934,7 @@ class EreignisGraph(nx.DiGraph):
         except ValueError:
             pass
         else:
-            self.zugplanziele[ereignis.zid] = next_label
+            self.zugplanereignisse[ereignis.zid] = next_label
 
     def zug_ereignis_suchen(self, zid, start: EreignisLabelType = None, **kwargs) -> EreignisLabelType:
         """
