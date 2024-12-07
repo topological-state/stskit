@@ -293,19 +293,20 @@ class EreignisGraph(nx.DiGraph):
             Falls None (default) der erste Knoten des Zuges mit ID (zid, 0).
         :param stop: Knoten-ID des ersten nicht mehr gelieferten Knotens.
             Falls None (default) werden die Knoten bis einschliesslich des letzten des Zuges geliefert.
-        :param kuppeln: Wenn True, wird ein allfälliges Kuppelereignis am Schluss inkludiert.
-            Per default wird es weggelassen, weil es die zid des Zielzuges trägt.
+        :param kuppeln: Wenn True, fährt der Generator mit dem Folgezug (nach Ersatz oder Kuppeln) fort.
+            Beim Flügeln, verläuft der Pfad immer über den Stammzug.
         :return: Generator von Knoten-IDs.
         """
 
         node = self.zuganfaenge[zid]
+        if not self.has_node(node):
+            logger.debug(f"EreignisGraph.zugpfad(zid={zid}, start={start}, stop={stop}), node {node} fehlt.")
+            return
+
         while node is not None:
             if node == start:
                 start = None
             if node == stop:
-                return
-            if not self.has_node(node):
-                logger.debug(f"EreignisGraph.zugpfad(zid={zid}, start={start}, stop={stop}), node {node} fehlt.")
                 return
             if start is None:
                 yield node
@@ -316,6 +317,11 @@ class EreignisGraph(nx.DiGraph):
                     break
                 elif kuppeln and self.nodes[n]['typ'] == 'K':
                     node = n
+                    zid = n.zid
+                    break
+                elif kuppeln and self.nodes[node]['typ'] == 'E' and self.edges[(node, n)]['typ'] == 'H':
+                    node = n
+                    zid = n.zid
                     break
             else:
                 node = None
@@ -324,8 +330,7 @@ class EreignisGraph(nx.DiGraph):
         """
         Vorheriges Ereignislabel eines Zuges
 
-        Diese Methode gibt das vorherige Ereignis des Zuges zurück.
-        Das vorherige Ereignis ist der Vorfahrknoten mit der gleichen zid oder vom Typ F.
+        Diese Methode gibt das vorherige Ereignis des Zuges bzw. (bei Ersatz oder Flügelung) des Vorgängerzuges zurück.
         Wenn das typ-Argument gesetzt ist, wird das Ereignis nur zurückgegeben, wenn der Typ übereinstimmt.
 
         Vorsicht: Diese Methode sucht nicht nach einem bestimmten Ereignis!
@@ -334,18 +339,19 @@ class EreignisGraph(nx.DiGraph):
         :param typ: Ereignistyp (EreignisGraphNode.typ)
         :return Label des gefundenen Ereignisses oder None
         """
+
         for n in self.predecessors(label):
-            if n.zid == label.zid or self.nodes[n]['typ'] == 'F':
+            if n.zid == label.zid or self.nodes[n]['typ'] in {'E', 'F'}:
                 if typ is None or self.nodes[n]['typ'] == typ:
                     return n
+
         return None
 
     def next_ereignis(self, label: EreignisLabelType, typ: Optional[str] = None) -> Optional[EreignisLabelType]:
         """
         Nächstes Ereignislabel eines Zuges
 
-        Diese Methode gibt das nächste Ereignis des Zuges zurück.
-        Das nächste Ereignis ist der Nachfolgeknoten mit der gleichen zid oder vom Typ K.
+        Diese Methode gibt das nächste Ereignis des Zuges bzw. (bei Ersatz oder Kupplung) des Folgezuges zurück.
         Wenn das typ-Argument gesetzt ist, wird das Ereignis nur zurückgegeben, wenn der Typ übereinstimmt.
 
         Vorsicht: Diese Methode sucht nicht nach einem bestimmten Ereignis!
@@ -354,10 +360,19 @@ class EreignisGraph(nx.DiGraph):
         :param typ: Ereignistyp (EreignisGraphNode.typ)
         :return Label des gefundenen Ereignisses oder None
         """
+
+        try:
+            start_typ = self.nodes[label]['typ']
+        except KeyError:
+            start_typ = None
+
         for n in self.successors(label):
-            if n.zid == label.zid or self.nodes[n]['typ'] == 'K':
+            if (n.zid == label.zid or
+                    (start_typ == 'E' and self.edges[(label, n)]['typ'] == 'H') or
+                    self.nodes[n]['typ'] == 'K'):
                 if typ is None or self.nodes[n]['typ'] == typ:
                     return n
+
         return None
 
     def _zuganfaenge_suchen(self):

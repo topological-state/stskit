@@ -265,6 +265,20 @@ class TestEreignisPrognose(unittest.TestCase):
         exp = [(14, 'Ab'), (14, 'An')]
         self.assertListEqual(act, exp, "Zug 14")
 
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(11, kuppeln=True)]
+        exp = [(11, 'Ab'), (11, 'An'), (11, 'An'), (11, 'E'), (12, 'Ab'), (12, 'An'),
+               (13, 'K'), (13, 'Ab'), (13, 'An'), (13, 'F'), (13, 'Ab'), (13, 'An')]
+        self.assertListEqual(act, exp, "Zug 11 gekuppelt")
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(12, kuppeln=True)]
+        exp = [(12, 'Ab'), (12, 'An'), (13, 'K'), (13, 'Ab'), (13, 'An'), (13, 'F'), (13, 'Ab'), (13, 'An')]
+        self.assertListEqual(act, exp, "Zug 12 gekuppelt")
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(13, kuppeln=True)]
+        exp = [(13, 'Ab'), (13, 'An'), (13, 'K'), (13, 'Ab'), (13, 'An'), (13, 'F'), (13, 'Ab'), (13, 'An')]
+        self.assertListEqual(act, exp, "Zug 13")
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(14, kuppeln=True)]
+        exp = [(14, 'Ab'), (14, 'An')]
+        self.assertListEqual(act, exp, "Zug 14")
+
     def test_prognose_1(self):
         """
         Prognose testen: keine Verspätungen
