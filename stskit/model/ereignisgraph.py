@@ -695,7 +695,7 @@ class EreignisGraph(nx.DiGraph):
         except ValueError:
             next_label = None
         else:
-            if next_label.zeit > start_label.zeit:
+            if start_label is None or next_label.zeit > start_label.zeit:
                 self.zugplanereignisse[ereignis.zid] = next_label
         return next_label
 
