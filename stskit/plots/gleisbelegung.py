@@ -637,25 +637,30 @@ class Gleisbelegung:
 
     def _zugfolgewarnung(self, s1: Slot, s2: Slot, verbindungsart: str) -> Iterable[SlotWarnung]:
         """
-        verbindet zwei slots und erstellt eine warnung
+        Verbindet zwei Slots und erstellt eine Warnung
 
-        passt die längen des ersten slots so an, dass sich die slots berühren.
+        Passt die Länge des ersten Slots so an, dass sich die Slots berühren.
+        Wenn die Anfangszeiten der Slots verkehrt sind, wird der zweite hinter den ersten verschoben.
+        Dieser Fall sollte jedoch bereits in der Datenquelle vermieden werden.
 
-        der erste slot muss den zweiten als folgeslot (infolge ersatz, kupplung, flügelung) haben
-        und insbesondere im gleichen gleis liegen.
+        Der erste Slot muss den zweiten als Folgeslot (infolge Ersatz, Kupplung, Flügelung) haben
+        und insbesondere im gleichen Gleis liegen.
 
-        :param s1: erster slot
-        :param s2: zweiter slot (später als s1)
-        :return: generator von SlotWarnung
+        :param s1: erster Slot
+        :param s2: zweiter Slot (später als s1)
+        :param verbindungsart: 'E', 'F' oder 'K'
+        :return: Generator von SlotWarnung. Liefert ein oder kein Objekt.
         """
-
-        if verbindungsart == "K":
-            pass
 
         try:
             d = s2.zeit - s1.zeit
             if d > 0:
                 s1.dauer = d
+            else:
+                s1.dauer = 1
+                s2_ende = s2.zeit + s2.dauer
+                s2.zeit = s1.zeit + s1.dauer
+                s2.dauer = max(s2_ende - s2.zeit, s2.zeit + s2.dauer)
 
             k = SlotWarnung(gleise={s1.gleis, s2.gleis})
             k.status = WARNUNG_VERBINDUNG[verbindungsart]
