@@ -2,8 +2,8 @@ import unittest
 
 import networkx as nx
 
-from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphEdge, EreignisGraphNode
-from stskit.model.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode, PlanungParams
+from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphEdge, EreignisGraphNode, EreignisLabelType
+from stskit.model.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode, PlanungParams, ZielLabelType
 
 
 class TestEreignisPrognose(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestEreignisPrognose(unittest.TestCase):
 
         nodes = [
             ZielGraphNode(
-                fid=(11, 0, 1),
+                fid=ZielLabelType(11, 300, 1),
                 zid=11,
                 typ='E',
                 plan='Agl 1',
@@ -29,7 +29,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 0
             # P
             ZielGraphNode(
-                fid=(11, 0, "A 1"),
+                fid=ZielLabelType(11, 322, "A 1"),
                 zid=11,
                 typ='D',
                 plan='A 1',
@@ -44,7 +44,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 1
             # P
             ZielGraphNode(
-                fid=(11, 0, "B 1"),
+                fid=ZielLabelType(11, 332, "B 1"),
                 zid=11,
                 typ='H',
                 plan='B 1',
@@ -58,7 +58,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 2
             # E
             ZielGraphNode(
-                fid=(12, 0, "B 1"),
+                fid=ZielLabelType(12, 336, "B 1"),
                 zid=12,
                 typ='H',
                 plan='B 1',
@@ -73,7 +73,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 3
             # P
             ZielGraphNode(
-                fid=(12, 0, "C 1"),
+                fid=ZielLabelType(12, 345, "C 1"),
                 zid=12,
                 typ='H',
                 plan='C 1',
@@ -87,7 +87,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 4
             # K -> 13 C 1
             ZielGraphNode(
-                fid=(13, 0, 2),
+                fid=ZielLabelType(13, 330, 2),
                 zid=13,
                 typ='E',
                 plan='Agl 2',
@@ -102,7 +102,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 5
             # P
             ZielGraphNode(
-                fid=(13, 0, "C 1"),
+                fid=ZielLabelType(13, 340, "C 1"),
                 zid=13,
                 typ='H',
                 plan='C 1',
@@ -117,7 +117,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 6
             # P, F -> 14
             ZielGraphNode(
-                fid=(13, 0, "D 1"),
+                fid=ZielLabelType(13, 360, "D 1"),
                 zid=13,
                 typ='H',
                 plan='D 1',
@@ -132,7 +132,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 7
             #P
             ZielGraphNode(
-                fid=(13, 0, 3),
+                fid=ZielLabelType(13, 370, 3),
                 zid=13,
                 typ='A',
                 plan='Agl 3',
@@ -146,7 +146,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 8
 
             ZielGraphNode(
-                fid=(14, 0, "D 1"),
+                fid=ZielLabelType(14, 360, "D 1"),
                 zid=14,
                 typ='H',
                 plan='D 1',
@@ -161,7 +161,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 9
             # P
             ZielGraphNode(
-                fid=(14, 0, 3),
+                fid=ZielLabelType(14, 377, 3),
                 zid=14,
                 typ='A',
                 plan='Agl 3',
@@ -290,7 +290,7 @@ class TestEreignisPrognose(unittest.TestCase):
         """
 
         def _test(v):
-            start_node = self.ereignisgraph.nodes[(11, 0)]
+            start_node = self.ereignisgraph.nodes[self.ereignisgraph.zuganfaenge[11]]
             start_node.t_mess = start_node.t_plan + v
             self.ereignisgraph.prognose()
             exp = [300 + v, 322 + v, 332 + v]
@@ -330,7 +330,7 @@ class TestEreignisPrognose(unittest.TestCase):
 
         nodes = [
             ZielGraphNode(
-                fid=(1, 0, 1),
+                fid=ZielLabelType(1, 340, 1),
                 zid=1,
                 typ='E',
                 plan='Agl 1',
@@ -343,7 +343,7 @@ class TestEreignisPrognose(unittest.TestCase):
                 v_ab=0
             ), # 0
             ZielGraphNode(
-                fid=(1, 0, "A"),
+                fid=ZielLabelType(1, 350, "A"),
                 zid=1,
                 typ='H',
                 plan='A',
@@ -357,7 +357,7 @@ class TestEreignisPrognose(unittest.TestCase):
                 v_ab=0
             ), # 1
             ZielGraphNode(
-                fid=(1, 0, 2),
+                fid=ZielLabelType(1, 384, 2),
                 zid=1,
                 typ='A',
                 plan='Agl 2',
@@ -371,7 +371,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 2
 
             ZielGraphNode(
-                fid=(2, 0, 2),
+                fid=ZielLabelType(2, 357, 2),
                 zid=2,
                 typ='E',
                 plan='Agl 2',
@@ -385,7 +385,7 @@ class TestEreignisPrognose(unittest.TestCase):
                 v_ab=0
             ), # 3
             ZielGraphNode(
-                fid=(2, 0, "B"),
+                fid=ZielLabelType(2, 367, "B"),
                 zid=2,
                 typ='H',
                 plan='B',
@@ -399,7 +399,7 @@ class TestEreignisPrognose(unittest.TestCase):
                 v_ab=0
             ), # 4
             ZielGraphNode(
-                fid=(2, 0, 1),
+                fid=ZielLabelType(2, 410, 1),
                 zid=2,
                 typ='A',
                 plan='Agl 1',
@@ -414,7 +414,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 5
 
             ZielGraphNode(
-                fid=(3, 0, "A"),
+                fid=ZielLabelType(3, 350, "A"),
                 zid=3,
                 typ='H',
                 plan='A',
@@ -428,7 +428,7 @@ class TestEreignisPrognose(unittest.TestCase):
                 v_ab=0
             ), # 6
             ZielGraphNode(
-                fid=(3, 0, "B"),
+                fid=ZielLabelType(3, 361, "B"),
                 zid=3,
                 typ='H',
                 plan='B',
@@ -442,7 +442,7 @@ class TestEreignisPrognose(unittest.TestCase):
             ), # 7
 
             ZielGraphNode(
-                fid=(4, 0, "B"),
+                fid=ZielLabelType(4, 367, "B"),
                 zid=4,
                 typ='H',
                 plan='B',
@@ -456,7 +456,7 @@ class TestEreignisPrognose(unittest.TestCase):
                 v_ab=0
             ), # 8
             ZielGraphNode(
-                fid=(4, 0, "A"),
+                fid=ZielLabelType(4, 372, "A"),
                 zid=4,
                 typ='H',
                 plan='A',
