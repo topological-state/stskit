@@ -336,6 +336,23 @@ class TestEreignisPrognose(unittest.TestCase):
         _test(20)
         _test(-5)
 
+    def test_ereignis_suchen(self):
+        self.szenario1()
+
+        # erste ankunft eines zuges
+        act = self.ereignisgraph.zug_ereignis_suchen(13, typ='An', quelle='sts')
+        exp = EreignisLabelType(13, 340, 'An')
+        self.assertEqual(act, exp)
+
+        # abfahrt eines ersetzten zuges, mit und ohne gleisangabe
+        prev_label = EreignisLabelType(11, 332, 'E')
+        prev_plan = 'B 1'
+        act = self.ereignisgraph.zug_ereignis_suchen(12, start=prev_label, plan=prev_plan, typ='Ab')
+        exp = EreignisLabelType(12, 336, 'Ab')
+        self.assertEqual(act, exp)
+        act = self.ereignisgraph.zug_ereignis_suchen(12, start=prev_label, typ='Ab', quelle='sts')
+        self.assertEqual(act, exp)
+
     def szenario2(self):
         """
         Loktausch zwischen 2 Zuegen (Stw Jenbach)

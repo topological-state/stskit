@@ -969,16 +969,24 @@ class EreignisGraph(nx.DiGraph):
                     print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
                     print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
 
-    def zug_ereignis_suchen(self, zid, start: EreignisLabelType = None, **kwargs) -> EreignisLabelType:
+    def zug_ereignis_suchen(self, zid = None, start: EreignisLabelType = None, **kwargs) -> EreignisLabelType:
         """
-        Ereignis im Zug mit gegebenen Attributen suchen.
+        Ereignis mit gegebenen Attributen im Zugpfad suchen.
 
-        Suche in einem Zug ab einem wählbaren Startpunkt nach einem Ereignis mit den gegebenen Attributen.
-        Die Suche folgt der Richtung des Graphen und endet am letzten Ereignis des Zuges
-        (Ausfahrt, Ersatz oder Kuppeln).
+        Suche im Zugpfad ab einem wählbaren Startpunkt nach einem Ereignis mit den gegebenen Attributen.
+        Die Suche folgt der Richtung des Graphen,
+        läuft über durch E/F/K-Ereignisse verbundene Folgezüge
+        und endet am Knoten, der keine Nachfolger hat.
 
-        :param zid: Zug-ID.
-        :param start: Startnode.
+        :param zid: Gesuchte Zug-ID (optional).
+            Das gesuchte Ereignis muss diese Zug-ID haben.
+            zid kann sich von start.zid unterscheiden,
+            muss dann aber ein Folgezug von start.zid bezeichnen.
+            Mindestens eines der Argumente zid und start muss angegeben werden.
+        :param start: Startnode (optional).
+            Die Suche startet an diesem Knoten (inklusiv).
+            Wenn kein Start angegeben ist, beginnt die Suche am Zuganfang.
+            Mindestens eines der Argumente zid und start muss angegeben werden.
         :param kwargs: Gesuchte Attributwerte.
             Die Keys müssen Attributnamen von EreignisGraphNode entsprechen.
             Bei float-Attributen gilt eine Toleranz von 0.0001.
@@ -986,7 +994,14 @@ class EreignisGraph(nx.DiGraph):
         :raise ValueError: Attributwerte werden nicht gefunden.
         """
 
-        for label in self.zugpfad(zid, kuppeln=True):
+        if start is None:
+            start_zid = zid
+        else:
+            start_zid = start.zid
+            if zid is not None:
+                kwargs['zid'] = zid
+
+        for label in self.zugpfad(start_zid, kuppeln=True):
             if start is not None:
                 if label == start:
                     start = None
@@ -1003,7 +1018,7 @@ class EreignisGraph(nx.DiGraph):
             else:
                 return label
 
-        raise ValueError(f"No label for {zid}")
+        raise ValueError(f"Suche nach {kwargs} im Pfad von {start or zid} fehlgeschlagen.")
 
 
 class EreignisGraphUngerichtet(nx.Graph):
