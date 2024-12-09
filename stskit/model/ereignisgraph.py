@@ -801,7 +801,7 @@ class EreignisGraph(nx.DiGraph):
                 self._sim_ereignis_messzeit(cur_label, ereignis)
                 self.zugpositionen[ereignis.zid] = cur_label
 
-                next_label = self._sim_ereignis_update_planereignis(ereignis, prev_label, cur_label, 'An')
+                next_label = self._sim_ereignis_update_planereignis(ereignis, prev_label, cur_label, 'An')  # ausfahrt?
 
             print(f"    prev_label: {self.node_info(prev_label)}")
             print(f"    cur_label: {self.node_info(cur_label)}")
@@ -907,12 +907,28 @@ class EreignisGraph(nx.DiGraph):
         print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
 
     def sim_ereignis_ersatz(self, ereignis: Ereignis):
-        print("ersatz", ereignis.zid, ereignis.plangleis)
-        prev_label = self.zugpositionen.get(ereignis.zid)
+        """
+        Ersatz verarbeiten
+
+        Das Ersatzereignis kommt aus dem Polling vom Pluginclient (stsplugin.PluginClient.request_zugliste),
+        nicht vom Simulator!
+        Es kann u.U. erst nach dem Abfahrtsereignis ankommen.
+        todo : In diesem Fall dürfen wir hier nichts mehr verarbeiten.
+        todo : Das Abfahrtsereignis sollte dazu vielleicht die Messzeit auf die Abfahrtszeit setzen.
+
+        ereignis.zid bezeichnet den Stammzug.
+        Unser E-Ereignisknoten gehört zum Stammzug, der Ab-Knoten zum Folgezug.
+        """
+
+        prev_label = self.zugpositionen.get(ereignis.zid) or self.zuganfaenge.get(ereignis.zid)
+        print("ersatz", ereignis.zid, ereignis.plangleis, prev_label)
         try:
-            cur_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="E")
-        except (AttributeError, ValueError, KeyError):
-            pass
+            cur_label = self.zug_ereignis_suchen(start=prev_label, plan=ereignis.plangleis, typ="E")
+        except (AttributeError, ValueError, KeyError) as e:
+            print("*** ersatzereignis nicht gefunden ***")
+            print(e)
+            print(f"    prev_label: {self.node_info(prev_label)}")
+            print(f"    prev_plan: {self.zugplangleise.get(ereignis.zid)}")
         else:
             self._sim_ereignis_messzeit(cur_label, ereignis)
             for next_label in self.successors(cur_label):
@@ -935,11 +951,22 @@ class EreignisGraph(nx.DiGraph):
             pass
 
     def sim_ereignis_kuppeln(self, ereignis: Ereignis):
-        prev_label = self.zugpositionen.get(ereignis.zid)
+        """
+        Kuppeln verarbeiten
+
+        ereignis.zid bezeichnet den endenden Zug.
+        Unser K-Ereignisknoten gehört zum durchgehenden Zug.
+        """
+
+        prev_label = self.zugpositionen.get(ereignis.zid) or self.zuganfaenge.get(ereignis.zid)
+        print("kuppeln", ereignis.zid, ereignis.plangleis, prev_label)
         try:
-            cur_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="K")
-        except (AttributeError, ValueError, KeyError):
-            pass
+            cur_label = self.zug_ereignis_suchen(start=prev_label, plan=ereignis.plangleis, typ="K")
+        except (AttributeError, ValueError, KeyError) as e:
+            print("*** kuppelnereignis nicht gefunden ***")
+            print(e)
+            print(f"    prev_label: {self.node_info(prev_label)}")
+            print(f"    prev_plan: {self.zugplangleise.get(ereignis.zid)}")
         else:
             self._sim_ereignis_messzeit(cur_label, ereignis)
         try:
@@ -950,10 +977,22 @@ class EreignisGraph(nx.DiGraph):
             pass
 
     def sim_ereignis_fluegeln(self, ereignis: Ereignis):
-        prev_label = self.zugpositionen.get(ereignis.zid)
+        """
+        Flügeln verarbeiten
+
+        ereignis.zid bezeichnet den Stammzug.
+        Unser F-Ereignisknoten gehört zum (durchgehenden) Stammzug.
+        """
+
+        prev_label = self.zugpositionen.get(ereignis.zid) or self.zuganfaenge.get(ereignis.zid)
+        print("flügeln", ereignis.zid, ereignis.plangleis, prev_label)
         try:
-            cur_label = self.zug_ereignis_suchen(ereignis.zid, start=prev_label, plan=ereignis.plangleis, typ="F")
-        except (AttributeError, ValueError, KeyError):
+            cur_label = self.zug_ereignis_suchen(start=prev_label, plan=ereignis.plangleis, typ="F")
+        except (AttributeError, ValueError, KeyError) as e:
+            print("*** flügelnereignis nicht gefunden ***")
+            print(e)
+            print(f"    prev_label: {self.node_info(prev_label)}")
+            print(f"    prev_plan: {self.zugplangleise.get(ereignis.zid)}")
             return
         else:
             self._sim_ereignis_messzeit(cur_label, ereignis)
