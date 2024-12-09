@@ -55,7 +55,7 @@ class Betrieb:
         Ereignisse und Ziele können als Label oder Node Data angegeben werden.
 
         Bemerkung: Bei Durchfahrt kann ein Zug nicht warten.
-        In diesem Fall ist vorher ein Betriebshalt zu erstellen.
+        In diesem Fall wird implizit ein Betriebshalt eingefügt.
 
         wartend: Wartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten)
         abzuwarten: Abzuwartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten).
@@ -64,10 +64,21 @@ class Betrieb:
         """
 
         wartend2 = self._get_ereignis_label(wartend, {'Ab'})
+        if wartend2 is None:
+            wartend2 = self._get_ereignis_label(wartend, {'An'})
+            if wartend2 is not None:
+                try:
+                    wartend2 = self._betriebshalt_statt_durchfahrt(wartend2, 1)
+                except ValueError:
+                    wartend2 = None
+        print(self.anlage.ereignisgraph.node_info(wartend2))
+
         abzuwarten2 = self._get_ereignis_label(abzuwarten, {'Ab'})
         if abzuwarten2 is None:
             abzuwarten2 = self._get_ereignis_label(abzuwarten, {'An'})
             wartezeit = max(1, wartezeit)
+        print(self.anlage.ereignisgraph.node_info(abzuwarten2))
+
         if wartend2 and abzuwarten2:
             return self._abhaengigkeit_setzen(wartend2, abzuwarten2, wartezeit, dry_run)
 
@@ -90,7 +101,7 @@ class Betrieb:
         Ereignisse und Ziele können als Label oder Node Data angegeben werden.
 
         Bemerkung: Bei Durchfahrt kann ein Zug nicht warten.
-        In diesem Fall ist vorher ein Betriebshalt zu erstellen.
+        In diesem Fall wird implizit ein Betriebshalt eingefügt.
 
         wartend: Wartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten)
         abzuwarten: Abzuwartende Ankunft (Ereignis- oder Ziel-, -Label oder -Daten).
@@ -99,13 +110,21 @@ class Betrieb:
         """
 
         wartend2 = self._get_ereignis_label(wartend, {'Ab'})
+        if wartend2 is None:
+            wartend2 = self._get_ereignis_label(wartend, {'An'})
+            if wartend2 is not None:
+                try:
+                    wartend2 = self._betriebshalt_statt_durchfahrt(wartend2, 1)
+                except ValueError:
+                    wartend2 = None
+
         abzuwarten2 = self._get_ereignis_label(abzuwarten, {'An'})
         if wartend2 and abzuwarten2:
             return self._abhaengigkeit_setzen(wartend2, abzuwarten2, wartezeit, dry_run)
 
     def _get_ereignis_label(self,
                             objekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                            typen: Set[str]):
+                            typen: Set[str]) -> Optional[EreignisLabelType]:
         """
         Ereignislabel zu Ziel- oder Ereignis-Argument herausfinden
 
@@ -155,7 +174,7 @@ class Betrieb:
                 typ = "Abfahrt" if objekt.typ == "Ab" else "Ankunft"
                 jid = JournalIDType(typ, subjekt.zid, eg.nodes[subjekt].plan_bst)
                 self.anlage.fdl_korrekturen.add_journal(jid, egj)
-                print("Korrektur gesetzt:", jid)
+                print(f"Korrektur {jid} gesetzt: {subjekt} wartet auf {objekt}")
             return objekt, subjekt
         else:
             return None
@@ -238,7 +257,7 @@ class Betrieb:
 
     def _betriebshalt_statt_durchfahrt(self,
                                        durchfahrt: EreignisLabelType,
-                                       wartezeit: int = 1):
+                                       wartezeit: int = 1) -> EreignisLabelType:
 
         """
         Betriebshalt statt Durchfahrt
@@ -249,6 +268,16 @@ class Betrieb:
         Die Kante von An2 nach An3 wird entfernt.
 
         durchfahrt: Durchfahrtsereignis An2
+
+        Return
+        ------
+
+        Ereignislabel des Abfahrtsknotens
+
+        Exceptions
+        ----------
+
+        ValueError: Betriebshalt konnte nicht gesetzt werden.
         """
 
         eg = self.anlage.ereignisgraph
@@ -299,11 +328,16 @@ class Betrieb:
 
         jid = JournalIDType(typ="Betriebshalt", zid=an2_node.zid, bst=an2_node.plan_bst)
         self.anlage.fdl_korrekturen.add_journal(jid, egj, zgj)
+        print(f"Betriebshalt {jid} erstellt")
+        print(f"    Ankunft: {self.anlage.ereignisgraph.node_info(an2_label)}")
+        print(f"    Abfahrt: {self.anlage.ereignisgraph.node_info(ab2_label)}")
+
+        return ab2_label
 
     def _betriebshalt_auf_strecke(self,
                                   vorher: EreignisLabelType,
                                   bst: BahnhofElement,
-                                  wartezeit: int = 1):
+                                  wartezeit: int = 1) -> EreignisLabelType:
 
         """
         Betriebshalt unterwegs (Bst nicht im Fahrplan)
@@ -319,6 +353,16 @@ class Betrieb:
         vorher: Vorhergehendes Ereignis im Ereignisgraph
 
         bst: Plangleis in Betriebsstellen-Notation. Muss vom Typ 'Gl' sein.
+
+        Return
+        ------
+
+        Ereignislabel des Abfahrtsknotens
+
+        Exceptions
+        ----------
+
+        ValueError: Betriebshalt konnte nicht gesetzt werden.
         """
 
         eg = self.anlage.ereignisgraph
@@ -390,6 +434,12 @@ class Betrieb:
 
         jid = JournalIDType(typ="Betriebshalt", zid=an2_node.zid, bst=an2_node.plan_bst)
         self.anlage.fdl_korrekturen.add_journal(jid, egj)
+        print(f"Betriebshalt {jid} erstellt")
+        print(f"    Ankunft: {self.anlage.ereignisgraph.node_info(an2_label)}")
+        print(f"    Abfahrt: {self.anlage.ereignisgraph.node_info(ab2_label)}")
+        print(f"    vorher:  {self.anlage.ereignisgraph.node_info(vorher)}")
+
+        return ab2_label
 
     def _betriebshalt_loeschen(self, halt_ereignis: EreignisLabelType):
         """
