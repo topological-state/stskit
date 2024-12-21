@@ -20,6 +20,7 @@ import re
 from typing import Any, Dict, Iterable, List, Set, Tuple
 
 import matplotlib as mpl
+from matplotlib.backend_bases import FigureCanvasBase
 import numpy as np
 import networkx as nx
 
@@ -204,13 +205,14 @@ class Slot:
         return s
 
 
-WARNUNG_STATUS = ['undefiniert', 'gleis', 'bahnsteig', 'ersatz', 'kuppeln', 'flügeln', 'fdl-markiert', 'fdl-ignoriert']
+WARNUNG_STATUS = ['undefiniert', 'gleis', 'bahnsteig', 'ersatz', 'kuppeln', 'kuppeln-reihenfolge', 'flügeln', 'fdl-markiert', 'fdl-ignoriert']
 WARNUNG_VERBINDUNG = {'E': 'ersatz', 'K': 'kuppeln', 'F': 'flügeln'}
 WARNUNG_FARBE = {'undefiniert': 'gray',
                  'gleis': 'red',
                  'bahnsteig': 'orange',
                  'ersatz': 'darkblue',
-                 'kuppeln': 'magenta',
+                 'kuppeln': 'darkmagenta',
+                 'kuppeln-reihenfolge': 'magenta',
                  'flügeln': 'darkgreen',
                  'fdl-markiert': 'red',
                  'fdl-ignoriert': 'gray'}
@@ -219,6 +221,7 @@ WARNUNG_BREITE = {'undefiniert': 1,
                   'bahnsteig': 2,
                   'ersatz': 1,
                   'kuppeln': 2,
+                  'kuppeln-reihenfolge': 2,
                   'flügeln': 2,
                   'fdl-markiert': 2,
                   'fdl-ignoriert': 1}
@@ -640,11 +643,17 @@ class Gleisbelegung:
         Verbindet zwei Slots und erstellt eine Warnung
 
         Passt die Länge des ersten Slots so an, dass sich die Slots berühren.
-        Wenn die Anfangszeiten der Slots verkehrt sind, wird der zweite hinter den ersten verschoben.
-        Dieser Fall sollte jedoch bereits in der Datenquelle vermieden werden.
-
         Der erste Slot muss den zweiten als Folgeslot (infolge Ersatz, Kupplung, Flügelung) haben
         und insbesondere im gleichen Gleis liegen.
+
+        Ersatz: Der erste Slot wird bis zum zweiten gedehnt.
+            Der zweite beginnt frühestens 1 Minute nach dem ersten.
+
+        Flügelung: Der erste Slot wird bis zum zweiten gedehnt.
+            Der zweite beginnt frühestens 1 Minute nach dem ersten.
+
+        Kupplung: Die Slots überlappen sich planmässig.
+            Wenn der erste Slot vor dem zweiten liegt, wird er gedehnt und eine Reihenfolge-Warnung gesetzt.
 
         :param s1: erster Slot
         :param s2: zweiter Slot (später als s1)
@@ -654,16 +663,39 @@ class Gleisbelegung:
 
         try:
             d = s2.zeit - s1.zeit
-            if d > 0:
-                s1.dauer = d
-            else:
-                s1.dauer = 1
+            w = WARNUNG_VERBINDUNG[verbindungsart]
+            if verbindungsart == "E":
+                if d < 1:
+                    s1.dauer = 1
                 s2_ende = s2.zeit + s2.dauer
                 s2.zeit = s1.zeit + s1.dauer
-                s2.dauer = max(s2_ende - s2.zeit, s2.zeit + s2.dauer)
+                s2.dauer = max(s2.dauer, s2_ende - s2.zeit)
+
+            elif verbindungsart == "F":
+                s2_ende = s2.zeit + s2.dauer
+                s2.zeit = max(s2.zeit, s1.zeit + 1)
+                s2.zeit = min(s2.zeit, s1.zeit + s1.dauer)
+                s2.dauer = max(s2_ende - s2.zeit, s1.zeit + s1.dauer - s2.zeit + 1)
+
+            elif verbindungsart == "K":
+                if d > 0:
+                    # warnen und s1 bis anfang s2 ausdehnen
+                    w += "-reihenfolge"
+                    s1.dauer = d
+                    s2.zeit = s1.zeit + s1.dauer
+                elif d < 0:
+                    # s2 bis ende s1 ausdehnen, wenn noetig
+                    s2.dauer = max(s2.dauer, s1.zeit + s1.dauer - s2.zeit)
+                else:
+                    # warnen und richtige reihenfolge angeben
+                    w += "-reihenfolge"
+                    s1.zeit = s2.zeit + 1
+
+            else:
+                raise ValueError(f"Fehlerhaftes Argument in Gleisbelegung._zugfolgewarnung")
 
             k = SlotWarnung(gleise={s1.gleis, s2.gleis})
-            k.status = WARNUNG_VERBINDUNG[verbindungsart]
+            k.status = w
             k.zeit = min(s1.zeit, s2.zeit)
             k.dauer = max(s1.zeit + s1.dauer - k.zeit, s2.zeit + s2.dauer - k.zeit)
             k.slots = {s1, s2}
@@ -679,7 +711,7 @@ class Gleisbelegung:
 
 
 class GleisbelegungPlot:
-    def __init__(self, zentrale: DatenZentrale, canvas: mpl.backend_bases.FigureCanvasBase) -> None:
+    def __init__(self, zentrale: DatenZentrale, canvas: FigureCanvasBase) -> None:
         self.zentrale = zentrale
         self.anlage = zentrale.anlage
 
