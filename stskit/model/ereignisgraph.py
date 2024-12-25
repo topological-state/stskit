@@ -634,7 +634,7 @@ class EreignisGraph(nx.DiGraph):
 
         Die Messzeit wird nicht geschrieben, wenn das Label None ist,
         der Knoten keine Daten hat, oder
-        die Zeit des Labels vor dem letzten registrierten Ereignis des Zuges liegt.
+        das Attribut bereits einen Wert hat.
 
         Untermethode der sim_ereignis-Methoden.
 
@@ -652,10 +652,12 @@ class EreignisGraph(nx.DiGraph):
             logger.error(f"Ereignis {label} hat keine Daten.")
             return
 
-        prev_label = self.zugpositionen.get(ereignis.zid)
-        if prev_label is None or label.zeit >= prev_label.zeit:
-            data.t_mess = ereignis.zeit.hour * 60 + ereignis.zeit.minute + ereignis.zeit.second / 60
-            print(f"messzeit setzen {label}, {data.plan}, {data.t_mess}")
+        # Attribut hat bereits einen Wert
+        if data.get('t_mess', None):
+            return
+
+        data.t_mess = ereignis.zeit.hour * 60 + ereignis.zeit.minute + ereignis.zeit.second / 60
+        logger.debug(f"Messzeit {label}, {ereignis.plangleis}, {data.t_mess}")
 
     def _sim_ereignis_update_planereignis(self, ereignis: Ereignis,
                                           prev_label: EreignisLabelType,
