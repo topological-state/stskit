@@ -8,3 +8,4 @@ qtrio
 untangle >= 1.2
 networkx >= 3.0
 netgraph >= 4.12
+icecream >= 2.1.3
