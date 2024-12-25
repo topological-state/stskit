@@ -613,7 +613,16 @@ class EreignisGraph(nx.DiGraph):
         Aktualisiert die Verspätung und Status-Flags anhand eines Ereignisses im Simulator.
 
         Aktualisiert werden die folgenden Attribute:
-        - t_mess
+        - zugpositionen
+        - zugplangleise
+        - zugplanereignisse
+        - t_mess der Ereignisknoten
+
+        Phantomzüge:
+        Nach gewissen Nummernwechseln (mit Richtungsänderung?) schickt der Sim weiterhin Ereignisse
+        unter der Nummer des nun unsichtbaren Zuges.
+        Das sichtbar-Attribut des Ereignisarguments ist dabei False.
+        Ausser bei den Ereignisarten 'Ausfahrt', 'Ersatz' sollten solche Ereignisse nicht beachtet werden.
 
         :param ereignis: Ereignis-objekt vom PluginClient
         :return:
@@ -728,6 +737,10 @@ class EreignisGraph(nx.DiGraph):
             pass
 
     def sim_ereignis_ankunft(self, ereignis: Ereignis):
+        # Phantomzug
+        if not ereignis.sichtbar:
+            return
+
         prev_label = self.zugpositionen.get(ereignis.zid)
         next_label = cur_label = None
 
@@ -764,13 +777,17 @@ class EreignisGraph(nx.DiGraph):
 
             next_label = self._sim_ereignis_update_planereignis(ereignis, prev_label, cur_label, 'An')
 
-        print(f"    prev_label: {self.node_info(prev_label)}")
-        print(f"    cur_label: {self.node_info(cur_label)}")
-        print(f"    next_label: {self.node_info(next_label)}")
-        print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
-        print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
+        # print(f"    prev_label: {self.node_info(prev_label)}")
+        # print(f"    cur_label: {self.node_info(cur_label)}")
+        # print(f"    next_label: {self.node_info(next_label)}")
+        # print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
+        # print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
 
     def sim_ereignis_abfahrt(self, ereignis: Ereignis):
+        # Phantomzug
+        if not ereignis.sichtbar:
+            return
+
         prev_label = cur_label = next_label = None
 
         if ereignis.amgleis:
@@ -805,11 +822,11 @@ class EreignisGraph(nx.DiGraph):
 
                 next_label = self._sim_ereignis_update_planereignis(ereignis, prev_label, cur_label, 'An')  # ausfahrt?
 
-            print(f"    prev_label: {self.node_info(prev_label)}")
-            print(f"    cur_label: {self.node_info(cur_label)}")
-            print(f"    next_label: {self.node_info(next_label)}")
-            print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
-            print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
+            # print(f"    prev_label: {self.node_info(prev_label)}")
+            # print(f"    cur_label: {self.node_info(cur_label)}")
+            # print(f"    next_label: {self.node_info(next_label)}")
+            # print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
+            # print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
 
     def sim_ereignis_rothalt(self, ereignis: Ereignis):
         """
@@ -831,6 +848,10 @@ class EreignisGraph(nx.DiGraph):
             Wir wissen nicht, wo der Zug genau steht.
             Dieser Fall wird aktuell nicht ausgewertet.
         """
+
+        # Phantomzug
+        if not ereignis.sichtbar:
+            return
 
         prev_label = self.zugpositionen.get(ereignis.zid)
         if prev_label is None:
@@ -884,6 +905,10 @@ class EreignisGraph(nx.DiGraph):
             Dieser Fall wird aktuell nicht ausgewertet.
         """
 
+        # Phantomzug
+        if not ereignis.sichtbar:
+            return
+
         prev_label = self.zugpositionen.get(ereignis.zid)
         if prev_label is None:
             return
@@ -902,11 +927,11 @@ class EreignisGraph(nx.DiGraph):
 
         next_label = self._sim_ereignis_update_planereignis(ereignis, prev_label, cur_label, 'An')
 
-        print(f"    prev_label: {self.node_info(prev_label)}")
-        print(f"    cur_label: {self.node_info(cur_label)}")
-        print(f"    next_label: {self.node_info(next_label)}")
-        print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
-        print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
+        # print(f"    prev_label: {self.node_info(prev_label)}")
+        # print(f"    cur_label: {self.node_info(cur_label)}")
+        # print(f"    next_label: {self.node_info(next_label)}")
+        # print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
+        # print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
 
     def sim_ereignis_ersatz(self, ereignis: Ereignis):
         """
@@ -915,8 +940,6 @@ class EreignisGraph(nx.DiGraph):
         Das Ersatzereignis kommt aus dem Polling vom Pluginclient (stsplugin.PluginClient.request_zugliste),
         nicht vom Simulator!
         Es kann u.U. erst nach dem Abfahrtsereignis ankommen.
-        todo : In diesem Fall dürfen wir hier nichts mehr verarbeiten.
-        todo : Das Abfahrtsereignis sollte dazu vielleicht die Messzeit auf die Abfahrtszeit setzen.
 
         ereignis.zid bezeichnet den Stammzug.
         Unser E-Ereignisknoten gehört zum Stammzug, der Ab-Knoten zum Folgezug.
@@ -933,17 +956,20 @@ class EreignisGraph(nx.DiGraph):
             print(f"    prev_plan: {self.zugplangleise.get(ereignis.zid)}")
         else:
             self._sim_ereignis_messzeit(cur_label, ereignis)
+
+            # folgezug aktualisieren, wenn das abfahrtsereignis noch nicht gemeldet wurde
             for next_label in self.successors(cur_label):
                 if self.edges[(cur_label, next_label)]['typ'] == 'H':
-                    self.zugpositionen[next_label.zid] = cur_label
-                    self.zugplangleise[next_label.zid] = ereignis.plangleis
-                    self.zugplanereignisse[next_label.zid] = next_label
+                    if next_label.zid not in self.zugpositionen:
+                        self.zugpositionen[next_label.zid] = cur_label
+                        self.zugplangleise[next_label.zid] = ereignis.plangleis
+                        self.zugplanereignisse[next_label.zid] = next_label
 
-                    print(f"    prev_label: {self.node_info(prev_label)}")
-                    print(f"    cur_label: {self.node_info(cur_label)}")
-                    print(f"    next_label: {self.node_info(next_label)}")
-                    print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
-                    print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
+                        # print(f"    prev_label: {self.node_info(prev_label)}")
+                        # print(f"    cur_label: {self.node_info(cur_label)}")
+                        # print(f"    next_label: {self.node_info(next_label)}")
+                        # print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
+                        # print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
 
         try:
             del self.zugpositionen[ereignis.zid]
@@ -1004,11 +1030,11 @@ class EreignisGraph(nx.DiGraph):
                     self.zugplangleise[next_label.zid] = ereignis.plangleis
                     self.zugplanereignisse[next_label.zid] = next_label
 
-                    print(f"    prev_label: {self.node_info(prev_label)}")
-                    print(f"    cur_label: {self.node_info(cur_label)}")
-                    print(f"    next_label: {self.node_info(next_label)}")
-                    print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
-                    print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
+                    # print(f"    prev_label: {self.node_info(prev_label)}")
+                    # print(f"    cur_label: {self.node_info(cur_label)}")
+                    # print(f"    next_label: {self.node_info(next_label)}")
+                    # print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
+                    # print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
 
     def zug_ereignis_suchen(self, zid = None, start: EreignisLabelType = None, **kwargs) -> EreignisLabelType:
         """
