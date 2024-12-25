@@ -573,7 +573,7 @@ class Gleisbelegung:
         for s1, s2 in itertools.permutations(slots, 2):
             if s1.zid == s2.zid:
                 continue
-            elif self.zentrale.anlage.zielgraph.has_edge(s1.fid, s2.fid):
+            elif self.zentrale.anlage.zielgraph.has_successor(s1.fid, s2.fid):
                 verbindungsdaten = self.zentrale.anlage.zielgraph.get_edge_data(s1.fid, s2.fid)
                 if verbindungsdaten.typ in {'E', 'F'}:
                     s2.verbunden = True
@@ -688,18 +688,17 @@ class Gleisbelegung:
                 s2.dauer = max(s2.abfahrt - s2.zeit, s1.abfahrt - s2.zeit)
 
             elif verbindungsart == "K":
-                if d > 0:
+                if d >= 1:
                     # warnen und s1 bis anfang s2 ausdehnen
                     w += "-reihenfolge"
                     s1.dauer = d
                     s2.zeit = s1.zeit + s1.dauer
-                elif d < 0:
+                elif d <= -1:
                     # s2 bis ende s1 ausdehnen, wenn noetig
                     s2.dauer = max(s2.dauer, s1.abfahrt - s2.zeit)
                 else:
-                    # warnen und richtige reihenfolge angeben
+                    # warnen
                     w += "-reihenfolge"
-                    s1.zeit = s2.zeit + 1
 
             else:
                 raise ValueError(f"Fehlerhaftes Argument in Gleisbelegung._zugfolgewarnung")
