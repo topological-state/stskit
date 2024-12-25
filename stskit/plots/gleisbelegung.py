@@ -17,7 +17,7 @@ import functools
 import itertools
 import logging
 import re
-from typing import Any, Dict, Iterable, List, Set, Tuple
+from typing import Any, Dict, Iterable, List, Set, Tuple, Union
 
 import matplotlib as mpl
 from matplotlib.backend_bases import FigureCanvasBase
@@ -94,6 +94,15 @@ class Slot:
 
     zugstamm : Set von zid-Nummern von allen Zügen, die miteinander verknüpft sind.
         Bei zügen aus demselben Stamm werden keine Gleiskonflikte angezeigt.
+
+    zeit: Anfangszeit des Slots in Minuten nach Mitternacht.
+        In der Regel entspricht dieser Wert der voraussichtlichen Ankunftszeit (inklusive Verspätung).
+        Bei Slotverbindungen kann der Wert abweichen.
+    dauer: Länge des Slots in Minuten. Der Slot endet bei `zeit + dauer`.
+    abfahrt: Voraussichtliche Abfahrtszeit (inklusive Verspätung) in Minuten.
+        Das Ende des Slots kann bei Slotverbindungen von dieser Zeit abweichen.
+    verspaetung_an: Voraussichtliche Ankunftsverspätung in Minuten.
+    verspaetung_ab: Voraussichtliche Abfahrtsverspätung in Minuten.
     """
 
     zid: int
@@ -103,10 +112,11 @@ class Slot:
     zieltyp: str = ""
     gleis: BahnhofElement = ("", "")
     durchfahrt: bool = False
-    zeit: int = 0
-    dauer: int = 0
-    verspaetung_an: int = 0
-    verspaetung_ab: int = 0
+    zeit: Union[int, float] = 0
+    dauer: Union[int, float] = 0
+    abfahrt: Union[int, float] = 0
+    verspaetung_an: Union[int, float] = 0
+    verspaetung_ab: Union[int, float] = 0
     titel: str = ""
     farbe: str = "gray"
     randfarbe: str = "k"
@@ -123,6 +133,7 @@ class Slot:
         self.gleis = BahnhofElement("Agl" if ziel_data.typ in {'A', 'E'} else "Gl", ziel_data.gleis)
         self.zeit = 0
         self.dauer = 0
+        self.abfahrt = 0
         self.titel = ""
 
     @property
@@ -240,8 +251,8 @@ class SlotWarnung:
     """
 
     gleise: Set[BahnhofElement] = field(default_factory=set)
-    zeit: int = 0
-    dauer: int = 0
+    zeit: Union[int, float] = 0
+    dauer: Union[int, float] = 0
     status: str = "undefiniert"
     slots: Set[Slot] = field(default_factory=set)
 
@@ -428,10 +439,11 @@ class Gleisbelegung:
                 slot.verspaetung_an = ziel_data.get('v_an', 0)
                 slot.verspaetung_ab = ziel_data.get('v_ab', 0)
                 slot.zeit = plan_an + slot.verspaetung_an
+                slot.abfahrt = plan_ab + slot.verspaetung_ab
                 if ziel_data.typ == 'D' or slot.gleis.typ == 'Agl':
                     slot.dauer = 1
                 else:
-                    slot.dauer = max(1, plan_ab + 1 + slot.verspaetung_ab - slot.zeit)
+                    slot.dauer = max(1, slot.abfahrt - slot.zeit)
                 slot.zugstamm = {zid for zid in nx.node_connected_component(undirected_zuggraph, slot.zid)}
                 keys_bisherige.discard(key)
 
@@ -667,15 +679,13 @@ class Gleisbelegung:
             if verbindungsart == "E":
                 if d < 1:
                     s1.dauer = 1
-                s2_ende = s2.zeit + s2.dauer
                 s2.zeit = s1.zeit + s1.dauer
-                s2.dauer = max(s2.dauer, s2_ende - s2.zeit)
+                s2.dauer = max(1, s2.abfahrt - s2.zeit)
 
             elif verbindungsart == "F":
-                s2_ende = s2.zeit + s2.dauer
                 s2.zeit = max(s2.zeit, s1.zeit + 1)
                 s2.zeit = min(s2.zeit, s1.zeit + s1.dauer)
-                s2.dauer = max(s2_ende - s2.zeit, s1.zeit + s1.dauer - s2.zeit + 1)
+                s2.dauer = max(s2.abfahrt - s2.zeit, s1.abfahrt - s2.zeit)
 
             elif verbindungsart == "K":
                 if d > 0:
@@ -685,7 +695,7 @@ class Gleisbelegung:
                     s2.zeit = s1.zeit + s1.dauer
                 elif d < 0:
                     # s2 bis ende s1 ausdehnen, wenn noetig
-                    s2.dauer = max(s2.dauer, s1.zeit + s1.dauer - s2.zeit)
+                    s2.dauer = max(s2.dauer, s1.abfahrt - s2.zeit)
                 else:
                     # warnen und richtige reihenfolge angeben
                     w += "-reihenfolge"
