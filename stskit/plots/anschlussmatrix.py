@@ -268,7 +268,7 @@ class Anschlussmatrix:
                     except AttributeError:
                         freigabe = False
 
-                    abwarten = self.zentrale.anlage.ereignisgraph.has_edge(ereignis_an.node_id, ereignis_ab.node_id)
+                    abwarten = self.zentrale.anlage.ereignisgraph.has_successor(ereignis_an.node_id, ereignis_ab.node_id)
 
                     if freigabe:
                         status = ANSCHLUSS_ERFOLGT
