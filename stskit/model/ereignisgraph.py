@@ -628,6 +628,10 @@ class EreignisGraph(nx.DiGraph):
         :return:
         """
 
+        # keine Rangierfahrten
+        if ereignis.zid <= 0:
+            return
+
         try:
             meth = getattr(self, "sim_ereignis_" + ereignis.art)
         except AttributeError:
