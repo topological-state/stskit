@@ -535,11 +535,21 @@ class PluginClient:
         Fahrplan eines Zuges anfragen.
 
         Das ZugDetails-Objekt muss in der Zugliste bereits existieren.
+        Der Fahrplan wird bei der ersten Anfrage komplett übernommen.
+        Bei den folgenden Anfragen, wird nur die aktuelle Gleisänderung übernommen,
+        die anderen Attribute bleiben unverändert (s. Bemerkung unten).
+
+        Die Methode aktualisiert auch den ziel_index des Zuges.
 
         Bemerkungen
         -----------
 
-        - Abgefahrene Wegpunkte sind im Fahrplan nicht mehr vorhanden.
+        - Abgefahrene Wegpunkte (ausser dem letzten) sind in der Antwort vom Simulator nicht mehr vorhanden.
+          Wir behalten jedoch den Fahrplan im ZugDetails bei, so wie er bei der ersten Aufruf zurückgegeben wurde.
+          Lediglich die Gleisänderung wird aktualisiert.
+        - Der Fahrplan vom Simulator enthält den letzten Wegpunkt auch, nachdem er passiert wurde.
+          Der Eintrag kann dann aber fehlerhafte Werte enthalten (Dezember 2024).
+          Z.B. kann das Flags-Attribut Fall leer sein, wenn es vorher eine Durchfahrt angezeigt hat.
         - Ersatzloks haben im XML keine Plangleis- und Gleisangabe.
           Wir übernehmen beim ersten Auftreten den ersten Fahrplaneintrag.
 
@@ -581,7 +591,7 @@ class PluginClient:
 
         for zeile_alt, zeile_neu in zip(reversed(zug.fahrplan), reversed(neuer_fahrplan)):
             if zeile_neu.plan == zeile_alt.plan:
-                zeile_alt.update(zeile_neu.__dict__)
+                zeile_alt.gleis = zeile_neu.gleis
             else:
                 logger.warning(f"ersetze fahrplan von {zug}, weil {zeile_alt.plan} ungleich {zeile_neu.plan}")
                 zug.fahrplan = neuer_fahrplan
