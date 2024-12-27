@@ -91,15 +91,18 @@ class Anlage:
             self.anlageninfo = client.anlageninfo
 
         if not self.config and config_path:
+            self.config["default"] = True
             default_path = Path(__file__).parent.parent / "config"
             try:
                 logger.info(f"Konfiguration laden von {config_path}")
                 self.load_config(config_path)
+                self.config["default"] = False
             except OSError:
                 logger.warning("Keine benutzerspezifische Anlagenkonfiguration gefunden")
                 logger.info(f"Beispielkonfiguration laden von {default_path}")
                 try:
                     self.load_config(default_path)
+                    self.config["default"] = True
                 except OSError:
                     logger.warning("Keine Beispielkonfiguration gefunden")
             except ValueError as e:
