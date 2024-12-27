@@ -10,10 +10,12 @@ class Observable:
 
     - Observers are bound methods of object instances.
     - The object keeps weak references - observers don't need to unregister.
+    - The triggered attribute can be used to defer the notification call to a separate processing loop.
     """
 
     def __init__(self, owner: Any):
         self.owner = owner
+        self.triggered = False
         self._observers = weakref.WeakKeyDictionary()
 
     def register(self, observer):
@@ -34,6 +36,16 @@ class Observable:
         else:
             self._observers[obj] = name
 
+    def trigger(self):
+        """
+        Set the triggered attribute.
+
+        This can be used to signal to the main loop that the observers should be notified.
+        The triggered flag is reset when the notify method is called.
+        """
+
+        self.triggered = True
+
     def notify(self, *args, **kwargs):
         """
         Notify observers
@@ -46,6 +58,7 @@ class Observable:
         :return: None
         """
 
+        self.triggered = False
         for obs, name in self._observers.items():
             meth = getattr(obs, name)  # bound method
             meth(self, *args, **kwargs)

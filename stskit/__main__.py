@@ -195,6 +195,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.update_interval: int = 30  # seconds
         self.enable_update: bool = True
+        self.notify_interval: int = 1
+        self.enable_notify: bool = True
 
     def ticker_clicked(self):
         window = TickerWindow(self.zentrale)
@@ -269,6 +271,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 logger.error(e)
 
             self.enable_update = False
+            self.enable_notify = False
             self.closed.set()
 
     async def update_loop(self):
@@ -302,6 +305,12 @@ class MainWindow(QtWidgets.QMainWindow):
         await self.zentrale.client.registered.wait()
         async for ereignis in self.zentrale.client._ereignis_channel_out:
             await self.zentrale.ereignis(ereignis)
+
+    async def notify_loop(self):
+        await self.zentrale.client.registered.wait()
+        while self.enable_notify:
+            await self.zentrale.notify()
+            await trio.sleep(self.notify_interval)
 
 
 def parse_args(arguments: Sequence[str]) -> argparse.Namespace:
@@ -351,6 +360,7 @@ async def main_window():
                 await client.request_anlageninfo()
                 nursery.start_soon(window.update_loop)
                 nursery.start_soon(window.ereignis_loop)
+                nursery.start_soon(window.notify_loop)
                 window.show()
                 await window.closed.wait()
                 raise TaskDone()

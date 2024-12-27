@@ -89,7 +89,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def accept(self):
-        self.anlage.zugschema.load_config(self.zugschema.name, self.anlage.anlageninfo.region)
+        self.zentrale.select_zugschema(self.zugschema.name)
         self.close()
 
     @pyqtSlot()
