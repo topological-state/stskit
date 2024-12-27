@@ -28,15 +28,28 @@ from stskit.model.zuggraph import ZugGraphNode
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
+# Uebersetzung von Regionen in Schema-Regionen (Regionen, die das gleiche Schema verwenden).
+# Das erste Wort des Regionsnamens ist ausschlaggebend.
 REGIONEN_SCHEMA = {
-    "Bern - Lötschberg": "Schweiz",
-    "Italien Nord": "Italien",
+    "Belgien": "Benelux",
+    "Bern": "Schweiz",
+    "Grand": "Frankreich",
+    "Großbritannien": "Grossbritannien",
+    "Hauts-de-France": "Frankreich",
+    "Île-de-France": "Frankreich",
+    "Italien": "Italien",
+    "Luxemburg": "Benelux",
     "Merxferri": "Deutschland",
+    "Niederlande": "Benelux",
     "Ostschweiz": "Schweiz",
+    "Polen": "Polen",
+    "Sverige": "Schweden",
     "Tessin": "Schweiz",
+    "Tschechien": "Tschechien",
     "Westschweiz": "Schweiz",
     "Zentralschweiz": "Schweiz",
-    "Zürich und Umgebung": "Schweiz"}
+    "Zürich": "Schweiz"
+    }
 
 
 class Zugschema:
@@ -210,8 +223,8 @@ class Zugschema:
             name = name.lower()
         else:
             try:
-                name = REGIONEN_SCHEMA[region].lower()
-            except KeyError:
+                name = REGIONEN_SCHEMA[region.split()[0]].lower()
+            except (IndexError, KeyError):
                 name = "deutschland"
 
         try:
