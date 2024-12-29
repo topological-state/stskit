@@ -198,6 +198,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.notify_interval: int = 1
         self.enable_notify: bool = True
 
+    # todo : window-initialisierungen in entsprechende module verschieben
+
     def ticker_clicked(self):
         window = TickerWindow(self.zentrale)
         window.show()
@@ -207,19 +209,19 @@ class MainWindow(QtWidgets.QMainWindow):
         window = GleisbelegungWindow(self.zentrale, "Agl")
         window.setWindowTitle("Einfahrten/Ausfahrten")
         window.vorlaufzeit = 25
-        window.planung_update()
+        window.plan_update()
         window.show()
         self.windows.add(window)
 
     def gleisbelegung_clicked(self):
         window = GleisbelegungWindow(self.zentrale, "Gl")
-        window.planung_update()
+        window.plan_update()
         window.show()
         self.windows.add(window)
 
     def matrix_clicked(self):
         window = AnschlussmatrixWindow(self.zentrale)
-        window.planung_update()
+        window.plan_update()
         window.show()
         self.windows.add(window)
 
@@ -231,19 +233,19 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def fahrplan_clicked(self):
         window = FahrplanWindow(self.zentrale)
-        window.planung_update()
+        window.plan_update()
         window.show()
         self.windows.add(window)
 
     def rangierplan_clicked(self):
         window = RangierplanWindow(self.zentrale)
-        window.planung_update()
+        window.plan_update()
         window.show()
         self.windows.add(window)
 
     def bildfahrplan_clicked(self):
         window = BildFahrplanWindow(self.zentrale)
-        window.planung_update()
+        window.plan_update()
         window.show()
         self.windows.add(window)
 

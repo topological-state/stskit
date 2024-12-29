@@ -26,7 +26,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         self.zentrale = zentrale
-        self.zentrale.planung_update.register(self.planung_update)
+        self.zentrale.plan_update.register(self.plan_update)
+        self.zentrale.betrieb_update.register(self.plan_update)
 
         self.ui = Ui_BildfahrplanWindow()
         self.ui.setupUi(self)
@@ -208,7 +209,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         except ValueError:
             pass
 
-    def planung_update(self, *args, **kwargs):
+    def plan_update(self, *args, **kwargs):
         if self.ui.von_combo.count() == 0:
             self.update_widgets()
         if self.plot.strecke_von and self.plot.strecke_nach:

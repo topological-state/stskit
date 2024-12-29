@@ -32,7 +32,8 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         self.zentrale = zentrale
-        self.zentrale.betrieb_update.register(self.planung_update)
+        self.zentrale.plan_update.register(self.plan_update)
+        self.zentrale.betrieb_update.register(self.plan_update)
 
         self.anschlussmatrix: Anschlussmatrix = Anschlussmatrix(zentrale)
         self._pick_event: bool = False
@@ -210,7 +211,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
     def page_changed(self):
         self.update_actions()
 
-    def planung_update(self, *args, **kwargs):
+    def plan_update(self, *args, **kwargs):
         """
         daten und grafik neu aufbauen.
 

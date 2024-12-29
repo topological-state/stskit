@@ -41,11 +41,34 @@ class DatenZentrale:
     werden über die periodische Aktualisierung benachrichtigt.
     Folgende Observer stehen zur Verfügung:
 
-    - anlage_update: Änderungen an der Anlage, die für das Anlagemodul interessant sind.
-    - betrieb_update: Änderungen am Fahrplan, die für das Betriebsmodul interessant sind.
+    - anlage_update: Änderungen an der Anlagenkonfiguration, insbesondere an den Datenstrukturen
+        signalgraph, bahnsteiggraph, bahnhofgraph, liniengraph,
+        strecken, hauptstrecke, streckenmarkierung, gleissperrungen und zugschema.
+        Benutzermodule müssen möglicherweise ihre Strukturen (Layout) neu aufbauen.
+        Der Observer triggert beim ersten Einlesen der Simulatordaten,
+        beim Laden und Bearbeiten der Konfiguration durch den Benutzer.
+
+        Die Benachrichtigung wird in jedem Fall von einem plan_update gefolgt.
+        Benutzermodule können also auch nur auf plan_update reagieren.
+    - plan_update: Änderungen am Fahrplan durch den Simulator, insbesondere an den Datenstrukturen
+        zuggraph, zielgraph, ereignisgraph.
+        Benutzermodule müssen möglicherweise ihre Daten (Inhalt) aktualisieren.
+        Der Observer triggert beim regelmässigen Einlesen der Simulatordaten.
+    - betrieb_update: Änderungen am Betriebsablauf durch den Fdl, insbesondere an den Datenstrukturen
+        zielgraph, ereignisgraph und fdl_korrekturen.
+        Die Züge können geänderte Betriebshalte oder andere Verspätungen haben.
+        Benutzermodule müssen möglicherweise ihre Daten (Inhalt) aktualisieren.
+        Die meisten Benutzermodule reagieren auf plan_update und betrieb_update auf die gleiche Weise.
     - auswertung_update: Änderungen am Fahrplan, die für das Auswertungsmodul interessant sind.
-    - planung_update: obsolet, wird in einer der nächsten Versionen entfernt.
+        Das Auswertungsmodul wird möglicherweise in einer folgenden Version überarbeitet.
+        Der Observer sollte in neuen Modulen nicht verwendet werden.
     - plugin_ereignis: Ereignismeldung vom Simulator.
+        Für Benutzermodule, die zeitnah auf Ereignisse vom Simulator reagieren müssen.
+        Der Observer triggert bei jedem Ereignis vom Simulator,
+        was bei gewissen Ereignisarten mehrmals pro Sekunde sein kann.
+        Die Verarbeitung darf daher keine lange Zeit in Anspruch nehmen,
+        insbesondere sollten komplexe Grafikaktualisierungen vermieden werden.
+        Diese sollten z.B. an die Qt-Mainloop oder an betrieb_update delegiert werden.
     """
 
     def __init__(self, config_path: Optional[os.PathLike] = None):
@@ -55,7 +78,7 @@ class DatenZentrale:
         self.anlage: Optional[Anlage] = None
         self.betrieb: Optional[Betrieb] = None
         self.auswertung: Optional[Auswertung] = None
-        self.planung_update = Observable(self)
+        self.plan_update = Observable(self)
         self.anlage_update = Observable(self)
         self.betrieb_update = Observable(self)
         self.auswertung_update = Observable(self)
@@ -85,7 +108,7 @@ class DatenZentrale:
             self.betrieb = Betrieb()
         self.betrieb.update(self.anlage, self.config_path)
         self.betrieb_update.trigger()
-        self.planung_update.trigger()
+        self.plan_update.trigger()
 
         if not self.auswertung:
             self.auswertung = Auswertung(self.anlage)
@@ -95,10 +118,11 @@ class DatenZentrale:
     async def notify(self):
         if self.anlage_update.triggered:
             self.anlage_update.notify()
+            self.plan_update.trigger()
+        if self.plan_update.triggered:
+            self.plan_update.notify()
         if self.betrieb_update.triggered:
             self.betrieb_update.notify()
-        if self.planung_update.triggered:
-            self.planung_update.notify()
         if self.auswertung_update.triggered:
             self.auswertung_update.notify()
 
@@ -147,4 +171,4 @@ class DatenZentrale:
     def select_zugschema(self, zugschema_name: str):
         self.anlage.zugschema.load_config(zugschema_name, self.anlage.anlageninfo.region)
         self.anlage_update.trigger()
-        self.planung_update.trigger()
+        self.plan_update.trigger()

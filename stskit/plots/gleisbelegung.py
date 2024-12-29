@@ -808,7 +808,7 @@ class GleisbelegungPlot:
         for balken, slot in zip(_slot_balken, slots):
             balken.set(linestyle=slot.linestyle, linewidth=slot.linewidth, edgecolor=slot.randfarbe)
             balken.slot = slot
-        _slot_labels = self._axes.bar_label(_slot_balken, labels=labels, label_type='center')
+        _slot_labels = self._axes.bar_label(_slot_balken, labels=labels, label_type='edge')
         for label, slot in zip(_slot_labels, slots):
             label.set(fontstyle=slot.fontstyle, fontsize='small', fontstretch='condensed')
 

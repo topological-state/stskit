@@ -29,7 +29,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         self.zentrale = zentrale
-        self.zentrale.planung_update.register(self.planung_update)
+        self.zentrale.plan_update.register(self.plan_update)
+        self.zentrale.betrieb_update.register(self.plan_update)
         self.ansicht = ansicht
 
         self._pick_event = False
@@ -117,7 +118,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         except ValueError:
             pass
 
-    def planung_update(self, *args, **kwargs):
+    def plan_update(self, *args, **kwargs):
         """
         daten und grafik neu aufbauen.
 

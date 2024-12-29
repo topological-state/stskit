@@ -865,7 +865,8 @@ class RangierplanWindow(QtWidgets.QWidget):
         super().__init__(*args, **kwargs)
 
         self.zentrale = zentrale
-        self.zentrale.planung_update.register(self.planung_update)
+        self.zentrale.plan_update.register(self.plan_update)
+        self.zentrale.betrieb_update.register(self.plan_update)
         self.zentrale.plugin_ereignis.register(self.plugin_ereignis)
 
         self.ui = Ui_RangierplanWidget()
@@ -904,7 +905,7 @@ class RangierplanWindow(QtWidgets.QWidget):
 
         self.ui.splitter.setSizes([800, 200])
 
-    def planung_update(self, *args, **kwargs) -> None:
+    def plan_update(self, *args, **kwargs) -> None:
         self.rangiertabelle_sort_filter.simzeit = self.zentrale.simzeit_minuten
         self.rangiertabelle_modell.update()
         self.fahrplan_modell.update()

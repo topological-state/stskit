@@ -538,7 +538,8 @@ class FahrplanWindow(QtWidgets.QWidget):
         super().__init__(*args, **kwargs)
 
         self.zentrale = zentrale
-        self.zentrale.planung_update.register(self.planung_update)
+        self.zentrale.plan_update.register(self.plan_update)
+        self.zentrale.betrieb_update.register(self.plan_update)
 
         self.ui = Ui_FahrplanWidget()
         self.ui.setupUi(self)
@@ -588,7 +589,7 @@ class FahrplanWindow(QtWidgets.QWidget):
 
         self.zielplot = ZielPlot(zentrale.anlage)
 
-    def planung_update(self, *args, **kwargs) -> None:
+    def plan_update(self, *args, **kwargs) -> None:
         """
         fahrplan mit neuen daten aktualisieren.
 
