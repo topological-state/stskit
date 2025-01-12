@@ -40,7 +40,7 @@ class Lokstatus:
     DARSTELLUNGSTEXT = {"unbekannt": "",
                         "gleisfehler": "Gleisfehler",
                         "unsichtbar": "",
-                        "unterwegs": "Fahrt",
+                        "unterwegs": "unterwegs",
                         "halt": "Halt",
                         "am gleis": "am Gleis",
                         "erledigt": "erledigt"}
@@ -169,6 +169,16 @@ class Lokstatus:
                 self.status = status
 
         return self.status
+
+    def toggle_status(self):
+        """
+        Lokstatus zwischen Unterwegs und Halt umschalten, wenn erlaubt.
+        """
+
+        if self.status == "halt":
+            self.status = "unterwegs"
+        elif self.status == "unterwegs":
+            self.status = "halt"
 
 
 class Zugstatus:
@@ -653,15 +663,36 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
 
     def plugin_ereignis(self, ereignis: Ereignis):
         fids = self.rangierplan.plugin_ereignis(ereignis)
+        self.emit_changes(ziele=fids)
 
-        for fid in fids:
-            try:
-                row = self.rangierziele.index(fid)
-            except ValueError:
-                return
-            index1 = self.index(row, self._columns.index('Status'))
-            index2 = self.index(row, len(self._columns)-1)
-            self.dataChanged.emit(index1, index2)
+    def emit_changes(self, ziele: Optional[Iterable[ZielLabelType]] = None, spalten: Optional[Iterable[str]] = None):
+        """
+        änderungen an den rangierdaten an den viewer melden
+
+        ruft das entsprechende qt-ereignis auf
+        """
+
+        if ziele:
+            ziele = set(ziele)
+            rows = [row for row, ziel in enumerate(self.rangierziele) if ziel in ziele]
+            row_min = min(rows)
+            row_max = max(rows)
+        else:
+            row_min = 0
+            row_max = len(self.rangierziele) - 1
+
+        if spalten:
+            spalten = set(spalten)
+            cols = [col for col, spalte in enumerate(self._columns) if spalte in spalten]
+            col_min = min(cols)
+            col_max = max(cols)
+        else:
+            col_min = 0
+            col_max = len(self._columns) - 1
+
+        index1 = self.index(row_min, col_min)
+        index2 = self.index(row_max, col_max)
+        self.dataChanged.emit(index1, index2)
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
         return len(self._columns)
@@ -887,6 +918,10 @@ class RangierplanWindow(QtWidgets.QWidget):
         self.ui.zugliste_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
         self.ui.zugliste_view.sortByColumn(self.rangiertabelle_modell._columns.index('An'), 0)
         self.ui.zugliste_view.setSortingEnabled(True)
+        self.toogle_lok_status_shortcut = QtWidgets.QShortcut(QtCore.Qt.Key_L, self.ui.zugliste_view,
+                                                              activated=self.toogle_lok_status)
+        self.toogle_ersatz_status_shortcut = QtWidgets.QShortcut(QtCore.Qt.Key_E, self.ui.zugliste_view,
+                                                                 activated=self.toogle_ersatz_status)
 
         self.ui.vorlaufzeit_spin.setValue(self.rangiertabelle_sort_filter.vorlaufzeit)
         self.ui.nachlaufzeit_spin.setValue(self.rangiertabelle_sort_filter.nachlaufzeit)
@@ -953,6 +988,24 @@ class RangierplanWindow(QtWidgets.QWidget):
     def suche_loeschen_clicked(self):
         self.ui.suche_zug_edit.clear()
 
+    def selected_rangiervorgang(self) -> Optional[Rangiervorgang]:
+        """
+        Ausgewählten Rangiervorgang ermitteln.
+
+        :return: Rangiervorgang-Objekt oder None.
+        """
+
+        try:
+            index = self.ui.zugliste_view.selectedIndexes()[0]
+            index = self.rangiertabelle_sort_filter.mapToSource(index)
+            row = index.row()
+            fid = self.rangiertabelle_modell.rangierziele[row]
+            rd = self.rangiertabelle_modell.rangierplan.rangierliste[fid]
+        except (IndexError, KeyError):
+            return None
+
+        return rd
+
     @QtCore.pyqtSlot('QItemSelection', 'QItemSelection')
     def zugliste_selection_changed(self, selected, deselected):
         """
@@ -963,16 +1016,22 @@ class RangierplanWindow(QtWidgets.QWidget):
         :return: None
         """
 
-        try:
-            index = self.ui.zugliste_view.selectedIndexes()[0]
-            index = self.rangiertabelle_sort_filter.mapToSource(index)
-            row = index.row()
-            fid = self.rangiertabelle_modell.rangierziele[row]
-            self.fahrplan_modell.set_zug(fid.zid)
-            rd = self.rangiertabelle_modell.rangierplan.rangierliste[fid]
+        if rd := self.selected_rangiervorgang():
+            self.fahrplan_modell.set_zug(rd.zid)
             self.ui.fahrplan_label.setText(rd.name)
-        except (IndexError, KeyError):
-            pass
-        else:
             self.ui.fahrplan_view.resizeColumnsToContents()
             self.ui.fahrplan_view.resizeRowsToContents()
+
+    @pyqtSlot()
+    def toogle_lok_status(self):
+        if rd := self.selected_rangiervorgang():
+            if rd.lok_zid:
+                rd.lok_status.toggle_status()
+                self.rangiertabelle_modell.emit_changes(ziele=[rd.fid], spalten=['L Status'])
+
+    @pyqtSlot()
+    def toogle_ersatz_status(self):
+        if rd := self.selected_rangiervorgang():
+            if rd.ersatzlok_zid:
+                rd.ersatzlok_status.toggle_status()
+                self.rangiertabelle_modell.emit_changes(ziele=[rd.fid], spalten=['E Status'])
