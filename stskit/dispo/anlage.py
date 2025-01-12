@@ -96,7 +96,6 @@ class Anlage:
             try:
                 logger.info(f"Konfiguration laden von {config_path}")
                 self.load_config(config_path)
-                self.config["default"] = False
             except OSError:
                 logger.warning("Keine benutzerspezifische Anlagenkonfiguration gefunden")
                 logger.info(f"Beispielkonfiguration laden von {default_path}")
@@ -127,6 +126,7 @@ class Anlage:
             self.bahnhofgraph.import_bahnsteiggraph(self.bahnsteiggraph, default_bahnsteigname, default_bahnhofname)
             self.bahnhofgraph.import_signalgraph(self.signalgraph, default_anschlussname)
             try:
+                # todo : konfiguration
                 self.bahnhofgraph.konfigurieren(self.config['bahnhofgraph'])
             except KeyError:
                 logger.warning("keine bahnhofkonfiguration gefunden")
@@ -237,6 +237,8 @@ class Anlage:
         """
         Streckendefinition aus der Konfiguration übernehmen
         """
+
+        # todo : konfiguration
         for titel, konfig in self.config.get('strecken', {}).items():
             strecke = []
             for name in konfig:
@@ -291,6 +293,10 @@ class Anlage:
         elif d['_version'] == 3:
             self.config = d
 
+    def save_config(self, path: os.PathLike):
+        with open(path, "w", encoding='utf-8') as fp:
+            json.dump(self.config, fp, indent=2, ensure_ascii=False)
+
     def set_config_v2(self, d: Dict):
         """
         Konfigurationsdaten im Format der Version 2 laden.
@@ -334,6 +340,7 @@ class Anlage:
             logger.info("Fehlende Anschlussgruppen-Konfiguration")
             anschluss_konfig = {}
 
+        self.config["default"] = False
         self.config['bahnhofgraph'] = bahnhofgraph_konfig_umdrehen(gleis_konfig, anschluss_konfig)
 
         try:
