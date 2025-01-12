@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Optional, Set, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Optional, Sequence, Set, Tuple, TypeVar, Union
 
 import networkx as nx
 
@@ -459,40 +459,46 @@ class BahnhofGraph(nx.DiGraph):
         for agl_label, gleise in agl_gleise.items():
             self.nodes[agl_label]['gleise'] = int(gleise + 0.5)
 
-    def konfigurieren(self, config: Dict[Tuple[str, str], Tuple[str, ...]]) -> None:
+    def konfigurieren(self, config: Dict[Tuple[str, str], Sequence[str]]) -> None:
         """
         Modifiziert den Bahnhofgraphen anhand von Konfigurationsdaten
 
-        :param config: Mapping von STS-Gleisnamen zu Tupel (Bahnsteig, Bahnhofteil, Bahnhof) bzw. (Anschlussstelle)
+        :param config: Mapping von Gleisen zu Betriebsstellen.
+            Die Keys sind Gleise als BahnhofElement-Tupel oder gewöhnliche Zweiertupel,
+            Values sind Dreiertupel (Bahnhof, Bahnhofteil, Bahnsteig) bei Bahnhofgleisen
+            oder Einertupel (Anschlussstelle) bei Anschlussgleisen.
+            Namen, die auf ein Fragezeichen enden (fehlende Konfigurationsdaten) werden ignoriert.
         """
 
         relabeling = {}
 
         def bahnhof_ast(graph: nx.Graph, gl: BahnhofLabelType) -> Optional[List[BahnhofLabelType]]:
             """
-            Finde den Bf bzw. Anst-Knoten und gib den Pfad zum Gleisknoten zurück.
+            Finde den Pfad vom Bf bzw. Anst-Knoten zum Gleisknoten.
+
             :param graph: Bahnhofgraph
             :param gl: Gleislabel (typ, name)
             :return: Liste von Bahnhofgraphlabels von Bf zu Gl, bzw. Anst zu Agl
             """
 
             try:
-                pfade = nx.shortest_path(graph, target=gl)
+                pfad = nx.shortest_path(graph, source=self.root(), target=gl)
             except nx.NodeNotFound:
                 return None
 
-            for key, pfad in pfade.items():
-                if key.typ in {'Bf', 'Anst'}:
+            while pfad:
+                if pfad[0].typ in {'Bf', 'Anst'}:
                     return pfad
+                else:
+                    pfad = pfad[1:]
+            else:
+                return None
 
         for gleis, bf_bft_bs in config.items():
-            ast = bahnhof_ast(self, BahnhofLabelType(gleis[0], gleis[1]))
+            ast = bahnhof_ast(self, BahnhofLabelType(*gleis))
             if ast:
-                for label_alt, name_neu in zip(ast, bf_bft_bs):
-                    # die alten konfigurationsdaten unterscheiden nicht zwischen Bf und Bft.
-                    # die bahnhofsnamen sind mit einem fragezeichen markiert.
+                for label_alt, name_neu in zip(ast[:-1], bf_bft_bs):
                     if name_neu.endswith("?"):
-                        bf_neu = name_neu[:-1]
                         continue
                     typ, name_alt = label_alt
                     if name_neu != name_alt:
