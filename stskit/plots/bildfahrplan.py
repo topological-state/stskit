@@ -10,9 +10,8 @@ from matplotlib.text import Text
 import networkx as nx
 
 from stskit.utils.observer import Observable
-from stskit.model.bahnhofgraph import BahnhofLabelType
+from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
-from stskit.model.zielgraph import ZielLabelType
 from stskit.model.zuggraph import ZugGraphNode
 from stskit.plugin.stsobj import format_verspaetung, format_minutes
 from stskit.plots.plotbasics import hour_minutes_formatter
@@ -101,19 +100,19 @@ class BildfahrplanPlot:
         self.anlage = zentrale.anlage
 
         self.strecken_name: str = ""
-        self.strecke_von: str = ""
-        self.strecke_via: str = ""
-        self.strecke_nach: str = ""
+        self.strecke_von: Optional[BahnhofElement] = None
+        self.strecke_via: Optional[BahnhofElement] = None
+        self.strecke_nach: Optional[BahnhofElement] = None
         self.zugbeschriftung = Zugbeschriftung(stil="Bildfahrplan")
 
         self.bildgraph = EreignisGraph()
         self.streckengraph = nx.MultiDiGraph()
 
         # bahnhofname -> distanz [minuten]
-        self.strecke: List[BahnhofLabelType] = []
+        self.strecke: List[BahnhofElement] = []
         self.distanz: List[float] = []
         # ortskoordinate der segmentmitte -> linker bahnhof
-        self.naechster_bahnhof: Dict[float, BahnhofLabelType] = {}
+        self.naechster_bahnhof: Dict[float, BahnhofElement] = {}
 
         self.zeit = 0
         self.vorlaufzeit = 55
@@ -122,7 +121,7 @@ class BildfahrplanPlot:
         self.auswahl_geaendert = Observable(self)
         self.auswahl_text: List[str] = []
         self.auswahl_kanten: List[Tuple[EreignisLabelType, ...]] = []
-        self.auswahl_bahnhoefe: List[BahnhofLabelType] = []
+        self.auswahl_bahnhoefe: List[BahnhofElement] = []
 
         self._canvas = canvas
         self._axes = self._canvas.figure.subplots()
@@ -132,19 +131,6 @@ class BildfahrplanPlot:
         self._canvas.mpl_connect("pick_event", self.on_pick)
         self._canvas.mpl_connect("resize_event", self.on_resize)
 
-
-    def _bahnhof_von_gleis(self, plan, zug):
-        try:
-            gleis1 = ('Gl', plan.gleis)
-            gruppe1 = self.anlage.bahnhofgraph.find_superior(gleis1, {'Bf'})
-        except (KeyError, nx.NetworkXError):
-            gleis1 = ('Agl', plan.gleis)
-            try:
-                gruppe1 = self.anlage.bahnhofgraph.find_superior(gleis1, {'Anst'})
-            except (KeyError, nx.NetworkXError):
-                logger.warning(f"gleis {plan.gleis} ({zug.name}) kann keinem bahnhof zugeordnet werden.")
-                gruppe1 = ""
-        return gruppe1
 
     def default_strecke_waehlen(self):
         """
@@ -177,13 +163,13 @@ class BildfahrplanPlot:
                 strecke = []
 
         try:
-            self.strecke_von = strecke[0][1]
-            self.strecke_nach = strecke[-1][1]
-            self.strecke_via = ""
+            self.strecke_von = strecke[0]
+            self.strecke_nach = strecke[-1]
+            self.strecke_via = None
         except IndexError:
-            self.strecke_von = ""
-            self.strecke_nach = ""
-            self.strecke_via = ""
+            self.strecke_von = None
+            self.strecke_nach = None
+            self.strecke_via = None
 
         self.update_strecke()
 
@@ -202,12 +188,12 @@ class BildfahrplanPlot:
         if self.strecken_name in self.anlage.strecken:
             strecke = self.anlage.strecken[self.strecken_name]
             try:
-                self.strecke_von = strecke[0][1]
-                self.strecke_nach = strecke[-1][1]
+                self.strecke_von = strecke[0]
+                self.strecke_nach = strecke[-1]
             except IndexError:
-                self.strecke_von = ""
-                self.strecke_nach = ""
-            self.strecke_via = ""
+                self.strecke_von = None
+                self.strecke_nach = None
+            self.strecke_via = None
 
         elif self.strecke_von and self.strecke_nach:
             if self.strecke_via:
@@ -274,7 +260,7 @@ class BildfahrplanPlot:
         ':' (gepunktet) Abhängigkeit
         """
 
-        def bst_von_gleis(gl: str) -> Optional[BahnhofLabelType]:
+        def bst_von_gleis(gl: str) -> Optional[BahnhofElement]:
             try:
                 bst = self.anlage.bahnhofgraph.find_name(gl)
                 if bst.typ not in {'Bf', 'Anst'}:

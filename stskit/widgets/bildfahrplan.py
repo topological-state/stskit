@@ -8,6 +8,7 @@ from matplotlib.figure import Figure
 from PyQt5 import QtWidgets
 
 from stskit.dispo.anlage import Anlage
+from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.ereignisgraph import EreignisGraphNode, EreignisGraphEdge
 from stskit.plugin.stsobj import time_to_minutes
 from stskit.plugin.stsplugin import PluginClient
@@ -95,17 +96,17 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         """
 
-        gruppen_liste = sorted((gr for gr in itertools.chain(self.anlage.bahnhofgraph.bahnhoefe(),
-                                                             self.anlage.bahnhofgraph.anschlussstellen())))
-
+        bg = self.anlage.bahnhofgraph
+        bst_liste = sorted(bg.list_children(bg.root(), {'Bf', 'Anst'}))
+        bst_liste = ["", *map(str, bst_liste)]
         strecken_liste = sorted(self.anlage.strecken.keys())
 
         self.ui.von_combo.clear()
-        self.ui.von_combo.addItems(["", *gruppen_liste])
+        self.ui.von_combo.addItems(bst_liste)
         self.ui.via_combo.clear()
-        self.ui.via_combo.addItems(["", *gruppen_liste])
+        self.ui.via_combo.addItems(bst_liste)
         self.ui.nach_combo.clear()
-        self.ui.nach_combo.addItems(["", *gruppen_liste])
+        self.ui.nach_combo.addItems(bst_liste)
         self.ui.vordefiniert_combo.clear()
         self.ui.vordefiniert_combo.addItems(["", *strecken_liste])
 
@@ -120,9 +121,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         nach = self.plot.strecke_nach
 
         self.ui.vordefiniert_combo.setCurrentText(name)
-        self.ui.von_combo.setCurrentText(von)
-        self.ui.via_combo.setCurrentText(via)
-        self.ui.nach_combo.setCurrentText(nach)
+        self.ui.von_combo.setCurrentText(str(von))
+        self.ui.via_combo.setCurrentText(str(via))
+        self.ui.nach_combo.setCurrentText(str(nach))
 
         enable_detailwahl = not bool(name)
         self.ui.von_combo.setEnabled(enable_detailwahl)
@@ -130,12 +131,12 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.nach_combo.setEnabled(enable_detailwahl)
 
         self.ui.strecke_list.clear()
-        self.ui.strecke_list.addItems((p[1] for p in self.plot.strecke))
+        self.ui.strecke_list.addItems(map(str, self.plot.strecke))
 
         if self.plot.strecken_name:
             titel = f"Bildfahrplan {self.plot.strecken_name}"
         elif self.plot.strecke_von and self.plot.strecke_nach:
-            titel = f"Bildfahrplan {self.plot.strecke_von}-{self.plot.strecke_nach}"
+            titel = f"Bildfahrplan {self.plot.strecke_von.name}-{self.plot.strecke_nach.name}"
         else:
             titel = "Bildfahrplan (keine Strecke ausgewählt)"
         self.setWindowTitle(titel)
@@ -154,9 +155,18 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         """
 
         name = self.ui.vordefiniert_combo.currentText()
-        von = self.ui.von_combo.currentText()
-        via = self.ui.via_combo.currentText()
-        nach = self.ui.nach_combo.currentText()
+        try:
+            von = BahnhofElement(*self.ui.von_combo.currentText().split(" ", 1))
+        except TypeError:
+            von = None
+        try:
+            via = BahnhofElement(*self.ui.via_combo.currentText().split(" ", 1))
+        except TypeError:
+            via = None
+        try:
+            nach = BahnhofElement(*self.ui.nach_combo.currentText().split(" ", 1))
+        except TypeError:
+            nach = None
 
         changed = name != self.plot.strecken_name
         if not name:

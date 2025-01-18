@@ -25,6 +25,12 @@ class BahnhofElement(NamedTuple):
     typ: str
     name: str
 
+    def __str__(self):
+        """
+        Benutzerfreundliche Bezeichnung, wird im UI verwendet.
+        """
+        return f"{self.typ} {self.name}"
+
 
 class BahnsteigGraphNode(dict):
     """

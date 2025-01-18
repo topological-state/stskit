@@ -62,7 +62,7 @@ class LinienGraph(nx.Graph):
         """
         Das Label vom Liniengraph entspricht dem des BahnsteigGraph, i.d.R. auf Stufe Bf und Anst.
         """
-        return typ, name
+        return LinienLabelType(typ, name)
 
     def linie_eintragen(self,
                         ziel1: ZielGraphNode, bahnhof1: BahnsteigGraphNode,
@@ -83,8 +83,8 @@ class LinienGraph(nx.Graph):
         except AttributeError:
             fahrzeit = 2
 
-        bft1 = (bahnhof1.typ, bahnhof1.name)
-        bft2 = (bahnhof2.typ, bahnhof2.name)
+        bft1 = self.label(bahnhof1.typ, bahnhof1.name)
+        bft2 = self.label(bahnhof2.typ, bahnhof2.name)
 
         try:
             knoten1_daten = self.nodes[bft1]
