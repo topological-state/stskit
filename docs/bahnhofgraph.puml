@@ -1,8 +1,7 @@
 @startuml
 'https://plantuml.com/object-diagram
 
-class Anlage {
-    Region
+class Stw {
     Stellwerk
 }
 
@@ -19,7 +18,7 @@ class Bs {
 }
 
 class Gl {
-    {field} Gleis(sektor)
+    {field} Gleis / Haltepunkt
 }
 
 class Agl {
@@ -30,21 +29,21 @@ class Anst {
     Anschlussstelle
 }
 
-note right of Anlage : wie im Sim
-note left of Bf : manuell\nkeine Entsprechung im Sim
-note left of Bft : Gruppierung nach Sim\nName manuell
-note left of Bs : algorithmisch/manuell\nkeine Entsprechung im Sim
+note right of Stw : wie im Sim
+note left of Bf : Name wählbar\nkeine Entsprechung im Sim
+note left of Bft : Name wählbar\nGruppierung nach Sim
+note left of Bs : Name wählbar\nkeine Entsprechung im Sim
 note left of Gl : wie im Sim
 
-note right of Anst : algorithmisch/manuell\nkeine Entsprechung im Sim
+note right of Anst : Name wählbar\nkeine Entsprechung im Sim
 note right of Agl : wie im Sim
 
-Anlage "1" *-- "*" Bf
+Stw "1" *-- "*" Bf
 Bf "1" *-- "*" Bft
 Bft "1" *-- "*" Bs
 Bs "1" *-- "*" Gl
 
-Anlage "1" *-- "*" Anst
+Stw "1" *-- "*" Anst
 Anst "1" *-- "*" Agl
 
 Bf . Anst

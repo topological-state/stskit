@@ -39,14 +39,14 @@ class BahnsteigGraphNode(dict):
     name = dict_property("name", str, docstring="Name")
     enr = dict_property("enr", int, docstring="Elementnummer bei Anschlussgleisen. Nur für Agl definiert.")
     typ = dict_property("typ", str, docstring="""
-        'Gl': Gleis(sektor)bezeichnung, wie sie in den Fahrplänen vorkommt. Vom Sim deklariert. 
-        'Bs': Bahnsteigbezeichnung, fasst Gleissektoren zusammen.
+        'Gl': Gleis- oder Haltepunktbezeichnung, wie sie in den Fahrplänen vorkommt. Vom Sim deklariert. 
+        'Bs': Bahnsteigbezeichnung, fasst Gleissektoren bzw. Haltepunkte zusammen.
         'Bft': Bahnhofteil, fasst Bahnsteige zusammen, auf die ein Zug umdisponiert werden kann.
         'Bf': Bahnhof für grafische Darstellung und Fahrzeitauswertung.
         'Agl': Anschluss- oder Übergabegleis. Vom Sim deklariert.
         'Anst': Anschluss- oder Übergabestelle, fasst Anschlussgleise zusammen auf die ein Zug umdisponiert werden kann. 
         'Bst': Betriebsstelle. Entweder 'Bf' oder 'Anst'.
-        'Anl': Anlage.
+        'Stw': Stellwerk/Anlage.
         """)
     auto = dict_property("auto", bool, docstring="True bei automatischer, False bei manueller Konfiguration.")
     einfahrt = dict_property("einfahrt", bool, docstring="True, wenn das Gleis eine Einfahrt ist. Nur für Agl definiert.")
@@ -147,14 +147,14 @@ class BahnhofGraph(nx.DiGraph):
 
     def root(self) -> BahnhofLabelType:
         """
-        Label des obersten Knoten
+        Label des höchsten Knotens
 
-        Im Moment ist das das Anlagenelement.
+        Der höchste Knoten ist das Stellwerk.
 
-        :return: Label ('Anl', Anlagenname)
+        :return: Label ('Stw', Stellwerkname)
         """
         for node in self.nodes():
-            if node.typ == 'Anl':
+            if node.typ == 'Stw':
                 return node
         else:
             raise KeyError('Bahnhofgraph enthält kein Anlagenelement.')
@@ -371,7 +371,11 @@ class BahnhofGraph(nx.DiGraph):
             yield node.name
 
     def import_anlageninfo(self, anlageninfo: AnlagenInfo):
-        anl_label = BahnhofLabelType('Anl', anlageninfo.name)
+        """
+        Importiert die Anlageninformation in den Stellwerksknoten.
+        """
+
+        anl_label = BahnhofLabelType('Stw', anlageninfo.name)
         self.add_node(anl_label, typ=anl_label.typ, name=anl_label.name, auto=True, aid=anlageninfo.aid,
                       region=anlageninfo.region, build=anlageninfo.build, online=anlageninfo.online)
 
