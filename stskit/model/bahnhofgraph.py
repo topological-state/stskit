@@ -49,6 +49,13 @@ class BahnsteigGraphNode(dict):
         'Stw': Stellwerk/Anlage.
         """)
     auto = dict_property("auto", bool, docstring="True bei automatischer, False bei manueller Konfiguration.")
+    gleise = dict_property("gleise", int, docstring="""
+        Anzahl Gleise mit dem gleichen Namen.
+        Normalerweise 1, ausser z.B. bei Haltestellen oder Anschlussgleisen ohne Gleisnummer.
+        In diesem Fall wird bei Mehrfachbelegung kein Konflikt angezeigt.  
+        Nur bei Gl, Bs und Agl.
+        Im Moment wird der Wert nur bei Agl automatisch aus dem Signalgraphen ausgewertet. 
+        """)
     einfahrt = dict_property("einfahrt", bool, docstring="True, wenn das Gleis eine Einfahrt ist. Nur für Agl definiert.")
     ausfahrt = dict_property("ausfahrt", bool, docstring="True, wenn das Gleis eine Ausfahrt ist. Nur für Agl definiert.")
     sperrung = dict_property("sperrung", bool, docstring="Gleissperrung")
@@ -403,8 +410,8 @@ class BahnhofGraph(nx.DiGraph):
 
             for gleis in comp:
                 bs = f_bahnsteigname(gleis)
-                self.add_node(BahnhofLabelType('Bs', bs), name=bs, typ='Bs', auto=True)
-                self.add_node(BahnhofLabelType('Gl', gleis), name=gleis, typ='Gl', auto=True)
+                self.add_node(BahnhofLabelType('Bs', bs), name=bs, typ='Bs', gleise=1, auto=True)
+                self.add_node(BahnhofLabelType('Gl', gleis), name=gleis, typ='Gl', gleise=1, auto=True)
                 self.ziel_gleis[gleis] = BahnhofLabelType('Gl', gleis)
                 self.add_edge(BahnhofLabelType('Bft', bft), BahnhofLabelType('Bs', bs), typ='Bft', auto=True)
                 self.add_edge(BahnhofLabelType('Bs', bs), BahnhofLabelType('Gl', gleis), typ='Bs', auto=True)
@@ -417,25 +424,40 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         anl_label = self.root()
-        anst_label = BahnhofLabelType('Bst', 'Anst')
-        self.add_node(anst_label, typ=anst_label.typ, name=anst_label.name, auto=True)
-        self.add_edge(anl_label, anst_label, typ=anl_label.typ, auto=True)
+        bst_label = BahnhofLabelType('Bst', 'Anst')
+        self.add_node(bst_label, typ=bst_label.typ, name=bst_label.name, auto=True)
+        self.add_edge(anl_label, bst_label, typ=anl_label.typ, auto=True)
 
+        agl_gleise = {}
         for anschluss, data in signalgraph.nodes(data=True):
             if data.typ in {Knoten.TYP_NUMMER['Einfahrt'], Knoten.TYP_NUMMER['Ausfahrt']}:
                 agl = data.name
-                agl_data = dict(name=agl, typ='Agl', enr=data.enr, auto=True)
+                agl_label = BahnhofLabelType('Agl', agl)
+                try:
+                    agl_data = self.nodes[agl_label]
+                except KeyError:
+                    agl_data = BahnsteigGraphNode(name=agl, typ='Agl', enr=data.enr, gleise=0, auto=True)
+                    agl_gleise[agl_label] = 0.
+
                 if data['typ'] == Knoten.TYP_NUMMER['Einfahrt']:
                     agl_data['einfahrt'] = True
+                    if agl_label in agl_gleise:
+                        agl_gleise[agl_label] += 0.5
                 if data['typ'] == Knoten.TYP_NUMMER['Ausfahrt']:
                     agl_data['ausfahrt'] = True
+                    if agl_label in agl_gleise:
+                        agl_gleise[agl_label] += 0.5
 
                 anst = f_anschlussname(agl)
-                self.add_node(BahnhofLabelType('Agl', agl), **agl_data)
-                self.add_edge(anst_label, BahnhofLabelType('Anst', anst), typ=anst_label.typ, auto=True)
-                self.ziel_gleis[data.enr] = BahnhofLabelType('Agl', agl)
-                self.add_node(BahnhofLabelType('Anst', anst), name=anst, typ='Anst', auto=True)
-                self.add_edge(BahnhofLabelType('Anst', anst), BahnhofLabelType('Agl', agl), typ='Anst', auto=True)
+                anst_label = BahnhofLabelType('Anst', anst)
+                self.add_node(agl_label, **agl_data)
+                self.add_edge(bst_label, anst_label, typ=bst_label.typ, auto=True)
+                self.ziel_gleis[data.enr] = agl_label
+                self.add_node(anst_label, name=anst, typ='Anst', auto=True)
+                self.add_edge(anst_label, agl_label, typ='Anst', auto=True)
+
+        for agl_label, gleise in agl_gleise.items():
+            self.nodes[agl_label]['gleise'] = int(gleise + 0.5)
 
     def konfigurieren(self, config: Dict[Tuple[str, str], Tuple[str, ...]]) -> None:
         """
