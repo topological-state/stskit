@@ -82,7 +82,7 @@ def setup_logging(filename: Optional[str] = "", level: Optional[str] = "ERROR", 
     logging.getLogger('matplotlib').setLevel(max(numeric_level, logging.WARNING))
     logging.getLogger('PyQt5.uic.uiparser').setLevel(max(numeric_level, logging.WARNING))
     if not log_comm:
-        logging.getLogger('stskit.interface.stsplugin').setLevel(logging.WARNING)
+        logging.getLogger('stskit.plugin.stsplugin').setLevel(logging.WARNING)
 
 
 class WindowManager:
