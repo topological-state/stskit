@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 import networkx as nx
 
+from stskit.dispo.config import Config
 from stskit.model.journal import JournalCollection, JournalIDType, GraphJournal
 from stskit.plugin.stsgraph import GraphClient
 from stskit.plugin.stsobj import Ereignis, AnlagenInfo, time_to_minutes
@@ -25,7 +26,6 @@ from stskit.model.zuggraph import ZugGraph
 from stskit.model.zielgraph import ZielGraph
 from stskit.model.ereignisgraph import EreignisGraph
 from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
-from stskit.utils.export import json_object_hook
 from stskit.model.zugschema import Zugschema
 
 
@@ -33,35 +33,12 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-def bahnhofgraph_konfig_umdrehen(gleis_konfig, anschluss_konfig):
-    """
-    Konfiguration invertieren
-
-    bahnhofgraph_konfigurien benoetigt eine bottom-up Struktur,
-    waehrend die Konfigurationsdatei eine top-down Struktur hat.
-    diese Methode wandelt top-down in bottom-up um.
-    """
-
-    result = {}
-
-    for bf, bf_dict in gleis_konfig.items():
-        for bft, bft_dict in bf_dict.items():
-            for bs, bs_set in bft_dict.items():
-                for gl in bs_set:
-                    result[('Gl', gl)] = (bf, bft, bs)
-
-    for anst, anst_set in anschluss_konfig.items():
-        for agl in anst_set:
-            result[('Agl', agl)] = (anst,)
-
-    return result
-
-
 class Anlage:
     def __init__(self):
         self.anlageninfo: Optional[AnlagenInfo] = None
         self.simzeit_minuten: int = 0
-        self.config: Dict[str, Any] = {}
+        self.config: Optional[Config] = None
+        self.default_config:Optional[Config] = None
 
         self.signalgraph = SignalGraph()
         self.bahnsteiggraph = BahnsteigGraph()
@@ -90,26 +67,8 @@ class Anlage:
         if self.anlageninfo is None:
             self.anlageninfo = client.anlageninfo
 
-        if not self.config and config_path:
-            self.config["default"] = True
-            default_path = Path(__file__).parent.parent / "config"
-            try:
-                logger.info(f"Konfiguration laden von {config_path}")
-                self.load_config(config_path)
-            except OSError:
-                logger.warning("Keine benutzerspezifische Anlagenkonfiguration gefunden")
-                logger.info(f"Beispielkonfiguration laden von {default_path}")
-                try:
-                    self.load_config(default_path)
-                    self.config["default"] = True
-                except OSError:
-                    logger.warning("Keine Beispielkonfiguration gefunden")
-            except ValueError as e:
-                logger.exception("Fehlerhafte Anlagenkonfiguration")
-
-            Zugschema.find_schemas(default_path)
-            Zugschema.find_schemas(config_path)
-            self.zugschema.load_config(self.config.get('zugschema', ''), self.anlageninfo.region)
+        if self.config is None:
+            self.load_config(config_path)
 
         if not self.signalgraph:
             self.signalgraph = client.signalgraph.copy(as_view=False)
@@ -126,10 +85,9 @@ class Anlage:
             self.bahnhofgraph.import_bahnsteiggraph(self.bahnsteiggraph, default_bahnsteigname, default_bahnhofname)
             self.bahnhofgraph.import_signalgraph(self.signalgraph, default_anschlussname)
             try:
-                # todo : konfiguration
-                self.bahnhofgraph.konfigurieren(self.config['bahnhofgraph'])
+                self.bahnhofgraph.konfigurieren(self.config['elemente'])
             except KeyError:
-                logger.warning("keine bahnhofkonfiguration gefunden")
+                logger.warning("Keine Bahnhofkonfiguration gefunden")
             if logger.isEnabledFor(logging.DEBUG):
                 nx.write_gml(self.bahnhofgraph, debug_path / f"{self.anlageninfo.aid}.bahnhofgraph.gml", stringizer=str)
 
@@ -258,119 +216,61 @@ class Anlage:
             if node1 is not None and node2 is not None:
                 self.streckenmarkierung[(node1, node2)] = markierung
 
-    def load_config(self, path: os.PathLike, load_graphs=False, ignore_version=False):
+    def load_config(self, config_path: os.PathLike):
         """
         Konfiguration aus Konfigurationsdatei laden.
 
-        :param path: Verzeichnis mit den Konfigurationsdaten.
+        :param config_path: Verzeichnis mit den Konfigurationsdaten.
             Der Dateiname wird aus der Anlagen-ID gebildet.
-        :param load_graphs: Die Graphen werden normalerweise vom Simulator abgefragt und erstellt.
-            Für die Offline-Auswertung können sie stattdessen aus dem Konfigurationsfile geladen werden.
         :return: None
         :raise: OSError, JSONDecodeError(ValueError)
         """
-        if load_graphs:
-            p = Path(path) / f"{self.anlageninfo.aid}diag.json"
-        else:
-            p = Path(path) / f"{self.anlageninfo.aid}.json"
 
-        with open(p, encoding='utf-8') as fp:
-            d = json.load(fp, object_hook=json_object_hook)
+        default_path = Path(__file__).parent.parent / "config"
 
-        if not ignore_version:
-            assert d['_aid'] == self.anlageninfo.aid
-            if self.anlageninfo.build != d['_build']:
-                logger.warning(f"unterschiedliche build-nummern (file: {d['_build']}, sim: {self.anlageninfo.build})")
-            if '_version' not in d:
-                d['_version'] = 1
-                logger.warning(f"konfigurationsdatei ohne versionsangabe. nehme 1 an.")
-            if d['_version'] < 2:
-                logger.error(f"inkompatible konfigurationsdatei - auto-konfiguration")
-                return
+        Zugschema.find_schemas(default_path)
+        Zugschema.find_schemas(config_path)
 
-        if d['_version'] == 2:
-            self.set_config_v2(d)
-        elif d['_version'] == 3:
-            self.config = d
+        if self.default_config is None:
+            self.default_config = Config()
+            p = Path(default_path) / f"{self.anlageninfo.aid}.json"
+            try:
+                logger.info(f"Beispielkonfiguration laden von {p}")
+                self.default_config.load(p, aid=self.anlageninfo.aid)
+                self.config["default"] = True
+            except OSError:
+                logger.warning(f"Keine Beispielkonfiguration gefunden")
+
+        if self.config is None:
+            self.config = Config()
+            self.config["default"] = True
+            p = Path(config_path) / f"{self.anlageninfo.aid}.json"
+            try:
+                logger.info(f"Konfiguration laden von {p}")
+                self.config.load(p, aid=self.anlageninfo.aid)
+            except OSError:
+                logger.warning(f"Benutzerkonfiguration {p} nicht gefunden")
+
+            # elemente, strecken, streckenmarkierung, zugschema
+            if 'elemente' not in self.config:
+                self.config['elemente'] = self.default_config.get('elemente', {})
+            if 'strecken' not in self.config:
+                self.config['strecken'] = self.default_config.get('strecken', {})
+            if 'streckenmarkierung' not in self.config:
+                self.config['streckenmarkierung'] = self.default_config.get('streckenmarkierung', {})
+            if 'zugschema' not in self.config:
+                self.config['zugschema'] = self.default_config.get('zugschema', {})
+
+        self.zugschema.load_config(self.config.get('zugschema', ''), self.anlageninfo.region)
 
     def save_config(self, path: os.PathLike):
-        with open(path, "w", encoding='utf-8') as fp:
-            json.dump(self.config, fp, indent=2, ensure_ascii=False)
+        self.config["_aid"] = self.anlageninfo.aid
+        self.config["_build"] = self.anlageninfo.build
+        self.config["_name"] = self.anlageninfo.name
+        self.config["_region"] = self.anlageninfo.region
 
-    def set_config_v2(self, d: Dict):
-        """
-        Konfigurationsdaten im Format der Version 2 laden.
-
-        :param d:
-        :return:
-        """
-        def _find_sektor(gleis: str, sektoren_gleise: Dict) -> Optional[str]:
-            for bahnsteig, gleise in sektoren_gleise.items():
-                if gleis in gleise:
-                    return bahnsteig
-            else:
-                return None
-
-        gleis_konfig = {}
-        try:
-            sektoren = d['sektoren']
-        except KeyError:
-            logger.info("Fehlende Sektoren-Konfiguration")
-            sektoren = {}
-
-        try:
-            for bft, gleise in d['bahnsteiggruppen'].items():
-                bf = bft + "?"
-                for gl in gleise:
-                    if bft not in gleis_konfig:
-                        gleis_konfig[bf] = {bft: {}}
-                    bs = _find_sektor(gl, sektoren)
-                    if not bs:
-                        bs = gl
-                    try:
-                        gleis_konfig[bf][bft][bs].add(gl)
-                    except KeyError:
-                        gleis_konfig[bf][bft][bs] = {gl}
-        except KeyError:
-            logger.info("Fehlende Bahnsteiggruppen-Konfiguration")
-
-        try:
-            anschluss_konfig = d['anschlussgruppen']
-        except KeyError:
-            logger.info("Fehlende Anschlussgruppen-Konfiguration")
-            anschluss_konfig = {}
-
-        self.config["default"] = False
-        self.config['bahnhofgraph'] = bahnhofgraph_konfig_umdrehen(gleis_konfig, anschluss_konfig)
-
-        try:
-            self.config['strecken'] = d['strecken']
-        except KeyError:
-            logger.info("Fehlende Streckenkonfiguration")
-            self.config['strecken'] = {}
-        try:
-            self.config['hauptstrecke'] = d['hauptstrecke']
-        except KeyError:
-            logger.info("Keine Hauptstrecke konfiguriert")
-            self.config['hauptstrecke'] = ""
-        try:
-            markierungen = d['streckenmarkierung']
-        except KeyError:
-            logger.info("keine streckenmarkierungen konfiguriert")
-            markierungen = []
-
-        streckenmarkierung = {}
-        for markierung in markierungen:
-            try:
-                streckenmarkierung[(markierung[0], markierung[1])] = markierung[2]
-            except IndexError:
-                pass
-        self.config['streckenmarkierung'] = streckenmarkierung
-
-        try:
-            self.config['zugschema'] = d['zugschema']
-        except KeyError:
-            self.config['zugschema'] = ''
+        p = Path(path) / f"{self.anlageninfo.aid}.json"
+        self.config.save(p)
 
     def sim_ereignis_uebernehmen(self, ereignis: Ereignis):
         self.ereignisgraph.sim_ereignis_uebernehmen(ereignis)

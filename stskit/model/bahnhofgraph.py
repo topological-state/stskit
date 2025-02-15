@@ -11,6 +11,10 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
+BAHNHOFELEMENT_TYPEN = {'Gl', 'Bs', 'Bft', 'Bf', 'Agl', 'Anst', 'Bst', 'Stw'}
+BAHNHOFELEMENT_HIERARCHIE = {'Gl': 'Bs', 'Bs': 'Bft', 'Bft': 'Bf', 'Bf': 'Bst', 'Agl': 'Anst', 'Anst': 'Bst', 'Bst': 'Stw'}
+
+
 class BahnhofElement(NamedTuple):
     """
     Vollständige Bahnhofelementbezeichnung (Typ und Name)
@@ -30,6 +34,22 @@ class BahnhofElement(NamedTuple):
         Benutzerfreundliche Bezeichnung, wird im UI verwendet.
         """
         return f"{self.typ} {self.name}"
+
+    @classmethod
+    def from_string(cls, s: str) -> 'BahnhofElement':
+        """
+        Bahnhofelement aus Stringdarstellung
+
+        :raises: ValueError bei fehlerhaftem Format oder unbekanntem Elementtyp.
+            Ueberprueft nicht, ob das Bahnhofelement in der Anlage existiert.
+        """
+
+        typ, name = s.split(" ", 1)
+        if typ not in BAHNHOFELEMENT_TYPEN:
+            raise ValueError(f"Unbekannter Bahnhofelementtyp {typ} in {s}")
+        if not name:
+            raise ValueError(f"Undefinierter Bahnhofelementname {name} in {s}")
+        return BahnhofElement(typ, name)
 
 
 class BahnsteigGraphNode(dict):
@@ -459,75 +479,58 @@ class BahnhofGraph(nx.DiGraph):
         for agl_label, gleise in agl_gleise.items():
             self.nodes[agl_label]['gleise'] = int(gleise + 0.5)
 
-    def konfigurieren(self, config: Dict[Tuple[str, str], Sequence[str]]) -> None:
+    def konfigurieren(self, elemente: dict):
         """
-        Modifiziert den Bahnhofgraphen anhand von Konfigurationsdaten
+        Bahnhofgraph konfigurieren
 
-        :param config: Mapping von Gleisen zu Betriebsstellen.
-            Die Keys sind Gleise als BahnhofElement-Tupel oder gewöhnliche Zweiertupel,
-            Values sind Dreiertupel (Bahnhof, Bahnhofteil, Bahnsteig) bei Bahnhofgleisen
-            oder Einertupel (Anschlussstelle) bei Anschlussgleisen.
-            Namen, die auf ein Fragezeichen enden (fehlende Konfigurationsdaten) werden ignoriert.
+        Der Bahnhofgraph muss bereits mit der Autokonfiguration befuellt sein.
         """
 
-        relabeling = {}
+        for e in elemente:
+            if e.get('auto'):  # oder nur wenn p auto?
+                continue
 
-        def bahnhof_ast(graph: nx.Graph, gl: BahnhofLabelType) -> Optional[List[BahnhofLabelType]]:
-            """
-            Finde den Pfad vom Bf bzw. Anst-Knoten zum Gleisknoten.
+            be2 = BahnhofElement(e['typ'], e['name'])
+            data2 = {"auto": False}
+            if "sichtbar" in e:
+                data2["sichtbar"] = e['sichtbar']
+            if "gleise" in e:
+                data2["gleise"] = e['gleise']
+            if "flags" in e:
+                data2["sperrung"] = "S" in e['flags']
 
-            :param graph: Bahnhofgraph
-            :param gl: Gleislabel (typ, name)
-            :return: Liste von Bahnhofgraphlabels von Bf zu Gl, bzw. Anst zu Agl
-            """
+            if e['typ'] in {'Gl', 'Agl'}:
+                if be2 not in self:
+                    logger.debug(f"Gleis {be2} existiert nicht im Simulator")
+                    continue
+            elif e['typ'] in {'Bs', 'Bft', 'Bf', 'Anst'}:
+                data2['typ'] = e['typ']
+                data2['name'] = e['name']
+            else:
+                continue
+
+            # element einfuegen und attribute aktualisieren
+            self.add_node(be2, **data2)
 
             try:
-                pfad = nx.shortest_path(graph, source=self.root(), target=gl)
-            except nx.NodeNotFound:
-                return None
+                t = BAHNHOFELEMENT_HIERARCHIE[e['typ']]
+                be1 = BahnhofElement(t, e['stamm'])
+            except KeyError:
+                continue
 
-            while pfad:
-                if pfad[0].typ in {'Bf', 'Anst'}:
-                    return pfad
-                else:
-                    pfad = pfad[1:]
-            else:
-                return None
+            # andere edges entfernen!
+            knoten_entfernen = list(self.predecessors(be2))
+            for p in knoten_entfernen:
+                self.remove_edge(p, be2)
+            self.add_edge(be1, be2, typ="Hierarchie", auto=False)
 
-        for gleis, bf_bft_bs in config.items():
-            ast = bahnhof_ast(self, BahnhofLabelType(*gleis))
-            if ast:
-                for label_alt, name_neu in zip(ast[:-1], bf_bft_bs):
-                    if name_neu.endswith("?"):
-                        continue
-                    typ, name_alt = label_alt
-                    if name_neu != name_alt:
-                        relabeling[label_alt] = BahnhofLabelType(typ, name_neu)
+        def leere_gruppen_entfernen(typ: str):
+            entfernen = []
+            for n in self.nodes():
+                if n.typ == typ and self.out_degree[n] == 0:
+                    entfernen.append(n)
+            for n in entfernen:
+                self.remove_node(n)
 
-        nx.relabel_nodes(self, relabeling, copy=False)
-
-        for node, data in self.nodes(data=True):
-            if data['name'] != node.name:
-                data['name'] = node.name
-                data['auto'] = False
-
-    def bereinigen(self):
-        """
-        Fehler im Graph bereinigen
-
-        - Mehrfache eingehende Kanten: Behalte die Kante zum Knoten mit dem kürzesten Namen und lösche die anderen.
-
-        :return:
-        """
-
-        kanten_entfernen = []
-
-        for node, data in self.nodes(data=True):
-            preds = list(self.predecessors(node))
-            if len(preds) > 1:
-                keep = min(sorted(preds), key=lambda n: len(n[1]))
-                preds.remove(keep)
-                for pred in preds:
-                    kanten_entfernen.append((pred, node))
-
-        self.remove_edges_from(kanten_entfernen)
+        for t in ['Bs', 'Bft', 'Bf', 'Anst']:
+            leere_gruppen_entfernen(t)
