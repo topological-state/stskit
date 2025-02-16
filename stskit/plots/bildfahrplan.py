@@ -145,7 +145,7 @@ class BildfahrplanPlot:
         :return: None
         """
 
-        strecken = [(name, len(strecke)) for name, strecke in self.anlage.strecken.items()]
+        strecken = [(name, len(strecke)) for name, strecke in self.anlage.strecken.strecken.items()]
         try:
             laengste_strecke = max(strecken, key=lambda x: x[1])
             laengste_strecke = laengste_strecke[0]
@@ -153,12 +153,12 @@ class BildfahrplanPlot:
             laengste_strecke = ""
 
         try:
-            self.strecken_name = self.anlage.hauptstrecke
-            strecke = self.anlage.strecken[self.anlage.hauptstrecke]
+            self.strecken_name = self.anlage.strecken.hauptstrecke
+            strecke = self.anlage.strecken.strecken[self.anlage.strecken.hauptstrecke]
         except KeyError:
             self.strecken_name = ""
             try:
-                strecke = self.anlage.strecken[laengste_strecke]
+                strecke = self.anlage.strecken.strecken[laengste_strecke]
             except KeyError:
                 strecke = []
 
@@ -185,8 +185,8 @@ class BildfahrplanPlot:
 
         self.streckengraph.clear()
 
-        if self.strecken_name in self.anlage.strecken:
-            strecke = self.anlage.strecken[self.strecken_name]
+        if self.strecken_name in self.anlage.strecken.strecken:
+            strecke = self.anlage.strecken.strecken[self.strecken_name]
             try:
                 self.strecke_von = strecke[0]
                 self.strecke_nach = strecke[-1]
@@ -482,7 +482,7 @@ class BildfahrplanPlot:
         """
 
         try:
-            markierungen = self.anlage.streckenmarkierung
+            markierungen = {(e1, e2): m for e1, e2, m in self.anlage.liniengraph.edges(data='markierung') if m}
         except AttributeError:
             markierungen = {}
 

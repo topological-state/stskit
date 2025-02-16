@@ -99,7 +99,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         bg = self.anlage.bahnhofgraph
         bst_liste = sorted(bg.list_children(bg.root(), {'Bf', 'Anst'}))
         bst_liste = ["", *map(str, bst_liste)]
-        strecken_liste = sorted(self.anlage.strecken.keys())
+        strecken_liste = sorted(self.anlage.strecken.strecken.keys(), key=self.anlage.strecken.ordnung.get)
 
         self.ui.von_combo.clear()
         self.ui.von_combo.addItems(bst_liste)

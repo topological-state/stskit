@@ -835,7 +835,7 @@ class GleisbelegungPlot:
         """
 
         try:
-            sperrungen = self.anlage.gleissperrungen
+            sperrungen = [gleis for gleis, sperrung in self.anlage.bahnhofgraph.nodes(data='sperrung') if sperrung]
         except AttributeError:
             sperrungen = []
         for gleis in sperrungen:

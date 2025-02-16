@@ -86,8 +86,10 @@ class Config(UserDict):
 
     def save_v3(self, path: Path):
         self.data['_version'] = 3
+        data = dict(self.data)
+        del data['dict']
         with open(path, "w", encoding='utf-8') as fp:
-            json.dump(self.data, fp, indent=2, ensure_ascii=False)
+            json.dump(data, fp, indent=2, ensure_ascii=False)
 
     def import_v2(self, d: Dict):
         """

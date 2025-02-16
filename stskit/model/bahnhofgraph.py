@@ -479,7 +479,7 @@ class BahnhofGraph(nx.DiGraph):
         for agl_label, gleise in agl_gleise.items():
             self.nodes[agl_label]['gleise'] = int(gleise + 0.5)
 
-    def konfigurieren(self, elemente: dict):
+    def import_konfiguration(self, elemente: Dict):
         """
         Bahnhofgraph konfigurieren
 
@@ -534,3 +534,30 @@ class BahnhofGraph(nx.DiGraph):
 
         for t in ['Bs', 'Bft', 'Bf', 'Anst']:
             leere_gruppen_entfernen(t)
+
+    def export_konfiguration(self) -> Sequence[Dict[str, Union[str, int, float, bool]]]:
+        """
+        Bahnhofgraph exportieren fuer Konfigurationsdatei
+
+        :return: Liste von Bahnhof-Elementen fuer das 'elemente'-Arrays gemaess config.schema3.json.
+        """
+
+        elemente = {}
+        for e1, e2 in self.edges():
+            if e1.typ in {'Stw', 'Bst'}:
+                continue
+            data: BahnsteigGraphNode = self.nodes[e2]
+            element = {'name': e2.name,
+                       'typ': e2.typ,
+                       'stamm': e1.name,
+                       'auto': data.auto,
+                       'sichtbar': True,
+                       'flags': ''}
+            if data.sperrung:
+                element['flags'] = 'S'
+                element['auto'] = False
+            if element['typ'] in {'Gl', 'Bs', 'Agl'}:
+                element['gleise'] = data.gleise
+            elemente[e2] = element
+
+        return list(elemente.values())

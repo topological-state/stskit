@@ -137,7 +137,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
                                                 anschluesse=self.ansicht == "Agl", bahnsteige=self.ansicht != "Agl")
             self.gleisauswahl.set_auswahl(self.gleisauswahl.alle_gleise)
             self.plot.belegung.gleise_auswaehlen(self.gleisauswahl.alle_gleise)
-            sperrungen = {BahnhofElement(gleis[0], gleis[1]) for gleis in self.anlage.gleissperrungen}
+            sperrungen = {gleis for gleis, sperrung in self.anlage.bahnhofgraph.nodes(data='sperrung') if sperrung}
             self.gleisauswahl.set_sperrungen(sperrungen)
 
         self.plot.belegung.update()
@@ -162,7 +162,9 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.plot.belegung.gleise_auswaehlen(self.gleisauswahl.get_auswahl())
-        self.anlage.gleissperrungen = self.gleisauswahl.get_sperrungen()
+        sperrungen = self.gleisauswahl.get_sperrungen()
+        for gleis in self.anlage.bahnhofgraph.nodes():
+            self.anlage.bahnhofgraph.nodes[gleis]['sperrung'] = gleis in sperrungen
         if self.ui.name_button.isChecked():
             self.plot.belegung.zugbeschriftung.elemente = ["Name"]
         else:

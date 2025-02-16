@@ -1,11 +1,11 @@
 import itertools
 import logging
-from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set, Tuple, TypeVar, Union
 
 import networkx as nx
 
 from stskit.model.graphbasics import dict_property
-from stskit.model.bahnhofgraph import BahnsteigGraphNode, BahnhofLabelType
+from stskit.model.bahnhofgraph import BahnhofElement, BahnhofGraph, BahnsteigGraphNode, BahnhofLabelType
 from stskit.model.zielgraph import ZielGraphNode
 
 logger = logging.getLogger(__name__)
@@ -32,6 +32,8 @@ class LinienGraphEdge(dict):
                                    docstring="Summe aller ausgewerteten Fahrzeiten in Minuten")
     fahrzeit_schnitt = dict_property("fahrzeit_schnitt", float,
                                      docstring="Mittelwert aller ausgewerteten Fahrzeiten in Minuten")
+    markierung = dict_property("markierung", str,
+                               docstring="Markierungsflags: E = Eingleisig")
 
 
 LinienLabelType = BahnhofLabelType
@@ -255,3 +257,157 @@ class LinienGraph(nx.Graph):
             result.append(float(distanz))
 
         return result
+
+    def import_konfiguration(self,
+                             streckenmarkierung_konfig: Iterable[Dict[str, Any]],
+                             bahnhofgraph: BahnhofGraph):
+        """
+        Streckenmarkierungen aus der Konfiguration übernehmen
+        """
+
+        for markierung_kfg in streckenmarkierung_konfig:
+            station1 = BahnhofElement.from_string(markierung_kfg['station1'])
+            station2 = BahnhofElement.from_string(markierung_kfg['station2'])
+            markierung = markierung_kfg.get('flags', '')
+            if station1 in bahnhofgraph and station2 in bahnhofgraph:
+                self.edges[station1, station2]['markierung'] = markierung
+
+
+    def export_konfiguration(self) -> Sequence[Dict[str, Union[str, int, float, bool]]]:
+        """
+        Streckenmarkierung in Konfigurationsformat exportieren
+        """
+
+        result = []
+        for e1, e2, m in self.edges(data='markierung'):
+            if m:
+                result.append({'station1': str(e1), 'station2': str(e2), 'flags': m})
+
+        return result
+
+
+class Strecken:
+    """
+    Strecken
+
+    Verwaltet konfigurierte Verbindungen zwischen Bahnhöfen.
+    Strecken werden aus dem Liniengraph automatisch erstellt oder aus der Konfiguration gelesen.
+
+    Sortierung:
+    Die Streckenliste kann durch das Attribut `ordnung` geordnet werden.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.liniengraph:Optional[LinienGraph] = None
+        self.strecken: Dict[str, List[BahnhofElement]] = {}
+        self.ordnung: Dict[str, int] = {}
+        self.auto: Dict[str, bool] = {}
+        self.hauptstrecke: Optional[str] = None
+
+    def streckengraph(self, strecke: str) -> LinienGraph:
+        """
+        Strecke als Liniengraph darstellen
+
+        Kann nützlich sein, wenn auf Liniengraphdaten für eine Strecke zugegriffen werden soll.
+        Das Resultat ist ein View und daher nicht veränderbar.
+
+        Todo: Mir ist noch nicht klar, wie dynamisch der View ist,
+        d.h. ob Änderungen am Basisgraph automatisch sichtbar werden.
+        Ausserdem: Können Attribute verändert werden?
+        """
+
+        def fn(node: BahnhofElement) -> bool:
+            return node in self.strecken[strecke]
+
+        def fe(node1: BahnhofElement, node2: BahnhofElement) -> bool:
+            return node1 in self.strecken[strecke] and node2 in self.strecken[strecke]
+
+        return nx.subgraph_view(self.liniengraph, filter_node=fn, filter_edge=fe)
+
+    def add_strecke(self,
+                    name: str,
+                    stationen: Iterable[BahnhofElement],
+                    ordnung: int = 99,
+                    auto: bool = True) -> None:
+        """
+        Strecke definieren
+        """
+
+        stationen = list(stationen)
+        if len(stationen) < 2:
+            return
+
+        self.strecken[name] = list(stationen)
+        self.ordnung[name] = ordnung
+        self.auto[name] = auto
+        if ordnung == 1:
+            self.hauptstrecke = name
+
+    def remove_strecke(self, name: str):
+        """
+        Streckendefinition entfernen
+        """
+
+        del self.strecken[name]
+        del self.ordnung[name]
+        del self.auto[name]
+        if self.hauptstrecke == name:
+            self.hauptstrecke = None
+
+    def import_konfiguration(self,
+                             strecken_konfig: Iterable[Dict[str, Any]],
+                             bahnhofgraph: BahnhofGraph):
+        """
+        Streckendefinition aus der Konfiguration übernehmen
+        """
+
+        strecken = {}
+        ordnung = {}
+        auto = {}
+        for strecke_kfg in strecken_konfig:
+            strecke = []
+            for station in strecke_kfg['stationen']:
+                if bahnhofgraph.has_node(node := BahnhofElement.from_string(station)):
+                    strecke.append(node)
+            if len(strecke) < 2:
+                continue
+
+            key = strecke_kfg.get('name')
+            if not key:
+                key = "-".join((str(strecke[0]), str(strecke[-1])))
+
+            strecken[key] = strecke
+            ordnung[key] = strecke_kfg.get('ordnung', 99)
+            auto[key] = strecke_kfg.get('auto', True)
+
+        for key in ordnung:
+            self.strecken[key] = strecken[key]
+            self.ordnung[key] = ordnung[key]
+            self.auto[key] = auto[key]
+
+        try:
+            hauptstrecke = sorted(ordnung.keys(), key=ordnung.get)[0]
+            if ordnung[hauptstrecke] == 1:
+                self.hauptstrecke = hauptstrecke
+            else:
+                self.hauptstrecke = None
+        except IndexError:
+            self.hauptstrecke = None
+
+
+    def export_konfiguration(self) -> Sequence[Dict[str, Any]]:
+        """
+        Streckendeklaration in Konfigurationsformat exportieren
+        """
+
+        konfig = []
+
+        for key in sorted(self.ordnung.keys(), key=self.ordnung.get):
+            stationen = [str(station) for station in self.strecken[key]]
+            konfig.append({'name': key,
+                           'ordnung': self.ordnung[key],
+                           'auto': self.auto[key],
+                           'stationen': stationen})
+
+        return konfig

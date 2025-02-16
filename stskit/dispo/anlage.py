@@ -21,7 +21,7 @@ from stskit.plugin.stsgraph import GraphClient
 from stskit.plugin.stsobj import Ereignis, AnlagenInfo, time_to_minutes
 from stskit.model.signalgraph import SignalGraph
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnsteigGraph
-from stskit.model.liniengraph import LinienGraph, LinienGraphEdge
+from stskit.model.liniengraph import LinienGraph, LinienGraphEdge, Strecken
 from stskit.model.zuggraph import ZugGraph
 from stskit.model.zielgraph import ZielGraph
 from stskit.model.ereignisgraph import EreignisGraph
@@ -50,10 +50,8 @@ class Anlage:
 
         self.fdl_korrekturen = JournalCollection()
 
-        self.strecken: Dict[str, List[Tuple[str, str]]] = {}
-        self.hauptstrecke: Optional[str] = None
-        self.streckenmarkierung: Dict[Tuple[Tuple[str, str], Tuple[str, str]], str] = {}
-        self.gleissperrungen: Set[Tuple[str, str]] = set()
+        self.strecken = Strecken()
+        self.strecken.liniengraph = self.liniengraph
 
         self.zugschema = Zugschema()
 
@@ -61,7 +59,6 @@ class Anlage:
         config_path = Path(config_path)
         debug_path = config_path / "debug"
 
-        # todo : konfiguration speichern
         self.simzeit_minuten = time_to_minutes(client.calc_simzeit())
 
         if self.anlageninfo is None:
@@ -85,7 +82,7 @@ class Anlage:
             self.bahnhofgraph.import_bahnsteiggraph(self.bahnsteiggraph, default_bahnsteigname, default_bahnhofname)
             self.bahnhofgraph.import_signalgraph(self.signalgraph, default_anschlussname)
             try:
-                self.bahnhofgraph.konfigurieren(self.config['elemente'])
+                self.bahnhofgraph.import_konfiguration(self.config['elemente'])
             except KeyError:
                 logger.warning("Keine Bahnhofkonfiguration gefunden")
             if logger.isEnabledFor(logging.DEBUG):
@@ -94,27 +91,44 @@ class Anlage:
         self.zuggraph = client.zuggraph.copy(as_view=True)
         self.zielgraph = client.zielgraph.copy(as_view=False)
 
+        # liniengraph konfigurieren
+        # benoetigt: bahnhofgraph, liniengraph, zielgraph, signalgraph
         if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
             self.liniengraph_konfigurieren()
             self.liniengraph_mit_signalgraph_abgleichen()
+            try:
+                self.liniengraph.import_konfiguration(self.config['streckenmarkierung'], self.bahnhofgraph)
+            except KeyError:
+                logger.warning("Keine Streckenmarkierungskonfiguration gefunden")
+
         self.zielgraph.einfahrtszeiten_korrigieren(self.liniengraph, self.bahnhofgraph)
         self.ereignisgraph.zielgraph_importieren(self.zielgraph)
         self.fdl_korrekturen.replay()
         self.ereignisgraph.prognose()
         self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
 
-        if len(self.strecken) == 0 and self.liniengraph:
-            strecken = self.liniengraph.strecken_vorschlagen(2, 3)
-            for strecke in strecken:
-                key = f"{strecke[0][1]}-{strecke[-1][1]}"
-                self.strecken[key] = strecke
-            self.strecken_konfigurieren()
+        # strecken konfigurieren
+        # benoetigt: bahnhofgraph, liniengraph
+        if len(self.strecken.strecken) == 0 and self.liniengraph:
+            try:
+                self.strecken.import_konfiguration(self.config['strecken'], self.bahnhofgraph)
+            except KeyError:
+                logger.warning("Keine Streckenkonfiguration gefunden")
+
+            # wenn automatische eintraege in der liste sind, werden auto-strecken generiert
+            any_auto = any(self.strecken.auto.values())
+            if any_auto or len(self.strecken.strecken) == 0:
+                strecken = self.liniengraph.strecken_vorschlagen(2, 3)
+                strecken = {f"{strecke[0][1]}-{strecke[-1][1]}": strecke for strecke in strecken}
+                for index, name in enumerate(sorted(strecken.keys())):
+                    if self.strecken.auto.get(name, True):
+                        self.strecken.add_strecke(name, strecken[name], 100 + index, True)
 
         if logger.isEnabledFor(logging.DEBUG):
             nx.write_gml(self.zielgraph, debug_path / f"{self.anlageninfo.aid}.zielgraph.gml", stringizer=str)
             nx.write_gml(self.ereignisgraph, debug_path / f"{self.anlageninfo.aid}.ereignisgraph.gml", stringizer=str)
-            with open(debug_path / f"{self.anlageninfo.aid}.strecken.json", "w") as f:
-                json.dump(self.strecken, f)
+            # with open(debug_path / f"{self.anlageninfo.aid}.strecken.json", "w") as f:
+            #     json.dump(self.strecken.strecken, f)
 
     def liniengraph_konfigurieren(self):
         """
@@ -191,31 +205,6 @@ class Anlage:
                     except nx.NetworkXError:
                         pass
 
-    def strecken_konfigurieren(self):
-        """
-        Streckendefinition aus der Konfiguration übernehmen
-        """
-
-        # todo : konfiguration
-        for titel, konfig in self.config.get('strecken', {}).items():
-            strecke = []
-            for name in konfig:
-                if self.bahnhofgraph.has_node(node := ('Bf', name)):
-                    strecke.append(node)
-                elif self.bahnhofgraph.has_node(node := ('Anst', name)):
-                    strecke.append(node)
-            key = f"{strecke[0][1]}-{strecke[-1][1]}"
-            self.strecken[key] = strecke
-
-            if titel == self.config.get('hauptstrecke', None):
-                self.hauptstrecke = key
-
-        for namen, markierung in self.config.get('streckenmarkierung', {}).items():
-            node1 = self.bahnhofgraph.find_name(namen[0])
-            node2 = self.bahnhofgraph.find_name(namen[1])
-            if node1 is not None and node2 is not None:
-                self.streckenmarkierung[(node1, node2)] = markierung
-
     def load_config(self, config_path: os.PathLike):
         """
         Konfiguration aus Konfigurationsdatei laden.
@@ -268,6 +257,11 @@ class Anlage:
         self.config["_build"] = self.anlageninfo.build
         self.config["_name"] = self.anlageninfo.name
         self.config["_region"] = self.anlageninfo.region
+
+        self.config['elemente'] = self.bahnhofgraph.export_konfiguration()
+        self.config['strecken'] = self.strecken.export_konfiguration()
+        self.config['streckenmarkierung'] = self.liniengraph.export_konfiguration()
+        self.config['zugschema'] = self.zugschema.name
 
         p = Path(path) / f"{self.anlageninfo.aid}.json"
         self.config.save(p)
