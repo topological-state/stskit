@@ -81,13 +81,16 @@ class Config(UserDict):
             logger.error(e)
             print(f"Fehlerhafte Konfigurationsdatei {path}: {e}", file=sys.stderr)
         else:
-            self.schema = data
+            self.clear()
+            self.update(data)
             self.loaded_from = path
 
     def save_v3(self, path: Path):
         self.data['_version'] = 3
         data = dict(self.data)
-        del data['dict']
+        if 'dict' in data:
+            logger.debug("'dict' Element in Konfiguration.")
+            del data['dict']
         with open(path, "w", encoding='utf-8') as fp:
             json.dump(data, fp, indent=2, ensure_ascii=False)
 

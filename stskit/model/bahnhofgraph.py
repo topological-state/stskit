@@ -553,11 +553,11 @@ class BahnhofGraph(nx.DiGraph):
                        'auto': data.auto,
                        'sichtbar': True,
                        'flags': ''}
-            if data.sperrung:
+            if data.get('sperrung'):
                 element['flags'] = 'S'
                 element['auto'] = False
             if element['typ'] in {'Gl', 'Bs', 'Agl'}:
-                element['gleise'] = data.gleise
+                element['gleise'] = data.get('gleise', 1)
             elemente[e2] = element
 
         return list(elemente.values())
