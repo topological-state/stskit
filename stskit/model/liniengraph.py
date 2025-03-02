@@ -32,6 +32,8 @@ class LinienGraphEdge(dict):
                                    docstring="Summe aller ausgewerteten Fahrzeiten in Minuten")
     fahrzeit_schnitt = dict_property("fahrzeit_schnitt", float,
                                      docstring="Mittelwert aller ausgewerteten Fahrzeiten in Minuten")
+    fahrzeit_manuell = dict_property("fahrzeit_manuell", Union[int, float],
+                                  docstring="Vom Benutzer eingestellte Fahrzeit. Ersetzt die berechnete Fahrzeit, sofern gesetzt und grösser Null.")
     markierung = dict_property("markierung", str,
                                docstring="Markierungsflags: E = Eingleisig")
 
@@ -230,12 +232,17 @@ class LinienGraph(nx.Graph):
 
         return strecken
 
-    def strecken_zeitachse(self, strecke: List[Tuple[str, str]], parameter: str = 'fahrzeit_min') -> List[Union[int, float]]:
+    def strecken_zeitachse(self, strecke: List[BahnhofElement], parameter: str = 'fahrzeit_min') -> List[Union[int, float]]:
         """
         Distanzen entlang einer Strecke berechnen
 
-        Kumulierte Distanzen der Haltepunkte ab dem ersten Punkt der strecke berechnen.
-        Die Distanz wird als minimale Fahrzeit in Minuten angegeben.
+        Kumulierte Distanzen der Haltepunkte ab dem ersten Punkt der Strecke berechnen.
+        Die Distanz wird als Fahrzeit in Minuten angegeben.
+
+        Als Fahrzeit wird für jeden Abschnitt der erste der folgenden Werte genommen, der grösser als Null ist:
+        1. 'fahrzeit_manuell'-Attribut der Liniengraph-Kante (vom Benutzer konfiguriert).
+        2. Vom parameter-Argument bezeichnetes Attribut der Liniengraph-Kante.
+        3. 1 (default, auch bei fehlender Kante im Liniengraph).
 
         :param strecke: Liste von Linienpunkten
         :param parameter: Zu verwendender Zeitparameter, fahrzeit_min, fahrzeit_schnitt, fahrzeit_max.
@@ -243,17 +250,20 @@ class LinienGraph(nx.Graph):
             Die Liste enthält die gleiche Anzahl Elemente wie die Strecke.
             Das erste Element ist 0.
         """
+
         kanten = zip(strecke[:-1], strecke[1:])
         distanz = 0
         result = [distanz]
-        for u, v in kanten:
+        for kante in kanten:
+            u, v = kante
             try:
-                zeit = self[u][v][parameter]
-                distanz += max(1, zeit)
+                data = self[u][v]
+                zeit = data.get('fahrzeit_manuell', 0) or data.get(parameter, 0)
             except KeyError:
                 logger.warning(f"Verbindung {u}-{v} nicht im Liniengraph.")
-                distanz += 1
+                zeit = 0
 
+            distanz += max(1, zeit)
             result.append(float(distanz))
 
         return result
@@ -268,9 +278,11 @@ class LinienGraph(nx.Graph):
         for markierung_kfg in streckenmarkierung_konfig:
             station1 = BahnhofElement.from_string(markierung_kfg['station1'])
             station2 = BahnhofElement.from_string(markierung_kfg['station2'])
+            fahrzeit = markierung_kfg.get('fahrzeit', 0)
             markierung = markierung_kfg.get('flags', '')
             if station1 in bahnhofgraph and station2 in bahnhofgraph:
                 self.edges[station1, station2]['markierung'] = markierung
+                self.edges[station1, station2]['fahrzeit_manuell'] = fahrzeit
 
 
     def export_konfiguration(self) -> Sequence[Dict[str, Union[str, int, float, bool]]]:
@@ -279,9 +291,18 @@ class LinienGraph(nx.Graph):
         """
 
         result = []
-        for e1, e2, m in self.edges(data='markierung'):
+        for e1, e2, data in self.edges(data=True):
+            m = data.get('markierung', '')
+            z = data.get('fahrzeit_manuell', 0)
+            d = {}
             if m:
-                result.append({'station1': str(e1), 'station2': str(e2), 'flags': m})
+                d['flags'] = m
+            if z > 0:
+                d['fahrzeit'] = z
+            if d:
+                d['station1'] = str(e1)
+                d['station2'] = str(e2)
+                result.append(d)
 
         return result
 

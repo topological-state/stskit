@@ -120,6 +120,12 @@
                         "type": "string",
                         "description": "Station: Anschlussstelle, Bahnhof oder Bahnhofteil, im Format 'Typ Name'"
                     },
+                    "fahrzeit": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 60,
+                        "description": "Durschnittliche Fahrzeit in Minuten. Bestimmt die Länge des Abschnitts im Bildfahrplan. Falls Null, wird die automatisch berechnete Fahrzeit verwendet."
+                    },
                     "flags": {
                         "type": "string",
                         "description": "Streckenmarkierungen: Buchstaben haben folgende Bedeutung: E = eingleisig"
