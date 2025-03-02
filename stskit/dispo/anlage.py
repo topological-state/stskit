@@ -226,7 +226,7 @@ class Anlage:
             try:
                 logger.info(f"Beispielkonfiguration laden von {p}")
                 self.default_config.load(p, aid=self.anlageninfo.aid)
-                self.config["default"] = True
+                self.default_config["default"] = True
             except OSError:
                 logger.warning(f"Keine Beispielkonfiguration gefunden")
 
