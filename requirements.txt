@@ -1,3 +1,4 @@
+jsonschema
 matplotlib >= 3.5
 mock
 numpy
