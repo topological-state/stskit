@@ -42,34 +42,50 @@
                         "description": "Name des Elements, Gleisnamen entsprechen denjenigen im Sim.",
                         "type": "string"
                     },
-                    "typ": {
-                        "description": "Elementtyp: Gl (Gleis), Bs (Bahnsteig), Bft (Bahnhofteil), Bf (Bahnhof), Agl (Anschlussgleis), Anst (Anschlussstelle)",
-                        "type": "string",
-                        "enum": ["Gl", "Bs", "Bft", "Bf", "Agl", "Anst"]
-                    },
-                    "stamm": {
-                        "description": "Name des uebergeordneten Elements. Kann bei Bf und Anst leer sein. ",
-                        "type": "string"
-                    },
                     "sichtbar": {
                         "description": "Sichtbarkeit in Gleisbelegung. Default ist True.",
                         "type": "boolean"
-                    },
-                    "flags": {
-                        "description": "Gleismarkierungen. Buchstaben haben folgende Bedeutung: S = Sperrung. Default ist leer.",
-                        "type": "string"
-                    },
-                    "gleise": {
-                        "description": "Anzahl der Gleise: 1 = eingleisige Ein- und Ausfahrt. Minimum 1. Default ist 1.",
-                        "type": "integer",
-                        "minimum": 1
                     },
                     "auto": {
                         "description": "Automatische Konfiguration. Auf False setzen, wenn der Eintrag manuell verändert wurde! Default ist True.",
                         "type": "boolean"
                     }
                 },
-                "required": ["name", "typ", "stamm"]
+                "required": ["name"],
+                "oneOf": [
+                    {
+                        "properties": {
+                            "typ": {
+                                "description": "Elementtyp: Gl (Gleis), Bs (Bahnsteig), Bft (Bahnhofteil), Agl (Anschlussgleis)",
+                                "type": "string",
+                                "enum": ["Gl", "Bs", "Bft", "Agl"]
+                            },
+                            "stamm": {
+                                "description": "Name des uebergeordneten Elements. Kann bei Bf und Anst leer sein. ",
+                                "type": "string"
+                            },
+                            "flags": {
+                                "description": "Gleismarkierungen. Buchstaben haben folgende Bedeutung: S = Sperrung. Default ist leer.",
+                                "type": "string"
+                            },
+                            "gleise": {
+                                "description": "Anzahl der Gleise: 1 = eingleisige Ein- und Ausfahrt. Minimum 1. Default ist 1.",
+                                "type": "integer",
+                                "minimum": 1
+                            }
+                        },
+                        "required": ["stamm"]
+                    },
+                    {
+                        "properties": {
+                            "typ": {
+                                "description": "Elementtyp: Bf (Bahnhof), Anst (Anschlussstelle)",
+                                "type": "string",
+                                "enum": ["Bf", "Anst"]
+                            }
+                        }
+                    }
+                ]
             },
             "uniqueItems": true
         },

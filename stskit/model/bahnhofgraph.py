@@ -544,15 +544,16 @@ class BahnhofGraph(nx.DiGraph):
 
         elemente = {}
         for e1, e2 in self.edges():
-            if e1.typ in {'Stw', 'Bst'}:
+            if e1.typ == 'Stw':
                 continue
             data: BahnsteigGraphNode = self.nodes[e2]
             element = {'name': e2.name,
                        'typ': e2.typ,
-                       'stamm': e1.name,
                        'auto': data.auto,
                        'sichtbar': True,
                        'flags': ''}
+            if e1.typ != 'Bst':
+                element['stamm'] = e1.name
             if data.get('sperrung'):
                 element['flags'] = 'S'
                 element['auto'] = False
