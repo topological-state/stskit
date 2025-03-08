@@ -79,6 +79,7 @@ class BahnsteigGraphNode(dict):
     einfahrt = dict_property("einfahrt", bool, docstring="True, wenn das Gleis eine Einfahrt ist. Nur für Agl definiert.")
     ausfahrt = dict_property("ausfahrt", bool, docstring="True, wenn das Gleis eine Ausfahrt ist. Nur für Agl definiert.")
     sperrung = dict_property("sperrung", bool, docstring="Gleissperrung")
+    linienstil = dict_property("linienstil", str, docstring="Linienstil für die Darstellung der Station.")
 
 
 class BahnsteigGraphEdge(dict):
@@ -498,6 +499,8 @@ class BahnhofGraph(nx.DiGraph):
                 data2["gleise"] = e['gleise']
             if "flags" in e:
                 data2["sperrung"] = "S" in e['flags']
+            if "linienstil" in e:
+                data2["linienstil"] = e['linienstil']
 
             if e['typ'] in {'Gl', 'Agl'}:
                 if be2 not in self:
@@ -559,6 +562,9 @@ class BahnhofGraph(nx.DiGraph):
                 element['auto'] = False
             if element['typ'] in {'Gl', 'Bs', 'Agl'}:
                 element['gleise'] = data.get('gleise', 1)
+            elif element['typ'] in {'Bf', 'Anst'}:
+                if stil := data.get('linienstil'):
+                    element['linienstil'] = stil
             elemente[e2] = element
 
         return list(elemente.values())

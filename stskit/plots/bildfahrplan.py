@@ -1,6 +1,6 @@
 import math
 import logging
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
 import matplotlib as mpl
 import numpy as np
@@ -111,6 +111,7 @@ class BildfahrplanPlot:
         # bahnhofname -> distanz [minuten]
         self.strecke: List[BahnhofElement] = []
         self.distanz: List[float] = []
+        self.linienstil: List[str] = []
         # ortskoordinate der segmentmitte -> linker bahnhof
         self.naechster_bahnhof: Dict[float, BahnhofElement] = {}
 
@@ -224,8 +225,11 @@ class BildfahrplanPlot:
                         self.streckengraph.add_edge(b[0], a[0], s0=b[1], s1=a[1])
                     else:
                         break
+
+            self.linienstil = [self.anlage.bahnhofgraph.nodes[s].get('linienstil', ':') for s in self.strecke]
         else:
             self.distanz = []
+            self.linienstil = []
 
         try:
             mitten = [(s1 + s2) / 2 for s1, s2 in zip(self.distanz[:-1], self.distanz[1:])]
@@ -380,7 +384,6 @@ class BildfahrplanPlot:
         self._axes.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(1))
         self._axes.yaxis.set_major_locator(mpl.ticker.MultipleLocator(5))
         self._axes.yaxis.grid(True, which='major')
-        self._axes.xaxis.grid(True)
 
         ylim = (self.zeit - self.nachlaufzeit, self.zeit + self.vorlaufzeit)
         self._axes.set_ylim(top=ylim[0], bottom=ylim[1])
@@ -389,12 +392,11 @@ class BildfahrplanPlot:
         except IndexError:
             return
 
-        try:
-            idx = x_labels.index(self.strecke_via)
-        except ValueError:
-            pass
-        else:
-            self._axes.axvline(x=self.distanz[idx], color=mpl.rcParams['grid.color'],
+        self._stationen_markieren(x_labels, x_labels_pos, self.linienstil)
+        self._strecken_markieren(x_labels, x_labels_pos)
+        if self.nachlaufzeit > 0:
+            self._axes.axhline(y=self.zeit,
+                               color=mpl.rcParams['axes.edgecolor'],
                                linewidth=mpl.rcParams['axes.linewidth'])
 
         wid_x = x_labels_pos[-1] - x_labels_pos[0]
@@ -402,8 +404,6 @@ class BildfahrplanPlot:
         off_x = 0
         off = self._axes.transData.inverted().transform([(0, 0), (0, -5)])
         off_y = (off[1] - off[0])[1]
-
-        self._strecken_markieren(x_labels, x_labels_pos)
 
         label_args = {'ha': 'center',
                       'va': 'center',
@@ -463,13 +463,35 @@ class BildfahrplanPlot:
         for item in (self._axes.get_xticklabels() + self._axes.get_yticklabels()):
             item.set_fontsize('small')
 
-        if self.nachlaufzeit > 0:
-            self._axes.axhline(y=self.zeit,
-                               color=mpl.rcParams['axes.edgecolor'],
-                               linewidth=mpl.rcParams['axes.linewidth'])
-
         self._axes.figure.tight_layout()
         self._axes.figure.canvas.draw()
+
+    def _stationen_markieren(self,
+                             x_labels: Sequence[str],
+                             x_labels_pos: Sequence[Union[int, float]],
+                             x_labels_stil: Optional[Sequence[str]]):
+        """
+        Stationen mit vertikalen Linien markieren
+
+        :param x_labels: Liste von Bahnhof- oder Anschlussnamen (Bf oder Anst Typ)
+        :param x_labels_pos: Liste von x-Koordinaten der Stationen
+        :param x_labels_stil: Matplotlib-Linienstil (z.B. '-', '--', ':', '').
+            Bei leerem String wird keine Linie gezeichnet.
+            Bei einem String mit 'w', wird die Linie weiß gezeichnet.
+        :return: None
+        """
+
+        if not x_labels_stil:
+            x_labels_stil = [':' for _ in x_labels]
+        for label, pos, stil in zip(x_labels, x_labels_pos, x_labels_stil):
+            if label == self.strecke_via:
+                stil = '-'
+            if stil:
+                color = mpl.rcParams['axes.edgecolor'] if 'w' in stil else mpl.rcParams['grid.color']
+                self._axes.axvline(x=pos,
+                                   color=color,
+                                   linestyle=stil.replace('w', ''),
+                                   linewidth=mpl.rcParams['axes.linewidth'])
 
     def _strecken_markieren(self, x_labels, x_labels_pos):
         """

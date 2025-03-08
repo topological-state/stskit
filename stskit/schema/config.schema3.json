@@ -82,6 +82,11 @@
                                 "description": "Elementtyp: Bf (Bahnhof), Anst (Anschlussstelle)",
                                 "type": "string",
                                 "enum": ["Bf", "Anst"]
+                            },
+                            "linienstil": {
+                                "description": "Matplotlib-Linienstil des Bahnhofs im Bildfahrplan. Mögliche Werte: '-', '--', '-.', ':', '-w', '--w', '-.w', ':w', '' (keine Linie). Default ist ':'.",
+                                "type": "string",
+                                "enum": ["-", "--", "-.", ":", "-w", "--w", "-.w", ":w", ""]
                             }
                         }
                     }
