@@ -34,6 +34,10 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
+class ConfigurationError(Exception):
+    pass
+
+
 class Anlage:
     def __init__(self):
         self.anlageninfo: Optional[AnlagenInfo] = None
@@ -57,26 +61,82 @@ class Anlage:
         self.zugschema = Zugschema()
 
     def update(self, client: GraphClient, config_path: os.PathLike):
+        """
+        Main update method of Anlage.
+
+        Called at every poll cycle.
+        Conditionally performs initialization and configuration if necessary.
+        """
+
         config_path = Path(config_path)
         debug_path = config_path / "debug"
+
+        self._update_client(client, debug_path)
+
+        for _ in range(2):
+            try:
+                self._init_anlage(config_path, debug_path)
+                self._init_linien()
+                self._init_strecken()
+            except ConfigurationError:
+                logger.warning("Fehler beim Laden der Konfiguration, versuche Autokonfiguration.")
+                self.config = None
+                self.default_config = None
+                config_path = None
+            else:
+                break
+
+        self.zielgraph.einfahrtszeiten_korrigieren(self.liniengraph, self.bahnhofgraph)
+        self.ereignisgraph.zielgraph_importieren(self.zielgraph)
+        self.fdl_korrekturen.replay()
+        self.ereignisgraph.prognose()
+        self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
+
+        if logger.isEnabledFor(logging.DEBUG):
+            write_gml(self.zielgraph, debug_path / f"{self.anlageninfo.aid}.zielgraph.gml")
+            write_gml(self.ereignisgraph, debug_path / f"{self.anlageninfo.aid}.ereignisgraph.gml")
+            # with open(debug_path / f"{self.anlageninfo.aid}.strecken.json", "w") as f:
+            #     json.dump(self.strecken.strecken, f)
+
+    def _update_client(self, client, debug_path):
+        """
+        Update the graphs with the current state of the simulation.
+
+        This method updates objects that are direct copies of client objects:
+        - `simzeit_minuten`
+        - `anlageninfo`
+        - `signalgraph`
+        - `bahnsteiggraph`
+        - `zuggraph`
+        - `zielgraph`
+        """
 
         self.simzeit_minuten = time_to_minutes(client.calc_simzeit())
 
         if self.anlageninfo is None:
             self.anlageninfo = client.anlageninfo
 
-        if self.config is None:
-            self.load_config(config_path)
-
         if not self.signalgraph:
             self.signalgraph = client.signalgraph.copy(as_view=False)
             if logger.isEnabledFor(logging.DEBUG):
                 debug_path.mkdir(exist_ok=True)
                 write_gml(self.signalgraph, debug_path / f"{self.anlageninfo.aid}.signalgraph.gml")
+
         if not self.bahnsteiggraph:
             self.bahnsteiggraph = client.bahnsteiggraph.copy(as_view=False)
             if logger.isEnabledFor(logging.DEBUG):
                 write_gml(self.bahnsteiggraph, debug_path / f"{self.anlageninfo.aid}.bahnsteiggraph.gml")
+
+        self.zuggraph = client.zuggraph.copy(as_view=True)
+        self.zielgraph = client.zielgraph.copy(as_view=False)
+
+    def _init_anlage(self, config_path, debug_path):
+        if self.config is None:
+            if config_path:
+                self.load_config(config_path)
+            else:
+                self.config = Config()
+                self.config['default'] = True
 
         if not self.bahnhofgraph and self.signalgraph and self.bahnsteiggraph:
             self.bahnhofgraph.import_anlageninfo(self.anlageninfo)
@@ -89,27 +149,39 @@ class Anlage:
             if logger.isEnabledFor(logging.DEBUG):
                 write_gml(self.bahnhofgraph, debug_path / f"{self.anlageninfo.aid}.bahnhofgraph.gml")
 
-        self.zuggraph = client.zuggraph.copy(as_view=True)
-        self.zielgraph = client.zielgraph.copy(as_view=False)
+    def _init_linien(self):
+        """
+        Liniengraph konfigurieren
 
-        # liniengraph konfigurieren
-        # benoetigt: bahnhofgraph, liniengraph, zielgraph, signalgraph
+        Benoetigt: bahnhofgraph, liniengraph, zielgraph, signalgraph
+        """
+
         if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
-            self.liniengraph_konfigurieren()
-            self.liniengraph_mit_signalgraph_abgleichen()
+            try:
+                self.liniengraph_konfigurieren()
+            except KeyError as e:
+                logger.error(e)
+                raise ConfigurationError()
+
+            try:
+                self.liniengraph_mit_signalgraph_abgleichen()
+            except KeyError as e:
+                logger.error(e)
+                raise ConfigurationError()
+
             try:
                 self.liniengraph.import_konfiguration(self.config['streckenmarkierung'], self.bahnhofgraph)
             except KeyError:
-                logger.warning("Keine Streckenmarkierungskonfiguration gefunden")
+                logger.info("Keine Streckenmarkierungskonfiguration gefunden")
 
-        self.zielgraph.einfahrtszeiten_korrigieren(self.liniengraph, self.bahnhofgraph)
-        self.ereignisgraph.zielgraph_importieren(self.zielgraph)
-        self.fdl_korrekturen.replay()
-        self.ereignisgraph.prognose()
-        self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
 
-        # strecken konfigurieren
-        # benoetigt: bahnhofgraph, liniengraph
+    def _init_strecken(self):
+        """
+        Strecken konfigurieren
+
+        Benoetigt: bahnhofgraph, liniengraph
+        """
+
         if len(self.strecken.strecken) == 0 and self.liniengraph:
             try:
                 self.strecken.import_konfiguration(self.config['strecken'], self.bahnhofgraph)
@@ -124,12 +196,6 @@ class Anlage:
                 for index, name in enumerate(sorted(strecken.keys())):
                     if self.strecken.auto.get(name, True):
                         self.strecken.add_strecke(name, strecken[name], 100 + index, True)
-
-        if logger.isEnabledFor(logging.DEBUG):
-            write_gml(self.zielgraph, debug_path / f"{self.anlageninfo.aid}.zielgraph.gml")
-            write_gml(self.ereignisgraph, debug_path / f"{self.anlageninfo.aid}.ereignisgraph.gml")
-            # with open(debug_path / f"{self.anlageninfo.aid}.strecken.json", "w") as f:
-            #     json.dump(self.strecken.strecken, f)
 
     def liniengraph_konfigurieren(self):
         """
