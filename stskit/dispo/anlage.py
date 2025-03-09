@@ -25,6 +25,7 @@ from stskit.model.liniengraph import LinienGraph, LinienGraphEdge, Strecken
 from stskit.model.zuggraph import ZugGraph
 from stskit.model.zielgraph import ZielGraph
 from stskit.model.ereignisgraph import EreignisGraph
+from stskit.utils.export import write_gml
 from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
 from stskit.model.zugschema import Zugschema
 
@@ -71,11 +72,11 @@ class Anlage:
             self.signalgraph = client.signalgraph.copy(as_view=False)
             if logger.isEnabledFor(logging.DEBUG):
                 debug_path.mkdir(exist_ok=True)
-                nx.write_gml(self.signalgraph, debug_path / f"{self.anlageninfo.aid}.signalgraph.gml", stringizer=str)
+                write_gml(self.signalgraph, debug_path / f"{self.anlageninfo.aid}.signalgraph.gml")
         if not self.bahnsteiggraph:
             self.bahnsteiggraph = client.bahnsteiggraph.copy(as_view=False)
             if logger.isEnabledFor(logging.DEBUG):
-                nx.write_gml(self.bahnsteiggraph, debug_path / f"{self.anlageninfo.aid}.bahnsteiggraph.gml", stringizer=str)
+                write_gml(self.bahnsteiggraph, debug_path / f"{self.anlageninfo.aid}.bahnsteiggraph.gml")
 
         if not self.bahnhofgraph and self.signalgraph and self.bahnsteiggraph:
             self.bahnhofgraph.import_anlageninfo(self.anlageninfo)
@@ -86,7 +87,7 @@ class Anlage:
             except KeyError:
                 logger.warning("Keine Bahnhofkonfiguration gefunden")
             if logger.isEnabledFor(logging.DEBUG):
-                nx.write_gml(self.bahnhofgraph, debug_path / f"{self.anlageninfo.aid}.bahnhofgraph.gml", stringizer=str)
+                write_gml(self.bahnhofgraph, debug_path / f"{self.anlageninfo.aid}.bahnhofgraph.gml")
 
         self.zuggraph = client.zuggraph.copy(as_view=True)
         self.zielgraph = client.zielgraph.copy(as_view=False)
@@ -125,8 +126,8 @@ class Anlage:
                         self.strecken.add_strecke(name, strecken[name], 100 + index, True)
 
         if logger.isEnabledFor(logging.DEBUG):
-            nx.write_gml(self.zielgraph, debug_path / f"{self.anlageninfo.aid}.zielgraph.gml", stringizer=str)
-            nx.write_gml(self.ereignisgraph, debug_path / f"{self.anlageninfo.aid}.ereignisgraph.gml", stringizer=str)
+            write_gml(self.zielgraph, debug_path / f"{self.anlageninfo.aid}.zielgraph.gml")
+            write_gml(self.ereignisgraph, debug_path / f"{self.anlageninfo.aid}.ereignisgraph.gml")
             # with open(debug_path / f"{self.anlageninfo.aid}.strecken.json", "w") as f:
             #     json.dump(self.strecken.strecken, f)
 
