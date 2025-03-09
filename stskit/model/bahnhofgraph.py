@@ -206,6 +206,20 @@ class BahnhofGraph(nx.DiGraph):
         except nx.NetworkXError:
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
+    def list_parents(self, label: BahnhofLabelType) -> Iterable[BahnhofLabelType]:
+        """
+        Uebergeordnete Bahnhofelemente zu einem Gleis.
+        :param label: Gleislabel (typ, name)
+        :return: Uebergeordnetes Bahnhofelemente
+        """
+
+        try:
+            for node in nx.ancestors(self, label):
+                yield node
+                yield from self.list_parents(node)
+        except nx.NetworkXError:
+            raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
+
     def list_children(self, label: BahnhofLabelType, typen: Set[str]) -> Iterable[BahnhofLabelType]:
         """
         Listet die untergeordneten Elemente bestimmter Typen auf.
@@ -225,6 +239,15 @@ class BahnhofGraph(nx.DiGraph):
         except nx.NetworkXError as e:
             logger.exception(e)
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
+
+    def list_by_type(self, typen: Set[str]) -> Iterable[BahnhofLabelType]:
+        """
+        Listet die alle Elemente bestimmter Typen auf.
+        """
+
+        for label in self.nodes:
+            if label.typ in typen:
+                yield label
 
     def find_name(self, name: str) -> Optional[BahnhofLabelType]:
         """
