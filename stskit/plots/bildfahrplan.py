@@ -264,16 +264,18 @@ class BildfahrplanPlot:
         ':' (gepunktet) Abhängigkeit
         """
 
-        def bst_von_gleis(gl: str) -> Optional[BahnhofElement]:
+        def bst_von_gleis(gl: Union[str, BahnhofElement]) -> Optional[BahnhofElement]:
             try:
-                bst = self.anlage.bahnhofgraph.find_name(gl)
+                if not isinstance(gl, BahnhofElement):
+                    bst = self.anlage.bahnhofgraph.find_name(gl)
                 if bst.typ not in {'Bf', 'Anst'}:
                     bst = self.anlage.bahnhofgraph.find_superior(bst, {'Bf', 'Anst'})
                 if bst in strecke:
                     return bst
                 else:
                     return None
-            except (IndexError, KeyError):
+            except (AttributeError, IndexError, KeyError):
+                logger.error(f"Error in bst_von_gleis: {gl} -> {bst}")
                 return None
 
         def _add_node(ereignis_label, ereignis_data, bst):
@@ -315,13 +317,13 @@ class BildfahrplanPlot:
                     u_v_data['farbe'] = 'silver'
 
                 if u not in self.bildgraph:
-                    bst = bst_von_gleis(u_data.gleis)
+                    bst = bst_von_gleis(u_data.gleis_bst or u_data.gleis)
                     if bst is not None:
                         _add_node(u, u_data, bst)
                     else:
                         continue
                 if v not in self.bildgraph:
-                    bst = bst_von_gleis(v_data.gleis)
+                    bst = bst_von_gleis(v_data.gleis_bst or v_data.gleis)
                     if bst is not None:
                         _add_node(v, v_data, bst)
                     else:
