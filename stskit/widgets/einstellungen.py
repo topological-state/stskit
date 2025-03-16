@@ -13,6 +13,7 @@ from PyQt5.QtCore import pyqtSlot
 from stskit.model.zugschema import Zugschema, ZugschemaBearbeitungModell
 from stskit.dispo.anlage import Anlage
 from stskit.zentrale import DatenZentrale
+from stskit.widgets.bahnhofeditor import BahnhofEditor
 
 from stskit.qt.ui_einstellungen import Ui_EinstellungenWindow
 
@@ -32,14 +33,16 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         # not implemented yet
-        self.ui.tab_widget.removeTab(2)
-        self.ui.tab_widget.removeTab(1)
-        self.ui.tab_widget.removeTab(0)
+        # self.ui.tab_widget.removeTab(2)
+        # self.ui.tab_widget.removeTab(1)
+        # self.ui.tab_widget.removeTab(0)
 
         try:
             self.setWindowTitle(f"Einstellungen {self.anlage.anlageninfo.name}")
         except AttributeError:
             self.setWindowTitle(f"Einstellungen")
+
+        self.bahnhof_editor = BahnhofEditor(zentrale.anlage, self.ui)
 
         self.zugschema = Zugschema()
         self.zugschema.load_config(self.anlage.zugschema.name)
@@ -57,6 +60,8 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
 
     def update_widgets(self):
         self.in_update = True
+
+        self.bahnhof_editor.update_widgets()
 
         schemas = sorted(self.zugschema_namen_nach_titel.keys())
         self.ui.zugschema_name_combo.clear()
