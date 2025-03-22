@@ -138,9 +138,25 @@ class BahnhofEditorFilterProxy(QSortFilterProxyModel):
 
     def __init__(self, parent):
         super().__init__(parent)
+        self.filter_text: Optional[str] = None
 
     def filterAcceptsRow(self, source_row, source_parent):
-        return True
+        if not self.filter_text:
+            return True
+
+        model: Optional[BahnhofEditorModel] = None
+        while model is None:
+            source = self.sourceModel()
+            if isinstance(source, BahnhofEditorModel):
+                model = source
+                break
+
+        try:
+            element = model.rows[source_row]
+        except (AttributeError, IndexError, KeyError):
+            return True
+
+        return self.filter_text in element.name
 
 
 class BahnhofEditor(QObject):
@@ -397,4 +413,10 @@ class BahnhofEditor(QObject):
 
     @pyqtSlot()
     def gl_filter_button_clicked(self):
-        pass
+        self.gl_table_filter.beginResetModel()
+        try:
+            self.gl_table_filter.filter_text = self.ui.gl_combo.currentText()
+        finally:
+            self.gl_table_filter.endResetModel()
+        self.ui.gl_table_view.resizeColumnsToContents()
+        self.ui.gl_table_view.resizeRowsToContents()
