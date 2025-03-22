@@ -210,14 +210,15 @@ class BahnhofGraph(nx.DiGraph):
         """
         Uebergeordnete Bahnhofelemente zu einem Gleis.
         :param label: Gleislabel (typ, name)
-        :return: Uebergeordnetes Bahnhofelemente
+        :return: Generator von übergeordneten Elementen (typ, name) von unten nach oben.
+            Das Ausgangselement wird nicht geliefert.
+        :raise: KeyError, wenn das Gleis nicht existiert.
         """
 
-        try:
-            for node in nx.ancestors(self, label):
-                yield node
-                yield from self.list_parents(node)
-        except nx.NetworkXError:
+        if self.has_node(label):
+            for parent, child in nx.bfs_edges(self, label, reverse=True):
+                yield child
+        else:
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
     def list_children(self, label: BahnhofLabelType, typen: Set[str]) -> Iterable[BahnhofLabelType]:
@@ -287,6 +288,47 @@ class BahnhofGraph(nx.DiGraph):
             return self.ziel_gleis[name_enr]
         except KeyError:
             return None
+
+    def replace_parent(self, gleis: BahnhofLabelType,
+                       new_parent: BahnhofLabelType,
+                       new_data: Optional[BahnsteigGraphNode] = None,
+                       del_old_parent: bool = False):
+        """
+        Ersetzt den Elternknoten eines Gleises.
+
+        Dies ist nützlich, wenn ein Gleis von einem anderen Bahnhof übernommen wird.
+        Der Elternknoten kann ein beliebiger übergeordneter Knoten des Gleises sein.
+
+        Der Elternknoten kann existieren oder wird neu erstellt.
+        Der alte Knoten wird gelöscht, wenn der Parameter `del_old_parent` auf True gesetzt ist und er keine Kinder mehr hat.
+
+        :param gleis: Das Gleis, dessen Elternknoten ersetzt werden soll.
+        :param new_parent: Der neue Elternknoten des Gleises
+        :param new_data: Daten des neuen Elternknotens. Wenn None, werden die alten Daten verwendet.
+        :param del_old_parent: Alten Knoten löschen, wenn er keine Kinder hat. Standardmäßig False.
+        :return: Label des alten Knotens
+        """
+
+        parents = [gleis] + [element for element in self.list_parents(gleis)]
+        parents_dict = {element.typ: element for element in parents}
+        old_parent = parents_dict[new_parent.typ]
+
+        if new_data is not None:
+            self.add_node(new_parent, **new_data)
+
+        for element in parents:
+            if self.has_edge(old_parent, element):
+                data = self.get_edge_data(old_parent, element)
+                self.add_edge(new_parent, element, **data)
+                self.remove_edge(old_parent, element)
+            if self.has_edge(element, old_parent):
+                data = self.get_edge_data(element, old_parent)
+                self.add_edge(element, new_parent, **data)
+
+        if del_old_parent and not any(self.successors(old_parent)):
+            self.remove_node(old_parent)
+
+        return old_parent
 
     def gleis_bahnsteig(self, gleis: str) -> str:
         """
