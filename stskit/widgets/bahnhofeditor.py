@@ -8,11 +8,11 @@ from stskit.model.bahnhofgraph import BahnhofElement
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
 from PyQt5 import Qt, QtCore
-from PyQt5.QtCore import pyqtSlot, QAbstractTableModel, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QStringListModel
-from PyQt5.QtWidgets import QWidget, QTableView, QVBoxLayout
+from PyQt5.QtCore import pyqtSlot, QAbstractTableModel, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QStringListModel, QObject
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement, BahnsteigGraphNode, BahnsteigGraphEdge
+from stskit.model.journal import GraphJournal
 from stskit.qt.ui_einstellungen import Ui_EinstellungenWindow
 
 
@@ -138,17 +138,33 @@ class BahnhofEditorModel(QAbstractTableModel):
         return super().flags(index) | QtCore.Qt.ItemIsEditable
 
 
-class BahnhofEditor:
-    def __init__(self, anlage: Anlage, ui: Ui_EinstellungenWindow):
+class BahnhofEditorFilterProxy(QSortFilterProxyModel):
+
+    def __init__(self, parent):
+        super().__init__(parent)
+
+    def filterAcceptsRow(self, source_row, source_parent):
+        return True
+
+
+class BahnhofEditor(QObject):
+    def __init__(self, anlage: Anlage, parent: QObject, ui: Ui_EinstellungenWindow):
         super().__init__()
         self.anlage = anlage
         self.bahnhofgraph = anlage.bahnhofgraph.copy(as_view=False)
+        self.changes: GraphJournal = GraphJournal()
+        self.parent = parent
         self.ui = ui
 
         self.gl_table_model = BahnhofEditorModel(self.bahnhofgraph)
-        self.ui.gl_table_view.setModel(self.gl_table_model)
+        self.gl_table_filter = BahnhofEditorFilterProxy(parent)
+        self.gl_table_filter.setSourceModel(self.gl_table_model)
+        self.gl_table_filter.setSortRole(QtCore.Qt.UserRole)
+        self.ui.gl_table_view.setModel(self.gl_table_filter)
         self.ui.gl_table_view.setSelectionMode(Qt.QAbstractItemView.MultiSelection)
         self.ui.gl_table_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
+        self.ui.gl_table_view.sortByColumn(self.gl_table_model._columns.index('Gl'), 0)
+        self.ui.gl_table_view.setSortingEnabled(True)
 
         self.gl_model = QStringListModel()
         self.ui.gl_combo.setModel(self.gl_model)
@@ -162,6 +178,25 @@ class BahnhofEditor:
         self.bf_model = QStringListModel()
         self.ui.bf_combo.setModel(self.bf_model)
 
+        self.ui.bf_group_button.clicked.connect(self.bf_group_button_clicked)
+        self.ui.bf_ungroup_button.clicked.connect(self.bf_ungroup_button_clicked)
+        self.ui.bf_rename_button.clicked.connect(self.bf_rename_button_clicked)
+        self.ui.bft_rename_button.clicked.connect(self.bft_rename_button_clicked)
+        self.ui.bs_group_button.clicked.connect(self.bs_group_button_clicked)
+        self.ui.bs_ungroup_button.clicked.connect(self.bs_ungroup_button_clicked)
+        self.ui.bs_rename_button.clicked.connect(self.bs_rename_button_clicked)
+        self.ui.gl_filter_button.clicked.connect(self.gl_filter_button_clicked)
+        self.ui.bf_combo.currentIndexChanged.connect(self.bf_combo_index_changed)
+        self.ui.bf_combo.editTextChanged.connect(self.bf_combo_text_changed)
+        self.ui.bft_combo.currentIndexChanged.connect(self.bft_combo_index_changed)
+        self.ui.bft_combo.editTextChanged.connect(self.bft_combo_text_changed)
+        self.ui.bs_combo.currentIndexChanged.connect(self.bs_combo_index_changed)
+        self.ui.bs_combo.editTextChanged.connect(self.bs_combo_text_changed)
+        self.ui.gl_combo.currentIndexChanged.connect(self.gl_combo_index_changed)
+        self.ui.gl_combo.editTextChanged.connect(self.gl_combo_text_changed)
+        self.ui.gl_table_view.selectionModel().selectionChanged.connect(
+            self.gl_selection_changed)
+
     def update_widgets(self):
         # Update the widgets based on the current state of the anlage
         self.gl_table_model.update()
@@ -172,3 +207,125 @@ class BahnhofEditor:
         self.bs_model.setStringList(sorted((bs.name for bs in self.bahnhofgraph.list_by_type({'Bs'}))))
         self.bft_model.setStringList(sorted((bft.name for bft in self.bahnhofgraph.list_by_type({'Bft'}))))
         self.bf_model.setStringList(sorted((bf.name for bf in self.bahnhofgraph.list_by_type({'Bf'}))))
+
+    def get_selection(self) -> Set[BahnhofElement]:
+        """
+        Gibt die aktuell ausgewählten Elemente zurück.
+        """
+
+        selection = set()
+        for index in self.ui.gl_table_view.selectedIndexes():
+            try:
+                index = self.gl_table_filter.mapToSource(index)
+                row = index.row()
+                selection.add(self.gl_table_model.rows[row])
+            except (IndexError, KeyError):
+                pass
+
+        return selection
+
+    @pyqtSlot('QItemSelection', 'QItemSelection')
+    def gl_selection_changed(self, selected, deselected):
+        pass
+
+    @pyqtSlot()
+    def bf_group_button_clicked(self):
+        """
+        Gruppiert die ausgewählten Bahnhofteile zu einem Bahnhof.
+
+        Die einzelnen Schritte sind:
+        1. Zielbahnhof auswählen, z.B. unter den gewählten Elementen den Bahnhof mit den meisten Gleisen.
+        2. Andere Bahnhöfe löschen.
+        3. Hinzufügen der ausgewählten Bahnhofteile zum Zielbahnhof durch Erstellen von Kanten.
+        4. Aktualisieren des Modells und der Ansicht.
+        """
+
+        pass
+
+    @pyqtSlot()
+    def bs_group_button_clicked(self):
+        """
+        Gruppiert die ausgewählten Gleise zu einem Bahnsteig.
+
+        Die einzelnen Schritte sind:
+        1. Zielbahnsteig auswählen, z.B. unter den gewählten Elementen den Bahnsteig mit den meisten Gleisen.
+        2. Andere Bahnsteige löschen.
+        3. Hinzufügen der ausgewählten Gleise zum Bahnsteig durch Erstellen von Kanten.
+        4. Aktualisieren des Modells und der Ansicht.
+        """
+
+        pass
+
+    @pyqtSlot()
+    def bf_ungroup_button_clicked(self):
+        """
+        Entfernt die Gruppierung der ausgewählten Bahnhofteile und ordnet sie wieder unabhängigen Bahnhöfen zu.
+
+        Die einzelnen Schritte sind:
+        1. Bahnhof löschen.
+        2. Zu jedem Bahnhofteil einen Bahnhof gleichen Namens erstellen und mit einer Kante verbinden.
+        3. Aktualisieren des Modells und der Ansicht.
+        """
+
+        pass
+
+    @pyqtSlot()
+    def bs_ungroup_button_clicked(self):
+        """
+        Entfernt die Gruppierung der ausgewählten Gleise und ordnet sie wieder unabhängigen Bahnsteigen zu.
+
+        Die einzelnen Schritte sind:
+        1. Bahnsteig löschen.
+        2. Zu jedem Gleis einen Bahnsteig gleichen Namens erstellen und mit einer Kante verbinden.
+        3. Aktualisieren des Modells und der Ansicht.
+        """
+
+        pass
+
+    @pyqtSlot()
+    def bf_rename_button_clicked(self):
+        pass
+
+    @pyqtSlot()
+    def bft_rename_button_clicked(self):
+        pass
+
+    @pyqtSlot()
+    def bs_rename_button_clicked(self):
+        pass
+
+    @pyqtSlot()
+    def bf_combo_index_changed(self):
+        pass
+
+    @pyqtSlot()
+    def bft_combo_index_changed(self):
+        pass
+
+    @pyqtSlot()
+    def bs_combo_index_changed(self):
+        pass
+
+    @pyqtSlot()
+    def gl_combo_index_changed(self):
+        pass
+
+    @pyqtSlot()
+    def bf_combo_text_changed(self):
+        pass
+
+    @pyqtSlot()
+    def bft_combo_text_changed(self):
+        pass
+
+    @pyqtSlot()
+    def bs_combo_text_changed(self):
+        pass
+
+    @pyqtSlot()
+    def gl_combo_text_changed(self):
+        pass
+
+    @pyqtSlot()
+    def gl_filter_button_clicked(self):
+        pass

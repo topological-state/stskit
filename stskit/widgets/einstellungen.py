@@ -42,7 +42,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
         except AttributeError:
             self.setWindowTitle(f"Einstellungen")
 
-        self.bahnhof_editor = BahnhofEditor(zentrale.anlage, self.ui)
+        self.bahnhof_editor = BahnhofEditor(zentrale.anlage, parent=self, ui=self.ui)
 
         self.zugschema = Zugschema()
         self.zugschema.load_config(self.anlage.zugschema.name)
