@@ -1,12 +1,8 @@
+from collections import Counter
 import logging
-from typing import AbstractSet, Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple, Type, Union
-
-
-from stskit.dispo.anlage import Anlage
-from stskit.model.bahnhofgraph import BahnhofElement
-
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
+import networkx as nx
 from PyQt5 import Qt, QtCore
 from PyQt5.QtCore import pyqtSlot, QAbstractTableModel, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QStringListModel, QObject
 
@@ -165,6 +161,7 @@ class BahnhofEditor(QObject):
         self.ui.gl_table_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
         self.ui.gl_table_view.sortByColumn(self.gl_table_model._columns.index('Gl'), 0)
         self.ui.gl_table_view.setSortingEnabled(True)
+        self.last_selection = set()
 
         self.gl_model = QStringListModel()
         self.ui.gl_combo.setModel(self.gl_model)
@@ -211,6 +208,8 @@ class BahnhofEditor(QObject):
     def get_selection(self) -> Set[BahnhofElement]:
         """
         Gibt die aktuell ausgewählten Elemente zurück.
+
+        :return: Ein Set von Gleisen (Bahnhofelemente vom Typ `Gl`), die aktuell ausgewählt sind.
         """
 
         selection = set()
@@ -226,7 +225,32 @@ class BahnhofEditor(QObject):
 
     @pyqtSlot('QItemSelection', 'QItemSelection')
     def gl_selection_changed(self, selected, deselected):
-        pass
+        selection = self.get_selection()
+        new = selection - self.last_selection
+        self.last_selection = selection
+
+        try:
+            new = list(new)[0]
+            new_data = self.gl_table_model.row_data[new]
+        except (IndexError, KeyError):
+            return
+
+        try:
+            self.ui.bf_combo.setCurrentIndex(self.bf_model.stringList().index(new_data['Bf']))
+        except ValueError:
+            pass
+        try:
+            self.ui.bft_combo.setCurrentIndex(self.bft_model.stringList().index(new_data['Bft']))
+        except ValueError:
+            pass
+        try:
+            self.ui.bs_combo.setCurrentIndex(self.bs_model.stringList().index(new_data['Bs']))
+        except ValueError:
+            pass
+        try:
+            self.ui.gl_combo.setCurrentIndex(self.gl_model.stringList().index(new_data['Gl']))
+        except ValueError:
+            pass
 
     @pyqtSlot()
     def bf_group_button_clicked(self):
@@ -240,7 +264,7 @@ class BahnhofEditor(QObject):
         4. Aktualisieren des Modells und der Ansicht.
         """
 
-        pass
+        self.group_elements('Bf', self.ui.bf_combo.currentText())
 
     @pyqtSlot()
     def bs_group_button_clicked(self):
@@ -254,7 +278,7 @@ class BahnhofEditor(QObject):
         4. Aktualisieren des Modells und der Ansicht.
         """
 
-        pass
+        self.group_elements('Bs', self.ui.bs_combo.currentText())
 
     @pyqtSlot()
     def bf_ungroup_button_clicked(self):
@@ -267,7 +291,44 @@ class BahnhofEditor(QObject):
         3. Aktualisieren des Modells und der Ansicht.
         """
 
-        pass
+        gleise = {gl for gl in self.get_selection()}
+
+        self.gl_table_model.beginResetModel()
+        try:
+            for gl in gleise:
+                bft = self.bahnhofgraph.find_superior(gl, {'Bft'})
+                self.bahnhofgraph.replace_parent(gl, BahnhofElement('Bf', bft.name), del_old_parent=True)
+        finally:
+            self.gl_table_model.endResetModel()
+
+    def group_elements(self, level: str, element: Optional[str] = None):
+        gleise = {gl for gl in self.get_selection()}
+
+        if element is None:
+            elements = (self.gl_table_model.row_data[sel].get(level) for sel in gleise)
+            elements = sorted((bf for bf in elements if bf is not None))
+            if not elements:
+                return {}, {}
+            element, _ = Counter(elements).most_common(1)[0]
+
+        new_element = BahnhofElement(level, element)
+        replace = {}
+        insert = {}
+        for gl in gleise:
+            try:
+                sup = self.bahnhofgraph.find_superior(gl, level)
+            except KeyError:
+                insert[gl] = new_element
+            else:
+                if sup != new_element:
+                    replace[sup] = new_element
+
+        self.gl_table_model.beginResetModel()
+        try:
+            # todo: test!
+            nx.relabel_nodes(self.bahnhofgraph, replace, copy=False)
+        finally:
+            self.gl_table_model.endResetModel()
 
     @pyqtSlot()
     def bs_ungroup_button_clicked(self):
@@ -280,7 +341,15 @@ class BahnhofEditor(QObject):
         3. Aktualisieren des Modells und der Ansicht.
         """
 
-        pass
+        gleise = {gl for gl in self.get_selection()}
+
+        self.gl_table_model.beginResetModel()
+        try:
+            for gl in gleise:
+                bs = self.bahnhofgraph.find_superior(gl, {'Bs'})
+                self.bahnhofgraph.replace_parent(gl, BahnhofElement('Bs', bs.name), del_old_parent=True)
+        finally:
+            self.gl_table_model.endResetModel()
 
     @pyqtSlot()
     def bf_rename_button_clicked(self):
