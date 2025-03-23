@@ -5,6 +5,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, 
 import networkx as nx
 from PyQt5 import Qt, QtCore
 from PyQt5.QtCore import pyqtSlot, QAbstractTableModel, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QStringListModel, QObject
+from PyQt5.uic.Compiler.qtproxies import QtWidgets
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement, BahnsteigGraphNode, BahnsteigGraphEdge
@@ -239,6 +240,25 @@ class BahnhofEditor(QObject):
 
         return selection
 
+    def get_combo_element(self, level: str, combo: QtWidgets.QComboBox):
+        """
+        Bahnhofelement aus Combobox auslesen.
+
+        Der Name des Elements wird aus dem Editierfeld ausgelesen.
+        Das Modell wird nicht beachtet.
+
+        :param level: Der Level des Elements.
+        :param combo: Die QComboBox, das den Namen des Elements enthält.
+        :return: Ein BahnhofElement vom Typ level, oder None, wenn das Element nicht existiert.
+        """
+
+        txt = combo.currentText()
+        element = BahnhofElement(level, txt)
+        if self.bahnhofgraph.has_node(element):
+            return element
+        else:
+            return None
+
     @pyqtSlot('QItemSelection', 'QItemSelection')
     def gl_selection_changed(self, selected, deselected):
         selection = self.get_selection()
@@ -296,27 +316,6 @@ class BahnhofEditor(QObject):
 
         self.group_elements('Bs', self.ui.bs_combo.currentText())
 
-    @pyqtSlot()
-    def bf_ungroup_button_clicked(self):
-        """
-        Entfernt die Gruppierung der ausgewählten Bahnhofteile und ordnet sie wieder unabhängigen Bahnhöfen zu.
-
-        Die einzelnen Schritte sind:
-        1. Bahnhof löschen.
-        2. Zu jedem Bahnhofteil einen Bahnhof gleichen Namens erstellen und mit einer Kante verbinden.
-        3. Aktualisieren des Modells und der Ansicht.
-        """
-
-        gleise = {gl for gl in self.get_selection()}
-
-        self.gl_table_model.beginResetModel()
-        try:
-            for gl in gleise:
-                bft = self.bahnhofgraph.find_superior(gl, {'Bft'})
-                self.bahnhofgraph.replace_parent(gl, BahnhofElement('Bf', bft.name), del_old_parent=True)
-        finally:
-            self.gl_table_model.endResetModel()
-
     def group_elements(self, level: str, element: Optional[str] = None):
         gleise = {gl for gl in self.get_selection()}
 
@@ -341,29 +340,54 @@ class BahnhofEditor(QObject):
 
         self.gl_table_model.beginResetModel()
         try:
-            # todo: test!
             nx.relabel_nodes(self.bahnhofgraph, replace, copy=False)
+            self.gl_table_model.update()
+        finally:
+            self.gl_table_model.endResetModel()
+
+    @pyqtSlot()
+    def bf_ungroup_button_clicked(self):
+        """
+        Erstellt einen Bahnhof aus dem gewählten Bahnhofteil.
+
+        - Der Name des Bahnhofteils wird aus der Bft-Combobox übernommen. Der Bahnhofteil muss existieren.
+        - Der Name des Bahnhofs wird aus dem Namen des Bahnhofteils abgeleitet. Der Bahnhof darf noch nicht existieren.
+        """
+
+        bft = BahnhofElement('Bft', self.ui.bft_combo.currentText())
+        if not self.bahnhofgraph.has_node(bft):
+            return  # Bahnhofteil existiert nicht
+        bf = BahnhofElement('Bf', bft.name)
+        if self.bahnhofgraph.has_node(bf):
+            return  # Bahnhof existiert bereits
+
+        self.gl_table_model.beginResetModel()
+        try:
+            self.bahnhofgraph.replace_parent(bft, bf, del_old_parent=True)
+            self.gl_table_model.update()
         finally:
             self.gl_table_model.endResetModel()
 
     @pyqtSlot()
     def bs_ungroup_button_clicked(self):
         """
-        Entfernt die Gruppierung der ausgewählten Gleise und ordnet sie wieder unabhängigen Bahnsteigen zu.
+        Erstellt einen Bahnsteig aus dem gewählten Gleis.
 
-        Die einzelnen Schritte sind:
-        1. Bahnsteig löschen.
-        2. Zu jedem Gleis einen Bahnsteig gleichen Namens erstellen und mit einer Kante verbinden.
-        3. Aktualisieren des Modells und der Ansicht.
+        - Der Name des Gleises wird aus der Gl-Combobox übernommen. Das Gleis muss existieren.
+        - Der Name des Bahnsteigs wird aus dem Namen des Gleises abgeleitet. Der Bahnsteig darf noch nicht existieren.
         """
 
-        gleise = {gl for gl in self.get_selection()}
+        gl = BahnhofElement('Gl', self.ui.gl_combo.currentText())
+        if not self.bahnhofgraph.has_node(gl):
+            return  # Gleis existiert nicht
+        bs = BahnhofElement('Bs', gl.name)
+        if self.bahnhofgraph.has_node(bs):
+            return  # Bahnsteig existiert bereits
 
         self.gl_table_model.beginResetModel()
         try:
-            for gl in gleise:
-                bs = self.bahnhofgraph.find_superior(gl, {'Bs'})
-                self.bahnhofgraph.replace_parent(gl, BahnhofElement('Bs', bs.name), del_old_parent=True)
+            self.bahnhofgraph.replace_parent(gl, bs, del_old_parent=True)
+            self.gl_table_model.update()
         finally:
             self.gl_table_model.endResetModel()
 
@@ -416,6 +440,16 @@ class BahnhofEditor(QObject):
         self.gl_table_filter.beginResetModel()
         try:
             self.gl_table_filter.filter_text = self.ui.gl_combo.currentText()
+        finally:
+            self.gl_table_filter.endResetModel()
+        self.ui.gl_table_view.resizeColumnsToContents()
+        self.ui.gl_table_view.resizeRowsToContents()
+
+    @pyqtSlot()
+    def gl_unfilter_button_clicked(self):
+        self.gl_table_filter.beginResetModel()
+        try:
+            self.gl_table_filter.filter_text = ""
         finally:
             self.gl_table_filter.endResetModel()
         self.ui.gl_table_view.resizeColumnsToContents()

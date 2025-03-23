@@ -120,8 +120,17 @@
               <enum>Qt::Horizontal</enum>
              </property>
              <widget class="QTableView" name="gl_table_view">
+              <property name="alternatingRowColors">
+               <bool>true</bool>
+              </property>
+              <property name="selectionMode">
+               <enum>QAbstractItemView::MultiSelection</enum>
+              </property>
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
+              </property>
+              <property name="sortingEnabled">
+               <bool>true</bool>
               </property>
              </widget>
              <widget class="QWidget" name="bf_control_widget" native="true">
@@ -146,6 +155,13 @@
                     </property>
                    </widget>
                   </item>
+                  <item>
+                   <widget class="QPushButton" name="bs_ungroup_button">
+                    <property name="text">
+                     <string>Neuer Bahnsteig</string>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
                 </widget>
                </item>
@@ -166,13 +182,6 @@
                    <widget class="QPushButton" name="bs_group_button">
                     <property name="text">
                      <string>Zuordnen</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="bs_ungroup_button">
-                    <property name="text">
-                     <string>Auflösen</string>
                     </property>
                    </widget>
                   </item>
@@ -206,6 +215,13 @@
                     </property>
                    </widget>
                   </item>
+                  <item>
+                   <widget class="QPushButton" name="bf_ungroup_button">
+                    <property name="text">
+                     <string>Neuer Bahnhof</string>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
                 </widget>
                </item>
@@ -226,13 +242,6 @@
                    <widget class="QPushButton" name="bf_group_button">
                     <property name="text">
                      <string>Zuordnen</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="bf_ungroup_button">
-                    <property name="text">
-                     <string>Auflösen</string>
                     </property>
                    </widget>
                   </item>
