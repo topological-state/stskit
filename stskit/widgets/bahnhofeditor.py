@@ -273,19 +273,19 @@ class BahnhofEditor(QObject):
 
         try:
             self.ui.bf_combo.setCurrentIndex(self.bf_model.stringList().index(new_data['Bf']))
-        except ValueError:
+        except (KeyError, ValueError):
             pass
         try:
             self.ui.bft_combo.setCurrentIndex(self.bft_model.stringList().index(new_data['Bft']))
-        except ValueError:
+        except (KeyError, ValueError):
             pass
         try:
             self.ui.bs_combo.setCurrentIndex(self.bs_model.stringList().index(new_data['Bs']))
-        except ValueError:
+        except (KeyError, ValueError):
             pass
         try:
             self.ui.gl_combo.setCurrentIndex(self.gl_model.stringList().index(new_data['Gl']))
-        except ValueError:
+        except (KeyError, ValueError):
             pass
 
     @pyqtSlot()
@@ -341,6 +341,8 @@ class BahnhofEditor(QObject):
         self.gl_table_model.beginResetModel()
         try:
             nx.relabel_nodes(self.bahnhofgraph, replace, copy=False)
+            for gl, new in insert.items():
+                self.bahnhofgraph.replace_parent(gl, new)
             self.gl_table_model.update()
         finally:
             self.gl_table_model.endResetModel()

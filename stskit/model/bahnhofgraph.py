@@ -311,7 +311,19 @@ class BahnhofGraph(nx.DiGraph):
 
         parents = [gleis] + [element for element in self.list_parents(gleis)]
         parents_dict = {element.typ: element for element in parents}
-        old_parent = parents_dict[new_parent.typ]
+        try:
+            old_parent = parents_dict[new_parent.typ]
+        except KeyError:
+            for element in parents:
+                new_level = BAHNHOFELEMENT_HIERARCHIE[element.typ]
+                if new_level not in parents_dict:
+                    if new_level == 'Bst':
+                        new = BahnhofElement('Bst', element.typ)
+                    else:
+                        new = BahnhofElement(new_level, element.name)
+                    self.add_edge(new, element)
+                    break
+            return
 
         if new_data is not None:
             self.add_node(new_parent, **new_data)
