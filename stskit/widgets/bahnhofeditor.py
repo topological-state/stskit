@@ -393,17 +393,45 @@ class BahnhofEditor(QObject):
         finally:
             self.gl_table_model.endResetModel()
 
+    def rename_element(self, level: str, combo: QtWidgets.QComboBox):
+        """
+        Renames an element in the graph and updates the model accordingly.
+        """
+
+        try:
+            old = combo.model().stringList()[combo.currentIndex()]
+        except IndexError:
+            return  # Kein Element ausgewählt
+        else:
+            old = BahnhofElement(level, old)
+        new = BahnhofElement(level, combo.currentText())
+        print(f'Renaming {old} to {new}')
+
+        if old == new:
+            return  # Alter und neuer Name sind identisch
+        if old not in self.bahnhofgraph.nodes():
+            return  # Element existiert nicht
+        if new in self.bahnhofgraph.nodes():
+            return  # Neuer Name existiert bereits
+
+        self.gl_table_model.beginResetModel()
+        try:
+            nx.relabel_nodes(self.bahnhofgraph, {old: new}, copy=False)
+            self.gl_table_model.update()
+        finally:
+            self.gl_table_model.endResetModel()
+
     @pyqtSlot()
     def bf_rename_button_clicked(self):
-        pass
+        self.rename_element('Bf', self.ui.bf_combo)
 
     @pyqtSlot()
     def bft_rename_button_clicked(self):
-        pass
+        self.rename_element('Bft', self.ui.bft_combo)
 
     @pyqtSlot()
     def bs_rename_button_clicked(self):
-        pass
+        self.rename_element('Bs', self.ui.bs_combo)
 
     @pyqtSlot()
     def bf_combo_index_changed(self):
