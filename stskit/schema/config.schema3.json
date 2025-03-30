@@ -33,7 +33,7 @@
             "type": "boolean"
         },
         "elemente": {
-            "description": "Zuordnung von Gleisen zu Betriebsstellen. Es müssen nur modifizierte Elemente (auto = false) angegeben werden.",
+            "description": "Zuordnung von Gleisen zu Betriebsstellen. Es müssen nur modifizierte Elemente (auto = false) angegeben werden. Zu jedem modifizierten Stammelement, muss jedoch mindestens ein ganzer Ast zu einem Gleis angegeben werden.",
             "type": "array",
             "items": {
                 "type": "object",

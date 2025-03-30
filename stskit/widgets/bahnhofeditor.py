@@ -2,6 +2,7 @@ from collections import Counter
 import logging
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
+from icecream import ic
 import networkx as nx
 from PyQt5 import Qt, QtCore
 from PyQt5.QtCore import pyqtSlot, QAbstractTableModel, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QStringListModel, QObject
@@ -222,6 +223,19 @@ class BahnhofEditor(QObject):
         self.bft_model.setStringList(sorted((bft.name for bft in self.bahnhofgraph.list_by_type({'Bft'}))))
         self.bf_model.setStringList(sorted((bf.name for bf in self.bahnhofgraph.list_by_type({'Bf'}))))
 
+    def apply(self):
+        # Apply changes to the anlage based on the current state of the widgets
+        self.anlage.bahnhofgraph.clear()
+        self.anlage.bahnhofgraph.update(self.bahnhofgraph)
+        try:
+            ic(self.anlage.bahnhofgraph.nodes[BahnhofElement('Bft', 'Bag')])
+        except KeyError:
+            pass
+
+    def reset(self):
+        # Revert changes to the anlage if necessary
+        self.update_widgets()
+
     def get_selection(self) -> Set[BahnhofElement]:
         """
         Gibt die aktuell ausgewählten Elemente zurück.
@@ -343,7 +357,7 @@ class BahnhofEditor(QObject):
             nx.relabel_nodes(self.bahnhofgraph, replace, copy=False)
             for gl, new in insert.items():
                 self.bahnhofgraph.replace_parent(gl, new)
-            self.gl_table_model.update()
+            self.update_widgets()
         finally:
             self.gl_table_model.endResetModel()
 
@@ -356,6 +370,8 @@ class BahnhofEditor(QObject):
         - Der Name des Bahnhofs wird aus dem Namen des Bahnhofteils abgeleitet. Der Bahnhof darf noch nicht existieren.
         """
 
+        # todo: funktioniert nicht richtig: Bahnhof bleibt in konfiguration der alte
+        # todo: auto auf False setzen
         bft = BahnhofElement('Bft', self.ui.bft_combo.currentText())
         if not self.bahnhofgraph.has_node(bft):
             return  # Bahnhofteil existiert nicht
@@ -366,7 +382,7 @@ class BahnhofEditor(QObject):
         self.gl_table_model.beginResetModel()
         try:
             self.bahnhofgraph.replace_parent(bft, bf, del_old_parent=True)
-            self.gl_table_model.update()
+            self.update_widgets()
         finally:
             self.gl_table_model.endResetModel()
 
@@ -389,7 +405,7 @@ class BahnhofEditor(QObject):
         self.gl_table_model.beginResetModel()
         try:
             self.bahnhofgraph.replace_parent(gl, bs, del_old_parent=True)
-            self.gl_table_model.update()
+            self.update_widgets()
         finally:
             self.gl_table_model.endResetModel()
 
@@ -405,7 +421,6 @@ class BahnhofEditor(QObject):
         else:
             old = BahnhofElement(level, old)
         new = BahnhofElement(level, combo.currentText())
-        print(f'Renaming {old} to {new}')
 
         if old == new:
             return  # Alter und neuer Name sind identisch
@@ -417,7 +432,9 @@ class BahnhofEditor(QObject):
         self.gl_table_model.beginResetModel()
         try:
             nx.relabel_nodes(self.bahnhofgraph, {old: new}, copy=False)
-            self.gl_table_model.update()
+            self.bahnhofgraph.nodes[new]['auto'] = False
+            self.bahnhofgraph.nodes[new]['name'] = new.name
+            self.update_widgets()
         finally:
             self.gl_table_model.endResetModel()
 

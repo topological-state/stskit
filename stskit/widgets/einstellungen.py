@@ -93,12 +93,24 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
             self.ui.zugschema_details_table.resizeRowsToContents()
 
     @pyqtSlot()
-    def accept(self):
+    def apply(self):
+        print("apply")
+        self.bahnhof_editor.apply()
         self.zentrale.select_zugschema(self.zugschema.name)
+
+    @pyqtSlot()
+    def accept(self):
+        self.apply()
         self.close()
 
     @pyqtSlot()
-    def reject(self):
+    def reset(self):
+        print("reset")
+        self.bahnhof_editor.reset()
         self.zugschema.load_config(self.anlage.zugschema.name)
         self.zugschema_modell.update()
+
+    @pyqtSlot()
+    def reject(self):
+        self.reset()
         self.close()

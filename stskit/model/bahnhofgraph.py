@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Optional, Sequence, Set, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, Generator, Iterable, List, NamedTuple, Optional, Sequence, Set, Tuple, TypeVar, Union
 
 import networkx as nx
 
@@ -206,7 +206,7 @@ class BahnhofGraph(nx.DiGraph):
         except nx.NetworkXError:
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
-    def list_parents(self, label: BahnhofLabelType) -> Iterable[BahnhofLabelType]:
+    def list_parents(self, label: BahnhofLabelType) -> Generator[BahnhofLabelType, None, None]:
         """
         Uebergeordnete Bahnhofelemente zu einem Gleis.
         :param label: Gleislabel (typ, name)
@@ -221,7 +221,7 @@ class BahnhofGraph(nx.DiGraph):
         else:
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
-    def list_children(self, label: BahnhofLabelType, typen: Set[str]) -> Iterable[BahnhofLabelType]:
+    def list_children(self, label: BahnhofLabelType, typen: Set[str]) -> Generator[BahnhofLabelType, None, None]:
         """
         Listet die untergeordneten Elemente bestimmter Typen auf.
 
@@ -241,7 +241,7 @@ class BahnhofGraph(nx.DiGraph):
             logger.exception(e)
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
-    def list_by_type(self, typen: Set[str]) -> Iterable[BahnhofLabelType]:
+    def list_by_type(self, typen: Set[str]) -> Generator[BahnhofLabelType, None, None]:
         """
         Listet die alle Elemente bestimmter Typen auf.
         """
@@ -298,44 +298,57 @@ class BahnhofGraph(nx.DiGraph):
 
         Dies ist nützlich, wenn ein Gleis von einem anderen Bahnhof übernommen wird.
         Der Elternknoten kann ein beliebiger übergeordneter Knoten des Gleises sein.
+        Der Endnutzer darf jedoch nur den Bs oder Bf ändern.
 
         Der Elternknoten kann existieren oder wird neu erstellt.
         Der alte Knoten wird gelöscht, wenn der Parameter `del_old_parent` auf True gesetzt ist und er keine Kinder mehr hat.
 
         :param gleis: Das Gleis, dessen Elternknoten ersetzt werden soll.
-        :param new_parent: Der neue Elternknoten des Gleises
+        :param new_parent: Der neue Elternknoten des Gleises.
+            Gibt den Typ und Namen des neuen Elternknotens an.
+            Der Knoten kann existieren oder wird aus einer Kopie des alten neu erstellt.
         :param new_data: Daten des neuen Elternknotens. Wenn None, werden die alten Daten verwendet.
         :param del_old_parent: Alten Knoten löschen, wenn er keine Kinder hat. Standardmäßig False.
         :return: Label des alten Knotens
         """
 
-        parents = [gleis] + [element for element in self.list_parents(gleis)]
-        parents_dict = {element.typ: element for element in parents}
+        old_path = [gleis] + [element for element in self.list_parents(gleis)]
+        old_parents = {element.typ: element for element in old_path}
         try:
-            old_parent = parents_dict[new_parent.typ]
+            old_parent = old_parents[new_parent.typ]
+            old_data = self.nodes[old_parent]
         except KeyError:
-            for element in parents:
-                new_level = BAHNHOFELEMENT_HIERARCHIE[element.typ]
-                if new_level not in parents_dict:
-                    if new_level == 'Bst':
-                        new = BahnhofElement('Bst', element.typ)
-                    else:
-                        new = BahnhofElement(new_level, element.name)
-                    self.add_edge(new, element)
-                    break
+            # Fehler im Graph: Das Gleis hat keinen entsprechenden Elternknoten!
+            logger.error(f"Fehler im Bahnhofgraph: Das Gleis {gleis} hat keinen Elternknoten vom Typ {new_parent.typ}!")
+            # for element in old_path:
+            #     new_level = BAHNHOFELEMENT_HIERARCHIE[element.typ]
+            #     if new_level not in old_parents:
+            #         if new_level == 'Bst':
+            #             new = BahnhofElement('Bst', element.typ)
+            #         else:
+            #             new = BahnhofElement(new_level, element.name)
+            #         # todo: existierenden knoten kopieren?
+            #         self.add_node(new, typ=new_level, name=new.name, auto=True)
+            #         self.add_edge(new, element)
+            #         break
             return
 
-        if new_data is not None:
-            self.add_node(new_parent, **new_data)
+        if new_data is None:
+            new_data = old_data.copy()
+        new_data['name'] = new_parent.name
+        new_data['typ'] = new_parent.typ
+        self.add_node(new_parent, **new_data)
 
-        for element in parents:
+        for element in old_path:
             if self.has_edge(old_parent, element):
                 data = self.get_edge_data(old_parent, element)
                 self.add_edge(new_parent, element, **data)
+                self.nodes[element]['auto'] = False
                 self.remove_edge(old_parent, element)
             if self.has_edge(element, old_parent):
                 data = self.get_edge_data(element, old_parent)
                 self.add_edge(element, new_parent, **data)
+                self.nodes[old_parent]['auto'] = False
 
         if del_old_parent and not any(self.successors(old_parent)):
             self.remove_node(old_parent)
@@ -564,12 +577,10 @@ class BahnhofGraph(nx.DiGraph):
         Der Bahnhofgraph muss bereits mit der Autokonfiguration befuellt sein.
         """
 
+        konfig_graph = BahnhofGraph()
         for e in elemente:
-            if e.get('auto'):  # oder nur wenn p auto?
-                continue
-
             be2 = BahnhofElement(e['typ'], e['name'])
-            data2 = {"auto": False}
+            data2 = {"auto": e['auto'], "typ": e['typ'], "name": e['name']}
             if "sichtbar" in e:
                 data2["sichtbar"] = e['sichtbar']
             if "gleise" in e:
@@ -581,16 +592,11 @@ class BahnhofGraph(nx.DiGraph):
 
             if e['typ'] in {'Gl', 'Agl'}:
                 if be2 not in self:
-                    logger.debug(f"Gleis {be2} existiert nicht im Simulator")
+                    logger.warning(f"Gleis {be2} existiert nicht im Simulator")
                     continue
-            elif e['typ'] in {'Bs', 'Bft', 'Bf', 'Anst'}:
-                data2['typ'] = e['typ']
-                data2['name'] = e['name']
-            else:
-                continue
 
             # element einfuegen und attribute aktualisieren
-            self.add_node(be2, **data2)
+            konfig_graph.add_node(be2, **data2)
 
             try:
                 t = BAHNHOFELEMENT_HIERARCHIE[e['typ']]
@@ -598,11 +604,45 @@ class BahnhofGraph(nx.DiGraph):
             except KeyError:
                 continue
 
-            # andere edges entfernen!
-            knoten_entfernen = list(self.predecessors(be2))
-            for p in knoten_entfernen:
-                self.remove_edge(p, be2)
-            self.add_edge(be1, be2, typ="Hierarchie", auto=False)
+            konfig_graph.add_edge(be1, be2, typ="Hierarchie", auto=e['auto'])
+
+        for gl in konfig_graph.list_by_type({'Gl', 'Agl'}):
+            gl_data = konfig_graph.nodes[gl]
+            if not gl_data.auto:
+                self.add_node(gl, **gl_data)
+            try:
+                bs_neu = konfig_graph.find_superior(gl, {'Bs', 'Anst'})
+                bs_alt = self.find_superior(gl, {'Bs', 'Anst'})
+            except KeyError:
+                pass
+            else:
+                if bs_alt != bs_neu:
+                    self.replace_parent(gl, bs_neu)
+
+        for bs in konfig_graph.list_by_type({'Bs'}):
+            bs_data = konfig_graph.nodes[bs]
+            if not bs_data.auto:
+                self.add_node(bs, **bs_data)
+
+        for bft in konfig_graph.list_by_type({'Bft'}):
+            bft_data = konfig_graph.nodes[bft]
+            if not bft_data.auto:
+                self.add_node(bft, **bft_data)
+            try:
+                bf_neu = konfig_graph.find_superior(bft, {'Bf'})
+                gl = next(konfig_graph.list_children(bf_neu, {'Gl'}))
+                bf_alt = self.find_superior(gl, {'Bf'})
+            except KeyError:
+                pass
+            else:
+                if bf_neu != bf_alt:
+                    self.replace_parent(bft, bf_neu)
+
+        for bf in konfig_graph.list_by_type({'Bf', 'Anst'}):
+            bf_data = konfig_graph.nodes[bf]
+            if not bf_data.auto:
+                self.add_node(bf, **bf_data)
+            self.add_edge(BahnhofElement('Bst', bf.typ), bf, typ='Hierarchie')
 
         def leere_gruppen_entfernen(typ: str):
             entfernen = []

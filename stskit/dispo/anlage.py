@@ -145,7 +145,7 @@ class Anlage:
             try:
                 self.bahnhofgraph.import_konfiguration(self.config['elemente'])
             except KeyError:
-                logger.warning("Keine Bahnhofkonfiguration gefunden")
+                logger.warning("Fehler in Bahnhofkonfiguration")
             if logger.isEnabledFor(logging.DEBUG):
                 write_gml(self.bahnhofgraph, debug_path / f"{self.anlageninfo.aid}.bahnhofgraph.gml")
 

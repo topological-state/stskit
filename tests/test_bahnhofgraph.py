@@ -109,6 +109,9 @@ class TestBahnhofGraph(unittest.TestCase):
         new_edge_data = self.graph.get_edge_data(new_parent, gleis)
         self.assertEqual(new_edge_data, old_edge_data)
 
+        # Verify that the old parent node still exists
+        self.assertTrue(self.graph.has_node(old_parent))
+
         # Verify that the old label is returned
         self.assertEqual(result, old_parent)
 
