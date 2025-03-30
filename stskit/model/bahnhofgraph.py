@@ -625,9 +625,19 @@ class BahnhofGraph(nx.DiGraph):
                 self.add_node(bs, **bs_data)
 
         for bft in konfig_graph.list_by_type({'Bft'}):
+            try:
+                bft_neu = bft
+                gl = next(konfig_graph.list_children(bft_neu, {'Gl'}))
+                bft_alt = self.find_superior(gl, {'Bft'})
+            except KeyError:
+                pass
+            else:
+                if bft_neu != bft_alt:
+                    nx.relabel_nodes(self, {bft_alt: bft_neu}, copy=False)
             bft_data = konfig_graph.nodes[bft]
             if not bft_data.auto:
                 self.add_node(bft, **bft_data)
+
             try:
                 bf_neu = konfig_graph.find_superior(bft, {'Bf'})
                 gl = next(konfig_graph.list_children(bf_neu, {'Gl'}))
@@ -655,6 +665,27 @@ class BahnhofGraph(nx.DiGraph):
         for t in ['Bs', 'Bft', 'Bf', 'Anst']:
             leere_gruppen_entfernen(t)
 
+        self.validate()
+
+    def validate(self):
+        for gl in self.list_by_type({'Gl', 'Agl'}):
+            if gl.typ == 'Gl':
+                check = {'Gl', 'Bs', 'Bft', 'Bf', 'Bst', 'Stw'}
+            elif gl.typ == 'Agl':
+                check = {'Agl', 'Anst', 'Bst', 'Stw'}
+            else:
+                raise ValueError(f"Ungueltiger Gleistyp {gl}")
+
+            # gl_data = self.nodes[gl]
+            try:
+                for be in self.list_parents(gl):
+                    # be_data = self.nodes[be]
+                    check -= {be.typ}
+                if not check:
+                    logger.error(f"{gl} hat fehlende Eltern {check}")
+            except KeyError as e:
+                logger.exception(f"{gl} nicht im bahnhofgraph", exc_info=e)
+
     def export_konfiguration(self) -> Sequence[Dict[str, Union[str, int, float, bool]]]:
         """
         Bahnhofgraph exportieren fuer Konfigurationsdatei
@@ -664,23 +695,25 @@ class BahnhofGraph(nx.DiGraph):
 
         elemente = {}
         for e1, e2 in self.edges():
+            # e1 ist der stammknoten
             if e1.typ == 'Stw':
                 continue
-            data: BahnsteigGraphNode = self.nodes[e2]
+            data1: BahnsteigGraphNode = self.nodes[e1]
+            data2: BahnsteigGraphNode = self.nodes[e2]
             element = {'name': e2.name,
                        'typ': e2.typ,
-                       'auto': data.auto,
+                       'auto': data2.auto and data1.auto,
                        'sichtbar': True,
                        'flags': ''}
             if e1.typ != 'Bst':
                 element['stamm'] = e1.name
-            if data.get('sperrung'):
+            if data2.get('sperrung'):
                 element['flags'] = 'S'
                 element['auto'] = False
             if element['typ'] in {'Gl', 'Bs', 'Agl'}:
-                element['gleise'] = data.get('gleise', 1)
+                element['gleise'] = data2.get('gleise', 1)
             elif element['typ'] in {'Bf', 'Anst'}:
-                if stil := data.get('linienstil'):
+                if stil := data2.get('linienstil'):
                     element['linienstil'] = stil
             elemente[e2] = element
 
