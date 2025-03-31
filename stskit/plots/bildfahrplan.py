@@ -266,7 +266,9 @@ class BildfahrplanPlot:
 
         def bst_von_gleis(gl: Union[str, BahnhofElement]) -> Optional[BahnhofElement]:
             try:
-                if not isinstance(gl, BahnhofElement):
+                if isinstance(gl, BahnhofElement):
+                    bst = gl
+                else:
                     bst = self.anlage.bahnhofgraph.find_name(gl)
                 if bst.typ not in {'Bf', 'Anst'}:
                     bst = self.anlage.bahnhofgraph.find_superior(bst, {'Bf', 'Anst'})
@@ -274,8 +276,8 @@ class BildfahrplanPlot:
                     return bst
                 else:
                     return None
-            except (AttributeError, IndexError, KeyError):
-                logger.error(f"Error in bst_von_gleis: {gl} -> {bst}")
+            except (AttributeError, IndexError, KeyError) as e:
+                logger.error(f"Error in bst_von_gleis: {gl} -> {bst}", exc_info=e)
                 return None
 
         def _add_node(ereignis_label, ereignis_data, bst):
