@@ -26,7 +26,7 @@ from stskit.model.zuggraph import ZugGraph
 from stskit.model.zielgraph import ZielGraph
 from stskit.model.ereignisgraph import EreignisGraph
 from stskit.utils.export import write_gml
-from stskit.utils.gleisnamen import default_anschlussname, default_bahnhofname, default_bahnsteigname
+from stskit.model.gleisschema import Gleisschema
 from stskit.model.zugschema import Zugschema
 
 
@@ -58,6 +58,7 @@ class Anlage:
         self.strecken = Strecken()
         self.strecken.liniengraph = self.liniengraph
 
+        self.gleisschema = Gleisschema()
         self.zugschema = Zugschema()
 
     def update(self, client: GraphClient, config_path: os.PathLike):
@@ -115,6 +116,7 @@ class Anlage:
 
         if self.anlageninfo is None:
             self.anlageninfo = client.anlageninfo
+            self.gleisschema = Gleisschema.regionsschema(self.anlageninfo.region)
 
         if not self.signalgraph:
             self.signalgraph = client.signalgraph.copy(as_view=False)
@@ -140,8 +142,8 @@ class Anlage:
 
         if not self.bahnhofgraph and self.signalgraph and self.bahnsteiggraph:
             self.bahnhofgraph.import_anlageninfo(self.anlageninfo)
-            self.bahnhofgraph.import_bahnsteiggraph(self.bahnsteiggraph, default_bahnsteigname, default_bahnhofname)
-            self.bahnhofgraph.import_signalgraph(self.signalgraph, default_anschlussname)
+            self.bahnhofgraph.import_bahnsteiggraph(self.bahnsteiggraph, self.gleisschema)
+            self.bahnhofgraph.import_signalgraph(self.signalgraph, self.gleisschema)
             try:
                 self.bahnhofgraph.import_konfiguration(self.config['elemente'])
             except KeyError:

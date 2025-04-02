@@ -1,5 +1,5 @@
 import unittest
-import stskit.utils.gleisnamen as gleisnamen
+from stskit.model.gleisschema import Gleisschema
 
 
 class TestAnlage(unittest.TestCase):
@@ -26,8 +26,10 @@ class TestAnlage(unittest.TestCase):
                  'N': 'N'
                  }
 
+        gleisschema = Gleisschema()
+
         for gleis, bahnhof in tests.items():
-            self.assertEqual(bahnhof, gleisnamen.default_bahnhofname(gleis))
+            self.assertEqual(bahnhof, gleisschema.bahnhofname(gleis))
 
     def test_default_anschlussname(self):
         """
@@ -51,8 +53,10 @@ class TestAnlage(unittest.TestCase):
                  'Leinde Fern': 'Leinde Fern'
                  }
 
+        gleisschema = Gleisschema()
+
         for gleis, bahnhof in tests.items():
-            self.assertEqual(bahnhof, gleisnamen.default_anschlussname(gleis))
+            self.assertEqual(bahnhof, gleisschema.anschlussname(gleis))
 
     
 if __name__ == '__main__':

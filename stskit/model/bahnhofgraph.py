@@ -5,6 +5,7 @@ import networkx as nx
 
 from stskit.model.graphbasics import dict_property
 from stskit.plugin.stsobj import AnlagenInfo, BahnsteigInfo, Knoten
+from stskit.model.gleisschema import Gleisschema
 from stskit.model.signalgraph import SignalGraph
 
 logger = logging.getLogger(__name__)
@@ -499,8 +500,7 @@ class BahnhofGraph(nx.DiGraph):
 
     def import_bahnsteiggraph(self,
                               bahnsteiggraph: BahnsteigGraph,
-                              f_bahnsteigname: Callable,
-                              f_bahnhofname: Callable):
+                              gleisschema: Gleisschema):
         """
         Importiert Gleise und Bahnsteige aus einem Bahnsteiggraphen.
         """
@@ -512,15 +512,15 @@ class BahnhofGraph(nx.DiGraph):
 
         for comp in nx.connected_components(bahnsteiggraph):
             gleis = min(comp, key=len)
-            bft = f_bahnsteigname(gleis)
-            bf = f_bahnhofname(bft)
+            bft = gleisschema.bahnsteigname(gleis)
+            bf = gleisschema.bahnhofname(bft)
             self.add_node(BahnhofLabelType('Bf', bf), name=bf, typ='Bf', auto=True)
             self.add_edge(bf_label, BahnhofLabelType('Bf', bf), typ=bf_label.typ, auto=True)
             self.add_node(BahnhofLabelType('Bft', bft), name=bft, typ='Bft', auto=True)
             self.add_edge(BahnhofLabelType('Bf', bf), BahnhofLabelType('Bft', bft), typ='Bf', auto=True)
 
             for gleis in comp:
-                bs = f_bahnsteigname(gleis)
+                bs = gleisschema.bahnsteigname(gleis)
                 self.add_node(BahnhofLabelType('Bs', bs), name=bs, typ='Bs', gleise=1, auto=True)
                 self.add_node(BahnhofLabelType('Gl', gleis), name=gleis, typ='Gl', gleise=1, auto=True)
                 self.ziel_gleis[gleis] = BahnhofLabelType('Gl', gleis)
@@ -529,7 +529,7 @@ class BahnhofGraph(nx.DiGraph):
 
     def import_signalgraph(self,
                            signalgraph: SignalGraph,
-                           f_anschlussname: Callable):
+                           gleisschema: Gleisschema):
         """
         Importiert Anschlussgleise aus einem Signalgraphen.
         """
@@ -559,7 +559,7 @@ class BahnhofGraph(nx.DiGraph):
                     if agl_label in agl_gleise:
                         agl_gleise[agl_label] += 0.5
 
-                anst = f_anschlussname(agl)
+                anst = gleisschema.anschlussname(agl)
                 anst_label = BahnhofLabelType('Anst', anst)
                 self.add_node(agl_label, **agl_data)
                 self.add_edge(bst_label, anst_label, typ=bst_label.typ, auto=True)
