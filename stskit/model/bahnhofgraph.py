@@ -629,7 +629,7 @@ class BahnhofGraph(nx.DiGraph):
                 bft_neu = bft
                 gl = next(konfig_graph.list_children(bft_neu, {'Gl'}))
                 bft_alt = self.find_superior(gl, {'Bft'})
-            except KeyError:
+            except (KeyError, StopIteration):
                 pass
             else:
                 if bft_neu != bft_alt:
@@ -642,7 +642,7 @@ class BahnhofGraph(nx.DiGraph):
                 bf_neu = konfig_graph.find_superior(bft, {'Bf'})
                 gl = next(konfig_graph.list_children(bf_neu, {'Gl'}))
                 bf_alt = self.find_superior(gl, {'Bf'})
-            except KeyError:
+            except (KeyError, StopIteration):
                 pass
             else:
                 if bf_neu != bf_alt:
