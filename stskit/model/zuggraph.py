@@ -104,7 +104,7 @@ class ZugGraph(nx.DiGraph):
             zug_data = self.nodes[node]
             return 'ausgefahren' in zug_data
 
-        return nx.subgraph_view(self, filter_vollstaendige_zuege)
+        return nx.subgraph_view(self, filter_node=filter_vollstaendige_zuege)
 
     def reset_aenderungen(self):
         self.aenderungen = {}
