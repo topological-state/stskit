@@ -608,7 +608,7 @@ class BahnhofGraph(nx.DiGraph):
 
         for gl in konfig_graph.list_by_type({'Gl', 'Agl'}):
             gl_data = konfig_graph.nodes[gl]
-            if not gl_data.auto:
+            if not gl_data.get('auto', True):
                 self.add_node(gl, **gl_data)
             try:
                 bs_neu = konfig_graph.find_superior(gl, {'Bs', 'Anst'})
@@ -621,7 +621,7 @@ class BahnhofGraph(nx.DiGraph):
 
         for bs in konfig_graph.list_by_type({'Bs'}):
             bs_data = konfig_graph.nodes[bs]
-            if not bs_data.auto:
+            if not bs_data.get('auto', True):
                 self.add_node(bs, **bs_data)
 
         for bft in konfig_graph.list_by_type({'Bft'}):
@@ -635,7 +635,7 @@ class BahnhofGraph(nx.DiGraph):
                 if bft_neu != bft_alt:
                     nx.relabel_nodes(self, {bft_alt: bft_neu}, copy=False)
             bft_data = konfig_graph.nodes[bft]
-            if not bft_data.auto:
+            if not bft_data.get('auto', True):
                 self.add_node(bft, **bft_data)
 
             try:
@@ -650,7 +650,7 @@ class BahnhofGraph(nx.DiGraph):
 
         for bf in konfig_graph.list_by_type({'Bf', 'Anst'}):
             bf_data = konfig_graph.nodes[bf]
-            if not bf_data.auto:
+            if not bf_data.get('auto', True):
                 self.add_node(bf, **bf_data)
             self.add_edge(BahnhofElement('Bst', bf.typ), bf, typ='Hierarchie')
 
