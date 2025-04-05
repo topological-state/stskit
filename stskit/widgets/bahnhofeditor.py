@@ -223,6 +223,8 @@ class BahnhofEditor(QObject):
         self.bft_model.setStringList(sorted((bft.name for bft in self.bahnhofgraph.list_by_type({'Bft'}))))
         self.bf_model.setStringList(sorted((bf.name for bf in self.bahnhofgraph.list_by_type({'Bf'}))))
 
+        self.update_widget_states(self.get_selection())
+
     def apply(self):
         # Apply changes to the anlage based on the current state of the widgets
         self.anlage.bahnhofgraph.clear()
@@ -301,6 +303,49 @@ class BahnhofEditor(QObject):
             self.ui.gl_combo.setCurrentIndex(self.gl_model.stringList().index(new_data['Gl']))
         except (KeyError, ValueError):
             pass
+
+        self.update_widget_states(selection)
+
+    def update_widget_states(self, selection: Set[BahnhofElement]):
+        bs_sel = {self.gl_table_model.row_data[gl]['Bs'] for gl in selection}
+        bft_sel = {self.gl_table_model.row_data[gl]['Bft'] for gl in selection}
+        bf_sel = {self.gl_table_model.row_data[gl]['Bf'] for gl in selection}
+
+        # gleiswahl >= 1 , combo-text vorhanden und noch nicht vergeben
+        # en = bool(selection)
+        # if en:
+        #     tx = self.ui.bf_combo.currentText()
+        #     be = BahnhofElement('Bf', tx)
+        #     en = bool(tx) and be in self.bahnhofgraph
+        en = bool(selection) and (tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) in self.bahnhofgraph)
+        self.ui.bf_group_button.setEnabled(en)
+
+        # gleiswahl >= 1 vom gleichen bft, combo-text vorhanden und noch nicht vergeben
+        en = len(bft_sel) == 1 and (tx := self.ui.bs_combo.currentText()) and (BahnhofElement('Bs', tx) in self.bahnhofgraph)
+        self.ui.bs_group_button.setEnabled(en)
+
+        # einzelner bf gewählt
+        en = len(bf_sel) == 1
+        self.ui.bf_ungroup_button.setEnabled(en)
+
+        # einzelner bs gewählt
+        en = len(bs_sel) == 1
+        self.ui.bs_ungroup_button.setEnabled(en)
+
+        # einzelner bf gewählt, combo-text vorhanden und noch nicht vergeben
+        en = len(bf_sel) == 1 and (tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) not in self.bahnhofgraph)
+        self.ui.bf_rename_button.setEnabled(en)
+
+        # einzelner bft gewählt, combo-text vorhanden und noch nicht vergeben
+        en = len(bft_sel) == 1 and (tx := self.ui.bft_combo.currentText()) and (BahnhofElement('Bft', tx) not in self.bahnhofgraph)
+        self.ui.bft_rename_button.setEnabled(en)
+
+        # einzelner bs gewählt, combo-text vorhanden und noch nicht vergeben
+        en = len(bs_sel) == 1 and (tx := self.ui.bs_combo.currentText()) and (BahnhofElement('Bs', tx) not in self.bahnhofgraph)
+        self.ui.bs_rename_button.setEnabled(en)
+
+        en = bool(self.ui.gl_combo.currentText())
+        self.ui.gl_filter_button.setEnabled(en)
 
     @pyqtSlot()
     def bf_group_button_clicked(self):
@@ -452,35 +497,35 @@ class BahnhofEditor(QObject):
 
     @pyqtSlot()
     def bf_combo_index_changed(self):
-        pass
+        self.update_widget_states(self.get_selection())
 
     @pyqtSlot()
     def bft_combo_index_changed(self):
-        pass
+        self.update_widget_states(self.get_selection())
 
     @pyqtSlot()
     def bs_combo_index_changed(self):
-        pass
+        self.update_widget_states(self.get_selection())
 
     @pyqtSlot()
     def gl_combo_index_changed(self):
-        pass
+        self.update_widget_states(self.get_selection())
 
     @pyqtSlot()
     def bf_combo_text_changed(self):
-        pass
+        self.update_widget_states(self.get_selection())
 
     @pyqtSlot()
     def bft_combo_text_changed(self):
-        pass
+        self.update_widget_states(self.get_selection())
 
     @pyqtSlot()
     def bs_combo_text_changed(self):
-        pass
+        self.update_widget_states(self.get_selection())
 
     @pyqtSlot()
     def gl_combo_text_changed(self):
-        pass
+        self.update_widget_states(self.get_selection())
 
     @pyqtSlot()
     def gl_filter_button_clicked(self):
