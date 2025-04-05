@@ -399,6 +399,8 @@ class BahnhofEditor(QObject):
 
         self.gl_table_model.beginResetModel()
         try:
+            for gl, new in replace.items():
+                self.bahnhofgraph.nodes[gl]['auto'] = False
             nx.relabel_nodes(self.bahnhofgraph, replace, copy=False)
             for gl, new in insert.items():
                 self.bahnhofgraph.replace_parent(gl, new)
