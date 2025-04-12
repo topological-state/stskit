@@ -44,6 +44,7 @@ class Anlage:
         self.simzeit_minuten: int = 0
         self.config: Optional[Config] = None
         self.default_config:Optional[Config] = None
+        self.aenderungen: Set[str] = set()
 
         self.signalgraph = SignalGraph()
         self.bahnsteiggraph = BahnsteigGraph()
@@ -61,7 +62,7 @@ class Anlage:
         self.gleisschema = Gleisschema()
         self.zugschema = Zugschema()
 
-    def update(self, client: GraphClient, config_path: os.PathLike):
+    def update(self, client: GraphClient, config_path: os.PathLike) -> Set[str]:
         """
         Main update method of Anlage.
 
@@ -99,6 +100,10 @@ class Anlage:
             # with open(debug_path / f"{self.anlageninfo.aid}.strecken.json", "w") as f:
             #     json.dump(self.strecken.strecken, f)
 
+        aenderungen = self.aenderungen
+        self.aenderungen = set()
+        return aenderungen
+
     def _update_client(self, client, debug_path):
         """
         Update the graphs with the current state of the simulation.
@@ -116,21 +121,27 @@ class Anlage:
 
         if self.anlageninfo is None:
             self.anlageninfo = client.anlageninfo
+            self.aenderungen.add('anlageninfo')
             self.gleisschema = Gleisschema.regionsschema(self.anlageninfo.region)
+            self.aenderungen.add('gleisschema')
 
         if not self.signalgraph:
             self.signalgraph = client.signalgraph.copy(as_view=False)
+            self.aenderungen.add('signalgraph')
             if logger.isEnabledFor(logging.DEBUG):
                 debug_path.mkdir(exist_ok=True)
                 write_gml(self.signalgraph, debug_path / f"{self.anlageninfo.aid}.signalgraph.gml")
 
         if not self.bahnsteiggraph:
             self.bahnsteiggraph = client.bahnsteiggraph.copy(as_view=False)
+            self.aenderungen.add('bahnsteiggraph')
             if logger.isEnabledFor(logging.DEBUG):
                 write_gml(self.bahnsteiggraph, debug_path / f"{self.anlageninfo.aid}.bahnsteiggraph.gml")
 
         self.zuggraph = client.zuggraph.copy(as_view=True)
+        self.aenderungen.add('zuggraph')
         self.zielgraph = client.zielgraph.copy(as_view=False)
+        self.aenderungen.add('zielgraph')
 
     def _init_anlage(self, config_path, debug_path):
         if self.config is None:
@@ -139,6 +150,7 @@ class Anlage:
             else:
                 self.config = Config()
                 self.config['default'] = True
+            self.aenderungen.add('config')
 
         if not self.bahnhofgraph and self.signalgraph and self.bahnsteiggraph:
             self.bahnhofgraph.import_anlageninfo(self.anlageninfo)
@@ -148,6 +160,7 @@ class Anlage:
                 self.bahnhofgraph.import_konfiguration(self.config['elemente'])
             except KeyError:
                 logger.warning("Fehler in Bahnhofkonfiguration")
+            self.aenderungen.add('bahnhofgraph')
             if logger.isEnabledFor(logging.DEBUG):
                 write_gml(self.bahnhofgraph, debug_path / f"{self.anlageninfo.aid}.bahnhofgraph.gml")
 
@@ -176,6 +189,8 @@ class Anlage:
             except KeyError:
                 logger.info("Keine Streckenmarkierungskonfiguration gefunden")
 
+            self.aenderungen.add('liniengraph')
+
 
     def _init_strecken(self):
         """
@@ -199,6 +214,8 @@ class Anlage:
                     if self.strecken.auto.get(name, True):
                         self.strecken.add_strecke(name, strecken[name], 100 + index, True)
 
+            self.aenderungen.add('strecken')
+
     def liniengraph_konfigurieren(self):
         """
         Erstellt den Liniengraphen aus dem Zielgraphen.
@@ -220,8 +237,10 @@ class Anlage:
                     bst1_data = self.bahnhofgraph.nodes[bst1]
                     bst2_data = self.bahnhofgraph.nodes[bst2]
                     self.liniengraph.linie_eintragen(ziel1_data, bst1_data, ziel2_data, bst2_data)
+                    self.aenderungen.add('liniengraph')
 
-        self.liniengraph.schleifen_aufloesen()
+        if 'liniengraph' in self.aenderungen:
+            self.liniengraph.schleifen_aufloesen()
 
     def liniengraph_mit_signalgraph_abgleichen(self):
         """
@@ -274,6 +293,8 @@ class Anlage:
                     except nx.NetworkXError:
                         pass
 
+        self.aenderungen.add('liniengraph')
+
     def load_config(self, config_path: os.PathLike):
         """
         Konfiguration aus Konfigurationsdatei laden.
@@ -290,6 +311,7 @@ class Anlage:
         Zugschema.find_schemas(config_path)
 
         if self.default_config is None:
+            self.aenderungen.add('default_config')
             self.default_config = Config()
             p = Path(default_path) / f"{self.anlageninfo.aid}.json"
             try:
@@ -300,6 +322,7 @@ class Anlage:
                 logger.warning(f"Keine Beispielkonfiguration gefunden")
 
         if self.config is None:
+            self.aenderungen.add('config')
             self.config = Config()
             self.config["default"] = True
             p = Path(config_path) / f"{self.anlageninfo.aid}.json"
@@ -320,6 +343,7 @@ class Anlage:
                 self.config['zugschema'] = self.default_config.get('zugschema', {})
 
         self.zugschema.load_config(self.config.get('zugschema', ''), self.anlageninfo.region)
+        self.aenderungen.add('zugschema')
 
     def save_config(self, path: os.PathLike):
         self.config["_aid"] = self.anlageninfo.aid

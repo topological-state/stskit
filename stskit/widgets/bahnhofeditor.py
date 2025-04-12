@@ -317,7 +317,7 @@ class BahnhofEditor(QObject):
         #     tx = self.ui.bf_combo.currentText()
         #     be = BahnhofElement('Bf', tx)
         #     en = bool(tx) and be in self.bahnhofgraph
-        en = bool(selection) and (tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) in self.bahnhofgraph)
+        en = len(bft_sel) == 1 and (tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) in self.bahnhofgraph)
         self.ui.bf_group_button.setEnabled(en)
 
         # gleiswahl >= 1 vom gleichen bft, combo-text vorhanden und noch nicht vergeben
