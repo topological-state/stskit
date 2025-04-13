@@ -101,7 +101,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QListWidget" name="strecke_list">
+                <widget class="QListView" name="strecke_list">
                  <property name="alternatingRowColors">
                   <bool>true</bool>
                  </property>

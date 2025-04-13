@@ -2,7 +2,7 @@ import itertools
 import logging
 from typing import Optional, Tuple
 
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, QStringListModel
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from PyQt5 import QtWidgets
@@ -27,12 +27,13 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         self.zentrale = zentrale
+        self.zentrale.anlage_update.register(self.update_anlage)
         self.zentrale.plan_update.register(self.plan_update)
         self.zentrale.betrieb_update.register(self.plan_update)
+        self.updating = True
 
         self.ui = Ui_BildfahrplanWindow()
         self.ui.setupUi(self)
-        self.update_anlage()
 
         self.setWindowTitle("Streckenfahrplan")
 
@@ -52,10 +53,21 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionActionBetriebshaltLoeschen.triggered.connect(self.action_betriebshalt_loeschen)
 
         self.ui.stackedWidget.currentChanged.connect(self.page_changed)
+
+        self.vordefiniert_model = QStringListModel()
+        self.ui.vordefiniert_combo.setModel(self.vordefiniert_model)
         self.ui.vordefiniert_combo.currentIndexChanged.connect(self.strecke_selection_changed)
+        self.von_model = QStringListModel()
+        self.ui.von_combo.setModel(self.von_model)
         self.ui.von_combo.currentIndexChanged.connect(self.strecke_selection_changed)
+        self.via_model = QStringListModel()
+        self.ui.via_combo.setModel(self.via_model)
         self.ui.via_combo.currentIndexChanged.connect(self.strecke_selection_changed)
+        self.nach_model = QStringListModel()
+        self.ui.nach_combo.setModel(self.nach_model)
         self.ui.nach_combo.currentIndexChanged.connect(self.strecke_selection_changed)
+        self.strecke_model = QStringListModel()
+        self.ui.strecke_list.setModel(self.strecke_model)
 
         self.ui.vorlaufzeit_spin.valueChanged.connect(self.vorlaufzeit_changed)
         self.ui.nachlaufzeit_spin.valueChanged.connect(self.nachlaufzeit_changed)
@@ -64,8 +76,9 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.plot.auswahl_geaendert.register(self.plot_selection_changed)
 
         self.plot.default_strecke_waehlen()
-        self.update_widgets()
+        self.update_anlage()
         self.update_actions()
+        self.updating = False
 
     @property
     def anlage(self) -> Anlage:
@@ -76,6 +89,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         return self.zentrale.client
 
     def update_actions(self):
+        self.updating = True
+
         display_mode = self.ui.stackedWidget.currentIndex() == 1
         trasse_auswahl = len(self.plot.auswahl_kanten) >= 1
         trasse_nachbar = None
@@ -89,6 +104,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and self.kann_abfahrt_abwarten() is not None)
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and self.kann_ankunft_abwarten() is not None)
 
+        self.updating = False
+
     def update_anlage(self, *args, **kwargs):
         """
         Widget-Inhalte nach Anlagenupdate aktualisieren.
@@ -96,42 +113,56 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         """
 
+        self.updating = True
+
         bg = self.anlage.bahnhofgraph
         bst_liste = sorted(bg.list_children(bg.root(), {'Bf', 'Anst'}))
         bst_liste = ["", *map(str, bst_liste)]
         strecken_liste = sorted(self.anlage.strecken.strecken.keys(), key=self.anlage.strecken.ordnung.get)
 
-        self.ui.von_combo.clear()
-        self.ui.von_combo.addItems(bst_liste)
-        self.ui.via_combo.clear()
-        self.ui.via_combo.addItems(bst_liste)
-        self.ui.nach_combo.clear()
-        self.ui.nach_combo.addItems(bst_liste)
-        self.ui.vordefiniert_combo.clear()
-        self.ui.vordefiniert_combo.addItems(["", *strecken_liste])
+        self.von_model.setStringList(bst_liste)
+        self.via_model.setStringList(bst_liste)
+        self.nach_model.setStringList(bst_liste)
+        self.vordefiniert_model.setStringList(["", *strecken_liste])
+
+        self.updating = False
+        self.update_widgets()
 
     def update_widgets(self):
         """
         Widget-Zustände gemäss Plotattributen aktualisieren.
         """
 
+        self.updating = True
+
         name = self.plot.strecken_name
         von = self.plot.strecke_von
         via = self.plot.strecke_via
         nach = self.plot.strecke_nach
 
-        self.ui.vordefiniert_combo.setCurrentText(name)
-        self.ui.von_combo.setCurrentText(str(von))
-        self.ui.via_combo.setCurrentText(str(via))
-        self.ui.nach_combo.setCurrentText(str(nach))
+        try:
+            self.ui.vordefiniert_combo.setCurrentIndex(self.vordefiniert_model.stringList().index(name))
+        except ValueError:
+            pass
+        try:
+            self.ui.von_combo.setCurrentIndex(self.vordefiniert_model.stringList().index(str(von)))
+        except ValueError:
+            pass
+        try:
+            self.ui.via_combo.setCurrentIndex(self.vordefiniert_model.stringList().index(str(via)))
+        except ValueError:
+            pass
+        try:
+            self.ui.nach_combo.setCurrentIndex(self.vordefiniert_model.stringList().index(str(nach)))
+        except ValueError:
+            pass
 
         enable_detailwahl = not bool(name)
         self.ui.von_combo.setEnabled(enable_detailwahl)
         self.ui.via_combo.setEnabled(enable_detailwahl)
         self.ui.nach_combo.setEnabled(enable_detailwahl)
 
-        self.ui.strecke_list.clear()
-        self.ui.strecke_list.addItems(map(str, self.plot.strecke))
+        self.strecke_model.setStringList(map(str, self.plot.strecke))
 
         if self.plot.strecken_name:
             titel = f"Bildfahrplan {self.plot.strecken_name}"
@@ -148,11 +179,15 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         else:
             self.ui.nummer_button.setChecked(True)
 
+        self.updating = False
+
     @pyqtSlot()
     def strecke_selection_changed(self):
         """
         Neue Streckenwahl von Widgets übernehmen.
         """
+        if self.updating:
+            return
 
         name = self.ui.vordefiniert_combo.currentText()
         try:
