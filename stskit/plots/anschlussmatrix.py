@@ -14,7 +14,7 @@ import numpy as np
 
 from stskit.zentrale import DatenZentrale
 from stskit.model.bahnhofgraph import BahnhofElement
-from stskit.model.ereignisgraph import EreignisGraphNode
+from stskit.model.ereignisgraph import EreignisGraphNode, EreignisLabelType
 from stskit.model.zuggraph import ZugGraphNode
 from stskit.plugin.stsobj import format_minutes, format_verspaetung
 from stskit.model.zugschema import Zugbeschriftung
@@ -171,6 +171,12 @@ class Anschlussmatrix:
         ereignisgraph = self.zentrale.anlage.ereignisgraph
         zielgraph = self.zentrale.anlage.zielgraph
 
+        def _zug_haelt(_label: EreignisLabelType):
+            for _u, _v, _data in ereignisgraph.out_edges(_label, data=True):
+                if _data.get('typ') in {'H', 'B', 'E', 'F', 'K'}:
+                    return True
+            return False
+
         kats = {zid: self.zentrale.anlage.zugschema.kategorie(zug)
                 for zid, zug in zuggraph.nodes(data=True)
                 if not zug.ausgefahren}
@@ -188,7 +194,8 @@ class Anschlussmatrix:
         ankunftsereignisse = {label: data for label, data in ereignisse.items()
                               if data.typ == "An"
                               and data.zid in zids_an
-                              and data.t_plan < endzeit}
+                              and data.t_plan < endzeit
+                              and _zug_haelt(label)}
         abfahrtsereignisse = {label: data for label, data in ereignisse.items()
                               if data.typ == "Ab"
                               and data.zid in zids_ab
