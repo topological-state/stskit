@@ -89,7 +89,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and self.kann_abfahrt_abwarten() is not None)
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and self.kann_ankunft_abwarten() is not None)
 
-    def update_anlage(self):
+    def update_anlage(self, *args, **kwargs):
         """
         Widget-Inhalte nach Anlagenupdate aktualisieren.
 

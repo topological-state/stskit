@@ -101,8 +101,11 @@ class DatenZentrale:
 
         if not self.anlage:
             self.anlage = Anlage()
-        self.anlage.update(self.client, self.config_path)
-        self.anlage_update.trigger()
+        aenderungen = self.anlage.update(self.client, self.config_path)
+        aenderungen -= {'zuggraph', 'zielgraph'}
+        if aenderungen:
+            print(f"Anlage-Aenderungen: {aenderungen}")
+            self.anlage_update.trigger()
 
         if not self.betrieb:
             self.betrieb = Betrieb()

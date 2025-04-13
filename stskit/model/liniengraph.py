@@ -376,6 +376,38 @@ class Strecken:
         if self.hauptstrecke == name:
             self.hauptstrecke = None
 
+    def clear(self):
+        """
+        Alle Streckendefinitionen löschen
+        """
+
+        self.strecken.clear()
+        self.ordnung.clear()
+        self.auto.clear()
+        self.hauptstrecke = None
+
+    def validate(self, bahnhofgraph: BahnhofGraph):
+        """
+        Strecken mit Bahnhofgraph abgleichen
+
+        Überprüft die Streckendefinitionen auf korrekte Stationen und
+        entfernt nicht vorhandene Stationen. Bei weniger als zwei Stationen
+        wird die Strecke gelöscht.
+        """
+
+        korrekturen = {}
+        for name in self.strecken.keys():
+            strecke = self.strecken[name]
+            stationen = [station for station in strecke if bahnhofgraph.has_node(station)]
+            if len(stationen) != len(strecke):
+                korrekturen[name] = stationen
+
+        for name, stationen in korrekturen:
+            if len(stationen) >= 2:
+                self.strecken[name] = stationen
+            else:
+                self.remove_strecke(name)
+
     def import_konfiguration(self,
                              strecken_konfig: Iterable[Dict[str, Any]],
                              bahnhofgraph: BahnhofGraph):

@@ -77,7 +77,8 @@ class Anlage:
 
         for _ in range(2):
             try:
-                self._init_anlage(config_path, debug_path)
+                self._load_config(config_path)
+                self._init_anlage(debug_path)
                 self._init_linien()
                 self._init_strecken()
             except ConfigurationError:
@@ -125,14 +126,14 @@ class Anlage:
             self.gleisschema = Gleisschema.regionsschema(self.anlageninfo.region)
             self.aenderungen.add('gleisschema')
 
-        if not self.signalgraph:
+        if not self.signalgraph or 'anlageninfo' in self.aenderungen:
             self.signalgraph = client.signalgraph.copy(as_view=False)
             self.aenderungen.add('signalgraph')
             if logger.isEnabledFor(logging.DEBUG):
                 debug_path.mkdir(exist_ok=True)
                 write_gml(self.signalgraph, debug_path / f"{self.anlageninfo.aid}.signalgraph.gml")
 
-        if not self.bahnsteiggraph:
+        if not self.bahnsteiggraph or {'anlageninfo', 'signalgraph'} & self.aenderungen:
             self.bahnsteiggraph = client.bahnsteiggraph.copy(as_view=False)
             self.aenderungen.add('bahnsteiggraph')
             if logger.isEnabledFor(logging.DEBUG):
@@ -143,7 +144,7 @@ class Anlage:
         self.zielgraph = client.zielgraph.copy(as_view=False)
         self.aenderungen.add('zielgraph')
 
-    def _init_anlage(self, config_path, debug_path):
+    def _load_config(self, config_path):
         if self.config is None:
             if config_path:
                 self.load_config(config_path)
@@ -152,15 +153,44 @@ class Anlage:
                 self.config['default'] = True
             self.aenderungen.add('config')
 
-        if not self.bahnhofgraph and self.signalgraph and self.bahnsteiggraph:
-            self.bahnhofgraph.import_anlageninfo(self.anlageninfo)
-            self.bahnhofgraph.import_bahnsteiggraph(self.bahnsteiggraph, self.gleisschema)
-            self.bahnhofgraph.import_signalgraph(self.signalgraph, self.gleisschema)
-            try:
-                self.bahnhofgraph.import_konfiguration(self.config['elemente'])
-            except KeyError:
-                logger.warning("Fehler in Bahnhofkonfiguration")
-            self.aenderungen.add('bahnhofgraph')
+    def _init_anlage(self, debug_path):
+        # abhängigkeiten
+        if self.bahnhofgraph:
+            aenderungen = self.aenderungen.copy()
+        else:
+            aenderungen = {'config'}
+        if 'config' in aenderungen:
+            aenderungen.add('anlageninfo')
+        if 'anlageninfo' in aenderungen:
+            aenderungen.add('bahnsteiggraph')
+        if 'bahnsteiggraph' in aenderungen:
+            aenderungen.add('signalgraph')
+        if 'signalgraph' in aenderungen:
+            aenderungen.add('config')
+        if 'gleisschema' in aenderungen:
+            aenderungen.add('bahnsteiggraph')
+            aenderungen.add('signalgraph')
+
+        if aenderungen:
+            if 'anlageninfo' in aenderungen:
+                self.bahnhofgraph.import_anlageninfo(self.anlageninfo)
+                self.aenderungen.add('bahnhofgraph')
+            if 'bahnsteiggraph' in aenderungen:
+                if self.bahnsteiggraph:
+                    self.bahnhofgraph.import_bahnsteiggraph(self.bahnsteiggraph, self.gleisschema)
+                    self.aenderungen.add('bahnhofgraph')
+            if 'signalgraph' in aenderungen:
+                if self.signalgraph:
+                    self.bahnhofgraph.import_signalgraph(self.signalgraph, self.gleisschema)
+                    self.aenderungen.add('bahnhofgraph')
+            if 'config' in aenderungen:
+                try:
+                    self.bahnhofgraph.import_konfiguration(self.config['elemente'])
+                    self.aenderungen.add('bahnhofgraph')
+                except KeyError:
+                    logger.warning("Fehler in Bahnhofkonfiguration")
+
+        if 'bahnhofgraph' in self.aenderungen:
             if logger.isEnabledFor(logging.DEBUG):
                 write_gml(self.bahnhofgraph, debug_path / f"{self.anlageninfo.aid}.bahnhofgraph.gml")
 
@@ -171,25 +201,50 @@ class Anlage:
         Benoetigt: bahnhofgraph, liniengraph, zielgraph, signalgraph
         """
 
-        if not self.liniengraph and self.bahnhofgraph and self.zielgraph:
+        # abhängigkeiten
+        if self.liniengraph:
+            aenderungen = self.aenderungen.copy()
+        elif self.bahnhofgraph and self.zielgraph:
+            aenderungen = {'bahnhofgraph', 'zielgraph'}
+        else:
+            aenderungen = set()
+
+        if 'config' in aenderungen:
+            aenderungen.add('bahnhofgraph')
+        if 'zielgraph' in aenderungen:
+            aenderungen.add('bahnhofgraph')
+        if 'bahnhofgraph' in aenderungen:
+            aenderungen.add('signalgraph')
+        if 'signalgraph' in aenderungen:
+            aenderungen.add('config')
+        if 'streckenmarkierung' in aenderungen:
+            aenderungen.add('config')
+
+        if 'bahnhofgraph' in aenderungen:
             try:
                 self.liniengraph_konfigurieren()
+                self.aenderungen.add('liniengraph')
+                print("Liniengraph konfiguriert.")
             except KeyError as e:
                 logger.error(e)
                 raise ConfigurationError()
 
+        if 'signalgraph' in aenderungen:
             try:
                 self.liniengraph_mit_signalgraph_abgleichen()
+                self.aenderungen.add('liniengraph')
+                print("Liniengraph mit Signalgraph abgleichen.")
             except KeyError as e:
                 logger.error(e)
                 raise ConfigurationError()
 
+        if 'config' in aenderungen:
             try:
                 self.liniengraph.import_konfiguration(self.config['streckenmarkierung'], self.bahnhofgraph)
+                self.aenderungen.add('liniengraph')
+                print("Liniengraph konfiguriert.")
             except KeyError:
                 logger.info("Keine Streckenmarkierungskonfiguration gefunden")
-
-            self.aenderungen.add('liniengraph')
 
 
     def _init_strecken(self):
@@ -199,22 +254,47 @@ class Anlage:
         Benoetigt: bahnhofgraph, liniengraph
         """
 
-        if len(self.strecken.strecken) == 0 and self.liniengraph:
+        # abhängigkeiten
+        if self.strecken.strecken:
+            aenderungen = self.aenderungen.copy()
+        elif self.liniengraph:
+            aenderungen = {'bahnhofgraph', 'config'}
+        else:
+            aenderungen = set()
+
+        if 'config' in aenderungen:
+            aenderungen.add('bahnhofgraph')
+        if 'liniengraph' in aenderungen:
+            aenderungen.add('bahnhofgraph')
+
+        any_auto = False
+        create_auto = False
+
+        if 'config' in aenderungen:
             try:
                 self.strecken.import_konfiguration(self.config['strecken'], self.bahnhofgraph)
+                self.aenderungen.add('strecken')
             except KeyError:
                 logger.warning("Keine Streckenkonfiguration gefunden")
 
-            # wenn automatische eintraege in der liste sind, werden auto-strecken generiert
-            any_auto = any(self.strecken.auto.values())
-            if any_auto or len(self.strecken.strecken) == 0:
-                strecken = self.liniengraph.strecken_vorschlagen(2, 3)
-                strecken = {f"{strecke[0][1]}-{strecke[-1][1]}": strecke for strecke in strecken}
-                for index, name in enumerate(sorted(strecken.keys())):
-                    if self.strecken.auto.get(name, True):
-                        self.strecken.add_strecke(name, strecken[name], 100 + index, True)
+            # bestehende automatische strecken aktualisieren
+            # neue auto-strecken nur erstellen, wenn die liste leer ist
+            any_auto = any_auto or any(self.strecken.auto.values())
+            create_auto = create_auto or len(self.strecken.strecken) == 0
 
-            self.aenderungen.add('strecken')
+        if 'bahnhofgraph' in aenderungen:
+            # strecken korrigieren
+            self.strecken.validate(self.bahnhofgraph)
+            any_auto = any_auto or any(self.strecken.auto.values())
+            create_auto = create_auto or len(self.strecken.strecken) == 0
+
+        if any_auto or create_auto:
+            strecken = self.liniengraph.strecken_vorschlagen(2, 3)
+            strecken = {f"{strecke[0][1]}-{strecke[-1][1]}": strecke for strecke in strecken}
+            for index, name in enumerate(sorted(strecken.keys())):
+                if self.strecken.auto.get(name, create_auto):
+                    self.strecken.add_strecke(name, strecken[name], 100 + index, True)
+                    self.aenderungen.add('strecken')
 
     def liniengraph_konfigurieren(self):
         """
