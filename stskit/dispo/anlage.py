@@ -222,18 +222,18 @@ class Anlage:
 
         if 'bahnhofgraph' in aenderungen:
             try:
+                logger.debug("Liniengraph konfigurieren.")
                 self.liniengraph_konfigurieren()
                 self.aenderungen.add('liniengraph')
-                print("Liniengraph konfiguriert.")
             except KeyError as e:
                 logger.error(e)
                 raise ConfigurationError()
 
         if 'signalgraph' in aenderungen:
             try:
+                logger.debug("Liniengraph mit Signalgraph abgleichen.")
                 self.liniengraph_mit_signalgraph_abgleichen()
                 self.aenderungen.add('liniengraph')
-                print("Liniengraph mit Signalgraph abgleichen.")
             except KeyError as e:
                 logger.error(e)
                 raise ConfigurationError()
@@ -242,7 +242,7 @@ class Anlage:
             try:
                 self.liniengraph.import_konfiguration(self.config['streckenmarkierung'], self.bahnhofgraph)
                 self.aenderungen.add('liniengraph')
-                print("Liniengraph konfiguriert.")
+                logger.debug("Liniengraph konfiguriert.")
             except KeyError:
                 logger.info("Keine Streckenmarkierungskonfiguration gefunden")
 
