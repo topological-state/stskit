@@ -29,6 +29,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         self.zentrale = zentrale
+        self.zentrale.anlage_update.register(self.anlage_update)
         self.zentrale.plan_update.register(self.plan_update)
         self.zentrale.betrieb_update.register(self.plan_update)
         self.ansicht = ansicht
@@ -118,6 +119,23 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         except ValueError:
             pass
 
+    def anlage_update(self, *args, **kwargs):
+        """
+        Änderungen an der Anlage übernehmen
+        """
+
+        auswahl = self.gleisauswahl.get_auswahl()
+        self.gleisauswahl.gleise_definieren(self.anlage,
+                                            anschluesse=self.ansicht == "Agl", bahnsteige=self.ansicht != "Agl")
+        auswahl = auswahl & self.gleisauswahl.alle_gleise
+        if not auswahl:
+            auswahl = self.gleisauswahl.alle_gleise
+        self.gleisauswahl.set_auswahl(auswahl)
+        self.plot.belegung.gleise_auswaehlen(auswahl)
+
+        sperrungen = {gleis for gleis, sperrung in self.anlage.bahnhofgraph.nodes(data='sperrung') if sperrung}
+        self.gleisauswahl.set_sperrungen(sperrungen)
+
     def plan_update(self, *args, **kwargs):
         """
         daten und grafik neu aufbauen.
@@ -128,21 +146,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         :return: None
         """
 
-        self.daten_update()
-        self.grafik_update()
-
-    def daten_update(self):
         if not self.plot.belegung.gleise:
-            self.gleisauswahl.gleise_definieren(self.anlage,
-                                                anschluesse=self.ansicht == "Agl", bahnsteige=self.ansicht != "Agl")
-            self.gleisauswahl.set_auswahl(self.gleisauswahl.alle_gleise)
-            self.plot.belegung.gleise_auswaehlen(self.gleisauswahl.alle_gleise)
-            sperrungen = {gleis for gleis, sperrung in self.anlage.bahnhofgraph.nodes(data='sperrung') if sperrung}
-            self.gleisauswahl.set_sperrungen(sperrungen)
+            self.anlage_update(*args, **kwargs)
 
         self.plot.belegung.update()
-
-    def grafik_update(self):
         self.plot.grafik_update()
 
     def plot_selection_changed(self, *args, **kwargs):
@@ -169,8 +176,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             self.plot.belegung.zugbeschriftung.elemente = ["Name"]
         else:
             self.plot.belegung.zugbeschriftung.elemente = ["Nummer"]
-        self.daten_update()
-        self.grafik_update()
+
+        self.plot.grafik_update()
 
     @pyqtSlot()
     def page_changed(self):
@@ -179,7 +186,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def action_belegte_gleise(self):
         self.plot.belegte_gleise_zeigen = not self.plot.belegte_gleise_zeigen
-        self.grafik_update()
+        self.plot.grafik_update()
         self.update_actions()
 
     @pyqtSlot()
