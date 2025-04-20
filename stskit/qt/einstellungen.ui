@@ -21,90 +21,115 @@
        <item>
         <widget class="QTabWidget" name="tab_widget">
          <property name="currentIndex">
-          <number>1</number>
+          <number>4</number>
          </property>
-         <widget class="QWidget" name="einaus_tab">
+         <widget class="QWidget" name="anst_tab">
           <property name="enabled">
            <bool>true</bool>
           </property>
           <attribute name="title">
-           <string>Ein-/Ausfahrten</string>
+           <string>Anschlussstellen</string>
           </attribute>
-          <widget class="QTreeView" name="einaus_view">
-           <property name="geometry">
-            <rect>
-             <x>20</x>
-             <y>20</y>
-             <width>511</width>
-             <height>621</height>
-            </rect>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="einaus_zusammen_button">
-           <property name="geometry">
-            <rect>
-             <x>590</x>
-             <y>30</y>
-             <width>80</width>
-             <height>23</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>zusammenfassen</string>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="einaus_teilen_button">
-           <property name="geometry">
-            <rect>
-             <x>590</x>
-             <y>60</y>
-             <width>80</width>
-             <height>23</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>aufteilen</string>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="einaus_umbenennen_button">
-           <property name="geometry">
-            <rect>
-             <x>590</x>
-             <y>90</y>
-             <width>80</width>
-             <height>23</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>umbenennen</string>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="einaus_rauf_button">
-           <property name="geometry">
-            <rect>
-             <x>590</x>
-             <y>120</y>
-             <width>80</width>
-             <height>23</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>rauf</string>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="einaus_runter_button">
-           <property name="geometry">
-            <rect>
-             <x>590</x>
-             <y>150</y>
-             <width>80</width>
-             <height>23</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>runter</string>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="verticalLayout_15">
+           <item>
+            <widget class="QSplitter" name="anst_splitter">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <widget class="QTableView" name="agl_table_view">
+              <property name="alternatingRowColors">
+               <bool>true</bool>
+              </property>
+              <property name="selectionMode">
+               <enum>QAbstractItemView::MultiSelection</enum>
+              </property>
+              <property name="selectionBehavior">
+               <enum>QAbstractItemView::SelectRows</enum>
+              </property>
+              <property name="sortingEnabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+             <widget class="QWidget" name="anst_control_widget" native="true">
+              <layout class="QVBoxLayout" name="verticalLayout_10">
+               <item>
+                <widget class="QGroupBox" name="agl_group">
+                 <property name="title">
+                  <string>Anschlussgleis (Agl)</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_11">
+                  <item>
+                   <widget class="QComboBox" name="agl_combo">
+                    <property name="editable">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="agl_filter_button">
+                    <property name="text">
+                     <string>Filter</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="anst_ungroup_button">
+                    <property name="text">
+                     <string>Neue Anst</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="anst_group">
+                 <property name="title">
+                  <string>Anschlussstelle (Anst)</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_14">
+                  <item>
+                   <widget class="QComboBox" name="anst_combo">
+                    <property name="editable">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="anst_group_button">
+                    <property name="text">
+                     <string>Zuordnen</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="anst_rename_button">
+                    <property name="text">
+                     <string>Umbenennen</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
          </widget>
          <widget class="QWidget" name="bahnhof_tab">
           <property name="enabled">
@@ -138,7 +163,7 @@
                <item>
                 <widget class="QGroupBox" name="gl_group">
                  <property name="title">
-                  <string>Gleis</string>
+                  <string>Gleis (Gl)</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_7">
                   <item>
@@ -168,7 +193,7 @@
                <item>
                 <widget class="QGroupBox" name="bs_group">
                  <property name="title">
-                  <string>Bahnsteig</string>
+                  <string>Bahnsteig (Bs)</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_4">
                   <item>
@@ -198,7 +223,7 @@
                <item>
                 <widget class="QGroupBox" name="bft_group">
                  <property name="title">
-                  <string>Bahnhofteil</string>
+                  <string>Bahnhofteil (Bft)</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_5">
                   <item>
@@ -228,7 +253,7 @@
                <item>
                 <widget class="QGroupBox" name="bf_group">
                  <property name="title">
-                  <string>Bahnhof</string>
+                  <string>Bahnhof (Bf)</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_6">
                   <item>
@@ -320,6 +345,20 @@
               </widget>
              </item>
             </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="hilfe_tab">
+          <attribute name="title">
+           <string>Hilfe</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <item>
+            <widget class="QTextEdit" name="hilfe_text">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>

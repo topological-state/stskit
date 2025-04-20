@@ -6,6 +6,8 @@ Einstellungsfenster
 """
 
 import logging
+import os
+from pathlib import Path
 
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
@@ -32,10 +34,14 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
         self.ui = Ui_EinstellungenWindow()
         self.ui.setupUi(self)
 
-        # not implemented yet
-        # self.ui.tab_widget.removeTab(2)
-        # self.ui.tab_widget.removeTab(1)
-        # self.ui.tab_widget.removeTab(0)
+        p = Path(__file__).with_suffix('.md')
+        try:
+            with open(p) as f:
+                hilfe = f.read()
+        except OSError as e:
+            self.ui.hilfe_text.setText(str(e))
+        else:
+            self.ui.hilfe_text.setMarkdown(hilfe)
 
         try:
             self.setWindowTitle(f"Einstellungen {self.anlage.anlageninfo.name}")
