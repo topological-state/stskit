@@ -144,9 +144,12 @@ class Anschlussmatrix:
         """
         if bahnhof != self.bahnhof:
             self.bahnhof = bahnhof
-            self.gleisnamen = {name for typ, name in self.zentrale.anlage.bahnhofgraph.list_children(bahnhof, {'Gl'})}
-            self.zid_ankuenfte_set = set([])
-            self.zid_abfahrten_set = set([])
+            try:
+                self.gleisnamen = {name for typ, name in self.zentrale.anlage.bahnhofgraph.list_children(bahnhof, {'Gl'})}
+            except KeyError:
+                self.gleisnamen = set()
+            self.zid_ankuenfte_set = set()
+            self.zid_abfahrten_set = set()
 
     def update(self):
         """

@@ -32,6 +32,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         self.zentrale = zentrale
+        self.zentrale.anlage_update.register(self.anlage_update)
         self.zentrale.plan_update.register(self.plan_update)
         self.zentrale.betrieb_update.register(self.plan_update)
 
@@ -175,7 +176,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
             self.anschlussmatrix.set_bahnhof(self.zentrale.anlage.bahnhofgraph.find_name(self.ui.bahnhofBox.currentText()))
             self.setWindowTitle("Anschlussmatrix " + self.anschlussmatrix.bahnhof.name)
         except (AttributeError, KeyError):
-            pass
+            self.setWindowTitle("Anschlussmatrix (ungültiger Bahnhof)")
 
     @pyqtSlot()
     def umsteigezeit_changed(self):
@@ -210,6 +211,9 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
     @pyqtSlot()
     def page_changed(self):
         self.update_actions()
+
+    def anlage_update(self, *args, **kwargs):
+        self.bahnhof_changed()
 
     def plan_update(self, *args, **kwargs):
         """
