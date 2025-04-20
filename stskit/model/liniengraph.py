@@ -402,7 +402,7 @@ class Strecken:
             if len(stationen) != len(strecke):
                 korrekturen[name] = stationen
 
-        for name, stationen in korrekturen:
+        for name, stationen in korrekturen.items():
             if len(stationen) >= 2:
                 self.strecken[name] = stationen
             else:
