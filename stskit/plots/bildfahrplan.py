@@ -226,7 +226,7 @@ class BildfahrplanPlot:
                     else:
                         break
 
-            self.linienstil = [self.anlage.bahnhofgraph.nodes[s].get('linienstil', ':') for s in self.strecke]
+            self.linienstil = [self.anlage.bahnhofgraph.nodes.get(s, {}).get('linienstil', ':') for s in self.strecke]
         else:
             self.distanz = []
             self.linienstil = []
