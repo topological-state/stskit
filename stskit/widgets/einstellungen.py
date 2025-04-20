@@ -94,9 +94,9 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def apply(self):
-        print("apply")
         self.bahnhof_editor.apply()
-        self.zentrale.select_zugschema(self.zugschema.name)
+        self.anlage.zugschema.load_config(self.zugschema.name, self.anlage.anlageninfo.region)
+        self.zentrale.notify_anlage({'zugschema', 'bahnhofgraph'})
 
     @pyqtSlot()
     def accept(self):
@@ -105,7 +105,6 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def reset(self):
-        print("reset")
         self.bahnhof_editor.reset()
         self.zugschema.load_config(self.anlage.zugschema.name)
         self.zugschema_modell.update()

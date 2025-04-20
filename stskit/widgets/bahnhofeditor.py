@@ -2,7 +2,6 @@ from collections import Counter
 import logging
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
-from icecream import ic
 import networkx as nx
 from PyQt5 import Qt, QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot, QAbstractTableModel, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QStringListModel, QObject
@@ -228,10 +227,6 @@ class BahnhofEditor(QObject):
         # Apply changes to the anlage based on the current state of the widgets
         self.anlage.bahnhofgraph.clear()
         self.anlage.bahnhofgraph.update(self.bahnhofgraph)
-        try:
-            ic(self.anlage.bahnhofgraph.nodes[BahnhofElement('Bft', 'Bag')])
-        except KeyError:
-            pass
 
     def reset(self):
         # Revert changes to the anlage if necessary

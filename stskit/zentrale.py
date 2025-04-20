@@ -8,7 +8,7 @@ und stellt die Schnittstelle zu den Benutzermodulen bereit.
 
 import logging
 import os
-from typing import Optional
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
 from stskit.utils.observer import Observable
 from stskit.plugin.stsobj import Ereignis, time_to_minutes
@@ -170,7 +170,6 @@ class DatenZentrale:
 
         self.plugin_ereignis.notify(ereignis=ereignis)
 
-    def select_zugschema(self, zugschema_name: str):
-        self.anlage.zugschema.load_config(zugschema_name, self.anlage.anlageninfo.region)
+    def notify_anlage(self, aenderungen: Set[str]):
+        self.anlage.aenderungen.update(aenderungen)
         self.anlage_update.trigger()
-        self.plan_update.trigger()
