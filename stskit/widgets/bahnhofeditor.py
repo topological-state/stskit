@@ -4,9 +4,8 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, 
 
 from icecream import ic
 import networkx as nx
-from PyQt5 import Qt, QtCore
+from PyQt5 import Qt, QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSlot, QAbstractTableModel, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QStringListModel, QObject
-from PyQt5.uic.Compiler.qtproxies import QtWidgets
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement, BahnsteigGraphNode, BahnsteigGraphEdge
