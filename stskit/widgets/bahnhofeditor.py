@@ -326,10 +326,18 @@ class BahnhofEditor(QObject):
         # einzelner bf gewählt
         en = len(bf_sel) == 1
         self.ui.bf_ungroup_button.setEnabled(en)
+        if en and len(selection) > 1:
+            self.ui.bf_ungroup_button.setText('Neue Bahnhöfe')
+        else:
+            self.ui.bf_ungroup_button.setText('Neuer Bahnhof')
 
         # einzelner bs gewählt
         en = len(bs_sel) == 1
         self.ui.bs_ungroup_button.setEnabled(en)
+        if en and len(selection) > 1:
+            self.ui.bs_ungroup_button.setText('Neue Bahnsteige')
+        else:
+            self.ui.bs_ungroup_button.setText('Neuer Bahnsteig')
 
         # einzelner bf gewählt, combo-text vorhanden und noch nicht vergeben
         en = len(bf_sel) == 1 and (tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) not in self.bahnhofgraph)
@@ -418,16 +426,23 @@ class BahnhofEditor(QObject):
 
         # todo: funktioniert nicht richtig: Bahnhof bleibt in konfiguration der alte
         # todo: auto auf False setzen
-        bft = BahnhofElement('Bft', self.ui.bft_combo.currentText())
-        if not self.bahnhofgraph.has_node(bft):
-            return  # Bahnhofteil existiert nicht
-        bf = BahnhofElement('Bf', bft.name)
-        if self.bahnhofgraph.has_node(bf):
-            return  # Bahnhof existiert bereits
+        sel = self.get_selection()
+        bft_sel = {self.gl_table_model.row_data[gl]['Bft'] for gl in sel}
+        replace = {}
+        for bft in bft_sel:
+            if not self.bahnhofgraph.has_node(bft):
+                continue  # Bahnhofteil existiert nicht
+            bf = BahnhofElement('Bf', bft.name)
+            if self.bahnhofgraph.has_node(bf):
+                continue  # Bahnhof existiert bereits
+            replace[bft] = bf
+        if not replace:
+            return
 
         self.gl_table_model.beginResetModel()
         try:
-            self.bahnhofgraph.replace_parent(bft, bf, del_old_parent=True)
+            for bft, bf in replace.items():
+                self.bahnhofgraph.replace_parent(bft, bf, del_old_parent=True)
             self.update_widgets()
         finally:
             self.gl_table_model.endResetModel()
@@ -441,16 +456,22 @@ class BahnhofEditor(QObject):
         - Der Name des Bahnsteigs wird aus dem Namen des Gleises abgeleitet. Der Bahnsteig darf noch nicht existieren.
         """
 
-        gl = BahnhofElement('Gl', self.ui.gl_combo.currentText())
-        if not self.bahnhofgraph.has_node(gl):
-            return  # Gleis existiert nicht
-        bs = BahnhofElement('Bs', gl.name)
-        if self.bahnhofgraph.has_node(bs):
-            return  # Bahnsteig existiert bereits
+        sel = self.get_selection()
+        replace = {}
+        for gl in sel:
+            if not self.bahnhofgraph.has_node(gl):
+                continue  # Gleis existiert nicht
+            bs = BahnhofElement('Bs', gl.name)
+            if self.bahnhofgraph.has_node(bs):
+                continue  # Bahnsteig existiert bereits
+            replace[gl] = bs
+        if not replace:
+            return
 
         self.gl_table_model.beginResetModel()
         try:
-            self.bahnhofgraph.replace_parent(gl, bs, del_old_parent=True)
+            for gl, bs in replace.items():
+                self.bahnhofgraph.replace_parent(gl, bs, del_old_parent=True)
             self.update_widgets()
         finally:
             self.gl_table_model.endResetModel()
