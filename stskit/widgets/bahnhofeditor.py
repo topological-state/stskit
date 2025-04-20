@@ -476,12 +476,11 @@ class BahnhofEditor(QObject):
         Renames an element in the graph and updates the model accordingly.
         """
 
-        try:
-            old = combo.model().stringList()[combo.currentIndex()]
-        except IndexError:
-            return  # Kein Element ausgewählt
-        else:
-            old = BahnhofElement(level, old)
+        sel = {self.gl_table_model.row_data[gl][level] for gl in self.get_selection()}
+        if len(sel) != 1:
+            return
+
+        old = BahnhofElement(level, sel.pop())
         new = BahnhofElement(level, combo.currentText())
 
         if old == new:
