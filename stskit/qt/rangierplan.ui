@@ -80,6 +80,9 @@
         </item>
         <item>
          <widget class="QTableView" name="zugliste_view">
+          <property name="toolTip">
+           <string>Tasten E/L zum Wechseln des Lokstatus</string>
+          </property>
           <property name="alternatingRowColors">
            <bool>true</bool>
           </property>

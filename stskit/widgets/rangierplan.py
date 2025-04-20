@@ -5,8 +5,9 @@ Qt-Fenster Rangierplan
 from dataclasses import dataclass, field
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
-from PyQt5 import Qt, QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
+from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QAbstractTableModel, Qt
+from PyQt5.QtGui import QColor, QKeySequence
+from PyQt5.QtWidgets import QShortcut, QWidget, QAbstractItemView
 
 from stskit.dispo.anlage import Anlage
 from stskit.plugin.stsobj import Ereignis
@@ -46,13 +47,13 @@ class Lokstatus:
                         "erledigt": "erledigt"}
 
     # SVG colors: https://www.w3.org/TR/SVG11/types.html#ColorKeywords
-    DARSTELLUNGSFARBE = {"unbekannt": QtGui.QColor("white"),
-                         "gleisfehler": QtGui.QColor("orangered"),
-                         "unsichtbar": QtGui.QColor("white"),
-                         "unterwegs": QtGui.QColor("limegreen"),
-                         "halt": QtGui.QColor("tomato"),
-                         "am gleis": QtGui.QColor("skyblue"),
-                         "erledigt": QtGui.QColor("gray")}
+    DARSTELLUNGSFARBE = {"unbekannt": QColor("white"),
+                         "gleisfehler": QColor("orangered"),
+                         "unsichtbar": QColor("white"),
+                         "unterwegs": QColor("limegreen"),
+                         "halt": QColor("tomato"),
+                         "am gleis": QColor("skyblue"),
+                         "erledigt": QColor("gray")}
 
     EREIGNIS_STATUS_MAP = {
         'einfahrt': 'unterwegs',
@@ -123,7 +124,7 @@ class Lokstatus:
         self._gleisfehler = gleisfehler
 
     @property
-    def qt_farbe(self) -> QtGui.QColor:
+    def qt_farbe(self) -> QColor:
         """
         In Qt-Farbe codierter Status.
 
@@ -202,13 +203,13 @@ class Zugstatus:
                         "bereit": "bereit",
                         "erledigt": "erledigt"}
 
-    DARSTELLUNGSFARBE = {"unbekannt": QtGui.QColor("white"),
-                         "unsichtbar": QtGui.QColor("white"),
-                         "bereit": QtGui.QColor("khaki"),
-                         "unterwegs": QtGui.QColor("limegreen"),
-                         "halt": QtGui.QColor("tomato"),
-                         "am gleis": QtGui.QColor("skyblue"),
-                         "erledigt": QtGui.QColor("gray")}
+    DARSTELLUNGSFARBE = {"unbekannt": QColor("white"),
+                         "unsichtbar": QColor("white"),
+                         "bereit": QColor("khaki"),
+                         "unterwegs": QColor("limegreen"),
+                         "halt": QColor("tomato"),
+                         "am gleis": QColor("skyblue"),
+                         "erledigt": QColor("gray")}
 
     EREIGNIS_STATUS_MAP = {
         'einfahrt': 'unterwegs',
@@ -237,7 +238,7 @@ class Zugstatus:
         self._status = status
 
     @property
-    def qt_farbe(self) -> QtGui.QColor:
+    def qt_farbe(self) -> QColor:
         return self.DARSTELLUNGSFARBE[self.status]
 
     def update_von_zug(self, zug: ZugGraphNode, plangleis: str) -> str:
@@ -632,7 +633,7 @@ class Rangierplan:
 
         return rd_ids
 
-class RangiertabelleModell(QtCore.QAbstractTableModel):
+class RangiertabelleModell(QAbstractTableModel):
     """
     Datenmodell für Rangiertabelle
     """
@@ -724,7 +725,7 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
         except (IndexError, KeyError):
             return None
 
-        if role == QtCore.Qt.UserRole:
+        if role == Qt.UserRole:
             if col == 'ID':
                 return rd.zid
             elif col == 'Zug':
@@ -754,7 +755,7 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             else:
                 return None
 
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             if col == 'ID':
                 return rd.zid
             elif col == 'Zug':
@@ -786,7 +787,7 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             else:
                 return None
 
-        elif role == QtCore.Qt.ForegroundRole:
+        elif role == Qt.ForegroundRole:
             # rgb = self.zugschema.zugfarbe_rgb(zug)
             # farbe = QtGui.QColor(*rgb)
 
@@ -801,10 +802,12 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
             else:
                 return None
 
-        elif role == QtCore.Qt.TextAlignmentRole:
-            return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
+        elif role == Qt.TextAlignmentRole:
+            return Qt.AlignHCenter + Qt.AlignVCenter
 
-    def headerData(self, section: int, orientation: QtCore.Qt.Orientation, role: int = ...) -> Any:
+        return None
+
+    def headerData(self, section: int, orientation: Qt.Orientation, role: int = ...) -> Any:
         """
         gibt den text der kopfzeile und -spalte aus.
         :param section: element-index
@@ -812,11 +815,13 @@ class RangiertabelleModell(QtCore.QAbstractTableModel):
         :param role: DisplayRole gibt den spaltentitel oder die zug-id aus.
         :return:
         """
-        if role == QtCore.Qt.DisplayRole:
-            if orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
                 return self._columns[section]
-            elif orientation == QtCore.Qt.Vertical:
+            elif orientation == Qt.Vertical:
                 return self.rangierziele[section]
+
+        return None
 
 
 class RangiertabelleFilterProxy(QSortFilterProxyModel):
@@ -824,8 +829,8 @@ class RangiertabelleFilterProxy(QSortFilterProxyModel):
     def __init__(self, parent=...):
         super().__init__(parent)
         self._simzeit: int = 0
-        self._vorlaufzeit: int = 0
-        self._nachlaufzeit: int = 15
+        self._vorlaufzeit: int = 60
+        self._nachlaufzeit: int = 5
 
     @property
     def simzeit(self) -> int:
@@ -886,7 +891,7 @@ class RangiertabelleFilterProxy(QSortFilterProxyModel):
         return True
 
 
-class RangierplanWindow(QtWidgets.QWidget):
+class RangierplanWindow(QWidget):
     """
     Rangierplanwidget
 
@@ -910,18 +915,18 @@ class RangierplanWindow(QtWidgets.QWidget):
 
         self.rangiertabelle_sort_filter = RangiertabelleFilterProxy(self)
         self.rangiertabelle_sort_filter.setSourceModel(self.rangiertabelle_modell)
-        self.rangiertabelle_sort_filter.setSortRole(QtCore.Qt.UserRole)
+        self.rangiertabelle_sort_filter.setSortRole(Qt.UserRole)
         self.ui.zugliste_view.setModel(self.rangiertabelle_sort_filter)
         self.ui.zugliste_view.selectionModel().selectionChanged.connect(
             self.zugliste_selection_changed)
-        self.ui.zugliste_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
-        self.ui.zugliste_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
+        self.ui.zugliste_view.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.ui.zugliste_view.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.zugliste_view.sortByColumn(self.rangiertabelle_modell._columns.index('An'), 0)
         self.ui.zugliste_view.setSortingEnabled(True)
-        self.toogle_lok_status_shortcut = QtWidgets.QShortcut(QtCore.Qt.Key_L, self.ui.zugliste_view,
-                                                              activated=self.toogle_lok_status)
-        self.toogle_ersatz_status_shortcut = QtWidgets.QShortcut(QtCore.Qt.Key_E, self.ui.zugliste_view,
-                                                                 activated=self.toogle_ersatz_status)
+        self.toggle_lok_status_shortcut = QShortcut(QKeySequence('L'), self)
+        self.toggle_lok_status_shortcut.activated.connect(self.toggle_lok_status)
+        self.toggle_ersatz_status_shortcut = QShortcut(QKeySequence('E'), self)
+        self.toggle_ersatz_status_shortcut.activated.connect(self.toggle_ersatz_status)
 
         self.ui.vorlaufzeit_spin.setValue(self.rangiertabelle_sort_filter.vorlaufzeit)
         self.ui.nachlaufzeit_spin.setValue(self.rangiertabelle_sort_filter.nachlaufzeit)
@@ -934,8 +939,8 @@ class RangierplanWindow(QtWidgets.QWidget):
         self.fahrplan_modell = FahrplanModell(zentrale.anlage)
         self.fahrplan_modell._columns = ['An', 'VAn', 'Gleis', 'Flags']
         self.ui.fahrplan_view.setModel(self.fahrplan_modell)
-        self.ui.fahrplan_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
-        self.ui.fahrplan_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
+        self.ui.fahrplan_view.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.ui.fahrplan_view.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.fahrplan_view.verticalHeader().setVisible(False)
 
         self.ui.splitter.setSizes([800, 200])
@@ -973,7 +978,7 @@ class RangierplanWindow(QtWidgets.QWidget):
 
         column = self.rangiertabelle_modell._columns.index("Zug")
         start = self.rangiertabelle_sort_filter.index(0, column)
-        matches = self.rangiertabelle_sort_filter.match(start, QtCore.Qt.DisplayRole, text, 1, QtCore.Qt.MatchContains)
+        matches = self.rangiertabelle_sort_filter.match(start, Qt.DisplayRole, text, 1, Qt.MatchContains)
 
         for index in matches:
             if index.column() == column:
@@ -1006,7 +1011,7 @@ class RangierplanWindow(QtWidgets.QWidget):
 
         return rd
 
-    @QtCore.pyqtSlot('QItemSelection', 'QItemSelection')
+    @pyqtSlot('QItemSelection', 'QItemSelection')
     def zugliste_selection_changed(self, selected, deselected):
         """
         Fahrplan eines angewählten Zuges darstellen.
@@ -1023,14 +1028,14 @@ class RangierplanWindow(QtWidgets.QWidget):
             self.ui.fahrplan_view.resizeRowsToContents()
 
     @pyqtSlot()
-    def toogle_lok_status(self):
+    def toggle_lok_status(self):
         if rd := self.selected_rangiervorgang():
             if rd.lok_zid:
                 rd.lok_status.toggle_status()
                 self.rangiertabelle_modell.emit_changes(ziele=[rd.fid], spalten=['L Status'])
 
     @pyqtSlot()
-    def toogle_ersatz_status(self):
+    def toggle_ersatz_status(self):
         if rd := self.selected_rangiervorgang():
             if rd.ersatzlok_zid:
                 rd.ersatzlok_status.toggle_status()
