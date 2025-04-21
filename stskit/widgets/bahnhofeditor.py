@@ -460,7 +460,7 @@ class BahnhofEditor(QObject):
 
     def update_agl_widget_states(self):
         selection = self.get_agl_selection()
-        anst_sel = {self.gl_table_model.row_data[gl]['Anst'] for gl in selection}
+        anst_sel = {self.agl_table_model.row_data[gl]['Anst'] for gl in selection}
 
         # gleiswahl >= 1 , combo-text vorhanden und noch nicht vergeben
         en = len(selection) >= 1 and (tx := self.ui.anst_combo.currentText()) and (BahnhofElement('Anst', tx) in self.bahnhofgraph)
