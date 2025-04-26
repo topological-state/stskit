@@ -44,6 +44,10 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
 
     def update(self):
         self.beginResetModel()
+        self._update()
+        self.endResetModel()
+
+    def _update(self):
         elemente = {}
 
         for gleis in self.bahnhofgraph.list_by_type({self._gleistyp}):
@@ -58,7 +62,6 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
 
         self.row_data = elemente
         self.rows = sorted(self.row_data.keys())
-        self.endResetModel()
 
     def rowCount(self, parent=QtCore.QModelIndex()):
         return len(self.rows)
@@ -121,18 +124,160 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
         return None
 
     def setData(self, index, value, role=QtCore.Qt.EditRole):
-        if not index.isValid() or role != QtCore.Qt.EditRole:
+        if not index.isValid():
             return False
-        return False
 
-        # todo
-        self.dataChanged.emit(index, index, [role])
+        row = index.row()
+        col = self._columns[index.column()]
+        label = self.rows[row]
+        data = self.row_data[label]
+
+        if role == QtCore.Qt.EditRole:
+            if col in {'Bs', 'Bft', 'Bf', 'Anst'}:
+                self.rename_element(col, label.name, value)
+                self.dataChanged.emit(index, index)
+        if role == QtCore.Qt.CheckStateRole:
+            if col in {'Sperrung', 'Sichtbar'}:
+                data[col] = value == QtCore.Qt.Checked
+                self.bahnhofgraph.nodes[label][col.lower()] = value
+                self.dataChanged.emit(index, index)
+            else:
+                return False
+
         return True
 
     def flags(self, index):
         if not index.isValid():
             return QtCore.Qt.NoItemFlags
-        return super().flags(index) | QtCore.Qt.ItemIsEditable
+
+        col = self._columns[index.column()]
+
+        result = QtCore.Qt.ItemIsEnabled
+        if col in {'Gl', 'Agl'}:
+            result |= QtCore.Qt.ItemIsSelectable
+        elif col in {'Sperrung', 'Sichtbar'}:
+            result |= QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsSelectable
+        elif col in {'Bs', 'Bft', 'Bf', 'Anst', 'Stil', 'N'}:
+            result |= QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable
+        else:
+            result = QtCore.Qt.NoItemFlags
+
+        return result
+
+    def group_elements(self,
+                       gleise: Set[BahnhofElement],
+                       level: str,
+                       element: Optional[str] = None) -> Set[BahnhofElement]:
+        """
+        Groups elements based on the given criteria.
+
+        :param gleise: Set of BahnhofElement objects to be grouped.
+        :type gleise: Set[BahnhofElement]
+        :param level: Level at which to perform the grouping.
+        :type level: str
+        :param element: Optional parameter specifying the specific element to group by; if None, the most common element is used.
+        :type element: Optional[str]
+
+        :return: Set of BahnhofElement objects (Gl or Agl) that were replaced or inserted.
+        :rtype: Set[BahnhofElement]
+        """
+
+        if element is None:
+            elements = (self.row_data[sel].get(level) for sel in gleise)
+            elements = sorted((bf for bf in elements if bf is not None))
+            if not elements:
+                return set()
+            element, _ = Counter(elements).most_common(1)[0]
+
+        new_element = BahnhofElement(level, element)
+        replace = {}
+        insert = {}
+        for gl in gleise:
+            try:
+                sup = self.bahnhofgraph.find_superior(gl, {level})
+            except KeyError:
+                insert[gl] = new_element
+            else:
+                if sup != new_element:
+                    replace[sup] = new_element
+
+        self.beginResetModel()
+        try:
+            for gl, new in replace.items():
+                self.bahnhofgraph.nodes[gl]['auto'] = False
+            nx.relabel_nodes(self.bahnhofgraph, replace, copy=False)
+            for gl, new in insert.items():
+                self.bahnhofgraph.replace_parent(gl, new)
+        finally:
+            self._update()
+            self.endResetModel()
+
+        return set(replace.keys()) | set(insert.keys())
+
+    def ungroup_elements(self, elements: Set[BahnhofElement],
+                        level: str) -> Set[BahnhofElement]:
+        """
+        Ungroups elements based on a given level.
+
+        This method creates new BahnhofElement objects with the specified level and name of each child element
+        if the corresponding parent does not exist in the bahnhofgraph.
+
+        Parameters:
+            elements (Set[BahnhofElement]): A set of BahnhofElement objects to be ungrouped.
+            level (str): The level at which to create new BahnhofElement objects.
+
+        Returns:
+            Set[BahnhofElement]: A set containing the new BahnhofElement objects that were created and added to the bahnhofgraph.
+
+        This method modifies the bahnhofgraph by replacing parent-child relationships as necessary. If no replacements are made, an empty set is returned.
+        """
+
+        replace = {}
+        for child in elements:
+            if not self.bahnhofgraph.has_node(child):
+                continue  # Gleis existiert nicht
+            parent = BahnhofElement(level, child.name)
+            if self.bahnhofgraph.has_node(parent):
+                continue  # Bahnsteig existiert bereits
+            replace[child] = parent
+        if not replace:
+            return set()
+
+        self.beginResetModel()
+        try:
+            for child, parent in replace.items():
+                self.bahnhofgraph.replace_parent(child, parent, del_old_parent=True)
+        finally:
+            self._update()
+            self.endResetModel()
+
+        return set(replace.keys())
+
+    def rename_element(self, level: str, old: str, new: str) -> Optional[BahnhofElement]:
+        """
+        Renames an element in the graph and updates the model accordingly.
+        """
+
+        old = BahnhofElement(level, old)
+        new = BahnhofElement(level, new)
+
+        if old == new:
+            return None   # Alter und neuer Name sind identisch
+        if old not in self.bahnhofgraph.nodes():
+            return  None  # Element existiert nicht
+        if new in self.bahnhofgraph.nodes():
+            return  None  # Neuer Name existiert bereits
+
+        self.beginResetModel()
+        try:
+            nx.relabel_nodes(self.bahnhofgraph, {old: new}, copy=False)
+            self.bahnhofgraph.nodes[new]['auto'] = False
+            self.bahnhofgraph.nodes[new]['name'] = new.name
+        finally:
+            self._update()
+            self.endResetModel()
+
+        return new
 
 
 class AnschlussEditorModel(AbstractBahnhofEditorModel):
@@ -209,7 +354,7 @@ class BahnhofEditor(QObject):
         self.gl_table_filter.setSourceModel(self.gl_table_model)
         self.gl_table_filter.setSortRole(QtCore.Qt.UserRole)
         self.ui.gl_table_view.setModel(self.gl_table_filter)
-        self.ui.gl_table_view.setSelectionMode(Qt.QAbstractItemView.MultiSelection)
+        self.ui.gl_table_view.setSelectionMode(Qt.QAbstractItemView.ExtendedSelection)
         self.ui.gl_table_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
         self.ui.gl_table_view.sortByColumn(self.gl_table_model._columns.index('Gl'), 0)
         self.ui.gl_table_view.setSortingEnabled(True)
@@ -244,13 +389,14 @@ class BahnhofEditor(QObject):
         self.ui.gl_combo.editTextChanged.connect(self.gl_combo_text_changed)
         self.ui.gl_table_view.selectionModel().selectionChanged.connect(
             self.gl_selection_changed)
+        self.gl_table_model.dataChanged.connect(self.table_model_changed)
 
         self.agl_table_model = AnschlussEditorModel(self.bahnhofgraph)
         self.agl_table_filter = BahnhofEditorFilterProxy(parent)
         self.agl_table_filter.setSourceModel(self.agl_table_model)
         self.agl_table_filter.setSortRole(QtCore.Qt.UserRole)
         self.ui.agl_table_view.setModel(self.agl_table_filter)
-        self.ui.agl_table_view.setSelectionMode(Qt.QAbstractItemView.MultiSelection)
+        self.ui.agl_table_view.setSelectionMode(Qt.QAbstractItemView.ExtendedSelection)
         self.ui.agl_table_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
         self.ui.agl_table_view.sortByColumn(self.agl_table_model._columns.index('Agl'), 0)
         self.ui.agl_table_view.setSortingEnabled(True)
@@ -271,9 +417,16 @@ class BahnhofEditor(QObject):
         self.ui.agl_combo.editTextChanged.connect(self.agl_combo_text_changed)
         self.ui.agl_table_view.selectionModel().selectionChanged.connect(
             self.agl_selection_changed)
+        self.agl_table_model.dataChanged.connect(self.table_model_changed)
+
+        self.ui.dialog_button_box.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.apply_button_clicked)
+        self.ui.dialog_button_box.button(QtWidgets.QDialogButtonBox.Reset).clicked.connect(self.reset_button_clicked)
 
     def update_widgets(self):
-        # Update the widgets based on the current state of the anlage
+        """
+        Update the widgets based on the current state of the anlage
+        """
+
         self.gl_table_model.update()
         self.agl_table_model.update()
 
@@ -293,12 +446,24 @@ class BahnhofEditor(QObject):
         self.update_agl_widget_states()
 
     def apply(self):
-        # Apply changes to the anlage based on the current state of the widgets
+        """
+        Apply changes to the anlage based on the current state of the widgets
+        """
+
         self.anlage.bahnhofgraph.clear()
         self.anlage.bahnhofgraph.update(self.bahnhofgraph)
 
     def reset(self):
-        # Revert changes to the anlage if necessary
+        """
+        Reset all widgets to Anlage
+        """
+
+        self.gl_table_model.beginResetModel()
+        self.agl_table_model.beginResetModel()
+        self.bahnhofgraph.clear()
+        self.bahnhofgraph.update(self.anlage.bahnhofgraph)
+        self.gl_table_model.endResetModel()
+        self.agl_table_model.endResetModel()
         self.update_widgets()
 
     def get_gl_selection(self) -> Set[BahnhofElement]:
@@ -493,35 +658,8 @@ class BahnhofEditor(QObject):
         else:
             raise ValueError(f'Invalid level {level}')
 
-        if element is None:
-            elements = (table_model.row_data[sel].get(level) for sel in gleise)
-            elements = sorted((bf for bf in elements if bf is not None))
-            if not elements:
-                return {}, {}
-            element, _ = Counter(elements).most_common(1)[0]
-
-        new_element = BahnhofElement(level, element)
-        replace = {}
-        insert = {}
-        for gl in gleise:
-            try:
-                sup = self.bahnhofgraph.find_superior(gl, level)
-            except KeyError:
-                insert[gl] = new_element
-            else:
-                if sup != new_element:
-                    replace[sup] = new_element
-
-        table_model.beginResetModel()
-        try:
-            for gl, new in replace.items():
-                self.bahnhofgraph.nodes[gl]['auto'] = False
-            nx.relabel_nodes(self.bahnhofgraph, replace, copy=False)
-            for gl, new in insert.items():
-                self.bahnhofgraph.replace_parent(gl, new)
+        if table_model.group_elements(gleise, level, element):
             self.update_widgets()
-        finally:
-            table_model.endResetModel()
 
     def ungroup_element(self, level: str):
         if level == 'Anst':
@@ -536,24 +674,8 @@ class BahnhofEditor(QObject):
         else:
             raise ValueError(f'Invalid level {level}')
 
-        replace = {}
-        for child in sel:
-            if not self.bahnhofgraph.has_node(child):
-                continue  # Gleis existiert nicht
-            parent = BahnhofElement(level, child.name)
-            if self.bahnhofgraph.has_node(parent):
-                continue  # Bahnsteig existiert bereits
-            replace[child] = parent
-        if not replace:
-            return
-
-        table_model.beginResetModel()
-        try:
-            for child, parent in replace.items():
-                self.bahnhofgraph.replace_parent(child, parent, del_old_parent=True)
+        if table_model.ungroup_elements(sel, level):
             self.update_widgets()
-        finally:
-            table_model.endResetModel()
 
     def rename_element(self, level: str, combo: QtWidgets.QComboBox):
         """
@@ -573,24 +695,15 @@ class BahnhofEditor(QObject):
         if len(sel) != 1:
             return
 
-        old = BahnhofElement(level, sel.pop())
-        new = BahnhofElement(level, combo.currentText())
+        old = sel.pop()
+        new = combo.currentText()
 
-        if old == new:
-            return  # Alter und neuer Name sind identisch
-        if old not in self.bahnhofgraph.nodes():
-            return  # Element existiert nicht
-        if new in self.bahnhofgraph.nodes():
-            return  # Neuer Name existiert bereits
-
-        table_model.beginResetModel()
-        try:
-            nx.relabel_nodes(self.bahnhofgraph, {old: new}, copy=False)
-            self.bahnhofgraph.nodes[new]['auto'] = False
-            self.bahnhofgraph.nodes[new]['name'] = new.name
+        if table_model.rename_element(level, old, new):
             self.update_widgets()
-        finally:
-            table_model.endResetModel()
+
+    @pyqtSlot()
+    def table_model_changed(self):
+        self.update_widgets()
 
     @pyqtSlot()
     def bf_group_button_clicked(self):
@@ -727,3 +840,11 @@ class BahnhofEditor(QObject):
             self.agl_table_filter.endResetModel()
         self.ui.agl_table_view.resizeColumnsToContents()
         self.ui.agl_table_view.resizeRowsToContents()
+
+    @pyqtSlot()
+    def apply_button_clicked(self):
+        self.apply()
+
+    @pyqtSlot()
+    def reset_button_clicked(self):
+        self.reset()

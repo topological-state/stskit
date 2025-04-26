@@ -66,11 +66,12 @@ Wenn Gruppen Elemente enthalten, die nicht zusammengehören:
 #### Umbenennen
 
 Alle Elemente ausser Gleisen können umbenannt werden.
-Die Auswahl in der Gleistabelle erfolgt jedoch immer nach Gleisen!
 
-1. Ein Gleis das zur umzubenennenden Gruppe gehört auswählen.
-2. Neuen Namen im Editierfeld eintragen.
-3. Umbenennen-Knopf drücken.
+1. Umzubenennendes Element in der Tabelle auswählen.
+2. Namen überschreiben und Eingabetaste drücken. 
+   Alternativ den Namen im Kombifeld eintragen und den *Umbenennen*-Knopf klicken.
+ 
+Der neue Namen muss auf der Ebene eindeutig sein, sonst wird er nicht angenommen.
 
 ## Strecken
 
