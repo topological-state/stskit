@@ -190,29 +190,17 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
             element, _ = Counter(elements).most_common(1)[0]
 
         new_element = BahnhofElement(level, element)
-        replace = {}
-        insert = {}
-        for gl in gleise:
-            try:
-                sup = self.bahnhofgraph.find_superior(gl, {level})
-            except KeyError:
-                insert[gl] = new_element
-            else:
-                if sup != new_element:
-                    replace[sup] = new_element
+        replace = {gl: new_element for gl in gleise}
 
         self.beginResetModel()
         try:
             for gl, new in replace.items():
-                self.bahnhofgraph.nodes[gl]['auto'] = False
-            nx.relabel_nodes(self.bahnhofgraph, replace, copy=False)
-            for gl, new in insert.items():
                 self.bahnhofgraph.replace_parent(gl, new)
         finally:
             self._update()
             self.endResetModel()
 
-        return set(replace.keys()) | set(insert.keys())
+        return set(replace.keys())
 
     def ungroup_elements(self, elements: Set[BahnhofElement],
                         level: str) -> Set[BahnhofElement]:
@@ -293,7 +281,7 @@ class AnschlussEditorModel(AbstractBahnhofEditorModel):
     def __init__(self, bahnhofgraph: BahnhofGraph, parent=None):
         super().__init__(bahnhofgraph, parent)
 
-        self._columns: List[str] = ['Agl', 'Anst', 'Sperrung', 'Stil']
+        self._columns: List[str] = ['Agl', 'Anst', 'Sperrung']
         self._gleistyp: str = 'Agl'
 
 
@@ -310,7 +298,7 @@ class BahnhofEditorModel(AbstractBahnhofEditorModel):
     def __init__(self, bahnhofgraph: BahnhofGraph, parent=None):
         super().__init__(bahnhofgraph, parent)
 
-        self._columns: List[str] = ['Gl', 'Bs', 'Bft', 'Bf', 'Sperrung', 'Stil']
+        self._columns: List[str] = ['Gl', 'Bs', 'Bft', 'Bf', 'Sperrung']
         self._gleistyp: str = 'Gl'
 
 
@@ -652,7 +640,7 @@ class BahnhofEditor(QObject):
         if level == 'Anst':
             gleise = self.get_agl_selection()
             table_model = self.agl_table_model
-        elif level in {'Bf', 'Bs'}:
+        elif level in {'Bf', 'Bft', 'Bs'}:
             gleise = self.get_gl_selection()
             table_model = self.gl_table_model
         else:
@@ -665,11 +653,8 @@ class BahnhofEditor(QObject):
         if level == 'Anst':
             sel = self.get_agl_selection()
             table_model = self.agl_table_model
-        elif level == 'Bs':
+        elif level in {'Bf', 'Bft', 'Bs'}:
             sel = self.get_gl_selection()
-            table_model = self.gl_table_model
-        elif level == 'Bf':
-            sel = {self.gl_table_model.row_data[gl]['Bft'] for gl in self.get_gl_selection()}
             table_model = self.gl_table_model
         else:
             raise ValueError(f'Invalid level {level}')
@@ -685,7 +670,7 @@ class BahnhofEditor(QObject):
         if level == 'Anst':
             sel = self.get_agl_selection()
             table_model = self.agl_table_model
-        elif level in {'Bf', 'Bs'}:
+        elif level in {'Bf', 'Bft', 'Bs'}:
             sel = self.get_gl_selection()
             table_model = self.gl_table_model
         else:
