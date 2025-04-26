@@ -222,6 +222,31 @@ class BahnhofGraph(nx.DiGraph):
         else:
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
+    def gleis_parents(self) -> Dict[BahnhofLabelType, Dict[str, BahnhofLabelType]]:
+        """
+        Summary: Generates a dictionary of parents for each Gl and Agl node in the graph.
+
+        This method traverses the graph in reverse breadth-first search (BFS) to find all parent nodes of each Gl and Agl node.
+        It organizes these parent nodes into a nested dictionary where the keys are the Gl or Agl nodes,
+        and the values are dictionaries mapping child node types to their corresponding child nodes.
+
+        Parameters:
+            None
+
+        Returns:
+            Dict[BahnhofLabelType, Dict[str, BahnhofLabelType]]: A dictionary containing parent nodes for each Gl and Agl node.
+        """
+
+        result = {}
+        for gl in self.list_by_type({'Gl', 'Agl'}):
+            for parent, child in nx.bfs_edges(self, gl, reverse=True):
+                if gl in result:
+                    result[gl][child.typ] = child
+                else:
+                    result[gl] = {child.typ: child}
+
+        return result
+
     def list_children(self, label: BahnhofLabelType, typen: Set[str]) -> Generator[BahnhofLabelType, None, None]:
         """
         Listet die untergeordneten Elemente bestimmter Typen auf.
@@ -299,12 +324,12 @@ class BahnhofGraph(nx.DiGraph):
 
         Dies ist nützlich, wenn ein Gleis von einem anderen Bahnhof übernommen wird.
         Der Elternknoten kann ein beliebiger übergeordneter Knoten des Gleises sein.
-        Der Endnutzer darf jedoch nur den Bs oder Bf ändern.
 
         Der Elternknoten kann existieren oder wird neu erstellt.
         Der alte Knoten wird gelöscht, wenn der Parameter `del_old_parent` auf True gesetzt ist und er keine Kinder mehr hat.
 
         :param gleis: Das Gleis, dessen Elternknoten ersetzt werden soll.
+            Kann auch ein Element einer höheren Ebene sein, so lange die Ebene tiefer ist als die von new_parent.
         :param new_parent: Der neue Elternknoten des Gleises.
             Gibt den Typ und Namen des neuen Elternknotens an.
             Der Knoten kann existieren oder wird aus einer Kopie des alten neu erstellt.
@@ -321,18 +346,7 @@ class BahnhofGraph(nx.DiGraph):
         except KeyError:
             # Fehler im Graph: Das Gleis hat keinen entsprechenden Elternknoten!
             logger.error(f"Fehler im Bahnhofgraph: Das Gleis {gleis} hat keinen Elternknoten vom Typ {new_parent.typ}!")
-            # for element in old_path:
-            #     new_level = BAHNHOFELEMENT_HIERARCHIE[element.typ]
-            #     if new_level not in old_parents:
-            #         if new_level == 'Bst':
-            #             new = BahnhofElement('Bst', element.typ)
-            #         else:
-            #             new = BahnhofElement(new_level, element.name)
-            #         # todo: existierenden knoten kopieren?
-            #         self.add_node(new, typ=new_level, name=new.name, auto=True)
-            #         self.add_edge(new, element)
-            #         break
-            return
+            return None
 
         if new_data is None:
             new_data = old_data.copy()
@@ -606,6 +620,7 @@ class BahnhofGraph(nx.DiGraph):
 
             konfig_graph.add_edge(be1, be2, typ="Hierarchie", auto=e['auto'])
 
+        # Gl-Daten und Bs/Anst-Elternbeziehung
         for gl in konfig_graph.list_by_type({'Gl', 'Agl'}):
             gl_data = konfig_graph.nodes[gl]
             if not gl_data.get('auto', True):
@@ -619,25 +634,26 @@ class BahnhofGraph(nx.DiGraph):
                 if bs_alt != bs_neu:
                     self.replace_parent(gl, bs_neu)
 
+        # Bs-Daten und Bft-Elternbeziehung
         for bs in konfig_graph.list_by_type({'Bs'}):
             bs_data = konfig_graph.nodes[bs]
             if not bs_data.get('auto', True):
                 self.add_node(bs, **bs_data)
-
-        for bft in konfig_graph.list_by_type({'Bft'}):
             try:
-                bft_neu = bft
+                bft_neu = konfig_graph.find_superior(bs, {'Bft'})
                 gl = next(konfig_graph.list_children(bft_neu, {'Gl'}))
                 bft_alt = self.find_superior(gl, {'Bft'})
             except (KeyError, StopIteration):
                 pass
             else:
-                if bft_neu != bft_alt:
-                    nx.relabel_nodes(self, {bft_alt: bft_neu}, copy=False)
+                if bft_alt != bft_neu:
+                    self.replace_parent(gl, bft_neu)
+
+        # Bft-Daten und Bf-Elternbeziehung
+        for bft in konfig_graph.list_by_type({'Bft'}):
             bft_data = konfig_graph.nodes[bft]
             if not bft_data.get('auto', True):
                 self.add_node(bft, **bft_data)
-
             try:
                 bf_neu = konfig_graph.find_superior(bft, {'Bf'})
                 gl = next(konfig_graph.list_children(bf_neu, {'Gl'}))

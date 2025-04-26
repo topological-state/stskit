@@ -227,6 +227,8 @@ class BahnhofEditor(QObject):
         self.ui.bf_group_button.clicked.connect(self.bf_group_button_clicked)
         self.ui.bf_ungroup_button.clicked.connect(self.bf_ungroup_button_clicked)
         self.ui.bf_rename_button.clicked.connect(self.bf_rename_button_clicked)
+        self.ui.bft_group_button.clicked.connect(self.bft_group_button_clicked)
+        self.ui.bft_ungroup_button.clicked.connect(self.bft_ungroup_button_clicked)
         self.ui.bft_rename_button.clicked.connect(self.bft_rename_button_clicked)
         self.ui.bs_group_button.clicked.connect(self.bs_group_button_clicked)
         self.ui.bs_ungroup_button.clicked.connect(self.bs_ungroup_button_clicked)
@@ -423,6 +425,10 @@ class BahnhofEditor(QObject):
         en = len(bft_sel) == 1 and (tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) in self.bahnhofgraph)
         self.ui.bf_group_button.setEnabled(en)
 
+        # gleiswahl >= 1 , combo-text vorhanden und noch nicht vergeben
+        en = len(bft_sel) == 1 and (tx := self.ui.bft_combo.currentText()) and (BahnhofElement('Bft', tx) in self.bahnhofgraph)
+        self.ui.bft_group_button.setEnabled(en)
+
         # gleiswahl >= 1 vom gleichen bft, combo-text vorhanden und noch nicht vergeben
         en = len(bft_sel) == 1 and (tx := self.ui.bs_combo.currentText()) and (BahnhofElement('Bs', tx) in self.bahnhofgraph)
         self.ui.bs_group_button.setEnabled(en)
@@ -430,18 +436,14 @@ class BahnhofEditor(QObject):
         # einzelner bf gewählt
         en = len(bf_sel) == 1
         self.ui.bf_ungroup_button.setEnabled(en)
-        if en and len(selection) > 1:
-            self.ui.bf_ungroup_button.setText('Neue Bahnhöfe')
-        else:
-            self.ui.bf_ungroup_button.setText('Neuer Bahnhof')
+
+        # einzelner bft gewählt
+        en = len(bft_sel) == 1
+        self.ui.bft_ungroup_button.setEnabled(en)
 
         # einzelner bs gewählt
         en = len(bs_sel) == 1
         self.ui.bs_ungroup_button.setEnabled(en)
-        if en and len(selection) > 1:
-            self.ui.bs_ungroup_button.setText('Neue Bahnsteige')
-        else:
-            self.ui.bs_ungroup_button.setText('Neuer Bahnsteig')
 
         # einzelner bf gewählt, combo-text vorhanden und noch nicht vergeben
         en = len(bf_sel) == 1 and (tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) not in self.bahnhofgraph)
@@ -469,10 +471,6 @@ class BahnhofEditor(QObject):
         # einzelne anst gewählt
         en = len(anst_sel) == 1
         self.ui.anst_ungroup_button.setEnabled(en)
-        if en and len(selection) > 1:
-            self.ui.anst_ungroup_button.setText("Neue A'stelle")
-        else:
-            self.ui.anst_ungroup_button.setText("Neue A'stellen")
 
         # einzelner anst gewählt, combo-text vorhanden und noch nicht vergeben
         en = len(anst_sel) == 1 and (tx := self.ui.anst_combo.currentText()) and (BahnhofElement('Anst', tx) not in self.bahnhofgraph)
@@ -596,11 +594,11 @@ class BahnhofEditor(QObject):
 
     @pyqtSlot()
     def bf_group_button_clicked(self):
-        """
-        Gruppiert die ausgewählten Bahnhofteile zu einem Bahnhof.
-        """
-
         self.group_elements('Bf', self.ui.bf_combo.currentText())
+
+    @pyqtSlot()
+    def bft_group_button_clicked(self):
+        self.group_elements('Bft', self.ui.bft_combo.currentText())
 
     @pyqtSlot()
     def bs_group_button_clicked(self):
@@ -609,6 +607,10 @@ class BahnhofEditor(QObject):
     @pyqtSlot()
     def bf_ungroup_button_clicked(self):
         self.ungroup_element('Bf')
+
+    @pyqtSlot()
+    def bft_ungroup_button_clicked(self):
+        self.ungroup_element('Bft')
 
     @pyqtSlot()
     def bs_ungroup_button_clicked(self):

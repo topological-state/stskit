@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>700</width>
-    <height>702</height>
+    <height>766</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
        <item>
         <widget class="QTabWidget" name="tab_widget">
          <property name="currentIndex">
-          <number>4</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="anst_tab">
           <property name="enabled">
@@ -60,6 +60,9 @@
                  <layout class="QVBoxLayout" name="verticalLayout_11">
                   <item>
                    <widget class="QComboBox" name="agl_combo">
+                    <property name="toolTip">
+                     <string>Filterkriterium</string>
+                    </property>
                     <property name="editable">
                      <bool>true</bool>
                     </property>
@@ -67,15 +70,11 @@
                   </item>
                   <item>
                    <widget class="QPushButton" name="agl_filter_button">
+                    <property name="toolTip">
+                     <string>Gleistabelle filtern</string>
+                    </property>
                     <property name="text">
                      <string>Filter</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="anst_ungroup_button">
-                    <property name="text">
-                     <string>Neue Anst</string>
                     </property>
                    </widget>
                   </item>
@@ -90,6 +89,9 @@
                  <layout class="QVBoxLayout" name="verticalLayout_14">
                   <item>
                    <widget class="QComboBox" name="anst_combo">
+                    <property name="toolTip">
+                     <string>Ziel-Anschlussstelle</string>
+                    </property>
                     <property name="editable">
                      <bool>true</bool>
                     </property>
@@ -97,13 +99,29 @@
                   </item>
                   <item>
                    <widget class="QPushButton" name="anst_group_button">
+                    <property name="toolTip">
+                     <string>Ausgewählte Gleise der Ziel-Anschlussstelle zuordnen</string>
+                    </property>
                     <property name="text">
                      <string>Zuordnen</string>
                     </property>
                    </widget>
                   </item>
                   <item>
+                   <widget class="QPushButton" name="anst_ungroup_button">
+                    <property name="toolTip">
+                     <string>Ausgewählte Gleise auf eigene Anschlussstellen aufteilen (Anst auflösen)</string>
+                    </property>
+                    <property name="text">
+                     <string>Aufteilen</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <widget class="QPushButton" name="anst_rename_button">
+                    <property name="toolTip">
+                     <string>Anschlussstelle umbenennen</string>
+                    </property>
                     <property name="text">
                      <string>Umbenennen</string>
                     </property>
@@ -168,6 +186,9 @@
                  <layout class="QVBoxLayout" name="verticalLayout_7">
                   <item>
                    <widget class="QComboBox" name="gl_combo">
+                    <property name="toolTip">
+                     <string>Filterkriterium</string>
+                    </property>
                     <property name="editable">
                      <bool>true</bool>
                     </property>
@@ -175,15 +196,11 @@
                   </item>
                   <item>
                    <widget class="QPushButton" name="gl_filter_button">
+                    <property name="toolTip">
+                     <string>Gleistabelle filtern</string>
+                    </property>
                     <property name="text">
                      <string>Filter</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="bs_ungroup_button">
-                    <property name="text">
-                     <string>Neuer Bahnsteig</string>
                     </property>
                    </widget>
                   </item>
@@ -198,6 +215,9 @@
                  <layout class="QVBoxLayout" name="verticalLayout_4">
                   <item>
                    <widget class="QComboBox" name="bs_combo">
+                    <property name="toolTip">
+                     <string>Ziel-Bahnsteig</string>
+                    </property>
                     <property name="editable">
                      <bool>true</bool>
                     </property>
@@ -205,13 +225,29 @@
                   </item>
                   <item>
                    <widget class="QPushButton" name="bs_group_button">
+                    <property name="toolTip">
+                     <string>Ausgewählte Gleise zu Ziel-Bahnsteig zuordnen</string>
+                    </property>
                     <property name="text">
                      <string>Zuordnen</string>
                     </property>
                    </widget>
                   </item>
                   <item>
+                   <widget class="QPushButton" name="bs_ungroup_button">
+                    <property name="toolTip">
+                     <string>Ausgewählte Gleise auf eigene Bahnsteige aufteilen (Bahnsteig auflösen)</string>
+                    </property>
+                    <property name="text">
+                     <string>Aufteilen</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <widget class="QPushButton" name="bs_rename_button">
+                    <property name="toolTip">
+                     <string>Bahnhsteig umbenennen</string>
+                    </property>
                     <property name="text">
                      <string>Umbenennen</string>
                     </property>
@@ -228,22 +264,41 @@
                  <layout class="QVBoxLayout" name="verticalLayout_5">
                   <item>
                    <widget class="QComboBox" name="bft_combo">
+                    <property name="toolTip">
+                     <string>Ziel-Bahnhofteil</string>
+                    </property>
                     <property name="editable">
                      <bool>true</bool>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="bft_rename_button">
+                   <widget class="QPushButton" name="bft_group_button">
+                    <property name="toolTip">
+                     <string>Ausgewählte Gleise zu Ziel-Bahnhofteil zuordnen</string>
+                    </property>
                     <property name="text">
-                     <string>Umbenennen</string>
+                     <string>Zuordnen</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="bf_ungroup_button">
+                   <widget class="QPushButton" name="bft_ungroup_button">
+                    <property name="toolTip">
+                     <string>Ausgewählte Gleise auf eigene Bahnhofteile aufteilen (Bahnhofteil auflösen)</string>
+                    </property>
                     <property name="text">
-                     <string>Neuer Bahnhof</string>
+                     <string>Aufteilen</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="bft_rename_button">
+                    <property name="toolTip">
+                     <string>Bahnhofteil umbenennen</string>
+                    </property>
+                    <property name="text">
+                     <string>Umbenennen</string>
                     </property>
                    </widget>
                   </item>
@@ -258,6 +313,9 @@
                  <layout class="QVBoxLayout" name="verticalLayout_6">
                   <item>
                    <widget class="QComboBox" name="bf_combo">
+                    <property name="toolTip">
+                     <string>Ziel-Bahnhof</string>
+                    </property>
                     <property name="editable">
                      <bool>true</bool>
                     </property>
@@ -265,13 +323,29 @@
                   </item>
                   <item>
                    <widget class="QPushButton" name="bf_group_button">
+                    <property name="toolTip">
+                     <string>Ausgewählte Gleise zu Ziel-Bahnhof zuordnen</string>
+                    </property>
                     <property name="text">
                      <string>Zuordnen</string>
                     </property>
                    </widget>
                   </item>
                   <item>
+                   <widget class="QPushButton" name="bf_ungroup_button">
+                    <property name="toolTip">
+                     <string>Ausgewählte Bahnhofteile auf eigene Bahnhöfe aufteilen (Bahnhof auflösen)</string>
+                    </property>
+                    <property name="text">
+                     <string>Aufteilen</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <widget class="QPushButton" name="bf_rename_button">
+                    <property name="toolTip">
+                     <string>Bahnhof umbenennen</string>
+                    </property>
                     <property name="text">
                      <string>Umbenennen</string>
                     </property>

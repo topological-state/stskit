@@ -173,18 +173,22 @@ class Anlage:
 
         if aenderungen:
             if 'anlageninfo' in aenderungen:
+                logger.debug("_init_anlage: import_anlageninfo")
                 self.bahnhofgraph.import_anlageninfo(self.anlageninfo)
                 self.aenderungen.add('bahnhofgraph')
             if 'bahnsteiggraph' in aenderungen:
                 if self.bahnsteiggraph:
+                    logger.debug("_init_anlage: import_bahnsteiggraph")
                     self.bahnhofgraph.import_bahnsteiggraph(self.bahnsteiggraph, self.gleisschema)
                     self.aenderungen.add('bahnhofgraph')
             if 'signalgraph' in aenderungen:
                 if self.signalgraph:
+                    logger.debug("_init_anlage: import_signalgraph")
                     self.bahnhofgraph.import_signalgraph(self.signalgraph, self.gleisschema)
                     self.aenderungen.add('bahnhofgraph')
             if 'config' in aenderungen:
                 try:
+                    logger.debug("_init_anlage: import_konfiguration")
                     self.bahnhofgraph.import_konfiguration(self.config['elemente'])
                     self.aenderungen.add('bahnhofgraph')
                 except KeyError:

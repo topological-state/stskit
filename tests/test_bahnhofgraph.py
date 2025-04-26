@@ -84,6 +84,24 @@ class TestBahnhofGraph(unittest.TestCase):
         with self.assertRaises(KeyError) as context:
             _ = list(self.graph.list_parents(BahnhofLabelType("Gl", "A3c")))
 
+    def test_gleis_parents(self):
+        expected = {
+            BahnhofLabelType('Gl', 'A1a'):  {'Bs': BahnhofLabelType('Bs', 'A1'), 'Bft': BahnhofLabelType('Bft', 'AHalle'), 'Bf': BahnhofLabelType('Bf', 'A'), 'Bst': BahnhofLabelType('Bst', 'Bf'), 'Stw': BahnhofLabelType('Stw', 'Testwerk')},
+            BahnhofLabelType('Gl', 'A1b'):  {'Bs': BahnhofLabelType('Bs', 'A1'), 'Bft': BahnhofLabelType('Bft', 'AHalle'), 'Bf': BahnhofLabelType('Bf', 'A'), 'Bst': BahnhofLabelType('Bst', 'Bf'), 'Stw': BahnhofLabelType('Stw', 'Testwerk')},
+            BahnhofLabelType('Gl', 'A2a'):  {'Bs': BahnhofLabelType('Bs', 'A2'), 'Bft': BahnhofLabelType('Bft', 'AHalle'), 'Bf': BahnhofLabelType('Bf', 'A'), 'Bst': BahnhofLabelType('Bst', 'Bf'), 'Stw': BahnhofLabelType('Stw', 'Testwerk')},
+            BahnhofLabelType('Gl', 'A2b'):  {'Bs': BahnhofLabelType('Bs', 'A2'), 'Bft': BahnhofLabelType('Bft', 'AHalle'), 'Bf': BahnhofLabelType('Bf', 'A'), 'Bst': BahnhofLabelType('Bst', 'Bf'), 'Stw': BahnhofLabelType('Stw', 'Testwerk')},
+            BahnhofLabelType('Gl', 'A100'): {'Bs': BahnhofLabelType('Bs', 'A100'), 'Bft': BahnhofLabelType('Bft', 'AFeld'), 'Bf': BahnhofLabelType('Bf', 'A'), 'Bst': BahnhofLabelType('Bst', 'Bf'), 'Stw': BahnhofLabelType('Stw', 'Testwerk')},
+            BahnhofLabelType('Gl', 'A101'): {'Bs': BahnhofLabelType('Bs', 'A101'), 'Bft': BahnhofLabelType('Bft', 'AFeld'), 'Bf': BahnhofLabelType('Bf', 'A'), 'Bst': BahnhofLabelType('Bst', 'Bf'), 'Stw': BahnhofLabelType('Stw', 'Testwerk')},
+            BahnhofLabelType('Gl', 'B1a'):  {'Bs': BahnhofLabelType('Bs', 'B1'), 'Bft': BahnhofLabelType('Bft', 'BHalle'), 'Bf': BahnhofLabelType('Bf', 'B'), 'Bst': BahnhofLabelType('Bst', 'Bf'), 'Stw': BahnhofLabelType('Stw', 'Testwerk')},
+            BahnhofLabelType('Gl', 'B1b'):  {'Bs': BahnhofLabelType('Bs', 'B1'), 'Bft': BahnhofLabelType('Bft', 'BHalle'), 'Bf': BahnhofLabelType('Bf', 'B'), 'Bst': BahnhofLabelType('Bst', 'Bf'), 'Stw': BahnhofLabelType('Stw', 'Testwerk')},
+            BahnhofLabelType('Gl', 'B2a'):  {'Bs': BahnhofLabelType('Bs', 'B2'), 'Bft': BahnhofLabelType('Bft', 'BHalle'), 'Bf': BahnhofLabelType('Bf', 'B'), 'Bst': BahnhofLabelType('Bst', 'Bf'), 'Stw': BahnhofLabelType('Stw', 'Testwerk')},
+            BahnhofLabelType('Gl', 'B2b'):  {'Bs': BahnhofLabelType('Bs', 'B2'), 'Bft': BahnhofLabelType('Bft', 'BHalle'), 'Bf': BahnhofLabelType('Bf', 'B'), 'Bst': BahnhofLabelType('Bst', 'Bf'), 'Stw': BahnhofLabelType('Stw', 'Testwerk')},
+            BahnhofLabelType('Gl', 'B100'): {'Bs': BahnhofLabelType('Bs', 'B100'), 'Bft': BahnhofLabelType('Bft', 'BFeld'), 'Bf': BahnhofLabelType('Bf', 'B'), 'Bst': BahnhofLabelType('Bst', 'Bf'), 'Stw': BahnhofLabelType('Stw', 'Testwerk')},
+            BahnhofLabelType('Gl', 'B101'): {'Bs': BahnhofLabelType('Bs', 'B101'), 'Bft': BahnhofLabelType('Bft', 'BFeld'), 'Bf': BahnhofLabelType('Bf', 'B'), 'Bst': BahnhofLabelType('Bst', 'Bf'), 'Stw': BahnhofLabelType('Stw', 'Testwerk')},
+        }
+        result = self.graph.gleis_parents()
+        self.assertEqual(result, expected)
+
     def test_replace_parent(self):
         gleis = BahnhofLabelType('Gl', 'A2a')
         old_parent = BahnhofLabelType('Bs', 'A2')

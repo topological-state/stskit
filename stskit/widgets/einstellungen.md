@@ -1,23 +1,15 @@
 # Einstellungen
 
-Die Pluginschnittstelle des Stellwerksim meldet nur Gleisnamen, keine Bahnhöfe.
-stsDispo versucht, Bahnhofsnamen aus den Gleisnamen abzuleiten.
-Das funktioniert jedoch nicht in allen Fällen, 
-weil das Schema von Gleisnamen nicht vorgegeben ist
-und von Stellwerk zu Stellwerk anders gehandhabt wird.
-In diesen Fällen, muss das Gleismodell, insbesondere die Bahnhofszuordnung, manuell bearbeitet werden.
-
-Die hier gemachten Einstellungen werden beim Beenden des Programms in einer Konfigrurationsdatei im JSON-Format gespeichert.
-Die Konfigurationsdatei befindet sich im Home-/User-Verzeichnis unter `.stskit`.
-Der Dateiname entspricht der Anlagennummer im Stellwerksim.
-Die Konfigurationsdateien können nach dem Umbau eines Stellwerks fehlerhaft werden.
-Im Extremfall muss die entsprechende Konfigurationsdatei manuell gelöscht werden.
-
 ## Anschlussstellen und Bahnhöfe
 
-stsDispo verwendet folgendes Gleismodell:
+stsDispo verwendet ein hierarchiches Bahnhofmodell mit vier Ebenen:
 
 ![Gleismodell](docs/bahnhofgraph.png)
+
+Die Pluginschnittstelle des Stellwerksim meldet nur Gleisnamen, aber keine Zuordnung zu Bahnhöfen, etc.
+stsDispo versucht, die Zuordnung aus den Gleisnamen abzuleiten.
+Dies funktioniert nicht in allen Stellwerken zuverlässig,
+weshalb eine manuelle Bereinigung nötig ist.
 
 ### Bahnhofelemente
 
@@ -31,52 +23,50 @@ Die Namen können nicht geändert werden.
 Ein Bahnsteig umfasst ein oder mehrere Gleise (Haltepunkte, Abschnitte, Sektoren).
 Die Gruppierung dient in der Gleisbelegung dazu, eine Warnung anzuzeigen, 
 wenn Züge denselben Bahnsteig belegen und in einer bestimmten Reihenfolge einfahren müssen.
-
 Die automatische Gruppierung erfolgt anhand von Namensregeln.
-Sie muss bei einigen Stellwerken korrigiert werden.
 
 #### Bahnhofteil (Bft)
 
-In einem Bahnhofteil werden die Gleise zusammengefasst, 
+In einem Bahnhofteil werden normalerweise die Gleise zusammengefasst, 
 auf die ein Zug im Funkmenü umgeleitet werden kann.
-
-Der Name des Bahnhofteils erscheint in den Diagrammen nicht und ist daher unwichtig.
-Als Vorgabe wird einer der Bahnsteignamen gewählt. 
+In stsDispo, dienen Bahnhofteile dazu, Gleise gruppenweise ein- oder auszublenden.
+Der Name des Bahnhofteils kann beliebig gewählt werden.
+Als automatische Vorgabe wird einer der Bahnsteignamen gewählt. 
 
 #### Bahnhof (Bf) und Anschlussstelle (Anst)
 
-Bahnhöfe und Anschlussstellen werden an vielen Stellen in stsDispo verwendet
-und bilden die Eckpunkte des Fahrzeitenmodells.
-
+Bahnhöfe und Anschlussstellen werden an vielen Stellen in stsDispo verwendet,
+z.B. bei der Streckendefinition oder der Berechnung von Fahrzeiten.
 stsDispo leitet Bahnhöfe automatisch von Gleisnamen ab.
-Wo dies nicht einwandfrei funktioniert, muss der Fdl das Modell korrigieren.
+Wo dies nicht einwandfrei funktioniert, kann die Zuordnung manuell korrigiert werden.
 
 ### Bearbeitung
 
-Zur Bearbeitung des Gleismodells dienen die folgenden drei Prozeduren.
+Das Bahnhofmodell wird mittels folgender Prozeduren bearbeitet.
 
 #### Zuordnen
 
-Wenn Gleise, Bahnhofteile oder Anschlussgleise zur falschen Gruppe gehören und die Zielgruppe bereits existiert:
+Wenn Gleise (*Elemente*) zu einer falschen übergeordneten Gruppe gehören und die Zielgruppe bereits existiert:
 
-1. Gleise der zuzuordnenden Elemente in der Tabelle auswählen.
-2. Liste im entsprechenden Kombifeld aufklappen und Zielgruppe auswählen.
+1. Zuzuordnenden Elemente in der Gleistabelle auswählen.
+2. Zielgruppe aus der Liste im Kombifeld der entsprechenden Ebene auswählen.
 3. Zugehörigen Knopf *Zuordnen* klicken.
 
 Wenn die Zielgruppe noch nicht existiert, zuerst gemäss Anleitung *Aufteilen* 
-die alte Gruppe auflösen und ggf. die neuen Gruppen umbenennen.
+die alte Gruppe auflösen und ggf. bereinigen.
 
 #### Aufteilen
 
-Wenn Bahnsteige, Bahnhöfe und Anschlussstellen Elemente enthalten, die nicht zusammengehören:
+Wenn Gruppen Elemente enthalten, die nicht zusammengehören:
 
 1. Ein Gleis der aufzuteilenden Gruppe auswählen.
-2. *Neuer Bahnsteig*, *Neuer Bahnhofteil* bzw. *Neue Anschlusstelle* klicken.
-3. Neue Gruppen ggf. umbenennen.
+2. Knopf *Aufteilen* der entsprechenden Gruppenebene klicken.
+3. Neue Gruppen ggf. bereinigen oder umbenennen.
 
 #### Umbenennen
 
-Bahnsteige, Bahnhofteile, Bahnhöfe und Anschlussstellen können umbenannt werden:
+Alle Elemente ausser Gleisen können umbenannt werden.
+Die Auswahl in der Gleistabelle erfolgt jedoch immer nach Gleisen!
 
 1. Ein Gleis das zur umzubenennenden Gruppe gehört auswählen.
 2. Neuen Namen im Editierfeld eintragen.
@@ -89,4 +79,13 @@ Bahnsteige, Bahnhofteile, Bahnhöfe und Anschlussstellen können umbenannt werde
 ## Zugschema
 
 Das Zugschema für das laufende Stellwerk aus der Liste auswählen.
-Die Bearbeitung der Zugschemata ist im Moment nur über Konfigurationsdateien möglich.
+Die Bearbeitung der Zugschemata ist nur über Konfigurationsdateien möglich.
+
+
+## Persistenz
+
+Die hier gemachten Einstellungen werden beim Beenden des Programms in einer Konfigrurationsdatei im JSON-Format gespeichert.
+Die Konfigurationsdatei befindet sich im Home-/User-Verzeichnis unter `.stskit`.
+Der Dateiname entspricht der Anlagennummer im Stellwerksim.
+Die Konfigurationsdateien können nach dem Umbau eines Stellwerks fehlerhaft werden.
+Im Extremfall muss die entsprechende Konfigurationsdatei manuell gelöscht werden.
