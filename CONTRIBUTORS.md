@@ -1,5 +1,17 @@
 # Contributions
 
+## Main Developers
+
+Matthias Muntwiler (topological-state)
+
+## Configuration Files
+
+- Eisenbahnfan2015
+- JanMalte
+- Pianorailways
+- SyselMitY
+- wittjoker
+
 ## Fugue Icons
 
 (C) 2013 Yusuke Kamiyamane. All rights reserved.
