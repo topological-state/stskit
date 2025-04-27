@@ -329,6 +329,9 @@ class BahnhofGraph(nx.DiGraph):
         Der Elternknoten kann existieren oder wird neu erstellt.
         Der alte Knoten wird gelöscht, wenn der Parameter `del_old_parent` auf True gesetzt ist und er keine Kinder mehr hat.
 
+        Hinweis: Es können leere Gruppen zurückbleiben.
+            Am Ende der Bearbeitung daher ggf. leere_gruppen_entfernen aufrufen!
+
         :param gleis: Das Gleis, dessen Elternknoten ersetzt werden soll.
             Kann auch ein Element einer höheren Ebene sein, so lange die Ebene tiefer ist als die von new_parent.
         :param new_parent: Der neue Elternknoten des Gleises.
@@ -672,18 +675,25 @@ class BahnhofGraph(nx.DiGraph):
                 self.add_node(bf, **bf_data)
             self.add_edge(BahnhofElement('Bst', bf.typ), bf, typ='Hierarchie')
 
-        def leere_gruppen_entfernen(typ: str):
+        self.leere_gruppen_entfernen()
+        self.validate()
+
+    def leere_gruppen_entfernen(self):
+        """
+        Gruppen ohne Elemente aus dem Graphen entfernen.
+
+        Bei der Bearbeitung mittels replace_parent kann es vorkommen, dass leere Gruppen (Bahnhöfe etc.) zurückbleiben.
+        Diese Methode räumt sie auf.
+        """
+
+        # die reihenfolge und getrennte behandlung der ebenen ist wichtig:
+        for typ in ['Bs', 'Bft', 'Bf', 'Anst']:
             entfernen = []
             for n in self.nodes():
                 if n.typ == typ and self.out_degree[n] == 0:
                     entfernen.append(n)
             for n in entfernen:
                 self.remove_node(n)
-
-        for t in ['Bs', 'Bft', 'Bf', 'Anst']:
-            leere_gruppen_entfernen(t)
-
-        self.validate()
 
     def validate(self):
         for gl in self.list_by_type({'Gl', 'Agl'}):

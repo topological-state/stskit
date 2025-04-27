@@ -196,6 +196,7 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
         try:
             for gl, new in replace.items():
                 self.bahnhofgraph.replace_parent(gl, new)
+            self.bahnhofgraph.leere_gruppen_entfernen()
         finally:
             self._update()
             self.endResetModel()
@@ -234,7 +235,8 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
         self.beginResetModel()
         try:
             for child, parent in replace.items():
-                self.bahnhofgraph.replace_parent(child, parent, del_old_parent=True)
+                self.bahnhofgraph.replace_parent(child, parent)
+            self.bahnhofgraph.leere_gruppen_entfernen()
         finally:
             self._update()
             self.endResetModel()
