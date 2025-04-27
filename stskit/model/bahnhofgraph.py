@@ -1,4 +1,5 @@
 import logging
+import sys
 from typing import Any, Callable, Dict, Generator, Iterable, List, NamedTuple, Optional, Sequence, Set, Tuple, TypeVar, Union
 
 import networkx as nx
@@ -348,11 +349,12 @@ class BahnhofGraph(nx.DiGraph):
             logger.error(f"Fehler im Bahnhofgraph: Das Gleis {gleis} hat keinen Elternknoten vom Typ {new_parent.typ}!")
             return None
 
-        if new_data is None:
+        if new_data is None and not self.has_node(new_parent):
             new_data = old_data.copy()
-        new_data['name'] = new_parent.name
-        new_data['typ'] = new_parent.typ
-        self.add_node(new_parent, **new_data)
+        if new_data is not None:
+            new_data['name'] = new_parent.name
+            new_data['typ'] = new_parent.typ
+            self.add_node(new_parent, **new_data)
 
         for element in old_path:
             if self.has_edge(old_parent, element):
@@ -363,7 +365,6 @@ class BahnhofGraph(nx.DiGraph):
             if self.has_edge(element, old_parent):
                 data = self.get_edge_data(element, old_parent)
                 self.add_edge(element, new_parent, **data)
-                self.nodes[old_parent]['auto'] = False
 
         if del_old_parent and not any(self.successors(old_parent)):
             self.remove_node(old_parent)
@@ -584,7 +585,7 @@ class BahnhofGraph(nx.DiGraph):
         for agl_label, gleise in agl_gleise.items():
             self.nodes[agl_label]['gleise'] = int(gleise + 0.5)
 
-    def import_konfiguration(self, elemente: Dict):
+    def import_konfiguration(self, elemente: Iterable[Dict[str, Any]]):
         """
         Bahnhofgraph konfigurieren
 
@@ -594,7 +595,8 @@ class BahnhofGraph(nx.DiGraph):
         konfig_graph = BahnhofGraph()
         for e in elemente:
             be2 = BahnhofElement(e['typ'], e['name'])
-            data2 = {"auto": e['auto'], "typ": e['typ'], "name": e['name']}
+            auto = e.get('auto', True)
+            data2 = {"auto": auto, "typ": e['typ'], "name": e['name']}
             if "sichtbar" in e:
                 data2["sichtbar"] = e['sichtbar']
             if "gleise" in e:
@@ -617,8 +619,8 @@ class BahnhofGraph(nx.DiGraph):
                 be1 = BahnhofElement(t, e['stamm'])
             except KeyError:
                 continue
-
-            konfig_graph.add_edge(be1, be2, typ="Hierarchie", auto=e['auto'])
+            else:
+                konfig_graph.add_edge(be1, be2, auto=auto)
 
         # Gl-Daten und Bs/Anst-Elternbeziehung
         for gl in konfig_graph.list_by_type({'Gl', 'Agl'}):
@@ -641,7 +643,7 @@ class BahnhofGraph(nx.DiGraph):
                 self.add_node(bs, **bs_data)
             try:
                 bft_neu = konfig_graph.find_superior(bs, {'Bft'})
-                gl = next(konfig_graph.list_children(bft_neu, {'Gl'}))
+                gl = next(konfig_graph.list_children(bs, {'Gl'}))
                 bft_alt = self.find_superior(gl, {'Bft'})
             except (KeyError, StopIteration):
                 pass
@@ -656,7 +658,7 @@ class BahnhofGraph(nx.DiGraph):
                 self.add_node(bft, **bft_data)
             try:
                 bf_neu = konfig_graph.find_superior(bft, {'Bf'})
-                gl = next(konfig_graph.list_children(bf_neu, {'Gl'}))
+                gl = next(konfig_graph.list_children(bft, {'Gl'}))
                 bf_alt = self.find_superior(gl, {'Bf'})
             except (KeyError, StopIteration):
                 pass
@@ -718,7 +720,7 @@ class BahnhofGraph(nx.DiGraph):
             data2: BahnsteigGraphNode = self.nodes[e2]
             element = {'name': e2.name,
                        'typ': e2.typ,
-                       'auto': data2.auto and data1.auto,
+                       'auto': data2.auto,
                        'sichtbar': True,
                        'flags': ''}
             if e1.typ != 'Bst':

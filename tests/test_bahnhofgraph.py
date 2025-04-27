@@ -2,6 +2,9 @@ import unittest
 
 from stskit.model.bahnhofgraph import BahnhofLabelType, BahnsteigGraphNode, BahnhofGraph
 
+BLT = BahnhofLabelType
+
+
 class TestBahnhofGraph(unittest.TestCase):
     def setUp(self):
         self.graph = BahnhofGraph()
@@ -61,6 +64,98 @@ class TestBahnhofGraph(unittest.TestCase):
         self.graph.add_edge(BahnhofLabelType('Bst', 'Bf'), BahnhofLabelType('Bf', 'A'), typ='Hierarchie')
         self.graph.add_edge(BahnhofLabelType('Bst', 'Bf'), BahnhofLabelType('Bf', 'B'), typ='Hierarchie')
         self.graph.add_edge(BahnhofLabelType('Stw', 'Testwerk'), BahnhofLabelType('Bst', 'Bf'), typ='Hierarchie')
+
+    def test_import_konfiguration_1(self):
+        """
+        Test: Bft AFeld Bahnhof B zuordnen
+        """
+
+        elemente = [
+            {"name": "A101", "typ": "Gl", "stamm": "A101"},
+            {"name": "A101", "typ": "Bs", "stamm": "AFeld"},
+            {"name": "AFeld", "typ": "Bft", "stamm": "B", "auto": False},
+            {"name": "B", "typ": "Bf"},
+        ]
+        self.graph.import_konfiguration(elemente)
+
+        self.assertTrue(self.graph.has_edge(BLT("Bf", "B"), BLT("Bft", "AFeld")), "B -> AFeld")
+        self.assertTrue(self.graph.has_edge(BLT("Bft", "AFeld"), BLT("Bs", "A101")), "AFeld -> A101")
+        self.assertTrue(self.graph.has_edge(BLT("Bs", "A101"), BLT("Gl", "A101")), "A101 -> A101")
+        self.assertFalse(self.graph.has_edge(BLT("Bf", "A"), BLT("Bft", "AFeld")), "A -> AFeld")
+
+        self.assertFalse(self.graph.nodes[BLT("Bft", "AFeld")]["auto"], "AFeld.auto")
+        self.assertTrue(self.graph.nodes[BLT("Bf", "A")]["auto"], "A.auto")  # this fails but shouldn't
+        self.assertTrue(self.graph.nodes[BLT("Bf", "B")]["auto"], "B.auto")
+        self.assertTrue(self.graph.nodes[BLT("Bs", "A101")]["auto"], "A101.auto")
+
+    def test_import_konfiguration_2(self):
+        """
+        Test: Bft AHalle in Bft ANeu umbenennen
+        """
+
+        elemente = [
+            {"name": "A1a", "typ": "Gl", "stamm": "A1"},
+            {"name": "A1b", "typ": "Gl", "stamm": "A1"},
+            {"name": "A2a", "typ": "Gl", "stamm": "A2"},
+            {"name": "A2b", "typ": "Gl", "stamm": "A2"},
+            {"name": "A1", "typ": "Bs", "stamm": "ANeu", "auto": False},
+            {"name": "A2", "typ": "Bs", "stamm": "ANeu", "auto": False},
+            {"name": "ANeu", "typ": "Bft", "stamm": "A", "auto": False},
+            {"name": "A", "typ": "Bf"},
+        ]
+        self.graph.import_konfiguration(elemente)
+
+        self.assertTrue(self.graph.has_node(BLT("Bft", "ANeu")), "ANeu")
+        self.assertFalse(self.graph.has_node(BLT("Bft", "AHalle")), "AHalle")
+
+        self.assertTrue(self.graph.has_edge(BLT("Bf", "A"), BLT("Bft", "ANeu")), "A -> ANeu")
+        self.assertTrue(self.graph.has_edge(BLT("Bft", "ANeu"), BLT("Bs", "A1")), "ANeu -> A1")
+        self.assertTrue(self.graph.has_edge(BLT("Bft", "ANeu"), BLT("Bs", "A2")), "ANeu -> A2")
+        self.assertTrue(self.graph.has_edge(BLT("Bs", "A1"), BLT("Gl", "A1a")), "A1 -> A1a")
+        self.assertTrue(self.graph.has_edge(BLT("Bs", "A1"), BLT("Gl", "A1b")), "A1 -> A1b")
+        self.assertTrue(self.graph.has_edge(BLT("Bs", "A2"), BLT("Gl", "A2a")), "A2 -> A2a")
+        self.assertTrue(self.graph.has_edge(BLT("Bs", "A2"), BLT("Gl", "A2b")), "A2 -> A2b")
+
+        self.assertTrue(self.graph.nodes[BLT("Bf", "A")]["auto"], "A.auto")
+        self.assertTrue(self.graph.nodes[BLT("Bf", "B")]["auto"], "B.auto")
+        self.assertFalse(self.graph.nodes[BLT("Bft", "ANeu")]["auto"], "ANeu.auto")
+        self.assertFalse(self.graph.nodes[BLT("Bs", "A1")]["auto"], "A1.auto")
+        self.assertFalse(self.graph.nodes[BLT("Bs", "A2")]["auto"], "A2.auto")
+        self.assertTrue(self.graph.nodes[BLT("Gl", "A1a")]["auto"], "A1a.auto")
+        self.assertTrue(self.graph.nodes[BLT("Gl", "A1b")]["auto"], "A1b.auto")
+        self.assertTrue(self.graph.nodes[BLT("Gl", "A2a")]["auto"], "A2a.auto")
+        self.assertTrue(self.graph.nodes[BLT("Gl", "A2b")]["auto"], "A2b.auto")
+
+    def test_export_konfiguration(self):
+        results = self.graph.export_konfiguration()
+        elements = {BLT(e['typ'], e['name']): e for e in results}
+        expected = {BLT('Gl', 'A1a'),
+                    BLT('Gl', 'A1b'),
+                    BLT('Gl', 'A2a'),
+                    BLT('Gl', 'A2b'),
+                    BLT('Gl', 'A100'),
+                    BLT('Gl', 'A101'),
+                    BLT('Gl', 'B1a'),
+                    BLT('Gl', 'B1b'),
+                    BLT('Gl', 'B2a'),
+                    BLT('Gl', 'B2b'),
+                    BLT('Gl', 'B100'),
+                    BLT('Gl', 'B101'),
+                    BLT('Bs', 'A1'),
+                    BLT('Bs', 'A2'),
+                    BLT('Bs', 'A100'),
+                    BLT('Bs', 'A101'),
+                    BLT('Bs', 'B1'),
+                    BLT('Bs', 'B2'),
+                    BLT('Bs', 'B100'),
+                    BLT('Bs', 'B101'),
+                    BLT('Bft', 'AHalle'),
+                    BLT('Bft', 'AFeld'),
+                    BLT('Bft', 'BHalle'),
+                    BLT('Bft', 'BFeld'),
+                    BLT('Bf', 'A'),
+                    BLT('Bf', 'B')}
+        self.assertEqual(set(elements.keys()), expected)
 
     def test_list_parents_no_ancestors(self):
         label = BahnhofLabelType("Stw", "Testwerk")
