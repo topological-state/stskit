@@ -289,8 +289,8 @@ class BildfahrplanPlot:
             self.bildgraph.add_node(ereignis_label, **d)
 
         self.bildgraph.clear()
-        t0 = self.zeit - self.nachlaufzeit
-        t1 = self.zeit + self.vorlaufzeit
+        t0 = self.zeit - self.nachlaufzeit - 10
+        t1 = self.zeit + self.vorlaufzeit + 10
 
         strecke = set(self.strecke)
 
