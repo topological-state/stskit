@@ -1,10 +1,43 @@
+# Python bytecode
+*.py[co]
+
+# Cache
+__pycache__/
+
+# Linux Editors
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+.\#*
+*.swp
+*.swo
+
+# Mac
+.DS_Store
+._*
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# PyCharm
 .idea/
+
+# VirtualEnv
+env/
+venv/
 
 .ipynb*/
 patch/
 research/
 varianten/
 icons/
+
+# Packaging files
 build/
 dist/
 
