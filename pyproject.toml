@@ -1,0 +1,19 @@
+[project]
+name = "stskit"
+version = "2.0.0"
+description = "stskit - graphical timetables plugin for Stellwerksim"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "icecream>=2.1.4",
+    "jsonschema>=4.23.0",
+    "matplotlib>=3.10.1",
+    "mock>=5.2.0",
+    "netgraph>=4.13.2",
+    "networkx>=3.4.2",
+    "numpy>=2.2.5",
+    "pyqt5>=5.15.11",
+    "qtrio>=0.7.0",
+    "trio>=0.30.0",
+    "untangle>=1.2.1",
+]
