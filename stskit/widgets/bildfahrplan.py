@@ -27,7 +27,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         self.zentrale = zentrale
-        self.zentrale.anlage_update.register(self.update_anlage)
+        self.zentrale.anlage_update.register(self.anlage_update)
         self.zentrale.plan_update.register(self.plan_update)
         self.zentrale.betrieb_update.register(self.plan_update)
         self.updating = True
@@ -76,8 +76,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.plot.auswahl_geaendert.register(self.plot_selection_changed)
 
         self.plot.default_strecke_waehlen()
-        self.update_anlage()
-        self.update_actions()
+        self.anlage_update()
+        self.plan_update()
         self.updating = False
 
     @property
@@ -88,29 +88,33 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     def client(self) -> PluginClient:
         return self.zentrale.client
 
-    def update_actions(self):
-        self.updating = True
-
-        display_mode = self.ui.stackedWidget.currentIndex() == 1
-        trasse_auswahl = len(self.plot.auswahl_kanten) >= 1
-        trasse_nachbar = None
-
-        self.ui.actionSetup.setEnabled(display_mode)
-        self.ui.actionAnzeige.setEnabled(not display_mode and len(self.plot.strecke) >= 2)
-        self.ui.actionFix.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionLoeschen.setEnabled(display_mode and trasse_auswahl)
-        self.ui.actionPlusEins.setEnabled(display_mode and trasse_auswahl)
-        self.ui.actionMinusEins.setEnabled(display_mode and trasse_auswahl)
-        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and self.kann_abfahrt_abwarten() is not None)
-        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and self.kann_ankunft_abwarten() is not None)
-
-        self.updating = False
-
-    def update_anlage(self, *args, **kwargs):
+    def anlage_update(self, *args, **kwargs):
         """
-        Widget-Inhalte nach Anlagenupdate aktualisieren.
+        Anlagenupdate
 
+        Bei einem Anlagenupdate können geändert werden:
+        - Bahnhofmodell und Streckendefinition
+        - Zugschema
+        """
 
+        self.plot.update_strecke()
+        self.update_widgets()
+
+    def plan_update(self, *args, **kwargs):
+        self.daten_update()
+        self.grafik_update()
+        self.update_actions()
+
+    def daten_update(self):
+        self.plot.zeit = time_to_minutes(self.client.calc_simzeit())
+        self.plot.update_ereignisgraph()
+
+    def grafik_update(self):
+        self.plot.draw_graph()
+
+    def update_widgets(self):
+        """
+        Widget-Zustände gemäss Plotattributen aktualisieren.
         """
 
         self.updating = True
@@ -125,16 +129,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.nach_model.setStringList(bst_liste)
         self.vordefiniert_model.setStringList(["", *strecken_liste])
 
-        self.updating = False
-        self.update_widgets()
-
-    def update_widgets(self):
-        """
-        Widget-Zustände gemäss Plotattributen aktualisieren.
-        """
-
-        self.updating = True
-
         name = self.plot.strecken_name
         von = self.plot.strecke_von
         via = self.plot.strecke_via
@@ -145,15 +139,15 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         except ValueError:
             pass
         try:
-            self.ui.von_combo.setCurrentIndex(self.vordefiniert_model.stringList().index(str(von)))
+            self.ui.von_combo.setCurrentIndex(self.von_model.stringList().index(str(von)))
         except ValueError:
             pass
         try:
-            self.ui.via_combo.setCurrentIndex(self.vordefiniert_model.stringList().index(str(via)))
+            self.ui.via_combo.setCurrentIndex(self.via_model.stringList().index(str(via)))
         except ValueError:
             pass
         try:
-            self.ui.nach_combo.setCurrentIndex(self.vordefiniert_model.stringList().index(str(nach)))
+            self.ui.nach_combo.setCurrentIndex(self.nach_model.stringList().index(str(nach)))
         except ValueError:
             pass
 
@@ -178,6 +172,24 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.ui.name_button.setChecked(True)
         else:
             self.ui.nummer_button.setChecked(True)
+
+        self.updating = False
+
+    def update_actions(self):
+        self.updating = True
+
+        display_mode = self.ui.stackedWidget.currentIndex() == 1
+        trasse_auswahl = len(self.plot.auswahl_kanten) >= 1
+        trasse_nachbar = None
+
+        self.ui.actionSetup.setEnabled(display_mode)
+        self.ui.actionAnzeige.setEnabled(not display_mode and len(self.plot.strecke) >= 2)
+        self.ui.actionFix.setEnabled(display_mode and False)  # not implemented
+        self.ui.actionLoeschen.setEnabled(display_mode and trasse_auswahl)
+        self.ui.actionPlusEins.setEnabled(display_mode and trasse_auswahl)
+        self.ui.actionMinusEins.setEnabled(display_mode and trasse_auswahl)
+        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and self.kann_abfahrt_abwarten() is not None)
+        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and self.kann_ankunft_abwarten() is not None)
 
         self.updating = False
 
@@ -253,23 +265,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.plot.nachlaufzeit = self.ui.nachlaufzeit_spin.value()
         except ValueError:
             pass
-
-    def plan_update(self, *args, **kwargs):
-        if self.ui.von_combo.count() == 0:
-            self.update_widgets()
-        if self.plot.strecke_von and self.plot.strecke_nach:
-            self.plot.update_strecke()
-            self.daten_update()
-            self.grafik_update()
-            self.update_actions()
-
-    def daten_update(self):
-        self.plot.zeit = time_to_minutes(self.client.calc_simzeit())
-        self.plot.update_ereignisgraph()
-
-    def grafik_update(self):
-        self.plot.zeit = time_to_minutes(self.client.calc_simzeit())
-        self.plot.draw_graph()
 
     def plot_selection_changed(self, *args, **kwargs):
         text = "\n".join(self.plot.auswahl_text)
