@@ -6,6 +6,7 @@ dieses modul ist in entwicklung.
 
 import logging
 import math
+import sys
 from typing import Callable, Iterable, Optional
 
 import matplotlib as mpl
@@ -441,13 +442,13 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
             # if self.anlage.signalgraph and not self.signal_diagramm.netgraph:
             #     self.signal_diagramm.draw_graph(self.anlage.signalgraph, self.anlage.bahnsteiggraph)
 
-            if self.anlage.bahnhofgraph and not self.bahnhof_diagramm.netgraph:
+            if self.anlage.bahnhofgraph:
                 self.bahnhof_diagramm.draw_graph(self.anlage.bahnhofgraph)
 
-            if self.anlage.liniengraph and not self.linien_diagramm.netgraph:
+            if self.anlage.liniengraph:
                 self.linien_diagramm.draw_graph(self.anlage.liniengraph)
         except AttributeError as e:
-            print(e)
+            print("Fehler in Gleisnetz.anlage_update:", e, file=sys.stderr)
 
     @pyqtSlot()
     def on_signal_aktualisieren_button_clicked(self):
