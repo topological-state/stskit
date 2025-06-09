@@ -10,9 +10,9 @@ from typing import AbstractSet, Any, Dict, Iterable, List, Optional, Sequence, S
 
 import networkx as nx
 
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtCore import QModelIndex
+from PySide6 import QtCore, QtWidgets
+from PySide6.QtCore import Slot
+from PySide6.QtCore import QModelIndex
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BahnhofElement

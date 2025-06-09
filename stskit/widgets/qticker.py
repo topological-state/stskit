@@ -11,8 +11,8 @@ import copy
 import logging
 from typing import Any, List
 
-from PyQt5 import Qt, QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QModelIndex
+from PySide6 import Qt, QtCore, QtGui, QtWidgets
+from PySide6.QtCore import QModelIndex
 
 from stskit.plugin.stsobj import Ereignis
 from stskit.zentrale import DatenZentrale

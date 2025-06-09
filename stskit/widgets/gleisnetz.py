@@ -15,8 +15,8 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import networkx as nx
 import netgraph
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import pyqtSlot
+from PySide6 import QtCore, QtWidgets
+from PySide6.QtCore import Slot
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BahnhofGraph
@@ -450,7 +450,7 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
         except AttributeError as e:
             print("Fehler in Gleisnetz.anlage_update:", e, file=sys.stderr)
 
-    @pyqtSlot()
+    @Slot()
     def on_signal_aktualisieren_button_clicked(self):
         filters = []
 
@@ -471,7 +471,7 @@ class GleisnetzWindow(QtWidgets.QMainWindow):
 
         self.signal_diagramm.draw_graph(self.anlage.signalgraph, self.anlage.bahnsteiggraph, filters=filters)
 
-    @pyqtSlot()
+    @Slot()
     def on_linie_aktualisieren_button_clicked(self):
         filters = []
 

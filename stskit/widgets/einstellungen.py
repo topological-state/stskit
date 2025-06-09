@@ -9,8 +9,8 @@ import logging
 import os
 from pathlib import Path
 
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import pyqtSlot
+from PySide6 import QtWidgets
+from PySide6.QtCore import Slot
 
 from stskit.model.zugschema import Zugschema, ZugschemaBearbeitungModell
 from stskit.dispo.anlage import Anlage
@@ -79,7 +79,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
         self.ui.zugschema_details_table.resizeColumnsToContents()
         self.ui.zugschema_details_table.resizeRowsToContents()
 
-    @pyqtSlot()
+    @Slot()
     def zugschema_changed(self):
         if self.in_update:
             return
@@ -98,24 +98,24 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
             self.ui.zugschema_details_table.resizeColumnsToContents()
             self.ui.zugschema_details_table.resizeRowsToContents()
 
-    @pyqtSlot()
+    @Slot()
     def apply(self):
         self.bahnhof_editor.apply()
         self.anlage.zugschema.load_config(self.zugschema.name, self.anlage.anlageninfo.region)
         self.zentrale.notify_anlage({'zugschema', 'bahnhofgraph'})
 
-    @pyqtSlot()
+    @Slot()
     def accept(self):
         self.apply()
         self.close()
 
-    @pyqtSlot()
+    @Slot()
     def reset(self):
         self.bahnhof_editor.reset()
         self.zugschema.load_config(self.anlage.zugschema.name)
         self.zugschema_modell.update()
 
-    @pyqtSlot()
+    @Slot()
     def reject(self):
         self.reset()
         self.close()

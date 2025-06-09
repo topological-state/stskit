@@ -3,8 +3,8 @@ import logging
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
 import networkx as nx
-from PyQt5 import Qt, QtCore, QtWidgets
-from PyQt5.QtCore import pyqtSlot, QAbstractTableModel, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QStringListModel, QObject
+from PySide6 import Qt, QtCore, QtWidgets
+from PySide6.QtCore import Slot, QAbstractTableModel, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QStringListModel, QObject
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement, BahnsteigGraphNode, BahnsteigGraphEdge
@@ -511,7 +511,7 @@ class BahnhofEditor(QObject):
         else:
             return None
 
-    @pyqtSlot('QItemSelection', 'QItemSelection')
+    @Slot('QItemSelection', 'QItemSelection')
     def gl_selection_changed(self, selected, deselected):
         selection = self.get_gl_selection()
         new = selection - self.gl_last_selection
@@ -542,7 +542,7 @@ class BahnhofEditor(QObject):
 
         self.update_gl_widget_states()
 
-    @pyqtSlot('QItemSelection', 'QItemSelection')
+    @Slot('QItemSelection', 'QItemSelection')
     def agl_selection_changed(self, selected, deselected):
         selection = self.get_agl_selection()
         new = selection - self.agl_last_selection
@@ -688,107 +688,107 @@ class BahnhofEditor(QObject):
         if table_model.rename_element(level, old, new):
             self.update_widgets()
 
-    @pyqtSlot()
+    @Slot()
     def table_model_changed(self):
         self.update_widgets()
 
-    @pyqtSlot()
+    @Slot()
     def bf_group_button_clicked(self):
         self.group_elements('Bf', self.ui.bf_combo.currentText())
 
-    @pyqtSlot()
+    @Slot()
     def bft_group_button_clicked(self):
         self.group_elements('Bft', self.ui.bft_combo.currentText())
 
-    @pyqtSlot()
+    @Slot()
     def bs_group_button_clicked(self):
         self.group_elements('Bs', self.ui.bs_combo.currentText())
 
-    @pyqtSlot()
+    @Slot()
     def bf_ungroup_button_clicked(self):
         self.ungroup_element('Bf')
 
-    @pyqtSlot()
+    @Slot()
     def bft_ungroup_button_clicked(self):
         self.ungroup_element('Bft')
 
-    @pyqtSlot()
+    @Slot()
     def bs_ungroup_button_clicked(self):
         self.ungroup_element('Bs')
 
-    @pyqtSlot()
+    @Slot()
     def bf_rename_button_clicked(self):
         self.rename_element('Bf', self.ui.bf_combo)
 
-    @pyqtSlot()
+    @Slot()
     def bft_rename_button_clicked(self):
         self.rename_element('Bft', self.ui.bft_combo)
 
-    @pyqtSlot()
+    @Slot()
     def bs_rename_button_clicked(self):
         self.rename_element('Bs', self.ui.bs_combo)
 
-    @pyqtSlot()
+    @Slot()
     def bf_combo_index_changed(self):
         self.update_gl_widget_states()
 
-    @pyqtSlot()
+    @Slot()
     def bft_combo_index_changed(self):
         self.update_gl_widget_states()
 
-    @pyqtSlot()
+    @Slot()
     def bs_combo_index_changed(self):
         self.update_gl_widget_states()
 
-    @pyqtSlot()
+    @Slot()
     def gl_combo_index_changed(self):
         self.update_gl_widget_states()
 
-    @pyqtSlot()
+    @Slot()
     def bf_combo_text_changed(self):
         self.update_gl_widget_states()
 
-    @pyqtSlot()
+    @Slot()
     def bft_combo_text_changed(self):
         self.update_gl_widget_states()
 
-    @pyqtSlot()
+    @Slot()
     def bs_combo_text_changed(self):
         self.update_gl_widget_states()
 
-    @pyqtSlot()
+    @Slot()
     def gl_combo_text_changed(self):
         self.update_gl_widget_states()
 
-    @pyqtSlot()
+    @Slot()
     def anst_group_button_clicked(self):
         self.group_elements('Anst', self.ui.anst_combo.currentText())
 
-    @pyqtSlot()
+    @Slot()
     def anst_ungroup_button_clicked(self):
         self.ungroup_element('Anst')
 
-    @pyqtSlot()
+    @Slot()
     def anst_rename_button_clicked(self):
         self.rename_element('Anst', self.ui.anst_combo)
 
-    @pyqtSlot()
+    @Slot()
     def anst_combo_index_changed(self):
         self.update_agl_widget_states()
 
-    @pyqtSlot()
+    @Slot()
     def agl_combo_index_changed(self):
         self.update_agl_widget_states()
 
-    @pyqtSlot()
+    @Slot()
     def anst_combo_text_changed(self):
         self.update_agl_widget_states()
 
-    @pyqtSlot()
+    @Slot()
     def agl_combo_text_changed(self):
         self.update_agl_widget_states()
 
-    @pyqtSlot()
+    @Slot()
     def gl_filter_button_clicked(self):
         self.gl_table_filter.beginResetModel()
         try:
@@ -798,7 +798,7 @@ class BahnhofEditor(QObject):
         self.ui.gl_table_view.resizeColumnsToContents()
         self.ui.gl_table_view.resizeRowsToContents()
 
-    @pyqtSlot()
+    @Slot()
     def gl_unfilter_button_clicked(self):
         self.gl_table_filter.beginResetModel()
         try:
@@ -808,7 +808,7 @@ class BahnhofEditor(QObject):
         self.ui.gl_table_view.resizeColumnsToContents()
         self.ui.gl_table_view.resizeRowsToContents()
 
-    @pyqtSlot()
+    @Slot()
     def agl_filter_button_clicked(self):
         self.agl_table_filter.beginResetModel()
         try:
@@ -818,7 +818,7 @@ class BahnhofEditor(QObject):
         self.ui.agl_table_view.resizeColumnsToContents()
         self.ui.agl_table_view.resizeRowsToContents()
 
-    @pyqtSlot()
+    @Slot()
     def gl_unfilter_button_clicked(self):
         self.agl_table_filter.beginResetModel()
         try:
@@ -828,10 +828,10 @@ class BahnhofEditor(QObject):
         self.ui.agl_table_view.resizeColumnsToContents()
         self.ui.agl_table_view.resizeRowsToContents()
 
-    @pyqtSlot()
+    @Slot()
     def apply_button_clicked(self):
         self.apply()
 
-    @pyqtSlot()
+    @Slot()
     def reset_button_clicked(self):
         self.reset()

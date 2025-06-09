@@ -5,9 +5,9 @@ Qt-Fenster Rangierplan
 from dataclasses import dataclass, field
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
-from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QAbstractTableModel, Qt
-from PyQt5.QtGui import QColor, QKeySequence
-from PyQt5.QtWidgets import QShortcut, QWidget, QAbstractItemView
+from PySide6.QtCore import Slot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QAbstractTableModel, Qt
+from PySide6.QtGui import QColor, QKeySequence, QShortcut
+from PySide6.QtWidgets import QWidget, QAbstractItemView
 
 from stskit.dispo.anlage import Anlage
 from stskit.plugin.stsobj import Ereignis
@@ -956,21 +956,21 @@ class RangierplanWindow(QWidget):
     def plugin_ereignis(self, *args, **kwargs) -> None:
         self.rangiertabelle_modell.plugin_ereignis(kwargs["ereignis"])
 
-    @pyqtSlot()
+    @Slot()
     def vorlaufzeit_changed(self):
         try:
             self.rangiertabelle_sort_filter.vorlaufzeit = self.ui.vorlaufzeit_spin.value()
         except ValueError:
             pass
 
-    @pyqtSlot()
+    @Slot()
     def nachlaufzeit_changed(self):
         try:
             self.rangiertabelle_sort_filter.nachlaufzeit = self.ui.nachlaufzeit_spin.value()
         except ValueError:
             pass
 
-    @pyqtSlot()
+    @Slot()
     def suche_zug_changed(self):
         text = self.ui.suche_zug_edit.text()
         if not text:
@@ -989,7 +989,7 @@ class RangierplanWindow(QWidget):
         else:
             self.ui.zugliste_view.selectionModel().clear()
 
-    @pyqtSlot()
+    @Slot()
     def suche_loeschen_clicked(self):
         self.ui.suche_zug_edit.clear()
 
@@ -1011,7 +1011,7 @@ class RangierplanWindow(QWidget):
 
         return rd
 
-    @pyqtSlot('QItemSelection', 'QItemSelection')
+    @Slot('QItemSelection', 'QItemSelection')
     def zugliste_selection_changed(self, selected, deselected):
         """
         Fahrplan eines angewählten Zuges darstellen.
@@ -1027,14 +1027,14 @@ class RangierplanWindow(QWidget):
             self.ui.fahrplan_view.resizeColumnsToContents()
             self.ui.fahrplan_view.resizeRowsToContents()
 
-    @pyqtSlot()
+    @Slot()
     def toggle_lok_status(self):
         if rd := self.selected_rangiervorgang():
             if rd.lok_zid:
                 rd.lok_status.toggle_status()
                 self.rangiertabelle_modell.emit_changes(ziele=[rd.fid], spalten=['L Status'])
 
-    @pyqtSlot()
+    @Slot()
     def toggle_ersatz_status(self):
         if rd := self.selected_rangiervorgang():
             if rd.ersatzlok_zid:

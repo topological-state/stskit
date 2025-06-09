@@ -2,10 +2,10 @@ import itertools
 import logging
 from typing import Optional, Tuple
 
-from PyQt5.QtCore import pyqtSlot, QStringListModel
+from PySide6.QtCore import Slot, QStringListModel
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from PyQt5 import QtWidgets
+from PySide6 import QtWidgets
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BahnhofElement
@@ -193,7 +193,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         self.updating = False
 
-    @pyqtSlot()
+    @Slot()
     def strecke_selection_changed(self):
         """
         Neue Streckenwahl von Widgets übernehmen.
@@ -233,11 +233,11 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.update_widgets()
             self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def settings_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(0)
 
-    @pyqtSlot()
+    @Slot()
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
         if self.ui.name_button.isChecked():
@@ -248,18 +248,18 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.daten_update()
             self.grafik_update()
 
-    @pyqtSlot()
+    @Slot()
     def page_changed(self):
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def vorlaufzeit_changed(self):
         try:
             self.plot.vorlaufzeit = self.ui.vorlaufzeit_spin.value()
         except ValueError:
             pass
 
-    @pyqtSlot()
+    @Slot()
     def nachlaufzeit_changed(self):
         try:
             self.plot.nachlaufzeit = self.ui.nachlaufzeit_spin.value()
@@ -271,7 +271,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.zuginfoLabel.setText(text)
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_plus_eins(self):
         try:
             ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
@@ -284,7 +284,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_minus_eins(self):
         try:
             ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
@@ -297,7 +297,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_loeschen(self):
         try:
             ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
@@ -310,7 +310,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_abfahrt_abwarten(self):
         """
         Abfahrt des zweiten Zuges abwarten (Anschluss/Kreuzung)
@@ -353,7 +353,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         return ziel, referenz
 
-    @pyqtSlot()
+    @Slot()
     def action_ankunft_abwarten(self):
         """
         Ankunft des zweiten Zuges abwarten (Anschluss/Kreuzung)
@@ -396,7 +396,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         return ziel, referenz
 
-    @pyqtSlot()
+    @Slot()
     def action_betriebshalt_einfuegen(self):
         try:
             ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
@@ -409,7 +409,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_betriebshalt_loeschen(self):
         try:
             ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]

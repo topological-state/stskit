@@ -8,8 +8,8 @@ from typing import Any, Dict, List, Optional
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-from PyQt5 import Qt, QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import pyqtSlot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
+from PySide6 import Qt, QtCore, QtGui, QtWidgets
+from PySide6.QtCore import Slot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
 
 from stskit.dispo.anlage import Anlage
 from stskit.zentrale import DatenZentrale
@@ -616,7 +616,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui.zugliste_view.resizeColumnsToContents()
         self.ui.zugliste_view.resizeRowsToContents()
 
-    @QtCore.pyqtSlot('QItemSelection', 'QItemSelection')
+    @QtCore.Slot('QItemSelection', 'QItemSelection')
     def zugliste_selection_changed(self, selected, deselected):
         """
         fahrplan eines angewählten zuges darstellen.
@@ -678,21 +678,21 @@ class FahrplanWindow(QtWidgets.QWidget):
 
         self.grafik_update()
 
-    @pyqtSlot()
+    @Slot()
     def vorlaufzeit_changed(self):
         try:
             self.zugliste_sort_filter.vorlaufzeit = self.ui.vorlaufzeit_spin.value()
         except ValueError:
             pass
 
-    @pyqtSlot()
+    @Slot()
     def nachlaufzeit_changed(self):
         try:
             self.zugliste_sort_filter.nachlaufzeit = self.ui.nachlaufzeit_spin.value()
         except ValueError:
             pass
 
-    @pyqtSlot()
+    @Slot()
     def suche_zug_changed(self):
         text = self.ui.suche_zug_edit.text()
         if not text:
@@ -711,6 +711,6 @@ class FahrplanWindow(QtWidgets.QWidget):
         else:
             self.ui.zugliste_view.selectionModel().clear()
 
-    @pyqtSlot()
+    @Slot()
     def suche_loeschen_clicked(self):
         self.ui.suche_zug_edit.clear()

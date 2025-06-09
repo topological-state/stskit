@@ -12,8 +12,8 @@ from matplotlib.image import AxesImage
 from matplotlib.text import Text
 import numpy as np
 
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import pyqtSlot
+from PySide6 import QtWidgets
+from PySide6.QtCore import Slot
 
 from stskit.model.ereignisgraph import EreignisGraphEdge, EreignisGraphNode
 from stskit.plots.anschlussmatrix import Anschlussmatrix, \
@@ -170,7 +170,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.in_update = False
 
-    @pyqtSlot()
+    @Slot()
     def bahnhof_changed(self):
         try:
             self.anschlussmatrix.set_bahnhof(self.zentrale.anlage.bahnhofgraph.find_name(self.ui.bahnhofBox.currentText()))
@@ -178,26 +178,26 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         except (AttributeError, KeyError):
             self.setWindowTitle("Anschlussmatrix (ungültiger Bahnhof)")
 
-    @pyqtSlot()
+    @Slot()
     def umsteigezeit_changed(self):
         try:
             self.anschlussmatrix.umsteigezeit = self.ui.umsteigezeitSpin.value()
         except ValueError:
             pass
 
-    @pyqtSlot()
+    @Slot()
     def anschlusszeit_changed(self):
         try:
             self.anschlussmatrix.anschlusszeit = self.ui.anschlusszeitSpin.value()
         except ValueError:
             pass
 
-    @pyqtSlot()
+    @Slot()
     def settings_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(0)
         self.update_widgets()
 
-    @pyqtSlot()
+    @Slot()
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.anschlussmatrix.ankunft_filter_kategorien = self.ankunft_filter_modell.auswahl
@@ -208,7 +208,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
             self.daten_update()
             self.grafik_update()
 
-    @pyqtSlot()
+    @Slot()
     def page_changed(self):
         self.update_actions()
 
@@ -323,7 +323,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         s = "\n".join(info)
         self.ui.zuginfoLabel.setText(s)
 
-    @pyqtSlot()
+    @Slot()
     def action_ankunft_abwarten(self):
         for zid_ab, zid_an in self.anschlussmatrix.anschluss_auswahl:
             if zid_an < 0:
@@ -350,7 +350,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_abfahrt_abwarten(self):
         for zid_ab, zid_an in self.anschlussmatrix.anschluss_auswahl:
             if zid_an < 0:
@@ -385,7 +385,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_anschluss_aufgeben(self):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         self.anschlussmatrix.anschluss_aufgabe.update(auswahl)
@@ -400,7 +400,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_anschluss_reset(self):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         self.anschlussmatrix.anschluss_aufgabe.difference_update(auswahl)
@@ -415,7 +415,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_plus_eins(self):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         for zid_ab, zid_an in auswahl:
@@ -425,7 +425,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_minus_eins(self):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         for zid_ab, zid_an in auswahl:
@@ -435,7 +435,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_zug_ausblenden(self):
         for zid_ab, zid_an in self.anschlussmatrix.anschluss_auswahl:
             if zid_ab:
@@ -448,7 +448,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_zug_einblenden(self):
         self.anschlussmatrix.ankuenfte_ausblenden.clear()
         self.anschlussmatrix.abfahrten_ausblenden.clear()

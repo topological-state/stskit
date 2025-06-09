@@ -1,7 +1,7 @@
 import logging
 
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import pyqtSlot
+from PySide6 import QtWidgets
+from PySide6.QtCore import Slot
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -105,14 +105,14 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         except AttributeError:
             pass
 
-    @pyqtSlot()
+    @Slot()
     def vorlaufzeit_changed(self):
         try:
             self.plot.vorlaufzeit = self.ui.vorlaufzeit_spin.value()
         except ValueError:
             pass
 
-    @pyqtSlot()
+    @Slot()
     def nachlaufzeit_changed(self):
         try:
             self.plot.nachlaufzeit = self.ui.nachlaufzeit_spin.value()
@@ -157,7 +157,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.zuginfoLabel.setText(text)
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def settings_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(0)
         self.ui.gleisView.expandAll()
@@ -165,7 +165,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.gleisauswahl.set_auswahl(self.plot.belegung.gleise)
         self.update_widgets()
 
-    @pyqtSlot()
+    @Slot()
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.plot.belegung.gleise_auswaehlen(self.gleisauswahl.get_auswahl())
@@ -179,17 +179,17 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.plot.grafik_update()
 
-    @pyqtSlot()
+    @Slot()
     def page_changed(self):
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_belegte_gleise(self):
         self.plot.belegte_gleise_zeigen = not self.plot.belegte_gleise_zeigen
         self.plot.grafik_update()
         self.update_actions()
 
-    @pyqtSlot()
+    @Slot()
     def action_plus_eins(self):
         try:
             ziel = self.plot._slot_auswahl[0].fid
@@ -198,7 +198,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.zentrale.betrieb.wartezeit_aendern(ziel, 1, True)
 
-    @pyqtSlot()
+    @Slot()
     def action_minus_eins(self):
         try:
             ziel = self.plot._slot_auswahl[0].fid
@@ -207,7 +207,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.zentrale.betrieb.wartezeit_aendern(ziel, -1, True)
 
-    @pyqtSlot()
+    @Slot()
     def action_loeschen(self):
         try:
             ziel = self.plot._slot_auswahl[0].fid
@@ -216,7 +216,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.zentrale.betrieb.abfahrt_zuruecksetzen(ziel)
 
-    @pyqtSlot()
+    @Slot()
     def action_abfahrt_abwarten(self):
         try:
             ziel = self.plot._slot_auswahl[0].fid
@@ -226,7 +226,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.zentrale.betrieb.abfahrt_abwarten(ziel, referenz)
 
-    @pyqtSlot()
+    @Slot()
     def action_ankunft_abwarten(self):
         try:
             ziel = self.plot._slot_auswahl[0].fid
@@ -236,14 +236,14 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.zentrale.betrieb.ankunft_abwarten(ziel, referenz)
 
-    @pyqtSlot()
+    @Slot()
     def action_warnung_ignorieren(self):
         pass
 
-    @pyqtSlot()
+    @Slot()
     def action_warnung_setzen(self):
         pass
 
-    @pyqtSlot()
+    @Slot()
     def action_warnung_reset(self):
         pass

@@ -15,8 +15,8 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Sequence
 
 import matplotlib.style
-from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtCore import pyqtSlot
+from PySide6 import QtCore, QtWidgets, QtGui
+from PySide6.QtCore import Slot
 import trio
 import qtrio
 
@@ -80,7 +80,7 @@ def setup_logging(filename: Optional[str] = "", level: Optional[str] = "ERROR", 
 
     # special modules
     logging.getLogger('matplotlib').setLevel(max(numeric_level, logging.WARNING))
-    logging.getLogger('PyQt5.uic.uiparser').setLevel(max(numeric_level, logging.WARNING))
+    logging.getLogger('PySide6.uic.uiparser').setLevel(max(numeric_level, logging.WARNING))
     if not log_comm:
         logging.getLogger('stskit.plugin.stsplugin').setLevel(logging.WARNING)
 
@@ -95,7 +95,7 @@ class WindowManager:
         window.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         window.destroyed.connect(functools.partial(self.on_window_destroyed, key))
 
-    @pyqtSlot()
+    @Slot()
     def on_window_destroyed(self, key):
         try:
             del self.windows[key]
@@ -255,7 +255,7 @@ class MainWindow(QtWidgets.QMainWindow):
         window.show()
         self.windows.add(window)
 
-    @pyqtSlot()
+    @Slot()
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         """Detect close events and emit the ``closed`` signal."""
 

@@ -17,8 +17,8 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
 
 import matplotlib as mpl
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import QModelIndex
+from PySide6 import QtCore, QtGui
+from PySide6.QtCore import QModelIndex
 
 from stskit.model.ereignisgraph import EreignisGraphNode
 from stskit.model.zielgraph import ZielGraphNode
