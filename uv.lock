@@ -12,15 +12,6 @@ wheels = [
 ]
 
 [[package]]
-name = "async-generator"
-version = "1.10"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ce/b6/6fa6b3b598a03cba5e80f829e0dadbb49d7645f523d209b2fb7ea0bbb02a/async_generator-1.10.tar.gz", hash = "sha256:6ebb3d106c12920aaae42ccb6f787ef5eefdcdd166ea3d628fa8476abe712144", size = 29870, upload-time = "2018-08-01T03:36:21.69Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/71/52/39d20e03abd0ac9159c162ec24b93fbcaa111e8400308f2465432495ca2b/async_generator-1.10-py3-none-any.whl", hash = "sha256:01c7bf666359b4967d2cda0000cc2e4af16a0ae098cbffcb8472fb9e8ad6585b", size = 18857, upload-time = "2018-08-01T03:36:20.029Z" },
-]
-
-[[package]]
 name = "attrs"
 version = "25.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -131,15 +122,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/a9/95/a3dbbb5028f35eafb79008e7522a75244477d2838f38cbb722248dabc2a8/cycler-0.12.1.tar.gz", hash = "sha256:88bb128f02ba341da8ef447245a9e138fae777f6a23943da4540077d3601eb1c", size = 7615, upload-time = "2023-10-07T05:32:18.335Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e7/05/c19819d5e3d95294a6f5947fb9b9629efb316b96de511b418c53d245aae6/cycler-0.12.1-py3-none-any.whl", hash = "sha256:85cef7cff222d8644161529808465972e51340599459b8ac3ccbac5a854e0d30", size = 8321, upload-time = "2023-10-07T05:32:16.783Z" },
-]
-
-[[package]]
-name = "decorator"
-version = "5.2.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/43/fa/6d96a0978d19e17b68d634497769987b16c8f4cd0a7a05048bec693caa6b/decorator-5.2.1.tar.gz", hash = "sha256:65f266143752f734b0a7cc83c46f4618af75b8c5911b00ccb61d0ac9b6da0360", size = 56711, upload-time = "2025-02-24T04:41:34.073Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/4e/8c/f3147f5c4b73e7550fe5f9352eaa956ae838d5c51eb58e7a25b9f3e2643b/decorator-5.2.1-py3-none-any.whl", hash = "sha256:d316bb415a2d9e2d2b3abcc4084c6502fc09240e292cd76a76afc106a1c8e04a", size = 9190, upload-time = "2025-02-24T04:41:32.565Z" },
 ]
 
 [[package]]
@@ -425,15 +407,6 @@ wheels = [
 ]
 
 [[package]]
-name = "mypy-extensions"
-version = "1.1.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/a2/6e/371856a3fb9d31ca8dac321cda606860fa4548858c0cc45d9d1d4ca2628b/mypy_extensions-1.1.0.tar.gz", hash = "sha256:52e68efc3284861e772bbcd66823fde5ae21fd2fdb51c62a211403730b916558", size = 6343, upload-time = "2025-04-22T14:54:24.164Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/79/7b/2c79738432f5c924bef5071f933bcc9efd0473bac3b4aa584a6f7c1c8df8/mypy_extensions-1.1.0-py3-none-any.whl", hash = "sha256:1be4cccdb0f2482337c4743e60421de3a356cd97508abadd57d47403e94f5505", size = 4963, upload-time = "2025-04-22T14:54:22.983Z" },
-]
-
-[[package]]
 name = "netgraph"
 version = "4.13.2"
 source = { registry = "https://pypi.org/simple" }
@@ -706,37 +679,6 @@ wheels = [
 ]
 
 [[package]]
-name = "qtrio"
-version = "0.7.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "async-generator" },
-    { name = "attrs" },
-    { name = "decorator" },
-    { name = "outcome" },
-    { name = "qts" },
-    { name = "trio" },
-    { name = "trio-typing" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/c8/82/2298bfc9a9c03c3434cbd3800c0dc565d6062740bb864b73a649a71a38fc/qtrio-0.7.0.tar.gz", hash = "sha256:98b3553598a057cbf053ed03f701f1be6e5b28647192b79e5a858763991cb974", size = 60443, upload-time = "2023-06-07T15:49:17.571Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/61/f4/efd92132d1a4771fa3c159efc37384a6e9583b8ad84175154854086df894/qtrio-0.7.0-py3-none-any.whl", hash = "sha256:58803879e29fa4260f34c1ce4f0e4521fd25083e5145072bdda4e3b1b5cb99a8", size = 53349, upload-time = "2023-06-07T15:49:15.904Z" },
-]
-
-[[package]]
-name = "qts"
-version = "0.3"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "attrs" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/97/79/a63d3e1c245a60864c7ce2ba98285eabf8c24db77ac78c3709451df9c69b/qts-0.3.tar.gz", hash = "sha256:84c62a445824cab252b64cff66b244f6d130fd2df88cf495c23c77df00024345", size = 26168, upload-time = "2022-11-19T14:17:08.551Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/d2/47/0fd5264ee98331e6558dcd5f98596475f9c961a8ce3509459a0b59d3b35a/qts-0.3-py3-none-any.whl", hash = "sha256:4e041b91daeb02fce0a156889ea3e48fc5e3e3ba8f594cd72b6bd5765720b702", size = 17418, upload-time = "2022-11-19T14:17:05.79Z" },
-]
-
-[[package]]
 name = "rectangle-packer"
 version = "2.0.4"
 source = { registry = "https://pypi.org/simple" }
@@ -1002,7 +944,6 @@ dependencies = [
     { name = "networkx" },
     { name = "numpy" },
     { name = "pyside6" },
-    { name = "qtrio" },
     { name = "trio" },
     { name = "untangle" },
 ]
@@ -1017,7 +958,6 @@ requires-dist = [
     { name = "networkx", specifier = ">=3.4.2" },
     { name = "numpy", specifier = ">=2.2.5" },
     { name = "pyside6", specifier = ">=6.9.1" },
-    { name = "qtrio", specifier = ">=0.7.0" },
     { name = "trio", specifier = ">=0.30.0" },
     { name = "untangle", specifier = ">=1.2.1" },
 ]
@@ -1038,20 +978,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/01/c1/68d582b4d3a1c1f8118e18042464bb12a7c1b75d64d75111b297687041e3/trio-0.30.0.tar.gz", hash = "sha256:0781c857c0c81f8f51e0089929a26b5bb63d57f927728a5586f7e36171f064df", size = 593776, upload-time = "2025-04-21T00:48:19.507Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/69/8e/3f6dfda475ecd940e786defe6df6c500734e686c9cd0a0f8ef6821e9b2f2/trio-0.30.0-py3-none-any.whl", hash = "sha256:3bf4f06b8decf8d3cf00af85f40a89824669e2d033bb32469d34840edcfc22a5", size = 499194, upload-time = "2025-04-21T00:48:17.167Z" },
-]
-
-[[package]]
-name = "trio-typing"
-version = "0.8.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "mypy-extensions" },
-    { name = "trio" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d7/55/a1c1fc3682f05a65219e1003b3949181e0668cab5931f8c239671fe388ef/trio-typing-0.8.0.tar.gz", hash = "sha256:f14264a27b45cec5dabd25b686255ac7d841984200c54b2057bc98a099318a97", size = 38177, upload-time = "2023-03-29T00:24:57.038Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b8/d2/4f7f67142d20b4a403c0ef31edbfaca1895a0551eb82c0183ef6ff4f532e/trio_typing-0.8.0-py3-none-any.whl", hash = "sha256:3734fa3f61cab047fdc97aa0030c72e910455cf85f18ca18c3ff336781b144bb", size = 41376, upload-time = "2023-03-29T00:24:55.01Z" },
 ]
 
 [[package]]
