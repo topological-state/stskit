@@ -342,6 +342,8 @@ class MainWindow(QMainWindow):
             except (AttributeError, OSError) as e:
                 logger.error(e)
 
+        QApplication.quit()
+
 
 class AsyncHelper(QObject):
     """
