@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (QAbstractButton, QAbstractItemView, QApplication,
     QLabel, QMainWindow, QPushButton, QSizePolicy,
     QSpacerItem, QSplitter, QTabWidget, QTableView,
     QTextEdit, QVBoxLayout, QWidget)
+import stskit.qt.resources_rc
 
 class Ui_EinstellungenWindow(object):
     def setupUi(self, EinstellungenWindow):

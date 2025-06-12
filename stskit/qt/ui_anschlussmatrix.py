@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QApplication, QComboBox, QFram
     QMainWindow, QSizePolicy, QSpinBox, QSplitter,
     QStackedWidget, QTableView, QToolBar, QVBoxLayout,
     QWidget)
+import stskit.qt.resources_rc
 
 class Ui_AnschlussmatrixWindow(object):
     def setupUi(self, AnschlussmatrixWindow):

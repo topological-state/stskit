@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QApplication, QComboBox, QFram
     QMainWindow, QRadioButton, QSizePolicy, QSpinBox,
     QSplitter, QStackedWidget, QToolBar, QVBoxLayout,
     QWidget)
+import stskit.qt.resources_rc
 
 class Ui_BildfahrplanWindow(object):
     def setupUi(self, BildfahrplanWindow):

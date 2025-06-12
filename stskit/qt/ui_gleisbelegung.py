@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (QApplication, QFrame, QGroupBox, QHBoxLayout,
     QHeaderView, QLabel, QMainWindow, QRadioButton,
     QSizePolicy, QSpinBox, QSplitter, QStackedWidget,
     QToolBar, QTreeView, QVBoxLayout, QWidget)
+import stskit.qt.resources_rc
 
 class Ui_GleisbelegungWindow(object):
     def setupUi(self, GleisbelegungWindow):
@@ -257,7 +258,7 @@ class Ui_GleisbelegungWindow(object):
 
         self.retranslateUi(GleisbelegungWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(GleisbelegungWindow)

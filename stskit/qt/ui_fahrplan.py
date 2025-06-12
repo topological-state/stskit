@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLabel,
     QLineEdit, QPushButton, QScrollArea, QSizePolicy,
     QSpacerItem, QSpinBox, QSplitter, QTabWidget,
     QTableView, QVBoxLayout, QWidget)
+import stskit.qt.resources_rc
 
 class Ui_FahrplanWidget(object):
     def setupUi(self, FahrplanWidget):

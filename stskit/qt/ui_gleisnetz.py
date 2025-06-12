@@ -18,6 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QMainWindow,
     QPushButton, QScrollArea, QSizePolicy, QSpacerItem,
     QSplitter, QTabWidget, QVBoxLayout, QWidget)
+import stskit.qt.resources_rc
 
 class Ui_GleisnetzWindow(object):
     def setupUi(self, GleisnetzWindow):
