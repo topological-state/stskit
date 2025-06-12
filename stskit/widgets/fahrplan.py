@@ -10,6 +10,7 @@ from matplotlib.figure import Figure
 
 from PySide6 import Qt, QtCore, QtGui, QtWidgets
 from PySide6.QtCore import Slot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
+from PySide6.QtWidgets import QWidget, QAbstractItemView
 
 from stskit.dispo.anlage import Anlage
 from stskit.zentrale import DatenZentrale
@@ -562,8 +563,8 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui.zugliste_view.setModel(self.zugliste_sort_filter)
         self.ui.zugliste_view.selectionModel().selectionChanged.connect(
             self.zugliste_selection_changed)
-        self.ui.zugliste_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
-        self.ui.zugliste_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
+        self.ui.zugliste_view.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.ui.zugliste_view.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.zugliste_view.sortByColumn(0, 0)
         self.ui.zugliste_view.setSortingEnabled(True)
 
@@ -577,14 +578,14 @@ class FahrplanWindow(QtWidgets.QWidget):
 
         self.fahrplan_modell = FahrplanModell(zentrale.anlage)
         self.ui.fahrplan_view.setModel(self.fahrplan_modell)
-        self.ui.fahrplan_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
-        self.ui.fahrplan_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
+        self.ui.fahrplan_view.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.ui.fahrplan_view.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.fahrplan_view.verticalHeader().setVisible(False)
 
         self.folgezug_modell = FahrplanModell(zentrale.anlage)
         self.ui.folgezug_view.setModel(self.folgezug_modell)
-        self.ui.folgezug_view.setSelectionMode(Qt.QAbstractItemView.SingleSelection)
-        self.ui.folgezug_view.setSelectionBehavior(Qt.QAbstractItemView.SelectRows)
+        self.ui.folgezug_view.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.ui.folgezug_view.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.folgezug_view.verticalHeader().setVisible(False)
 
         self.zielplot = ZielPlot(zentrale.anlage)

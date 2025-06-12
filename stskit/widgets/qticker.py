@@ -11,8 +11,10 @@ import copy
 import logging
 from typing import Any, List
 
-from PySide6 import Qt, QtCore, QtGui, QtWidgets
-from PySide6.QtCore import QModelIndex
+from PySide6 import QtCore, QtWidgets
+from PySide6.QtCore import QAbstractTableModel, QModelIndex
+from PySide6.QtGui import QColor
+from PySide6.QtWidgets import QAbstractItemView
 
 from stskit.plugin.stsobj import Ereignis
 from stskit.zentrale import DatenZentrale
@@ -21,22 +23,22 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 EREIGNISART_QCOLOR_SVG = {
-    "einfahrt": QtGui.QColor("orchid"),
-    "ausfahrt": QtGui.QColor("dodgerblue"),
-    "ersatz": QtGui.QColor("dodgerblue"),
-    "rothalt": QtGui.QColor("tomato"),
-    "fahrt": QtGui.QColor("limegreen"),
-    "ankunft": QtGui.QColor("skyblue"),
-    "durchfahrt": QtGui.QColor("skyblue"),
-    "bereit": QtGui.QColor("khaki"),
-    "abfahrt": QtGui.QColor("limegreen"),
-    "kuppeln": QtGui.QColor("coral"),
-    "flügeln": QtGui.QColor("orange"),
-    "default": QtGui.QColor("gray")
+    "einfahrt": QColor("orchid"),
+    "ausfahrt": QColor("dodgerblue"),
+    "ersatz": QColor("dodgerblue"),
+    "rothalt": QColor("tomato"),
+    "fahrt": QColor("limegreen"),
+    "ankunft": QColor("skyblue"),
+    "durchfahrt": QColor("skyblue"),
+    "bereit": QColor("khaki"),
+    "abfahrt": QColor("limegreen"),
+    "kuppeln": QColor("coral"),
+    "flügeln": QColor("orange"),
+    "default": QColor("gray")
 }
 
 
-class EreignisTabelle(QtCore.QAbstractTableModel):
+class EreignisTabelle(QAbstractTableModel):
 
     def __init__(self):
         super().__init__()
@@ -135,7 +137,7 @@ class TickerWindow(QtWidgets.QMainWindow):
         self.model = EreignisTabelle()
         self.table = QtWidgets.QTableView()
         self.table.setModel(self.model)
-        self.table.setSelectionMode(Qt.QAbstractItemView.NoSelection)
+        self.table.setSelectionMode(QAbstractItemView.NoSelection)
         layout.addWidget(self.table)
 
     def add_ereignis(self, *args, ereignis: Ereignis, **kwargs):
