@@ -5,6 +5,7 @@ Qt-Fenster Rangierplan
 from dataclasses import dataclass, field
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
+from PySide6 import QtCore
 from PySide6.QtCore import Slot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QAbstractTableModel, Qt
 from PySide6.QtGui import QColor, QKeySequence, QShortcut
 from PySide6.QtWidgets import QWidget, QAbstractItemView
@@ -921,7 +922,7 @@ class RangierplanWindow(QWidget):
             self.zugliste_selection_changed)
         self.ui.zugliste_view.setSelectionMode(QAbstractItemView.SingleSelection)
         self.ui.zugliste_view.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.ui.zugliste_view.sortByColumn(self.rangiertabelle_modell._columns.index('An'), 0)
+        self.ui.zugliste_view.sortByColumn(self.rangiertabelle_modell._columns.index('An'), QtCore.Qt.AscendingOrder)
         self.ui.zugliste_view.setSortingEnabled(True)
         self.toggle_lok_status_shortcut = QShortcut(QKeySequence('L'), self)
         self.toggle_lok_status_shortcut.activated.connect(self.toggle_lok_status)

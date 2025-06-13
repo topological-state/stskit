@@ -8,9 +8,9 @@ from typing import Any, Dict, List, Optional
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-from PySide6 import Qt, QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtGui, QtWidgets
 from PySide6.QtCore import Slot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel
-from PySide6.QtWidgets import QWidget, QAbstractItemView
+from PySide6.QtWidgets import QAbstractItemView
 
 from stskit.dispo.anlage import Anlage
 from stskit.zentrale import DatenZentrale
@@ -371,10 +371,8 @@ class FahrplanModell(QtCore.QAbstractTableModel):
         :param zid: Zug-ID. 0 = leerer Fahrplan.
         :return: None
         """
-        self.beginResetModel()
         self.zid = zid
         self.update()
-        self.endResetModel()
 
     def update(self):
         self.beginResetModel()
@@ -565,7 +563,7 @@ class FahrplanWindow(QtWidgets.QWidget):
             self.zugliste_selection_changed)
         self.ui.zugliste_view.setSelectionMode(QAbstractItemView.SingleSelection)
         self.ui.zugliste_view.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.ui.zugliste_view.sortByColumn(0, 0)
+        self.ui.zugliste_view.sortByColumn(0, QtCore.Qt.AscendingOrder)
         self.ui.zugliste_view.setSortingEnabled(True)
 
         self.ui.vorlaufzeit_spin.setValue(self.zugliste_sort_filter.vorlaufzeit)

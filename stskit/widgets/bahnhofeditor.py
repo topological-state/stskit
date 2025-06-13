@@ -3,7 +3,7 @@ import logging
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
 import networkx as nx
-from PySide6 import Qt, QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import Slot, QAbstractTableModel, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QStringListModel, QObject
 from PySide6.QtWidgets import QWidget, QAbstractItemView
 
@@ -347,7 +347,7 @@ class BahnhofEditor(QObject):
         self.ui.gl_table_view.setModel(self.gl_table_filter)
         self.ui.gl_table_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.ui.gl_table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.ui.gl_table_view.sortByColumn(self.gl_table_model._columns.index('Gl'), 0)
+        self.ui.gl_table_view.sortByColumn(self.gl_table_model._columns.index('Gl'), QtCore.Qt.AscendingOrder)
         self.ui.gl_table_view.setSortingEnabled(True)
         self.gl_last_selection = set()
 
@@ -389,7 +389,7 @@ class BahnhofEditor(QObject):
         self.ui.agl_table_view.setModel(self.agl_table_filter)
         self.ui.agl_table_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.ui.agl_table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.ui.agl_table_view.sortByColumn(self.agl_table_model._columns.index('Agl'), 0)
+        self.ui.agl_table_view.sortByColumn(self.agl_table_model._columns.index('Agl'), QtCore.Qt.AscendingOrder)
         self.ui.agl_table_view.setSortingEnabled(True)
         self.agl_last_selection = set()
 
