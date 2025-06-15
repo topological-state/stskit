@@ -230,6 +230,7 @@ class MainWindow(QMainWindow):
         self.netz_button.setEnabled(False)
         self.netz_button.clicked.connect(self.netz_clicked)
         layout.addWidget(self.netz_button)
+        self.netz_button.setVisible(bool(self.arguments.netgraph))
 
         self.ticker_button = QtWidgets.QPushButton("Ticker", self)
         self.ticker_button.setEnabled(False)
@@ -434,6 +435,8 @@ def parse_args(arguments: Sequence[str]) -> argparse.Namespace:
                         help=f"Hostname oder IP-Adresse des Stellwerksim-Simulators. Default: {DEFAULT_HOST}")
     parser.add_argument("--port", type=int, default=DEFAULT_PORT,
                         help=f"Netzwerkport des Stellwerksim-Simulators. Default: {DEFAULT_PORT}")
+    parser.add_argument("--netgraph", action="store_true",
+                        help="Gleisnetzmodul anbieten. Das Gleisnetzmodul ist in Entwicklung und standardmässig verborgen.")
     parser.add_argument("--log-level", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], default="ERROR",
                         help="Minimale Stufe für Protokollmeldungen. Default: ERROR")
     parser.add_argument("--log-file", default="stskit.log",
