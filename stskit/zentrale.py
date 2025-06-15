@@ -1,97 +1,94 @@
+"""
+Nachrichtenzentrale
+
+Die Nachrichtenzentrale hält die Anlage- und Betriebsobjekte
+und stellt die Schnittstelle zu den Benutzermodulen bereit.
+Änderungen an den Betriebsdaten werden über Observer gemeldet.
+"""
+
 import logging
 import os
-from pathlib import Path
-from typing import Any, Callable, Dict, Generator, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
-import weakref
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
-from stskit.stsobj import Ereignis, time_to_minutes
-from stskit.stsplugin import PluginClient
-from stskit.anlage import Anlage
-from stskit.auswertung import Auswertung
-from stskit.planung import Planung
+from stskit.utils.observer import Observable
+from stskit.plugin.stsobj import Ereignis, time_to_minutes
+from stskit.plugin.stsgraph import GraphClient
+from stskit.dispo.anlage import Anlage
+from stskit.dispo.betrieb import Betrieb
+from stskit.dispo.auswertung import Auswertung
 
 logger = logging.getLogger(__name__)
 
 
-class Observable:
-    """
-    notify observers of events
-
-    - observers are bound methods of object instances.
-    - the object keeps weak references - observers don't need to unregister.
-    """
-
-    def __init__(self, owner: Any):
-        self.owner = owner
-        self._observers = weakref.WeakKeyDictionary()
-
-    def register(self, observer):
-        """
-        register an observer
-
-        :param observer: must be a bound method.
-
-        :return: None
-        """
-
-        try:
-            obj = observer.__self__
-            func = observer.__func__
-            name = observer.__name__
-        except AttributeError:
-            raise
-        else:
-            self._observers[obj] = name
-
-    def notify(self, *args, **kwargs):
-        """
-        notify observers
-
-        the first two positional arguments sent to the observers are the instance of observable and the owner.
-        the remaining arguments are copied from the call arguments.
-
-        :param args: positional arguments to be passed to the observers.
-        :param kwargs: keyword arguments to be passed to the observers
-        :return: None
-        """
-
-        for obs, name in self._observers.items():
-            meth = getattr(obs, name)  # bound method
-            meth(self, *args, **kwargs)
-
-
 class DatenZentrale:
     """
-    zentrale datenschnittstelle zu simulator, planung und auswertung
+    Zentrale Datenschnittstelle zum Simulator
 
-    die datenzentrale ist unterteilt in:
-    - die plugin-schnittstelle hält die daten vom simulator bereit, s. stsplugin-modul.
-    - die anlage beschreibt das stellwerk, s. anlage-modul.
-    - die planung enthält die aktuellen fahrplandaten, s. planung-modul.
-    - die auswertung führt statistik über die zugbewegungen, s. auswertung-modul.
+    Die Datenzentrale ist unterteilt in:
+    - Die Plugin-Schnittstelle hält die Daten vom Simulator bereit, s. Modul stsgraph.
+      Die Benutzermodule dürfen nicht direkt auf diese Objekte zugreifen.
+    - Die Anlage beschreibt das Stellwerk und die aktuellen Fahrplandaten, s. Modul dispo.anlage.
+    - Der Betrieb verwaltet die Änderungen des Benutzers, s. Modul dispo.betrieb.
+      Alle Anlagen- und Fahrplanänderungen müssen über diese Schnittstelle beantragt werden.
+    - Die Auswertung wertet erfolgte Zugbewegungen aus, s. Modul auswertung.
 
-    die klasse implementiert methoden, die die plugin-schnittstelle abfragen
-    und ereignisse vom simulator weiterleiten.
-    die kommunikationsschleifen liegen jedoch ausserhalb dieser klasse.
+    Die Klasse implementiert asynchrone Methoden, die die Plugin-Schnittstelle abfragen
+    und Ereignisse vom Simulator weiterleiten.
+    Die Kommunikationsschleifen müssen jedoch vom Besitzer unterhalten werden.
 
-    die klasse stellt für jedes modul eine observer-schnittstelle bereit,
-    die registrierte beobachter nach einer aktualisierung benachrichtigen.
+    Für die Benutzermodule stellt die Klasse Observer-Schnittstellen bereit.
+    Benutzermodule registrieren sich bei den passenden Beobachtern und
+    werden über die periodische Aktualisierung benachrichtigt.
+    Folgende Observer stehen zur Verfügung:
+
+    - anlage_update: Änderungen an der Anlagenkonfiguration, insbesondere an den Datenstrukturen
+        signalgraph, bahnsteiggraph, bahnhofgraph, liniengraph,
+        strecken, hauptstrecke, streckenmarkierung, gleissperrungen und zugschema.
+        Benutzermodule müssen möglicherweise ihre Strukturen (Layout) neu aufbauen.
+        Der Observer triggert beim ersten Einlesen der Simulatordaten,
+        beim Laden und Bearbeiten der Konfiguration durch den Benutzer.
+
+        Die Benachrichtigung wird in jedem Fall von einem plan_update gefolgt.
+        Benutzermodule können also auch nur auf plan_update reagieren.
+    - plan_update: Änderungen am Fahrplan durch den Simulator, insbesondere an den Datenstrukturen
+        zuggraph, zielgraph, ereignisgraph.
+        Benutzermodule müssen möglicherweise ihre Daten (Inhalt) aktualisieren.
+        Der Observer triggert beim regelmässigen Einlesen der Simulatordaten.
+    - betrieb_update: Änderungen am Betriebsablauf durch den Fdl, insbesondere an den Datenstrukturen
+        zielgraph, ereignisgraph und fdl_korrekturen.
+        Die Züge können geänderte Betriebshalte oder andere Verspätungen haben.
+        Benutzermodule müssen möglicherweise ihre Daten (Inhalt) aktualisieren.
+        Die meisten Benutzermodule reagieren auf plan_update und betrieb_update auf die gleiche Weise.
+    - auswertung_update: Änderungen am Fahrplan, die für das Auswertungsmodul interessant sind.
+        Das Auswertungsmodul wird möglicherweise in einer folgenden Version überarbeitet.
+        Der Observer sollte in neuen Modulen nicht verwendet werden.
+    - plugin_ereignis: Ereignismeldung vom Simulator.
+        Für Benutzermodule, die zeitnah auf Ereignisse vom Simulator reagieren müssen.
+        Der Observer triggert bei jedem Ereignis vom Simulator,
+        was bei gewissen Ereignisarten mehrmals pro Sekunde sein kann.
+        Die Verarbeitung darf daher keine lange Zeit in Anspruch nehmen,
+        insbesondere sollten komplexe Grafikaktualisierungen vermieden werden.
+        Diese sollten z.B. an die Qt-Mainloop oder an betrieb_update delegiert werden.
     """
 
     def __init__(self, config_path: Optional[os.PathLike] = None):
+        self.simzeit_minuten: int = 0
         self.config_path: os.PathLike = config_path
-        self.client: Optional[PluginClient] = None
+        self.client: Optional[GraphClient] = None
         self.anlage: Optional[Anlage] = None
-        self.planung: Optional[Planung] = None
+        self.betrieb: Optional[Betrieb] = None
         self.auswertung: Optional[Auswertung] = None
-        self.planung_update = Observable(self)
+        self.plan_update = Observable(self)
         self.anlage_update = Observable(self)
+        self.betrieb_update = Observable(self)
         self.auswertung_update = Observable(self)
         self.plugin_ereignis = Observable(self)
 
     async def update(self):
         """
-        aktuelle daten von der plugin-schnittstelle abfragen und datenmodule aktualisieren.
+        Aktuelle Daten von der Plugin-Schnittstelle abfragen.
+
+        Die eigenen Objekte werden aktualisiert und die Observer aufgerufen.
 
         :return: None
         """
@@ -100,29 +97,52 @@ class DatenZentrale:
         for art in Ereignis.arten:
             await self.client.request_ereignis(art, self.client.zugliste.keys())
 
-        if not self.anlage:
-            self.anlage = Anlage(self.client.anlageninfo)
-        self.anlage.update(self.client, self.config_path)
+        self.simzeit_minuten = time_to_minutes(self.client.calc_simzeit())
 
-        if not self.planung:
-            self.planung = Planung()
+        if not self.anlage:
+            self.anlage = Anlage()
+        aenderungen = self.anlage.update(self.client, self.config_path)
+        aenderungen -= {'zuggraph', 'zielgraph'}
+        if aenderungen:
+            self.anlage_update.trigger()
+
+        if not self.betrieb:
+            self.betrieb = Betrieb()
+        self.betrieb.update(self.anlage, self.config_path)
+        self.betrieb_update.trigger()
+        self.plan_update.trigger()
 
         if not self.auswertung:
             self.auswertung = Auswertung(self.anlage)
-            self.planung.auswertung = self.auswertung
-
-        self.planung.simzeit_minuten = time_to_minutes(self.client.calc_simzeit())
-        self.planung.zuege_uebernehmen(self.client.zugliste.values())
-        self.planung.einfahrten_korrigieren()
-        self.planung.verspaetungen_korrigieren()
-
         self.auswertung.zuege_uebernehmen(self.client.zugliste.values())
+        self.auswertung_update.trigger()
 
-        self.anlage_update.notify()
-        self.planung_update.notify()
-        self.auswertung_update.notify()
+    async def notify(self):
+        if self.anlage_update.triggered:
+            self.anlage_update.notify()
+            self.plan_update.trigger()
+        if self.plan_update.triggered:
+            self.plan_update.notify()
+        if self.betrieb_update.triggered:
+            self.betrieb_update.notify()
+        if self.auswertung_update.triggered:
+            self.auswertung_update.notify()
 
     async def _get_sts_data(self, alles=False):
+        """
+        Aktuelle Daten von der Plugin-Schnittstelle abfragen (Unterprozedur von update).
+
+        Ruft den Pluginclient auf, um die Daten abzufragen.
+        Die Anlageninformation inkl. Bahnsteige und Signalgraph werden standardmässig nur beim ersten Mal angefragt.
+
+        :param alles: Bei False (default) wird die Anlageninformation nur angefragt,
+            wenn die entsprechenden Objekte wie zu Beginn leer sind.
+            Bei True wird die Anlageninformation unbedingt angefragt.
+        :return: None
+        """
+
+        await self.client.request_simzeit()
+
         if alles or not self.client.anlageninfo:
             await self.client.request_anlageninfo()
         if alles or not self.client.bahnsteigliste:
@@ -135,20 +155,21 @@ class DatenZentrale:
         await self.client.request_zugfahrplan()
         await self.client.resolve_zugflags()
 
-        self.client.update_bahnsteig_zuege()
-        self.client.update_wege_zuege()
-
     async def ereignis(self, ereignis):
         """
-        ereignisdaten übernehmen.
+        Ereignisdaten übernehmen.
 
         :param ereignis:
         :return:
         """
 
-        if self.planung:
-            self.planung.ereignis_uebernehmen(ereignis)
+        if self.anlage:
+            self.anlage.sim_ereignis_uebernehmen(ereignis)
         if self.auswertung:
             self.auswertung.ereignis_uebernehmen(ereignis)
 
         self.plugin_ereignis.notify(ereignis=ereignis)
+
+    def notify_anlage(self, aenderungen: Set[str]):
+        self.anlage.aenderungen.update(aenderungen)
+        self.anlage_update.trigger()

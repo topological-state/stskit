@@ -1,0 +1,171 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://github.com/topological-state/stskit/stskit/schema/config.schema.json",
+    "title": "STSdispo configuration schema",
+    "description": "Schema of STSdispo configuration files",
+    "type": "object",
+    "properties": {
+        "_aid": {
+            "description": "Anlage/Stellwerk ID, vom Simulator vorgegeben.",
+            "type": "integer",
+            "exclusiveMinimum": 0
+        },
+        "_build": {
+            "description": "Build number des Simulators.",
+            "type": "integer",
+            "exclusiveMinimum": 0
+        },
+        "_name": {
+            "description": "Name der Anlage/des Stellwerks, vom Simulator vorgegeben.",
+            "type": "string"
+        },
+        "_region": {
+            "description": "Name der Region, vom Simulator vorgegeben.",
+            "type": "string"
+        },
+        "_version": {
+            "description": "Versionsnummer des Konfigurationsschemas.",
+            "type": "integer",
+            "exclusiveMinimum": 0
+        },
+        "default": {
+            "description": "True = Konfigurationsdaten wurden automatisch generiert.",
+            "type": "boolean"
+        },
+        "elemente": {
+            "description": "Zuordnung von Gleisen zu Betriebsstellen. Es müssen nur modifizierte Elemente (auto = false) angegeben werden. Zu jedem modifizierten Stammelement, muss jedoch mindestens ein ganzer Ast zu einem Gleis angegeben werden.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "Name des Elements, Gleisnamen entsprechen denjenigen im Sim.",
+                        "type": "string"
+                    },
+                    "sichtbar": {
+                        "description": "Sichtbarkeit in Gleisbelegung. Default ist True.",
+                        "type": "boolean"
+                    },
+                    "auto": {
+                        "description": "Automatische Konfiguration. Auf False setzen, wenn der Eintrag manuell verändert wurde! Default ist True.",
+                        "type": "boolean"
+                    }
+                },
+                "required": ["name"],
+                "oneOf": [
+                    {
+                        "properties": {
+                            "typ": {
+                                "description": "Elementtyp: Gl (Gleis), Bs (Bahnsteig), Bft (Bahnhofteil), Agl (Anschlussgleis)",
+                                "type": "string",
+                                "enum": ["Gl", "Bs", "Bft", "Agl"]
+                            },
+                            "stamm": {
+                                "description": "Name des uebergeordneten Elements. Kann bei Bf und Anst leer sein. ",
+                                "type": "string"
+                            },
+                            "flags": {
+                                "description": "Gleismarkierungen. Buchstaben haben folgende Bedeutung: S = Sperrung. Default ist leer.",
+                                "type": "string"
+                            },
+                            "gleise": {
+                                "description": "Anzahl der Gleise: 1 = eingleisige Ein- und Ausfahrt. Minimum 1. Default ist 1.",
+                                "type": "integer",
+                                "minimum": 1
+                            }
+                        },
+                        "required": ["stamm", "typ"]
+                    },
+                    {
+                        "properties": {
+                            "typ": {
+                                "description": "Elementtyp: Bf (Bahnhof), Anst (Anschlussstelle)",
+                                "type": "string",
+                                "enum": ["Bf", "Anst"]
+                            },
+                            "linienstil": {
+                                "description": "Matplotlib-Linienstil des Bahnhofs im Bildfahrplan. Mögliche Werte: '-', '--', '-.', ':', '-w', '--w', '-.w', ':w', '' (keine Linie). Default ist ':'.",
+                                "type": "string",
+                                "enum": ["-", "--", "-.", ":", "-w", "--w", "-.w", ":w", ""]
+                            }
+                        },
+                        "required": ["typ"]
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "strecken": {
+            "description": "Definition der Strecken für den Streckenfahrplan.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "Streckenname. Frei wählbar.",
+                        "type": "string"
+                    },
+                    "ordnung": {
+                        "description": "Sortierordnung, 1 = Hauptstrecke",
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "stationen": {
+                        "description": "Stationsliste",
+                        "type": "array",
+                        "items": {
+                            "description": "Station: Anschlussstelle, Bahnhof oder Bahnhofteil, im Format 'Typ Name'",
+                            "type": "string"
+                        },
+                        "minItems": 2
+                    },
+                    "auto": {
+                        "description": "Automatisch generiert. Auf False setzen, wenn der Eintrag manuell verändert wurde! Default ist True.",
+                        "type": "boolean"
+                    }
+                },
+                "required": ["name", "stationen"]
+            },
+            "uniqueItems": true
+        },
+        "streckenmarkierung": {
+            "description": "Markierung von Streckenabschnitten",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "station1": {
+                        "type": "string",
+                        "description": "Station: Anschlussstelle, Bahnhof oder Bahnhofteil, im Format 'Typ Name'"
+                    },
+                    "station2": {
+                        "type": "string",
+                        "description": "Station: Anschlussstelle, Bahnhof oder Bahnhofteil, im Format 'Typ Name'"
+                    },
+                    "fahrzeit": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 60,
+                        "description": "Durschnittliche Fahrzeit in Minuten. Bestimmt die Länge des Abschnitts im Bildfahrplan. Falls Null, wird die automatisch berechnete Fahrzeit verwendet."
+                    },
+                    "flags": {
+                        "type": "string",
+                        "description": "Streckenmarkierungen: Buchstaben haben folgende Bedeutung: E = eingleisig"
+                    }
+                },
+                "required": ["station1", "station2", "flags"]
+            },
+            "uniqueItems": true
+        },
+        "widgets": {
+            "description": "Liste und Position der offenen Fenster.",
+            "type": "array"
+
+        },
+        "zugschema": {
+            "description": "Name des Zugschemas.",
+            "type": "string"
+        }
+    },
+    "required": ["_aid", "_build", "_version"]
+}

@@ -11,13 +11,14 @@ die ausgabe erfolgt auf stdout.
 import argparse
 import trio
 
-from stskit.stsplugin import PluginClient
-from stskit.stsobj import Ereignis
+from stskit.plugin.stsplugin import PluginClient
+from stskit.plugin.stsobj import Ereignis
 
 
 COLORCODES = {
     "einfahrt": "\033[93m",  # gelb
     "ausfahrt": "\033[94m",  # blau
+    "ersatz": "\033[94m",  # blau
     "rothalt": "\033[91m",  # rot
     "wurdegruen": "\033[92m",  # gruen
     "ankunft": "\033[96m",  # cyan

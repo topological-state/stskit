@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object "Zug 1 an" as zug1an {
+    zid = 1
+    typ = An
+    p = p<sub>an,1</sub>
+}
+
+object "Zug 2 an" as zug2an {
+    zid = 2
+    typ = An
+    p = p<sub>an,2</sub>
+}
+
+object "Kupplung" as kupplung {
+    zid = 2
+    typ = K
+    p = max(p<sub>an,1</sub>, p<sub>an,2</sub>) + dt<sub>min</sub>
+}
+
+object "Zug 2 ab" as zug2ab {
+    zid = 2
+    typ = Ab
+    p = p<sub>ab,2</sub>
+}
+
+zug1an -> kupplung: K (dt<sub>min</sub>)
+zug2an -> kupplung: H
+kupplung -> zug2ab: H
+@enduml

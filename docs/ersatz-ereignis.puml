@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object "Zug 1 an" as zug1an {
+    zid = 1
+    typ = An
+    p = p<sub>an,1</sub>
+}
+
+object "Ersatz" as ersatz {
+    zid = 1
+    typ = E
+    p = p<sub>ab,2</sub>
+}
+
+object "Zug 2 ab" as zug2ab {
+    zid = 2
+    typ = An
+    p = p<sub>ab,2</sub>
+}
+
+zug1an -> ersatz: E (dt<sub>min</sub>)
+ersatz -> zug2ab: H
+@enduml

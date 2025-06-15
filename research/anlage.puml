@@ -2,34 +2,57 @@
 'https://plantuml.com/object-diagram
 
 object simulator
+
+package stsplugin {
+    object wegeliste
+        wegeliste : konstant
+
+    object bahnsteigliste
+        bahnsteigliste : konstant
+
+    object zugliste
+        zugliste : variabel
+
+}
+
+package stsgraph {
+    object signalgraph
+        signalgraph : signale
+        signalgraph : weichen
+        signalgraph : einfahrten
+        signalgraph : ausfahrten
+        signalgraph : bahnsteige
+        signalgraph : haltepunkte
+
+    object bahnsteiggraph
+        bahnsteiggraph : bahnsteige
+        bahnsteiggraph : bahnhofteile
+
+    object zuggraph
+        zuggraph : zuege
+        zuggraph : folgezuege
+        zuggraph : stammzuege
+
+    object zielgraph
+        zielgraph : fahrplanziele
+        zielgraph : trassen
+}
+
+
 object konfiguration
 konfiguration : anschluesse
 konfiguration : bahnhoefe
 konfiguration : strecken
 
-object zugliste
-zugliste : variabel
 
-object wegeliste
-wegeliste : konstant
-
-object bahnsteigliste
-bahnsteigliste : konstant
 
 object auswertung
 
-object signalgraph
-signalgraph : signale
-signalgraph : gleise
-signalgraph : einfahrten
-signalgraph : ausfahrten
-
+package anlage {
 object bahnhofgraph
 bahnhofgraph : bahnhoefe
 bahnhofgraph : anschluesse
 bahnhofgraph : relationen
-
-object bahnsteiggraph
 
 object anschlussgruppen
 object bahnsteiggruppen
@@ -37,6 +60,7 @@ object bahnsteiggruppen
 object strecken
 strecken : bahnhoefe
 strecken : anschluesse
+}
 
 simulator --> zugliste
 simulator --> wegeliste
@@ -48,7 +72,10 @@ signalgraph --> anschlussgruppen : auto-gruppen
 bahnsteigliste --> bahnsteiggraph : original-graph
 bahnsteiggraph --> bahnsteiggruppen : auto-gruppen
 
-zugliste --> bahnhofgraph : fahrzeiten
+zugliste --> zuggraph : original-graph
+zugliste --> zielgraph : original-graph
+
+zielgraph --> bahnhofgraph : fahrzeiten
 bahnsteiggruppen --> bahnhofgraph : bahnhoefe
 anschlussgruppen --> bahnhofgraph : anschluesse
 

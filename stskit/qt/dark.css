@@ -4,6 +4,7 @@
     alternate-background-color: #373737;
     selection-color: #afaf00;
     selection-background-color: #3c3c76 }
+*:disabled { color: gray }
 
 QToolTip {
     color: white;

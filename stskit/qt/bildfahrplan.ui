@@ -101,7 +101,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QListWidget" name="strecke_list">
+                <widget class="QListView" name="strecke_list">
                  <property name="alternatingRowColors">
                   <bool>true</bool>
                  </property>
@@ -188,7 +188,7 @@
                 </widget>
                </item>
                <item>
-                 <widget class="QGroupBox" name="beschriftung_group">
+                <widget class="QGroupBox" name="beschriftung_group">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
                    <horstretch>0</horstretch>
@@ -340,10 +340,13 @@
    <addaction name="actionAnkunftAbwarten"/>
    <addaction name="actionAbfahrtAbwarten"/>
    <addaction name="actionLoeschen"/>
+   <addaction name="separator"/>
+   <addaction name="actionBetriebshaltEinfuegen"/>
+   <addaction name="actionActionBetriebshaltLoeschen"/>
   </widget>
   <action name="actionSetup">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/equalizer.png</normaloff>
      <disabledoff>:/equalizer-dis.png</disabledoff>:/equalizer.png</iconset>
    </property>
@@ -359,7 +362,7 @@
   </action>
   <action name="actionAnzeige">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/slots.png</normaloff>
      <disabledoff>:/slots-dis.png</disabledoff>:/slots.png</iconset>
    </property>
@@ -375,7 +378,7 @@
   </action>
   <action name="actionPlusEins">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/clock--plus.png</normaloff>:/clock--plus.png</iconset>
    </property>
    <property name="text">
@@ -390,7 +393,7 @@
   </action>
   <action name="actionMinusEins">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/clock--minus.png</normaloff>:/clock--minus.png</iconset>
    </property>
    <property name="text">
@@ -405,7 +408,7 @@
   </action>
   <action name="actionFix">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/clock--pencil.png</normaloff>:/clock--pencil.png</iconset>
    </property>
    <property name="text">
@@ -420,7 +423,7 @@
   </action>
   <action name="actionLoeschen">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/chain--return.png</normaloff>:/chain--return.png</iconset>
    </property>
    <property name="text">
@@ -435,7 +438,7 @@
   </action>
   <action name="actionAnkunftAbwarten">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/chain--arrow-in.png</normaloff>:/chain--arrow-in.png</iconset>
    </property>
    <property name="text">
@@ -450,7 +453,7 @@
   </action>
   <action name="actionAbfahrtAbwarten">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/chain--arrow.png</normaloff>:/chain--arrow.png</iconset>
    </property>
    <property name="text">
@@ -463,7 +466,39 @@
     <string>F</string>
    </property>
   </action>
+  <action name="actionBetriebshaltEinfuegen">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/node-insert.png</normaloff>:/node-insert.png</iconset>
+   </property>
+   <property name="text">
+    <string>Betriebshalt</string>
+   </property>
+   <property name="toolTip">
+    <string>Betriebshalt einfügen (B)</string>
+   </property>
+   <property name="shortcut">
+    <string>B</string>
+   </property>
+  </action>
+  <action name="actionActionBetriebshaltLoeschen">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/node-delete.png</normaloff>:/node-delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Betriebshalt löschen</string>
+   </property>
+   <property name="toolTip">
+    <string>Betriebshalt löschen (Shift+B)</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+B</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

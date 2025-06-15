@@ -11,26 +11,32 @@ import argparse
 import functools
 import logging
 import os
-import weakref
+
+import outcome
 from pathlib import Path
-from typing import Any, Dict, Generator, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
+import signal
+import sys
+import traceback
+from typing import Any, Dict, Optional, Sequence
 
 import matplotlib.style
-from PyQt5 import QtCore, QtWidgets, uic, QtGui
-from PyQt5.QtCore import pyqtSlot
+from PySide6 import QtCore, QtWidgets, QtGui
+from PySide6.QtCore import Qt, QEvent, QObject, QTimer, Signal, Slot
+from PySide6.QtWidgets import QApplication, QMainWindow
 import trio
-import qtrio
 
-from stskit.stsplugin import PluginClient, TaskDone, DEFAULT_HOST, DEFAULT_PORT
+from stskit.plugin.stsplugin import DEFAULT_HOST, DEFAULT_PORT
+from stskit.plugin.stsgraph import GraphClient
 from stskit.zentrale import DatenZentrale
-from stskit.anschlussmatrix import AnschlussmatrixWindow
-from stskit.bildfahrplan import BildFahrplanWindow
-from stskit.einstellungen import EinstellungenWindow
-from stskit.gleisbelegung import GleisbelegungWindow
-from stskit.gleisnetz import GleisnetzWindow
-from stskit.qticker import TickerWindow
-from stskit.fahrplan import FahrplanWindow
-import stskit.resources_rc
+from stskit.utils.observer import Observable
+from stskit.widgets.anschlussmatrix import AnschlussmatrixWindow
+from stskit.widgets.einstellungen import EinstellungenWindow
+from stskit.widgets.gleisbelegung import GleisbelegungWindow
+from stskit.widgets.gleisnetz import GleisnetzWindow
+from stskit.widgets.qticker import TickerWindow
+from stskit.widgets.fahrplan import FahrplanWindow
+from stskit.widgets.rangierplan import RangierplanWindow
+from stskit.widgets.bildfahrplan import BildFahrplanWindow
 
 logger = logging.getLogger(__name__)
 
@@ -80,9 +86,82 @@ def setup_logging(filename: Optional[str] = "", level: Optional[str] = "ERROR", 
 
     # special modules
     logging.getLogger('matplotlib').setLevel(max(numeric_level, logging.WARNING))
-    logging.getLogger('PyQt5.uic.uiparser').setLevel(max(numeric_level, logging.WARNING))
+    logging.getLogger('PySide6.uic.uiparser').setLevel(max(numeric_level, logging.WARNING))
     if not log_comm:
-        logging.getLogger('stskit.stsplugin').setLevel(logging.WARNING)
+        logging.getLogger('stskit.plugin.stsplugin').setLevel(logging.WARNING)
+
+
+class StsDispoRunner(QObject):
+    def __init__(self, arguments: argparse.Namespace, config_path: Optional[os.PathLike] = None):
+        super().__init__()
+        self.arguments = arguments
+        self.config_path = config_path
+
+        self.update_interval: int = 30  # seconds
+        self.enable_update: bool = True
+        self.notify_interval: int = 1
+        self.enable_notify: bool = True
+        self.status: str = ""
+        self.status_update = Observable(self)
+
+        self.client = GraphClient(name='STSdispo', autor='Matthias Muntwiler', version='2.0',
+                                  text='STSdispo: Grafische Fahrpläne, Disposition und Auswertung')
+
+        self.zentrale = DatenZentrale(config_path=self.config_path)
+        self.zentrale.client = self.client
+
+        self.coroutines = []
+        self.done = False
+        self.nursery = None
+
+    async def start(self):
+        await self.client.connect(host=self.arguments.host, port=self.arguments.port)
+
+        async with self.client._stream:
+            async with trio.open_nursery() as nursery:
+                await nursery.start(self.client.receiver)
+                await self.client.register()
+                await self.client.request_simzeit()
+                await self.client.request_anlageninfo()
+                nursery.start_soon(self.update_loop)
+                nursery.start_soon(self.ereignis_loop)
+                nursery.start_soon(self.notify_loop)
+
+                self.done = True
+
+    async def update_loop(self):
+        await self.zentrale.client.registered.wait()
+        while self.enable_update:
+            try:
+                self.status = "Datenübertragung..."
+                self.status_update.trigger()
+                self.status_update.notify()
+                await self.zentrale.update()
+            except (trio.EndOfChannel, trio.BrokenResourceError, trio.ClosedResourceError):
+                self.enable_update = False
+                break
+            except trio.BusyResourceError:
+                pass
+
+            self.status = ""
+            self.status_update.trigger()
+            self.status_update.notify()
+            await trio.sleep(self.update_interval)
+
+        self.status = "Keine Verbindung"
+        self.status_update.trigger()
+        self.status_update.notify()
+
+    async def ereignis_loop(self):
+        await self.zentrale.client.registered.wait()
+        async for ereignis in self.zentrale.client._ereignis_channel_out:
+            await self.zentrale.ereignis(ereignis)
+
+    async def notify_loop(self):
+        await self.zentrale.client.registered.wait()
+        while self.enable_notify:
+            await self.zentrale.notify()
+            await trio.sleep(self.notify_interval)
 
 
 class WindowManager:
@@ -95,7 +174,7 @@ class WindowManager:
         window.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         window.destroyed.connect(functools.partial(self.on_window_destroyed, key))
 
-    @pyqtSlot()
+    @Slot()
     def on_window_destroyed(self, key):
         try:
             del self.windows[key]
@@ -103,40 +182,13 @@ class WindowManager:
             pass
 
 
-class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self, config_path: Optional[os.PathLike] = None):
+class MainWindow(QMainWindow):
+    def __init__(self, arguments: argparse.Namespace, config_path: Optional[os.PathLike] = None):
         super().__init__()
-        self.closed = trio.Event()
 
-        try:
-            p = Path(config_path)
-            if not p.is_dir():
-                p = None
-        except TypeError:
-            p = None
-
-        if p:
-            self.config_path = p
-        else:
-            self.config_path = Path.home() / r".stskit"
-            self.config_path.mkdir(exist_ok=True)
-
-        self.zentrale = DatenZentrale(config_path=self.config_path)
-
-        try:
-            p = Path(__file__).parent / r"mplstyle" / r"dark.mplstyle"
-            matplotlib.style.use(p)
-        except OSError:
-            pass
-
-        try:
-            p = Path(__file__).parent / r"qt" / r"dark.css"
-            ss = p.read_text(encoding="utf8")
-            app = QtWidgets.QApplication.instance()
-            app.setStyleSheet(ss)
-        except OSError:
-            pass
-
+        self.arguments = arguments
+        self.config_path = config_path
+        self.runner: Optional[StsDispoRunner] = None
         self.windows = WindowManager()
 
         self.setWindowTitle("STSdispo")
@@ -169,10 +221,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.fahrplan_button.clicked.connect(self.fahrplan_clicked)
         layout.addWidget(self.fahrplan_button)
 
-        self.netz_button = QtWidgets.QPushButton("Gleisplan", self)
+        self.rangierplan_button = QtWidgets.QPushButton("Rangierplan", self)
+        self.rangierplan_button.setEnabled(False)
+        self.rangierplan_button.clicked.connect(self.rangierplan_clicked)
+        layout.addWidget(self.rangierplan_button)
+
+        self.netz_button = QtWidgets.QPushButton("Gleisplan (Geduld!)", self)
         self.netz_button.setEnabled(False)
         self.netz_button.clicked.connect(self.netz_clicked)
         layout.addWidget(self.netz_button)
+        self.netz_button.setVisible(bool(self.arguments.netgraph))
 
         self.ticker_button = QtWidgets.QPushButton("Ticker", self)
         self.ticker_button.setEnabled(False)
@@ -188,113 +246,178 @@ class MainWindow(QtWidgets.QMainWindow):
         self.statusfeld.setReadOnly(True)
         layout.addWidget(self.statusfeld)
 
-        self.update_interval: int = 30  # seconds
-        self.enable_update: bool = True
+    async def start_runner(self):
+        self.runner = StsDispoRunner(self.arguments, self.config_path)
+        self.runner.status_update.register(self.update_status)
+        await self.runner.start()
+
+    def update_status(self, *args, **kwargs):
+        if self.runner is not None:
+            self.statusfeld.setText(self.runner.status)
+            enable = self.runner.enable_update
+        else:
+            self.statusfeld.setText("Keine Verbindung")
+            enable = False
+
+        self.einfahrten_button.setEnabled(enable)
+        self.gleisbelegung_button.setEnabled(enable)
+        self.bildfahrplan_button.setEnabled(enable)
+        self.matrix_button.setEnabled(enable)
+        self.fahrplan_button.setEnabled(enable)
+        self.rangierplan_button.setEnabled(enable)
+        self.netz_button.setEnabled(enable)
+        self.ticker_button.setEnabled(enable)
+        self.einstellungen_button.setEnabled(enable)
+
+    # todo : window-initialisierungen in entsprechende module verschieben
 
     def ticker_clicked(self):
-        window = TickerWindow(self.zentrale)
+        window = TickerWindow(self.runner.zentrale)
         window.show()
         self.windows.add(window)
 
     def einfahrten_clicked(self):
-        window = GleisbelegungWindow(self.zentrale)
-        window.show_zufahrten = True
-        window.show_bahnsteige = False
+        window = GleisbelegungWindow(self.runner.zentrale, "Agl")
         window.setWindowTitle("Einfahrten/Ausfahrten")
         window.vorlaufzeit = 25
-        window.planung_update()
+        window.plan_update()
         window.show()
         self.windows.add(window)
 
     def gleisbelegung_clicked(self):
-        window = GleisbelegungWindow(self.zentrale)
-        window.planung_update()
+        window = GleisbelegungWindow(self.runner.zentrale, "Gl")
+        window.plan_update()
         window.show()
         self.windows.add(window)
 
     def matrix_clicked(self):
-        window = AnschlussmatrixWindow(self.zentrale)
-        window.planung_update()
+        window = AnschlussmatrixWindow(self.runner.zentrale)
+        window.plan_update()
         window.show()
         self.windows.add(window)
 
     def netz_clicked(self):
-        window = GleisnetzWindow(self.zentrale)
+        window = GleisnetzWindow(self.runner.zentrale)
         window.anlage_update()
         window.show()
         self.windows.add(window)
 
     def fahrplan_clicked(self):
-        window = FahrplanWindow(self.zentrale)
-        window.planung_update()
+        window = FahrplanWindow(self.runner.zentrale)
+        window.plan_update()
+        window.show()
+        self.windows.add(window)
+
+    def rangierplan_clicked(self):
+        window = RangierplanWindow(self.runner.zentrale)
+        window.plan_update()
         window.show()
         self.windows.add(window)
 
     def bildfahrplan_clicked(self):
-        window = BildFahrplanWindow(self.zentrale)
-        window.planung_update()
+        window = BildFahrplanWindow(self.runner.zentrale)
+        window.plan_update()
         window.show()
         self.windows.add(window)
 
     def einstellungen_clicked(self):
-        window = EinstellungenWindow(self.zentrale)
+        window = EinstellungenWindow(self.runner.zentrale)
         window.update()
         window.show()
         self.windows.add(window)
 
-    @pyqtSlot()
+    @Slot()
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
-        """Detect close events and emit the ``closed`` signal."""
+        """Detect close event and save configuration before closing."""
 
         super().closeEvent(event)
 
         if event.isAccepted():
             try:
-                self.zentrale.anlage.save_config(self.config_path)
-                if logger.isEnabledFor(logging.DEBUG):
-                    p = Path(self.config_path) / f"{self.zentrale.anlage.anlage.aid}.zielgraph.json"
-                    self.zentrale.planung.zielgraph_speichern(p)
+                self.runner.zentrale.anlage.save_config(self.config_path)
             except (AttributeError, OSError) as e:
                 logger.error(e)
 
             try:
-                self.auswertung.fahrzeiten.report()
+                self.runner.zentrale.auswertung.fahrzeiten.report()
             except (AttributeError, OSError) as e:
                 logger.error(e)
 
-            self.enable_update = False
-            self.closed.set()
+        QApplication.quit()
 
-    async def update_loop(self):
-        await self.zentrale.client.registered.wait()
-        while self.enable_update:
-            try:
-                self.statusfeld.setText("Datenübertragung...")
-                await self.zentrale.update()
-            except (trio.EndOfChannel, trio.BrokenResourceError, trio.ClosedResourceError):
-                self.enable_update = False
-                break
-            except trio.BusyResourceError:
-                pass
-            else:
-                self.einfahrten_button.setEnabled(self.enable_update)
-                self.gleisbelegung_button.setEnabled(self.enable_update)
-                self.bildfahrplan_button.setEnabled(self.enable_update)
-                self.matrix_button.setEnabled(self.enable_update)
-                self.fahrplan_button.setEnabled(self.enable_update)
-                self.netz_button.setEnabled(self.enable_update)
-                self.ticker_button.setEnabled(self.enable_update)
-                self.einstellungen_button.setEnabled(self.enable_update)
 
-            self.statusfeld.setText("")
-            await trio.sleep(self.update_interval)
+class AsyncHelper(QObject):
+    """
+    from https://doc.qt.io/qtforpython-6/examples/example_async_eratosthenes.html
 
-        self.statusfeld.setText("Keine Verbindung")
+    This is application-agnostic boilerplate.
+    """
 
-    async def ereignis_loop(self):
-        await self.zentrale.client.registered.wait()
-        async for ereignis in self.zentrale.client._ereignis_channel_out:
-            await self.zentrale.ereignis(ereignis)
+    class ReenterQtObject(QObject):
+        """ This is a QObject to which an event will be posted, allowing
+            Trio to resume when the event is handled. event.fn() is the
+            next entry point of the Trio event loop. """
+        def event(self, event):
+            if event.type() == QEvent.Type.User + 1:
+                event.fn()
+                return True
+            return False
+
+    class ReenterQtEvent(QEvent):
+        """ This is the QEvent that will be handled by the ReenterQtObject.
+            self.fn is the next entry point of the Trio event loop. """
+        def __init__(self, fn):
+            super().__init__(QEvent.Type(QEvent.Type.User + 1))
+            self.fn = fn
+
+    def __init__(self, worker, entry):
+        """
+        Helper class to run the Trio event loop inside the Qt event loop.
+
+        Parameters
+        ----------
+
+        `worker`: A QObject class that implements the trio event loop.
+            If the worker has a `start_signal` attribute of type `Signal`,
+            it will trigger a `launch_guest_run` when signalled.
+        `entry`: A method of `worker` that calls the trio event loop.
+        """
+
+        super().__init__()
+        self.reenter_qt = self.ReenterQtObject()
+        self.entry = entry
+
+        self.worker = worker
+        if hasattr(self.worker, "start_signal") and isinstance(self.worker.start_signal, Signal):
+            self.worker.start_signal.connect(self.launch_guest_run)
+
+    @Slot()
+    def launch_guest_run(self):
+        """ To use Trio and Qt together, one must run the Trio event
+            loop as a "guest" inside the Qt "host" event loop. """
+        if not self.entry:
+            raise Exception("No entry point for the Trio guest run was set.")
+        trio.lowlevel.start_guest_run(
+            self.entry,
+            run_sync_soon_threadsafe=self.next_guest_run_schedule,
+            done_callback=self.trio_done_callback,
+        )
+
+    def next_guest_run_schedule(self, fn):
+        """ This function serves to re-schedule the guest (Trio) event
+            loop inside the host (Qt) event loop. It is called by Trio
+            at the end of an event loop run in order to relinquish back
+            to Qt's event loop. By posting an event on the Qt event loop
+            that contains Trio's next entry point, it ensures that Trio's
+            event loop will be scheduled again by Qt. """
+        QApplication.postEvent(self.reenter_qt, self.ReenterQtEvent(fn))
+
+    def trio_done_callback(self, outcome_):
+        """ This function is called by Trio when its event loop has
+            finished. """
+        if isinstance(outcome_, outcome.Error):
+            error = outcome_.error
+            traceback.print_exception(type(error), error, error.__traceback__)
 
 
 def parse_args(arguments: Sequence[str]) -> argparse.Namespace:
@@ -312,6 +435,8 @@ def parse_args(arguments: Sequence[str]) -> argparse.Namespace:
                         help=f"Hostname oder IP-Adresse des Stellwerksim-Simulators. Default: {DEFAULT_HOST}")
     parser.add_argument("--port", type=int, default=DEFAULT_PORT,
                         help=f"Netzwerkport des Stellwerksim-Simulators. Default: {DEFAULT_PORT}")
+    parser.add_argument("--netgraph", action="store_true",
+                        help="Gleisnetzmodul anbieten. Das Gleisnetzmodul ist in Entwicklung und standardmässig verborgen.")
     parser.add_argument("--log-level", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], default="ERROR",
                         help="Minimale Stufe für Protokollmeldungen. Default: ERROR")
     parser.add_argument("--log-file", default="stskit.log",
@@ -323,39 +448,46 @@ def parse_args(arguments: Sequence[str]) -> argparse.Namespace:
     return parser.parse_args(arguments)
 
 
-async def main_window():
-    arguments = parse_args(QtWidgets.QApplication.instance().arguments())
+def main():
+    app = QApplication(sys.argv)
+    arguments = parse_args(sys.argv[1:])
     setup_logging(filename=arguments.log_file, level=arguments.log_level, log_comm=arguments.log_comm)
 
-    window = MainWindow(arguments.data_dir)
+    config_path = arguments.data_dir
+    try:
+        p = Path(config_path)
+        if not p.is_dir():
+            p = None
+    except TypeError:
+        p = None
 
-    client = PluginClient(name='STSdispo', autor='bummler', version='0.8',
-                          text='STSdispo: grafische fahrpläne, disposition und auswertung')
-
-    await client.connect(host=arguments.host, port=arguments.port)
-    window.zentrale.client = client
+    if p:
+        config_path = p
+    else:
+        config_path = Path.home() / r".stskit"
+        config_path.mkdir(exist_ok=True)
 
     try:
-        async with client._stream:
-            async with trio.open_nursery() as nursery:
-                await nursery.start(client.receiver)
-                await client.register()
-                await client.request_simzeit()
-                await client.request_anlageninfo()
-                nursery.start_soon(window.update_loop)
-                nursery.start_soon(window.ereignis_loop)
-                window.show()
-                await window.closed.wait()
-                raise TaskDone()
-
-    except KeyboardInterrupt:
-        pass
-    except TaskDone:
+        p = Path(__file__).parent / r"mplstyle" / r"dark.mplstyle"
+        matplotlib.style.use(p)
+    except OSError:
         pass
 
+    app.setStyle('Fusion')
+    try:
+        p = Path(__file__).parent / r"qt" / r"dark.css"
+        ss = p.read_text(encoding="utf8")
+        app.setStyleSheet(ss)
+    except (AttributeError, OSError):
+        pass
 
-def main():
-    qtrio.run(main_window)
+    main_window = MainWindow(arguments, config_path)
+    async_helper = AsyncHelper(main_window, main_window.start_runner)
+    QTimer.singleShot(0, async_helper.launch_guest_run)
+    main_window.show()
+
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    app.exec()
 
 
 if __name__ == "__main__":

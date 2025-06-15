@@ -4,7 +4,7 @@
 object Stammzug {
     Flügelung-Flag
     --
-    v_ab = Abfahrt erster Zug
+    Abfahrt wie Planhalt
 }
 
 object "Stammzug nächster Halt" as StammzugSucc
@@ -12,9 +12,10 @@ object "Stammzug nächster Halt" as StammzugSucc
 object Folgezug {
     Anschluss 1
     --
-    v_an = Ankunft Stammzug
-    v_ab = Abfahrt zweiter Zug
+    an = Ankunft Stammzug
+    ab = Abfahrt zweiter Zug
 }
+'Ankunftszeiten der beiden Züge sind gleich
 
 object "Folgezug nächster Halt" as FolgezugSucc
 
@@ -28,12 +29,14 @@ object "Anschlusszug 3" as A3 {
 Anschluss 3
 }
 
-Stammzug --> Folgezug: F
-Stammzug --> StammzugSucc: P
+Stammzug "t_an" --> "t_an" Folgezug: F
+Stammzug "v_ab" --> "v_an" StammzugSucc: P
 Folgezug --> FolgezugSucc: P
 
 A1 "*" -[dashed]-> Folgezug: A
 Folgezug -[dashed]-> "*" A2: A
 Stammzug -[dashed]-> "*" A3: A
+
+note "Flügeln" as N1
 
 @enduml
