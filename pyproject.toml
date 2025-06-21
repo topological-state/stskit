@@ -11,9 +11,11 @@ dependencies = [
     "mock>=5.2.0",
     "netgraph>=4.13.2",
     "networkx>=3.4.2",
-    "nuitka>=2.7.7",
     "numpy>=2.2.5",
     "pyside6>=6.9.1",
     "trio>=0.30.0",
     "untangle>=1.2.1",
 ]
+
+[dependency-groups]
+dev = ["nuitka>=2.7.7"]
