@@ -3,7 +3,7 @@ name = "stskit"
 version = "2.0.0"
 description = "stskit - graphical timetables plugin for Stellwerksim"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = [
     "icecream>=2.1.4",
     "jsonschema>=4.23.0",
