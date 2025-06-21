@@ -5,19 +5,20 @@
 # nuitka-project: --include-data-files=stskit/qt/*.ui=stskit/qt/
 # nuitka-project: --include-data-files=stskit/config/*.json=stskit/config/
 
-# Compilation mode, standalone everywhere, except on macOS there app bundle
-# nuitka-project: --mode=app
-#
+# Compilation mode, support OS-specific options
+# nuitka-project-if: {OS} in ("Windows", "Linux", "Darwin", "FreeBSD"):
+#    nuitka-project: --onefile
+# nuitka-project-else:
+#    nuitka-project: --standalone
+
 # Debugging options, controlled via environment variable at compile time.
-# nuitka-project-if: {OS} == "Windows" and os.getenv("DEBUG_COMPILATION", "no") == "yes"
+# nuitka-project-if: {OS} == "Windows" and os.getenv("DEBUG_COMPILATION", "no") == "yes":
 #     nuitka-project: --windows-console-mode=hide
 # nuitka-project-else:
-#     nuitka-project: --windows-console-mode=disabled
+#     nuitka-project: --windows-console-mode=disable
 
 # to compile with nuitka:
-# uv run python -m nuitka --standalone stsdispo.py
-# or:
-# uv run python -m nuitka --onefile stsdispo.py
+# uv run python -m nuitka stsdispo.py
 
 
 from stskit.__main__ import main
