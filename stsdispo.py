@@ -5,12 +5,7 @@
 # nuitka-project: --include-data-files=stskit/qt/*.ui=stskit/qt/
 # nuitka-project: --include-data-files=stskit/config/*.json=stskit/config/
 
-# Compilation mode, support OS-specific options
-# nuitka-project-if: {OS} in ("Windows", "Linux", "Darwin", "FreeBSD"):
-#    nuitka-project: --onefile
-# nuitka-project-else:
-#    nuitka-project: --standalone
-
+# nuitka-project: --mode=app
 # Debugging options, controlled via environment variable at compile time.
 # nuitka-project-if: {OS} == "Windows" and os.getenv("DEBUG_COMPILATION", "no") == "yes":
 #     nuitka-project: --windows-console-mode=hide

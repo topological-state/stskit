@@ -19,3 +19,6 @@ dependencies = [
 
 [dependency-groups]
 dev = ["nuitka>=2.7.7"]
+
+[tool.uv]
+python-preference = "only-managed"
