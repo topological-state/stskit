@@ -7,22 +7,22 @@ on:
 
 jobs:
   build:
-     strategy:
-        matrix:
-          os: [ubuntu-latest, windows-latest]
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
 
-     runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
 
-     steps:
-        - name: Check-out repository
-          uses: actions/checkout@v4
+    steps:
+      - name: Check-out repository
+        uses: actions/checkout@v4
 
-        - name: Setup Python
-          uses: actions/setup-python@v5
-          with:
-            cache: 'pip'
-            cache-dependency-path: |
-              **/requirements*.txt
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          cache: 'pip'
+          cache-dependency-path: |
+            **/requirements*.txt
 
       - name: Install Dependencies
         run: |
