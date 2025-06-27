@@ -6,7 +6,7 @@ from typing import Any, Callable, Dict, Iterable, NamedTuple, Optional, Set, Tup
 import networkx as nx
 
 from stskit.model.graphbasics import dict_property
-from stskit.model.bahnhofgraph import BahnhofGraph
+from stskit.model.bahnhofgraph import BahnhofElement, BahnhofGraph
 from stskit.plugin.stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
 from stskit.plugin.stsobj import Knoten, FahrplanZeile, ZugDetails, FahrplanZeileID
 
@@ -156,24 +156,24 @@ class ZielGraphNode(dict):
             return None
 
     @property
-    def plan_bst(self) -> Tuple[str, str]:
+    def plan_bst(self) -> BahnhofElement:
         """
         Plangleis in Betriebsstellen-Notation.
         """
         if self.typ in {'E', 'A'}:
-            return 'Agl', self.plan
+            return BahnhofElement('Agl', self.plan)
         else:
-            return 'Gl', self.plan
+            return BahnhofElement('Gl', self.plan)
 
     @property
-    def gleis_bst(self) -> Tuple[str, str]:
+    def gleis_bst(self) -> BahnhofElement:
         """
         Effektives Gleis in Betriebsstellen-Notation.
         """
         if self.typ in {'E', 'A'}:
-            return 'Agl', self.gleis
+            return BahnhofElement('Agl', self.gleis)
         else:
-            return 'Gl', self.gleis
+            return BahnhofElement('Gl', self.gleis)
 
     @classmethod
     def from_fahrplanzeile(cls, fahrplanzeile: FahrplanZeile):
