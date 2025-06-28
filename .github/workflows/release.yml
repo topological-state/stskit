@@ -2,14 +2,14 @@ name: Build release
 
 on:
   push:
-    branches:
-      - 'releases'
+    tags:
+      - "v*.*.*"
 
 jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
 
     runs-on: ${{ matrix.os }}
 
@@ -39,9 +39,31 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ runner.os }} Build
+          name: build-${{ runner.os }}
           path: | # match what's created for the 3 OSes
             build/*.exe
             build/*.bin
             build/*.app/**/*
           include-hidden-files: true
+
+  release:
+    name: Create github release
+    needs: build
+    runs-on:
+      ubuntu-latest
+    steps:
+      - name: Retrieve build packages
+        uses: actions/download-artifact@v4
+        with:
+          pattern: build-*
+          merge-multiple: true
+          path: dist
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: false
+          files: dist/*
+          fail_on_unmatched_files: true
+          make_latest: false
