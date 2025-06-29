@@ -60,7 +60,10 @@ jobs:
         with:
           pattern: build-*
           merge-multiple: true
-          path: dist
+          path: artifacts
+
+      - name: zip macos package
+        run: zip -r artifacts/stsdispo.app.zip artifacts/*.app
 
       - name: Create release
         uses: softprops/action-gh-release@v2
@@ -68,6 +71,6 @@ jobs:
           body_path: CHANGELOG.md
           draft: false
           prerelease: false
-          files: dist/*
+          files: artifacts/*
           fail_on_unmatched_files: true
           make_latest: false

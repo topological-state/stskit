@@ -1,6 +1,11 @@
 # Changelog
 
-## Unreleased
+## 2.0.3 (2025-06-29)
+
+### Closed issues
+
+- Issue 144: Runtime Error
+- Issue 145: Anschlussmatrix
 
 ## 2.0.1 (2025-06-28)
 
@@ -24,9 +29,3 @@
 - Das neue Schema der Konfigurationsdateien ist inkompatibel zu der Version 1. 
 Bestehende Konfigurationsdaten werden automatisch migriert, können nachher aber nicht mehr in Version 1 benutzt werden.
 - (intern) Grosses Refactoring der Modulstruktur, konsequente Separation von Modell und View.
-
-### Closed issues
-
-### Merged pull requests
-
-### Other fixes
