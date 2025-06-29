@@ -99,7 +99,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
             auswahl_matrix = self.anschlussmatrix._make_auswahl_matrix(self.anschlussmatrix.anschluss_auswahl)
             auswahl_matrix[auswahl_matrix == 0] = np.nan
             status_auswahl = self.anschlussmatrix.anschlussstatus * auswahl_matrix
-            auswahl = display_mode and ~np.all(np.isnan(status_auswahl))
+            auswahl = display_mode and bool(~np.all(np.isnan(status_auswahl)))
         else:
             auswahl = False
 
@@ -108,8 +108,8 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         plus_enabled = auswahl and np.any(np.isin(status_auswahl, [ANSCHLUSS_ABWARTEN, ANSCHLUSS_WARNUNG, ANSCHLUSS_OK]))
         abwarten_enabled = auswahl and np.any(np.isin(status_auswahl, [ANSCHLUSS_WARNUNG, ANSCHLUSS_OK]))
         einblenden_enabled = display_mode and self.anschlussmatrix is not None and \
-                             (len(self.anschlussmatrix.abfahrten_ausblenden) or
-                            len(self.anschlussmatrix.ankuenfte_ausblenden))
+                             bool((len(self.anschlussmatrix.abfahrten_ausblenden) or
+                             len(self.anschlussmatrix.ankuenfte_ausblenden)))
 
         self.ui.actionSetup.setEnabled(display_mode)
         self.ui.actionAnzeige.setEnabled(not display_mode)
