@@ -92,6 +92,12 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.update_actions()
         self.in_update = False
 
+    def closeEvent(self, event, /):
+        self.zentrale.anlage_update.unregister(self)
+        self.zentrale.plan_update.unregister(self)
+        self.zentrale.betrieb_update.unregister(self)
+        super().closeEvent(event)
+
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
 

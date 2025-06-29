@@ -1,6 +1,7 @@
 import logging
 from typing import Any, Optional
 import weakref
+from icecream import ic
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +36,12 @@ class Observable:
             raise
         else:
             self._observers[obj] = name
+
+    def unregister(self, observer):
+        try:
+            del self._observers[observer]
+        except KeyError:
+            pass
 
     def trigger(self):
         """

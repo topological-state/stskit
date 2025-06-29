@@ -588,6 +588,12 @@ class FahrplanWindow(QtWidgets.QWidget):
 
         self.zielplot = ZielPlot(zentrale.anlage)
 
+    def closeEvent(self, event, /):
+        self.zentrale.anlage_update.unregister(self)
+        self.zentrale.plan_update.unregister(self)
+        self.zentrale.betrieb_update.unregister(self)
+        super().closeEvent(event)
+
     def plan_update(self, *args, **kwargs) -> None:
         """
         fahrplan mit neuen daten aktualisieren.

@@ -140,6 +140,10 @@ class TickerWindow(QtWidgets.QMainWindow):
         self.table.setSelectionMode(QAbstractItemView.NoSelection)
         layout.addWidget(self.table)
 
+    def closeEvent(self, event, /):
+        self.zentrale.plugin_ereignis.unregister(self)
+        super().closeEvent(event)
+
     def add_ereignis(self, *args, ereignis: Ereignis, **kwargs):
         self.model.add_ereignis(ereignis)
         self.model.layoutChanged.emit()

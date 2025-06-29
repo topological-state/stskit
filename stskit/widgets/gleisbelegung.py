@@ -73,6 +73,12 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.update_widgets()
         self.update_actions()
 
+    def closeEvent(self, event, /):
+        self.zentrale.anlage_update.unregister(self)
+        self.zentrale.plan_update.unregister(self)
+        self.zentrale.betrieb_update.unregister(self)
+        super().closeEvent(event)
+
     @property
     def anlage(self) -> Anlage:
         return self.zentrale.anlage

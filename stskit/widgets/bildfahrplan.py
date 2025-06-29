@@ -88,6 +88,12 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     def client(self) -> PluginClient:
         return self.zentrale.client
 
+    def closeEvent(self, event, /):
+        self.zentrale.anlage_update.unregister(self)
+        self.zentrale.plan_update.unregister(self)
+        self.zentrale.betrieb_update.unregister(self)
+        super().closeEvent(event)
+
     def anlage_update(self, *args, **kwargs):
         """
         Anlagenupdate
