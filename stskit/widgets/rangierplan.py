@@ -946,6 +946,12 @@ class RangierplanWindow(QWidget):
 
         self.ui.splitter.setSizes([800, 200])
 
+    def closeEvent(self, event, /):
+        self.zentrale.plugin_ereignis.unregister(self)
+        self.zentrale.plan_update.unregister(self)
+        self.zentrale.betrieb_update.unregister(self)
+        super().closeEvent(event)
+
     def plan_update(self, *args, **kwargs) -> None:
         self.rangiertabelle_sort_filter.simzeit = self.zentrale.simzeit_minuten
         self.rangiertabelle_modell.update()
