@@ -1,7 +1,6 @@
 import logging
 from typing import Any, Optional
 import weakref
-from icecream import ic
 
 logger = logging.getLogger(__name__)
 
