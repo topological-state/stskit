@@ -101,7 +101,7 @@ class StsDispoRunner(QObject):
         self.enable_update: bool = True
         self.notify_interval: int = 1
         self.enable_notify: bool = True
-        self.status: str = ""
+        self.status: str = "Keine Verbindung"
         self.status_update = Observable(self)
 
         self.client = GraphClient(name='STSdispo', autor='Matthias Muntwiler', version='2.0',
@@ -189,6 +189,7 @@ class MainWindow(QMainWindow):
         self.arguments = arguments
         self.config_path = config_path
         self.runner: Optional[StsDispoRunner] = None
+        self.data_available: bool = False
         self.windows = WindowManager()
 
         self.setWindowTitle("STSdispo")
@@ -254,9 +255,12 @@ class MainWindow(QMainWindow):
     def update_status(self, *args, **kwargs):
         if self.runner is not None:
             self.statusfeld.setText(self.runner.status)
-            enable = self.runner.enable_update
+            if self.runner.status == "":
+                self.data_available = True
+            enable = self.runner.enable_update and self.data_available
         else:
             self.statusfeld.setText("Keine Verbindung")
+            self.data_available = False
             enable = False
 
         self.einfahrten_button.setEnabled(enable)
