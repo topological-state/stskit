@@ -472,11 +472,12 @@ class ZugschemaAuswahlModell(QtCore.QAbstractTableModel):
             return False
 
         if role == QtCore.Qt.CheckStateRole:
+            value = QtCore.Qt.CheckState(value)
             if self.auswahl_erlauben and col == -1:
                 if value == QtCore.Qt.Checked:
                     self._auswahl.add(kat)
                 else:
-                    self._auswahl.remove(kat)
+                    self._auswahl.discard(kat)
                 return True
 
         return False
@@ -989,6 +990,7 @@ class ZugbeschriftungAuswahlModell(QtCore.QAbstractTableModel):
             return False
 
         if role == QtCore.Qt.CheckStateRole:
+            value = QtCore.Qt.CheckState(value)
             if col == 0:
                 if value == QtCore.Qt.Checked:
                     self._auswahl.add(element)
