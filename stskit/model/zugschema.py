@@ -20,9 +20,10 @@ import matplotlib as mpl
 from PySide6 import QtCore, QtGui
 from PySide6.QtCore import QModelIndex
 
+from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.ereignisgraph import EreignisGraphNode
 from stskit.model.zielgraph import ZielGraphNode
-from stskit.plugin.stsobj import time_to_minutes, ZugDetails
+from stskit.plugin.stsobj import ZugDetails
 from stskit.model.zuggraph import ZugGraphNode
 
 logger = logging.getLogger(__name__)
@@ -715,327 +716,544 @@ class ZugschemaBearbeitungModell(QtCore.QAbstractTableModel):
         self.endResetModel()
 
 
+class ZugFormatter:
+    """
+    Formatiert Elemente der Zugbeschriftung
+
+    Die formatierten Elemente werden als Properties dargestellt,
+    basierend auf den bei der Erstellung angegebenen Graphdaten.
+
+    Die Angabe der Anlage und des Zuges sind immer zwingend.
+    Für die Gleisbelegung kann entweder das Ziel oder die Ankunfts- und Abfahrtsereignisse angegeben werden.
+    Für den Bildfahrplan und die Anschlussmatrix ist die Angabe der Ankunfts- und/oder Abfahrtsereignisse erforderlich,
+    das Fahrplanziel ist nicht nötig.
+    Die Ereignisangaben haben Priorität.
+    """
+
+    def __init__(self,
+                 anlage: 'Anlage',
+                 zug: ZugGraphNode,
+                 ziel: Optional[ZielGraphNode] = None,
+                 ankunft: Optional[EreignisGraphNode] = None,
+                 abfahrt: Optional[EreignisGraphNode] = None,
+                 null_zeigen: bool = False):
+
+        super().__init__()
+        self._anlage = anlage
+        self._zug = zug
+        self._ziel = ziel
+        self._ankunft = ankunft
+        self._abfahrt = abfahrt
+        self._null_zeigen = null_zeigen
+
+    @property
+    def von(self) -> str:
+        """
+        Anfang des Zuges
+
+        Dies ist der Name einer Anschlussstelle oder eines Bahnhofs.
+        """
+
+        try:
+            zuganfang = self._anlage.zielgraph.zuganfaenge[self._zug.zid]
+            anfangsziel = self._anlage.zielgraph.nodes[zuganfang]
+            result = self._anlage.bahnhofgraph.find_superior(anfangsziel.gleis_bst, {"Anst", "Bf"}).name
+        except (AttributeError, KeyError):
+            result = ""
+
+        return result
+
+    @property
+    def nach(self) -> str:
+        """
+        Ende des Zuges
+
+        Dies ist der Name einer Anschlussstelle oder eines Bahnhofs.
+        """
+
+        try:
+            zugende = self._anlage.zielgraph.zugenden[self._zug.zid]
+            endziel = self._anlage.zielgraph.nodes[zugende]
+            result = self._anlage.bahnhofgraph.find_superior(endziel.gleis_bst, {"Anst", "Bf"}).name
+        except (AttributeError, KeyError):
+            result = ""
+
+        return result
+
+    @property
+    def zug(self) -> str:
+        """
+        Zugbeschreibung mit Name, Anfang und Ende
+
+        Format: Name (von - nach)
+        """
+
+        von = self.von or '?'
+        nach = self.nach or '?'
+        return f"{self._zug.name} ({von} - {nach})"
+
+    @property
+    def name(self) -> str:
+        """
+        Zugname (Gattung und Nummer)
+        """
+
+        return self._zug.name
+
+    @property
+    def nummer(self) -> str:
+        """
+        Zugnummer
+        """
+
+        return str(self._zug.nummer)
+
+    @property
+    def gleis_an(self) -> str:
+        """
+        Name des disponierten Ankunftsgleises
+        """
+
+        if self._ankunft is not None:
+            g = self._ankunft.gleis
+        elif self._ziel is not None:
+            g = self._ziel.gleis
+        else:
+            return ""
+
+        return g
+
+    @property
+    def gleis_ab(self) -> str:
+        """
+        Name des disponierten Abfahrtsgleises
+        """
+
+        if self._abfahrt is not None:
+            g = self._abfahrt.gleis
+        elif self._ziel is not None:
+            g = self._ziel.gleis
+        else:
+            return ""
+
+        return g
+
+    @property
+    def gleis_plan_an(self) -> str:
+        """
+        Namen der geplanten und disponierten Ankunftsgleise
+
+        Format: disponiert/geplant falls verschieden.
+        Wenn das Gleis nicht geändert wurde, wird nur das Plangleis ausgegeben.
+        """
+
+        if self._ankunft is not None:
+            g = self._ankunft.gleis
+            p = self._ankunft.plan
+        elif self._ziel is not None:
+            g = self._ziel.gleis
+            p = self._ziel.plan
+        else:
+            return ""
+
+        if g == p:
+            return g
+        else:
+            return f"{g}/{p}"
+
+    @property
+    def gleis_plan_ab(self) -> str:
+        """
+        Namen der geplanten und disponierten Abfahrtsgleise
+
+        Format: disponiert/geplant falls verschieden.
+        Wenn das Gleis nicht geändert wurde, wird nur das Plangleis ausgegeben.
+        """
+
+        if self._abfahrt is not None:
+            g = self._abfahrt.gleis
+            p = self._abfahrt.plan
+        elif self._ziel is not None:
+            g = self._ziel.gleis
+            p = self._ziel.plan
+        else:
+            return ""
+
+        if g == p:
+            return g
+        else:
+            return f"{g}/{p}"
+
+    @property
+    def zeit_v_an(self):
+        """
+        Geplante Ankunftszeit und Verspätung
+
+        Format: ← HH:MM+V ABH
+        Die Verspätung erscheint nur, wenn sie ungleich 0 ist, oder das Attribut null_zeigen gesetzt ist.
+        Wenn Abhängigkeiten (abh_an Property) bestehen, werden diese angefügt.
+        """
+
+        zv = f"← {self.zeit_an}{self.v_an}"
+        l = [zv]
+        abh = self.abh_an
+        if abh:
+            l.append(abh)
+        return " ".join(l)
+
+    @property
+    def zeit_v_ab(self):
+        """
+        Geplante Abfahrtszeit und Verspätung
+
+        Format: → HH:MM+V ABH
+        Die Verspätung erscheint nur, wenn sie ungleich 0 ist, oder das Attribut null_zeigen gesetzt ist.
+        Wenn Abhängigkeiten (abh_ab Property) bestehen, werden diese angefügt.
+        """
+
+        zv = f"→ {self.zeit_ab}{self.v_ab}"
+        l = [zv]
+        abh = self.abh_ab
+        if abh:
+            l.append(abh)
+        return " ".join(l)
+
+    @property
+    def zeit_an(self) -> str:
+        """
+        Geplante Ankunftszeit
+
+        Format: HH:MM
+        """
+
+        try:
+            zeit = self._ankunft.t_plan
+        except (AttributeError, KeyError):
+            try:
+                zeit = self._ziel.p_an
+            except (AttributeError, KeyError):
+                return ""
+
+        result = f"{int(zeit) // 60:02}:{int(zeit) % 60:02}"
+        return result
+
+    @property
+    def zeit_ab(self) -> str:
+        """
+        Geplante Abfahrtszeit
+
+        Format: HH:MM
+        """
+
+        try:
+            zeit = self._abfahrt.t_plan
+        except (AttributeError, KeyError):
+            try:
+                zeit = self._ziel.p_ab  # todo
+            except (AttributeError, KeyError):
+                return ""
+
+        result = f"{int(zeit) // 60:02}:{int(zeit) % 60:02}"
+        return result
+
+    @property
+    def v_an(self) -> str:
+        """
+        Ankunftsverspätung inkl. Vorzeichen
+
+        Format: +V
+        Die Verspätung erscheint nur, wenn sie ungleich 0 ist, oder das Attribut null_zeigen gesetzt ist.
+        """
+
+        if self._ankunft is not None:
+            v = self._ankunft.t_eff - self._ankunft.t_plan
+        elif self._ziel is not None:
+            v = self._ziel.v_an
+        else:
+            v = 0
+
+        if self._null_zeigen or abs(v) > 0.5:
+            result = f"{int(v):+}"
+        else:
+            result = ""
+        return result
+
+    @property
+    def v_ab(self) -> str:
+        """
+        Abfahrtsverspätung inkl. Vorzeichen
+
+        Format: +V
+        Die Verspätung erscheint nur, wenn sie ungleich 0 ist, oder das Attribut null_zeigen gesetzt ist.
+        """
+
+        if self._abfahrt is not None:
+            v = self._abfahrt.t_eff - self._abfahrt.t_plan
+        elif self._ziel is not None:
+            v = self._ziel.v_ab
+        else:
+            v = 0
+
+        if self._null_zeigen or abs(v) > 0.5:
+            result = f"{int(v):+}"
+        else:
+            result = ""
+        return result
+
+    @property
+    def abh_an(self) -> str:
+        """
+        Ankunftsabhängigkeiten (nicht implementiert)
+        """
+
+        return ""
+
+    @property
+    def abh_ab(self) -> str:
+        """
+        Abfahrtsabhängigkeiten (nicht implementiert)
+        """
+
+        return ""
+
+
 class Zugbeschriftung:
     """
-    Konfigurieren und Formatieren von Zugbeschriftungen
+    Formatieren von Zugbeschriftungen
 
-    Idee: Jede Darstellung unterhält ein zugeordnetes Zugbeschriftungsobjekt.
-    In diesem wird das Format der Zugbeschriftung sowie die enthaltenen Elemente konfiguriert.
+    Diese Klasse formatiert die Zugbeschriftungen (Labels und Infos) für die wichtigen Anzeigemodule.
+    Sie stellt Formatierungsmethoden für deren Zwecke bereit.
+    Die Methoden in dieser Klasse definieren das Muster der jeweiligen Beschriftungen.
+    Die Muster bestehen aus Elementen, die jeweils von einem ZugFormatter-Objekt gestellt werden.
 
-    Meist bleibt das Format für eine bestimmte Darstellung unverändert und wird programmatisch gesetzt.
-    Die in der Beschriftung verwendeten Elemente werden vom Benutzer konfiguriert,
-    z.B. mittels ZugBeschriftungAuswahlModell.
+    Die folgenden Formate werden produziert:
 
-    Attribute:
-        stil: Name des Stils entspricht dem Ziel der Anzeige: z.B. Anschlussmatrix, Bildfahrplan, Gleisbelegung.
-            Jeder Stil hat ein vorgegebenes Muster und Elemente.
-        muster: Reihenfolge, in der die Elemente dargestellt werden.
-        elemente: Elemente, die in der Beschriftung enthalten sein sollen.
-            Dieses Attribut kann vom Benutzer eingestellt werden.
+    Slot-Info
+        IC 2662 (WI - TG), BG5/BG4, ← 15:03+6, → 15:04+5
+
+    Slot-Label
+        2662 +6
+
+    Trasse-Info
+        IC 2662 (WI - TG), B 2/B 1 → 15:30+3, C 3 ← 15:40+3
+
+    Trasse kurz
+        2662 +6|+5
+
+    Anschluss-Info
+        IC 2662 (WI - TG), C 3 ← 15:20+3, C 3 → 15:30+3
+
+    Anschluss-Label
+        IC 2662 / WI
+
+    Anschluss-Inset
+        C 3, 15:20, +3
+
     """
 
-    ELEMENTE = ['Gleis', 'Name', 'Nummer', 'Richtung', 'Zeit', 'Verspätung']
-    SITUATIONEN = ['Ankunft', 'Abfahrt']
-    DEFAULT_MUSTER = {
-        'Anschlussmatrix': ['Gleis', 'Name', 'Nummer', 'Richtung', 'Zeit', 'Verspätung'],
-        'Bildfahrplan': ['Name', 'Nummer', 'Verspätung'],
-        'Gleisbelegung': ['Name', 'Nummer', 'Verspätung'],
-        'default': ['Name', 'Verspätung']
-    }
-    DEFAULT_ELEMENTE = {
-        'Anschlussmatrix': ['Nummer', 'Richtung', 'Verspätung'],
-        'Bildfahrplan': ['Nummer', 'Verspätung'],
-        'Gleisbelegung': ['Nummer', 'Verspätung'],
-        'default': ['Name', 'Verspätung']
-    }
+    def __init__(self, anlage: 'Anlage'):
+        self._anlage = anlage
 
-    def __init__(self, stil: str = 'default'):
-        self._stil: str = stil
-        self._muster: List[str] = self.DEFAULT_MUSTER[stil]
-        self._elemente: Set[str] = self.DEFAULT_ELEMENTE[stil]
-
-    @property
-    def muster(self) -> List[str]:
-        return self._muster
-
-    @muster.setter
-    def muster(self, muster: Iterable[str]):
-        self._muster = list(muster)
-
-    @property
-    def elemente(self) -> Set[str]:
-        return self._elemente
-
-    @elemente.setter
-    def elemente(self, elemente: Iterable[str]):
-        self._elemente = set(elemente)
-
-    def format(self,
-               zug_data: ZugGraphNode,
-               ziel_data: Union[ZielGraphNode, EreignisGraphNode],
-               situation: Optional[Union[str, Set[str]]] = None) -> str:
+    def format_slot_label(self,
+               zug: ZugGraphNode,
+               ziel: Optional[ZielGraphNode] = None,
+               ankunft: Optional[EreignisGraphNode] = None,
+               abfahrt: Optional[EreignisGraphNode] = None) -> str:
 
         """
-        Zugbeschriftung nach Ankunfts- oder Abfahrtsmuster formatieren
+        Formatiert ein Slot-Label für die Gleisbelegungsgrafik
 
-        Gleis Name Nummer Richtung Zeit (Verspätung)
-
-        :param zug_data: Zugdaten
-        :param ziel_data: Zieldaten
-        :param situation: 'Abfahrt' (default) und/oder 'Ankunft'
-        :return: str
+        Format: Zugnummer, Verspätung
         """
 
-        if situation is None:
-            situation = {'Abfahrt'}
-        elif isinstance(situation, str):
-            situation = {situation}
+        fmt = ZugFormatter(self._anlage, zug, ziel, ankunft, abfahrt, null_zeigen=False)
 
-        args = {'Name': zug_data.name,
-                'Nummer': str(zug_data.nummer),
-                'Gleis': ziel_data.gleis + ':',
-                'Richtung': '',
-                'Zeit': None,
-                'Verspätung': None
-                }
+        t = ""
+        if ziel is not None:
+            typ = ziel.get("typ", "?")
+            if typ == 'E':
+                t = "← "
+            elif typ == 'A':
+                t = "→ "
 
-        if 'Ankunft' in situation:
-            try:
-                args['Richtung'] = zug_data.von.replace("Gleis ", "").split(" ")[0]
-            except AttributeError:
-                pass
-            try:
-                if ziel_data.typ == 'An':
-                    args['Zeit'] = ziel_data.t_plan
-                else:
-                    args['Zeit'] = ziel_data.p_an
-            except AttributeError:
-                pass
-            try:
-                if ziel_data.typ == 'An':
-                    args['Verspätung'] = ziel_data.t_eff - ziel_data.t_plan
-                else:
-                    args['Verspätung'] = ziel_data.v_an
-            except AttributeError:
-                pass
+        s = t + fmt.nummer
+        l = [s]
+        v = fmt.v_an
+        if v:
+            l.append(v)
+        result = "\n".join(l)
 
-        if 'Abfahrt' in situation:
-            try:
-                args['Richtung'] = zug_data.nach.replace("Gleis ", "").split(" ")[0]
-            except AttributeError:
-                pass
-            try:
-                if ziel_data.typ == 'Ab':
-                    args['Zeit'] = ziel_data.t_plan
-                else:
-                    args['Zeit'] = ziel_data.p_ab
-            except AttributeError:
-                pass
-            try:
-                if ziel_data.typ == 'Ab':
-                    args['Verspätung'] = ziel_data.t_eff - ziel_data.t_plan
-                else:
-                    args['Verspätung'] = ziel_data.v_ab
-            except AttributeError:
-                pass
+        return result
 
-        if args['Zeit']:
-            args['Zeit'] = f"{int(args['Zeit']) // 60:02}:{int(args['Zeit']) % 60:02}"
+    def format_slot_info(self,
+               zug: ZugGraphNode,
+               ziel: Optional[ZielGraphNode] = None,
+               ankunft: Optional[EreignisGraphNode] = None,
+               abfahrt: Optional[EreignisGraphNode] = None) -> str:
+
+        """
+        Formatiert die Zuginfo für die Gleisbelegungsgrafik
+
+        Format: Zug, Ankunft, Abfahrt
+        """
+
+        fmt = ZugFormatter(self._anlage, zug, ziel, ankunft, abfahrt, null_zeigen=False)
+        zug = fmt.zug
+        ankunft = " ".join([fmt.gleis_plan_an, fmt.zeit_v_an])
+        abfahrt = fmt.zeit_v_ab
+
+        l = [zug]
+        if ankunft:
+            l.append(ankunft)
+        if abfahrt:
+            l.append(abfahrt)
+
+        result = ", ".join(l)
+        return result
+
+    def format_trasse_label(self,
+               zug: ZugGraphNode,
+               ziel: Optional[ZielGraphNode] = None,
+               ankunft: Optional[EreignisGraphNode] = None,
+               abfahrt: Optional[EreignisGraphNode] = None) -> str:
+
+        """
+        Formatiert das Trassenlabel für den Bildfahrplan
+
+        Format: Zugnummer, Verspätung
+        """
+
+        fmt = ZugFormatter(self._anlage, zug, ziel, ankunft, abfahrt, null_zeigen=False)
+        l = []
+        v_ab = fmt.v_ab
+        if v_ab:
+            l.append(v_ab)
+        v_an = fmt.v_an
+        if v_an:
+            l.append(v_an)
+        if v_ab == v_an:
+            v = v_an
         else:
-            del args['Zeit']
+            v = "|".join(l)
 
-        if args['Verspätung']:
-            args['Verspätung'] = f"({int(args['Verspätung']):+})"
+        l = [fmt.nummer]
+        if v:
+            l.append(v)
+        result = " ".join(l)
+
+        return result
+
+    def format_trasse_info(self,
+               zug: ZugGraphNode,
+               ziel: Optional[ZielGraphNode] = None,
+               ankunft: Optional[EreignisGraphNode] = None,
+               abfahrt: Optional[EreignisGraphNode] = None) -> str:
+
+        """
+        Formatiert die Zuginfo für den Bildfahrplan
+
+        Format: Zug, Abfahrt, Ankunft
+        """
+
+        fmt = ZugFormatter(self._anlage, zug, ziel, ankunft, abfahrt, null_zeigen=False)
+        zug = fmt.zug
+        ankunft = " ".join([fmt.gleis_plan_an, fmt.zeit_v_an])
+        abfahrt = " ".join([fmt.gleis_plan_ab, fmt.zeit_v_ab])
+
+        l = [zug]
+        if abfahrt:
+            l.append(abfahrt)
+        if ankunft:
+            l.append(ankunft)
+
+        result = ", ".join(l)
+        return result
+
+    def format_anschluss_label(self,
+               zug: ZugGraphNode,
+               ziel: Optional[ZielGraphNode] = None,
+               ankunft: Optional[EreignisGraphNode] = None,
+               abfahrt: Optional[EreignisGraphNode] = None) -> str:
+
+        """
+        Formatiert ein Achsenlabel der Anschlussmatrix
+
+        Format: Zug, von/nach
+        von/nach je nachdem, ob das Ankunfts- oder Abfahrtsereignis angegeben wird.
+        """
+
+        fmt = ZugFormatter(self._anlage, zug, ziel, ankunft, abfahrt)
+        zeilen = [fmt.zug]
+        if ankunft:
+            anst = fmt.von
+        elif abfahrt:
+            anst = fmt.nach
         else:
-            del args["Verspätung"]
+            anst = ""
+        if anst:
+            zeilen.append(anst)
 
-        beschriftung = " ".join((args[element] for element in self._muster if element in self._elemente and element in args))
-        return beschriftung
+        return "\n".join(zeilen)
 
+    def format_anschluss_inset(self,
+               zug: ZugGraphNode,
+               ziel: Optional[ZielGraphNode] = None,
+               ankunft: Optional[EreignisGraphNode] = None,
+               abfahrt: Optional[EreignisGraphNode] = None) -> str:
 
-class ZugbeschriftungAuswahlModell(QtCore.QAbstractTableModel):
-    """
-    Tabellenmodell zum Einstellen Zugbeschriftung
+        """
+        Formatiert ein Inset der Anschlussmatrix
 
-    Die Tabelle enthält die Spalten 'Auswahl', 'Beschreibung'.
-    Die Zeilen enthalten die wählbaren Elemente 'Gleis', 'Zug', 'Nummer', 'Richtung', 'Zeit', 'Verspätung'.
+        Format: Gleis (abgekürzt), Zeit, Verspätung
 
-    Implementiert die Methoden von QAbstractTableModel.
-    """
-
-    def __init__(self, *args, beschriftung: Zugbeschriftung = ..., **kwargs) -> None:
+        Zeit und Verspätung werden ausgeblendet, nachdem das Ereignis eingetreten ist.
         """
 
-        :param args: Für Superklasse
-        :param elemente: Wählbare Elemente
-        :param kwargs: Für Superklasse
+        fmt = ZugFormatter(self._anlage, zug, ziel, ankunft, abfahrt, null_zeigen=False)
+        l = []
+        g = z = v = ""
+        if ankunft:
+            g = fmt.gleis_an
+            if not ankunft.get("t_mess"):
+                z = fmt.zeit_an
+                v = fmt.v_an
+        elif abfahrt:
+            g = fmt.gleis_ab
+            if not abfahrt.get("t_mess"):
+                z = fmt.zeit_ab
+                v = fmt.v_ab
+
+        g = self._anlage.gleisschema.gleisname_kurz(g)[:6]
+        l.append(g)
+        l.append(z)
+        if int(v or "0") > 0:
+            l.append(v)
+        result = "\n".join(l)
+
+        return result
+
+    def format_anschluss_info(self,
+               zug: ZugGraphNode,
+               ziel: Optional[ZielGraphNode] = None,
+               ankunft: Optional[EreignisGraphNode] = None,
+               abfahrt: Optional[EreignisGraphNode] = None) -> str:
+
+        """
+        Formatiert die Zuginfo für die Anschlussmatrix
+
+        Format: Zug, Ankunft, Abfahrt
         """
 
-        super().__init__(*args, **kwargs)
+        fmt = ZugFormatter(self._anlage, zug, ziel, ankunft, abfahrt, null_zeigen=False)
+        zug = fmt.zug
+        ankunft = " ".join([fmt.gleis_plan_an, fmt.zeit_v_an])
+        abfahrt = fmt.zeit_v_ab
 
-        self._beschriftung = beschriftung
-        self._spalten: List[str] = ['Auswahl', 'Beschreibung']
-        self._elemente: List[str] = list(beschriftung.muster)
-        self._auswahl: Set[str] = set(beschriftung.elemente)
+        l = [zug]
+        if ankunft:
+            l.append(ankunft)
+        if abfahrt:
+            l.append(abfahrt)
 
-    @property
-    def elemente(self) -> Iterable[str]:
-        return self._elemente
-
-    @elemente.setter
-    def elemente(self, elemente: Iterable[str]):
-        self.beginResetModel()
-        self._elemente = list(elemente)
-        self.endResetModel()
-
-    @property
-    def auswahl(self) -> Set[str]:
-        """
-        Aktuelle Auswahl
-
-        :return: Menge von Beschriftungselementen
-        """
-
-        return self._auswahl.copy()
-
-    @auswahl.setter
-    def auswahl(self, auswahl: Iterable[str]):
-        """
-        Auswahl ändern
-
-        :param auswahl: Menge von Beschriftungselementen
-        :return:
-        """
-
-        self.beginResetModel()
-        self._auswahl = set(auswahl)
-        self.endResetModel()
-
-    def columnCount(self, parent: QModelIndex = ...) -> int:
-        """
-        anzahl spalten in der tabelle
-
-        :param parent: nicht verwendet
-        :return: die spaltenzahl ist fix.
-        """
-        return len(self._spalten)
-
-    def rowCount(self, parent: QModelIndex = ...) -> int:
-        """
-        anzahl zeilen (züge)
-
-        :param parent: nicht verwendet
-        :return: anzahl dargestellte zeilen.
-        """
-        return len(self._elemente)
-
-    def data(self, index: QModelIndex, role: int = ...) -> Any:
-        """
-        Daten pro Zelle an den Viewer ausgeben.
-
-        :param index: enthält spalte und zeile der gewünschten zelle
-        :param role: gewünschtes datenfeld:
-        :return: verschiedene
-        """
-
-        if not index.isValid():
-            return None
-
-        try:
-            col = index.column()
-            row = index.row()
-            element = self._elemente[row]
-        except (IndexError, KeyError):
-            return None
-
-        if role == QtCore.Qt.DisplayRole:
-            if col == 1:
-                return element
-
-        elif role == QtCore.Qt.CheckStateRole:
-            if col == 0:
-                if element in self._auswahl:
-                    return QtCore.Qt.Checked
-                else:
-                    return QtCore.Qt.Unchecked
-
-        elif role == QtCore.Qt.TextAlignmentRole:
-            if col == 0:
-                return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
-            else:
-                return QtCore.Qt.AlignLeft + QtCore.Qt.AlignVCenter
-
-        return None
-
-    def setData(self, index: QModelIndex, value: typing.Any, role: int = ...) -> bool:
-        """
-        Datenänderung vom QListView übernehmen.
-
-        Wir reagieren nur auf geänderte Auswahl
-
-        :param index: Zeilenindex
-        :param role: Rolle
-        :param value: neuer Wert
-        :return: True, wenn sich das Model geändert hat.
-        """
-
-        if not index.isValid():
-            return False
-
-        try:
-            col = index.column()
-            row = index.row()
-            element = self._elemente[row]
-        except (IndexError, KeyError):
-            return False
-
-        if role == QtCore.Qt.CheckStateRole:
-            value = QtCore.Qt.CheckState(value)
-            if col == 0:
-                if value == QtCore.Qt.Checked:
-                    self._auswahl.add(element)
-                else:
-                    self._auswahl.remove(element)
-                return True
-
-        return False
-
-    def flags(self, index: QModelIndex) -> Optional[QtCore.Qt.ItemFlags]:
-        """
-        Flags an QListView übergeben
-
-        :param index: Zeilenindex
-        :return: Alle Felder enabled und selectable. Erste Spalte checkable, wenn Auswahl erlaubt.
-        """
-
-        if not index.isValid():
-            return None
-
-        try:
-            col = index.column()
-            row = index.row()
-            element = self._elemente[row]
-        except (IndexError, KeyError):
-            return None
-
-        if col == 0:
-            return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable
-        elif col == 1:
-            return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
-
-        return None
-
-    def headerData(self, section: int, orientation: QtCore.Qt.Orientation, role: int = ...) -> Any:
-        """
-        gibt den text der kopfzeile und -spalte aus.
-        :param section: element-index
-        :param orientation: wahl zeile oder spalte
-        :param role: DisplayRole gibt den titel aus.
-        :return:
-        """
-
-        if role == QtCore.Qt.DisplayRole:
-            if orientation == QtCore.Qt.Horizontal:
-                return self._spalten[section]
-            elif orientation == QtCore.Qt.Vertical:
-                return None
+        result = ", ".join(l)
+        return result

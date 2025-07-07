@@ -18,9 +18,8 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QTransform)
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QComboBox, QFrame,
     QGroupBox, QHBoxLayout, QLabel, QListView,
-    QMainWindow, QRadioButton, QSizePolicy, QSpinBox,
-    QSplitter, QStackedWidget, QToolBar, QVBoxLayout,
-    QWidget)
+    QMainWindow, QSizePolicy, QSpinBox, QSplitter,
+    QStackedWidget, QToolBar, QVBoxLayout, QWidget)
 import stskit.qt.resources_rc
 
 class Ui_BildfahrplanWindow(object):
@@ -197,36 +196,13 @@ class Ui_BildfahrplanWindow(object):
 
         self.darstellung_layout.addWidget(self.nachlaufzeit_spin)
 
-        self.beschriftung_group = QGroupBox(self.darstellung_group)
-        self.beschriftung_group.setObjectName(u"beschriftung_group")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.beschriftung_group.sizePolicy().hasHeightForWidth())
-        self.beschriftung_group.setSizePolicy(sizePolicy1)
-        self.verticalLayout_2 = QVBoxLayout(self.beschriftung_group)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.name_button = QRadioButton(self.beschriftung_group)
-        self.name_button.setObjectName(u"name_button")
-
-        self.verticalLayout_2.addWidget(self.name_button)
-
-        self.nummer_button = QRadioButton(self.beschriftung_group)
-        self.nummer_button.setObjectName(u"nummer_button")
-        self.nummer_button.setChecked(True)
-
-        self.verticalLayout_2.addWidget(self.nummer_button)
-
-
-        self.darstellung_layout.addWidget(self.beschriftung_group)
-
         self.darstellung_stretch = QWidget(self.darstellung_group)
         self.darstellung_stretch.setObjectName(u"darstellung_stretch")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.darstellung_stretch.sizePolicy().hasHeightForWidth())
-        self.darstellung_stretch.setSizePolicy(sizePolicy2)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.darstellung_stretch.sizePolicy().hasHeightForWidth())
+        self.darstellung_stretch.setSizePolicy(sizePolicy1)
 
         self.darstellung_layout.addWidget(self.darstellung_stretch)
 
@@ -250,19 +226,19 @@ class Ui_BildfahrplanWindow(object):
         self.displaySplitter.setOrientation(Qt.Vertical)
         self.grafikWidget = QWidget(self.displaySplitter)
         self.grafikWidget.setObjectName(u"grafikWidget")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.grafikWidget.sizePolicy().hasHeightForWidth())
-        self.grafikWidget.setSizePolicy(sizePolicy3)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.grafikWidget.sizePolicy().hasHeightForWidth())
+        self.grafikWidget.setSizePolicy(sizePolicy2)
         self.displaySplitter.addWidget(self.grafikWidget)
         self.zuginfoLabel = QLabel(self.displaySplitter)
         self.zuginfoLabel.setObjectName(u"zuginfoLabel")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.zuginfoLabel.sizePolicy().hasHeightForWidth())
-        self.zuginfoLabel.setSizePolicy(sizePolicy4)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.zuginfoLabel.sizePolicy().hasHeightForWidth())
+        self.zuginfoLabel.setSizePolicy(sizePolicy3)
         self.zuginfoLabel.setMaximumSize(QSize(16777215, 50))
         self.zuginfoLabel.setBaseSize(QSize(0, 0))
         self.zuginfoLabel.setFrameShape(QFrame.Box)
@@ -399,9 +375,6 @@ class Ui_BildfahrplanWindow(object):
         self.vorlaufzeit_spin.setSuffix(QCoreApplication.translate("BildfahrplanWindow", u" Min.", None))
         self.nachlaufzeit_label.setText(QCoreApplication.translate("BildfahrplanWindow", u"N&achlaufzeit", None))
         self.nachlaufzeit_spin.setSuffix(QCoreApplication.translate("BildfahrplanWindow", u" Min.", None))
-        self.beschriftung_group.setTitle(QCoreApplication.translate("BildfahrplanWindow", u"&Beschriftung", None))
-        self.name_button.setText(QCoreApplication.translate("BildfahrplanWindow", u"Zugname (Gattung + Nummer)", None))
-        self.nummer_button.setText(QCoreApplication.translate("BildfahrplanWindow", u"Zugnummer", None))
         self.zuginfoLabel.setText(QCoreApplication.translate("BildfahrplanWindow", u"Zuginfo: (keine Auswahl)", None))
         self.toolBar.setWindowTitle(QCoreApplication.translate("BildfahrplanWindow", u"Tool Bar", None))
     # retranslateUi

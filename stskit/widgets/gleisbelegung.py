@@ -7,8 +7,6 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from stskit.dispo.anlage import Anlage
-from stskit.model.bahnhofgraph import BahnhofElement
-from stskit.plugin.stsplugin import PluginClient
 from stskit.plots.gleisbelegung import GleisbelegungPlot
 from stskit.qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 from stskit.widgets.gleisauswahl import GleisauswahlModell

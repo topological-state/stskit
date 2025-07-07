@@ -23,77 +23,6 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-def format_label(zugbeschriftung: Zugbeschriftung, zug: ZugGraphNode, anfang: EreignisGraphNode, ende: EreignisGraphNode):
-    """
-    zuglabel formatieren mit verspätungsangabe
-
-    das label besteht aus zugname und verspätungsangabe (falls nicht null).
-    die verspätungsangabe besteht aus einem teil wenn sie am anfang und ende der linie gleich ist,
-    sonst aus der verspätung am anfang und ende.
-
-    :param plan1: anfangspunkt der linie. zug.name und verspaetung_ab werden benutzt.
-    :param plan2: endpunkt der linie. verspaetung_an wird benutzt.
-    :return: (str)
-    """
-
-    try:
-        v1 = anfang.t_eff - anfang.t_plan
-    except AttributeError:
-        v1 = None
-    try:
-        v2 = ende.t_eff - ende.t_plan
-    except AttributeError:
-        v2 = None
-    if v1 is None:
-        v1 = v2 or 0
-    if v2 is None:
-        v2 = v1 or 0
-
-    if "Name" in zugbeschriftung.elemente:
-        name = zug.name
-    elif "Nummer" in zugbeschriftung.elemente:
-        name = zug.nummer
-    else:
-        name = ""
-
-    v1 = int(v1)
-    v2 = int(v2)
-    if v1 == v2:
-        if v1 == 0:
-            v = ""
-        else:
-            v = format_verspaetung(v1)
-    else:
-        v = "|".join((format_verspaetung(v1), format_verspaetung(v2)))
-
-    if v:
-        return f"{name} ({v})"
-    else:
-        return f"{name}"
-
-
-def format_zuginfo(zug: ZugGraphNode, abfahrt: EreignisGraphNode, ankunft: EreignisGraphNode):
-    """
-    zug-trasseninfo formatieren
-
-    beispiel:
-    ICE 573 A-D: B 2 ab 15:30 +3, C 3 an 15:40 +3
-
-    :param trasse: ausgewaehlte trasse
-    :return: (str)
-    """
-
-    z1 = format_minutes(abfahrt.t_plan)
-    z2 = format_minutes(ankunft.t_plan)
-    v1 = f"{int(abfahrt.t_eff - abfahrt.t_plan):+}"
-    v2 = f"{int(ankunft.t_eff - ankunft.t_plan):+}"
-    name = zug.name
-    von = zug.von
-    nach = zug.nach
-
-    return f"{name} ({von} - {nach}): {abfahrt.gleis} ab {z1}{v1}, {ankunft.gleis} an {z2}{v2}"
-
-
 class BildfahrplanPlot:
     def __init__(self, zentrale: DatenZentrale, canvas: mpl.backend_bases.FigureCanvasBase):
         self.zentrale = zentrale
@@ -103,7 +32,7 @@ class BildfahrplanPlot:
         self.strecke_von: Optional[BahnhofElement] = None
         self.strecke_via: Optional[BahnhofElement] = None
         self.strecke_nach: Optional[BahnhofElement] = None
-        self.zugbeschriftung = Zugbeschriftung(stil="Bildfahrplan")
+        self.zugbeschriftung = Zugbeschriftung(self.zentrale.anlage)
 
         self.bildgraph = EreignisGraph()
         self.streckengraph = nx.MultiDiGraph()
@@ -310,7 +239,7 @@ class BildfahrplanPlot:
                 v_data = self.anlage.ereignisgraph.nodes[v]
                 u_v_data = data.copy()
                 u_v_data['farbe'] = self.anlage.zugschema.zugfarbe(zug)
-                u_v_data['titel'] = format_label(self.zugbeschriftung, zug, u_data, v_data)
+                u_v_data['titel'] = self.zugbeschriftung.format_trasse_label(zug, abfahrt=u_data, ankunft=v_data)
                 u_v_data['fontstyle'] = "normal"
                 u_v_data['linewidth'] = 1
                 u_v_data['linestyle'] = '--' if data.typ in {"B", "E", "F", "H"} else "-"
@@ -669,17 +598,9 @@ class BildfahrplanPlot:
 
         try:
             zug = self.zentrale.anlage.zuggraph.nodes[abfahrt.zid]
-            name = zug.name
-            von = zug.von
-            nach = zug.nach
         except KeyError:
-            name = f"[{abfahrt.zid}]"
-            von = "?"
-            nach = "?"
+            info = f"[{abfahrt.zid}]"
+        else:
+            info = self.zugbeschriftung.format_trasse_info(zug, ankunft=ankunft, abfahrt=abfahrt)
 
-        z1 = format_minutes(abfahrt.t_eff)
-        z2 = format_minutes(ankunft.t_eff)
-        v1 = format_verspaetung(round(abfahrt.t_eff - abfahrt.t_plan))
-        v2 = format_verspaetung(round(ankunft.t_eff - ankunft.t_plan))
-
-        return f"{name} ({von} - {nach}): {abfahrt.gleis} ab {z1}{v1}, {ankunft.gleis} an {z2}{v2}"
+        return info

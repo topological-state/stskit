@@ -174,10 +174,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         self.ui.vorlaufzeit_spin.setValue(self.plot.vorlaufzeit)
         self.ui.nachlaufzeit_spin.setValue(self.plot.nachlaufzeit)
-        if "Name" in self.plot.zugbeschriftung.elemente:
-            self.ui.name_button.setChecked(True)
-        else:
-            self.ui.nummer_button.setChecked(True)
 
         self.updating = False
 

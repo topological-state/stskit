@@ -17,9 +17,9 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGroupBox, QHBoxLayout,
-    QHeaderView, QLabel, QMainWindow, QRadioButton,
-    QSizePolicy, QSpinBox, QSplitter, QStackedWidget,
-    QToolBar, QTreeView, QVBoxLayout, QWidget)
+    QHeaderView, QLabel, QMainWindow, QSizePolicy,
+    QSpinBox, QSplitter, QStackedWidget, QToolBar,
+    QTreeView, QVBoxLayout, QWidget)
 import stskit.qt.resources_rc
 
 class Ui_GleisbelegungWindow(object):
@@ -155,36 +155,13 @@ class Ui_GleisbelegungWindow(object):
 
         self.verticalLayout_3.addWidget(self.nachlaufzeit_spin)
 
-        self.beschriftung_group = QGroupBox(self.darstellung_group)
-        self.beschriftung_group.setObjectName(u"beschriftung_group")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.beschriftung_group.sizePolicy().hasHeightForWidth())
-        self.beschriftung_group.setSizePolicy(sizePolicy)
-        self.verticalLayout_2 = QVBoxLayout(self.beschriftung_group)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.name_button = QRadioButton(self.beschriftung_group)
-        self.name_button.setObjectName(u"name_button")
-
-        self.verticalLayout_2.addWidget(self.name_button)
-
-        self.nummer_button = QRadioButton(self.beschriftung_group)
-        self.nummer_button.setObjectName(u"nummer_button")
-        self.nummer_button.setChecked(True)
-
-        self.verticalLayout_2.addWidget(self.nummer_button)
-
-
-        self.verticalLayout_3.addWidget(self.beschriftung_group)
-
         self.darstellung_stretch = QWidget(self.darstellung_group)
         self.darstellung_stretch.setObjectName(u"darstellung_stretch")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.darstellung_stretch.sizePolicy().hasHeightForWidth())
-        self.darstellung_stretch.setSizePolicy(sizePolicy1)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.darstellung_stretch.sizePolicy().hasHeightForWidth())
+        self.darstellung_stretch.setSizePolicy(sizePolicy)
 
         self.verticalLayout_3.addWidget(self.darstellung_stretch)
 
@@ -202,19 +179,19 @@ class Ui_GleisbelegungWindow(object):
         self.displaySplitter.setOrientation(Qt.Vertical)
         self.grafikWidget = QWidget(self.displaySplitter)
         self.grafikWidget.setObjectName(u"grafikWidget")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.grafikWidget.sizePolicy().hasHeightForWidth())
-        self.grafikWidget.setSizePolicy(sizePolicy2)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.grafikWidget.sizePolicy().hasHeightForWidth())
+        self.grafikWidget.setSizePolicy(sizePolicy1)
         self.displaySplitter.addWidget(self.grafikWidget)
         self.zuginfoLabel = QLabel(self.displaySplitter)
         self.zuginfoLabel.setObjectName(u"zuginfoLabel")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.zuginfoLabel.sizePolicy().hasHeightForWidth())
-        self.zuginfoLabel.setSizePolicy(sizePolicy3)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.zuginfoLabel.sizePolicy().hasHeightForWidth())
+        self.zuginfoLabel.setSizePolicy(sizePolicy2)
         self.zuginfoLabel.setMaximumSize(QSize(16777215, 50))
         self.zuginfoLabel.setBaseSize(QSize(0, 0))
         self.zuginfoLabel.setFrameShape(QFrame.Box)
@@ -357,9 +334,6 @@ class Ui_GleisbelegungWindow(object):
         self.vorlaufzeit_spin.setSuffix(QCoreApplication.translate("GleisbelegungWindow", u" Min.", None))
         self.nachlaufzeit_label.setText(QCoreApplication.translate("GleisbelegungWindow", u"N&achlaufzeit", None))
         self.nachlaufzeit_spin.setSuffix(QCoreApplication.translate("GleisbelegungWindow", u" Min.", None))
-        self.beschriftung_group.setTitle(QCoreApplication.translate("GleisbelegungWindow", u"&Beschriftung", None))
-        self.name_button.setText(QCoreApplication.translate("GleisbelegungWindow", u"Zugname (Gattung + Nummer)", None))
-        self.nummer_button.setText(QCoreApplication.translate("GleisbelegungWindow", u"Zugnummer", None))
         self.zuginfoLabel.setText(QCoreApplication.translate("GleisbelegungWindow", u"Zuginfo: (keine Auswahl)", None))
         self.toolBar.setWindowTitle(QCoreApplication.translate("GleisbelegungWindow", u"toolBar", None))
     # retranslateUi

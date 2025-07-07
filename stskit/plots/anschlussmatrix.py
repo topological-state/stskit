@@ -111,8 +111,7 @@ class Anschlussmatrix:
         self.umsteigezeit: int = 2
         self.ankunft_filter_kategorien: Set[str] = {'X', 'F', 'N', 'S'}
         self.abfahrt_filter_kategorien: Set[str] = {'X', 'F', 'N'}
-        self.ankunft_beschriftung = Zugbeschriftung(stil='Anschlussmatrix')
-        self.abfahrt_beschriftung = Zugbeschriftung(stil='Anschlussmatrix')
+        self.beschriftung = Zugbeschriftung(self.zentrale.anlage)
         self.ankuenfte_ausblenden: Set[int] = set([])
         self.abfahrten_ausblenden: Set[int] = set([])
         self.anschluss_auswahl: Set[Tuple[int, int]] = set([])
@@ -308,41 +307,13 @@ class Anschlussmatrix:
         aufgabe_auswahl = np.logical_and(aufgabe_auswahl, aufgabe_maske)
         self.anschlussstatus = np.where(aufgabe_auswahl, ANSCHLUSS_AUFGEBEN, self.anschlussstatus)
 
-        def _format_label(zug: ZugGraphNode, richtung: str) -> str:
-            zeilen = [zug.name]
-            try:
-                anst = self.zentrale.anlage.bahnhofgraph.find_superior(("Agl", zug.get(richtung)), {"Anst"})
-                zeilen.append(anst.name)
-            except KeyError:
-                pass
-
-            return "\n".join(zeilen)
-
-        def _format_inset(ereignis: EreignisGraphNode) -> str:
-            zeilen = []
-            zeilen.append(self.zentrale.anlage.gleisschema.gleisname_kurz(ereignis.gleis)[:6])
-
-            if not ereignis.get("t_mess"):
-                t_plan = ereignis.t_plan
-                v = ereignis.t_eff - ereignis.t_plan
-                zeilen.append(format_minutes(t_plan))
-                if v > 0:
-                    zeilen.append(format_verspaetung(v))
-                else:
-                    zeilen.append("")
-            else:
-                zeilen.append("")
-                zeilen.append("")
-
-            return "\n".join(zeilen)
-
-        self.ankunft_labels = {zid: _format_label(self.zuege[zid], "von")
+        self.ankunft_labels = {zid: self.beschriftung.format_anschluss_label(self.zuege[zid], ankunft=self.ankunft_ereignisse[zid])
                                for zid in self.zid_ankuenfte_index}
-        self.abfahrt_labels = {zid: _format_label(self.zuege[zid], "nach")
+        self.abfahrt_labels = {zid: self.beschriftung.format_anschluss_label(self.zuege[zid], abfahrt=self.abfahrt_ereignisse[zid])
                                for zid in self.zid_abfahrten_index}
-        self.ankunft_insets = {zid: _format_inset(self.ankunft_ereignisse[zid])
+        self.ankunft_insets = {zid: self.beschriftung.format_anschluss_inset(self.zuege[zid], ankunft=self.ankunft_ereignisse[zid])
                                for zid in self.zid_ankuenfte_index}
-        self.abfahrt_insets = {zid: _format_inset(self.abfahrt_ereignisse[zid])
+        self.abfahrt_insets = {zid: self.beschriftung.format_anschluss_inset(self.zuege[zid], abfahrt=self.abfahrt_ereignisse[zid])
                                for zid in self.zid_abfahrten_index}
 
         loeschen = set(self.zuege.keys()) - self.zid_ankuenfte_set - self.zid_abfahrten_set

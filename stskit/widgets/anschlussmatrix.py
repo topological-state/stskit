@@ -15,10 +15,9 @@ import numpy as np
 from PySide6 import QtWidgets
 from PySide6.QtCore import Slot
 
-from stskit.model.ereignisgraph import EreignisGraphEdge, EreignisGraphNode
 from stskit.plots.anschlussmatrix import Anschlussmatrix, \
     ANSCHLUSS_OK, ANSCHLUSS_ABWARTEN, ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN
-from stskit.model.zugschema import Zugbeschriftung, ZugbeschriftungAuswahlModell, ZugschemaAuswahlModell
+from stskit.model.zugschema import ZugschemaAuswahlModell
 
 from stskit.qt.ui_anschlussmatrix import Ui_AnschlussmatrixWindow
 
@@ -55,8 +54,6 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.abfahrt_filter_modell = ZugschemaAuswahlModell(None, zugschema=self.zentrale.anlage.zugschema)
         self.ui.abfahrt_filter_view.setModel(self.abfahrt_filter_modell)
-
-        self.zugbeschriftung = Zugbeschriftung(stil='Anschlussmatrix')
 
         self.ui.actionAnzeige.triggered.connect(self.display_button_clicked)
         self.ui.actionSetup.triggered.connect(self.settings_button_clicked)
@@ -299,14 +296,14 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         try:
             ziel_an = self.anschlussmatrix.ankunft_ereignisse[zids[1]]
             zug_data = self.zentrale.anlage.zuggraph.nodes[ziel_an.zid]
-            info_an = self.zugbeschriftung.format(zug_data, ziel_an, "Ankunft")
+            info_an = self.anschlussmatrix.beschriftung.format_anschluss_info(zug_data, ankunft=ziel_an)
             info.append(info_an)
         except (IndexError, KeyError):
             pass
         try:
             ziel_ab = self.anschlussmatrix.abfahrt_ereignisse[zids[0]]
             zug_data = self.zentrale.anlage.zuggraph.nodes[ziel_ab.zid]
-            info_ab = self.zugbeschriftung.format(zug_data, ziel_ab, "Abfahrt")
+            info_ab = self.anschlussmatrix.beschriftung.format_anschluss_info(zug_data, abfahrt=ziel_ab)
             info.append(info_ab)
         except (IndexError, KeyError):
             pass

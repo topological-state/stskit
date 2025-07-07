@@ -118,6 +118,7 @@ class Slot:
     verspaetung_an: Union[int, float] = 0
     verspaetung_ab: Union[int, float] = 0
     titel: str = ""
+    info: str = ""
     farbe: str = "gray"
     randfarbe: str = "k"
     linestyle: str = "-"
@@ -135,6 +136,7 @@ class Slot:
         self.dauer = 0
         self.abfahrt = 0
         self.titel = ""
+        self.info = ""
 
     @property
     def key(self) -> Tuple[BahnhofElement, int, int]:
@@ -195,25 +197,7 @@ class Slot:
         return hash(self.key)
 
     def __str__(self) -> str:
-        v_an = format_verspaetung(self.verspaetung_an) if self.verspaetung_an else ""
-        v_ab = format_verspaetung(self.verspaetung_ab) if self.verspaetung_ab else ""
-        if v_an or v_ab:
-            v_an = v_an or "+0"
-            v_ab = v_ab or "+0"
-        if v_an == v_ab:
-            v_ab = ""
-        if v_an and v_ab:
-            v = f"{v_an}/{v_ab}"
-        else:
-            v = v_an or v_ab
-        if v:
-            v = f" ({v})"
-
-        s = (f"{self.titel}"
-             f" @ {self.gleis.name}:"
-             f" {format_minutes(self.zeit)} - {format_minutes(self.zeit + self.dauer)}{v}")
-
-        return s
+        return self.info
 
 
 WARNUNG_STATUS = ['undefiniert', 'gleis', 'bahnsteig', 'ersatz', 'kuppeln', 'kuppeln-reihenfolge', 'flügeln', 'fdl-markiert', 'fdl-ignoriert']
@@ -360,7 +344,7 @@ class Gleisbelegung:
         self.hauptgleis_slots: Dict[BahnhofElement, Dict[Any, Slot]] = {}
         self.belegte_gleise: Set[BahnhofElement] = set()
         self.warnungen: Dict[Any, SlotWarnung] = {}
-        self.zugbeschriftung = Zugbeschriftung(stil="Gleisbelegung")
+        self.zugbeschriftung = Zugbeschriftung(self.zentrale.anlage)
 
     def slot_warnungen(self, slot: Slot) -> Iterable[SlotWarnung]:
         """
@@ -487,21 +471,28 @@ class Gleisbelegung:
                 self.hauptgleis_slots[hauptgleis][key] = slot
 
     def slots_formatieren(self):
+        """
+        Grafik und Text der Slots gemäss Fahrplandaten formatieren
+
+        Die Fahrplandaten werden aus dem zuggraph and zielgraph der Anlage bestimmt.
+
+        Der Titel ist die Kurzbezeichnung des Zuges in der Grafik.
+        Bei Ein- und Ausfahrten wird ein Pfeil "→" vorangestellt oder angehängt.
+        Die Info ist die ausführliche Beschreibung für das Statusfeld.
+
+        Die Farbe des Rechtecks wird anhand des Zugschemas bestimmt,
+        die Randfarbe anhand der Flags.
+
+        Format des Info-Strings:
+        IC 2662 (WI → TG): Gleis 5, an 15:03+6, ab 15:04+5
+        {name} ({von} → {nach}): {gleis}/{plan}, an {an}+{v_an}, ab {ab}+{v_ab}
+        """
+
         for slot in self.slots.values():
             zug_data = self.anlage.zuggraph.nodes[slot.zid]
             ziel_data = self.anlage.zielgraph.nodes[slot.fid]
-            slot.titel = self.zugbeschriftung.format(zug_data=zug_data, ziel_data=ziel_data)
-
-            if "Name" in self.zugbeschriftung.elemente:
-                s = zug_data.name
-            else:
-                s = str(zug_data.nummer)
-            if slot.zieltyp == 'E':
-                s = "→ " + s
-            elif slot.zieltyp == 'A':
-                s = s + " →"
-            slot.titel = s
-
+            slot.info = self.zugbeschriftung.format_slot_info(zug_data, ziel=ziel_data)
+            slot.titel = self.zugbeschriftung.format_slot_label(zug_data, ziel=ziel_data)
             slot.farbe = self.anlage.zugschema.zugfarbe(zug_data)
             slot.randfarbe = "magenta" if ziel_data.lokwechsel or ziel_data.lokumlauf else "k"
             slot.fontstyle = "italic" if slot.zieltyp == 'D' else "normal"
@@ -733,7 +724,7 @@ class GleisbelegungPlot:
 
         self.belegung = Gleisbelegung(self.zentrale)
 
-        self.zugbeschriftung = Zugbeschriftung(stil="Gleisbelegung")
+        self.zugbeschriftung = Zugbeschriftung(self.zentrale.anlage)
 
         self.vorlaufzeit = 55
         self.nachlaufzeit = 5
