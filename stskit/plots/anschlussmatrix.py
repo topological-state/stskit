@@ -206,6 +206,7 @@ class Anschlussmatrix:
         zids_abgefahren = {data.zid for label, data in ereignisgraph.nodes(data=True)
                            if data.typ == "Ab"
                            and data.zid in zids_ab
+                           and data.plan in self.gleisnamen
                            and data.get('t_mess', startzeit) < startzeit - 1}
         zids_ausgefahren = {zid for zid, zug in zuggraph.nodes(data=True)
                             if zug.ausgefahren}
@@ -296,7 +297,7 @@ class Anschlussmatrix:
                 self.verspaetung[i_ab, i_an] = verspaetung
 
         spalten = np.any(~np.isnan(self.anschlussstatus), axis=0)
-        self.zid_ankuenfte_index = list(np.asarray(self.zid_ankuenfte_index)[spalten])
+        self.zid_ankuenfte_index = [int(i) for i in np.asarray(self.zid_ankuenfte_index)[spalten]]
         self.zid_ankuenfte_set = set(self.zid_ankuenfte_index)
         self.anschlussplan = self.anschlussplan[:, spalten]
         self.anschlussstatus = self.anschlussstatus[:, spalten]
