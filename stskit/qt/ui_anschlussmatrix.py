@@ -200,13 +200,14 @@ class Ui_AnschlussmatrixWindow(object):
 
         self.verticalLayout_4.addWidget(self.ankunft_filter_label_2)
 
-        self.ankunft_beschriftung_view = QTableView(self.ankunft_group)
-        self.ankunft_beschriftung_view.setObjectName(u"ankunft_beschriftung_view")
-        self.ankunft_beschriftung_view.setAlternatingRowColors(True)
-        self.ankunft_beschriftung_view.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.ankunft_beschriftung_view.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.von_filter_view = QTableView(self.ankunft_group)
+        self.von_filter_view.setObjectName(u"von_filter_view")
+        self.von_filter_view.setEnabled(False)
+        self.von_filter_view.setAlternatingRowColors(True)
+        self.von_filter_view.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.von_filter_view.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-        self.verticalLayout_4.addWidget(self.ankunft_beschriftung_view)
+        self.verticalLayout_4.addWidget(self.von_filter_view)
 
 
         self.horizontalLayout_2.addWidget(self.ankunft_group)
@@ -233,13 +234,14 @@ class Ui_AnschlussmatrixWindow(object):
 
         self.verticalLayout_5.addWidget(self.abfahrt_beschriftung_label)
 
-        self.abfahrt_beschriftung_view = QTableView(self.abfahrt_group)
-        self.abfahrt_beschriftung_view.setObjectName(u"abfahrt_beschriftung_view")
-        self.abfahrt_beschriftung_view.setAlternatingRowColors(True)
-        self.abfahrt_beschriftung_view.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.abfahrt_beschriftung_view.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.nach_filter_view = QTableView(self.abfahrt_group)
+        self.nach_filter_view.setObjectName(u"nach_filter_view")
+        self.nach_filter_view.setEnabled(False)
+        self.nach_filter_view.setAlternatingRowColors(True)
+        self.nach_filter_view.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.nach_filter_view.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-        self.verticalLayout_5.addWidget(self.abfahrt_beschriftung_view)
+        self.verticalLayout_5.addWidget(self.nach_filter_view)
 
 
         self.horizontalLayout_2.addWidget(self.abfahrt_group)
@@ -426,11 +428,11 @@ class Ui_AnschlussmatrixWindow(object):
         self.anschlusszeitLabel.setText(QCoreApplication.translate("AnschlussmatrixWindow", u"&Anschlusszeit", None))
         self.anschlusszeitSpin.setSuffix(QCoreApplication.translate("AnschlussmatrixWindow", u" Min.", None))
         self.ankunft_group.setTitle(QCoreApplication.translate("AnschlussmatrixWindow", u"Ankommende Z\u00fcge", None))
-        self.ankunft_filter_label.setText(QCoreApplication.translate("AnschlussmatrixWindow", u"Filter", None))
-        self.ankunft_filter_label_2.setText(QCoreApplication.translate("AnschlussmatrixWindow", u"Beschriftung", None))
+        self.ankunft_filter_label.setText(QCoreApplication.translate("AnschlussmatrixWindow", u"Kategorie", None))
+        self.ankunft_filter_label_2.setText(QCoreApplication.translate("AnschlussmatrixWindow", u"Von", None))
         self.abfahrt_group.setTitle(QCoreApplication.translate("AnschlussmatrixWindow", u"Abfahrende Z\u00fcge", None))
-        self.abfahrt_filter_label.setText(QCoreApplication.translate("AnschlussmatrixWindow", u"Filter", None))
-        self.abfahrt_beschriftung_label.setText(QCoreApplication.translate("AnschlussmatrixWindow", u"Beschriftung", None))
+        self.abfahrt_filter_label.setText(QCoreApplication.translate("AnschlussmatrixWindow", u"Kategorie", None))
+        self.abfahrt_beschriftung_label.setText(QCoreApplication.translate("AnschlussmatrixWindow", u"Nach", None))
         self.zuginfoLabel.setText(QCoreApplication.translate("AnschlussmatrixWindow", u"Zuginfo: (keine Auswahl)", None))
         self.toolBar.setWindowTitle(QCoreApplication.translate("AnschlussmatrixWindow", u"toolBar", None))
     # retranslateUi

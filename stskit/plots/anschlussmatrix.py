@@ -319,14 +319,19 @@ class Anschlussmatrix:
             return "\n".join(zeilen)
 
         def _format_inset(ereignis: EreignisGraphNode) -> str:
-            if ereignis.get("t_mess"):
-                return ""
-            t_plan = ereignis.t_plan
-            v = ereignis.t_eff - ereignis.t_plan
-            zeilen = [format_minutes(t_plan)]
-            if v > 0:
-                zeilen.append(format_verspaetung(v))
+            zeilen = []
+            zeilen.append(self.zentrale.anlage.gleisschema.gleisname_kurz(ereignis.gleis)[:6])
+
+            if not ereignis.get("t_mess"):
+                t_plan = ereignis.t_plan
+                v = ereignis.t_eff - ereignis.t_plan
+                zeilen.append(format_minutes(t_plan))
+                if v > 0:
+                    zeilen.append(format_verspaetung(v))
+                else:
+                    zeilen.append("")
             else:
+                zeilen.append("")
                 zeilen.append("")
 
             return "\n".join(zeilen)
@@ -444,19 +449,19 @@ class Anschlussmatrix:
         n_an, n_ab = ankunft_matrix.shape[1], abfahrt_matrix.shape[0]
 
         # main_extent = (-0.5, n_an - 0.5, n_ab - 0.5, -0.5)  # left, right, bottom, top
-        ankunft_extent = (-0.5, n_an - 0.5, n_ab + 0.5, n_ab - 0.5)
-        abfahrt_extent = (-1.5, -0.5, n_ab - 0.5, -0.5)
-        # total_extent = (-1.5, n_an - 0.5, n_ab, -1.0)
+        ankunft_extent = (-0.5, n_an - 0.5, n_ab + 1.0, n_ab - 0.5)
+        abfahrt_extent = (-2.0, -0.5, n_ab - 0.5, -0.5)
+        # total_extent = (-2.0, n_an - 0.5, n_ab + 1.0, -1.0)
 
         ax.imshow(ankunft_matrix, extent=ankunft_extent, **image_args)
         ax.imshow(abfahrt_matrix, extent=abfahrt_extent, **image_args)
-        ax.set_xlim(-1.5, n_an - 0.5)
-        ax.set_ylim(-0.5, n_ab + 0.5)
+        ax.set_xlim(-2.0, n_an - 0.5)
+        ax.set_ylim(-0.5, n_ab + 1.0)
 
         for j, zid in enumerate(self.zid_ankuenfte_index):
-            ax.text(j, n_ab, self.ankunft_insets[zid], **label_args)
+            ax.text(j, n_ab + 0.25, self.ankunft_insets[zid], **label_args)
         for j, zid in enumerate(self.zid_abfahrten_index):
-            ax.text(-1.0, j, self.abfahrt_insets[zid], rotation=90, **label_args)
+            ax.text(-1.25, j, self.abfahrt_insets[zid], rotation=90, **label_args)
 
         ax.axhline(y=n_ab - 0.5, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])
         ax.axvline(x=-0.5, color=mpl.rcParams['axes.edgecolor'], linewidth=mpl.rcParams['axes.linewidth'])

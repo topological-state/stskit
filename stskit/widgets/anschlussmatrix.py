@@ -56,14 +56,6 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.abfahrt_filter_modell = ZugschemaAuswahlModell(None, zugschema=self.zentrale.anlage.zugschema)
         self.ui.abfahrt_filter_view.setModel(self.abfahrt_filter_modell)
 
-        self.ankunft_beschriftung_modell = ZugbeschriftungAuswahlModell(None,
-            beschriftung=self.anschlussmatrix.ankunft_beschriftung)
-        self.ui.ankunft_beschriftung_view.setModel(self.ankunft_beschriftung_modell)
-
-        self.abfahrt_beschriftung_modell = ZugbeschriftungAuswahlModell(None,
-            beschriftung=self.anschlussmatrix.abfahrt_beschriftung)
-        self.ui.abfahrt_beschriftung_view.setModel(self.abfahrt_beschriftung_modell)
-
         self.zugbeschriftung = Zugbeschriftung(stil='Anschlussmatrix')
 
         self.ui.actionAnzeige.triggered.connect(self.display_button_clicked)
@@ -162,13 +154,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         self.ankunft_filter_modell.auswahl = self.anschlussmatrix.ankunft_filter_kategorien
         self.abfahrt_filter_modell.auswahl = self.anschlussmatrix.abfahrt_filter_kategorien
-        self.ankunft_beschriftung_modell.auswahl = self.anschlussmatrix.ankunft_beschriftung.elemente
-        self.abfahrt_beschriftung_modell.auswahl = self.anschlussmatrix.abfahrt_beschriftung.elemente
 
-        self.ui.ankunft_beschriftung_view.resizeColumnsToContents()
-        self.ui.ankunft_beschriftung_view.resizeRowsToContents()
-        self.ui.abfahrt_beschriftung_view.resizeColumnsToContents()
-        self.ui.abfahrt_beschriftung_view.resizeRowsToContents()
         self.ui.ankunft_filter_view.resizeColumnsToContents()
         self.ui.ankunft_filter_view.resizeRowsToContents()
         self.ui.abfahrt_filter_view.resizeColumnsToContents()
@@ -208,8 +194,6 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.anschlussmatrix.ankunft_filter_kategorien = self.ankunft_filter_modell.auswahl
         self.anschlussmatrix.abfahrt_filter_kategorien = self.abfahrt_filter_modell.auswahl
-        self.anschlussmatrix.ankunft_beschriftung.elemente = self.ankunft_beschriftung_modell.auswahl
-        self.anschlussmatrix.abfahrt_beschriftung.elemente = self.abfahrt_beschriftung_modell.auswahl
         if self.anschlussmatrix.bahnhof:
             self.daten_update()
             self.grafik_update()

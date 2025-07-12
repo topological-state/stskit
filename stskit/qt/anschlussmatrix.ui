@@ -150,7 +150,7 @@
              <item>
               <widget class="QLabel" name="ankunft_filter_label">
                <property name="text">
-                <string>Filter</string>
+                <string>Kategorie</string>
                </property>
               </widget>
              </item>
@@ -170,12 +170,15 @@
              <item>
               <widget class="QLabel" name="ankunft_filter_label_2">
                <property name="text">
-                <string>Beschriftung</string>
+                <string>Von</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QTableView" name="ankunft_beschriftung_view">
+              <widget class="QTableView" name="von_filter_view">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="alternatingRowColors">
                 <bool>true</bool>
                </property>
@@ -199,7 +202,7 @@
              <item>
               <widget class="QLabel" name="abfahrt_filter_label">
                <property name="text">
-                <string>Filter</string>
+                <string>Kategorie</string>
                </property>
               </widget>
              </item>
@@ -219,12 +222,15 @@
              <item>
               <widget class="QLabel" name="abfahrt_beschriftung_label">
                <property name="text">
-                <string>Beschriftung</string>
+                <string>Nach</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QTableView" name="abfahrt_beschriftung_view">
+              <widget class="QTableView" name="nach_filter_view">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="alternatingRowColors">
                 <bool>true</bool>
                </property>

@@ -49,6 +49,10 @@ ENTHAELT_ZIFFER_REGEX = re.compile(r'\D*\d+\D*')
 BAHNSTEIG_VON_SEKTOR_REGEX = re.compile(r'\D*\d+')
 HALTESTELLE_OESTERREICH_REGEX = re.compile(r'\D+\s[AHKSU]\d\D?')
 
+# extrahiert die gleisnummer, wenn sie numerisch ist
+# beispiele Aa5a, Aa 5a, AA 5a G
+GLEISNUMMER_REGEX = re.compile(r'\D*(\d+\w*)\D*')
+
 EINZEL_ANSCHLUESSE = ['Anschluss', 'Feld', 'Gruppe', 'Gleis', 'Gr.', 'Anschl.', 'Gl.', 'Industrie', 'Depot',
                       'Abstellung']
 
@@ -192,6 +196,31 @@ class Gleisschema:
             return name
         else:
             return "Hbf"
+
+    def gleisname_kurz(self, gleis: str) -> str:
+        """
+        Gleisnamen abkürzen.
+
+        Die Abkürzung wird in Grafiken verwendet, wo eine möglichst kurze Beschriftung verwendet werden soll.
+        Das Resultat dieser Funktion ist nicht eindeutig und
+        kann in der Programmlogik nicht als Gleisidentifikation verwendet werden.
+
+        :param gleis: Gleis- bzw. Bahnsteigname
+        :return: Gleisnummer (String), extrahiert aus Gleisnamen.
+            Wenn der Gleisname eine Ziffer enthält, ist das der Substring ab der Ziffer bis zum Ende oder nächsten Leerzeichen,
+            wenn der Gleisname keine Ziffer aber Leerzeichen enthält, der zweite Teilstring geliefert,
+            ansonsten der unveränderte Gleisname.
+        """
+
+        mo = GLEISNUMMER_REGEX.match(gleis)
+        if mo:
+            return mo.group(1)
+        else:
+            teile = gleis.split()
+            if len(teile) > 1:
+                return teile[1]
+            else:
+                return teile[0]
 
     def ist_einzel_anschluss(self, gleis: str) -> bool:
         """
