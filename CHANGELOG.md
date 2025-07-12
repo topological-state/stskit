@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.0.6
+
+### Features
+
+- Einheitliche Zugbeschriftung
+- Gleisnummern anzeigen in Anschlussmatrix
+
+### Closed issues
+
+- Issue 152: Anzeigefehler bei Versätung
+
+## 2.0.5
+
+### Closed issues
+
+- Issue 148: Zugkategorienauswahl
+- Issue 149: Werkzeugleiste in Anschlussmatrix
+- Issue 151: Fehlende Züge in Anschlussmatrix
+- Modulknöpfe im Hauptfenster sperren bis Verbindung steht
+- Balkenbeschriftung in Gleisbelegung am oberen Rand
+
 ## 2.0.3 (2025-06-29)
 
 ### Closed issues
