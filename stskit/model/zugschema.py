@@ -972,6 +972,7 @@ class ZugFormatter:
         else:
             v = 0
 
+        v += 0.5
         if self._null_zeigen or abs(v) > 0.5:
             result = f"{int(v):+}"
         else:
@@ -994,6 +995,7 @@ class ZugFormatter:
         else:
             v = 0
 
+        v += 0.5
         if self._null_zeigen or abs(v) > 0.5:
             result = f"{int(v):+}"
         else:
@@ -1063,7 +1065,7 @@ class Zugbeschriftung:
         """
         Formatiert ein Slot-Label für die Gleisbelegungsgrafik
 
-        Format: Zugnummer, Verspätung
+        Format: Zugnummer
         """
 
         fmt = ZugFormatter(self._anlage, zug, ziel, ankunft, abfahrt, null_zeigen=False)
@@ -1076,12 +1078,7 @@ class Zugbeschriftung:
             elif typ == 'A':
                 t = "→ "
 
-        s = t + fmt.nummer
-        l = [s]
-        v = fmt.v_an
-        if v:
-            l.append(v)
-        result = "\n".join(l)
+        result = t + fmt.nummer
 
         return result
 
@@ -1183,7 +1180,7 @@ class Zugbeschriftung:
         """
 
         fmt = ZugFormatter(self._anlage, zug, ziel, ankunft, abfahrt)
-        zeilen = [fmt.zug]
+        zeilen = [fmt.name]
         if ankunft:
             anst = fmt.von
         elif abfahrt:
