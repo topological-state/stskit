@@ -17,9 +17,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractButton, QAbstractItemView, QApplication, QComboBox,
     QDialogButtonBox, QGroupBox, QHBoxLayout, QHeaderView,
-    QLabel, QMainWindow, QPushButton, QSizePolicy,
-    QSpacerItem, QSplitter, QTabWidget, QTableView,
-    QTextEdit, QVBoxLayout, QWidget)
+    QLabel, QListView, QListWidget, QListWidgetItem,
+    QMainWindow, QPushButton, QSizePolicy, QSpacerItem,
+    QSplitter, QTabWidget, QTableView, QTextEdit,
+    QVBoxLayout, QWidget)
 import stskit.qt.resources_rc
 
 class Ui_EinstellungenWindow(object):
@@ -243,7 +244,121 @@ class Ui_EinstellungenWindow(object):
         self.tab_widget.addTab(self.bahnhof_tab, "")
         self.strecken_tab = QWidget()
         self.strecken_tab.setObjectName(u"strecken_tab")
-        self.strecken_tab.setEnabled(False)
+        self.strecken_tab.setEnabled(True)
+        self.verticalLayout_19 = QVBoxLayout(self.strecken_tab)
+        self.verticalLayout_19.setObjectName(u"verticalLayout_19")
+        self.verticalLayout_18 = QVBoxLayout()
+        self.verticalLayout_18.setObjectName(u"verticalLayout_18")
+        self.verticalLayout_17 = QVBoxLayout()
+        self.verticalLayout_17.setObjectName(u"verticalLayout_17")
+        self.strecken_name_label = QLabel(self.strecken_tab)
+        self.strecken_name_label.setObjectName(u"strecken_name_label")
+
+        self.verticalLayout_17.addWidget(self.strecken_name_label)
+
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.strecken_name_combo = QComboBox(self.strecken_tab)
+        self.strecken_name_combo.setObjectName(u"strecken_name_combo")
+        self.strecken_name_combo.setEditable(True)
+
+        self.horizontalLayout.addWidget(self.strecken_name_combo)
+
+        self.strecken_loeschen_button = QPushButton(self.strecken_tab)
+        self.strecken_loeschen_button.setObjectName(u"strecken_loeschen_button")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.strecken_loeschen_button.sizePolicy().hasHeightForWidth())
+        self.strecken_loeschen_button.setSizePolicy(sizePolicy)
+
+        self.horizontalLayout.addWidget(self.strecken_loeschen_button)
+
+
+        self.verticalLayout_17.addLayout(self.horizontalLayout)
+
+
+        self.verticalLayout_18.addLayout(self.verticalLayout_17)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.verticalLayout_13 = QVBoxLayout()
+        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.strecken_auswahl_label = QLabel(self.strecken_tab)
+        self.strecken_auswahl_label.setObjectName(u"strecken_auswahl_label")
+
+        self.verticalLayout_13.addWidget(self.strecken_auswahl_label)
+
+        self.strecken_auswahl_list = QListWidget(self.strecken_tab)
+        self.strecken_auswahl_list.setObjectName(u"strecken_auswahl_list")
+
+        self.verticalLayout_13.addWidget(self.strecken_auswahl_list)
+
+
+        self.horizontalLayout_4.addLayout(self.verticalLayout_13)
+
+        self.verticalLayout_12 = QVBoxLayout()
+        self.verticalLayout_12.setObjectName(u"verticalLayout_12")
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_12.addItem(self.verticalSpacer_3)
+
+        self.strecken_auswahl_button = QPushButton(self.strecken_tab)
+        self.strecken_auswahl_button.setObjectName(u"strecken_auswahl_button")
+        sizePolicy.setHeightForWidth(self.strecken_auswahl_button.sizePolicy().hasHeightForWidth())
+        self.strecken_auswahl_button.setSizePolicy(sizePolicy)
+
+        self.verticalLayout_12.addWidget(self.strecken_auswahl_button)
+
+        self.strecken_abwahl_button = QPushButton(self.strecken_tab)
+        self.strecken_abwahl_button.setObjectName(u"strecken_abwahl_button")
+        sizePolicy.setHeightForWidth(self.strecken_abwahl_button.sizePolicy().hasHeightForWidth())
+        self.strecken_abwahl_button.setSizePolicy(sizePolicy)
+
+        self.verticalLayout_12.addWidget(self.strecken_abwahl_button)
+
+        self.strecken_hoch_button = QPushButton(self.strecken_tab)
+        self.strecken_hoch_button.setObjectName(u"strecken_hoch_button")
+        sizePolicy.setHeightForWidth(self.strecken_hoch_button.sizePolicy().hasHeightForWidth())
+        self.strecken_hoch_button.setSizePolicy(sizePolicy)
+
+        self.verticalLayout_12.addWidget(self.strecken_hoch_button)
+
+        self.strecken_runter_button = QPushButton(self.strecken_tab)
+        self.strecken_runter_button.setObjectName(u"strecken_runter_button")
+        sizePolicy.setHeightForWidth(self.strecken_runter_button.sizePolicy().hasHeightForWidth())
+        self.strecken_runter_button.setSizePolicy(sizePolicy)
+
+        self.verticalLayout_12.addWidget(self.strecken_runter_button)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_12.addItem(self.verticalSpacer_4)
+
+
+        self.horizontalLayout_4.addLayout(self.verticalLayout_12)
+
+        self.verticalLayout_16 = QVBoxLayout()
+        self.verticalLayout_16.setObjectName(u"verticalLayout_16")
+        self.strecken_abwahl_label = QLabel(self.strecken_tab)
+        self.strecken_abwahl_label.setObjectName(u"strecken_abwahl_label")
+
+        self.verticalLayout_16.addWidget(self.strecken_abwahl_label)
+
+        self.strecken_abwahl_list = QListView(self.strecken_tab)
+        self.strecken_abwahl_list.setObjectName(u"strecken_abwahl_list")
+
+        self.verticalLayout_16.addWidget(self.strecken_abwahl_list)
+
+
+        self.horizontalLayout_4.addLayout(self.verticalLayout_16)
+
+
+        self.verticalLayout_18.addLayout(self.horizontalLayout_4)
+
+
+        self.verticalLayout_19.addLayout(self.verticalLayout_18)
+
         self.tab_widget.addTab(self.strecken_tab, "")
         self.zugschema_tab = QWidget()
         self.zugschema_tab.setObjectName(u"zugschema_tab")
@@ -302,6 +417,9 @@ class Ui_EinstellungenWindow(object):
 
         EinstellungenWindow.setCentralWidget(self.centralwidget)
 #if QT_CONFIG(shortcut)
+        self.strecken_name_label.setBuddy(self.strecken_name_combo)
+        self.strecken_auswahl_label.setBuddy(self.strecken_auswahl_list)
+        self.strecken_abwahl_label.setBuddy(self.strecken_abwahl_list)
         self.zugschema_name_label.setBuddy(self.zugschema_name_label)
         self.zugschema_details_label.setBuddy(self.zugschema_details_table)
 #endif // QT_CONFIG(shortcut)
@@ -310,7 +428,7 @@ class Ui_EinstellungenWindow(object):
         self.dialog_button_box.accepted.connect(EinstellungenWindow.accept)
         self.dialog_button_box.rejected.connect(EinstellungenWindow.reject)
 
-        self.tab_widget.setCurrentIndex(1)
+        self.tab_widget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(EinstellungenWindow)
@@ -400,6 +518,15 @@ class Ui_EinstellungenWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.bf_rename_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Umbenennen", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.bahnhof_tab), QCoreApplication.translate("EinstellungenWindow", u"Bahnh\u00f6fe", None))
+        self.strecken_name_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Strecke", None))
+        self.strecken_name_combo.setPlaceholderText(QCoreApplication.translate("EinstellungenWindow", u"Streckenname", None))
+        self.strecken_loeschen_button.setText(QCoreApplication.translate("EinstellungenWindow", u"\u274c", None))
+        self.strecken_auswahl_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Gew\u00e4hlte Stationen", None))
+        self.strecken_auswahl_button.setText(QCoreApplication.translate("EinstellungenWindow", u"\u2b05\ufe0f", None))
+        self.strecken_abwahl_button.setText(QCoreApplication.translate("EinstellungenWindow", u"\u27a1\ufe0f", None))
+        self.strecken_hoch_button.setText(QCoreApplication.translate("EinstellungenWindow", u"\u2b06\ufe0f", None))
+        self.strecken_runter_button.setText(QCoreApplication.translate("EinstellungenWindow", u"\u2b07\ufe0f", None))
+        self.strecken_abwahl_label.setText(QCoreApplication.translate("EinstellungenWindow", u"\u00fcbrige Stationen", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.strecken_tab), QCoreApplication.translate("EinstellungenWindow", u"Strecken", None))
         self.zugschema_name_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Zugschema", None))
         self.zugschema_details_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Kategorien", None))
