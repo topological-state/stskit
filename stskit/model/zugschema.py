@@ -798,7 +798,10 @@ class ZugFormatter:
         Zugname (Gattung und Nummer)
         """
 
-        return self._zug.name
+        try:
+            return self._zug.name
+        except (AttributeError, KeyError):
+            return ""
 
     @property
     def nummer(self) -> str:
@@ -806,7 +809,10 @@ class ZugFormatter:
         Zugnummer
         """
 
-        return str(self._zug.nummer)
+        try:
+            return str(self._zug.nummer)
+        except (AttributeError, KeyError):
+            return ""
 
     @property
     def gleis_an(self) -> str:
@@ -814,11 +820,14 @@ class ZugFormatter:
         Name des disponierten Ankunftsgleises
         """
 
-        if self._ankunft is not None:
-            g = self._ankunft.gleis
-        elif self._ziel is not None:
-            g = self._ziel.gleis
-        else:
+        try:
+            if self._ankunft is not None:
+                g = self._ankunft.gleis
+            elif self._ziel is not None:
+                g = self._ziel.gleis
+            else:
+                return ""
+        except (AttributeError, KeyError):
             return ""
 
         return g
@@ -829,11 +838,14 @@ class ZugFormatter:
         Name des disponierten Abfahrtsgleises
         """
 
-        if self._abfahrt is not None:
-            g = self._abfahrt.gleis
-        elif self._ziel is not None:
-            g = self._ziel.gleis
-        else:
+        try:
+            if self._abfahrt is not None:
+                g = self._abfahrt.gleis
+            elif self._ziel is not None:
+                g = self._ziel.gleis
+            else:
+                return ""
+        except (AttributeError, KeyError):
             return ""
 
         return g
@@ -847,13 +859,16 @@ class ZugFormatter:
         Wenn das Gleis nicht geändert wurde, wird nur das Plangleis ausgegeben.
         """
 
-        if self._ankunft is not None:
-            g = self._ankunft.gleis
-            p = self._ankunft.plan
-        elif self._ziel is not None:
-            g = self._ziel.gleis
-            p = self._ziel.plan
-        else:
+        try:
+            if self._ankunft is not None:
+                g = self._ankunft.gleis
+                p = self._ankunft.plan
+            elif self._ziel is not None:
+                g = self._ziel.gleis
+                p = self._ziel.plan
+            else:
+                return ""
+        except (AttributeError, KeyError):
             return ""
 
         if g == p:
@@ -870,13 +885,16 @@ class ZugFormatter:
         Wenn das Gleis nicht geändert wurde, wird nur das Plangleis ausgegeben.
         """
 
-        if self._abfahrt is not None:
-            g = self._abfahrt.gleis
-            p = self._abfahrt.plan
-        elif self._ziel is not None:
-            g = self._ziel.gleis
-            p = self._ziel.plan
-        else:
+        try:
+            if self._abfahrt is not None:
+                g = self._abfahrt.gleis
+                p = self._abfahrt.plan
+            elif self._ziel is not None:
+                g = self._ziel.gleis
+                p = self._ziel.plan
+            else:
+                return ""
+        except (AttributeError, KeyError):
             return ""
 
         if g == p:
@@ -965,12 +983,15 @@ class ZugFormatter:
         Die Verspätung erscheint nur, wenn sie ungleich 0 ist, oder das Attribut null_zeigen gesetzt ist.
         """
 
-        if self._ankunft is not None:
-            v = self._ankunft.t_eff - self._ankunft.t_plan
-        elif self._ziel is not None:
-            v = self._ziel.v_an
-        else:
-            v = 0
+        try:
+            if self._ankunft is not None:
+                v = self._ankunft.t_eff - self._ankunft.t_plan
+            elif self._ziel is not None:
+                v = self._ziel.v_an
+            else:
+                v = 0
+        except (AttributeError, KeyError):
+            return ""
 
         v += 0.5
         if self._null_zeigen or abs(v) > 0.5:
@@ -988,12 +1009,15 @@ class ZugFormatter:
         Die Verspätung erscheint nur, wenn sie ungleich 0 ist, oder das Attribut null_zeigen gesetzt ist.
         """
 
-        if self._abfahrt is not None:
-            v = self._abfahrt.t_eff - self._abfahrt.t_plan
-        elif self._ziel is not None:
-            v = self._ziel.v_ab
-        else:
-            v = 0
+        try:
+            if self._abfahrt is not None:
+                v = self._abfahrt.t_eff - self._abfahrt.t_plan
+            elif self._ziel is not None:
+                v = self._ziel.v_ab
+            else:
+                v = 0
+        except (AttributeError, KeyError):
+            return ""
 
         v += 0.5
         if self._null_zeigen or abs(v) > 0.5:
