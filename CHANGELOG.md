@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.7
+
+### Closed issues
+
+- Issue 153: Attribute Errors in Zugschema
+
 ## 2.0.6
 
 ### Features
@@ -9,7 +15,7 @@
 
 ### Closed issues
 
-- Issue 152: Anzeigefehler bei Versätung
+- Issue 152: Anzeigefehler bei Verspätung
 
 ## 2.0.5
 
