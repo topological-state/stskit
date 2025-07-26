@@ -17,10 +17,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractButton, QAbstractItemView, QApplication, QComboBox,
     QDialogButtonBox, QGroupBox, QHBoxLayout, QHeaderView,
-    QLabel, QListView, QListWidget, QListWidgetItem,
-    QMainWindow, QPushButton, QSizePolicy, QSpacerItem,
-    QSplitter, QTabWidget, QTableView, QTextEdit,
-    QVBoxLayout, QWidget)
+    QLabel, QListView, QMainWindow, QPushButton,
+    QSizePolicy, QSpacerItem, QSplitter, QTabWidget,
+    QTableView, QTextEdit, QVBoxLayout, QWidget)
+
 import stskit.qt.resources_rc
 
 class Ui_EinstellungenWindow(object):
@@ -260,17 +260,27 @@ class Ui_EinstellungenWindow(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.strecken_name_combo = QComboBox(self.strecken_tab)
         self.strecken_name_combo.setObjectName(u"strecken_name_combo")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.strecken_name_combo.sizePolicy().hasHeightForWidth())
+        self.strecken_name_combo.setSizePolicy(sizePolicy)
         self.strecken_name_combo.setEditable(True)
 
         self.horizontalLayout.addWidget(self.strecken_name_combo)
 
+        self.strecken_erstellen_button = QPushButton(self.strecken_tab)
+        self.strecken_erstellen_button.setObjectName(u"strecken_erstellen_button")
+
+        self.horizontalLayout.addWidget(self.strecken_erstellen_button)
+
         self.strecken_loeschen_button = QPushButton(self.strecken_tab)
         self.strecken_loeschen_button.setObjectName(u"strecken_loeschen_button")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.strecken_loeschen_button.sizePolicy().hasHeightForWidth())
-        self.strecken_loeschen_button.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.strecken_loeschen_button.sizePolicy().hasHeightForWidth())
+        self.strecken_loeschen_button.setSizePolicy(sizePolicy1)
 
         self.horizontalLayout.addWidget(self.strecken_loeschen_button)
 
@@ -289,8 +299,10 @@ class Ui_EinstellungenWindow(object):
 
         self.verticalLayout_13.addWidget(self.strecken_auswahl_label)
 
-        self.strecken_auswahl_list = QListWidget(self.strecken_tab)
+        self.strecken_auswahl_list = QListView(self.strecken_tab)
         self.strecken_auswahl_list.setObjectName(u"strecken_auswahl_list")
+        self.strecken_auswahl_list.setAlternatingRowColors(True)
+        self.strecken_auswahl_list.setSelectionMode(QAbstractItemView.SingleSelection)
 
         self.verticalLayout_13.addWidget(self.strecken_auswahl_list)
 
@@ -305,31 +317,41 @@ class Ui_EinstellungenWindow(object):
 
         self.strecken_auswahl_button = QPushButton(self.strecken_tab)
         self.strecken_auswahl_button.setObjectName(u"strecken_auswahl_button")
-        sizePolicy.setHeightForWidth(self.strecken_auswahl_button.sizePolicy().hasHeightForWidth())
-        self.strecken_auswahl_button.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.strecken_auswahl_button.sizePolicy().hasHeightForWidth())
+        self.strecken_auswahl_button.setSizePolicy(sizePolicy1)
 
         self.verticalLayout_12.addWidget(self.strecken_auswahl_button)
 
         self.strecken_abwahl_button = QPushButton(self.strecken_tab)
         self.strecken_abwahl_button.setObjectName(u"strecken_abwahl_button")
-        sizePolicy.setHeightForWidth(self.strecken_abwahl_button.sizePolicy().hasHeightForWidth())
-        self.strecken_abwahl_button.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.strecken_abwahl_button.sizePolicy().hasHeightForWidth())
+        self.strecken_abwahl_button.setSizePolicy(sizePolicy1)
 
         self.verticalLayout_12.addWidget(self.strecken_abwahl_button)
 
         self.strecken_hoch_button = QPushButton(self.strecken_tab)
         self.strecken_hoch_button.setObjectName(u"strecken_hoch_button")
-        sizePolicy.setHeightForWidth(self.strecken_hoch_button.sizePolicy().hasHeightForWidth())
-        self.strecken_hoch_button.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.strecken_hoch_button.sizePolicy().hasHeightForWidth())
+        self.strecken_hoch_button.setSizePolicy(sizePolicy1)
 
         self.verticalLayout_12.addWidget(self.strecken_hoch_button)
 
         self.strecken_runter_button = QPushButton(self.strecken_tab)
         self.strecken_runter_button.setObjectName(u"strecken_runter_button")
-        sizePolicy.setHeightForWidth(self.strecken_runter_button.sizePolicy().hasHeightForWidth())
-        self.strecken_runter_button.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.strecken_runter_button.sizePolicy().hasHeightForWidth())
+        self.strecken_runter_button.setSizePolicy(sizePolicy1)
 
         self.verticalLayout_12.addWidget(self.strecken_runter_button)
+
+        self.strecken_ordnen_button = QPushButton(self.strecken_tab)
+        self.strecken_ordnen_button.setObjectName(u"strecken_ordnen_button")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.strecken_ordnen_button.sizePolicy().hasHeightForWidth())
+        self.strecken_ordnen_button.setSizePolicy(sizePolicy2)
+
+        self.verticalLayout_12.addWidget(self.strecken_ordnen_button)
 
         self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -347,6 +369,9 @@ class Ui_EinstellungenWindow(object):
 
         self.strecken_abwahl_list = QListView(self.strecken_tab)
         self.strecken_abwahl_list.setObjectName(u"strecken_abwahl_list")
+        self.strecken_abwahl_list.setAlternatingRowColors(True)
+        self.strecken_abwahl_list.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.strecken_abwahl_list.setSelectionBehavior(QAbstractItemView.SelectItems)
 
         self.verticalLayout_16.addWidget(self.strecken_abwahl_list)
 
@@ -520,12 +545,14 @@ class Ui_EinstellungenWindow(object):
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.bahnhof_tab), QCoreApplication.translate("EinstellungenWindow", u"Bahnh\u00f6fe", None))
         self.strecken_name_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Strecke", None))
         self.strecken_name_combo.setPlaceholderText(QCoreApplication.translate("EinstellungenWindow", u"Streckenname", None))
-        self.strecken_loeschen_button.setText(QCoreApplication.translate("EinstellungenWindow", u"\u274c", None))
+        self.strecken_erstellen_button.setText(QCoreApplication.translate("EinstellungenWindow", u"+", None))
+        self.strecken_loeschen_button.setText(QCoreApplication.translate("EinstellungenWindow", u"-", None))
         self.strecken_auswahl_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Gew\u00e4hlte Stationen", None))
         self.strecken_auswahl_button.setText(QCoreApplication.translate("EinstellungenWindow", u"\u2b05\ufe0f", None))
         self.strecken_abwahl_button.setText(QCoreApplication.translate("EinstellungenWindow", u"\u27a1\ufe0f", None))
         self.strecken_hoch_button.setText(QCoreApplication.translate("EinstellungenWindow", u"\u2b06\ufe0f", None))
         self.strecken_runter_button.setText(QCoreApplication.translate("EinstellungenWindow", u"\u2b07\ufe0f", None))
+        self.strecken_ordnen_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Ordnen", None))
         self.strecken_abwahl_label.setText(QCoreApplication.translate("EinstellungenWindow", u"\u00fcbrige Stationen", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.strecken_tab), QCoreApplication.translate("EinstellungenWindow", u"Strecken", None))
         self.zugschema_name_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Zugschema", None))

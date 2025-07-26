@@ -16,6 +16,7 @@ from stskit.model.zugschema import Zugschema, ZugschemaBearbeitungModell
 from stskit.dispo.anlage import Anlage
 from stskit.zentrale import DatenZentrale
 from stskit.widgets.bahnhofeditor import BahnhofEditor
+from stskit.widgets.streckeneditor import StreckenEditor
 
 from stskit.qt.ui_einstellungen import Ui_EinstellungenWindow
 
@@ -49,6 +50,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
             self.setWindowTitle(f"Einstellungen")
 
         self.bahnhof_editor = BahnhofEditor(zentrale.anlage, parent=self, ui=self.ui)
+        self.strecken_editor = StreckenEditor(zentrale.anlage, parent=self, ui=self.ui)
 
         self.zugschema = Zugschema()
         self.zugschema.load_config(self.anlage.zugschema.name)
@@ -68,6 +70,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
         self.in_update = True
 
         self.bahnhof_editor.update_widgets()
+        self.strecken_editor.update_widgets()
 
         schemas = sorted(self.zugschema_namen_nach_titel.keys())
         self.ui.zugschema_name_combo.clear()
@@ -101,6 +104,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
     @Slot()
     def apply(self):
         self.bahnhof_editor.apply()
+        self.strecken_editor.apply()
         self.anlage.zugschema.load_config(self.zugschema.name, self.anlage.anlageninfo.region)
         self.zentrale.notify_anlage({'zugschema', 'bahnhofgraph'})
 
@@ -112,6 +116,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
     @Slot()
     def reset(self):
         self.bahnhof_editor.reset()
+        self.strecken_editor.reset()
         self.zugschema.load_config(self.anlage.zugschema.name)
         self.zugschema_modell.update()
 

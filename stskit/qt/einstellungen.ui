@@ -399,11 +399,24 @@
                 <layout class="QHBoxLayout" name="horizontalLayout">
                  <item>
                   <widget class="QComboBox" name="strecken_name_combo">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="editable">
                     <bool>true</bool>
                    </property>
                    <property name="placeholderText">
                     <string>Streckenname</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="strecken_erstellen_button">
+                   <property name="text">
+                    <string>+</string>
                    </property>
                   </widget>
                  </item>
@@ -416,7 +429,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>❌</string>
+                    <string>-</string>
                    </property>
                   </widget>
                  </item>
@@ -439,7 +452,14 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QListWidget" name="strecken_auswahl_list"/>
+                  <widget class="QListView" name="strecken_auswahl_list">
+                   <property name="alternatingRowColors">
+                    <bool>true</bool>
+                   </property>
+                   <property name="selectionMode">
+                    <enum>QAbstractItemView::SingleSelection</enum>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </item>
@@ -511,6 +531,19 @@
                   </widget>
                  </item>
                  <item>
+                  <widget class="QPushButton" name="strecken_ordnen_button">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Ordnen</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <spacer name="verticalSpacer_4">
                    <property name="orientation">
                     <enum>Qt::Vertical</enum>
@@ -538,7 +571,17 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QListView" name="strecken_abwahl_list"/>
+                  <widget class="QListView" name="strecken_abwahl_list">
+                   <property name="alternatingRowColors">
+                    <bool>true</bool>
+                   </property>
+                   <property name="selectionMode">
+                    <enum>QAbstractItemView::MultiSelection</enum>
+                   </property>
+                   <property name="selectionBehavior">
+                    <enum>QAbstractItemView::SelectItems</enum>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </item>
