@@ -242,10 +242,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     @Slot()
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
-        if self.ui.name_button.isChecked():
-            self.plot.zugbeschriftung.elemente = ["Name", "Verspätung"]
-        else:
-            self.plot.zugbeschriftung.elemente = ["Nummer", "Verspätung"]
         if self.plot.strecke_von and self.plot.strecke_nach:
             self.daten_update()
             self.grafik_update()
