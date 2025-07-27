@@ -47,7 +47,6 @@ class StreckenEditor(QObject):
         self.ui.strecken_hoch_button.clicked.connect(self.strecken_hoch_button_clicked)
         self.ui.strecken_runter_button.clicked.connect(self.strecken_runter_button_clicked)
         self.ui.strecken_ordnen_button.clicked.connect(self.strecken_ordnen_button_clicked)
-        self.ui.strecken_ordnen_button.setEnabled(False)
         self.ui.strecken_erstellen_button.clicked.connect(self.strecken_erstellen_button_clicked)
         self.ui.strecken_loeschen_button.clicked.connect(self.strecken_loeschen_button_clicked)
 
@@ -244,26 +243,44 @@ class StreckenEditor(QObject):
 
     @Slot()
     def strecken_ordnen_button_clicked(self):
+        def _bst_to_signal(bst: BahnhofElement):
+            for gl in self.anlage.bahnhofgraph.list_children(bst, {"Gl", "Agl"}):
+                gl_node = self.anlage.bahnhofgraph.nodes[gl]
+                break
+            else:
+                return None
+
+            if bst.typ == "Anst":
+                return gl_node.enr
+            elif bst.typ == "Gl":
+                return gl_node.name
+            else:
+                return None
+
         try:
             start = self.akt_auswahl[0]
         except IndexError:
+            return
+        try:
+            signal_start = _bst_to_signal(start)
+        except KeyError:
             return
 
         distanzen = {}
         d = 0.
         for station in self.akt_auswahl:
+            signal_ziel = _bst_to_signal(station)
             if station == start:
                 distanzen[station] = 0.
             else:
                 try:
-                    # todo : map start/station to signal graph label
-                    pfad = nx.shortest_path(self.anlage.signalgraph, start, station)
-                except nx.exception.NetworkXError:
+                    pfad = nx.shortest_path(self.anlage.signalgraph, signal_start, signal_ziel)
+                except (KeyError, nx.exception.NetworkXError):
                     d += 0.001
                 else:
                     d = len(pfad) + 0.
                 distanzen[station] = d
 
-        self.change_strecke(self.akt_name, sorted(self.akt_auswahl, key=lambda station: distanzen[station]))
+        self.change_strecke(self.akt_name, sorted(self.akt_auswahl, key=lambda _item: distanzen[_item]))
         self.select_strecke("")
         self.update_widgets()
