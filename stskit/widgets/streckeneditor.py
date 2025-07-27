@@ -17,6 +17,8 @@ logger.addHandler(logging.NullHandler())
 
 
 class StreckenEditor(QObject):
+    # todo : drag drop uebernehmen
+
     def __init__(self, anlage: Anlage, parent: QObject, ui: Ui_EinstellungenWindow):
         super().__init__()
         self.anlage = anlage
@@ -52,7 +54,16 @@ class StreckenEditor(QObject):
 
         self.ui.strecken_name_combo.currentIndexChanged.connect(self.strecken_name_combo_index_changed)
         self.ui.strecken_name_combo.editTextChanged.connect(self.strecken_name_combo_text_changed)
-        
+
+        self.auswahl_model.rowsInserted.connect(self.auswahl_rows_inserted)
+        self.abwahl_model.rowsInserted.connect(self.abwahl_rows_inserted)
+        self.auswahl_model.rowsMoved.connect(self.auswahl_rows_moved)
+        self.abwahl_model.rowsMoved.connect(self.abwahl_rows_moved)
+        self.auswahl_model.rowsRemoved.connect(self.auswahl_rows_removed)
+        self.abwahl_model.rowsRemoved.connect(self.abwahl_rows_removed)
+        self.auswahl_model.dataChanged.connect(self.auswahl_data_changed)
+        self.abwahl_model.dataChanged.connect(self.abwahl_data_changed)
+
         self.init_from_anlage()
         self.update_widgets()
 
@@ -90,6 +101,8 @@ class StreckenEditor(QObject):
         """
         Update the widgets based on the current state of the anlage
         """
+
+        # todo : auswahl beibehalten
 
         def strecken_key(name: str) -> Any:
             return name in self.auto_strecken, name
@@ -200,6 +213,7 @@ class StreckenEditor(QObject):
 
     @Slot()
     def strecken_hoch_button_clicked(self):
+        # todo : funktioniert nicht (keine wirkung, keine fehlermeldung)
         try:
             src_indexes = self.ui.strecken_auswahl_list.selectedIndexes()
             move_items = [self.akt_auswahl[index.row()] for index in src_indexes]
@@ -213,6 +227,7 @@ class StreckenEditor(QObject):
 
     @Slot()
     def strecken_runter_button_clicked(self):
+        # todo : funktioniert nicht (keine wirkung, keine fehlermeldung)
         try:
             src_indexes = self.ui.strecken_auswahl_list.selectedIndexes()
             move_items = [self.akt_auswahl[index.row()] for index in src_indexes]
@@ -223,6 +238,38 @@ class StreckenEditor(QObject):
         after = self.akt_auswahl[index+1:]
         self.change_strecke(self.akt_name, [*before, *move_items, *after])
         self.update_widgets()
+
+    @Slot()
+    def auswahl_rows_inserted(self):
+        print("auswahl_rows_inserted")
+
+    @Slot()
+    def abwahl_rows_inserted(self):
+        print("abwahl_rows_inserted")
+
+    @Slot()
+    def auswahl_rows_moved(self):
+        print("auswahl_rows_moved")
+
+    @Slot()
+    def abwahl_rows_moved(self):
+        print("abwahl_rows_moved")
+
+    @Slot()
+    def auswahl_rows_removed(self):
+        print("auswahl_rows_removed")
+
+    @Slot()
+    def abwahl_rows_removed(self):
+        print("abwahl_rows_removed")
+
+    @Slot()
+    def auswahl_data_changed(self):
+        print("auswahl_data_changed")
+
+    @Slot()
+    def abwahl_data_changed(self):
+        print("abwahl_data_changed")
 
     @Slot()
     def strecken_loeschen_button_clicked(self):

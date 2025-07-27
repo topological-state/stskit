@@ -301,8 +301,11 @@ class Ui_EinstellungenWindow(object):
 
         self.strecken_auswahl_list = QListView(self.strecken_tab)
         self.strecken_auswahl_list.setObjectName(u"strecken_auswahl_list")
+        self.strecken_auswahl_list.setDragEnabled(True)
+        self.strecken_auswahl_list.setDragDropMode(QAbstractItemView.DragDrop)
+        self.strecken_auswahl_list.setDefaultDropAction(Qt.MoveAction)
         self.strecken_auswahl_list.setAlternatingRowColors(True)
-        self.strecken_auswahl_list.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.strecken_auswahl_list.setSelectionMode(QAbstractItemView.MultiSelection)
 
         self.verticalLayout_13.addWidget(self.strecken_auswahl_list)
 
@@ -369,6 +372,8 @@ class Ui_EinstellungenWindow(object):
 
         self.strecken_abwahl_list = QListView(self.strecken_tab)
         self.strecken_abwahl_list.setObjectName(u"strecken_abwahl_list")
+        self.strecken_abwahl_list.setDragEnabled(True)
+        self.strecken_abwahl_list.setDragDropMode(QAbstractItemView.DragDrop)
         self.strecken_abwahl_list.setAlternatingRowColors(True)
         self.strecken_abwahl_list.setSelectionMode(QAbstractItemView.MultiSelection)
         self.strecken_abwahl_list.setSelectionBehavior(QAbstractItemView.SelectItems)

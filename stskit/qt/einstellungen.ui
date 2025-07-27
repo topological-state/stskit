@@ -453,11 +453,20 @@
                  </item>
                  <item>
                   <widget class="QListView" name="strecken_auswahl_list">
+                   <property name="dragEnabled">
+                    <bool>true</bool>
+                   </property>
+                   <property name="dragDropMode">
+                    <enum>QAbstractItemView::DragDrop</enum>
+                   </property>
+                   <property name="defaultDropAction">
+                    <enum>Qt::MoveAction</enum>
+                   </property>
                    <property name="alternatingRowColors">
                     <bool>true</bool>
                    </property>
                    <property name="selectionMode">
-                    <enum>QAbstractItemView::SingleSelection</enum>
+                    <enum>QAbstractItemView::MultiSelection</enum>
                    </property>
                   </widget>
                  </item>
@@ -572,6 +581,12 @@
                  </item>
                  <item>
                   <widget class="QListView" name="strecken_abwahl_list">
+                   <property name="dragEnabled">
+                    <bool>true</bool>
+                   </property>
+                   <property name="dragDropMode">
+                    <enum>QAbstractItemView::DragDrop</enum>
+                   </property>
                    <property name="alternatingRowColors">
                     <bool>true</bool>
                    </property>
