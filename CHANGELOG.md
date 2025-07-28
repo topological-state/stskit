@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.8
+
+### Closed issues
+
+- Crash beim Seiten Umschalten im Bildfahrplan
+
 ## 2.0.7
 
 ### Closed issues
