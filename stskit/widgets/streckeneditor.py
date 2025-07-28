@@ -4,8 +4,8 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, 
 
 import networkx as nx
 from PySide6 import QtCore, QtWidgets
-from PySide6.QtCore import Slot, QAbstractListModel, QModelIndex, QItemSelectionModel, QStringListModel, QObject, \
-    QMimeData, QByteArray
+from PySide6.QtCore import (Slot, Signal, QAbstractListModel, QModelIndex, QItemSelectionModel,
+                            QStringListModel, QObject, QMimeData, QByteArray)
 from PySide6.QtWidgets import QWidget, QAbstractItemView
 
 from stskit.dispo.anlage import Anlage
@@ -31,15 +31,19 @@ class StreckenEditorModel(QAbstractListModel):
       List of BahnhofElements sorted by some criterion (not specified in the code).
     """
 
+    drop_completed = Signal(str)
+
     def __init__(self, anlage: Anlage, parent=None):
         super().__init__(parent)
-
         self.anlage: Anlage = anlage
         self.columns: List[str] = ["Stationen"]
         self.rows: List[BahnhofElement] = []
+        self.sorted = False
 
     def update(self, strecke: Sequence[BahnhofElement]) -> None:
         self.beginResetModel()
+        if self.sorted:
+            strecke = sorted(strecke)
         self.rows = list(strecke)
         self.endResetModel()
 
@@ -113,11 +117,15 @@ class StreckenEditorModel(QAbstractListModel):
         Station einfügen
 
         :param row: Zielindex
+            Wenn die Liste sortiert ist, hat row keinen Einfluss.
         :param bst: Einzufügendes BahnhofElement.
         :return: True bei Erfolg, False bei Indexfehler.
         """
 
-        self.beginInsertRows(QModelIndex(), row, 1)
+        if self.sorted:
+            row = bisect.bisect_left(self.rows, bst)
+
+        self.beginInsertRows(QModelIndex(), row, row)
         try:
             self.rows.insert(row, bst)
             result = True
@@ -139,7 +147,7 @@ class StreckenEditorModel(QAbstractListModel):
         except ValueError:
             return False
 
-        self.beginRemoveRows(QModelIndex(), row, 1)
+        self.beginRemoveRows(QModelIndex(), row, row)
         try:
             del self.rows[row]
             result = True
@@ -196,9 +204,50 @@ class StreckenEditorModel(QAbstractListModel):
         return data
 
     def dropMimeData(self, data, action, row, column, parent, /):
+        """
+        Verarbeitet einen Drop von Bst
+
+        Parameters:
+        data (QDropEvent): The event containing the dropped data.
+        action (int): The action to be performed with the dropped data, e.g., Qt.MoveAction or Qt.CopyAction.
+        row (int): The row where the data should be inserted.
+        column (int): The column where the data should be inserted.
+        parent (QModelIndex): The parent index of the item being dropped.
+
+        Returns:
+        bool: True if the data was successfully dropped, False otherwise.
+
+        """
+
         dada = data.data("application/x-bahnhofelement").toStdString()
-        print("--- dropMimeData", dada)
+        move_str = dada.split(";")
+        for s in reversed(move_str):
+            bst = BahnhofElement(*s.split(" ", 1))
+            self.insert(row, bst)
+
+        self.drop_completed.emit(dada)
         return True
+
+    def on_drop_completed(self, dada):
+        """
+        Schliesst einen Drag-Event ab.
+
+        Summary
+        -------
+        This method processes a completed drop event by parsing the provided data,
+        creating `BahnhofElement` instances, and removing them from the current context.
+
+        Parameters
+        ----------
+        dada (str) : The data received from the drop event,
+        expected to be a semicolon-separated string of element data.
+        Each element data is further split by a space into two parts: identifier and additional data.
+        """
+
+        move_str = dada.split(";")
+        for s in move_str:
+            bst = BahnhofElement(*s.split(" ", 1))
+            self.remove(bst)
 
 
 class StreckenEditor(QObject):
@@ -222,9 +271,12 @@ class StreckenEditor(QObject):
         self.auswahl_model = StreckenEditorModel(anlage, parent)
         self.ui.strecken_auswahl_list.setModel(self.auswahl_model)
         self.ui.strecken_auswahl_list.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.ui.strecken_auswahl_list.setAcceptDrops(True)
         self.abwahl_model = StreckenEditorModel(anlage, parent)
+        self.abwahl_model.sorted = True
         self.ui.strecken_abwahl_list.setModel(self.abwahl_model)
         self.ui.strecken_abwahl_list.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.ui.strecken_abwahl_list.setAcceptDrops(True)
         self.strecken_model = QStringListModel()
         self.ui.strecken_name_combo.setModel(self.strecken_model)
 
@@ -239,14 +291,8 @@ class StreckenEditor(QObject):
         self.ui.strecken_name_combo.currentIndexChanged.connect(self.strecken_name_combo_index_changed)
         self.ui.strecken_name_combo.editTextChanged.connect(self.strecken_name_combo_text_changed)
 
-        # self.auswahl_model.rowsInserted.connect(self.auswahl_rows_inserted)
-        # self.abwahl_model.rowsInserted.connect(self.abwahl_rows_inserted)
-        # self.auswahl_model.rowsMoved.connect(self.auswahl_rows_moved)
-        # self.abwahl_model.rowsMoved.connect(self.abwahl_rows_moved)
-        # self.auswahl_model.rowsRemoved.connect(self.auswahl_rows_removed)
-        # self.abwahl_model.rowsRemoved.connect(self.abwahl_rows_removed)
-        # self.auswahl_model.dataChanged.connect(self.auswahl_data_changed)
-        # self.abwahl_model.dataChanged.connect(self.abwahl_data_changed)
+        self.auswahl_model.drop_completed.connect(self.abwahl_model.on_drop_completed)
+        self.abwahl_model.drop_completed.connect(self.auswahl_model.on_drop_completed)
 
         self.init_from_anlage()
         self.update_widgets()
@@ -342,7 +388,6 @@ class StreckenEditor(QObject):
 
     @Slot()
     def strecken_name_combo_index_changed(self):
-        print(f"strecken_name_combo_index_changed: {self.strecken_name}, {self.in_update}")
         if self.in_update:
             return
 
@@ -356,7 +401,6 @@ class StreckenEditor(QObject):
 
     @Slot()
     def strecken_name_combo_text_changed(self):
-        print(f"strecken_name_combo_text_changed: {self.strecken_name}, {self.in_update}")
         if self.in_update:
             return
 
@@ -411,8 +455,7 @@ class StreckenEditor(QObject):
 
         for bst in move_items:
             self.auswahl_model.remove(bst)
-            index = bisect.bisect_left(self.abwahl_model.rows, bst)
-            self.abwahl_model.insert(index, bst)
+            self.abwahl_model.insert(0, bst)
 
         self.edited_strecken.add(self.strecken_name)
         self.ui.strecken_auswahl_list.clearSelection()
@@ -514,36 +557,3 @@ class StreckenEditor(QObject):
         self.alle_strecken[self.strecken_name] = sorted(distanzen.keys(), key=lambda _item: distanzen[_item])
         self.edited_strecken.add(self.strecken_name)
         self.select_strecke(self.strecken_name)
-
-    @Slot()
-    def auswahl_rows_inserted(self):
-        print("auswahl_rows_inserted")
-
-    @Slot()
-    def abwahl_rows_inserted(self):
-        print("abwahl_rows_inserted")
-
-    @Slot()
-    def auswahl_rows_moved(self):
-        print("auswahl_rows_moved")
-
-    @Slot()
-    def abwahl_rows_moved(self):
-        print("abwahl_rows_moved")
-
-    @Slot()
-    def auswahl_rows_removed(self):
-        print("auswahl_rows_removed")
-
-    @Slot()
-    def abwahl_rows_removed(self):
-        print("abwahl_rows_removed")
-
-    @Slot()
-    def auswahl_data_changed(self):
-        print("auswahl_data_changed")
-
-    @Slot()
-    def abwahl_data_changed(self):
-        print("abwahl_data_changed")
-
