@@ -16,6 +16,15 @@ logger.addHandler(logging.NullHandler())
 BAHNHOFELEMENT_TYPEN = {'Gl', 'Bs', 'Bft', 'Bf', 'Agl', 'Anst', 'Bst', 'Stw'}
 BAHNHOFELEMENT_HIERARCHIE = {'Gl': 'Bs', 'Bs': 'Bft', 'Bft': 'Bf', 'Bf': 'Bst', 'Agl': 'Anst', 'Anst': 'Bst', 'Bst': 'Stw'}
 
+BAHNHOFELEMENT_BESCHREIBUNG = {'Gl': 'Gleis',
+                               'Bs': 'Bahnsteig',
+                               'Bft': 'Bahnhofteil',
+                               'Bf': 'Bahnhof',
+                               'Agl': 'Anschlussgleis',
+                               'Anst': 'Anschlussstelle',
+                               'Bst': 'Betriebsstelle',
+                               'Stw': 'Stellwerk'}
+
 
 class BahnhofElement(NamedTuple):
     """
