@@ -370,9 +370,18 @@ class Strecken:
         Streckendefinition entfernen
         """
 
-        del self.strecken[name]
-        del self.ordnung[name]
-        del self.auto[name]
+        try:
+            del self.strecken[name]
+        except KeyError:
+            pass
+        try:
+            del self.ordnung[name]
+        except KeyError:
+            pass
+        try:
+            del self.auto[name]
+        except KeyError:
+            pass
         if self.hauptstrecke == name:
             self.hauptstrecke = None
 
