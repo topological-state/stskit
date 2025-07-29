@@ -1,5 +1,6 @@
 import bisect
 import logging
+import pickle
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
 import networkx as nx
@@ -39,6 +40,7 @@ class StreckenEditorModel(QAbstractListModel):
         self.columns: List[str] = ["Stationen"]
         self.rows: List[BahnhofElement] = []
         self.sorted = False
+        self._drag_data = {}
 
     def update(self, strecke: Sequence[BahnhofElement]) -> None:
         self.beginResetModel()
@@ -196,11 +198,12 @@ class StreckenEditorModel(QAbstractListModel):
 
     def mimeData(self, items):
         src_rows = [index.row() for index in items]
-        move_items = [str(self.rows[row]) for row in src_rows]
-        move_str = ";".join(move_items)
-        dada = QByteArray.fromStdString(move_str)
+        bst_list = [self.rows[row] for row in src_rows]
+        drag_id = id(bst_list)
+        dada = {"drag_id": drag_id, "sender": id(self), "bst_list": bst_list}
+        self._drag_data[drag_id] = dada
         data = QMimeData()
-        data.setData("application/x-bahnhofelement", dada)
+        data.setData("application/x-bahnhofelement", pickle.dumps(dada))
         return data
 
     def dropMimeData(self, data, action, row, column, parent, /):
@@ -219,16 +222,28 @@ class StreckenEditorModel(QAbstractListModel):
 
         """
 
-        dada = data.data("application/x-bahnhofelement").toStdString()
-        move_str = dada.split(";")
-        for s in reversed(move_str):
-            bst = BahnhofElement(*s.split(" ", 1))
-            self.insert(row, bst)
+        try:
+            dada = pickle.loads(data.data("application/x-bahnhofelement"))
+        except pickle.PickleError:
+            return False
 
-        self.drop_completed.emit(dada)
+        if parent.isValid():
+            row = parent.row()
+        
+        try:
+            if dada["sender"] == id(self):
+                for bst in reversed(dada["bst_list"]):
+                    self.move(row, bst)
+            else:
+                for bst in reversed(dada["bst_list"]):
+                    self.insert(row, bst)
+        except KeyError:
+            return False
+
+        self.drop_completed.emit(str(dada.get("drag_id", 0)))
         return True
 
-    def on_drop_completed(self, dada):
+    def on_drop_completed(self, drag_id):
         """
         Schliesst einen Drag-Event ab.
 
@@ -239,15 +254,20 @@ class StreckenEditorModel(QAbstractListModel):
 
         Parameters
         ----------
-        dada (str) : The data received from the drop event,
-        expected to be a semicolon-separated string of element data.
-        Each element data is further split by a space into two parts: identifier and additional data.
+        dada (Dict) : The data received from the drop event.
         """
 
-        move_str = dada.split(";")
-        for s in move_str:
-            bst = BahnhofElement(*s.split(" ", 1))
-            self.remove(bst)
+        drag_id = int(drag_id)
+        try:
+            dada = self._drag_data[drag_id]
+        except (KeyError, ValueError):
+            return
+
+        if dada["sender"] == id(self):
+            for bst in dada["bst_list"]:
+                self.remove(bst)
+
+        del self._drag_data[drag_id]
 
 
 class StreckenEditor(QObject):
@@ -263,6 +283,7 @@ class StreckenEditor(QObject):
         self.anlage_bst: List[BahnhofElement] = []
         self.anlage_strecken: Dict[str, List[BahnhofElement]] = {}
         self.alle_strecken: Dict[str, List[BahnhofElement]] = {}
+        self.ordnung: Dict[str, Union[int, float]] = {}
         self.auto_strecken: Set[str] = set()
         self.edited_strecken: Set[str] = set()
         self.deleted_strecken: Set[str] = set()
@@ -291,37 +312,89 @@ class StreckenEditor(QObject):
         self.ui.strecken_name_combo.currentIndexChanged.connect(self.strecken_name_combo_index_changed)
         self.ui.strecken_name_combo.editTextChanged.connect(self.strecken_name_combo_text_changed)
 
+        self.auswahl_model.rowsInserted.connect(self.auswahl_rows_inserted)
+        self.auswahl_model.rowsMoved.connect(self.auswahl_rows_moved)
+        self.auswahl_model.rowsRemoved.connect(self.auswahl_rows_removed)
+        self.auswahl_model.dataChanged.connect(self.auswahl_data_changed)
+
         self.auswahl_model.drop_completed.connect(self.abwahl_model.on_drop_completed)
         self.abwahl_model.drop_completed.connect(self.auswahl_model.on_drop_completed)
 
         self.init_from_anlage()
-        self.update_widgets()
-        try:
-            self.strecken_name = list(self.alle_strecken)[0]
-            self.select_strecke(self.strecken_name)
-            self.ui.strecken_name_combo.setCurrentIndex(0)
-        except IndexError:
-            pass
+        self._streckenliste_changed()
+        self._select_strecke(self.strecken_name)
+
+    def apply(self):
+        """
+        Apply changes to the anlage based on the current state of the widgets
+        
+        Called by owner when the user clicks the Apply or OK button.
+        """
+
+        self.save_to_anlage()
+
+    def reset(self):
+        """
+        Reset all widgets to Anlage
+        
+        Called by owner when the user clicks the Reset button.
+        """
+
+        self.init_from_anlage()
+        self._streckenliste_changed()
+
+    def update_widgets(self):
+        """
+        Update changes of Anlage.
+
+        Called by owner after changes to the anlage.
+        Update anlage_bst and validate alle_strecken.
+        """
+
+        self.anlage_bst = sorted(self.anlage.bahnhofgraph.list_by_type({'Bf', 'Anst'}))
+
+        neue_strecken = {}
+        changed = False
+        for name, strecke in self.alle_strecken.items():
+            neue_strecke = [station for station in strecke if station in self.anlage_bst]
+            neue_strecken[name] = neue_strecke
+            if neue_strecke != strecke:
+                changed = True
+
+        if changed:
+            self.alle_strecken = neue_strecken
+            self._select_strecke(self.strecken_name)
 
     def init_from_anlage(self):
         """
         Streckendefinition von Anlage initialisieren
 
         Alle Änderungen werden gelöscht!
+        Aktualisiert nur die eigenen Attribute, nicht die Views!
+        Wählt auch eine Strecke aus.
         """
 
+        self.anlage_bst = sorted(self.anlage.bahnhofgraph.list_by_type({'Bf', 'Anst'}))
         self.anlage_strecken = {k: self.anlage.strecken.strecken[k] for k in self.anlage.strecken.strecken}
         self.auto_strecken = {k for k in self.anlage.strecken.strecken if self.anlage.strecken.auto.get(k, True)}
         self.alle_strecken = self.anlage_strecken.copy()
+        self.ordnung = self.anlage.strecken.ordnung.copy()
         self.edited_strecken = set()
         self.deleted_strecken = set()
-        self.anlage_bst = sorted(self.anlage.bahnhofgraph.list_by_type({'Bf', 'Anst'}))
+
+        try:
+            self.strecken_name = min(self.ordnung, key=self.ordnung.get)
+        except ValueError:
+            try:
+                self.strecken_name = list(self.alle_strecken)[0]
+            except IndexError:
+                pass
 
     def save_to_anlage(self):
         self.auto_strecken = self.auto_strecken - self.edited_strecken - self.deleted_strecken
         for idx, strecke in enumerate(self.alle_strecken.items()):
             name, stationen = strecke
-            if name not in self.auto_strecken:
+            if name and name not in self.auto_strecken:
                 if name not in self.deleted_strecken and len(stationen) >= 2:
                     self.anlage.strecken.add_strecke(name, stationen, idx + 1, False)
                 else:
@@ -330,19 +403,16 @@ class StreckenEditor(QObject):
         self.edited_strecken = set()
         self.deleted_strecken = set()
 
-    def update_widgets(self):
+    def _streckenliste_changed(self):
         """
-        Update the widgets based on the current state of the anlage
+        Streckenlisten-Modell aktualisieren
         """
 
         def strecken_key(name: str) -> Any:
             return name in self.auto_strecken, name
 
-        #self.in_update = True
         strecken_liste = sorted((name for name, strecke in self.alle_strecken.items()), key=strecken_key)
         self.strecken_model.setStringList(strecken_liste)
-        #self.in_update = False
-
         try:
             index = strecken_liste.index(self.strecken_name)
         except ValueError:
@@ -350,24 +420,11 @@ class StreckenEditor(QObject):
         else:
             self.ui.strecken_name_combo.setCurrentIndex(index)
 
-    def apply(self):
-        """
-        Apply changes to the anlage based on the current state of the widgets
-        """
-
-        self.save_to_anlage()
-
-    def reset(self):
-        """
-        Reset all widgets to Anlage
-        """
-
-        self.init_from_anlage()
-        self.update_widgets()
-
-    def select_strecke(self, name: str):
+    def _select_strecke(self, name: str):
         """
         Strecke auswählen und Stationslisten aktualisieren
+
+        Die Modelle der Stationslisten werden aus alle_strecken aktualisiert (überschrieben!).
 
         :param name: Name der Strecke.
 
@@ -382,9 +439,18 @@ class StreckenEditor(QObject):
         self.abwahl_model.update(uebrige)
         self.in_update = False
 
-    def change_strecke(self, name: str, stationen: Sequence[BahnhofElement]):
-        self.alle_strecken[name] = list(self.auswahl_model.rows)
-        self.edited_strecken.add(name)
+    def _strecke_edited(self):
+        """
+        Geänderte Strecke vom List-Modell übernehmen
+
+        Aktualisiert alle_strecken,
+        fügt die Strecke zu edited_strecken hinzu und
+        entfernt sie aus deleted_strecken.
+        """
+
+        self.alle_strecken[self.strecken_name] = list(self.auswahl_model.rows)
+        self.edited_strecken.add(self.strecken_name)
+        self.deleted_strecken.discard(self.strecken_name)
 
     @Slot()
     def strecken_name_combo_index_changed(self):
@@ -397,7 +463,7 @@ class StreckenEditor(QObject):
             strecken_name = self.strecken_model.data(index)
             if strecken_name != self.strecken_name:
                 self.strecken_name = strecken_name
-                self.select_strecke(self.strecken_name)
+                self._select_strecke(self.strecken_name)
 
     @Slot()
     def strecken_name_combo_text_changed(self):
@@ -416,7 +482,8 @@ class StreckenEditor(QObject):
                 except KeyError:
                     pass
                 self.edited_strecken.discard(index_name)
-                self.auto_strecken.discard(index_name)
+                self.auto_strecken.discard(new_name)
+                self.deleted_strecken.discard(new_name)
                 self.edited_strecken.add(new_name)
                 self.strecken_model.setData(index, new_name)
                 self.strecken_name = new_name
@@ -440,7 +507,7 @@ class StreckenEditor(QObject):
             self.abwahl_model.remove(bst)
             self.auswahl_model.insert(index, bst)
 
-        self.edited_strecken.add(self.strecken_name)
+        #self._strecke_edited()
         self.ui.strecken_auswahl_list.clearSelection()
         self.ui.strecken_abwahl_list.clearSelection()
 
@@ -457,7 +524,7 @@ class StreckenEditor(QObject):
             self.auswahl_model.remove(bst)
             self.abwahl_model.insert(0, bst)
 
-        self.edited_strecken.add(self.strecken_name)
+        #self._strecke_edited()
         self.ui.strecken_auswahl_list.clearSelection()
         self.ui.strecken_abwahl_list.clearSelection()
 
@@ -476,7 +543,7 @@ class StreckenEditor(QObject):
             self.auswahl_model.move(dst_row, bst)
             dst_row += 1
 
-        self.edited_strecken.add(self.strecken_name)
+        #self._strecke_edited()
 
     @Slot()
     def strecken_runter_button_clicked(self):
@@ -493,13 +560,17 @@ class StreckenEditor(QObject):
             self.auswahl_model.move(dst_row, bst)
             dst_row -= 1
 
-        self.edited_strecken.add(self.strecken_name)
+        #self._strecke_edited()
 
     @Slot()
     def strecken_loeschen_button_clicked(self):
-        del self.alle_strecken[self.strecken_name]
+        try:
+            del self.alle_strecken[self.strecken_name]
+        except KeyError:
+            pass
+        self.edited_strecken.discard(self.strecken_name)
         self.deleted_strecken.add(self.strecken_name)
-        self.update_widgets()
+        self._streckenliste_changed()
 
     @Slot()
     def strecken_erstellen_button_clicked(self):
@@ -511,8 +582,8 @@ class StreckenEditor(QObject):
 
         self.alle_strecken[name] = []
         self.edited_strecken.add(self.strecken_name)
-        self.select_strecke(name)
-        self.update_widgets()
+        self._select_strecke(name)
+        self._streckenliste_changed()
 
     @Slot()
     def strecken_ordnen_button_clicked(self):
@@ -559,4 +630,20 @@ class StreckenEditor(QObject):
 
         self.alle_strecken[self.strecken_name] = sorted(distanzen.keys(), key=lambda _item: distanzen[_item])
         self.edited_strecken.add(self.strecken_name)
-        self.select_strecke(self.strecken_name)
+        self._select_strecke(self.strecken_name)
+
+    @Slot()
+    def auswahl_rows_inserted(self):
+        self._strecke_edited()
+
+    @Slot()
+    def auswahl_rows_moved(self):
+        self._strecke_edited()
+
+    @Slot()
+    def auswahl_rows_removed(self):
+        self._strecke_edited()
+
+    @Slot()
+    def auswahl_data_changed(self):
+        self._strecke_edited()
