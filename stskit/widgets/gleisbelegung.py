@@ -176,10 +176,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         sperrungen = self.gleisauswahl.get_sperrungen()
         for gleis in self.anlage.bahnhofgraph.nodes():
             self.anlage.bahnhofgraph.nodes[gleis]['sperrung'] = gleis in sperrungen
-        if self.ui.name_button.isChecked():
-            self.plot.belegung.zugbeschriftung.elemente = ["Name"]
-        else:
-            self.plot.belegung.zugbeschriftung.elemente = ["Nummer"]
 
         self.plot.grafik_update()
 
