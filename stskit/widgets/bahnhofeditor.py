@@ -568,9 +568,9 @@ class BahnhofEditor(QObject):
 
     def update_gl_widget_states(self):
         selection = self.get_gl_selection()
-        bs_sel = {self.gl_table_model.row_data[gl]['Bs'] for gl in selection}
-        bft_sel = {self.gl_table_model.row_data[gl]['Bft'] for gl in selection}
-        bf_sel = {self.gl_table_model.row_data[gl]['Bf'] for gl in selection}
+        bs_sel = {self.gl_table_model.row_data[gl]['Bs'] for gl in selection if 'Bs' in self.gl_table_model.row_data[gl]}
+        bft_sel = {self.gl_table_model.row_data[gl]['Bft'] for gl in selection if 'Bft' in self.gl_table_model.row_data[gl]}
+        bf_sel = {self.gl_table_model.row_data[gl]['Bf'] for gl in selection if 'Bf' in self.gl_table_model.row_data[gl]}
 
         # gleiswahl >= 1 , combo-text vorhanden und noch nicht vergeben
         # en = bool(selection)
