@@ -523,9 +523,9 @@ class StreckenEditor(QObject):
             else:
                 return None
 
-            if bst.typ == "Anst":
+            if gl_node.typ == "Agl":
                 return gl_node.enr
-            elif bst.typ == "Gl":
+            elif gl_node.typ == "Gl":
                 return gl_node.name
             else:
                 return None
@@ -538,21 +538,24 @@ class StreckenEditor(QObject):
             signal_start = _bst_to_signal(start)
         except KeyError:
             return
+        if signal_start is None:
+            return
 
         distanzen = {}
-        d = 0.
-        for station in self.auswahl_model.rows:
+        for i, station in enumerate(self.auswahl_model.rows):
             signal_ziel = _bst_to_signal(station)
             if station == start:
-                distanzen[station] = 0.
-            else:
+                distanzen[station] = 0
+            elif signal_ziel is not None:
                 try:
                     pfad = nx.shortest_path(self.anlage.signalgraph, signal_start, signal_ziel)
-                except (KeyError, nx.exception.NetworkXError):
-                    d += 0.001
+                except (KeyError, nx.exception.NetworkXError, nx.exception.NodeNotFound):
+                    d = i
                 else:
-                    d = len(pfad) + 0.
+                    d = len(pfad)
                 distanzen[station] = d
+            else:
+                distanzen[station] = i
 
         self.alle_strecken[self.strecken_name] = sorted(distanzen.keys(), key=lambda _item: distanzen[_item])
         self.edited_strecken.add(self.strecken_name)
