@@ -1,186 +1,1185 @@
 {
-    "_aid": 858,
-    "_build": 5851,
-    "_name": "Brennero/Brenner",
-    "_region": "Italien Nord",
-    "_version": 2,
-    "anschlussgruppen": {
-        "AR": {
-            "__class__": "Set",
-            "data": [
-                "AR1",
-                "AR2",
-                "AR7",
-                "AR6",
-                "AR4"
-            ]
-        },
-        "BW": {
-            "__class__": "Set",
-            "data": [
-                "BW 2",
-                "BW 1"
-            ]
-        },
-        "Bolzano": {
-            "__class__": "Set",
-            "data": [
-                "Bolzano"
-            ]
-        },
-        "Matrei": {
-            "__class__": "Set",
-            "data": [
-                "Matrei"
-            ]
-        },
-        "San Candido": {
-            "__class__": "Set",
-            "data": [
-                "San Candido"
-            ]
-        }
+  "default": true,
+  "_aid": 858,
+  "_build": 5851,
+  "_name": "Brennero/Brenner",
+  "_region": "Triveneto",
+  "elemente": [
+    {
+      "name": "Brennero",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "Brennero": {
-            "__class__": "Set",
-            "data": [
-                "12",
-                "8",
-                "16",
-                "R7",
-                "11",
-                "R6",
-                "7A",
-                "R4",
-                "9",
-                "R3",
-                "10",
-                "N",
-                "3",
-                "1",
-                "R2",
-                "6",
-                "4",
-                "R5",
-                "7",
-                "2",
-                "5",
-                "17"
-            ]
-        },
-        "Campo": {
-            "__class__": "Set",
-            "data": [
-                "Campo 1",
-                "Campo 2"
-            ]
-        },
-        "Colle": {
-            "__class__": "Set",
-            "data": [
-                "Colle 1",
-                "Colle 3",
-                "Colle 2"
-            ]
-        },
-        "Einfahrt Bolzano": {
-            "__class__": "Set",
-            "data": [
-                "Einfahrt Bolzano"
-            ]
-        },
-        "Fortezza": {
-            "__class__": "Set",
-            "data": [
-                "Fortezza 3",
-                "Fortezza 12",
-                "Fortezza 7G",
-                "Fortezza 1G",
-                "Fortezza 15",
-                "Fortezza R",
-                "Fortezza 3G",
-                "Fortezza 2G",
-                "Fortezza 4G",
-                "Fortezza 1",
-                "Fortezza 1T",
-                "Fortezza 2",
-                "Fortezza 23",
-                "Fortezza 5G",
-                "Fortezza 6G"
-            ]
-        },
-        "Vipiteno": {
-            "__class__": "Set",
-            "data": [
-                "Vipiteno 4G",
-                "Vipiteno 2",
-                "Vipiteno 2G",
-                "Vipiteno 3G",
-                "Vipiteno 1G",
-                "Vipiteno 3",
-                "Vipiteno 1"
-            ]
-        }
+    {
+      "name": "Campo",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "Matrei-Bolzano",
-    "sektoren": {
-        "Fortezza 1": {
-            "__class__": "Set",
-            "data": [
-                "Fortezza 1G",
-                "Fortezza 1"
-            ]
-        },
-        "Fortezza 2": {
-            "__class__": "Set",
-            "data": [
-                "Fortezza 2",
-                "Fortezza 2G"
-            ]
-        },
-        "Fortezza 3": {
-            "__class__": "Set",
-            "data": [
-                "Fortezza 3",
-                "Fortezza 3G"
-            ]
-        },
-        "Vipiteno 1": {
-            "__class__": "Set",
-            "data": [
-                "Vipiteno 1G",
-                "Vipiteno 1"
-            ]
-        },
-        "Vipiteno 2": {
-            "__class__": "Set",
-            "data": [
-                "Vipiteno 2G",
-                "Vipiteno 2"
-            ]
-        },
-        "Vipiteno 3": {
-            "__class__": "Set",
-            "data": [
-                "Vipiteno 3",
-                "Vipiteno 3G"
-            ]
-        }
+    {
+      "name": "Colle",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
     },
-    "strecken": {
-        "Matrei-Bolzano": [
-            "Matrei",
-            "Brennero",
-            "Colle",
-            "Vipiteno",
-            "Campo",
-            "Fortezza",
-            "Einfahrt Bolzano",
-            "Bolzano"
-        ]
+    {
+      "name": "Einfahrt Bolzano",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": [],
-    "zugschema": "italien"
+    {
+      "name": "Fortezza",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Vipiteno",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "5",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero"
+    },
+    {
+      "name": "3",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero"
+    },
+    {
+      "name": "7",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "7",
+      "gleise": 1
+    },
+    {
+      "name": "10",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "10",
+      "gleise": 1
+    },
+    {
+      "name": "5",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "5",
+      "gleise": 1
+    },
+    {
+      "name": "12",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "12",
+      "gleise": 1
+    },
+    {
+      "name": "1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1",
+      "gleise": 1
+    },
+    {
+      "name": "3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "N",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "N",
+      "gleise": 1
+    },
+    {
+      "name": "8",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "8",
+      "gleise": 1
+    },
+    {
+      "name": "2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2",
+      "gleise": 1
+    },
+    {
+      "name": "4",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "4",
+      "gleise": 1
+    },
+    {
+      "name": "7",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "7",
+      "gleise": 1
+    },
+    {
+      "name": "7A",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "7",
+      "gleise": 1
+    },
+    {
+      "name": "11",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "11",
+      "gleise": 1
+    },
+    {
+      "name": "6",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "6",
+      "gleise": 1
+    },
+    {
+      "name": "9",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "9",
+      "gleise": 1
+    },
+    {
+      "name": "16",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "16",
+      "gleise": 1
+    },
+    {
+      "name": "17",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "7",
+      "gleise": 1
+    },
+    {
+      "name": "17",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "17",
+      "gleise": 1
+    },
+    {
+      "name": "Campo 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Campo"
+    },
+    {
+      "name": "Fortezza 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Campo"
+    },
+    {
+      "name": "Campo 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Campo 2",
+      "gleise": 1
+    },
+    {
+      "name": "Campo 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Campo 2",
+      "gleise": 1
+    },
+    {
+      "name": "Campo 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Campo 2",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza R",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza R",
+      "gleise": 1
+    },
+    {
+      "name": "Campo 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Campo 1",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 23",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 23",
+      "gleise": 1
+    },
+    {
+      "name": "Colle 3",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Colle"
+    },
+    {
+      "name": "Colle 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Colle 2",
+      "gleise": 1
+    },
+    {
+      "name": "Colle 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Colle 3",
+      "gleise": 1
+    },
+    {
+      "name": "Colle 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Colle 1",
+      "gleise": 1
+    },
+    {
+      "name": "Einfahrt Bolzano",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Einfahrt Bolzano"
+    },
+    {
+      "name": "Einfahrt Bolzano",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Einfahrt Bolzano",
+      "gleise": 1
+    },
+    {
+      "name": "Einfahrt Bolzano",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Einfahrt Bolzano",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 1",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza"
+    },
+    {
+      "name": "Fortezza 15",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza"
+    },
+    {
+      "name": "Fortezza 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 1",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 6G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 6",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 3G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 3",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 3",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 4G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 4",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 7G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 7",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 1",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 1G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 1",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 1T",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 1",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 2G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 2",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 2",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 5G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 5",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 15",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 15",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 12",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 15",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 15",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 15",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 12",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 12",
+      "gleise": 1
+    },
+    {
+      "name": "R2",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero"
+    },
+    {
+      "name": "R3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "R3",
+      "gleise": 1
+    },
+    {
+      "name": "R2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "R2",
+      "gleise": 1
+    },
+    {
+      "name": "R4",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "R4",
+      "gleise": 1
+    },
+    {
+      "name": "R5",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "R5",
+      "gleise": 1
+    },
+    {
+      "name": "R6",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "R5",
+      "gleise": 1
+    },
+    {
+      "name": "R5",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "R5",
+      "gleise": 1
+    },
+    {
+      "name": "R6",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "R6",
+      "gleise": 1
+    },
+    {
+      "name": "R7",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "R7",
+      "gleise": 1
+    },
+    {
+      "name": "R7",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "R7",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 1",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno"
+    },
+    {
+      "name": "Vipiteno 2G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 2",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 2",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 3",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 3G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 3",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 4G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 4",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 1",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 1G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 1",
+      "gleise": 1
+    },
+    {
+      "name": "Matrei",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BW",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bolzano",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "AR",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "San Candido",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Matrei",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Matrei",
+      "gleise": 2
+    },
+    {
+      "name": "BW 1",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BW",
+      "gleise": 1
+    },
+    {
+      "name": "BW 2",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BW",
+      "gleise": 1
+    },
+    {
+      "name": "Bolzano",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bolzano",
+      "gleise": 2
+    },
+    {
+      "name": "AR2",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AR",
+      "gleise": 1
+    },
+    {
+      "name": "AR6",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AR",
+      "gleise": 1
+    },
+    {
+      "name": "AR7",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AR",
+      "gleise": 1
+    },
+    {
+      "name": "AR4",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AR",
+      "gleise": 1
+    },
+    {
+      "name": "AR1",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AR",
+      "gleise": 1
+    },
+    {
+      "name": "San Candido",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "San Candido",
+      "gleise": 1
+    },
+    {
+      "name": "3",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "N",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "5",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "12",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "4",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "8",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "16",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "6",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "11",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "9",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "10",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 23",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 2",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza R",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 2",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 2",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 7",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 2",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 5",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 2",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 4",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 2",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 6",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 2",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 3",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 2",
+      "gleise": 1
+    },
+    {
+      "name": "Colle 3",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Colle 3",
+      "gleise": 1
+    },
+    {
+      "name": "Colle 1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Colle 3",
+      "gleise": 1
+    },
+    {
+      "name": "Colle 2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Colle 3",
+      "gleise": 1
+    },
+    {
+      "name": "R2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "R2",
+      "gleise": 1
+    },
+    {
+      "name": "R4",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "R2",
+      "gleise": 1
+    },
+    {
+      "name": "R3",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "R2",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 1",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 1",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 4",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 1",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 3",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 1",
+      "gleise": 1
+    },
+    {
+      "name": "7",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero"
+    },
+    {
+      "name": "R7",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero"
+    },
+    {
+      "name": "R5",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero"
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Bolzano-Matrei",
+      "ordnung": 100,
+      "auto": true,
+      "stationen": [
+        "Anst Bolzano",
+        "Bf Campo",
+        "Bf Vipiteno",
+        "Bf Colle",
+        "Bf Brennero",
+        "Anst Matrei"
+      ]
+    },
+    {
+      "name": "Bolzano-San Candido",
+      "ordnung": 101,
+      "auto": true,
+      "stationen": [
+        "Anst Bolzano",
+        "Bf Campo",
+        "Anst San Candido"
+      ]
+    },
+    {
+      "name": "Matrei-Bolzano",
+      "ordnung": 102,
+      "auto": true,
+      "stationen": [
+        "Anst Matrei",
+        "Bf Brennero",
+        "Bf Colle",
+        "Bf Vipiteno",
+        "Bf Campo",
+        "Anst Bolzano"
+      ]
+    },
+    {
+      "name": "Matrei-San Candido",
+      "ordnung": 103,
+      "auto": true,
+      "stationen": [
+        "Anst Matrei",
+        "Bf Brennero",
+        "Bf Colle",
+        "Bf Vipiteno",
+        "Bf Campo",
+        "Anst San Candido"
+      ]
+    },
+    {
+      "name": "San Candido-Bolzano",
+      "ordnung": 104,
+      "auto": true,
+      "stationen": [
+        "Anst San Candido",
+        "Bf Campo",
+        "Anst Bolzano"
+      ]
+    },
+    {
+      "name": "San Candido-Matrei",
+      "ordnung": 105,
+      "auto": true,
+      "stationen": [
+        "Anst San Candido",
+        "Bf Campo",
+        "Bf Vipiteno",
+        "Bf Colle",
+        "Bf Brennero",
+        "Anst Matrei"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "italien",
+  "_version": 3
 }
