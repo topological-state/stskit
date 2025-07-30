@@ -578,15 +578,15 @@ class BahnhofEditor(QObject):
         #     tx = self.ui.bf_combo.currentText()
         #     be = BahnhofElement('Bf', tx)
         #     en = bool(tx) and be in self.bahnhofgraph
-        en = len(bft_sel) == 1 and (tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) in self.bahnhofgraph)
+        en = len(bft_sel) == 1 and bool(tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) in self.bahnhofgraph)
         self.ui.bf_group_button.setEnabled(en)
 
         # gleiswahl >= 1 , combo-text vorhanden und noch nicht vergeben
-        en = len(bft_sel) == 1 and (tx := self.ui.bft_combo.currentText()) and (BahnhofElement('Bft', tx) in self.bahnhofgraph)
+        en = len(bft_sel) == 1 and bool(tx := self.ui.bft_combo.currentText()) and (BahnhofElement('Bft', tx) in self.bahnhofgraph)
         self.ui.bft_group_button.setEnabled(en)
 
         # gleiswahl >= 1 vom gleichen bft, combo-text vorhanden und noch nicht vergeben
-        en = len(bft_sel) == 1 and (tx := self.ui.bs_combo.currentText()) and (BahnhofElement('Bs', tx) in self.bahnhofgraph)
+        en = len(bft_sel) == 1 and bool(tx := self.ui.bs_combo.currentText()) and (BahnhofElement('Bs', tx) in self.bahnhofgraph)
         self.ui.bs_group_button.setEnabled(en)
 
         # einzelner bf gewählt
@@ -602,15 +602,15 @@ class BahnhofEditor(QObject):
         self.ui.bs_ungroup_button.setEnabled(en)
 
         # einzelner bf gewählt, combo-text vorhanden und noch nicht vergeben
-        en = len(bf_sel) == 1 and (tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) not in self.bahnhofgraph)
+        en = len(bf_sel) == 1 and bool(tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) not in self.bahnhofgraph)
         self.ui.bf_rename_button.setEnabled(en)
 
         # einzelner bft gewählt, combo-text vorhanden und noch nicht vergeben
-        en = len(bft_sel) == 1 and (tx := self.ui.bft_combo.currentText()) and (BahnhofElement('Bft', tx) not in self.bahnhofgraph)
+        en = len(bft_sel) == 1 and bool(tx := self.ui.bft_combo.currentText()) and (BahnhofElement('Bft', tx) not in self.bahnhofgraph)
         self.ui.bft_rename_button.setEnabled(en)
 
         # einzelner bs gewählt, combo-text vorhanden und noch nicht vergeben
-        en = len(bs_sel) == 1 and (tx := self.ui.bs_combo.currentText()) and (BahnhofElement('Bs', tx) not in self.bahnhofgraph)
+        en = len(bs_sel) == 1 and bool(tx := self.ui.bs_combo.currentText()) and (BahnhofElement('Bs', tx) not in self.bahnhofgraph)
         self.ui.bs_rename_button.setEnabled(en)
 
         en = bool(self.ui.gl_combo.currentText())
@@ -621,7 +621,7 @@ class BahnhofEditor(QObject):
         anst_sel = {self.agl_table_model.row_data[gl]['Anst'] for gl in selection}
 
         # gleiswahl >= 1 , combo-text vorhanden und noch nicht vergeben
-        en = len(selection) >= 1 and (tx := self.ui.anst_combo.currentText()) and (BahnhofElement('Anst', tx) in self.bahnhofgraph)
+        en = len(selection) >= 1 and bool(tx := self.ui.anst_combo.currentText()) and (BahnhofElement('Anst', tx) in self.bahnhofgraph)
         self.ui.anst_group_button.setEnabled(en)
 
         # einzelne anst gewählt
@@ -629,7 +629,7 @@ class BahnhofEditor(QObject):
         self.ui.anst_ungroup_button.setEnabled(en)
 
         # einzelner anst gewählt, combo-text vorhanden und noch nicht vergeben
-        en = len(anst_sel) == 1 and (tx := self.ui.anst_combo.currentText()) and (BahnhofElement('Anst', tx) not in self.bahnhofgraph)
+        en = len(anst_sel) == 1 and bool(tx := self.ui.anst_combo.currentText()) and (BahnhofElement('Anst', tx) not in self.bahnhofgraph)
         self.ui.anst_rename_button.setEnabled(en)
 
         en = bool(self.ui.agl_combo.currentText())
