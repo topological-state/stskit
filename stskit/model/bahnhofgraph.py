@@ -80,6 +80,11 @@ class BahnsteigGraphNode(dict):
         'Stw': Stellwerk/Anlage.
         """)
     auto = dict_property("auto", bool, docstring="True bei automatischer, False bei manueller Konfiguration.")
+    stamm = dict_property("stamm", str, docstring="""
+        Name des übergeordneten Knoten. 
+        Wird im Konfigurationsimport und -export verwendet und ist ansonsten undefiniert.
+        Der Typ erschliesst sich aus `BAHNHOFELEMENT_HIERARCHIE[typ]`.
+        """)
     gleise = dict_property("gleise", int, docstring="""
         Anzahl Gleise mit dem gleichen Namen.
         Normalerweise 1, ausser z.B. bei Haltestellen oder Anschlussgleisen ohne Gleisnummer.
@@ -599,92 +604,104 @@ class BahnhofGraph(nx.DiGraph):
 
     def import_konfiguration(self, elemente: Iterable[Dict[str, Any]]):
         """
-        Bahnhofgraph konfigurieren
+        Konfiguration importieren
 
-        Der Bahnhofgraph muss bereits mit der Autokonfiguration befuellt sein.
+        Strategie
+        ---------
+
+        1. Alle Knoten von bestehendem Graph importieren.
+           Kanten _nicht_ importieren, sondern Vorfahr im stamm-Attribut verzeichnen.
+        2. Knoten mit Attributen aus Elementen importieren, bestehende überschreiben.
+           Vorfahr im stamm-Attribut verzeichnen.
+           In der Anlage nicht vorkommende Gleise nicht übernehmen.
+        3. Kanten gem. stamm-Attribut schichtweise zur Vorfahrenebene konstruieren,
+           beginnend mit Gl und Agl.
+        4. Kantenlose Knoten entfernen:
+           Alle ohne eingehende Kanten, alle nicht-Gleise ohne ausgehende Kanten.
+           Gl und Agl haben keine ausgehenden Kanten und müssen beibehalten werden.
         """
 
-        konfig_graph = BahnhofGraph()
-        for e in elemente:
-            be2 = BahnhofElement(e['typ'], e['name'])
-            auto = e.get('auto', True)
-            data2 = {"auto": auto, "typ": e['typ'], "name": e['name']}
-            if "sichtbar" in e:
-                data2["sichtbar"] = e['sichtbar']
-            if "gleise" in e:
-                data2["gleise"] = e['gleise']
-            if "flags" in e:
-                data2["sperrung"] = "S" in e['flags']
-            if "linienstil" in e:
-                data2["linienstil"] = e['linienstil']
-
-            if e['typ'] in {'Gl', 'Agl'}:
-                if be2 not in self:
-                    logger.warning(f"Gleis {be2} existiert nicht im Simulator")
-                    continue
-
-            # element einfuegen und attribute aktualisieren
-            konfig_graph.add_node(be2, **data2)
-
+        # Schritt 1: Default-Graph importieren
+        new_graph = BahnhofGraph()
+        for node, data in self.nodes(data=True):
+            data.auto = True
             try:
-                t = BAHNHOFELEMENT_HIERARCHIE[e['typ']]
-                be1 = BahnhofElement(t, e['stamm'])
+                parent_node = next(self.list_parents(node), BahnhofLabelType(None, None))
+                data.stamm = parent_node.name
             except KeyError:
                 continue
-            else:
-                konfig_graph.add_edge(be1, be2, auto=auto)
+            new_graph.add_node(node, **data)
 
-        # Gl-Daten und Bs/Anst-Elternbeziehung
-        for gl in konfig_graph.list_by_type({'Gl', 'Agl'}):
-            gl_data = konfig_graph.nodes[gl]
-            if not gl_data.get('auto', True):
-                self.add_node(gl, **gl_data)
-            try:
-                bs_neu = konfig_graph.find_superior(gl, {'Bs', 'Anst'})
-                bs_alt = self.find_superior(gl, {'Bs', 'Anst'})
-            except KeyError:
-                pass
-            else:
-                if bs_alt != bs_neu:
-                    self.replace_parent(gl, bs_neu)
+        # Schritt 2: Konfiguration importieren, wo auto==False
+        konfig_graph = BahnhofGraph()
+        for element in elemente:
+            node = BahnhofElement(element['typ'], element['name'])
+            auto = element.get('auto', True)
+            stamm = element.get('stamm', None)
 
-        # Bs-Daten und Bft-Elternbeziehung
-        for bs in konfig_graph.list_by_type({'Bs'}):
-            bs_data = konfig_graph.nodes[bs]
-            if not bs_data.get('auto', True):
-                self.add_node(bs, **bs_data)
-            try:
-                bft_neu = konfig_graph.find_superior(bs, {'Bft'})
-                gl = next(konfig_graph.list_children(bs, {'Gl'}))
-                bft_alt = self.find_superior(gl, {'Bft'})
-            except (KeyError, StopIteration):
-                pass
-            else:
-                if bft_alt != bft_neu:
-                    self.replace_parent(gl, bft_neu)
+            data = {"auto": auto, "typ": element['typ'], "name": element['name'], "stamm": stamm}
+            if "sichtbar" in element:
+                data["sichtbar"] = element['sichtbar']
+            if "gleise" in element:
+                data["gleise"] = element['gleise']
+            if "flags" in element:
+                data["sperrung"] = "S" in element['flags']
+            if "linienstil" in element:
+                data["linienstil"] = element['linienstil']
 
-        # Bft-Daten und Bf-Elternbeziehung
-        for bft in konfig_graph.list_by_type({'Bft'}):
-            bft_data = konfig_graph.nodes[bft]
-            if not bft_data.get('auto', True):
-                self.add_node(bft, **bft_data)
-            try:
-                bf_neu = konfig_graph.find_superior(bft, {'Bf'})
-                gl = next(konfig_graph.list_children(bft, {'Gl'}))
-                bf_alt = self.find_superior(gl, {'Bf'})
-            except (KeyError, StopIteration):
-                pass
-            else:
-                if bf_neu != bf_alt:
-                    self.replace_parent(bft, bf_neu)
+            if element['typ'] in {'Gl', 'Agl'}:
+                if node not in self:
+                    logger.warning(f"Gleis {node} existiert nicht im Simulator")
+                    continue
 
-        for bf in konfig_graph.list_by_type({'Bf', 'Anst'}):
-            bf_data = konfig_graph.nodes[bf]
-            if not bf_data.get('auto', True):
-                self.add_node(bf, **bf_data)
-            self.add_edge(BahnhofElement('Bst', bf.typ), bf, typ='Hierarchie')
+            # element einfuegen oder attribute aktualisieren
+            konfig_graph.add_node(node, **data)
 
-        self.leere_gruppen_entfernen()
+        # Schritt 2.5: reine auto-Knoten filtern
+        for node, data in konfig_graph.nodes(data=True):
+            parent_node = BahnhofElement(BAHNHOFELEMENT_HIERARCHIE[data['typ']], data['stamm'])
+            parent_auto = not konfig_graph.has_node(parent_node) or konfig_graph.nodes[parent_node]['auto']
+            if not data.auto or not parent_auto:
+                new_graph.add_node(node, **data)
+
+        # Schritt 3: Kanten erstellen gem. stamm-Attributen
+        TYPEN_FOLGE = ['Gl', 'Agl', 'Bs', 'Bft', 'Bf', 'Anst']
+        for typ in TYPEN_FOLGE:
+            if typ == "Bst":
+                break
+            for node in new_graph.list_by_type({typ}):
+                data = new_graph.nodes[node]
+                try:
+                    if typ == "Bf":
+                        parent_node = BahnhofElement("Bst", "Bf")
+                    elif typ == "Anst":
+                        parent_node = BahnhofElement("Bst", "Anst")
+                    else:
+                        parent_node = BahnhofElement(BAHNHOFELEMENT_HIERARCHIE[data['typ']], data['stamm'])
+                except KeyError:
+                    continue
+                if parent_node in new_graph:
+                    new_graph.add_edge(parent_node, node, auto=data.get('auto', True))
+
+        new_graph.add_edge(self.root(), BahnhofElement('Bst', 'Bf'))
+        new_graph.add_edge(self.root(), BahnhofElement('Bst', 'Anst'))
+
+        # Schritt 4: kinder- und elternlose Knoten entfernen
+        for typ in TYPEN_FOLGE:
+            to_remove = set()
+            for node in new_graph.list_by_type({typ}):
+                if new_graph.in_degree(node) == 0:
+                    to_remove.add(node)
+                if typ in {'Gl', 'Agl'}:
+                    continue
+                if new_graph.out_degree(node) == 0:
+                    to_remove.add(node)
+            for node in to_remove:
+                new_graph.remove_node(node)
+
+        # Schritt 5: Import abschliessen
+        self.clear()
+        self.update(new_graph)
         self.validate()
 
     def leere_gruppen_entfernen(self):
@@ -718,6 +735,8 @@ class BahnhofGraph(nx.DiGraph):
                 for be in self.list_parents(gl):
                     # be_data = self.nodes[be]
                     check -= {be.typ}
+                    if self.in_degree(be) > 1:
+                        logger.error(f"{be} hat mehrere Eltern.")
                 if not check:
                     logger.error(f"{gl} hat fehlende Eltern {check}")
             except KeyError as e:
