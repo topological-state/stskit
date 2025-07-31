@@ -130,6 +130,7 @@ class GleisauswahlItem:
         if role == QtCore.Qt.EditRole:
             return False
         elif role == QtCore.Qt.CheckStateRole:
+            value = QtCore.Qt.CheckState(value)
             if column == 0:
                 self.setCheckState(value)
                 if len(self._children):
