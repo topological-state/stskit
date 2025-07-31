@@ -236,10 +236,10 @@
     {
       "name": "Fortezza 2",
       "typ": "Bft",
-      "auto": true,
+      "auto": false,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Campo"
+      "stamm": "Fortezza"
     },
     {
       "name": "Campo 2",
