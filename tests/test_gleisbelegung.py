@@ -18,9 +18,11 @@ class GleisbelegungTest(TestCase):
         s1 = Mock(Slot)
         s1.zeit = s1_zeit
         s1.dauer = s1_dauer
+        s1.abfahrt = s1_zeit + s1_dauer
         s2 = Mock(Slot)
         s2.zeit = s2_zeit
         s2.dauer = s2_dauer
+        s2.abfahrt = s2_zeit + s2_dauer
         g = Gleisbelegung(zentrale)._zugfolgewarnung(s1, s2, verbindung)
         w: SlotWarnung = next(g)
         self.assertIsInstance(w, SlotWarnung)
@@ -122,9 +124,9 @@ class GleisbelegungTest(TestCase):
         self.assertEqual(s1.zeit, 1010, "Reihenfolge: s1.zeit")
         self.assertEqual(s1.dauer, 10, "Reihenfolge: s1.dauer")
         self.assertEqual(s2.zeit, 1011, "Reihenfolge: s2.zeit")
-        self.assertEqual(s2.dauer, 10, "Reihenfolge: s2.dauer")
+        self.assertEqual(s2.dauer, 9, "Reihenfolge: s2.dauer")
         self.assertEqual(w.zeit, 1010, "Reihenfolge: w.zeit")
-        self.assertEqual(w.dauer, 11, "Reihenfolge: w.dauer")
+        self.assertEqual(w.dauer, 10, "Reihenfolge: w.dauer")
 
         # Gleichzeitige Ankunft
         w, s1, s2 = self.setup_zugfolgewarnung(1000, 10, 1000, 10, "F")
@@ -132,9 +134,9 @@ class GleisbelegungTest(TestCase):
         self.assertEqual(s1.zeit, 1000, "gleichzeitig: s1.zeit")
         self.assertEqual(s1.dauer, 10, "gleichzeitig: s1.dauer")
         self.assertEqual(s2.zeit, 1001, "gleichzeitig: s2.zeit")
-        self.assertEqual(s2.dauer, 10, "gleichzeitig: s2.dauer")
+        self.assertEqual(s2.dauer, 9, "gleichzeitig: s2.dauer")
         self.assertEqual(w.zeit, 1000, "gleichzeitig: w.zeit")
-        self.assertEqual(w.dauer, 11, "gleichzeitig: w.dauer")
+        self.assertEqual(w.dauer, 10, "gleichzeitig: w.dauer")
 
     def test_kuppeln_warnung(self):
         """
@@ -185,7 +187,7 @@ class GleisbelegungTest(TestCase):
         # Grenzfall, gleichzeitige Ankunft
         w, s1, s2 = self.setup_zugfolgewarnung(1000, 2, 1000, 10, "K")
         self.assertEqual(w.status, "kuppeln-reihenfolge", "gleichzeitige Ankunft: w.status")
-        self.assertEqual(s1.zeit, 1001, "gleichzeitige Ankunft: s1.zeit")
+        self.assertEqual(s1.zeit, 1000, "gleichzeitige Ankunft: s1.zeit")
         self.assertEqual(s1.dauer, 2, "gleichzeitige Ankunft: s1.dauer")
         self.assertEqual(s2.zeit, 1000, "gleichzeitige Ankunft: s2.zeit")
         self.assertEqual(s2.dauer, 10, "gleichzeitige Ankunft: s2.dauer")

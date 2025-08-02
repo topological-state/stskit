@@ -45,7 +45,12 @@ class TestStsObj(unittest.TestCase):
         - "S 8449 S12" -> 8449
         """
 
-        assert stsobj.ZugDetails.get_nummer("536") == 536
-        assert stsobj.ZugDetails.get_nummer("ICE 624") == 624
-        assert stsobj.ZugDetails.get_nummer("S8 8376 RF") == 8376
-        assert stsobj.ZugDetails.get_nummer("S 8449 S12") == 8449
+        zug_details = stsobj.ZugDetails()
+        zug_details.name = "536"
+        assert zug_details.nummer == 536
+        zug_details.name = "ICE 624"
+        assert zug_details.nummer == 624
+        zug_details.name = "S8 8376 RF"
+        assert zug_details.nummer == 8376
+        zug_details.name = "S 8449 S12"
+        assert zug_details.nummer == 8449
