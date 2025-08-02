@@ -1,5 +1,11 @@
 # Einstellungen
 
+# Allgemeines
+
+1. Wenn die automatische Konfiguration in einem Stellwerk nicht richtig funktioniert, kann sie hier korrigiert werden.  
+2. Es wird empfohlen, zuerst die Anschlüsse und Bahnhöfe zu konfigurieren, erst dann die Strecken.
+3. Änderungen an der Konfiguration werden möglicherweise erst nach einem Neustart des Plugins sichtbar.
+
 ## Anschlussstellen und Bahnhöfe
 
 stsDispo verwendet ein hierarchiches Bahnhofmodell mit vier Ebenen:
@@ -75,7 +81,18 @@ Der neue Namen muss auf der Ebene eindeutig sein, sonst wird er nicht angenommen
 
 ## Strecken
 
-...
+Eine Strecke definiert eine Abfolge von Stationen (Anschlussstellen und Bahnhöfen),
+die im Streckenfahrplan grafisch dargestellt werden kann.
+
+Die konfigurierten Strecken können in der Listbox ausgewählt werden.
+Mit dem Minusknopf wird die gewählte Strecke gelöscht, mit dem Plusknopf kann eine neue hinzugefügt werden.
+
+Die aktuell gewählte Strecke wird in der Liste links dargestellt.
+Die Liste rechts zeigt die von der Strecke nicht berührten Stationen.
+Stationen können zwischen den Listen verschoben werden durch Klicken und Ziehen oder mittels der Links/Rechts-Knöpfe.
+Stationen können innerhalb der Strecke angeordnet werden durck Klicken und Ziehen oder mittels der Hoch/Runter-Knöpfe.
+Mit dem Ordnen-Knopf wird die Strecke automatisch geordnet.
+Die automatische Ordnung kann jedoch fehlerhaft sein, insbesondere bei Haltepunkten.
 
 ## Zugschema
 
