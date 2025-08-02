@@ -294,7 +294,7 @@ class Anlage:
 
         if any_auto or create_auto:
             strecken = self.liniengraph.strecken_vorschlagen(2, 3)
-            strecken = {f"{strecke[0][1]}-{strecke[-1][1]}": strecke for strecke in strecken}
+            strecken = {f"{strecke[0].name}-{strecke[-1].name}": strecke for strecke in strecken}
             for index, name in enumerate(sorted(strecken.keys())):
                 if self.strecken.auto.get(name, create_auto):
                     self.strecken.add_strecke(name, strecken[name], 100 + index, True)
@@ -334,11 +334,11 @@ class Anlage:
         """
         mapping = {}
         for gleis, gleis_data in self.bahnhofgraph.nodes(data=True):
-            if gleis[0] in {'Gl', 'Agl'}:
+            if gleis.typ in {'Gl', 'Agl'}:
                 bst = self.bahnhofgraph.find_superior(gleis, {'Bf', 'Anst'})
-                if gleis[0] == 'Gl':
+                if gleis.typ == 'Gl':
                     mapping[gleis_data.name] = bst
-                elif gleis[0] == 'Agl':
+                elif gleis.typ == 'Agl':
                     mapping[gleis_data.enr] = bst
         signalgraph_einfach = nx.relabel_nodes(self.signalgraph, mapping)
         signalgraph_einfach.remove_edges_from(nx.selfloop_edges(signalgraph_einfach))
@@ -356,7 +356,7 @@ class Anlage:
                 continue
 
             for zwischenziel in signal_strecke[1:-1]:
-                if isinstance(zwischenziel, collections.abc.Sequence) and zwischenziel[0] in {'Bf', 'Anst'}:
+                if isinstance(zwischenziel, collections.abc.Sequence) and zwischenziel.typ in {'Bf', 'Anst'}:
                     neue_kante = LinienGraphEdge()
                     neue_kante.update(kante)
                     neue_kante.fahrzeit_max = kante.fahrzeit_max / 2
