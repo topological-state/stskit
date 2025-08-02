@@ -84,8 +84,8 @@ class FahrzeitAuswertung:
     def report(self):
         if logger.isEnabledFor(logging.INFO):
             try:
-                d = {'gleis_zeiten': dict(nx.node_link_data(self.gleis_zeiten)),
-                     'bahnhof_zeiten': dict(nx.node_link_data(self.bahnhof_zeiten))}
+                d = {'gleis_zeiten': dict(nx.node_link_data(self.gleis_zeiten, edges="edges")),
+                     'bahnhof_zeiten': dict(nx.node_link_data(self.bahnhof_zeiten, edges="edges"))}
                 p = Path.home() / r".stskit" / f"auswertung.json"
                 with open(p, "w", encoding='utf-8') as fp:
                     json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
