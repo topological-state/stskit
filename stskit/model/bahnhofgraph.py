@@ -661,14 +661,14 @@ class BahnhofGraph(nx.DiGraph):
         for node, data in konfig_graph.nodes(data=True):
             parent_node = BahnhofElement(BAHNHOFELEMENT_HIERARCHIE[data['typ']], data['stamm'])
             parent_auto = not konfig_graph.has_node(parent_node) or konfig_graph.nodes[parent_node]['auto']
-            if not data.auto or not parent_auto:
+            if node not in new_graph or not data.auto or not parent_auto:
                 new_graph.add_node(node, **data)
+            else:
+                logger.debug(f"BahnhofGraph.import_konfiguration: Ignoriere Auto-Element {node}.")
 
         # Schritt 3: Kanten erstellen gem. stamm-Attributen
         TYPEN_FOLGE = ['Gl', 'Agl', 'Bs', 'Bft', 'Bf', 'Anst']
         for typ in TYPEN_FOLGE:
-            if typ == "Bst":
-                break
             for node in new_graph.list_by_type({typ}):
                 data = new_graph.nodes[node]
                 try:
@@ -682,6 +682,8 @@ class BahnhofGraph(nx.DiGraph):
                     continue
                 if parent_node in new_graph:
                     new_graph.add_edge(parent_node, node, auto=data.get('auto', True))
+                else:
+                    logger.warning(f"BahnhofGraph.import_konfiguration: Fehlendes Stammelement {parent_node} zu {node}.")
 
         new_graph.add_edge(self.root(), BahnhofElement('Bst', 'Bf'))
         new_graph.add_edge(self.root(), BahnhofElement('Bst', 'Anst'))
@@ -722,6 +724,14 @@ class BahnhofGraph(nx.DiGraph):
                 self.remove_node(n)
 
     def validate(self):
+        """
+        Vollständigkeit des Bahnhofgraphen prüfen.
+
+        - Hat jedes Gleis eine zugeordnete Bst?
+        - Hat jedes Element genau einen Stammelement?
+        """
+
+        logger.debug("Validating BahnhofGraph")
         for gl in self.list_by_type({'Gl', 'Agl'}):
             if gl.typ == 'Gl':
                 check = {'Gl', 'Bs', 'Bft', 'Bf', 'Bst', 'Stw'}
@@ -730,15 +740,19 @@ class BahnhofGraph(nx.DiGraph):
             else:
                 raise ValueError(f"Ungueltiger Gleistyp {gl}")
 
-            # gl_data = self.nodes[gl]
             try:
                 for be in self.list_parents(gl):
-                    # be_data = self.nodes[be]
                     check -= {be.typ}
-                    if self.in_degree(be) > 1:
-                        logger.error(f"{be} hat mehrere Eltern.")
                 if not check:
                     logger.error(f"{gl} hat fehlende Eltern {check}")
+            except KeyError as e:
+                logger.exception(f"{gl} nicht im bahnhofgraph", exc_info=e)
+
+        for node, data in self.nodes(data=True):
+            try:
+                if self.in_degree(node) > 1:
+                    path = [str(node) for node in nx.ancestors(self.graph, node)]
+                    logger.error(f"{node} hat mehrere Eltern. {path}")
             except KeyError as e:
                 logger.exception(f"{gl} nicht im bahnhofgraph", exc_info=e)
 
