@@ -165,11 +165,11 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.strecke_model.setStringList(map(str, self.plot.strecke))
 
         if self.plot.strecken_name:
-            titel = f"Bildfahrplan {self.plot.strecken_name}"
+            titel = f"Streckenfahrplan {self.plot.strecken_name}"
         elif self.plot.strecke_von and self.plot.strecke_nach:
-            titel = f"Bildfahrplan {self.plot.strecke_von.name}-{self.plot.strecke_nach.name}"
+            titel = f"Streckenfahrplan {self.plot.strecke_von.name}-{self.plot.strecke_nach.name}"
         else:
-            titel = "Bildfahrplan (keine Strecke ausgewählt)"
+            titel = "Streckenfahrplan (keine Strecke ausgewählt)"
         self.setWindowTitle(titel)
 
         self.ui.vorlaufzeit_spin.setValue(self.plot.vorlaufzeit)
