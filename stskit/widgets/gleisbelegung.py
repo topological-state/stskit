@@ -172,9 +172,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.gleisauswahl.set_auswahl(auswahl)
         self.plot.belegung.gleise_auswaehlen(auswahl)
 
-        sperrungen = {gleis for gleis, sperrung in self.anlage.bahnhofgraph.nodes(data='sperrung') if sperrung}
-        self.gleisauswahl.set_sperrungen(sperrungen)
-
     def plan_update(self, *args, **kwargs):
         """
         daten und grafik neu aufbauen.
@@ -208,10 +205,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     def display_button_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.plot.belegung.gleise_auswaehlen(self.gleisauswahl.get_auswahl())
-        sperrungen = self.gleisauswahl.get_sperrungen()
-        for gleis in self.anlage.bahnhofgraph.nodes():
-            self.anlage.bahnhofgraph.nodes[gleis]['sperrung'] = gleis in sperrungen
-
         self.plot.grafik_update()
 
     @Slot()

@@ -9,7 +9,7 @@ Jeder Knoten besteht aus einem GleisauswahlItem.
 Jeder Ebene sind Elemente eines bestimmten Typs zugeordnet.
 Die Ebenen sind in GleisauswahlItem.TYPEN deklariert.
 `root` ist der unsichtbare Wurzelknoten.
-Die unterste Ebene hat zwei Spalten (Name und Sperrung), alle anderen nur eine.
+Alle Ebenen haben nur eine Spalte.
 """
 
 import logging
@@ -18,7 +18,6 @@ from typing import AbstractSet, Any, Dict, Iterable, List, Optional, Sequence, S
 import networkx as nx
 
 from PySide6 import QtCore, QtWidgets
-from PySide6.QtCore import Slot
 from PySide6.QtCore import QModelIndex
 
 from stskit.dispo.anlage import Anlage
@@ -43,8 +42,7 @@ class GleisauswahlItem:
         self.modell = modell
         self.typ = typ
         self.name = name
-        self.sperrung: bool = False
-        self._column_count = 2 if self.typ in {"Gl", "Agl"} else 1
+        self._column_count = 1
         self._parent = None
         self._children = []
         self._row = 0
@@ -76,7 +74,6 @@ class GleisauswahlItem:
         child._parent = self
         child._row = len(self._children)
         self._children.append(child)
-        # self._column_count = max(child.columnCount(), self._column_count)
 
     def checkState(self) -> QtCore.Qt.CheckState:
         if len(self._children):
@@ -110,7 +107,7 @@ class GleisauswahlItem:
 
         if self.name:
             flags = flags | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable
-        if self.typ == "Gl":
+        if self.typ in {"Gl", "Agl"}:
             flags = flags | QtCore.Qt.ItemNeverHasChildren
         else:
             flags = flags | QtCore.Qt.ItemIsAutoTristate
@@ -127,14 +124,10 @@ class GleisauswahlItem:
         elif role == QtCore.Qt.CheckStateRole:
             if column == 0:
                 return self.checkState()
-            elif column == 1 and self.typ in {"Gl", "Agl"}:
-                return QtCore.Qt.Checked if self.sperrung else QtCore.Qt.Unchecked
 
         elif role == QtCore.Qt.UserRole:
             if column == 0:
                 return BahnhofElement(self.typ, self.name)
-            elif column == 1:
-                return self.sperrung
 
         return None
 
@@ -153,19 +146,11 @@ class GleisauswahlItem:
                         child.setData(child_index, value, role)
                 self.modell.dataChanged.emit(index, index)
                 return True
-            elif column == 1 and self.typ in {"Gl", "Agl"}:
-                self.sperrung = value != QtCore.Qt.Unchecked
-                self.modell.dataChanged.emit(index, index)
-                return True
 
         elif role == QtCore.Qt.UserRole:
             if column == 0:
                 self.typ = value.typ
                 self.name = value.name
-                self.modell.dataChanged.emit(index, index)
-                return True
-            elif column == 1 and self.typ in {"Gl", "Agl"}:
-                self.sperrung = value == QtCore.Qt.Checked
                 self.modell.dataChanged.emit(index, index)
                 return True
 
@@ -180,7 +165,7 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
     wird dem Treeview eine Instanz dieser Klasse zugeordnet.
 
     Die Daten werden über die Methoden
-    gleise_definieren, set_auswahl, get_auswahl, set_sperrungen, get_sperrungen ein- und ausgelesen.
+    gleise_definieren, set_auswahl und get_auswahl ein- und ausgelesen.
     """
 
     def __init__(self, parent: Optional[QtCore.QObject]):
@@ -190,7 +175,7 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
         self.alle_gleise: Set[BahnhofElement] = set()
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
-        return 2
+        return 1
 
     def rowCount(self, parent: QModelIndex = ...) -> int:
         if parent is ... or not parent.isValid():
@@ -243,8 +228,6 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
             if orientation == QtCore.Qt.Horizontal:
                 if section == 0:
                     return "Gleis"
-                elif section == 1:
-                    return "Sperrung"
 
         return None
 
@@ -382,27 +365,3 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
                 gleise.add(element)
 
         return gleise
-
-    def set_sperrungen(self, gleissperrungen: AbstractSet[BahnhofElement]) -> None:
-        """
-        Sperrungsstatus aller Gleise auf einmal setzen.
-
-        :param gleissperrungen: Set von (Gleistyp, Gleisnamen)-Tupeln.
-            Gelistete Gleise werden gesperrt, nicht gelistete entsperrt.
-        :return:
-        """
-
-        for item in self.gleis_items():
-            item.sperrung = BahnhofElement(item.typ, item.name) in gleissperrungen
-
-    def get_sperrungen(self) -> Set[BahnhofElement]:
-        """
-        Sperrungsstatus aller Gleise auf einmal auslesen..
-
-        :param gleissperrungen: Set von (Gleistyp, Gleisnamen)-Tupeln.
-            Gelistete Gleise werden gesperrt, nicht gelistete entsperrt.
-        :return:
-        """
-
-        sperrungen = (BahnhofElement(item.typ, item.name) for item in self.gleis_items() if item.sperrung and item.typ == "Gl")
-        return set(sperrungen)
