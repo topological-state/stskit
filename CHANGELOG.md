@@ -1,18 +1,20 @@
 # Changelog
 
-## 2.0.8
+## 2.1.0
+
+### Features
+
+- Streckeneditor (im Modul Einstellungen)
+- Gleissperrung nur noch im Einstellungsfenster einstellbar
 
 ### Closed issues
 
-- Crash beim Seiten Umschalten im Bildfahrplan
+- Fehler beim Laden der Bahnhofkonfiguration
+- Pull request 154: Fix gleiseditor checkboxes
+- Gleisauswahl bei Aktualisierung nicht zuklappen 
 
-## 2.0.7
 
-### Closed issues
-
-- Issue 153: Attribute Errors in Zugschema
-
-## 2.0.6
+## 2.0.3 - 2.0.8
 
 ### Features
 
@@ -21,22 +23,14 @@
 
 ### Closed issues
 
+- Crash beim Seiten Umschalten im Bildfahrplan
+- Issue 153: Attribute Errors in Zugschema
 - Issue 152: Anzeigefehler bei Verspätung
-
-## 2.0.5
-
-### Closed issues
-
 - Issue 148: Zugkategorienauswahl
 - Issue 149: Werkzeugleiste in Anschlussmatrix
 - Issue 151: Fehlende Züge in Anschlussmatrix
 - Modulknöpfe im Hauptfenster sperren bis Verbindung steht
 - Balkenbeschriftung in Gleisbelegung am oberen Rand
-
-## 2.0.3 (2025-06-29)
-
-### Closed issues
-
 - Issue 144: Runtime Error
 - Issue 145: Anschlussmatrix
 
