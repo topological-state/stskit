@@ -137,10 +137,12 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
             if col in {'Bs', 'Bft', 'Bf', 'Anst'}:
                 self.rename_element(col, label.name, value)
                 self.dataChanged.emit(index, index)
-        if role == QtCore.Qt.CheckStateRole:
+
+        elif role == QtCore.Qt.CheckStateRole:
+            value = QtCore.Qt.CheckState(value)
             if col in {'Sperrung', 'Sichtbar'}:
                 data[col] = value == QtCore.Qt.Checked
-                self.bahnhofgraph.nodes[label][col.lower()] = value
+                self.bahnhofgraph.nodes[label][col.lower()] = data[col]
                 self.dataChanged.emit(index, index)
             else:
                 return False

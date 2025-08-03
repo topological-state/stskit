@@ -233,6 +233,7 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
         node: GleisauswahlItem = index.internalPointer()
 
         if role == QtCore.Qt.CheckStateRole:
+            value = QtCore.Qt.CheckState(value)
             node.setData(index, value, role)
 
             parent_index = index
