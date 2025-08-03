@@ -1,7 +1,8 @@
 import logging
+from typing import AbstractSet, Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple, Type, Union
 
-from PySide6 import QtWidgets
-from PySide6.QtCore import Slot
+from PySide6 import QtWidgets, QtCore
+from PySide6.QtCore import Slot, QModelIndex
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -31,6 +32,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.zentrale.plan_update.register(self.plan_update)
         self.zentrale.betrieb_update.register(self.plan_update)
         self.ansicht = ansicht
+        self.collapsed_items = set()
 
         self._pick_event = False
 
@@ -101,13 +103,44 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     def update_widgets(self):
         self.ui.vorlaufzeit_spin.setValue(self.plot.vorlaufzeit)
         self.ui.nachlaufzeit_spin.setValue(self.plot.nachlaufzeit)
-        try:
-            if "Name" in self.belegung.zugbeschriftung.elemente:
-                self.ui.name_button.setChecked(True)
-            else:
-                self.ui.nummer_button.setChecked(True)
-        except AttributeError:
-            pass
+
+    def save_expanded_state(self, index: Optional[QModelIndex] = None):
+        view = self.ui.gleisView
+        model = view.model()
+        if index is None:
+            index = QModelIndex()
+
+        if index.isValid():
+            element = index.data(QtCore.Qt.UserRole)
+            if not view.isExpanded(index):
+                self.collapsed_items.add(element)
+        else:
+            self.collapsed_items = set()
+
+        for row in range(model.rowCount(index)):
+            self.save_expanded_state(model.index(row, 0, index))
+
+    def restore_expanded_state(self, index: Optional[QModelIndex] = None):
+        view = self.ui.gleisView
+        model = view.model()
+        updates = False
+        if index is None:
+            index = QModelIndex()
+
+        if index.isValid():
+            element = index.data(QtCore.Qt.UserRole)
+            expanded = element not in self.collapsed_items
+            view.setExpanded(index, expanded)
+        else:
+            index = QModelIndex()
+            view.setUpdatesEnabled(False)
+            updates = True
+
+        for row in range(model.rowCount(index)):
+            self.restore_expanded_state(model.index(row, 0, index))
+
+        if updates:
+            view.setUpdatesEnabled(True)
 
     @Slot()
     def vorlaufzeit_changed(self):
@@ -129,8 +162,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         """
 
         auswahl = self.gleisauswahl.get_auswahl()
+        self.save_expanded_state()
         self.gleisauswahl.gleise_definieren(self.anlage,
                                             anschluesse=self.ansicht == "Agl", bahnsteige=self.ansicht != "Agl")
+        self.restore_expanded_state()
         auswahl = auswahl & self.gleisauswahl.alle_gleise
         if not auswahl:
             auswahl = self.gleisauswahl.alle_gleise

@@ -1,8 +1,15 @@
 """
-Modell für Gleisauswahl in Qt5-Treeview-Widget
+Modell für Gleisauswahl in QTreeView
 
 Das Modul deklariert eine GleisauswahlModell-Klasse,
-mit der in einem Qt5-Treeview-Widget Gleise asugewählt werden können.
+mit der in einem QTreeView Gleise asugewählt werden können.
+
+Das Modell hat eine Baumstruktur.
+Jeder Knoten besteht aus einem GleisauswahlItem.
+Jeder Ebene sind Elemente eines bestimmten Typs zugeordnet.
+Die Ebenen sind in GleisauswahlItem.TYPEN deklariert.
+`root` ist der unsichtbare Wurzelknoten.
+Die unterste Ebene hat zwei Spalten (Name und Sperrung), alle anderen nur eine.
 """
 
 import logging
@@ -37,7 +44,7 @@ class GleisauswahlItem:
         self.typ = typ
         self.name = name
         self.sperrung: bool = False
-        self._column_count = 2 if self.typ == "Gleis" else 1
+        self._column_count = 2 if self.typ in {"Gl", "Agl"} else 1
         self._parent = None
         self._children = []
         self._row = 0
@@ -69,7 +76,7 @@ class GleisauswahlItem:
         child._parent = self
         child._row = len(self._children)
         self._children.append(child)
-        self._column_count = max(child.columnCount(), self._column_count)
+        # self._column_count = max(child.columnCount(), self._column_count)
 
     def checkState(self) -> QtCore.Qt.CheckState:
         if len(self._children):
@@ -120,8 +127,14 @@ class GleisauswahlItem:
         elif role == QtCore.Qt.CheckStateRole:
             if column == 0:
                 return self.checkState()
-            elif column == 1 and self.typ == "Gl":
+            elif column == 1 and self.typ in {"Gl", "Agl"}:
                 return QtCore.Qt.Checked if self.sperrung else QtCore.Qt.Unchecked
+
+        elif role == QtCore.Qt.UserRole:
+            if column == 0:
+                return BahnhofElement(self.typ, self.name)
+            elif column == 1:
+                return self.sperrung
 
         return None
 
@@ -129,6 +142,7 @@ class GleisauswahlItem:
         column = index.column()
         if role == QtCore.Qt.EditRole:
             return False
+
         elif role == QtCore.Qt.CheckStateRole:
             value = QtCore.Qt.CheckState(value)
             if column == 0:
@@ -139,8 +153,19 @@ class GleisauswahlItem:
                         child.setData(child_index, value, role)
                 self.modell.dataChanged.emit(index, index)
                 return True
-            elif column == 1 and self.typ == "Gl":
+            elif column == 1 and self.typ in {"Gl", "Agl"}:
                 self.sperrung = value != QtCore.Qt.Unchecked
+                self.modell.dataChanged.emit(index, index)
+                return True
+
+        elif role == QtCore.Qt.UserRole:
+            if column == 0:
+                self.typ = value.typ
+                self.name = value.name
+                self.modell.dataChanged.emit(index, index)
+                return True
+            elif column == 1 and self.typ in {"Gl", "Agl"}:
+                self.sperrung = value == QtCore.Qt.Checked
                 self.modell.dataChanged.emit(index, index)
                 return True
 
@@ -168,31 +193,42 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
         return 2
 
     def rowCount(self, parent: QModelIndex = ...) -> int:
-        if parent.isValid():
-            return parent.internalPointer().childCount()
-        else:
+        if parent is ... or not parent.isValid():
             return self._root.childCount()
-
-    def index(self, row: int, column: int, _parent: QModelIndex = ...) -> QModelIndex:
-        if not _parent or not _parent.isValid():
-            parent = self._root
         else:
-            parent = _parent.internalPointer()
+            return parent.internalPointer().childCount()
 
-        if not QtCore.QAbstractItemModel.hasIndex(self, row, column, _parent):
-            return QtCore.QModelIndex()
+    def index(self, row: int, column: int, parent=QModelIndex()) -> QModelIndex:
+        if not self.hasIndex(row, column, parent):
+            return QModelIndex()
 
-        child = parent.child(row)
-        if child:
-            return QtCore.QAbstractItemModel.createIndex(self, row, column, child)
+        parent_item = self.getItem(parent)
+        child_item = parent_item.child(row)
+
+        if child_item:
+            return self.createIndex(row, column, child_item)
         else:
-            return QtCore.QModelIndex()
+            return QModelIndex()
+
+    def hasIndex(self, row, column, parent=QModelIndex()) -> bool:
+        if not parent.isValid():
+            return 0 <= row < len(self.alle_gleise) and column == 0
+        else:
+            parent_item = self.getItem(parent)
+            return 0 <= row < parent_item.childCount() and 0 <= column < parent_item.columnCount()
+
+    def getItem(self, index: QModelIndex) -> GleisauswahlItem:
+        if index.isValid():
+            item = index.internalPointer()
+            if item:
+                return item
+        return self._root
 
     def parent(self, child: QModelIndex) -> QModelIndex:
         if child.isValid():
             p = child.internalPointer().parent()
             if p and p is not self._root:
-                return QtCore.QAbstractItemModel.createIndex(self, p.row(), 0, p)
+                return self.createIndex(p.row(), 0, p)
         return QtCore.QModelIndex()
 
     def addChild(self, node: GleisauswahlItem, _parent: QModelIndex) -> None:
@@ -291,7 +327,7 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
             items[('Bst', 'Bf')] = bahnsteige_item
 
             for node1, node2 in nx.dfs_edges(anlage.bahnhofgraph, source=('Bst', 'Bf')):
-                item = GleisauswahlItem(self, node2[0], node2[1])
+                item = GleisauswahlItem(self, node2.typ, node2.name)
                 items[node2] = item
                 items[node1].addChild(item)
 
