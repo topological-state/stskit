@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.1.1
+
+### Closed issues
+
+- Hilfeseite zu Einstellungen in Kompilation einpacken 
+
+
 ## 2.1.0
 
 ### Features
