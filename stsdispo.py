@@ -4,7 +4,8 @@
 # nuitka-project: --include-data-files=stskit/qt/*.css=stskit/qt/
 # nuitka-project: --include-data-files=stskit/qt/*.ui=stskit/qt/
 # nuitka-project: --include-data-files=stskit/config/*.json=stskit/config/
-# nuitka-project: --include-data-files=stskit/widgets/*.md=stskit/widgets/
+# nuitka-project: --include-data-files=stskit/widgets/einstellungen.md=stskit/widgets/einstellungen.md
+# nuitka-project: --include-data-files=stskit/docs/bahnhofgraph.png=stskit/docs/bahnhofgraph.png
 
 # nuitka-project: --mode=app
 # Debugging options, controlled via environment variable at compile time.
