@@ -66,6 +66,7 @@ class Config(UserDict):
 
         self.import_v2(d)
         self.loaded_from = path
+        logger.info(f"Konfiguration geladen. Version 2.")
 
     def load_v3(self, path: Path):
         if not self.schema_path:
@@ -84,6 +85,12 @@ class Config(UserDict):
             self.clear()
             self.update(data)
             self.loaded_from = path
+            logger.info(f"Konfiguration geladen. "
+                        f"Version {self.get('_version')}, "
+                        f"Anlage {self.get('_aid')}, "
+                        f"Build {self.get('_build')}, "
+                        f"Name {self.get('_name')}, "
+                        f"Region {self.get('_region')}")
 
     def save_v3(self, path: Path):
         self.data['_version'] = 3

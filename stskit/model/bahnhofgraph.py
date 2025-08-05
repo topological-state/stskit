@@ -657,6 +657,10 @@ class BahnhofGraph(nx.DiGraph):
             # element einfuegen oder attribute aktualisieren
             konfig_graph.add_node(node, **data)
 
+        original_count = len(list(new_graph.list_by_type({'Gl', 'Agl'})))
+        konfig_count = len(list(konfig_graph.list_by_type({'Gl', 'Agl'})))
+        logger.info(f"Konfiguration importieren. Original {original_count} Gleise, Konfiguration {konfig_count} Gleise")
+
         # Schritt 2.5: reine auto-Knoten filtern
         for node, data in konfig_graph.nodes(data=True):
             parent_node = BahnhofElement(BAHNHOFELEMENT_HIERARCHIE[data['typ']], data['stamm'])
