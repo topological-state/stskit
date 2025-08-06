@@ -4,6 +4,7 @@
 
 ### Closed issues
 
+- Issues 155, 156: Freitext-Filterfunktion in Bahnhofeditor
 - Hilfeseite zu Einstellungen in Kompilation einpacken 
 
 
