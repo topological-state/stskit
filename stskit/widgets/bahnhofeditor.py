@@ -1,5 +1,6 @@
 from collections import Counter
 import logging
+import re
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
 import networkx as nx
@@ -329,7 +330,7 @@ class BahnhofEditorFilterProxy(QSortFilterProxyModel):
         except (AttributeError, IndexError, KeyError):
             return True
 
-        return self.filter_text in element.name
+        return self.filter_text in element.name.casefold()
 
 
 class BahnhofEditor(QObject):
@@ -370,14 +371,12 @@ class BahnhofEditor(QObject):
         self.ui.bs_group_button.clicked.connect(self.bs_group_button_clicked)
         self.ui.bs_ungroup_button.clicked.connect(self.bs_ungroup_button_clicked)
         self.ui.bs_rename_button.clicked.connect(self.bs_rename_button_clicked)
-        self.ui.gl_filter_button.clicked.connect(self.gl_filter_button_clicked)
         self.ui.bf_combo.currentIndexChanged.connect(self.bf_combo_index_changed)
         self.ui.bf_combo.editTextChanged.connect(self.bf_combo_text_changed)
         self.ui.bft_combo.currentIndexChanged.connect(self.bft_combo_index_changed)
         self.ui.bft_combo.editTextChanged.connect(self.bft_combo_text_changed)
         self.ui.bs_combo.currentIndexChanged.connect(self.bs_combo_index_changed)
         self.ui.bs_combo.editTextChanged.connect(self.bs_combo_text_changed)
-        self.ui.gl_combo.currentIndexChanged.connect(self.gl_combo_index_changed)
         self.ui.gl_combo.editTextChanged.connect(self.gl_combo_text_changed)
         self.ui.gl_table_view.selectionModel().selectionChanged.connect(
             self.gl_selection_changed)
@@ -402,7 +401,6 @@ class BahnhofEditor(QObject):
         self.ui.anst_group_button.clicked.connect(self.anst_group_button_clicked)
         self.ui.anst_ungroup_button.clicked.connect(self.anst_ungroup_button_clicked)
         self.ui.anst_rename_button.clicked.connect(self.anst_rename_button_clicked)
-        self.ui.agl_filter_button.clicked.connect(self.agl_filter_button_clicked)
         self.ui.anst_combo.currentIndexChanged.connect(self.anst_combo_index_changed)
         self.ui.anst_combo.editTextChanged.connect(self.anst_combo_text_changed)
         self.ui.agl_combo.currentIndexChanged.connect(self.agl_combo_index_changed)
@@ -419,6 +417,14 @@ class BahnhofEditor(QObject):
         Update the widgets based on the current state of the anlage
         """
 
+        def _make_filter_list(gl_list: Iterable[BahnhofElement]) -> Iterable[str]:
+            result = {''}
+            for gl in gl_list:
+                mo = re.match(r'^[a-zA-Z]*', gl.name)
+                if mo:
+                    result.add(mo[0])
+            return result
+
         self.gl_table_model.update()
         self.agl_table_model.update()
 
@@ -427,11 +433,11 @@ class BahnhofEditor(QObject):
         self.ui.agl_table_view.resizeColumnsToContents()
         self.ui.agl_table_view.resizeRowsToContents()
 
-        self.gl_model.setStringList(sorted((gl.name for gl in self.bahnhofgraph.list_by_type({'Gl'}))))
+        self.gl_model.setStringList(sorted(_make_filter_list(self.bahnhofgraph.list_by_type({'Gl'}))))
         self.bs_model.setStringList(sorted((bs.name for bs in self.bahnhofgraph.list_by_type({'Bs'}))))
         self.bft_model.setStringList(sorted((bft.name for bft in self.bahnhofgraph.list_by_type({'Bft'}))))
         self.bf_model.setStringList(sorted((bf.name for bf in self.bahnhofgraph.list_by_type({'Bf'}))))
-        self.agl_model.setStringList(sorted((gl.name for gl in self.bahnhofgraph.list_by_type({'Agl'}))))
+        self.agl_model.setStringList(sorted(_make_filter_list(self.bahnhofgraph.list_by_type({'Agl'}))))
         self.anst_model.setStringList(sorted((bf.name for bf in self.bahnhofgraph.list_by_type({'Anst'}))))
 
         self.update_gl_widget_states()
@@ -537,10 +543,6 @@ class BahnhofEditor(QObject):
             self.ui.bs_combo.setCurrentIndex(self.bs_model.stringList().index(new_data['Bs']))
         except (KeyError, ValueError):
             pass
-        try:
-            self.ui.gl_combo.setCurrentIndex(self.gl_model.stringList().index(new_data['Gl']))
-        except (KeyError, ValueError):
-            pass
 
         self.update_gl_widget_states()
 
@@ -558,10 +560,6 @@ class BahnhofEditor(QObject):
 
         try:
             self.ui.anst_combo.setCurrentIndex(self.bf_model.stringList().index(new_data['Anst']))
-        except (KeyError, ValueError):
-            pass
-        try:
-            self.ui.agl_combo.setCurrentIndex(self.gl_model.stringList().index(new_data['Agl']))
         except (KeyError, ValueError):
             pass
 
@@ -614,9 +612,6 @@ class BahnhofEditor(QObject):
         en = len(bs_sel) == 1 and bool(tx := self.ui.bs_combo.currentText()) and (BahnhofElement('Bs', tx) not in self.bahnhofgraph)
         self.ui.bs_rename_button.setEnabled(en)
 
-        en = bool(self.ui.gl_combo.currentText())
-        self.ui.gl_filter_button.setEnabled(en)
-
     def update_agl_widget_states(self):
         selection = self.get_agl_selection()
         anst_sel = {self.agl_table_model.row_data[gl]['Anst'] for gl in selection}
@@ -632,9 +627,6 @@ class BahnhofEditor(QObject):
         # einzelner anst gewählt, combo-text vorhanden und noch nicht vergeben
         en = len(anst_sel) == 1 and bool(tx := self.ui.anst_combo.currentText()) and (BahnhofElement('Anst', tx) not in self.bahnhofgraph)
         self.ui.anst_rename_button.setEnabled(en)
-
-        en = bool(self.ui.agl_combo.currentText())
-        self.ui.agl_filter_button.setEnabled(en)
 
     def group_elements(self, level: str, element: Optional[str] = None):
         """
@@ -760,7 +752,13 @@ class BahnhofEditor(QObject):
 
     @Slot()
     def gl_combo_text_changed(self):
-        self.update_gl_widget_states()
+        self.gl_table_filter.beginResetModel()
+        try:
+            self.gl_table_filter.filter_text = self.ui.gl_combo.currentText().casefold()
+        finally:
+            self.gl_table_filter.endResetModel()
+        self.ui.gl_table_view.resizeColumnsToContents()
+        self.ui.gl_table_view.resizeRowsToContents()
 
     @Slot()
     def anst_group_button_clicked(self):
@@ -788,43 +786,9 @@ class BahnhofEditor(QObject):
 
     @Slot()
     def agl_combo_text_changed(self):
-        self.update_agl_widget_states()
-
-    @Slot()
-    def gl_filter_button_clicked(self):
-        self.gl_table_filter.beginResetModel()
-        try:
-            self.gl_table_filter.filter_text = self.ui.gl_combo.currentText()
-        finally:
-            self.gl_table_filter.endResetModel()
-        self.ui.gl_table_view.resizeColumnsToContents()
-        self.ui.gl_table_view.resizeRowsToContents()
-
-    @Slot()
-    def gl_unfilter_button_clicked(self):
-        self.gl_table_filter.beginResetModel()
-        try:
-            self.gl_table_filter.filter_text = ""
-        finally:
-            self.gl_table_filter.endResetModel()
-        self.ui.gl_table_view.resizeColumnsToContents()
-        self.ui.gl_table_view.resizeRowsToContents()
-
-    @Slot()
-    def agl_filter_button_clicked(self):
         self.agl_table_filter.beginResetModel()
         try:
-            self.agl_table_filter.filter_text = self.ui.agl_combo.currentText()
-        finally:
-            self.agl_table_filter.endResetModel()
-        self.ui.agl_table_view.resizeColumnsToContents()
-        self.ui.agl_table_view.resizeRowsToContents()
-
-    @Slot()
-    def gl_unfilter_button_clicked(self):
-        self.agl_table_filter.beginResetModel()
-        try:
-            self.agl_table_filter.filter_text = ""
+            self.agl_table_filter.filter_text = self.ui.agl_combo.currentText().casefold()
         finally:
             self.agl_table_filter.endResetModel()
         self.ui.agl_table_view.resizeColumnsToContents()

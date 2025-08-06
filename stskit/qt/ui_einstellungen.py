@@ -67,11 +67,6 @@ class Ui_EinstellungenWindow(object):
 
         self.verticalLayout_11.addWidget(self.agl_combo)
 
-        self.agl_filter_button = QPushButton(self.agl_group)
-        self.agl_filter_button.setObjectName(u"agl_filter_button")
-
-        self.verticalLayout_11.addWidget(self.agl_filter_button)
-
 
         self.verticalLayout_10.addWidget(self.agl_group)
 
@@ -140,11 +135,6 @@ class Ui_EinstellungenWindow(object):
         self.gl_combo.setEditable(True)
 
         self.verticalLayout_7.addWidget(self.gl_combo)
-
-        self.gl_filter_button = QPushButton(self.gl_group)
-        self.gl_filter_button.setObjectName(u"gl_filter_button")
-
-        self.verticalLayout_7.addWidget(self.gl_filter_button)
 
 
         self.verticalLayout.addWidget(self.gl_group)
@@ -466,14 +456,10 @@ class Ui_EinstellungenWindow(object):
 
     def retranslateUi(self, EinstellungenWindow):
         EinstellungenWindow.setWindowTitle(QCoreApplication.translate("EinstellungenWindow", u"Einstellungen", None))
-        self.agl_group.setTitle(QCoreApplication.translate("EinstellungenWindow", u"Anschlussgleis (Agl)", None))
+        self.agl_group.setTitle(QCoreApplication.translate("EinstellungenWindow", u"Filter", None))
 #if QT_CONFIG(tooltip)
-        self.agl_combo.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Filterkriterium", None))
+        self.agl_combo.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Anschlussgleise (Agl) filtern (leer = alle)", None))
 #endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.agl_filter_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Gleistabelle filtern", None))
-#endif // QT_CONFIG(tooltip)
-        self.agl_filter_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Filter", None))
         self.anst_group.setTitle(QCoreApplication.translate("EinstellungenWindow", u"Anschlussstelle (Anst)", None))
 #if QT_CONFIG(tooltip)
         self.anst_combo.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Ziel-Anschlussstelle", None))
@@ -491,14 +477,10 @@ class Ui_EinstellungenWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.anst_rename_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Umbenennen", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.anst_tab), QCoreApplication.translate("EinstellungenWindow", u"Anschlussstellen", None))
-        self.gl_group.setTitle(QCoreApplication.translate("EinstellungenWindow", u"Gleis (Gl)", None))
+        self.gl_group.setTitle(QCoreApplication.translate("EinstellungenWindow", u"Filter", None))
 #if QT_CONFIG(tooltip)
-        self.gl_combo.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Filterkriterium", None))
+        self.gl_combo.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Gleise (Gl) filtern (leer = alle)", None))
 #endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.gl_filter_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Gleistabelle filtern", None))
-#endif // QT_CONFIG(tooltip)
-        self.gl_filter_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Filter", None))
         self.bs_group.setTitle(QCoreApplication.translate("EinstellungenWindow", u"Bahnsteig (Bs)", None))
 #if QT_CONFIG(tooltip)
         self.bs_combo.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Ziel-Bahnsteig", None))

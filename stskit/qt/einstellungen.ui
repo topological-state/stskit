@@ -55,26 +55,16 @@
                <item>
                 <widget class="QGroupBox" name="agl_group">
                  <property name="title">
-                  <string>Anschlussgleis (Agl)</string>
+                  <string>Filter</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_11">
                   <item>
                    <widget class="QComboBox" name="agl_combo">
                     <property name="toolTip">
-                     <string>Filterkriterium</string>
+                     <string>Anschlussgleise (Agl) filtern (leer = alle)</string>
                     </property>
                     <property name="editable">
                      <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="agl_filter_button">
-                    <property name="toolTip">
-                     <string>Gleistabelle filtern</string>
-                    </property>
-                    <property name="text">
-                     <string>Filter</string>
                     </property>
                    </widget>
                   </item>
@@ -181,26 +171,16 @@
                <item>
                 <widget class="QGroupBox" name="gl_group">
                  <property name="title">
-                  <string>Gleis (Gl)</string>
+                  <string>Filter</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_7">
                   <item>
                    <widget class="QComboBox" name="gl_combo">
                     <property name="toolTip">
-                     <string>Filterkriterium</string>
+                     <string>Gleise (Gl) filtern (leer = alle)</string>
                     </property>
                     <property name="editable">
                      <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="gl_filter_button">
-                    <property name="toolTip">
-                     <string>Gleistabelle filtern</string>
-                    </property>
-                    <property name="text">
-                     <string>Filter</string>
                     </property>
                    </widget>
                   </item>
