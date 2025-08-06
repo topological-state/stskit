@@ -307,7 +307,6 @@ class BahnhofEditorModel(AbstractBahnhofEditorModel):
         self._gleistyp: str = 'Gl'
 
 
-
 class BahnhofEditorFilterProxy(QSortFilterProxyModel):
 
     def __init__(self, parent):
@@ -318,12 +317,12 @@ class BahnhofEditorFilterProxy(QSortFilterProxyModel):
         if not self.filter_text:
             return True
 
-        model: Optional[BahnhofEditorModel] = None
-        while model is None:
-            source = self.sourceModel()
-            if isinstance(source, BahnhofEditorModel):
-                model = source
-                break
+        model = self.sourceModel()
+        while not isinstance(model, AbstractBahnhofEditorModel):
+            try:
+                model = model.sourceModel()
+            except AttributeError:
+                return True
 
         try:
             element = model.rows[source_row]
