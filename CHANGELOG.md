@@ -2,6 +2,11 @@
 
 ## 2.1.1
 
+### Features
+
+- Durchfahrt mit verzögerter Abfahrtszeit als Fahrzeitreserve beachten.
+- Zugschema Italien: MRI und S Züge
+
 ### Closed issues
 
 - Issues 155, 156: Freitext-Filterfunktion in Bahnhofeditor
