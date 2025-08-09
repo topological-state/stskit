@@ -214,7 +214,8 @@ class TestEreignisPrognose(unittest.TestCase):
         self.assertGreaterEqual(len(self.ereignisgraph.edges), 15)
 
         iso_edges = [
-            (1, 3, 'P'),
+            (1, 2, 'P'),
+            (2, 3, 'D'),
             (3, 4, 'P'),
             (4, 5, 'E'),
             (5, 6, 'H'),
@@ -239,13 +240,13 @@ class TestEreignisPrognose(unittest.TestCase):
         self.assertTrue(nx.is_isomorphic(self.ereignisgraph, iso_graph), 'isomorphic graph')
 
         types = {'Ab': 0, 'An': 0, 'E': 0, 'K': 0, 'F': 0}
-        expected_types = {'Ab': 6, 'An': 7, 'E': 1, 'K': 1, 'F': 1}
+        expected_types = {'Ab': 7, 'An': 7, 'E': 1, 'K': 1, 'F': 1}
         for node, typ in self.ereignisgraph.nodes(data='typ'):
             types[typ] += 1
         self.assertDictEqual(types, expected_types, "Knotentypen")
 
-        types = {'P': 0, 'H': 0, 'E': 0, 'K': 0, 'F': 0}
-        expected_types = {'P': 7, 'H': 5, 'E': 1, 'K': 1, 'F': 1}
+        types = {'P': 0, 'H': 0, 'D': 0, 'E': 0, 'K': 0, 'F': 0}
+        expected_types = {'P': 7, 'H': 5, 'D': 1, 'E': 1, 'K': 1, 'F': 1}
         for u, v, typ in self.ereignisgraph.edges(data='typ'):
             types[typ] += 1
         self.assertDictEqual(types, expected_types, "Kantentypen")
@@ -253,7 +254,7 @@ class TestEreignisPrognose(unittest.TestCase):
     def test_zugpfad(self):
         self.szenario1()
         act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(11)]
-        exp = [(11, 'Ab'), (11, 'An'), (11, 'An'), (11, 'E')]
+        exp = [(11, 'Ab'), (11, 'An'), (11, 'Ab'), (11, 'An'), (11, 'E')]
         self.assertListEqual(act, exp, "Zug 11")
         act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(12)]
         exp = [(12, 'Ab'), (12, 'An')]
@@ -266,7 +267,7 @@ class TestEreignisPrognose(unittest.TestCase):
         self.assertListEqual(act, exp, "Zug 14")
 
         act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(11, kuppeln=True)]
-        exp = [(11, 'Ab'), (11, 'An'), (11, 'An'), (11, 'E'), (12, 'Ab'), (12, 'An'),
+        exp = [(11, 'Ab'), (11, 'An'), (11, 'Ab'), (11, 'An'), (11, 'E'), (12, 'Ab'), (12, 'An'),
                (13, 'K'), (13, 'Ab'), (13, 'An'), (13, 'F'), (13, 'Ab'), (13, 'An')]
         self.assertListEqual(act, exp, "Zug 11 gekuppelt")
         act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(12, kuppeln=True)]
@@ -286,7 +287,7 @@ class TestEreignisPrognose(unittest.TestCase):
         self.szenario1()
         self.ereignisgraph.prognose()
         act = [self.ereignisgraph.nodes(data='t_prog', default='?')[n] for n in self.ereignisgraph.zugpfad(11)]
-        exp = [300, 322, 332, 332 + PlanungParams.mindestaufenthalt_ersatz]
+        exp = [300, 322, 322, 332, 332 + PlanungParams.mindestaufenthalt_ersatz]
         self.assertListEqual(act, exp, "Zug 11")
         act = [self.ereignisgraph.nodes(data='t_prog', default='?')[n] for n in self.ereignisgraph.zugpfad(12)]
         exp = [336, 345]
@@ -307,7 +308,7 @@ class TestEreignisPrognose(unittest.TestCase):
             start_node = self.ereignisgraph.nodes[self.ereignisgraph.zuganfaenge[11]]
             start_node.t_mess = start_node.t_plan + v
             self.ereignisgraph.prognose()
-            exp = [300 + v, 322 + v, 332 + v]
+            exp = [300 + v, 322 + v, 322 + v, 332 + v]
             e_zeit = 332 + v + PlanungParams.mindestaufenthalt_ersatz
             exp.append(e_zeit)
             act = [self.ereignisgraph.nodes[n].t_eff for n in self.ereignisgraph.zugpfad(11)]

@@ -233,7 +233,7 @@ class BildfahrplanPlot:
                 continue
 
         for u, v, data in self.anlage.ereignisgraph.edges(data=True):
-            if data.typ in {'P', 'H', 'B', 'E', 'F', 'K', 'A'} and (u in self.bildgraph or v in self.bildgraph):
+            if data.typ in {'P', 'D', 'H', 'B', 'E', 'F', 'K', 'A'} and (u in self.bildgraph or v in self.bildgraph):
                 zug = self.anlage.zuggraph.nodes[data.zid]
                 u_data = self.anlage.ereignisgraph.nodes[u]
                 v_data = self.anlage.ereignisgraph.nodes[v]
@@ -242,7 +242,7 @@ class BildfahrplanPlot:
                 u_v_data['titel'] = self.zugbeschriftung.format_trasse_label(zug, abfahrt=u_data, ankunft=v_data)
                 u_v_data['fontstyle'] = "normal"
                 u_v_data['linewidth'] = 1
-                u_v_data['linestyle'] = '--' if data.typ in {"B", "E", "F", "H"} else "-"
+                u_v_data['linestyle'] = '--' if data.typ in {"B", "D", "E", "F", "H"} else "-"
                 if data.typ == 'A':
                     u_v_data['linestyle'] = ':'
                     u_v_data['farbe'] = 'silver'
@@ -273,7 +273,7 @@ class BildfahrplanPlot:
                 'marker': start.marker}
 
         try:
-            args['markevery'] = [start.typ == "Ab" or data.typ in {"E", "F", "H"}, data.typ == "H"]
+            args['markevery'] = [data.typ in {"B", "E", "F", "H"}, data.typ in {"B", "H"}]
         except AttributeError:
             args['marker'] = ""
 

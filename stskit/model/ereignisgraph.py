@@ -144,6 +144,7 @@ class EreignisGraphEdge(dict):
                         docstring="""
                             Verbindungstyp:
                                 'P': planmässige Fahrt,
+                                'D': Durchfahrt,
                                 'H': Halt,
                                 'B': Betriebshalt, vom Fdl angeordneter, ungeplanter Halt,
                                 'E': Ersatz (Kante von E-Flag nach E-Knoten),
@@ -528,6 +529,8 @@ class EreignisGraph(nx.DiGraph):
                 start_zeit = start_data.get("t_mess") or start_data.get("t_prog") or start_data.get("t_plan")
                 if start_zeit is None:
                     continue
+                if edge_data.get("typ", "P") == "D":
+                    ziel_zeit = start_zeit
 
                 zeit_min = max(zeit_min, start_zeit + dt_min + dt_fdl)
 
@@ -1268,7 +1271,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
             self.nodes.append(n1d)
             self.node_template = n1d
 
-        if ziel_node.typ in {'H', 'E'}:
+        if ziel_node.typ in {'H', 'D', 'E'}:
             n2d = EreignisGraphNode(
                 quelle=self.quelle,
                 typ='Ab',
@@ -1296,7 +1299,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
 
         e2d = EreignisGraphEdge(
             quelle=self.quelle,
-            typ='H',
+            typ=ziel_node.typ if ziel_node.typ in {'H', 'D'} else 'H',
             zid=ziel_node.zid,
             dt_min=ziel_node.get('mindestaufenthalt', 0),
             ds=0
