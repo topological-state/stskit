@@ -8,6 +8,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from stskit.dispo.anlage import Anlage
+from stskit.model.bahnhofgraph import BAHNHOFELEMENT_TYPEN
 from stskit.plots.gleisbelegung import GleisbelegungPlot
 from stskit.qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 from stskit.widgets.gleisauswahl import GleisauswahlModell
@@ -104,40 +105,59 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.vorlaufzeit_spin.setValue(self.plot.vorlaufzeit)
         self.ui.nachlaufzeit_spin.setValue(self.plot.nachlaufzeit)
 
-    def save_expanded_state(self, index: Optional[QModelIndex] = None):
+    def save_expanded_state(self, level: int = 0, index: Optional[QModelIndex] = None):
+        """
+        Save expansion state of all tree view items.
+
+        Adds Bahnhofelement label of collapsed items to collapsed_items attribute.
+        At the top level, leave all optional arguments to their default values.
+        Arguments are used in the internal recursion.
+        """
+
         view = self.ui.gleisView
         model = view.model()
-        if index is None:
+
+        if level == 0:
             index = QModelIndex()
+            self.collapsed_items = set()
+        elif level >= len(BAHNHOFELEMENT_TYPEN):
+            return
 
         if index.isValid():
             element = index.data(QtCore.Qt.UserRole)
             if not view.isExpanded(index):
                 self.collapsed_items.add(element)
-        else:
-            self.collapsed_items = set()
 
         for row in range(model.rowCount(index)):
-            self.save_expanded_state(model.index(row, 0, index))
+            self.save_expanded_state(level + 1, model.index(row, 0, index))
 
-    def restore_expanded_state(self, index: Optional[QModelIndex] = None):
+    def restore_expanded_state(self, level: int = 0, index: Optional[QModelIndex] = None):
+        """
+        Restore expansion state of all tree view items.
+
+        Expands each item whose Bahnhofelement label is not present in the collapsed_items attribute.
+        At the top level, leave all optional arguments to their default values.
+        Arguments are used in the internal recursion.
+        """
+
         view = self.ui.gleisView
         model = view.model()
         updates = False
-        if index is None:
+
+        if level == 0:
             index = QModelIndex()
+            view.setUpdatesEnabled(False)
+            updates = True
+        elif level >= len(BAHNHOFELEMENT_TYPEN):
+            return
 
         if index.isValid():
             element = index.data(QtCore.Qt.UserRole)
             expanded = element not in self.collapsed_items
             view.setExpanded(index, expanded)
-        else:
-            index = QModelIndex()
-            view.setUpdatesEnabled(False)
-            updates = True
 
         for row in range(model.rowCount(index)):
-            self.restore_expanded_state(model.index(row, 0, index))
+            self.restore_expanded_state(level + 1, model.index(row, 0, index))
 
         if updates:
             view.setUpdatesEnabled(True)
