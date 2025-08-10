@@ -68,10 +68,13 @@ class SignalGraph(nx.DiGraph):
                 for knoten2 in knoten1.nachbarn:
                     self.add_edge(knoten1.key, knoten2.key, typ='verbindung', distanz=1)
 
+        entfernen = set()
         for knoten1, typ in self.nodes(data='typ', default='kein'):
             if typ == 'kein':
-                print(f"_signalgraph_erstellen: Knoten {knoten1} hat keinen Typ.")
-                self.remove_node(knoten1)
+                logger.error(f"_signalgraph_erstellen: Knoten {knoten1} hat keinen Typ.")
+                entfernen.add(knoten1)
+        for knoten1 in entfernen:
+            self.remove_node(knoten1)
 
         self.remove_edges_from(nx.selfloop_edges(self))
 
