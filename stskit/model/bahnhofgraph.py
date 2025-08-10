@@ -776,7 +776,7 @@ class BahnhofGraph(nx.DiGraph):
             data2: BahnsteigGraphNode = self.nodes[e2]
             element = {'name': e2.name,
                        'typ': e2.typ,
-                       'auto': data2.auto,
+                       'auto': data2.auto and data1.auto,
                        'sichtbar': True,
                        'flags': ''}
             if e1.typ != 'Bst':
