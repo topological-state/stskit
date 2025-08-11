@@ -395,7 +395,7 @@ class PluginClient:
                 key1 = int(connector['enr1'])
             except (KeyError, TypeError):
                 try:
-                    key1 = connector['name1']
+                    key1 = str(connector['name1']).strip()
                 except KeyError:
                     logger.warning(f"Fehlerhafte Elementreferenz zu Knoten 1 von {connector}")
                     continue
@@ -410,7 +410,7 @@ class PluginClient:
                 key2 = int(connector['enr2'])
             except (KeyError, TypeError):
                 try:
-                    key2 = connector['name2']
+                    key2 = str(connector['name2']).strip()
                 except KeyError:
                     logger.warning(f"Fehlerhafte Elementreferenz zu Knoten 2 von {connector}")
                     continue

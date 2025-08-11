@@ -134,7 +134,7 @@ class AnlagenInfo:
         :return: self
         """
         self.aid = int(item['aid'])
-        self.name = item['name']
+        self.name = str(item['name']).strip()
         self.build = int(item['simbuild'])
         self.region = item['region']
         self.online = str(item['online']).lower() == 'true'
@@ -181,10 +181,10 @@ class BahnsteigInfo:
 
         :return: self
         """
-        self.name = item['name']
+        self.name = str(item['name']).strip()
         self.haltepunkt = str(item['haltepunkt']).lower() == 'true'
         try:
-            self.nachbarn_namen = sorted([n['name'] for n in item.n])
+            self.nachbarn_namen = sorted([str(n['name']).strip() for n in item.n])
         except AttributeError:
             self.nachbarn_namen = []
         self.nachbarn = []
@@ -265,11 +265,15 @@ class Knoten:
 
         :return: self
         """
+
         try:
             self.enr = int(shape['enr'])
         except TypeError:
             self.enr = None
-        self.name = shape['name']
+        try:
+            self.name = str(shape['name']).strip()
+        except TypeError:
+            self.name = None
         try:
             self.typ = int(shape['type'])
         except TypeError:
@@ -357,20 +361,20 @@ class ZugDetails:
         :return: self
         """
         self.zid = int(zugdetails['zid'])
-        self.name = zugdetails['name']
+        self.name = str(zugdetails['name']).strip()
         try:
             self.verspaetung = int(zugdetails['verspaetung'])
         except TypeError:
             pass
-        self.gleis = zugdetails['gleis'] or self.gleis
-        self.plangleis = zugdetails['plangleis'] or self.plangleis
-        self.von = zugdetails['von']
-        self.nach = zugdetails['nach']
+        self.gleis = str(zugdetails['gleis']).strip() or self.gleis
+        self.plangleis = str(zugdetails['plangleis']).strip() or self.plangleis
+        self.von = str(zugdetails['von']).strip()
+        self.nach = str(zugdetails['nach']).strip()
         self.sichtbar = str(zugdetails['sichtbar']).lower() == 'true'
         self.amgleis = str(zugdetails['amgleis']).lower() == 'true'
-        self.usertext = zugdetails['usertext']
-        self.usertextsender = zugdetails['usertextsender']
-        self.hinweistext = zugdetails['hinweistext']
+        self.usertext = str(zugdetails['usertext'])
+        self.usertextsender = str(zugdetails['usertextsender'])
+        self.hinweistext = str(zugdetails['hinweistext'])
         return self
 
     @property
@@ -663,7 +667,8 @@ class Ereignis(ZugDetails):
         :return: self
         """
         super().update(ereignis)
-        self.art = ereignis['art']
+        self.art = str(ereignis['art'])
+
         return self
 
     def to_dict(self) -> Dict:
@@ -791,11 +796,11 @@ class FahrplanZeile:
             item = item.__dict__
 
         if isinstance(item, untangle.Element):
-            self.gleis = item['name']
+            self.gleis = str(item['name']).strip()
         else:
-            self.gleis = item['gleis']
+            self.gleis = str(item['gleis']).strip()
 
-        self.plan = item['plan']
+        self.plan = str(item['plan']).strip()
 
         try:
             if item['an'] is None or isinstance(item['an'], datetime.time):
@@ -813,8 +818,8 @@ class FahrplanZeile:
         except (TypeError, ValueError):
             self.ab = None
 
-        self.flags = item['flags']
-        self.hinweistext = item['hinweistext']
+        self.flags = str(item['flags']).strip()
+        self.hinweistext = str(item['hinweistext'])
 
         return self
 
