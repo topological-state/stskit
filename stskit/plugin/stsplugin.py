@@ -138,6 +138,8 @@ class PluginClient:
         self.wege_nach_typ: Dict[int, Set[Knoten]] = {}
         self.wege_nach_typ_namen: Dict[int, Dict[str, Knoten]] = {}
         self.wege_verbindungen: Set[Tuple[Union[int, str], Union[int, str]]] = set([])
+        self.fehlende_wege_knoten = set()
+        self.fehlende_wege_kanten = set()
         self.zugliste: Dict[int, ZugDetails] = {}
         self.zuggattungen: Set[str] = set()
 
@@ -368,6 +370,8 @@ class PluginClient:
         self.wege_nach_namen = {}
         self.wege_nach_typ = {typ: set([]) for typ in Knoten.TYP_NAME}
         self.wege_nach_typ_namen = {typ: {} for typ in Knoten.TYP_NAME}
+        self.fehlende_wege_knoten = set()
+        self.fehlende_wege_kanten = set()
 
         for shape in response.wege.shape:
             knoten = Knoten().update(shape)
@@ -401,12 +405,6 @@ class PluginClient:
                     continue
 
             try:
-                knoten1 = self.wege[key1]
-            except KeyError:
-                logger.warning(f"Nicht auflösbare Elementreferenz zu Knoten 1 von {connector}")
-                knoten1 = None
-
-            try:
                 key2 = int(connector['enr2'])
             except (KeyError, TypeError):
                 try:
@@ -416,9 +414,19 @@ class PluginClient:
                     continue
 
             try:
+                knoten1 = self.wege[key1]
+            except KeyError:
+                logger.warning(f"Nicht auflösbare Elementreferenz zu Knoten 1 von {connector}")
+                self.fehlende_wege_knoten.add(key1)
+                self.fehlende_wege_kanten.add((key1, key2))
+                knoten1 = None
+
+            try:
                 knoten2 = self.wege[key2]
             except KeyError:
                 logger.warning(f"Nicht auflösbare Elementreferenz zu Knoten 2 von {connector}")
+                self.fehlende_wege_knoten.add(key2)
+                self.fehlende_wege_kanten.add((key1, key2))
                 knoten2 = None
 
             if key1 and key2:
@@ -427,6 +435,9 @@ class PluginClient:
             if knoten1 is not None and knoten2 is not None:
                 knoten1.nachbarn.add(knoten2)
                 knoten2.nachbarn.add(knoten1)
+
+            logger.debug(f"Wege: Fehlende Knoten {self.fehlende_wege_knoten}")
+            logger.debug(f"Wege: Fehlende Kanten {self.fehlende_wege_kanten}")
 
     async def request_zugdetails(self, zid: Optional[Union[int, Iterable[int]]] = None):
         """
