@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.1.2
+
+### Features
+
+- Zugschema Italien: AV, RE, MXP, NCL, RID, INV-Züge
+
+### Closed issues
+
+- Bahnhofkonfiguration: Zuordnung von umbenannten Stammknoten korrekt speichern 
+- Führende oder folgende Leerzeichen von Gleisnamen entfernen (Stw Jemeppe)
+- Verbesserte Fehlertoleranz im Signalgraph-Import und im Gleisbelegungsfenster
+
+
 ## 2.1.1
 
 ### Features
