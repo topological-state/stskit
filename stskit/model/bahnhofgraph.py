@@ -144,7 +144,7 @@ class BahnsteigGraph(nx.Graph):
 
         for bs1 in bahnsteige:
             self.add_node(bs1.name, name=bs1.name, typ='Gl')
-            for bs2 in bs1.nachbarn:
+            for bs2 in bs1.nachbarn.values():
                 self.add_edge(bs1.name, bs2.name, typ='Nachbar', distanz=0)
 
 

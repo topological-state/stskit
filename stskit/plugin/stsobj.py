@@ -19,6 +19,7 @@ import numpy as np
 import re
 from typing import Any, Dict, Iterable, List, Mapping, NamedTuple, Optional, Set, Tuple, Union
 import untangle
+import weakref
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -143,14 +144,17 @@ class AnlagenInfo:
 
 class BahnsteigInfo:
     """
-    objektklasse für bahnsteiginformationen.
+    Objektklasse für Bahnsteiginformationen.
 
-    diese klasse entspricht dem xml-tag "bahnsteiginfo" mit eigenen ergänzungen.
+    Diese Klasse entspricht dem xml-Tag "bahnsteiginfo" mit Ergänzungen.
 
-    bemerkungen:
-    - in der liste 'zuege', führt der klient die züge, die den bahnsteig in ihrem fahrplan haben.
-    - die namen der nachbarbahnsteige wird in nachbar_namen gespeichert.
-      der klient löst die namen in objekte auf und speichert sie in nachbarn.
+    Bemerkungen
+    -----------
+
+    - Im Dictionary 'zuege', führt der PluginClient die Züge, die den Bahnsteig in ihrem Fahrplan haben
+      (disponiertes Gleis).
+    - Die Namen der Nachbarbahnsteige werden in `nachbar_namen` gespeichert.
+      Der PluglinClient löst die Namen in Objekte auf und speichert sie in `nachbarn`.
     """
 
     # xml-tagname
@@ -161,8 +165,8 @@ class BahnsteigInfo:
         self.name: str = ""
         self.haltepunkt: bool = False
         self.nachbarn_namen: List[str] = []
-        self.nachbarn: List['BahnsteigInfo'] = []
-        self.zuege: List['ZugDetails'] = []
+        self.nachbarn: weakref.WeakValueDictionary[str, 'BahnsteigInfo'] = weakref.WeakValueDictionary()
+        self.zuege: weakref.WeakValueDictionary[int, 'ZugDetails'] = weakref.WeakValueDictionary()
 
     def __str__(self) -> str:
         if self.haltepunkt:
@@ -175,19 +179,23 @@ class BahnsteigInfo:
 
     def update(self, item: untangle.Element) -> 'BahnsteigInfo':
         """
-        attributwerte vom xml-dokument übernehmen.
+        Attribute vom xml-dokument übernehmen.
 
-        :param item: dictionary mit den attributen aus dem xml-tag.
+        Die Namen der Nachbarbahnsteige werden in `nachbarn_namen` gespeichert.
+        Die `nachbarn` und `zuege` Attribute sind möglicherweise veraltet.
+
+        :param item: Dictionary mit den Attributen aus dem xml-Tag.
 
         :return: self
         """
+
         self.name = str(item['name']).strip()
         self.haltepunkt = str(item['haltepunkt']).lower() == 'true'
         try:
             self.nachbarn_namen = sorted([str(n['name']).strip() for n in item.n])
         except AttributeError:
             self.nachbarn_namen = []
-        self.nachbarn = []
+
         return self
 
 
@@ -242,8 +250,8 @@ class Knoten:
         self.enr: Optional[int] = None
         self.name: Optional[str] = None
         self.typ: int = 0
-        self.nachbarn: Set['Knoten'] = set()
-        self.zuege: List['ZugDetails'] = []
+        self.nachbarn: weakref.WeakValueDictionary[Union[int, str], 'Knoten'] = weakref.WeakValueDictionary()
+        self.zuege: weakref.WeakValueDictionary[int, 'ZugDetails'] = weakref.WeakValueDictionary()
 
     def __eq__(self, other: 'Knoten') -> bool:
         return self.key.__eq__(other.key)
@@ -716,10 +724,12 @@ class FahrplanZeile:
         self.flags: str = ""
         self.hinweistext: str = ""
 
-        # die nächsten drei attribute werden vom PluginClient anhand der flags aufgelöst.
-        self.ersatzzug: Optional[ZugDetails] = None
-        self.fluegelzug: Optional[ZugDetails] = None
-        self.kuppelzug: Optional[ZugDetails] = None
+        # Die nächsten drei Attribute werden vom PluginClient anhand der Flags aufgelöst.
+        # Lokal speichern wir Weak References.
+        # Daher nur via die entsprechenden öffentlichen Properties zugreifen!
+        self._ersatzzug: Optional[weakref.ReferenceType[ZugDetails]] = None
+        self._fluegelzug: Optional[weakref.ReferenceType[ZugDetails]] = None
+        self._kuppelzug: Optional[weakref.ReferenceType[ZugDetails]] = None
 
     @property
     def fid(self) -> FahrplanZeileID:
@@ -822,6 +832,48 @@ class FahrplanZeile:
         self.hinweistext = str(item['hinweistext'])
 
         return self
+
+    @property
+    def ersatzzug(self) -> Optional[ZugDetails]:
+        if self._ersatzzug is not None:
+            return self._ersatzzug()
+        else:
+            return None
+
+    @ersatzzug.setter
+    def ersatzzug(self, val: ZugDetails):
+        if val is not None:
+            self._ersatzzug = weakref.ref(val)
+        else:
+            self._ersatzzug = None
+
+    @property
+    def fluegelzug(self) -> Optional[ZugDetails]:
+        if self._fluegelzug is not None:
+            return self._fluegelzug()
+        else:
+            return None
+
+    @fluegelzug.setter
+    def fluegelzug(self, val: ZugDetails):
+        if val is not None:
+            self._fluegelzug = weakref.ref(val)
+        else:
+            self._fluegelzug = None
+
+    @property
+    def kuppelzug(self) -> Optional[ZugDetails]:
+        if self._kuppelzug is not None:
+            return self._kuppelzug()
+        else:
+            return None
+
+    @kuppelzug.setter
+    def kuppelzug(self, val: ZugDetails):
+        if val is not None:
+            self._kuppelzug = weakref.ref(val)
+        else:
+            self._kuppelzug = None
 
     def durchfahrt(self) -> bool:
         """

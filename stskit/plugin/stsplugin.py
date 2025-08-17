@@ -278,12 +278,14 @@ class PluginClient:
 
     async def request_bahnsteigliste(self):
         """
-        bahnsteigliste anfordern.
+        Bahnsteigliste anfordern.
 
-        die liste wird im bahnsteigliste-attribut gespeichert.
+        Die Liste wird im Attribut `bahnsteigliste` gespeichert.
+        Die Methode löst auch die `nachbarn` der Bahnsteige auf.
 
         :return: None
         """
+
         self.bahnsteigliste = {}
         await self._send_request("bahnsteigliste")
         response = await self._antwort_channel_out.receive()
@@ -292,8 +294,11 @@ class PluginClient:
             self.bahnsteigliste[bi.name] = bi
 
         for bahnsteig in self.bahnsteigliste.values():
-            bahnsteig.nachbarn = [self.bahnsteigliste[name] for name in bahnsteig.nachbarn_namen]
-            bahnsteig.nachbarn.sort(key=lambda b: b.name)
+            for name in bahnsteig.nachbarn_namen:
+                try:
+                    bahnsteig.nachbarn[name] = self.bahnsteigliste[name]
+                except KeyError:
+                    logger.warning(f"Nachbarbahnsteig {name} zu {bahnsteig.name} nicht in der Bahnsteigliste.")
 
     async def request_simzeit(self) -> datetime.datetime:
         """
@@ -433,8 +438,8 @@ class PluginClient:
                 self.wege_verbindungen.add((key1, key2))
 
             if knoten1 is not None and knoten2 is not None:
-                knoten1.nachbarn.add(knoten2)
-                knoten2.nachbarn.add(knoten1)
+                knoten1.nachbarn[knoten2.key] = knoten2
+                knoten2.nachbarn[knoten1.key] = knoten1
 
             logger.debug(f"Wege: Fehlende Knoten {self.fehlende_wege_knoten}")
             logger.debug(f"Wege: Fehlende Kanten {self.fehlende_wege_kanten}")
@@ -765,14 +770,17 @@ class PluginClient:
 
     def update_bahnsteig_zuege(self):
         """
-        züge in bahnsteigliste eintragen.
+        Züge in Bahnsteigliste eintragen.
 
-        im züge-attribut der bahnsteige werden die fahrplanmässig an dem bahnsteig vorbei kommenden züge aufgelistet.
+        Im `zuege`-attribut der Bahnsteige werden die an den Bahnsteig disponierten Züge aufgelistet.
+        `zuege` ist ein Dictionary und bildet zid auf ZugDetails ab.
+        Die ZugDetails sind weak References.
 
         :return: None
         """
+
         for bahnsteig in self.bahnsteigliste.values():
-            bahnsteig.zuege = []
+            bahnsteig.zuege.clear()
 
         for zid in self.zugliste.keys():
             zug = self.zugliste[zid]
@@ -782,11 +790,7 @@ class PluginClient:
                 except KeyError:
                     pass
                 else:
-                    bahnsteig.zuege.append(zug)
-
-        for bahnsteig in self.bahnsteigliste.values():
-            bahnsteig.zuege = sorted(set(bahnsteig.zuege),
-                                     key=zugsortierschluessel(bahnsteig.name, 'an', datetime.time()))
+                    bahnsteig.zuege[zid] = zug
 
     def update_wege_zuege(self):
         """
@@ -798,7 +802,7 @@ class PluginClient:
         :return: None
         """
         for knoten in self.wege.values():
-            knoten.zuege = []
+            knoten.zuege.clear()
 
         einfahrten = {knoten.name: knoten for knoten in self.wege_nach_typ[6]}
         ausfahrten = {knoten.name: knoten for knoten in self.wege_nach_typ[7]}
@@ -810,26 +814,18 @@ class PluginClient:
             zug = self.zugliste[zid]
 
             try:
-                einfahrten[zug.von].zuege.append(zug)
+                einfahrten[zug.von].zuege[zid] = zug
             except KeyError:
                 pass
             try:
-                ausfahrten[zug.nach].zuege.append(zug)
+                ausfahrten[zug.nach].zuege[zid] = zug
             except KeyError:
                 pass
             for fahrplanzeile in zug.fahrplan:
                 try:
-                    haltepunkte[fahrplanzeile.gleis].zuege.append(fahrplanzeile.gleis)
+                    haltepunkte[fahrplanzeile.gleis].zuege[zid] = zug
                 except KeyError:
                     pass
-
-        for knoten in self.wege.values():
-            if knoten.typ == 5 or knoten.typ == 12:
-                knoten.zuege = sorted(set(knoten.zuege), key=zugsortierschluessel(knoten.name, 'an', datetime.time()))
-            elif knoten.typ == 6:
-                knoten.zuege = sorted(set(knoten.zuege), key=einfahrt_sortierschluessel('an', datetime.time()))
-            elif knoten.typ == 7:
-                knoten.zuege = sorted(set(knoten.zuege), key=ausfahrt_sortierschluessel('an', datetime.time()))
 
 
 def zugsortierschluessel(gleis: str, attr: str, default: datetime.time) -> Callable:
@@ -951,12 +947,12 @@ async def test() -> PluginClient:
     print("\neinfahrten\n")
     for knoten in client.wege_nach_typ[6]:
         print(knoten)
-        print("  nachbarn: ", ", ".join(sorted((n.key for n in knoten.nachbarn))))
+        print("  nachbarn: ", ", ".join(sorted((n.key for n in knoten.nachbarn.values()))))
 
     print("\nausfahrten\n")
     for knoten in client.wege_nach_typ[7]:
         print(knoten)
-        print("  nachbarn: ", ", ".join(sorted((n.key for n in knoten.nachbarn))))
+        print("  nachbarn: ", ", ".join(sorted((n.key for n in knoten.nachbarn.values()))))
 
     print("\nzüge\n")
     for zid, zug in client.zugliste.items():

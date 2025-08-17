@@ -65,7 +65,7 @@ class SignalGraph(nx.DiGraph):
         for knoten1 in wege:
             if knoten1.key:
                 self.add_node(knoten1.key, typ=knoten1.typ, name=knoten1.name, enr=knoten1.enr)
-                for knoten2 in knoten1.nachbarn:
+                for knoten2 in knoten1.nachbarn.values():
                     self.add_edge(knoten1.key, knoten2.key, typ='verbindung', distanz=1)
 
         entfernen = set()
