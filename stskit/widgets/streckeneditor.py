@@ -376,7 +376,7 @@ class StreckenEditor(QObject):
 
         self.anlage_bst = sorted(self.anlage.bahnhofgraph.list_by_type({'Bf', 'Anst'}))
         self.anlage_strecken = {k: self.anlage.strecken.strecken[k] for k in self.anlage.strecken.strecken}
-        self.auto_strecken = {k for k in self.anlage.strecken.strecken if self.anlage.strecken.auto.get(k, True)}
+        self.auto_strecken = {k for k in self.anlage.strecken.strecken if self.anlage.strecken.auto.get(k, False)}
         self.alle_strecken = self.anlage_strecken.copy()
         self.ordnung = self.anlage.strecken.ordnung.copy()
         self.edited_strecken = set()
@@ -391,14 +391,13 @@ class StreckenEditor(QObject):
                 pass
 
     def save_to_anlage(self):
-        self.auto_strecken = self.auto_strecken - self.edited_strecken - self.deleted_strecken
-        for idx, strecke in enumerate(self.alle_strecken.items()):
-            name, stationen = strecke
-            if name and name not in self.auto_strecken:
-                if name not in self.deleted_strecken and len(stationen) >= 2:
-                    self.anlage.strecken.add_strecke(name, stationen, idx + 1, False)
-                else:
-                    self.anlage.strecken.remove_strecke(name)
+        for idx, name in enumerate(self.edited_strecken):
+            stationen = self.alle_strecken[name]
+            self.anlage.strecken.add_strecke(name, stationen, idx + 1, False)
+            self.auto_strecken.discard(name)
+        for name in self.deleted_strecken:
+            self.anlage.strecken.remove_strecke(name)
+            self.auto_strecken.discard(name)
 
         self.edited_strecken = set()
         self.deleted_strecken = set()
