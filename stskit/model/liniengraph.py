@@ -158,7 +158,8 @@ class LinienGraph(nx.Graph):
                 if laengste_fahrzeit > summe_fahrzeit - laengste_fahrzeit - len(schleife):
                     entfernen.add(laengste_kante)
                 else:
-                    logger.debug(f"symmetrische schleife {schleife}")
+                    schleifen_text = ", ".join((str(bst) for bst in schleife))
+                    logger.debug(f"symmetrische schleife {schleifen_text}")
 
         for u, v in entfernen:
             try:
