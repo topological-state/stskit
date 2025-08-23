@@ -409,9 +409,6 @@ class BahnhofEditor(QObject):
             self.agl_selection_changed)
         self.agl_table_model.dataChanged.connect(self.table_model_changed)
 
-        self.ui.dialog_button_box.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.apply_button_clicked)
-        self.ui.dialog_button_box.button(QtWidgets.QDialogButtonBox.Reset).clicked.connect(self.reset_button_clicked)
-
     def update_widgets(self):
         """
         Update the widgets based on the current state of the anlage
@@ -793,11 +790,3 @@ class BahnhofEditor(QObject):
             self.agl_table_filter.endResetModel()
         self.ui.agl_table_view.resizeColumnsToContents()
         self.ui.agl_table_view.resizeRowsToContents()
-
-    @Slot()
-    def apply_button_clicked(self):
-        self.apply()
-
-    @Slot()
-    def reset_button_clicked(self):
-        self.reset()

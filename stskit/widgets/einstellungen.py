@@ -59,6 +59,9 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
         self.ui.zugschema_details_table.setModel(self.zugschema_modell)
         self.ui.zugschema_name_combo.currentIndexChanged.connect(self.zugschema_changed)
 
+        self.ui.dialog_button_box.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.apply_button_clicked)
+        self.ui.dialog_button_box.button(QtWidgets.QDialogButtonBox.Reset).clicked.connect(self.reset_button_clicked)
+
         self.update_widgets()
         self.in_update = False
 
@@ -101,26 +104,30 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
             self.ui.zugschema_details_table.resizeColumnsToContents()
             self.ui.zugschema_details_table.resizeRowsToContents()
 
-    @Slot()
     def apply(self):
         self.bahnhof_editor.apply()
         self.strecken_editor.apply()
         self.anlage.zugschema.load_config(self.zugschema.name, self.anlage.anlageninfo.region)
         self.zentrale.notify_anlage({'zugschema', 'bahnhofgraph'})
 
-    @Slot()
     def accept(self):
         self.apply()
         self.close()
 
-    @Slot()
     def reset(self):
         self.bahnhof_editor.reset()
         self.strecken_editor.reset()
         self.zugschema.load_config(self.anlage.zugschema.name)
         self.zugschema_modell.update()
 
-    @Slot()
     def reject(self):
         self.reset()
         self.close()
+
+    @Slot()
+    def apply_button_clicked(self):
+        self.apply()
+
+    @Slot()
+    def reset_button_clicked(self):
+        self.reset()
