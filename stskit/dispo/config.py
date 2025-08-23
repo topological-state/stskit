@@ -131,9 +131,9 @@ class Config(UserDict):
 
         try:
             for bft, gleise in d['bahnsteiggruppen'].items():
-                bf = bft + "?"
+                bf = bft
                 for gl in gleise:
-                    if bft not in gleis_konfig:
+                    if bf not in gleis_konfig:
                         gleis_konfig[bf] = {bft: {}}
                     bs = _find_sektor(gl, sektoren)
                     if not bs:
@@ -159,15 +159,15 @@ class Config(UserDict):
             for bft, bft_dict in bf_dict.items():
                 for bs, bs_set in bft_dict.items():
                     for gl in bs_set:
-                        elemente[BahnhofElement('Bf', bf)] = {"name": bf, "typ": "Bf", "visible": True, "flags": "", "auto": False}
-                        elemente[BahnhofElement('Bft', bft)] = {"name": bft, "typ": "Bft", "parent": bf, "visible": True, "flags": "", "auto": False}
-                        elemente[BahnhofElement('Bs', bs)] = {"name": bs, "typ": "Bs", "parent": bft, "visible": True, "flags": "", "auto": False}
-                        elemente[BahnhofElement('Gl', gl)] = {"name": gl, "typ": "Gl", "parent": bs, "visible": True, "flags": "", "auto": False}
+                        elemente[BahnhofElement('Bf', bf)] = {"name": bf, "typ": "Bf", "sichtbar": True, "flags": "", "auto": False}
+                        elemente[BahnhofElement('Bft', bft)] = {"name": bft, "typ": "Bft", "stamm": bf, "sichtbar": True, "flags": "", "auto": False}
+                        elemente[BahnhofElement('Bs', bs)] = {"name": bs, "typ": "Bs", "stamm": bft, "sichtbar": True, "flags": "", "auto": False}
+                        elemente[BahnhofElement('Gl', gl)] = {"name": gl, "typ": "Gl", "stamm": bs, "sichtbar": True, "flags": "", "auto": False}
 
         for anst, anst_set in anschluss_konfig.items():
             for agl in anst_set:
-                elemente[BahnhofElement("Anst", anst)] = {"name": anst, "typ": "Anst", "visible": True, "flags": "", "auto": False}
-                elemente[BahnhofElement("Agl", agl)] = {"name": agl, "typ": "Agl", "parent": anst, "visible": True, "flags": "", "auto": False}
+                elemente[BahnhofElement("Anst", anst)] = {"name": anst, "typ": "Anst", "sichtbar": True, "flags": "", "auto": False}
+                elemente[BahnhofElement("Agl", agl)] = {"name": agl, "typ": "Agl", "stamm": anst, "sichtbar": True, "flags": "", "auto": False}
 
         self.data['elemente'] = elemente.values()
 
