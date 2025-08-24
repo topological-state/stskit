@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.1.3
+
+### Features
+
+
+### Closed issues
+
+- Bahnhofkonfiguration: Konfiguration aus alter Version (1.x) korrekt einlesen
+- Streckeneditor: Apply- und Reset-Buttons aktivieren
+- Streckeneditor: Automatik-Flag von bearbeiteten und gelöschten Strecken entfernen
+
+
 ## 2.1.2
 
 ### Features
