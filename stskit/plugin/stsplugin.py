@@ -108,6 +108,18 @@ class PluginClient:
         Der Dict enthält Sets von Knoten-objekten.
     wege_verbindungen: Set von Zweiertuples Knoten.key mit den Verbindungen zwischen Knoten.
         Kann als Kantenliste für den Aufbau von Graphen verwendet werden.
+        Achtung: Es kann Kanten geben, deren Endpunkt in `wege` keinen Knoten haben, s. `fehlende_wege_knoten`.
+
+    fehlende_wege_knoten: Set von Wegeknoten, die in einer `wege_verbindungen` vorkommen,
+        aber in `wege` nicht erfasst sind.
+        Gewisse Rangiersignale aus Einfahrten (Beispiele S210, S289, S308, S218 in Bozen) haben keinen Knoten,
+        d.h. wir können ihren Typ und Namen nicht ermitteln.
+        Diese Signale fehlen dann auch im Signalgraph.
+        Aktuell sollte dies aber kein Problem darstellen.
+    fehlende_wege_kanten: Set von Verbindungen analog `wege_verbindungen`,
+        von denen mindestens ein Endpunkt in `wege` nicht erfasst ist.
+        Der entsprechende Endpunkt ist in `fehlende_wege_knoten` eingetragen.
+        Die nicht aufgelösten Kanten sind trotzdem in `wege_verbindungen` enthalten.
 
     Verwendung
     ----------
@@ -137,9 +149,9 @@ class PluginClient:
         self.wege_nach_namen: Dict[str, Set[Knoten]] = {}
         self.wege_nach_typ: Dict[int, Set[Knoten]] = {}
         self.wege_nach_typ_namen: Dict[int, Dict[str, Knoten]] = {}
-        self.wege_verbindungen: Set[Tuple[Union[int, str], Union[int, str]]] = set([])
-        self.fehlende_wege_knoten = set()
-        self.fehlende_wege_kanten = set()
+        self.wege_verbindungen: Set[Tuple[Union[int, str], Union[int, str]]] = set()
+        self.fehlende_wege_knoten: Set[Union[int, str]] = set()
+        self.fehlende_wege_kanten: Set[Tuple[Union[int, str], Union[int, str]]] = set()
         self.zugliste: Dict[int, ZugDetails] = {}
         self.zuggattungen: Set[str] = set()
 
@@ -358,12 +370,18 @@ class PluginClient:
         - je nach Typ - entweder die enr oder den Namen.
 
         Die methode aktualisiert folgende Attribute:
-        wege, wege_nach_enr, wege_nach_namen, wege_nach_typ, wege_verbindungen.
+        wege, wege_nach_enr, wege_nach_namen, wege_nach_typ, wege_verbindungen,
+        fehlende_wege_knoten, fehlende_wege_kanten.
 
         Bemerkungen
         -----------
 
         - Teilweise fehlen wichtige Gleisverbindungen in dem Graphen, z.B. von Anschlüssen ans Gleisnetz.
+
+        - Rangiersignale aus Einfahrten (Beispiele S210, S289, S308, S218 in Bozen) haben keinen Knoten,
+          werden aber in Kanten referenziert.
+          Wir geben in diesem Fall eine Info-Meldung 'Nicht auflösbare Elementreferenz' ins Log
+          und schreiben die Verbindung und Referenz in die fehlende_wege_knoten- und fehlende_wege_kanten-Listen.
 
         :return: None
         """
@@ -421,7 +439,7 @@ class PluginClient:
             try:
                 knoten1 = self.wege[key1]
             except KeyError:
-                logger.warning(f"Nicht auflösbare Elementreferenz zu Knoten 1 von {connector}")
+                logger.info(f"Nicht auflösbare Elementreferenz zu Knoten 1 von {connector}")
                 self.fehlende_wege_knoten.add(key1)
                 self.fehlende_wege_kanten.add((key1, key2))
                 knoten1 = None
@@ -429,7 +447,7 @@ class PluginClient:
             try:
                 knoten2 = self.wege[key2]
             except KeyError:
-                logger.warning(f"Nicht auflösbare Elementreferenz zu Knoten 2 von {connector}")
+                logger.info(f"Nicht auflösbare Elementreferenz zu Knoten 2 von {connector}")
                 self.fehlende_wege_knoten.add(key2)
                 self.fehlende_wege_kanten.add((key1, key2))
                 knoten2 = None
@@ -441,8 +459,8 @@ class PluginClient:
                 knoten1.nachbarn[knoten2.key] = knoten2
                 knoten2.nachbarn[knoten1.key] = knoten1
 
-            logger.debug(f"Wege: Fehlende Knoten {self.fehlende_wege_knoten}")
-            logger.debug(f"Wege: Fehlende Kanten {self.fehlende_wege_kanten}")
+        logger.info(f"Wege: Fehlende Knoten {self.fehlende_wege_knoten}")
+        logger.info(f"Wege: Fehlende Kanten {self.fehlende_wege_kanten}")
 
     async def request_zugdetails(self, zid: Optional[Union[int, Iterable[int]]] = None):
         """
