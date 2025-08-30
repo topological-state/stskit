@@ -392,7 +392,11 @@ class StreckenEditor(QObject):
 
     def save_to_anlage(self):
         for idx, name in enumerate(self.edited_strecken):
-            stationen = self.alle_strecken[name]
+            try:
+                stationen = self.alle_strecken[name]
+            except KeyError:
+                self.deleted_strecken.add(name)
+                continue
             self.anlage.strecken.add_strecke(name, stationen, idx + 1, False)
             self.auto_strecken.discard(name)
         for name in self.deleted_strecken:
