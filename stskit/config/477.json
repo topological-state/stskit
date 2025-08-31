@@ -1,187 +1,1318 @@
 {
-    "_aid": 477,
-    "_build": 5847,
-    "_name": "Gen\u00e8ve",
-    "_region": "Westschweiz",
-    "_version": 2,
-    "anschlussgruppen": {
-        "ANN": {
-            "__class__": "Set",
-            "data": [
-                "ANN 286",
-                "ANN 186"
-            ]
-        },
-        "Depot C": {
-            "__class__": "Set",
-            "data": [
-                "Depot C"
-            ]
-        },
-        "Feld B": {
-            "__class__": "Set",
-            "data": [
-                "Feld B"
-            ]
-        },
-        "Feld C": {
-            "__class__": "Set",
-            "data": [
-                "Feld C"
-            ]
-        },
-        "Feld H": {
-            "__class__": "Set",
-            "data": [
-                "Feld H"
-            ]
-        },
-        "GEPR": {
-            "__class__": "Set",
-            "data": [
-                "GEPR 55",
-                "GEPR 53",
-                "GEPR 3",
-                "GEPR 4"
-            ]
-        },
-        "VMC": {
-            "__class__": "Set",
-            "data": [
-                "VMC 786",
-                "VMC 686"
-            ]
-        },
-        "VSX": {
-            "__class__": "Set",
-            "data": [
-                "VSX 240",
-                "VSX 340",
-                "VSX 140"
-            ]
-        }
+  "default": false,
+  "elemente": [
+    {
+      "name": "CABA",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "CABA": {
-            "__class__": "Set",
-            "data": [
-                "CABA"
-            ]
-        },
-        "CHEB": {
-            "__class__": "Set",
-            "data": [
-                "CHEB"
-            ]
-        },
-        "CHHO": {
-            "__class__": "Set",
-            "data": [
-                "CHHO"
-            ]
-        },
-        "CHNE": {
-            "__class__": "Set",
-            "data": [
-                "CHNE"
-            ]
-        },
-        "GE": {
-            "__class__": "Set",
-            "data": [
-                "GE 5",
-                "GE 3",
-                "GE 6",
-                "GE 8",
-                "GE 4",
-                "GE 7",
-                "GE 1",
-                "GE 2"
-            ]
-        },
-        "GEAP": {
-            "__class__": "Set",
-            "data": [
-                "GEAP 2",
-                "GEAP 1",
-                "GEAP 4",
-                "GEAP 3"
-            ]
-        },
-        "GEBC": {
-            "__class__": "Set",
-            "data": [
-                "B 02",
-                "B 03",
-                "B 01",
-                "C 08"
-            ]
-        },
-        "GESE": {
-            "__class__": "Set",
-            "data": [
-                "GESE"
-            ]
-        },
-        "GEV": {
-            "__class__": "Set",
-            "data": [
-                "GEV 1",
-                "GEV 2"
-            ]
-        },
-        "LAPR": {
-            "__class__": "Set",
-            "data": [
-                "LAPR 2",
-                "LAPR 1"
-            ]
-        }
+    {
+      "name": "CHEB",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "VSX-ANN",
-    "sektoren": {},
-    "strecken": {
-        "ANN-VSX": [
-            "ANN",
-            "CHEB",
-            "GEV",
-            "CHHO",
-            "CABA",
-            "LAPR",
-            "GE",
-            "GEBC",
-            "GESE",
-            "VSX"
-        ],
-        "GEAP-VSX": [
-            "GEAP",
-            "CHNE",
-            "GE",
-            "GEBC",
-            "GESE",
-            "VSX"
-        ],
-        "VMC-VSX": [
-            "VMC",
-            "CHNE",
-            "GE",
-            "GEBC",
-            "GESE",
-            "VSX"
-        ],
-        "VSX-ANN": [
-            "VSX",
-            "GESE",
-            "GE",
-            "LAPR",
-            "CABA",
-            "CHHO",
-            "GEV",
-            "CHEB",
-            "ANN"
-        ]
+    {
+      "name": "CHHO",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": [],
-    "zugschema": "schweiz"
+    {
+      "name": "COI",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GE",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GEAP",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GEPR",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GESE",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GEV",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LAPR",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LP",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "RUS",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SY",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "VM",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "VMC",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZIM",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "145",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "145",
+      "gleise": 1
+    },
+    {
+      "name": "145",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "145",
+      "gleise": 1
+    },
+    {
+      "name": "CABA",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CABA"
+    },
+    {
+      "name": "CABA",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CABA",
+      "gleise": 1
+    },
+    {
+      "name": "CABA",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CABA",
+      "gleise": 1
+    },
+    {
+      "name": "CHEB",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHEB"
+    },
+    {
+      "name": "CHEB",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHEB",
+      "gleise": 1
+    },
+    {
+      "name": "CHEB",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHEB",
+      "gleise": 1
+    },
+    {
+      "name": "CHHO",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHHO"
+    },
+    {
+      "name": "CHHO",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHHO",
+      "gleise": 1
+    },
+    {
+      "name": "CHHO",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHHO",
+      "gleise": 1
+    },
+    {
+      "name": "COI",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COI"
+    },
+    {
+      "name": "COI",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COI",
+      "gleise": 1
+    },
+    {
+      "name": "COI",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COI",
+      "gleise": 1
+    },
+    {
+      "name": "145",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE"
+    },
+    {
+      "name": "GE 10",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE"
+    },
+    {
+      "name": "GE 658",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE"
+    },
+    {
+      "name": "GE",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE"
+    },
+    {
+      "name": "GE 5",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 5",
+      "gleise": 1
+    },
+    {
+      "name": "GE 1",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 1",
+      "gleise": 1
+    },
+    {
+      "name": "GE 2",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 2",
+      "gleise": 1
+    },
+    {
+      "name": "GE 4",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 4",
+      "gleise": 1
+    },
+    {
+      "name": "GE 6",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 6",
+      "gleise": 1
+    },
+    {
+      "name": "GE 3",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 3",
+      "gleise": 1
+    },
+    {
+      "name": "GE 7",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 7",
+      "gleise": 1
+    },
+    {
+      "name": "GE 10",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 10",
+      "gleise": 1
+    },
+    {
+      "name": "GE 10",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 10",
+      "gleise": 1
+    },
+    {
+      "name": "GE 101",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 101",
+      "gleise": 1
+    },
+    {
+      "name": "GE 658",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 658",
+      "gleise": 1
+    },
+    {
+      "name": "GE 103",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 103",
+      "gleise": 1
+    },
+    {
+      "name": "GE 102",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 102",
+      "gleise": 1
+    },
+    {
+      "name": "GEAP",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEAP"
+    },
+    {
+      "name": "GEAP 2",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEAP 2",
+      "gleise": 1
+    },
+    {
+      "name": "GEAP 1",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEAP 1",
+      "gleise": 1
+    },
+    {
+      "name": "GEAP 3",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEAP 3",
+      "gleise": 1
+    },
+    {
+      "name": "GEAP 4",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEAP 4",
+      "gleise": 1
+    },
+    {
+      "name": "GEPR 3",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR"
+    },
+    {
+      "name": "GEPR 55",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR"
+    },
+    {
+      "name": "GEPR 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR 3",
+      "gleise": 1
+    },
+    {
+      "name": "GEPR 4",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR 3",
+      "gleise": 1
+    },
+    {
+      "name": "GEPR 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR 3",
+      "gleise": 1
+    },
+    {
+      "name": "GEPR 4",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR 4",
+      "gleise": 1
+    },
+    {
+      "name": "GEPR 55",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR 55",
+      "gleise": 1
+    },
+    {
+      "name": "GEPR 53",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR 55",
+      "gleise": 1
+    },
+    {
+      "name": "GEPR 55",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR 55",
+      "gleise": 1
+    },
+    {
+      "name": "GEPR 53",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR 53",
+      "gleise": 1
+    },
+    {
+      "name": "GESE",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GESE"
+    },
+    {
+      "name": "GESE",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GESE",
+      "gleise": 1
+    },
+    {
+      "name": "GESE",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GESE",
+      "gleise": 1
+    },
+    {
+      "name": "GEV",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEV"
+    },
+    {
+      "name": "GEV 1",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEV 1",
+      "gleise": 1
+    },
+    {
+      "name": "GEV 2",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEV 2",
+      "gleise": 1
+    },
+    {
+      "name": "LAPR",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LAPR"
+    },
+    {
+      "name": "LAPR 1",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LAPR 1",
+      "gleise": 1
+    },
+    {
+      "name": "LAPR 2",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LAPR 2",
+      "gleise": 1
+    },
+    {
+      "name": "LP 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LP"
+    },
+    {
+      "name": "LP 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LP 2",
+      "gleise": 1
+    },
+    {
+      "name": "LP 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LP 2",
+      "gleise": 1
+    },
+    {
+      "name": "LP 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LP 2",
+      "gleise": 1
+    },
+    {
+      "name": "LP 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LP 2",
+      "gleise": 1
+    },
+    {
+      "name": "LP 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LP 1",
+      "gleise": 1
+    },
+    {
+      "name": "LP 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LP 3",
+      "gleise": 1
+    },
+    {
+      "name": "RUS",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RUS"
+    },
+    {
+      "name": "RUS",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RUS",
+      "gleise": 1
+    },
+    {
+      "name": "RUS",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RUS",
+      "gleise": 1
+    },
+    {
+      "name": "SY",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SY"
+    },
+    {
+      "name": "SY",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SY",
+      "gleise": 1
+    },
+    {
+      "name": "SY",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SY",
+      "gleise": 1
+    },
+    {
+      "name": "VM",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VM"
+    },
+    {
+      "name": "VM",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VM",
+      "gleise": 1
+    },
+    {
+      "name": "VM",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VM",
+      "gleise": 1
+    },
+    {
+      "name": "VMC 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VMC"
+    },
+    {
+      "name": "VMC 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VMC 2",
+      "gleise": 1
+    },
+    {
+      "name": "VMC 4",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VMC 2",
+      "gleise": 1
+    },
+    {
+      "name": "VMC 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VMC 2",
+      "gleise": 1
+    },
+    {
+      "name": "VMC 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VMC 2",
+      "gleise": 1
+    },
+    {
+      "name": "VMC 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VMC 2",
+      "gleise": 1
+    },
+    {
+      "name": "VMC 4",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VMC 4",
+      "gleise": 1
+    },
+    {
+      "name": "VMC 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VMC 3",
+      "gleise": 1
+    },
+    {
+      "name": "VMC 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VMC 1",
+      "gleise": 1
+    },
+    {
+      "name": "ZIM",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZIM"
+    },
+    {
+      "name": "ZIM",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZIM",
+      "gleise": 1
+    },
+    {
+      "name": "ZIM",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZIM",
+      "gleise": 1
+    },
+    {
+      "name": "145",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GEPR",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "VMC",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "CHY",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "104-105",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "611-618",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "661-667",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "501-508",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "108-114",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BELG",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ANN",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "145",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "145",
+      "gleise": 1
+    },
+    {
+      "name": "GEPR 3",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR",
+      "gleise": 1
+    },
+    {
+      "name": "GEPR 4",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR",
+      "gleise": 1
+    },
+    {
+      "name": "GEPR 53",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR",
+      "gleise": 1
+    },
+    {
+      "name": "GEPR 55",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEPR",
+      "gleise": 1
+    },
+    {
+      "name": "VMC 3",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VMC",
+      "gleise": 1
+    },
+    {
+      "name": "VMC 4",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VMC",
+      "gleise": 1
+    },
+    {
+      "name": "CHY 243",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHY",
+      "gleise": 1
+    },
+    {
+      "name": "CHY 343",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHY",
+      "gleise": 1
+    },
+    {
+      "name": "CHY 443",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHY",
+      "gleise": 1
+    },
+    {
+      "name": "104-105",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "104-105",
+      "gleise": 1
+    },
+    {
+      "name": "611-618",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "611-618",
+      "gleise": 1
+    },
+    {
+      "name": "661-667",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "661-667",
+      "gleise": 1
+    },
+    {
+      "name": "501-508",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "501-508",
+      "gleise": 1
+    },
+    {
+      "name": "108-114",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "108-114",
+      "gleise": 1
+    },
+    {
+      "name": "BELG 574",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BELG",
+      "gleise": 1
+    },
+    {
+      "name": "BELG 674",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BELG",
+      "gleise": 1
+    },
+    {
+      "name": "ANN 186",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ANN",
+      "gleise": 1
+    },
+    {
+      "name": "ANN 286",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ANN",
+      "gleise": 1
+    },
+    {
+      "name": "GE 101",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 658",
+      "gleise": 1
+    },
+    {
+      "name": "GE 658",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 658",
+      "gleise": 1
+    },
+    {
+      "name": "GE 103",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 658",
+      "gleise": 1
+    },
+    {
+      "name": "GE 102",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE 658",
+      "gleise": 1
+    },
+    {
+      "name": "GE 5",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE",
+      "gleise": 1
+    },
+    {
+      "name": "GE 1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE",
+      "gleise": 1
+    },
+    {
+      "name": "GE 2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE",
+      "gleise": 1
+    },
+    {
+      "name": "GE 4",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE",
+      "gleise": 1
+    },
+    {
+      "name": "GE 6",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE",
+      "gleise": 1
+    },
+    {
+      "name": "GE 3",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE",
+      "gleise": 1
+    },
+    {
+      "name": "GE 7",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE",
+      "gleise": 1
+    },
+    {
+      "name": "GEAP 2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEAP",
+      "gleise": 1
+    },
+    {
+      "name": "GEAP 1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEAP",
+      "gleise": 1
+    },
+    {
+      "name": "GEAP 3",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEAP",
+      "gleise": 1
+    },
+    {
+      "name": "GEAP 4",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEAP",
+      "gleise": 1
+    },
+    {
+      "name": "GEV 1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEV",
+      "gleise": 1
+    },
+    {
+      "name": "GEV 2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GEV",
+      "gleise": 1
+    },
+    {
+      "name": "LAPR 1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LAPR",
+      "gleise": 1
+    },
+    {
+      "name": "LAPR 2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LAPR",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "BELG-CHY",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst BELG",
+        "Bf LP",
+        "Bf RUS",
+        "Bf SY",
+        "Bf ZIM",
+        "Bf VM",
+        "Bf VMC",
+        "Bf COI",
+        "Bf GE",
+        "Bf GESE",
+        "Anst CHY"
+      ]
+    },
+    {
+      "name": "ANN-CHY",
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst ANN",
+        "Bf CHEB",
+        "Bf GEV",
+        "Bf CHHO",
+        "Bf CABA",
+        "Anst GEPR",
+        "Bf LAPR",
+        "Bf GE",
+        "Bf GESE",
+        "Anst CHY"
+      ]
+    },
+    {
+      "name": "GEAP-CHY",
+      "ordnung": 3,
+      "auto": false,
+      "stationen": [
+        "Bf GEAP",
+        "Bf GE",
+        "Bf GESE",
+        "Anst CHY"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 477,
+  "_build": 5851,
+  "_name": "Genève",
+  "_region": "Westschweiz",
+  "_version": 3
 }

@@ -1,0 +1,2460 @@
+{
+  "default": true,
+  "elemente": [
+    {
+      "name": "BRW",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BRZ",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BRZW",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "DAE",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EBLI",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FS",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "IO",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "IW",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KH",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LSS",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MBI",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "NR",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "OAB",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "RIN",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SP",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SP Depot",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WILD",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZWEI",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BRW",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRW"
+    },
+    {
+      "name": "BRW 2",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRW 2",
+      "gleise": 1
+    },
+    {
+      "name": "BRW 72",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRW 2",
+      "gleise": 1
+    },
+    {
+      "name": "BRW 3",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRW 3",
+      "gleise": 1
+    },
+    {
+      "name": "BRW 73",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRW 3",
+      "gleise": 1
+    },
+    {
+      "name": "BRZ 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZ"
+    },
+    {
+      "name": "BRZ 12",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZ"
+    },
+    {
+      "name": "BRZ 92",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZ"
+    },
+    {
+      "name": "BRZ 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZ 2",
+      "gleise": 1
+    },
+    {
+      "name": "BRZ 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZ 2",
+      "gleise": 1
+    },
+    {
+      "name": "BRZ 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZ 2",
+      "gleise": 1
+    },
+    {
+      "name": "BRZ 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZ 1",
+      "gleise": 1
+    },
+    {
+      "name": "BRZ 12",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZ 12",
+      "gleise": 1
+    },
+    {
+      "name": "BRZ 12",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZ 12",
+      "gleise": 1
+    },
+    {
+      "name": "BRZ 92",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZ 92",
+      "gleise": 1
+    },
+    {
+      "name": "BRZ 92",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZ 92",
+      "gleise": 1
+    },
+    {
+      "name": "BRZW",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZW"
+    },
+    {
+      "name": "BRZW",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZW",
+      "gleise": 1
+    },
+    {
+      "name": "BRZW",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRZW",
+      "gleise": 1
+    },
+    {
+      "name": "DAE 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAE"
+    },
+    {
+      "name": "DAE 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAE 2",
+      "gleise": 1
+    },
+    {
+      "name": "DAE 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAE 2",
+      "gleise": 1
+    },
+    {
+      "name": "DAE 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAE 2",
+      "gleise": 1
+    },
+    {
+      "name": "DAE 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAE 1",
+      "gleise": 1
+    },
+    {
+      "name": "EBLI",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBLI"
+    },
+    {
+      "name": "EBLI",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBLI",
+      "gleise": 1
+    },
+    {
+      "name": "EBLI",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBLI",
+      "gleise": 1
+    },
+    {
+      "name": "FS",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FS"
+    },
+    {
+      "name": "FS",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FS",
+      "gleise": 1
+    },
+    {
+      "name": "FS",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FS",
+      "gleise": 1
+    },
+    {
+      "name": "IO 8",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO"
+    },
+    {
+      "name": "IO 15",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO"
+    },
+    {
+      "name": "IO 35",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO"
+    },
+    {
+      "name": "IO 435",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO"
+    },
+    {
+      "name": "IO 8",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 96",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 5",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 4",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 6",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 7",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 81",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 68",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 10",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 8",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 8",
+      "gleise": 1
+    },
+    {
+      "name": "IO 96",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 96",
+      "gleise": 1
+    },
+    {
+      "name": "IO 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 1",
+      "gleise": 1
+    },
+    {
+      "name": "IO 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 3",
+      "gleise": 1
+    },
+    {
+      "name": "IO 5",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 5",
+      "gleise": 1
+    },
+    {
+      "name": "IO 5 kurz",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 5",
+      "gleise": 1
+    },
+    {
+      "name": "IO 4",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 4",
+      "gleise": 1
+    },
+    {
+      "name": "IO 6",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 6",
+      "gleise": 1
+    },
+    {
+      "name": "IO 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 2",
+      "gleise": 1
+    },
+    {
+      "name": "IO 7",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 7",
+      "gleise": 1
+    },
+    {
+      "name": "IO 81",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 81",
+      "gleise": 1
+    },
+    {
+      "name": "IO 68",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 68",
+      "gleise": 1
+    },
+    {
+      "name": "IO 10",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 10",
+      "gleise": 1
+    },
+    {
+      "name": "IO 15",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 15",
+      "gleise": 1
+    },
+    {
+      "name": "IO 15",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 15",
+      "gleise": 1
+    },
+    {
+      "name": "IO 35",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 35",
+      "gleise": 1
+    },
+    {
+      "name": "IO 35",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 35",
+      "gleise": 1
+    },
+    {
+      "name": "IO 435",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 435",
+      "gleise": 1
+    },
+    {
+      "name": "IO 437",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 435",
+      "gleise": 1
+    },
+    {
+      "name": "IO 433",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 435",
+      "gleise": 1
+    },
+    {
+      "name": "IO 436",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 435",
+      "gleise": 1
+    },
+    {
+      "name": "IO 434",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 435",
+      "gleise": 1
+    },
+    {
+      "name": "IO 432",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 435",
+      "gleise": 1
+    },
+    {
+      "name": "IO 435",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 435",
+      "gleise": 1
+    },
+    {
+      "name": "IO 437",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 437",
+      "gleise": 1
+    },
+    {
+      "name": "IO 433",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 433",
+      "gleise": 1
+    },
+    {
+      "name": "IO 436",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 436",
+      "gleise": 1
+    },
+    {
+      "name": "IO 434",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 434",
+      "gleise": 1
+    },
+    {
+      "name": "IO 432",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO 432",
+      "gleise": 1
+    },
+    {
+      "name": "IW 1",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IW"
+    },
+    {
+      "name": "IW 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IW 1",
+      "gleise": 1
+    },
+    {
+      "name": "IW 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IW 1",
+      "gleise": 1
+    },
+    {
+      "name": "IW 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IW 1",
+      "gleise": 1
+    },
+    {
+      "name": "IW 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IW 2",
+      "gleise": 1
+    },
+    {
+      "name": "KH 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KH"
+    },
+    {
+      "name": "KH 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KH 2",
+      "gleise": 1
+    },
+    {
+      "name": "KH 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KH 2",
+      "gleise": 1
+    },
+    {
+      "name": "KH 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KH 2",
+      "gleise": 1
+    },
+    {
+      "name": "KH 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KH 1",
+      "gleise": 1
+    },
+    {
+      "name": "LSS 3",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LSS"
+    },
+    {
+      "name": "LSS 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LSS 3",
+      "gleise": 1
+    },
+    {
+      "name": "LSS 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LSS 3",
+      "gleise": 1
+    },
+    {
+      "name": "LSS 4",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LSS 3",
+      "gleise": 1
+    },
+    {
+      "name": "LSS 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LSS 3",
+      "gleise": 1
+    },
+    {
+      "name": "LSS 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LSS 2",
+      "gleise": 1
+    },
+    {
+      "name": "LSS 4",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LSS 4",
+      "gleise": 1
+    },
+    {
+      "name": "MBI 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MBI"
+    },
+    {
+      "name": "MBI 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MBI 2",
+      "gleise": 1
+    },
+    {
+      "name": "MBI 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MBI 2",
+      "gleise": 1
+    },
+    {
+      "name": "MBI 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MBI 2",
+      "gleise": 1
+    },
+    {
+      "name": "MBI 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MBI 1",
+      "gleise": 1
+    },
+    {
+      "name": "NR",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NR"
+    },
+    {
+      "name": "NR",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NR",
+      "gleise": 1
+    },
+    {
+      "name": "NR",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NR",
+      "gleise": 1
+    },
+    {
+      "name": "OAB 3",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OAB"
+    },
+    {
+      "name": "OAB 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OAB 3",
+      "gleise": 1
+    },
+    {
+      "name": "OAB 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OAB 3",
+      "gleise": 1
+    },
+    {
+      "name": "OAB 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OAB 3",
+      "gleise": 1
+    },
+    {
+      "name": "OAB 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OAB 2",
+      "gleise": 1
+    },
+    {
+      "name": "RIN 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RIN"
+    },
+    {
+      "name": "RIN 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RIN 2",
+      "gleise": 1
+    },
+    {
+      "name": "RIN 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RIN 2",
+      "gleise": 1
+    },
+    {
+      "name": "RIN 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RIN 2",
+      "gleise": 1
+    },
+    {
+      "name": "RIN 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RIN 3",
+      "gleise": 1
+    },
+    {
+      "name": "SP 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP"
+    },
+    {
+      "name": "SP 521",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP"
+    },
+    {
+      "name": "SP 581",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP"
+    },
+    {
+      "name": "SP 798",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP"
+    },
+    {
+      "name": "SP 573",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 5",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 16",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 572",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 552",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 4",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 571",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 551",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 342",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 550",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 574",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 573",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 573",
+      "gleise": 1
+    },
+    {
+      "name": "SP 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 2",
+      "gleise": 1
+    },
+    {
+      "name": "SP 5AB",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 5",
+      "gleise": 1
+    },
+    {
+      "name": "SP 5CD",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 5",
+      "gleise": 1
+    },
+    {
+      "name": "SP 16",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 16",
+      "gleise": 1
+    },
+    {
+      "name": "SP 572",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 572",
+      "gleise": 1
+    },
+    {
+      "name": "SP 552",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 552",
+      "gleise": 1
+    },
+    {
+      "name": "SP 4",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 4",
+      "gleise": 1
+    },
+    {
+      "name": "SP 571",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 571",
+      "gleise": 1
+    },
+    {
+      "name": "SP 551",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 551",
+      "gleise": 1
+    },
+    {
+      "name": "SP 342",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 342",
+      "gleise": 1
+    },
+    {
+      "name": "SP 550",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 550",
+      "gleise": 1
+    },
+    {
+      "name": "SP 574",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 574",
+      "gleise": 1
+    },
+    {
+      "name": "SP 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 3",
+      "gleise": 1
+    },
+    {
+      "name": "SP 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 1",
+      "gleise": 1
+    },
+    {
+      "name": "SP 521",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 521",
+      "gleise": 1
+    },
+    {
+      "name": "SP 510",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 521",
+      "gleise": 1
+    },
+    {
+      "name": "SP 322",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 521",
+      "gleise": 1
+    },
+    {
+      "name": "SP 521",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 521",
+      "gleise": 1
+    },
+    {
+      "name": "SP 510",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 510",
+      "gleise": 1
+    },
+    {
+      "name": "SP 322",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 322",
+      "gleise": 1
+    },
+    {
+      "name": "SP 581",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 581",
+      "gleise": 1
+    },
+    {
+      "name": "SP 582",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 581",
+      "gleise": 1
+    },
+    {
+      "name": "SP 581",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 581",
+      "gleise": 1
+    },
+    {
+      "name": "SP 582",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 582",
+      "gleise": 1
+    },
+    {
+      "name": "SP 798",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 798",
+      "gleise": 1
+    },
+    {
+      "name": "SP 798",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP 798",
+      "gleise": 1
+    },
+    {
+      "name": "SP Depot",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP Depot"
+    },
+    {
+      "name": "SP Depot",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP Depot",
+      "gleise": 1
+    },
+    {
+      "name": "SP Depot",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP Depot",
+      "gleise": 1
+    },
+    {
+      "name": "WILD 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WILD"
+    },
+    {
+      "name": "WILD 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WILD 2",
+      "gleise": 1
+    },
+    {
+      "name": "WILD 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WILD 2",
+      "gleise": 1
+    },
+    {
+      "name": "WILD 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WILD 2",
+      "gleise": 1
+    },
+    {
+      "name": "WILD 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WILD 1",
+      "gleise": 1
+    },
+    {
+      "name": "ZWEI 3",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI"
+    },
+    {
+      "name": "ZWEI 1",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI"
+    },
+    {
+      "name": "ZWEI 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI 3",
+      "gleise": 1
+    },
+    {
+      "name": "ZWEI 4",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI 3",
+      "gleise": 1
+    },
+    {
+      "name": "ZWEI 1 kurz",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI 1",
+      "gleise": 1
+    },
+    {
+      "name": "ZWEI 51",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI 1",
+      "gleise": 1
+    },
+    {
+      "name": "ZWEI 1",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI 1",
+      "gleise": 1
+    },
+    {
+      "name": "ZWEI 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI 3",
+      "gleise": 1
+    },
+    {
+      "name": "ZWEI 2",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI 2",
+      "gleise": 1
+    },
+    {
+      "name": "ZWEI 52",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI 2",
+      "gleise": 1
+    },
+    {
+      "name": "ZWEI 4",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI 4",
+      "gleise": 1
+    },
+    {
+      "name": "SP Depot",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "IO",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Depot BDB",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Meiringen",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "IW",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Umschlag",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wagenwäsche",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EIN",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wimmis",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MUE",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Grindelwald",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lauterbrunnen",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SP Depot",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SP Depot",
+      "gleise": 1
+    },
+    {
+      "name": "IO 431",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IO",
+      "gleise": 1
+    },
+    {
+      "name": "Depot BDB",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Depot BDB",
+      "gleise": 1
+    },
+    {
+      "name": "Meiringen",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Meiringen",
+      "gleise": 1
+    },
+    {
+      "name": "IW31",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IW",
+      "gleise": 1
+    },
+    {
+      "name": "IW23",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "IW",
+      "gleise": 1
+    },
+    {
+      "name": "Umschlag",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Umschlag",
+      "gleise": 1
+    },
+    {
+      "name": "Wagenwäsche",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wagenwäsche",
+      "gleise": 1
+    },
+    {
+      "name": "EIN 308",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EIN",
+      "gleise": 1
+    },
+    {
+      "name": "EIN 408",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EIN",
+      "gleise": 1
+    },
+    {
+      "name": "Wimmis",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wimmis",
+      "gleise": 1
+    },
+    {
+      "name": "MUE 102",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MUE",
+      "gleise": 1
+    },
+    {
+      "name": "MUE 202",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MUE",
+      "gleise": 1
+    },
+    {
+      "name": "Grindelwald",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Grindelwald",
+      "gleise": 1
+    },
+    {
+      "name": "Lauterbrunnen",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lauterbrunnen",
+      "gleise": 1
+    },
+    {
+      "name": "BRW 2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRW",
+      "gleise": 1
+    },
+    {
+      "name": "BRW 3",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRW",
+      "gleise": 1
+    },
+    {
+      "name": "ZWEI 1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI 1",
+      "gleise": 1
+    },
+    {
+      "name": "ZWEI 2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWEI 1",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "EIN-Grindelwald",
+      "ordnung": 100,
+      "auto": true,
+      "stationen": [
+        "Anst EIN",
+        "Bf SP",
+        "Bf FS",
+        "Bf KH",
+        "Bf LSS",
+        "Bf DAE",
+        "Bf IW",
+        "Bf IO",
+        "Bf MBI",
+        "Bf WILD",
+        "Bf ZWEI",
+        "Anst Grindelwald"
+      ]
+    },
+    {
+      "name": "EIN-Lauterbrunnen",
+      "ordnung": 101,
+      "auto": true,
+      "stationen": [
+        "Anst EIN",
+        "Bf SP",
+        "Bf FS",
+        "Bf KH",
+        "Bf LSS",
+        "Bf DAE",
+        "Bf IW",
+        "Bf IO",
+        "Bf MBI",
+        "Bf WILD",
+        "Bf ZWEI",
+        "Anst Lauterbrunnen"
+      ]
+    },
+    {
+      "name": "EIN-MUE",
+      "ordnung": 102,
+      "auto": true,
+      "stationen": [
+        "Anst EIN",
+        "Bf SP",
+        "Anst MUE"
+      ]
+    },
+    {
+      "name": "EIN-Meiringen",
+      "ordnung": 103,
+      "auto": true,
+      "stationen": [
+        "Anst EIN",
+        "Bf SP",
+        "Bf FS",
+        "Bf KH",
+        "Bf LSS",
+        "Bf DAE",
+        "Bf IW",
+        "Bf IO",
+        "Bf RIN",
+        "Bf NR",
+        "Bf OAB",
+        "Bf EBLI",
+        "Bf BRZW",
+        "Bf BRZ",
+        "Bf BRW",
+        "Anst Meiringen"
+      ]
+    },
+    {
+      "name": "EIN-Wimmis",
+      "ordnung": 105,
+      "auto": true,
+      "stationen": [
+        "Anst EIN",
+        "Bf SP",
+        "Anst Wimmis"
+      ]
+    },
+    {
+      "name": "Grindelwald-EIN",
+      "ordnung": 106,
+      "auto": true,
+      "stationen": [
+        "Anst Grindelwald",
+        "Bf ZWEI",
+        "Bf WILD",
+        "Bf MBI",
+        "Bf IO",
+        "Bf IW",
+        "Bf DAE",
+        "Bf LSS",
+        "Bf KH",
+        "Bf FS",
+        "Bf SP",
+        "Anst EIN"
+      ]
+    },
+    {
+      "name": "Grindelwald-Lauterbrunnen",
+      "ordnung": 107,
+      "auto": true,
+      "stationen": [
+        "Anst Grindelwald",
+        "Bf ZWEI",
+        "Anst Lauterbrunnen"
+      ]
+    },
+    {
+      "name": "Grindelwald-MUE",
+      "ordnung": 108,
+      "auto": true,
+      "stationen": [
+        "Anst Grindelwald",
+        "Bf ZWEI",
+        "Bf WILD",
+        "Bf MBI",
+        "Bf IO",
+        "Bf IW",
+        "Bf DAE",
+        "Bf LSS",
+        "Bf KH",
+        "Bf FS",
+        "Bf SP",
+        "Anst MUE"
+      ]
+    },
+    {
+      "name": "Grindelwald-Meiringen",
+      "ordnung": 109,
+      "auto": true,
+      "stationen": [
+        "Anst Grindelwald",
+        "Bf ZWEI",
+        "Bf WILD",
+        "Bf MBI",
+        "Bf IO",
+        "Bf RIN",
+        "Bf NR",
+        "Bf OAB",
+        "Bf EBLI",
+        "Bf BRZW",
+        "Bf BRZ",
+        "Bf BRW",
+        "Anst Meiringen"
+      ]
+    },
+    {
+      "name": "Grindelwald-Wimmis",
+      "ordnung": 111,
+      "auto": true,
+      "stationen": [
+        "Anst Grindelwald",
+        "Bf ZWEI",
+        "Bf WILD",
+        "Bf MBI",
+        "Bf IO",
+        "Bf IW",
+        "Bf DAE",
+        "Bf LSS",
+        "Bf KH",
+        "Bf FS",
+        "Bf SP",
+        "Anst Wimmis"
+      ]
+    },
+    {
+      "name": "Lauterbrunnen-EIN",
+      "ordnung": 112,
+      "auto": true,
+      "stationen": [
+        "Anst Lauterbrunnen",
+        "Bf ZWEI",
+        "Bf WILD",
+        "Bf MBI",
+        "Bf IO",
+        "Bf IW",
+        "Bf DAE",
+        "Bf LSS",
+        "Bf KH",
+        "Bf FS",
+        "Bf SP",
+        "Anst EIN"
+      ]
+    },
+    {
+      "name": "Lauterbrunnen-Grindelwald",
+      "ordnung": 113,
+      "auto": true,
+      "stationen": [
+        "Anst Lauterbrunnen",
+        "Bf ZWEI",
+        "Anst Grindelwald"
+      ]
+    },
+    {
+      "name": "Lauterbrunnen-MUE",
+      "ordnung": 114,
+      "auto": true,
+      "stationen": [
+        "Anst Lauterbrunnen",
+        "Bf ZWEI",
+        "Bf WILD",
+        "Bf MBI",
+        "Bf IO",
+        "Bf IW",
+        "Bf DAE",
+        "Bf LSS",
+        "Bf KH",
+        "Bf FS",
+        "Bf SP",
+        "Anst MUE"
+      ]
+    },
+    {
+      "name": "Lauterbrunnen-Meiringen",
+      "ordnung": 115,
+      "auto": true,
+      "stationen": [
+        "Anst Lauterbrunnen",
+        "Bf ZWEI",
+        "Bf WILD",
+        "Bf MBI",
+        "Bf IO",
+        "Bf RIN",
+        "Bf NR",
+        "Bf OAB",
+        "Bf EBLI",
+        "Bf BRZW",
+        "Bf BRZ",
+        "Bf BRW",
+        "Anst Meiringen"
+      ]
+    },
+    {
+      "name": "Lauterbrunnen-Wimmis",
+      "ordnung": 117,
+      "auto": true,
+      "stationen": [
+        "Anst Lauterbrunnen",
+        "Bf ZWEI",
+        "Bf WILD",
+        "Bf MBI",
+        "Bf IO",
+        "Bf IW",
+        "Bf DAE",
+        "Bf LSS",
+        "Bf KH",
+        "Bf FS",
+        "Bf SP",
+        "Anst Wimmis"
+      ]
+    },
+    {
+      "name": "MUE-EIN",
+      "ordnung": 118,
+      "auto": true,
+      "stationen": [
+        "Anst MUE",
+        "Bf SP",
+        "Anst EIN"
+      ]
+    },
+    {
+      "name": "MUE-Grindelwald",
+      "ordnung": 119,
+      "auto": true,
+      "stationen": [
+        "Anst MUE",
+        "Bf SP",
+        "Bf FS",
+        "Bf KH",
+        "Bf LSS",
+        "Bf DAE",
+        "Bf IW",
+        "Bf IO",
+        "Bf MBI",
+        "Bf WILD",
+        "Bf ZWEI",
+        "Anst Grindelwald"
+      ]
+    },
+    {
+      "name": "MUE-Lauterbrunnen",
+      "ordnung": 120,
+      "auto": true,
+      "stationen": [
+        "Anst MUE",
+        "Bf SP",
+        "Bf FS",
+        "Bf KH",
+        "Bf LSS",
+        "Bf DAE",
+        "Bf IW",
+        "Bf IO",
+        "Bf MBI",
+        "Bf WILD",
+        "Bf ZWEI",
+        "Anst Lauterbrunnen"
+      ]
+    },
+    {
+      "name": "MUE-Meiringen",
+      "ordnung": 121,
+      "auto": true,
+      "stationen": [
+        "Anst MUE",
+        "Bf SP",
+        "Bf FS",
+        "Bf KH",
+        "Bf LSS",
+        "Bf DAE",
+        "Bf IW",
+        "Bf IO",
+        "Bf RIN",
+        "Bf NR",
+        "Bf OAB",
+        "Bf EBLI",
+        "Bf BRZW",
+        "Bf BRZ",
+        "Bf BRW",
+        "Anst Meiringen"
+      ]
+    },
+    {
+      "name": "MUE-Wimmis",
+      "ordnung": 123,
+      "auto": true,
+      "stationen": [
+        "Anst MUE",
+        "Bf SP",
+        "Anst Wimmis"
+      ]
+    },
+    {
+      "name": "Meiringen-EIN",
+      "ordnung": 124,
+      "auto": true,
+      "stationen": [
+        "Anst Meiringen",
+        "Bf BRW",
+        "Bf BRZ",
+        "Bf BRZW",
+        "Bf EBLI",
+        "Bf OAB",
+        "Bf NR",
+        "Bf RIN",
+        "Bf IO",
+        "Bf IW",
+        "Bf DAE",
+        "Bf LSS",
+        "Bf KH",
+        "Bf FS",
+        "Bf SP",
+        "Anst EIN"
+      ]
+    },
+    {
+      "name": "Meiringen-Grindelwald",
+      "ordnung": 125,
+      "auto": true,
+      "stationen": [
+        "Anst Meiringen",
+        "Bf BRW",
+        "Bf BRZ",
+        "Bf BRZW",
+        "Bf EBLI",
+        "Bf OAB",
+        "Bf NR",
+        "Bf RIN",
+        "Bf IO",
+        "Bf MBI",
+        "Bf WILD",
+        "Bf ZWEI",
+        "Anst Grindelwald"
+      ]
+    },
+    {
+      "name": "Meiringen-Lauterbrunnen",
+      "ordnung": 126,
+      "auto": true,
+      "stationen": [
+        "Anst Meiringen",
+        "Bf BRW",
+        "Bf BRZ",
+        "Bf BRZW",
+        "Bf EBLI",
+        "Bf OAB",
+        "Bf NR",
+        "Bf RIN",
+        "Bf IO",
+        "Bf MBI",
+        "Bf WILD",
+        "Bf ZWEI",
+        "Anst Lauterbrunnen"
+      ]
+    },
+    {
+      "name": "Meiringen-MUE",
+      "ordnung": 127,
+      "auto": true,
+      "stationen": [
+        "Anst Meiringen",
+        "Bf BRW",
+        "Bf BRZ",
+        "Bf BRZW",
+        "Bf EBLI",
+        "Bf OAB",
+        "Bf NR",
+        "Bf RIN",
+        "Bf IO",
+        "Bf IW",
+        "Bf DAE",
+        "Bf LSS",
+        "Bf KH",
+        "Bf FS",
+        "Bf SP",
+        "Anst MUE"
+      ]
+    },
+    {
+      "name": "Meiringen-Wimmis",
+      "ordnung": 129,
+      "auto": true,
+      "stationen": [
+        "Anst Meiringen",
+        "Bf BRW",
+        "Bf BRZ",
+        "Bf BRZW",
+        "Bf EBLI",
+        "Bf OAB",
+        "Bf NR",
+        "Bf RIN",
+        "Bf IO",
+        "Bf IW",
+        "Bf DAE",
+        "Bf LSS",
+        "Bf KH",
+        "Bf FS",
+        "Bf SP",
+        "Anst Wimmis"
+      ]
+    },
+    {
+      "name": "Wimmis-EIN",
+      "ordnung": 136,
+      "auto": true,
+      "stationen": [
+        "Anst Wimmis",
+        "Bf SP",
+        "Anst EIN"
+      ]
+    },
+    {
+      "name": "Wimmis-Grindelwald",
+      "ordnung": 137,
+      "auto": true,
+      "stationen": [
+        "Anst Wimmis",
+        "Bf SP",
+        "Bf FS",
+        "Bf KH",
+        "Bf LSS",
+        "Bf DAE",
+        "Bf IW",
+        "Bf IO",
+        "Bf MBI",
+        "Bf WILD",
+        "Bf ZWEI",
+        "Anst Grindelwald"
+      ]
+    },
+    {
+      "name": "Wimmis-Lauterbrunnen",
+      "ordnung": 138,
+      "auto": true,
+      "stationen": [
+        "Anst Wimmis",
+        "Bf SP",
+        "Bf FS",
+        "Bf KH",
+        "Bf LSS",
+        "Bf DAE",
+        "Bf IW",
+        "Bf IO",
+        "Bf MBI",
+        "Bf WILD",
+        "Bf ZWEI",
+        "Anst Lauterbrunnen"
+      ]
+    },
+    {
+      "name": "Wimmis-MUE",
+      "ordnung": 139,
+      "auto": true,
+      "stationen": [
+        "Anst Wimmis",
+        "Bf SP",
+        "Anst MUE"
+      ]
+    },
+    {
+      "name": "Wimmis-Meiringen",
+      "ordnung": 140,
+      "auto": true,
+      "stationen": [
+        "Anst Wimmis",
+        "Bf SP",
+        "Bf FS",
+        "Bf KH",
+        "Bf LSS",
+        "Bf DAE",
+        "Bf IW",
+        "Bf IO",
+        "Bf RIN",
+        "Bf NR",
+        "Bf OAB",
+        "Bf EBLI",
+        "Bf BRZW",
+        "Bf BRZ",
+        "Bf BRW",
+        "Anst Meiringen"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 38,
+  "_build": 5851,
+  "_name": "Thunersee",
+  "_region": "Bern - Lötschberg",
+  "_version": 3
+}

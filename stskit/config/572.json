@@ -1,197 +1,947 @@
 {
-    "_aid": 572,
-    "_build": 5840,
-    "_name": "Calanda",
-    "_region": "Ostschweiz",
-    "_version": 2,
-    "zugschema": "schweiz-rhb",
-    "anschlussgruppen": {
-        "Abstellung RhB": {
-            "__class__": "Set",
-            "data": [
-                "Abstellung RhB"
-            ]
-        },
-        "Abstellung SBB": {
-            "__class__": "Set",
-            "data": [
-                "Abstellung SBB"
-            ]
-        },
-        "Arosa": {
-            "__class__": "Set",
-            "data": [
-                "Arosa"
-            ]
-        },
-        "Chur": {
-            "__class__": "Set",
-            "data": [
-                "Chur GB"
-            ]
-        },
-        "Depot Arosa": {
-            "__class__": "Set",
-            "data": [
-                "Depot Arosa"
-            ]
-        },
-        "FBG": {
-            "__class__": "Set",
-            "data": [
-                "FBG215",
-                "FBG115"
-            ]
-        },
-        "Haldenstein": {
-            "__class__": "Set",
-            "data": [
-                "Haldenstein"
-            ]
-        },
-        "LQ Industrie": {
-            "__class__": "Set",
-            "data": [
-                "LQ Industrie"
-            ]
-        },
-        "SA": {
-            "__class__": "Set",
-            "data": [
-                "SA 403",
-                "SA 303"
-            ]
-        },
-        "Zizers": {
-            "__class__": "Set",
-            "data": [
-                "Zizers"
-            ]
-        }
+  "default": true,
+  "elemente": [
+    {
+      "name": "BRAG",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "BRAG": {
-            "__class__": "Set",
-            "data": [
-                "BRAG3",
-                "BRAG4"
-            ]
-        },
-        "CH": {
-            "__class__": "Set",
-            "data": [
-                "CH2",
-                "CH8",
-                "CH1",
-                "CH72",
-                "CH42",
-                "CH14",
-                "CH6",
-                "CH9",
-                "CH5",
-                "CH12",
-                "CH11",
-                "CH7",
-                "CH71",
-                "CH13",
-                "CH4",
-                "CH10"
-            ]
-        },
-        "CH8x": {
-            "__class__": "Set",
-            "data": [
-                "CH88",
-                "CH83",
-                "CH81",
-                "CH82",
-                "CH84",
-                "CH87"
-            ]
-        },
-        "CHWE": {
-            "__class__": "Set",
-            "data": [
-                "CHWE"
-            ]
-        },
-        "CHWI": {
-            "__class__": "Set",
-            "data": [
-                "CHWI"
-            ]
-        },
-        "LQ": {
-            "__class__": "Set",
-            "data": [
-                "LQ1",
-                "LQ4",
-                "LQ3",
-                "LQ2"
-            ]
-        },
-        "MF": {
-            "__class__": "Set",
-            "data": [
-                "MF"
-            ]
-        },
-        "Stadt": {
-            "__class__": "Set",
-            "data": [
-                "Stadt"
-            ]
-        }
+    {
+      "name": "CH",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
     },
-    "sektoren": {
-        "CH1": {
-            "__class__": "Set",
-            "data": [
-                "CH1",
-                "CH71"
-            ]
-        },
-        "CH2": {
-            "__class__": "Set",
-            "data": [
-                "CH2",
-                "CH72"
-            ]
-        }
+    {
+      "name": "CHSA",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "SA-FBG",
-    "strecken": {
-        "Depot Arosa-Arosa": [
-            "Depot Arosa",
-            "CH",
-            "Stadt",
-            "Arosa"
-        ],
-        "Haldenstein-Arosa": [
-            "Haldenstein",
-            "CHWI",
-            "CH",
-            "Stadt",
-            "Arosa"
-        ],
-        "Haldenstein-FBG": [
-            "Haldenstein",
-            "CHWI",
-            "CH",
-            "CH8x",
-            "CHWE",
-            "FBG"
-        ],
-        "SA-FBG": [
-            "SA",
-            "BRAG",
-            "MF",
-            "LQ",
-            "CH",
-            "CH8x",
-            "CHWE",
-            "FBG"
-        ]
+    {
+      "name": "CHWE",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "CHWI",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LQ",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MF",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "CH8x",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BRAG",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRAG"
+    },
+    {
+      "name": "BRAG3",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRAG3",
+      "gleise": 1
+    },
+    {
+      "name": "BRAG4",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRAG4",
+      "gleise": 1
+    },
+    {
+      "name": "CH37",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH"
+    },
+    {
+      "name": "CH",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH"
+    },
+    {
+      "name": "CH1",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH1",
+      "gleise": 1
+    },
+    {
+      "name": "CH71",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH1",
+      "gleise": 1
+    },
+    {
+      "name": "CH2",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH2",
+      "gleise": 1
+    },
+    {
+      "name": "CH72",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH2",
+      "gleise": 1
+    },
+    {
+      "name": "CH5",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH5",
+      "gleise": 1
+    },
+    {
+      "name": "CH6",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH6",
+      "gleise": 1
+    },
+    {
+      "name": "CH4",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH4",
+      "gleise": 1
+    },
+    {
+      "name": "CH9",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH9",
+      "gleise": 1
+    },
+    {
+      "name": "CH8",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH8",
+      "gleise": 1
+    },
+    {
+      "name": "CH7",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH7",
+      "gleise": 1
+    },
+    {
+      "name": "CH13",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH13",
+      "gleise": 1
+    },
+    {
+      "name": "CH12CD",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH12",
+      "gleise": 1
+    },
+    {
+      "name": "CH12AB",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH12",
+      "gleise": 1
+    },
+    {
+      "name": "CH14",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH14",
+      "gleise": 1
+    },
+    {
+      "name": "CH10",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH10",
+      "gleise": 1
+    },
+    {
+      "name": "CH11",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH11",
+      "gleise": 1
+    },
+    {
+      "name": "CH37",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH37",
+      "gleise": 1
+    },
+    {
+      "name": "CH37",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH37",
+      "gleise": 1
+    },
+    {
+      "name": "CH42",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH42",
+      "gleise": 1
+    },
+    {
+      "name": "CH84",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH84",
+      "gleise": 1
+    },
+    {
+      "name": "CH83",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH83",
+      "gleise": 1
+    },
+    {
+      "name": "CH81",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH81",
+      "gleise": 1
+    },
+    {
+      "name": "CH82",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH82",
+      "gleise": 1
+    },
+    {
+      "name": "CH88",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH88",
+      "gleise": 1
+    },
+    {
+      "name": "CH87",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH87",
+      "gleise": 1
+    },
+    {
+      "name": "CHSA",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHSA"
+    },
+    {
+      "name": "CHSA",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHSA",
+      "gleise": 1
+    },
+    {
+      "name": "CHSA",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHSA",
+      "gleise": 1
+    },
+    {
+      "name": "CHWE",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHWE"
+    },
+    {
+      "name": "CHWE",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHWE",
+      "gleise": 1
+    },
+    {
+      "name": "CHWE",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHWE",
+      "gleise": 1
+    },
+    {
+      "name": "CHWI",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHWI"
+    },
+    {
+      "name": "CHWI",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHWI",
+      "gleise": 1
+    },
+    {
+      "name": "CHWI",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHWI",
+      "gleise": 1
+    },
+    {
+      "name": "LQ",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LQ"
+    },
+    {
+      "name": "LQ4",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LQ4",
+      "gleise": 1
+    },
+    {
+      "name": "LQ3",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LQ3",
+      "gleise": 1
+    },
+    {
+      "name": "LQ1",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LQ1",
+      "gleise": 1
+    },
+    {
+      "name": "LQ2",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LQ2",
+      "gleise": 1
+    },
+    {
+      "name": "MF",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MF"
+    },
+    {
+      "name": "MF",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MF",
+      "gleise": 1
+    },
+    {
+      "name": "MF",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MF",
+      "gleise": 1
+    },
+    {
+      "name": "Arosa",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SA",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Abstellung SBB",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FBG",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Abstellung RhB",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Depot",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Depot Arosa",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Industrie",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Zizers",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Haldenstein",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Chur GB",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Arosa",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Arosa",
+      "gleise": 1
+    },
+    {
+      "name": "SA 302",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SA",
+      "gleise": 1
+    },
+    {
+      "name": "SA 402",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SA",
+      "gleise": 1
+    },
+    {
+      "name": "Abstellung SBB",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Abstellung SBB",
+      "gleise": 1
+    },
+    {
+      "name": "FBG 115",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FBG",
+      "gleise": 1
+    },
+    {
+      "name": "FBG 215",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FBG",
+      "gleise": 1
+    },
+    {
+      "name": "Abstellung RhB",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Abstellung RhB",
+      "gleise": 1
+    },
+    {
+      "name": "Depot",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Depot",
+      "gleise": 1
+    },
+    {
+      "name": "Depot Arosa",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Depot Arosa",
+      "gleise": 1
+    },
+    {
+      "name": "Industrie",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Industrie",
+      "gleise": 1
+    },
+    {
+      "name": "Zizers",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Zizers",
+      "gleise": 1
+    },
+    {
+      "name": "Haldenstein",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Haldenstein",
+      "gleise": 1
+    },
+    {
+      "name": "CH8x",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH8x"
+    },
+    {
+      "name": "BRAG3",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRAG",
+      "gleise": 1
+    },
+    {
+      "name": "BRAG4",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRAG",
+      "gleise": 1
+    },
+    {
+      "name": "CH1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH5",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH6",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH4",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH9",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH8",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH7",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH13",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH12",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH14",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH10",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH11",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "CH42",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH",
+      "gleise": 1
+    },
+    {
+      "name": "LQ4",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LQ",
+      "gleise": 1
+    },
+    {
+      "name": "LQ3",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LQ",
+      "gleise": 1
+    },
+    {
+      "name": "LQ1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LQ",
+      "gleise": 1
+    },
+    {
+      "name": "LQ2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LQ",
+      "gleise": 1
+    },
+    {
+      "name": "CH84",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH8x",
+      "gleise": 1
+    },
+    {
+      "name": "CH83",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH8x",
+      "gleise": 1
+    },
+    {
+      "name": "CH81",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH8x",
+      "gleise": 1
+    },
+    {
+      "name": "CH82",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH8x",
+      "gleise": 1
+    },
+    {
+      "name": "CH88",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH8x",
+      "gleise": 1
+    },
+    {
+      "name": "CH87",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CH8x",
+      "gleise": 1
+    },
+    {
+      "name": "Chur GB",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Chur GB",
+      "gleise": 1
     }
+  ],
+  "strecken": [
+    {
+      "name": "Haldenstein-FBG",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Haldenstein",
+        "Bf CHWI",
+        "Bf CH",
+        "Bf CHWE",
+        "Anst FBG"
+      ]
+    },
+    {
+      "name": "SA-GB",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst SA",
+        "Bf BRAG",
+        "Bf MF",
+        "Bf LQ",
+        "Bf CH",
+        "Bf CH8x",
+        "Anst Chur GB"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz-rhb",
+  "_aid": 572,
+  "_build": 5851,
+  "_name": "Calanda",
+  "_region": "Ostschweiz",
+  "_version": 3
 }

@@ -1,264 +1,1384 @@
 {
-    "_aid": 857,
-    "_build": 5851,
-    "_name": "Bolzano/Bozen",
-    "_region": "Italien Nord",
-    "_version": 2,
-    "anschlussgruppen": {
-        "BW": {
-            "__class__": "Set",
-            "data": [
-                "BW 1",
-                "BW 2"
-            ]
-        },
-        "Brennero": {
-            "__class__": "Set",
-            "data": [
-                "Brennero"
-            ]
-        },
-        "Gbf": {
-            "__class__": "Set",
-            "data": [
-                "Gbf S\u00fcd",
-                "Gbf Nord"
-            ]
-        },
-        "Gleis 10-15": {
-            "__class__": "Set",
-            "data": [
-                "Gleis 10-15"
-            ]
-        },
-        "Gleis 10-17": {
-            "__class__": "Set",
-            "data": [
-                "Gleis 10-17"
-            ]
-        },
-        "Merano": {
-            "__class__": "Set",
-            "data": [
-                "Merano"
-            ]
-        },
-        "Trento": {
-            "__class__": "Set",
-            "data": [
-                "Trento"
-            ]
-        },
-        "Wagenabstellung": {
-            "__class__": "Set",
-            "data": [
-                "Wagenabstellung"
-            ]
-        }
+  "default": true,
+  "_aid": 857,
+  "_build": 5851,
+  "_name": "Bolzano/Bozen",
+  "_region": "Triveneto",
+  "elemente": [
+    {
+      "name": "Bressanone",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "Bolzano": {
-            "__class__": "Set",
-            "data": [
-                "61",
-                "9G",
-                "37a",
-                "Rola 1",
-                "2G",
-                "1",
-                "67",
-                "39a",
-                "5",
-                "G\u00fcter",
-                "6",
-                "40a",
-                "41",
-                "40b",
-                "8G",
-                "65",
-                "3",
-                "42",
-                "37b",
-                "38a",
-                "Rola 2",
-                "4G",
-                "1G",
-                "84",
-                "68",
-                "38b",
-                "3G",
-                "4",
-                "43",
-                "66",
-                "7G",
-                "1T",
-                "39b"
-            ]
-        },
-        "Bressanone": {
-            "__class__": "Set",
-            "data": [
-                "Bressanone 3",
-                "Bressanone 1G",
-                "Bressanone 2",
-                "Bressanone 1",
-                "Bressanone 3G",
-                "Bressanone 2G",
-                "Bressanone 4G",
-                "Bressanone 5G"
-            ]
-        },
-        "Chiusa": {
-            "__class__": "Set",
-            "data": [
-                "Chiusa 2",
-                "Chiusa 1"
-            ]
-        },
-        "E-A Merano": {
-            "__class__": "Set",
-            "data": [
-                "E-A Merano"
-            ]
-        },
-        "Laives": {
-            "__class__": "Set",
-            "data": [
-                "Laives 2",
-                "Laives 1",
-                "Laives  1",
-                "Laives  2"
-            ]
-        },
-        "Ponte": {
-            "__class__": "Set",
-            "data": [
-                "Ponte 2G",
-                "Ponte 2",
-                "Ponte 4G",
-                "Ponte 3G",
-                "Ponte 3"
-            ]
-        },
-        "Prato": {
-            "__class__": "Set",
-            "data": [
-                "Prato 3",
-                "Prato 2",
-                "Prato 1",
-                "Prato 4"
-            ]
-        }
+    {
+      "name": "Chiusa",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "Brennero-Trento",
-    "sektoren": {
-        "1": {
-            "__class__": "Set",
-            "data": [
-                "1",
-                "1G"
-            ]
-        },
-        "3": {
-            "__class__": "Set",
-            "data": [
-                "3",
-                "3G"
-            ]
-        },
-        "37": {
-            "__class__": "Set",
-            "data": [
-                "37b",
-                "37a"
-            ]
-        },
-        "38": {
-            "__class__": "Set",
-            "data": [
-                "38a",
-                "38b"
-            ]
-        },
-        "39": {
-            "__class__": "Set",
-            "data": [
-                "39b",
-                "39a"
-            ]
-        },
-        "4": {
-            "__class__": "Set",
-            "data": [
-                "4G",
-                "4"
-            ]
-        },
-        "40": {
-            "__class__": "Set",
-            "data": [
-                "40b",
-                "40a"
-            ]
-        },
-        "Bressanone 1": {
-            "__class__": "Set",
-            "data": [
-                "Bressanone 1G",
-                "Bressanone 1"
-            ]
-        },
-        "Bressanone 2": {
-            "__class__": "Set",
-            "data": [
-                "Bressanone 2",
-                "Bressanone 2G"
-            ]
-        },
-        "Bressanone 3": {
-            "__class__": "Set",
-            "data": [
-                "Bressanone 3",
-                "Bressanone 3G"
-            ]
-        },
-        "Ponte 2": {
-            "__class__": "Set",
-            "data": [
-                "Ponte 2G",
-                "Ponte 2"
-            ]
-        },
-        "Ponte 3": {
-            "__class__": "Set",
-            "data": [
-                "Ponte 3G",
-                "Ponte 3"
-            ]
-        }
+    {
+      "name": "E-A Merano",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
     },
-    "strecken": {
-        "Brennero-Merano": [
-            "Brennero",
-            "Bressanone",
-            "Chiusa",
-            "Ponte",
-            "Prato",
-            "Bolzano",
-            "Merano"
-        ],
-        "Brennero-Trento": [
-            "Brennero",
-            "Bressanone",
-            "Chiusa",
-            "Ponte",
-            "Prato",
-            "Bolzano",
-            "Laives",
-            "Trento"
-        ]
+    {
+      "name": "Gbf Süd",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": [],
-    "zugschema": "italien"
+    {
+      "name": "Laives",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Ponte",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Prato",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bolzano",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "3",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "5",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "4",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "8",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "7",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "9",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "6",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "3",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "3G",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "5",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "5",
+      "gleise": 1
+    },
+    {
+      "name": "4",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "4",
+      "gleise": 1
+    },
+    {
+      "name": "4G",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "4",
+      "gleise": 1
+    },
+    {
+      "name": "1",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1",
+      "gleise": 1
+    },
+    {
+      "name": "1G",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1",
+      "gleise": 1
+    },
+    {
+      "name": "2G",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2",
+      "gleise": 1
+    },
+    {
+      "name": "8G",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "8",
+      "gleise": 1
+    },
+    {
+      "name": "7G",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "7",
+      "gleise": 1
+    },
+    {
+      "name": "9G",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "9",
+      "gleise": 1
+    },
+    {
+      "name": "6",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "6",
+      "gleise": 1
+    },
+    {
+      "name": "1T",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1",
+      "gleise": 1
+    },
+    {
+      "name": "37",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "37",
+      "gleise": 1
+    },
+    {
+      "name": "38",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "37",
+      "gleise": 1
+    },
+    {
+      "name": "40",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "37",
+      "gleise": 1
+    },
+    {
+      "name": "39",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "37",
+      "gleise": 1
+    },
+    {
+      "name": "37a",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "37",
+      "gleise": 1
+    },
+    {
+      "name": "37b",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "37",
+      "gleise": 1
+    },
+    {
+      "name": "38a",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "38",
+      "gleise": 1
+    },
+    {
+      "name": "38b",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "38",
+      "gleise": 1
+    },
+    {
+      "name": "40a",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "40",
+      "gleise": 1
+    },
+    {
+      "name": "40b",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "40",
+      "gleise": 1
+    },
+    {
+      "name": "39a",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "39",
+      "gleise": 1
+    },
+    {
+      "name": "39b",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "39",
+      "gleise": 1
+    },
+    {
+      "name": "43",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "43",
+      "gleise": 1
+    },
+    {
+      "name": "42",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "42",
+      "gleise": 1
+    },
+    {
+      "name": "41",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "41",
+      "gleise": 1
+    },
+    {
+      "name": "67",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "67",
+      "gleise": 1
+    },
+    {
+      "name": "Güter",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Güter",
+      "gleise": 1
+    },
+    {
+      "name": "Rola 1",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rola 1",
+      "gleise": 1
+    },
+    {
+      "name": "61",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "61",
+      "gleise": 1
+    },
+    {
+      "name": "66",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "66",
+      "gleise": 1
+    },
+    {
+      "name": "68",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "68",
+      "gleise": 1
+    },
+    {
+      "name": "Rola 2",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rola 2",
+      "gleise": 1
+    },
+    {
+      "name": "65",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "65",
+      "gleise": 1
+    },
+    {
+      "name": "65",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "65",
+      "gleise": 1
+    },
+    {
+      "name": "84",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "84",
+      "gleise": 1
+    },
+    {
+      "name": "84",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "84",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 3",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bressanone"
+    },
+    {
+      "name": "Bressanone 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bressanone 3",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 4",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bressanone 3",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bressanone 3",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bressanone 3",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 5",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bressanone 3",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 3G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bressanone 3",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bressanone 3",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 4G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bressanone 4",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 1G",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "S",
+      "stamm": "Bressanone 1",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 1",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "S",
+      "stamm": "Bressanone 1",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 2G",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "S",
+      "stamm": "Bressanone 2",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 2",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "S",
+      "stamm": "Bressanone 2",
+      "gleise": 1
+    },
+    {
+      "name": "Bressanone 5G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bressanone 5",
+      "gleise": 1
+    },
+    {
+      "name": "Chiusa 1",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Chiusa"
+    },
+    {
+      "name": "Chiusa 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Chiusa 1",
+      "gleise": 1
+    },
+    {
+      "name": "Chiusa 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Chiusa 1",
+      "gleise": 1
+    },
+    {
+      "name": "Chiusa 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Chiusa 1",
+      "gleise": 1
+    },
+    {
+      "name": "Chiusa 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Chiusa 2",
+      "gleise": 1
+    },
+    {
+      "name": "E-A Merano",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E-A Merano"
+    },
+    {
+      "name": "E-A Merano",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E-A Merano",
+      "gleise": 1
+    },
+    {
+      "name": "E-A Merano",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E-A Merano",
+      "gleise": 1
+    },
+    {
+      "name": "Gbf Süd",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gbf Süd"
+    },
+    {
+      "name": "Gbf Süd",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "Gbf Süd",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "Gleis 10",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gleis 10",
+      "gleise": 1
+    },
+    {
+      "name": "Gleis 10-15",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gleis 10",
+      "gleise": 1
+    },
+    {
+      "name": "Gleis 10-17",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gleis 10",
+      "gleise": 1
+    },
+    {
+      "name": "Laives 1",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Laives"
+    },
+    {
+      "name": "Laives 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Laives"
+    },
+    {
+      "name": "Laives  2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Laives"
+    },
+    {
+      "name": "Laives 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Laives 1",
+      "gleise": 1
+    },
+    {
+      "name": "Laives 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Laives 1",
+      "gleise": 1
+    },
+    {
+      "name": "Laives 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Laives 2",
+      "gleise": 1
+    },
+    {
+      "name": "Laives 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Laives 2",
+      "gleise": 1
+    },
+    {
+      "name": "Laives  2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Laives  2",
+      "gleise": 1
+    },
+    {
+      "name": "Laives  1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Laives  2",
+      "gleise": 1
+    },
+    {
+      "name": "Laives  2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Laives  2",
+      "gleise": 1
+    },
+    {
+      "name": "Laives  1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Laives  1",
+      "gleise": 1
+    },
+    {
+      "name": "Ponte 2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ponte"
+    },
+    {
+      "name": "Ponte 4",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ponte 2",
+      "gleise": 1
+    },
+    {
+      "name": "Ponte 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ponte 2",
+      "gleise": 1
+    },
+    {
+      "name": "Ponte 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ponte 2",
+      "gleise": 1
+    },
+    {
+      "name": "Ponte 4G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ponte 4",
+      "gleise": 1
+    },
+    {
+      "name": "Ponte 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ponte 2",
+      "gleise": 1
+    },
+    {
+      "name": "Ponte 2G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ponte 2",
+      "gleise": 1
+    },
+    {
+      "name": "Ponte 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ponte 3",
+      "gleise": 1
+    },
+    {
+      "name": "Ponte 3G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ponte 3",
+      "gleise": 1
+    },
+    {
+      "name": "Prato 3",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Prato"
+    },
+    {
+      "name": "Prato 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Prato 3",
+      "gleise": 1
+    },
+    {
+      "name": "Prato 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Prato 3",
+      "gleise": 1
+    },
+    {
+      "name": "Prato 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Prato 3",
+      "gleise": 1
+    },
+    {
+      "name": "Prato 4",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Prato 3",
+      "gleise": 1
+    },
+    {
+      "name": "Prato 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Prato 3",
+      "gleise": 1
+    },
+    {
+      "name": "Prato 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Prato 1",
+      "gleise": 1
+    },
+    {
+      "name": "Prato 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Prato 2",
+      "gleise": 1
+    },
+    {
+      "name": "Prato 4",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Prato 4",
+      "gleise": 1
+    },
+    {
+      "name": "Merano",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Brennero",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gbf Nord",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gbf Süd",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BW",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gleis 10-15",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gleis 10-17",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wagenabstellung",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Trento",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Merano",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Merano",
+      "gleise": 1
+    },
+    {
+      "name": "Brennero",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 2
+    },
+    {
+      "name": "Gbf Nord",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "Gbf Süd",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "BW 1",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BW",
+      "gleise": 1
+    },
+    {
+      "name": "BW 2",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BW",
+      "gleise": 1
+    },
+    {
+      "name": "Gleis 10-15",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gleis 10-15",
+      "gleise": 1
+    },
+    {
+      "name": "Gleis 10-17",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gleis 10-17",
+      "gleise": 1
+    },
+    {
+      "name": "Wagenabstellung",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wagenabstellung",
+      "gleise": 1
+    },
+    {
+      "name": "Trento",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Trento",
+      "gleise": 2
+    },
+    {
+      "name": "3",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bolzano"
+    },
+    {
+      "name": "1",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bolzano"
+    },
+    {
+      "name": "37",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bolzano"
+    },
+    {
+      "name": "65",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bolzano"
+    },
+    {
+      "name": "84",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bolzano"
+    },
+    {
+      "name": "Gleis 10",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bolzano"
+    },
+    {
+      "name": "41",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bolzano"
+    },
+    {
+      "name": "66",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bolzano"
+    },
+    {
+      "name": "1T",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1T",
+      "gleise": 1
+    },
+    {
+      "name": "43",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "41",
+      "gleise": 1
+    },
+    {
+      "name": "42",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "41",
+      "gleise": 1
+    },
+    {
+      "name": "41",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "41",
+      "gleise": 1
+    },
+    {
+      "name": "67",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "66",
+      "gleise": 1
+    },
+    {
+      "name": "Güter",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "66",
+      "gleise": 1
+    },
+    {
+      "name": "Rola 1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "66",
+      "gleise": 1
+    },
+    {
+      "name": "61",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "66",
+      "gleise": 1
+    },
+    {
+      "name": "66",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "66",
+      "gleise": 1
+    },
+    {
+      "name": "68",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "66",
+      "gleise": 1
+    },
+    {
+      "name": "Rola 2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "66",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Brennero-Merano",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Brennero",
+        "Bf Bressanone",
+        "Bf Chiusa",
+        "Bf Ponte",
+        "Bf Prato",
+        "Bf Bolzano",
+        "Bf E-A Merano",
+        "Anst Merano"
+      ]
+    },
+    {
+      "name": "Brennero-Trento",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Brennero",
+        "Bf Bressanone",
+        "Bf Chiusa",
+        "Bf Ponte",
+        "Bf Prato",
+        "Bf Bolzano",
+        "Bf E-A Merano",
+        "Bf Laives",
+        "Anst Trento"
+      ]
+    },
+    {
+      "name": "Merano-Brennero",
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst Merano",
+        "Bf E-A Merano",
+        "Bf Bolzano",
+        "Bf Prato",
+        "Bf Ponte",
+        "Bf Chiusa",
+        "Bf Bressanone",
+        "Anst Brennero"
+      ]
+    },
+    {
+      "name": "Trento-Brennero",
+      "ordnung": 3,
+      "auto": false,
+      "stationen": [
+        "Anst Trento",
+        "Bf E-A Merano",
+        "Bf Laives",
+        "Bf Bolzano",
+        "Bf Prato",
+        "Bf Ponte",
+        "Bf Chiusa",
+        "Bf Bressanone",
+        "Anst Brennero"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "italien",
+  "_version": 3
 }
