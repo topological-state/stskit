@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.1.4
+
+### Features
+
+- Neue Befehle im Streckeneditor: automatische Strecken löschen, Strecke interpolieren ()
+- Pushbutton-Aktivierung im Streckeneditor
+
+### Closed issues
+
+- Issue #518: Konfigurationsdatei lädt nicht.
+
+### Beispielkonfigurationen
+
+- Bolzano
+- Calanda
+- Genève
+- Thunersee
+
+Hinweis: Aufgrund der stetigen Entwicklung der Stellwerke können die Beispielkonfigurationen veraltet sein.
+  Die Gleisangaben von veralteten Konfigurationen werden so weit wie möglich übernommen,
+  müssen aber eventuell manuell angepasst werden.
+
+
 ## 2.1.3
 
 ### Features
