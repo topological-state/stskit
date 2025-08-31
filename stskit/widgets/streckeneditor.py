@@ -313,12 +313,13 @@ class StreckenEditor(QObject):
 
         self.ui.strecken_name_combo.currentIndexChanged.connect(self.strecken_name_combo_index_changed)
         self.ui.strecken_name_combo.editTextChanged.connect(self.strecken_name_combo_text_changed)
+        self.ui.strecken_auswahl_list.selectionModel().selectionChanged.connect(self.update_widget_states)
+        self.ui.strecken_abwahl_list.selectionModel().selectionChanged.connect(self.update_widget_states)
 
         self.auswahl_model.rowsInserted.connect(self.auswahl_rows_inserted)
         self.auswahl_model.rowsMoved.connect(self.auswahl_rows_moved)
         self.auswahl_model.rowsRemoved.connect(self.auswahl_rows_removed)
         self.auswahl_model.dataChanged.connect(self.auswahl_data_changed)
-
         self.auswahl_model.drop_completed.connect(self.abwahl_model.on_drop_completed)
         self.abwahl_model.drop_completed.connect(self.auswahl_model.on_drop_completed)
 
@@ -366,6 +367,24 @@ class StreckenEditor(QObject):
         if changed:
             self.alle_strecken = neue_strecken
             self._select_strecke(self.strecken_name)
+
+    def update_widget_states(self):
+        en = len(self.ui.strecken_abwahl_list.selectedIndexes()) >= 1
+        self.ui.strecken_auswahl_button.setEnabled(en)
+        en = len(self.ui.strecken_auswahl_list.selectedIndexes()) >= 1
+        self.ui.strecken_abwahl_button.setEnabled(en)
+        self.ui.strecken_hoch_button.setEnabled(en)
+        self.ui.strecken_runter_button.setEnabled(en)
+
+        self.ui.strecken_erstellen_button.setEnabled(True)
+        en = len(self.alle_strecken) >= 1
+        self.ui.strecken_loeschen_button.setEnabled(en)
+        en = len(self.auto_strecken) >= 1
+        self.ui.strecken_auto_loeschen_button.setEnabled(en)
+
+        en = bool(self.strecken_name) and len(self.auswahl_model.rows) >= 2
+        self.ui.strecken_interpolieren_button.setEnabled(en)
+        self.ui.strecken_ordnen_button.setEnabled(en)
 
     def init_from_anlage(self):
         """
@@ -424,6 +443,7 @@ class StreckenEditor(QObject):
             pass
         else:
             self.ui.strecken_name_combo.setCurrentIndex(index)
+        self.update_widget_states()
 
     def _select_strecke(self, name: str):
         """
@@ -443,6 +463,7 @@ class StreckenEditor(QObject):
         uebrige = [bst for bst in self.anlage_bst if bst not in stationen]
         self.abwahl_model.update(uebrige)
         self.in_update = False
+        self.update_widget_states()
 
     def _strecke_edited(self):
         """
@@ -456,6 +477,7 @@ class StreckenEditor(QObject):
         self.alle_strecken[self.strecken_name] = list(self.auswahl_model.rows)
         self.edited_strecken.add(self.strecken_name)
         self.deleted_strecken.discard(self.strecken_name)
+        self.update_widget_states()
 
     @Slot()
     def strecken_name_combo_index_changed(self):
