@@ -385,6 +385,9 @@
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
+                   <property name="toolTip">
+                    <string>Streckenauswahl</string>
+                   </property>
                    <property name="editable">
                     <bool>true</bool>
                    </property>
@@ -395,6 +398,27 @@
                  </item>
                  <item>
                   <widget class="QPushButton" name="strecken_erstellen_button">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>26</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>26</width>
+                     <height>26</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Neue Strecke</string>
+                   </property>
                    <property name="text">
                     <string>+</string>
                    </property>
@@ -408,8 +432,27 @@
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>26</width>
+                     <height>26</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Strecke löschen</string>
+                   </property>
                    <property name="text">
                     <string>-</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="strecken_auto_loeschen_button">
+                   <property name="toolTip">
+                    <string>Alle automatischen Strecken löschen</string>
+                   </property>
+                   <property name="text">
+                    <string>- auto</string>
                    </property>
                   </widget>
                  </item>
@@ -433,6 +476,9 @@
                  </item>
                  <item>
                   <widget class="QListView" name="strecken_auswahl_list">
+                   <property name="toolTip">
+                    <string>Stationsliste der aktuellen Strecke</string>
+                   </property>
                    <property name="dragEnabled">
                     <bool>true</bool>
                    </property>
@@ -469,11 +515,8 @@
                  </item>
                  <item>
                   <widget class="QPushButton" name="strecken_auswahl_button">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
+                   <property name="toolTip">
+                    <string>Station in Strecke übernehmen</string>
                    </property>
                    <property name="text">
                     <string>⬅️</string>
@@ -482,11 +525,8 @@
                  </item>
                  <item>
                   <widget class="QPushButton" name="strecken_abwahl_button">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
+                   <property name="toolTip">
+                    <string>Station aus Strecke entfernen</string>
                    </property>
                    <property name="text">
                     <string>➡️</string>
@@ -495,11 +535,8 @@
                  </item>
                  <item>
                   <widget class="QPushButton" name="strecken_hoch_button">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
+                   <property name="toolTip">
+                    <string>Station nach vorne schieben</string>
                    </property>
                    <property name="text">
                     <string>⬆️</string>
@@ -508,11 +545,8 @@
                  </item>
                  <item>
                   <widget class="QPushButton" name="strecken_runter_button">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
+                   <property name="toolTip">
+                    <string>Station nach hinten schieben</string>
                    </property>
                    <property name="text">
                     <string>⬇️</string>
@@ -520,12 +554,19 @@
                   </widget>
                  </item>
                  <item>
+                  <widget class="QPushButton" name="strecken_interpolieren_button">
+                   <property name="toolTip">
+                    <string>Strecke zwischen Anfangs- und Endstation aus Netzplan erstellen</string>
+                   </property>
+                   <property name="text">
+                    <string>Interpolieren</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QPushButton" name="strecken_ordnen_button">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
+                   <property name="toolTip">
+                    <string>Stationen nach Entfernung im Netzplan anordnen</string>
                    </property>
                    <property name="text">
                     <string>Ordnen</string>
@@ -561,6 +602,9 @@
                  </item>
                  <item>
                   <widget class="QListView" name="strecken_abwahl_list">
+                   <property name="toolTip">
+                    <string>übrige Stationen</string>
+                   </property>
                    <property name="dragEnabled">
                     <bool>true</bool>
                    </property>

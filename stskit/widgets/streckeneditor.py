@@ -308,6 +308,8 @@ class StreckenEditor(QObject):
         self.ui.strecken_ordnen_button.clicked.connect(self.strecken_ordnen_button_clicked)
         self.ui.strecken_erstellen_button.clicked.connect(self.strecken_erstellen_button_clicked)
         self.ui.strecken_loeschen_button.clicked.connect(self.strecken_loeschen_button_clicked)
+        self.ui.strecken_auto_loeschen_button.clicked.connect(self.strecken_auto_loeschen_button_clicked)
+        self.ui.strecken_interpolieren_button.clicked.connect(self.strecken_interpolieren_button_clicked)
 
         self.ui.strecken_name_combo.currentIndexChanged.connect(self.strecken_name_combo_index_changed)
         self.ui.strecken_name_combo.editTextChanged.connect(self.strecken_name_combo_text_changed)
@@ -587,6 +589,39 @@ class StreckenEditor(QObject):
         self.edited_strecken.add(self.strecken_name)
         self._select_strecke(name)
         self._streckenliste_changed()
+
+    @Slot()
+    def strecken_auto_loeschen_button_clicked(self):
+        namen = list(self.alle_strecken.keys())
+        changed = False
+        for name in namen:
+            if name in self.auto_strecken:
+                del self.alle_strecken[name]
+                self.edited_strecken.discard(name)
+                self.deleted_strecken.add(name)
+                changed = True
+
+        if changed:
+            self._streckenliste_changed()
+
+    @Slot()
+    def strecken_interpolieren_button_clicked(self):
+        if not self.strecken_name:
+            return
+        try:
+            start = self.auswahl_model.rows[0]
+        except IndexError:
+            return
+        try:
+            ziel = self.auswahl_model.rows[-1]
+        except IndexError:
+            return
+
+        strecke = self.anlage.liniengraph.strecke(start, ziel)
+        if strecke:
+            self.alle_strecken[self.strecken_name] = strecke
+            self.edited_strecken.add(self.strecken_name)
+            self._select_strecke(self.strecken_name)
 
     @Slot()
     def strecken_ordnen_button_clicked(self):
