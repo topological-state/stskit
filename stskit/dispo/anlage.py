@@ -402,8 +402,8 @@ class Anlage:
                 logger.info(f"Beispielkonfiguration laden von {p}")
                 self.default_config.load(p, aid=self.anlageninfo.aid)
                 self.default_config["default"] = True
-            except OSError:
-                logger.warning(f"Keine Beispielkonfiguration gefunden")
+            except OSError as e:
+                logger.warning(f"Fehler beim Laden der Beispielkonfiguration: {e}")
 
         if self.config is None:
             self.aenderungen.add('config')
@@ -414,7 +414,7 @@ class Anlage:
                 logger.info(f"Konfiguration laden von {p}")
                 self.config.load(p, aid=self.anlageninfo.aid)
             except OSError:
-                logger.warning(f"Benutzerkonfiguration {p} nicht gefunden")
+                logger.warning(f"Fehler beim Laden der Benutzerkonfiguration von {p}", exc_info=True)
 
             # elemente, strecken, streckenmarkierung, zugschema
             if 'elemente' not in self.config:

@@ -4,6 +4,7 @@
 # nuitka-project: --include-data-files=stskit/qt/*.css=stskit/qt/
 # nuitka-project: --include-data-files=stskit/qt/*.ui=stskit/qt/
 # nuitka-project: --include-data-files=stskit/config/*.json=stskit/config/
+# nuitka-project: --include-data-files=stskit/schema/*.json=stskit/schema/
 # nuitka-project: --include-data-files=stskit/widgets/einstellungen.md=stskit/widgets/einstellungen.md
 # nuitka-project: --include-data-files=docs/bahnhofgraph.png=docs/bahnhofgraph.png
 
