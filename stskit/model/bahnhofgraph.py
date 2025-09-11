@@ -85,6 +85,10 @@ class BahnsteigGraphNode(dict):
         Wird im Konfigurationsimport und -export verwendet und ist ansonsten undefiniert.
         Der Typ erschliesst sich aus `BAHNHOFELEMENT_HIERARCHIE[typ]`.
         """)
+    ordnung = dict_property("ordnung", int, docstring=""" 
+        Sortierordnung innerhalb der Gruppe.
+        Bahnhofelemente innerhalb der Gruppe werden gemäss dem Tupel (ordnung, name) sortiert.
+        """)
     gleise = dict_property("gleise", int, docstring="""
         Anzahl Gleise mit dem gleichen Namen.
         Normalerweise 1, ausser z.B. bei Haltestellen oder Anschlussgleisen ohne Gleisnummer.
@@ -642,6 +646,8 @@ class BahnhofGraph(nx.DiGraph):
             data = {"auto": auto, "typ": element['typ'], "name": element['name'], "stamm": stamm}
             if "sichtbar" in element:
                 data["sichtbar"] = element['sichtbar']
+            if "ordnung" in element:
+                data["ordnung"] = element['ordnung']
             if "gleise" in element:
                 data["gleise"] = element['gleise']
             if "flags" in element:
@@ -777,6 +783,7 @@ class BahnhofGraph(nx.DiGraph):
             element = {'name': e2.name,
                        'typ': e2.typ,
                        'auto': data2.auto and data1.auto,
+                       'ordnung': data1.get('ordnung', 0),
                        'sichtbar': True,
                        'flags': ''}
             if e1.typ != 'Bst':

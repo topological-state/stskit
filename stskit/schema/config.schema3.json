@@ -49,6 +49,10 @@
                     "auto": {
                         "description": "Automatische Konfiguration. Auf False setzen, wenn der Eintrag manuell verändert wurde! Default ist True.",
                         "type": "boolean"
+                    },
+                    "ordnung": {
+                        "description": "Sortierordnung. Default = 0",
+                        "type": "integer"
                     }
                 },
                 "required": ["name"],

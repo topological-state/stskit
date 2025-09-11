@@ -382,7 +382,18 @@ class Gleisbelegung:
         :return: None
         """
 
-        self.gleise = sorted(gleise, key=lambda x: gleisname_sortkey(x.name))
+        sortierung = {}
+        for g in gleise:
+            parents = [g] + list(self.anlage.bahnhofgraph.list_parents(g))
+            keys = []
+            for e in reversed(parents):
+                node = self.anlage.bahnhofgraph.nodes[e]
+                key = gleisname_sortkey(node.name)
+                keys.append(node.get('ordnung', 0))
+                keys.extend(key)
+            sortierung[g] = keys
+
+        self.gleise = sorted(gleise, key=sortierung.get)
 
     def slots_erstellen(self):
         """
