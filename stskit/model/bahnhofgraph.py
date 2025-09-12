@@ -783,7 +783,7 @@ class BahnhofGraph(nx.DiGraph):
             element = {'name': e2.name,
                        'typ': e2.typ,
                        'auto': data2.auto and data1.auto,
-                       'ordnung': data1.get('ordnung', 0),
+                       'ordnung': data2.get('ordnung', 0),
                        'sichtbar': True,
                        'flags': ''}
             if e1.typ != 'Bst':
