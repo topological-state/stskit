@@ -1,365 +1,1947 @@
 {
-    "_aid": 418,
-    "_build": 5851,
-    "_name": "Wien Meidling",
-    "_region": "\u00d6sterreich Ost",
-    "_version": 2,
-    "anschlussgruppen": {
-        "353-357": {
-            "__class__": "Set",
-            "data": [
-                "353-357"
-            ]
-        },
-        "358-360": {
-            "__class__": "Set",
-            "data": [
-                "358-360"
-            ]
-        },
-        "359N": {
-            "__class__": "Set",
-            "data": [
-                "359N"
-            ]
-        },
-        "359S": {
-            "__class__": "Set",
-            "data": [
-                "359S"
-            ]
-        },
-        "360N": {
-            "__class__": "Set",
-            "data": [
-                "360N"
-            ]
-        },
-        "360S": {
-            "__class__": "Set",
-            "data": [
-                "360S"
-            ]
-        },
-        "364": {
-            "__class__": "Set",
-            "data": [
-                "364"
-            ]
-        },
-        "380-384": {
-            "__class__": "Set",
-            "data": [
-                "380-384"
-            ]
-        },
-        "703": {
-            "__class__": "Set",
-            "data": [
-                "703"
-            ]
-        },
-        "864": {
-            "__class__": "Set",
-            "data": [
-                "864"
-            ]
-        },
-        "870": {
-            "__class__": "Set",
-            "data": [
-                "870"
-            ]
-        },
-        "891": {
-            "__class__": "Set",
-            "data": [
-                "891"
-            ]
-        },
-        "ASC": {
-            "__class__": "Set",
-            "data": [
-                "ASC 573-577",
-                "ASC 570-572"
-            ]
-        },
-        "Brunn-Maria E.": {
-            "__class__": "Set",
-            "data": [
-                "Brunn-Maria E."
-            ]
-        },
-        "Inzersdorf Ort": {
-            "__class__": "Set",
-            "data": [
-                "Inzersdorf Ort"
-            ]
-        },
-        "Inzersdorf WLB": {
-            "__class__": "Set",
-            "data": [
-                "Inzersdorf WLB"
-            ]
-        },
-        "Iz Ort": {
-            "__class__": "Set",
-            "data": [
-                "Iz Ort 9",
-                "Iz Ort 7"
-            ]
-        },
-        "Kn Hadersdorf": {
-            "__class__": "Set",
-            "data": [
-                "Kn Hadersdorf"
-            ]
-        },
-        "Maxing": {
-            "__class__": "Set",
-            "data": [
-                "Maxing 5",
-                "Maxing 6",
-                "Maxing 4",
-                "Maxing 3"
-            ]
-        },
-        "Stammstrecke": {
-            "__class__": "Set",
-            "data": [
-                "Stammstrecke"
-            ]
-        },
-        "Waldm\u00fchle": {
-            "__class__": "Set",
-            "data": [
-                "Waldm\u00fchle"
-            ]
-        },
-        "Wien Hbf": {
-            "__class__": "Set",
-            "data": [
-                "Wien Hbf 350",
-                "Wien Hbf 3",
-                "Wien Hbf 5",
-                "Wien Hbf 1",
-                "Wien Hbf 2",
-                "Wien Hbf 351"
-            ]
-        }
+  "default": true,
+  "elemente": [
+    {
+      "name": "Aa",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "Aa": {
-            "__class__": "Set",
-            "data": [
-                "Aa"
-            ]
-        },
-        "Het": {
-            "__class__": "Set",
-            "data": [
-                "Het 711",
-                "Het 712"
-            ]
-        },
-        "Hez": {
-            "__class__": "Set",
-            "data": [
-                "Hez"
-            ]
-        },
-        "Hez U1": {
-            "__class__": "Set",
-            "data": [
-                "Hez U1"
-            ]
-        },
-        "Lg": {
-            "__class__": "Set",
-            "data": [
-                "Lg 322",
-                "Lg 403",
-                "Lg 431",
-                "Lg 332",
-                "Lg 402",
-                "Lg 401",
-                "Lg 432",
-                "Lg 531"
-            ]
-        },
-        "Lga": {
-            "__class__": "Set",
-            "data": [
-                "Lga 202",
-                "Lga 203",
-                "Lga 201"
-            ]
-        },
-        "Lgf": {
-            "__class__": "Set",
-            "data": [
-                "Lgf 301",
-                "Lgf 302",
-                "Lgf 352",
-                "Lgf 351",
-                "Lgf 354",
-                "Lgf 303",
-                "Lgf 353"
-            ]
-        },
-        "Mat": {
-            "__class__": "Set",
-            "data": [
-                "Mat 301",
-                "Mat 303",
-                "Mat 302",
-                "Mat 351",
-                "Mat 305",
-                "Mat 350",
-                "Mat 452",
-                "Mat 352",
-                "Mat 401",
-                "Mat 319",
-                "Mat 451"
-            ]
-        },
-        "Mi": {
-            "__class__": "Set",
-            "data": [
-                "Mi 481",
-                "Mi 483",
-                "Mi 502",
-                "Mi *01",
-                "Mi 501",
-                "Mi 510",
-                "Mi *05",
-                "Mi 515",
-                "Mi *06",
-                "Mi 503",
-                "Mi *01 (l)",
-                "Mi *03 (l)",
-                "Mi *03",
-                "Mi 504 (l)",
-                "Mi 508",
-                "Mi *08",
-                "Mi 506",
-                "Mi 502 (l)",
-                "Mi 504",
-                "Mi 513",
-                "Mi 516",
-                "Mi 518",
-                "Mi 552",
-                "Mi 551",
-                "Mi 601",
-                "Mi 612",
-                "Mi 610",
-                "Mi W253",
-                "Mi W279"
-            ]
-        },
-        "Osw": {
-            "__class__": "Set",
-            "data": [
-                "Osw"
-            ]
-        },
-        "Wbb": {
-            "__class__": "Set",
-            "data": [
-                "Wbb"
-            ]
-        }
+    {
+      "name": "Het",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "Brunn-Maria-Stammstrecke",
-    "sektoren": {
-        "Mi *01": {
-            "__class__": "Set",
-            "data": [
-                "Mi *01",
-                "Mi 501",
-                "Mi *01 (l)",
-                "Mi 481"
-            ]
-        },
-        "Mi *02": {
-            "__class__": "Set",
-            "data": [
-                "Mi 502",
-                "Mi 502 (l)"
-            ]
-        },
-        "Mi *03": {
-            "__class__": "Set",
-            "data": [
-                "Mi 503",
-                "Mi *03 (l)",
-                "Mi *03",
-                "Mi 513",
-                "Mi 483"
-            ]
-        },
-        "Mi *04": {
-            "__class__": "Set",
-            "data": [
-                "Mi 504 (l)",
-                "Mi 504"
-            ]
-        },
-        "Mi *05": {
-            "__class__": "Set",
-            "data": [
-                "Mi *05",
-                "Mi 505",
-                "Mi 515"
-            ]
-        },
-        "Mi *06": {
-            "__class__": "Set",
-            "data": [
-                "Mi *06",
-                "Mi 506",
-                "Mi 516"
-            ]
-        },
-        "Mi *08": {
-            "__class__": "Set",
-            "data": [
-                "Mi 508",
-                "Mi *08",
-                "Mi 518"
-            ]
-        }
+    {
+      "name": "Hez",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "strecken": {
-        "Brunn-Maria-Stammstrecke": [
-            "Brunn-Maria E.",
-            "Lg",
-            "Lgf",
-            "Lga",
-            "Het",
-            "Wbb",
-            "Mi",
-            "Stammstrecke"
-        ],
-        "Brunn-Maria E.-Wien Hbf": [
-            "Brunn-Maria E.",
-            "Lg",
-            "Lgf",
-            "Lga",
-            "Het",
-            "Wbb",
-            "Mi",
-            "Wien Hbf"
-        ],
-        "Kn Hadersdorf-Wien Hbf": [
-            "Kn Hadersdorf",
-            "Hez U1",
-            "Hez",
-            "Mi",
-            "Wien Hbf"
-        ]
+    {
+      "name": "Hez U1",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": [],
-    "zugschema": "deutschland"
+    {
+      "name": "Lg",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lga",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lgf",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Mat",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Mi",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Osw",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wbb",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Aa",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Aa"
+    },
+    {
+      "name": "Aa",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Aa",
+      "gleise": 1
+    },
+    {
+      "name": "Aa",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Aa",
+      "gleise": 1
+    },
+    {
+      "name": "Het",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Het"
+    },
+    {
+      "name": "Het 712",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Het 712",
+      "gleise": 1
+    },
+    {
+      "name": "Het 711",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Het 711",
+      "gleise": 1
+    },
+    {
+      "name": "Hez",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hez"
+    },
+    {
+      "name": "Hez",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hez",
+      "gleise": 1
+    },
+    {
+      "name": "Hez",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hez",
+      "gleise": 1
+    },
+    {
+      "name": "Hez U1",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hez U1"
+    },
+    {
+      "name": "Hez U1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hez U1",
+      "gleise": 1
+    },
+    {
+      "name": "Hez U1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hez U1",
+      "gleise": 1
+    },
+    {
+      "name": "Lg",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg"
+    },
+    {
+      "name": "Lg 332",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg 432",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 432",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg 432",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 401",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg 401",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 402",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg 402",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 403",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg 403",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 431",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg 431",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 322",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg 402",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 531",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg 531",
+      "gleise": 1
+    },
+    {
+      "name": "Lga",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lga"
+    },
+    {
+      "name": "Lga 201",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lga 201",
+      "gleise": 1
+    },
+    {
+      "name": "Lga 203",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lga 203",
+      "gleise": 1
+    },
+    {
+      "name": "Lga 202",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lga 202",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf"
+    },
+    {
+      "name": "Lgf 351",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf 351",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 353",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf 353",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 301",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf 301",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 354",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf 354",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 302",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf 302",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 303",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf 303",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 352",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf 352",
+      "gleise": 1
+    },
+    {
+      "name": "Mat",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat"
+    },
+    {
+      "name": "Mat 303",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat 303",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 305",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat 305",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 350",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat 350",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 351",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat 351",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 301",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat 301",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 302",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat 302",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 451",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat 451",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 352",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat 352",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 319",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat 319",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 452",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat 452",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 401",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat 401",
+      "gleise": 1
+    },
+    {
+      "name": "Mi",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi"
+    },
+    {
+      "name": "Mi 501",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 3,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *01",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *01 (l)",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 2,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *01",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *01",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 1,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *01",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *05",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 1,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *05",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 515",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 4,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *05",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 503",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 3,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *03",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *03 (l)",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 2,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *03",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 513",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 4,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *03",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *03",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 1,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *03",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 508",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 3,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *08",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *08",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 1,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *08",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 506",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 3,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *06",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *06",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 1,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *06",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 510",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 3,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *10",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 552",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 3,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi 552",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 551",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 3,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi 551",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 601",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi 601",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 612",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi 612",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 610",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi 610",
+      "gleise": 1
+    },
+    {
+      "name": "Mi W253",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi W253",
+      "gleise": 1
+    },
+    {
+      "name": "Mi W279",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi W279",
+      "gleise": 1
+    },
+    {
+      "name": "Osw",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Osw"
+    },
+    {
+      "name": "Osw",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Osw",
+      "gleise": 1
+    },
+    {
+      "name": "Osw",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Osw",
+      "gleise": 1
+    },
+    {
+      "name": "Wbb",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wbb"
+    },
+    {
+      "name": "Wbb",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wbb",
+      "gleise": 1
+    },
+    {
+      "name": "Wbb",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wbb",
+      "gleise": 1
+    },
+    {
+      "name": "Maxing",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "353-357",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "364",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Stammstrecke",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "359S",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "359N",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Brunn-Maria E.",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "360N",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "386",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "385",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "380-384",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Iz Ort",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "363",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Kn Hadersdorf",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "362",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wien Hbf",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "361",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "870",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "352",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "358-360",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "891",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "703",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Inzersdorf Ort",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ASC",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Inzersdorf WLB",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "360S",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Waldmühle",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "864",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Maxing 6",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Maxing",
+      "gleise": 1
+    },
+    {
+      "name": "Maxing 4",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Maxing",
+      "gleise": 1
+    },
+    {
+      "name": "Maxing 3",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Maxing",
+      "gleise": 1
+    },
+    {
+      "name": "Maxing 5",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Maxing",
+      "gleise": 1
+    },
+    {
+      "name": "353-357",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "353-357",
+      "gleise": 1
+    },
+    {
+      "name": "364",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "364",
+      "gleise": 1
+    },
+    {
+      "name": "Stammstrecke",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Stammstrecke",
+      "gleise": 2
+    },
+    {
+      "name": "359S",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "359S",
+      "gleise": 1
+    },
+    {
+      "name": "359N",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "359N",
+      "gleise": 1
+    },
+    {
+      "name": "Brunn-Maria E.",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brunn-Maria E.",
+      "gleise": 2
+    },
+    {
+      "name": "360N",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "360N",
+      "gleise": 1
+    },
+    {
+      "name": "386",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "386",
+      "gleise": 1
+    },
+    {
+      "name": "385",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "385",
+      "gleise": 1
+    },
+    {
+      "name": "380-384",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "380-384",
+      "gleise": 1
+    },
+    {
+      "name": "Iz Ort 9",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Iz Ort",
+      "gleise": 1
+    },
+    {
+      "name": "Iz Ort 7",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Iz Ort",
+      "gleise": 1
+    },
+    {
+      "name": "363",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "363",
+      "gleise": 1
+    },
+    {
+      "name": "Kn Hadersdorf",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kn Hadersdorf",
+      "gleise": 2
+    },
+    {
+      "name": "362",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "362",
+      "gleise": 1
+    },
+    {
+      "name": "Wien Hbf 351",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wien Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "Wien Hbf 350",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wien Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "Wien Hbf 2",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wien Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "Wien Hbf 1",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wien Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "Wien Hbf 3",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wien Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "Wien Hbf 5",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wien Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "361",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "361",
+      "gleise": 1
+    },
+    {
+      "name": "870",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "870",
+      "gleise": 1
+    },
+    {
+      "name": "352",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "352",
+      "gleise": 1
+    },
+    {
+      "name": "358-360",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "358-360",
+      "gleise": 1
+    },
+    {
+      "name": "891",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "891",
+      "gleise": 1
+    },
+    {
+      "name": "703",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "703",
+      "gleise": 1
+    },
+    {
+      "name": "Inzersdorf Ort",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Inzersdorf Ort",
+      "gleise": 2
+    },
+    {
+      "name": "ASC 570-572",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ASC",
+      "gleise": 1
+    },
+    {
+      "name": "ASC 573-577",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ASC",
+      "gleise": 1
+    },
+    {
+      "name": "Inzersdorf WLB",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Inzersdorf WLB",
+      "gleise": 1
+    },
+    {
+      "name": "360S",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "360S",
+      "gleise": 1
+    },
+    {
+      "name": "Waldmühle",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waldmühle",
+      "gleise": 1
+    },
+    {
+      "name": "864",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "864",
+      "gleise": 1
+    },
+    {
+      "name": "Het 712",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Het",
+      "gleise": 1
+    },
+    {
+      "name": "Het 711",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Het",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 432",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 401",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 402",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 403",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 431",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg",
+      "gleise": 1
+    },
+    {
+      "name": "Lg 531",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lg",
+      "gleise": 1
+    },
+    {
+      "name": "Lga 201",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lga",
+      "gleise": 1
+    },
+    {
+      "name": "Lga 203",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lga",
+      "gleise": 1
+    },
+    {
+      "name": "Lga 202",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lga",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 351",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 353",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 301",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 354",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 302",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 303",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf",
+      "gleise": 1
+    },
+    {
+      "name": "Lgf 352",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lgf",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 303",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 305",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 350",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 351",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 301",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 302",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 451",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 352",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 319",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 452",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat",
+      "gleise": 1
+    },
+    {
+      "name": "Mat 401",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mat",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *01",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 1,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *05",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 5,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *03",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 3,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *08",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 8,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *06",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 6,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *10",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 10,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 552",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 552,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 551",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 551,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 601",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 601,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 612",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 612,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 610",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 610,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi W253",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 1253,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi W279",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 1279,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *02",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 2,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi *04",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 4,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 502 (l)",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 3,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *02",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 502",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 3,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *02",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 504 (l)",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 3,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *04",
+      "gleise": 1
+    },
+    {
+      "name": "Mi 504",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 3,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mi *04",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Brunn-Maria E.-Stammstrecke",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Brunn-Maria E.",
+        "Bf Lg",
+        "Bf Lgf",
+        "Bf Lga",
+        "Bf Het",
+        "Bf Wbb",
+        "Bf Mi",
+        "Anst Stammstrecke"
+      ]
+    },
+    {
+      "name": "Brunn-Maria E.-Wien Hbf",
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst Brunn-Maria E.",
+        "Bf Lg",
+        "Bf Lgf",
+        "Bf Lga",
+        "Bf Het",
+        "Bf Wbb",
+        "Bf Mi",
+        "Anst Wien Hbf"
+      ]
+    },
+    {
+      "name": "Kn Hadersdorf-Wien Hbf",
+      "ordnung": 147,
+      "auto": false,
+      "stationen": [
+        "Anst Kn Hadersdorf",
+        "Bf Hez U1",
+        "Bf Hez",
+        "Bf Mi",
+        "Anst Wien Hbf"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "deutschland",
+  "_aid": 418,
+  "_build": 5851,
+  "_name": "Wien Meidling",
+  "_region": "Österreich Ost",
+  "_version": 3
 }
