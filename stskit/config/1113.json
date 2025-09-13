@@ -1,0 +1,1199 @@
+{
+  "default": true,
+  "_aid": 1113,
+  "_build": 5851,
+  "_name": "St. Anton am Arlberg",
+  "_region": "Österreich West",
+  "elemente": [
+    {
+      "name": "Ao",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bz",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Da",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EA B",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Fch U2",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hin",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lan",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Waa",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wende",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Fch Z1",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lan Z1",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Ao 201",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao"
+    },
+    {
+      "name": "Ao 306",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao"
+    },
+    {
+      "name": "Ao 402",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao"
+    },
+    {
+      "name": "Ao 201",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 201",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 202",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 201",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 201",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 201",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 202",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 202",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 304",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 306",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 301",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 306",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 303",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 306",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 302",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 306",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 306",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 304",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 304",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 304",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 314",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 304",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 324",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 304",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 301",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 301",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 311",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 301",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 303",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 303",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 313",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 303",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 302",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 302",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 312",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 302",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 402",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 402",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 401",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 402",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 402",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 402",
+      "gleise": 1
+    },
+    {
+      "name": "Ao 401",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ao 401",
+      "gleise": 1
+    },
+    {
+      "name": "Bz 103",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bz"
+    },
+    {
+      "name": "Bz 201",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bz"
+    },
+    {
+      "name": "Wende Bz",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bz"
+    },
+    {
+      "name": "Bz 103",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bz 103",
+      "gleise": 1
+    },
+    {
+      "name": "Bz 102",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bz 103",
+      "gleise": 1
+    },
+    {
+      "name": "Bz 101",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bz 103",
+      "gleise": 1
+    },
+    {
+      "name": "Bz 103",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bz 103",
+      "gleise": 1
+    },
+    {
+      "name": "Bz 102",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bz 102",
+      "gleise": 1
+    },
+    {
+      "name": "Bz 101",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bz 101",
+      "gleise": 1
+    },
+    {
+      "name": "Bz 201",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bz 201",
+      "gleise": 1
+    },
+    {
+      "name": "Bz 201",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bz 201",
+      "gleise": 1
+    },
+    {
+      "name": "Da 401",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da"
+    },
+    {
+      "name": "Da 511",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da"
+    },
+    {
+      "name": "Da 601",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da"
+    },
+    {
+      "name": "Da 401",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da 401",
+      "gleise": 1
+    },
+    {
+      "name": "Da 401",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da 401",
+      "gleise": 1
+    },
+    {
+      "name": "Da 511",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da 511",
+      "gleise": 1
+    },
+    {
+      "name": "Da 503",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da 511",
+      "gleise": 1
+    },
+    {
+      "name": "Da 511",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da 511",
+      "gleise": 1
+    },
+    {
+      "name": "Da 515",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da 503",
+      "gleise": 1
+    },
+    {
+      "name": "Da 503",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da 503",
+      "gleise": 1
+    },
+    {
+      "name": "Da 513",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da 503",
+      "gleise": 1
+    },
+    {
+      "name": "Da 601",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da 601",
+      "gleise": 1
+    },
+    {
+      "name": "Da 601",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Da 601",
+      "gleise": 1
+    },
+    {
+      "name": "EA B",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EA B"
+    },
+    {
+      "name": "EA B",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EA B",
+      "gleise": 1
+    },
+    {
+      "name": "EA B",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EA B",
+      "gleise": 1
+    },
+    {
+      "name": "Fch U2",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fch U2"
+    },
+    {
+      "name": "Fch U2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fch U2",
+      "gleise": 1
+    },
+    {
+      "name": "Fch U2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fch U2",
+      "gleise": 1
+    },
+    {
+      "name": "Fch Z1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fch Z1",
+      "gleise": 1
+    },
+    {
+      "name": "Fch Z1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fch Z1",
+      "gleise": 1
+    },
+    {
+      "name": "Hin 801",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hin"
+    },
+    {
+      "name": "Hin 812",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hin"
+    },
+    {
+      "name": "Hin 821",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hin"
+    },
+    {
+      "name": "Hin 801",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hin 801",
+      "gleise": 1
+    },
+    {
+      "name": "Hin 801",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hin 801",
+      "gleise": 1
+    },
+    {
+      "name": "Hin 812",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hin 812",
+      "gleise": 1
+    },
+    {
+      "name": "Hin 811",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hin 812",
+      "gleise": 1
+    },
+    {
+      "name": "Hin 812",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hin 812",
+      "gleise": 1
+    },
+    {
+      "name": "Hin 822",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hin 812",
+      "gleise": 1
+    },
+    {
+      "name": "Hin 811",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hin 811",
+      "gleise": 1
+    },
+    {
+      "name": "Hin 821",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hin 821",
+      "gleise": 1
+    },
+    {
+      "name": "Hin 821",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hin 821",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 101",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan"
+    },
+    {
+      "name": "Lan 201",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan"
+    },
+    {
+      "name": "Lan 101",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 101",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 101",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 101",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 201",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 201",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 403",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 201",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 203",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 201",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 205",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 201",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 202",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 201",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 305",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 201",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 207",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 201",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 201",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 201",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 201G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 201",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 403",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 403",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 203",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 203",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 205",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 205",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 202G",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 202",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 202",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 202",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 305",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 305",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 207",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 207",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 501",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan Z1",
+      "gleise": 1
+    },
+    {
+      "name": "Lan Z1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan Z1",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 502",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan Z1",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 501",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 501",
+      "gleise": 1
+    },
+    {
+      "name": "Lan Z1",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan Z1",
+      "gleise": 1
+    },
+    {
+      "name": "Lan 502",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan 502",
+      "gleise": 1
+    },
+    {
+      "name": "Waa 101",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa"
+    },
+    {
+      "name": "Waa 212",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa"
+    },
+    {
+      "name": "Waa 301",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa"
+    },
+    {
+      "name": "Waa 101",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa 101",
+      "gleise": 1
+    },
+    {
+      "name": "Waa 101",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa 101",
+      "gleise": 1
+    },
+    {
+      "name": "Waa 201",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa 212",
+      "gleise": 1
+    },
+    {
+      "name": "Waa 203",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa 212",
+      "gleise": 1
+    },
+    {
+      "name": "Waa 202",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa 212",
+      "gleise": 1
+    },
+    {
+      "name": "Waa 201",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa 201",
+      "gleise": 1
+    },
+    {
+      "name": "Waa 203",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa 203",
+      "gleise": 1
+    },
+    {
+      "name": "Waa 212",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa 202",
+      "gleise": 1
+    },
+    {
+      "name": "Waa 202",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa 202",
+      "gleise": 1
+    },
+    {
+      "name": "Waa 301",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa 301",
+      "gleise": 1
+    },
+    {
+      "name": "Waa 301",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Waa 301",
+      "gleise": 1
+    },
+    {
+      "name": "Wende ÖBB-Unterwerk",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wende"
+    },
+    {
+      "name": "Wende Bz",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wende Bz",
+      "gleise": 1
+    },
+    {
+      "name": "Wende Bz",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wende Bz",
+      "gleise": 1
+    },
+    {
+      "name": "Wende ÖBB-Unterwerk",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wende ÖBB-Unterwerk",
+      "gleise": 1
+    },
+    {
+      "name": "Wende ÖBB-Unterwerk",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wende ÖBB-Unterwerk",
+      "gleise": 1
+    },
+    {
+      "name": "Landeck-Zams",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bludenz/Feldkirch",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ÖBB-Unterwerk",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Landeck-Zams",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Landeck-Zams",
+      "gleise": 1
+    },
+    {
+      "name": "Bludenz/Feldkirch",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bludenz/Feldkirch",
+      "gleise": 1
+    },
+    {
+      "name": "ÖBB-Unterwerk",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ÖBB-Unterwerk",
+      "gleise": 1
+    },
+    {
+      "name": "Fch Z1",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fch Z1"
+    },
+    {
+      "name": "Lan Z1",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lan Z1"
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Landeck-Zams-Bludenz/Feldkirch",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Landeck-Zams",
+        "Bf Fch Z1",
+        "Bf Fch U2",
+        "Bf Ao",
+        "Bf Lan",
+        "Bf Lan Z1",
+        "Bf Waa",
+        "Bf Da",
+        "Bf Hin",
+        "Bf Bz",
+        "Bf EA B",
+        "Anst Bludenz/Feldkirch"
+      ]
+    },
+    {
+      "name": "Bludenz/Feldkirch-Landeck-Zams",
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst Bludenz/Feldkirch",
+        "Bf EA B",
+        "Bf Bz",
+        "Bf Hin",
+        "Bf Da",
+        "Bf Waa",
+        "Bf Lan Z1",
+        "Bf Lan",
+        "Bf Ao",
+        "Bf Fch U2",
+        "Bf Fch Z1",
+        "Anst Landeck-Zams"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "deutschland",
+  "_version": 3
+}

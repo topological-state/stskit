@@ -1,0 +1,2082 @@
+{
+  "default": true,
+  "elemente": [
+    {
+      "name": "Acton West",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "AML",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "AML ES",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "AML HS",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "AML HSx",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Brentford Goods",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Brentford Loop",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Dawley Loop",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Ealing Broadway",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "from Acton Wells Jn",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "from Greenford",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "from Paddington",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "from Slough",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HAF",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hanson Exit",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hanwell",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hanwell Goods Up Slow",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HAY",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HAY Loop",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Heathrow Airport Jn",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HWV",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HXX",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Southall",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Southall Depot",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Tarmac E Exit",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Tarmac W Exit",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Tunnel Jn",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WEA",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WEA EMU Sdgs Exit",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WEA Loop",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "West Sdg",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Acton West",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Acton West"
+    },
+    {
+      "name": "Acton West",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Acton West",
+      "gleise": 1
+    },
+    {
+      "name": "Acton West",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Acton West",
+      "gleise": 1
+    },
+    {
+      "name": "AML 3",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML"
+    },
+    {
+      "name": "AML Rcp 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 3",
+      "gleise": 1
+    },
+    {
+      "name": "AML Up Poplar",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 3",
+      "gleise": 1
+    },
+    {
+      "name": "AML Rcp 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 3",
+      "gleise": 1
+    },
+    {
+      "name": "AML 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 3",
+      "gleise": 1
+    },
+    {
+      "name": "AML 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 3",
+      "gleise": 1
+    },
+    {
+      "name": "AML Dn Poplar",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 3",
+      "gleise": 1
+    },
+    {
+      "name": "AML Rcp 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 3",
+      "gleise": 1
+    },
+    {
+      "name": "AML 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 3",
+      "gleise": 1
+    },
+    {
+      "name": "Acton Yard Exit",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 3",
+      "gleise": 1
+    },
+    {
+      "name": "AML 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 3",
+      "gleise": 1
+    },
+    {
+      "name": "AML Rcp 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML Rcp 1",
+      "gleise": 1
+    },
+    {
+      "name": "AML Up Poplar",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML Up Poplar",
+      "gleise": 1
+    },
+    {
+      "name": "AML Rcp 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML Rcp 2",
+      "gleise": 1
+    },
+    {
+      "name": "AML 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 3",
+      "gleise": 1
+    },
+    {
+      "name": "AML 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 1",
+      "gleise": 1
+    },
+    {
+      "name": "AML Dn Poplar",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML Dn Poplar",
+      "gleise": 1
+    },
+    {
+      "name": "AML Rcp 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML Rcp 3",
+      "gleise": 1
+    },
+    {
+      "name": "AML 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 2",
+      "gleise": 1
+    },
+    {
+      "name": "Acton Yard Exit",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Acton Yard Exit",
+      "gleise": 1
+    },
+    {
+      "name": "AML 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML 4",
+      "gleise": 1
+    },
+    {
+      "name": "AML ES",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML ES"
+    },
+    {
+      "name": "AML ES",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML ES",
+      "gleise": 1
+    },
+    {
+      "name": "AML ES",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML ES",
+      "gleise": 1
+    },
+    {
+      "name": "AML HS",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML HS"
+    },
+    {
+      "name": "AML HS",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML HS",
+      "gleise": 1
+    },
+    {
+      "name": "AML HS",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML HS",
+      "gleise": 1
+    },
+    {
+      "name": "AML HSx",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML HSx"
+    },
+    {
+      "name": "AML HSx",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML HSx",
+      "gleise": 1
+    },
+    {
+      "name": "AML HSx",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AML HSx",
+      "gleise": 1
+    },
+    {
+      "name": "Brentford Goods",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brentford Goods"
+    },
+    {
+      "name": "Brentford Goods",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brentford Goods",
+      "gleise": 1
+    },
+    {
+      "name": "Brentford Goods",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brentford Goods",
+      "gleise": 1
+    },
+    {
+      "name": "Brentford Loop",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brentford Loop"
+    },
+    {
+      "name": "Southall West Loop",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brentford Loop",
+      "gleise": 1
+    },
+    {
+      "name": "Brentford Loop",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brentford Loop",
+      "gleise": 1
+    },
+    {
+      "name": "Southall West Loop",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Southall West Loop",
+      "gleise": 1
+    },
+    {
+      "name": "Brentford Loop",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brentford Loop",
+      "gleise": 1
+    },
+    {
+      "name": "Dawley Loop",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dawley Loop"
+    },
+    {
+      "name": "Dawley Loop",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dawley Loop",
+      "gleise": 1
+    },
+    {
+      "name": "Dawley Loop",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dawley Loop",
+      "gleise": 1
+    },
+    {
+      "name": "Ealing Broadway",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ealing Broadway"
+    },
+    {
+      "name": "Ealing Broadway",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ealing Broadway",
+      "gleise": 1
+    },
+    {
+      "name": "Ealing Broadway",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ealing Broadway",
+      "gleise": 1
+    },
+    {
+      "name": "from Acton Wells Jn",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "from Acton Wells Jn"
+    },
+    {
+      "name": "from Acton Wells Jn",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "from Acton Wells Jn",
+      "gleise": 1
+    },
+    {
+      "name": "from Acton Wells Jn",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "from Acton Wells Jn",
+      "gleise": 1
+    },
+    {
+      "name": "from Greenford",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "from Greenford"
+    },
+    {
+      "name": "from Greenford",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "from Greenford",
+      "gleise": 1
+    },
+    {
+      "name": "from Greenford",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "from Greenford",
+      "gleise": 1
+    },
+    {
+      "name": "from Paddington",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "from Paddington"
+    },
+    {
+      "name": "from Paddington",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "from Paddington",
+      "gleise": 1
+    },
+    {
+      "name": "from Paddington",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "from Paddington",
+      "gleise": 1
+    },
+    {
+      "name": "from Slough",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "from Slough"
+    },
+    {
+      "name": "from Slough",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "from Slough",
+      "gleise": 1
+    },
+    {
+      "name": "from Slough",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "from Slough",
+      "gleise": 1
+    },
+    {
+      "name": "HAF 2",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAF"
+    },
+    {
+      "name": "HAF 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAF 2",
+      "gleise": 1
+    },
+    {
+      "name": "HAF 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAF 2",
+      "gleise": 1
+    },
+    {
+      "name": "HAF 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAF 2",
+      "gleise": 1
+    },
+    {
+      "name": "HAF 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAF 1",
+      "gleise": 1
+    },
+    {
+      "name": "Hanson Exit",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanson Exit"
+    },
+    {
+      "name": "Hanson Exit",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanson Exit",
+      "gleise": 1
+    },
+    {
+      "name": "Hanson Exit",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanson Exit",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell"
+    },
+    {
+      "name": "Hanwell",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell Goods Up Slow",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Up Slow"
+    },
+    {
+      "name": "Hanwell Goods Up Slow",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Up Slow",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell Goods Dn Fast",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Up Slow",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell Goods Up Fast",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Up Slow",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell Goods Dn Loop",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Up Slow",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell Goods Dn Slow",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Up Slow",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell Goods Up Loop",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Up Slow",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell Goods Up Slow",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Up Slow",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell Goods Dn Fast",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Dn Fast",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell Goods Up Fast",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Up Fast",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell Goods Dn Loop",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Dn Loop",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell Goods Dn Slow",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Dn Slow",
+      "gleise": 1
+    },
+    {
+      "name": "Hanwell Goods Up Loop",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanwell Goods Up Loop",
+      "gleise": 1
+    },
+    {
+      "name": "HAY 5",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY"
+    },
+    {
+      "name": "HAY 5",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY 5",
+      "gleise": 1
+    },
+    {
+      "name": "HAY 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY 5",
+      "gleise": 1
+    },
+    {
+      "name": "HAY 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY 5",
+      "gleise": 1
+    },
+    {
+      "name": "HAY 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY 5",
+      "gleise": 1
+    },
+    {
+      "name": "HAY 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY 5",
+      "gleise": 1
+    },
+    {
+      "name": "HAY 5",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY 5",
+      "gleise": 1
+    },
+    {
+      "name": "HAY 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY 3",
+      "gleise": 1
+    },
+    {
+      "name": "HAY 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY 1",
+      "gleise": 1
+    },
+    {
+      "name": "HAY 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY 2",
+      "gleise": 1
+    },
+    {
+      "name": "HAY 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY 4",
+      "gleise": 1
+    },
+    {
+      "name": "HAY Loop",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY Loop"
+    },
+    {
+      "name": "HAY Loop",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY Loop",
+      "gleise": 1
+    },
+    {
+      "name": "HAY Loop Up",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY Loop",
+      "gleise": 1
+    },
+    {
+      "name": "HAY Loop Dn",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY Loop",
+      "gleise": 1
+    },
+    {
+      "name": "HAY Loop",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY Loop",
+      "gleise": 1
+    },
+    {
+      "name": "HAY Loop Up",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY Loop Up",
+      "gleise": 1
+    },
+    {
+      "name": "HAY Loop Dn",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAY Loop Dn",
+      "gleise": 1
+    },
+    {
+      "name": "Heathrow Airport Jn",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Heathrow Airport Jn"
+    },
+    {
+      "name": "Heathrow Airport Jn",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Heathrow Airport Jn",
+      "gleise": 1
+    },
+    {
+      "name": "Heathrow Airport Jn",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Heathrow Airport Jn",
+      "gleise": 1
+    },
+    {
+      "name": "HWV 4",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWV"
+    },
+    {
+      "name": "HWV 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWV 4",
+      "gleise": 1
+    },
+    {
+      "name": "HWV 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWV 4",
+      "gleise": 1
+    },
+    {
+      "name": "HWV 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWV 4",
+      "gleise": 1
+    },
+    {
+      "name": "HWV 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWV 3",
+      "gleise": 1
+    },
+    {
+      "name": "HXX 2",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HXX"
+    },
+    {
+      "name": "HXX 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HXX 2",
+      "gleise": 1
+    },
+    {
+      "name": "HXX 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HXX 2",
+      "gleise": 1
+    },
+    {
+      "name": "HXX 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HXX 2",
+      "gleise": 1
+    },
+    {
+      "name": "HXX 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HXX 1",
+      "gleise": 1
+    },
+    {
+      "name": "Southall",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Southall"
+    },
+    {
+      "name": "Southall",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Southall",
+      "gleise": 1
+    },
+    {
+      "name": "Southall",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Southall",
+      "gleise": 1
+    },
+    {
+      "name": "Southall Depot",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Southall Depot"
+    },
+    {
+      "name": "Southall Depot",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Southall Depot",
+      "gleise": 1
+    },
+    {
+      "name": "Southall Depot",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Southall Depot",
+      "gleise": 1
+    },
+    {
+      "name": "Tarmac E Exit",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tarmac E Exit"
+    },
+    {
+      "name": "Tarmac E Exit",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tarmac E Exit",
+      "gleise": 1
+    },
+    {
+      "name": "Tarmac E Exit",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tarmac E Exit",
+      "gleise": 1
+    },
+    {
+      "name": "Tarmac W Exit",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tarmac W Exit"
+    },
+    {
+      "name": "Tarmac W Exit",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tarmac W Exit",
+      "gleise": 1
+    },
+    {
+      "name": "Tarmac W Exit",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tarmac W Exit",
+      "gleise": 1
+    },
+    {
+      "name": "Tunnel Jn",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tunnel Jn"
+    },
+    {
+      "name": "Tunnel Jn",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tunnel Jn",
+      "gleise": 1
+    },
+    {
+      "name": "Tunnel Jn",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tunnel Jn",
+      "gleise": 1
+    },
+    {
+      "name": "WEA 3",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA"
+    },
+    {
+      "name": "WEA UM",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA 3",
+      "gleise": 1
+    },
+    {
+      "name": "WEA 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA 3",
+      "gleise": 1
+    },
+    {
+      "name": "WEA DM",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA 3",
+      "gleise": 1
+    },
+    {
+      "name": "WEA 5",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA 3",
+      "gleise": 1
+    },
+    {
+      "name": "WEA 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA 3",
+      "gleise": 1
+    },
+    {
+      "name": "WEA UM",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA UM",
+      "gleise": 1
+    },
+    {
+      "name": "WEA 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA 3",
+      "gleise": 1
+    },
+    {
+      "name": "WEA DM",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA DM",
+      "gleise": 1
+    },
+    {
+      "name": "WEA 5",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA 5",
+      "gleise": 1
+    },
+    {
+      "name": "WEA 5x",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA 5",
+      "gleise": 1
+    },
+    {
+      "name": "WEA 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA 4",
+      "gleise": 1
+    },
+    {
+      "name": "WEA EMU Sdgs Exit",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA EMU Sdgs Exit"
+    },
+    {
+      "name": "WEA EMU Sdgs Exit",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA EMU Sdgs Exit",
+      "gleise": 1
+    },
+    {
+      "name": "WEA EMU Sdgs Exit",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA EMU Sdgs Exit",
+      "gleise": 1
+    },
+    {
+      "name": "WEA Loop",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA Loop"
+    },
+    {
+      "name": "WEA Loop Dn Slow",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA Loop",
+      "gleise": 1
+    },
+    {
+      "name": "WEA Loop",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA Loop",
+      "gleise": 1
+    },
+    {
+      "name": "WEA Loop Up Fast",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA Loop",
+      "gleise": 1
+    },
+    {
+      "name": "WEA Loop Up Slow",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA Loop",
+      "gleise": 1
+    },
+    {
+      "name": "WEA Loop Dn Fast",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA Loop",
+      "gleise": 1
+    },
+    {
+      "name": "WEA Loop Dn Slow",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA Loop Dn Slow",
+      "gleise": 1
+    },
+    {
+      "name": "WEA Loop",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA Loop",
+      "gleise": 1
+    },
+    {
+      "name": "WEA Loop Up Fast",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA Loop Up Fast",
+      "gleise": 1
+    },
+    {
+      "name": "WEA Loop Up Slow",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA Loop Up Slow",
+      "gleise": 1
+    },
+    {
+      "name": "WEA Loop Dn Fast",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WEA Loop Dn Fast",
+      "gleise": 1
+    },
+    {
+      "name": "West Sdg",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "West Sdg"
+    },
+    {
+      "name": "West Sdg",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "West Sdg",
+      "gleise": 1
+    },
+    {
+      "name": "West Sdg",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "West Sdg",
+      "gleise": 1
+    },
+    {
+      "name": "Tarmac E",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Greenford",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EMU",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Acton Yard",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hanson",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Tarmac W",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Southall Depot",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Brentford Goods",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Acton Wells Jn",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Greenford 2",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Paddington",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Slough",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Tarmac E",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tarmac E",
+      "gleise": 1
+    },
+    {
+      "name": "Greenford",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Greenford",
+      "gleise": 1
+    },
+    {
+      "name": "EMU",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EMU",
+      "gleise": 1
+    },
+    {
+      "name": "Acton Yard",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Acton Yard",
+      "gleise": 1
+    },
+    {
+      "name": "Hanson",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hanson",
+      "gleise": 1
+    },
+    {
+      "name": "Tarmac W",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tarmac W",
+      "gleise": 1
+    },
+    {
+      "name": "Southall Depot",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Southall Depot",
+      "gleise": 1
+    },
+    {
+      "name": "Brentford Goods",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brentford Goods",
+      "gleise": 1
+    },
+    {
+      "name": "Acton Wells Jn",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Acton Wells Jn",
+      "gleise": 1
+    },
+    {
+      "name": "Greenford 2",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Greenford 2",
+      "gleise": 1
+    },
+    {
+      "name": "Paddington Slow",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Paddington",
+      "gleise": 1
+    },
+    {
+      "name": "Paddington Fast",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Paddington",
+      "gleise": 1
+    },
+    {
+      "name": "Slough Fast",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Slough",
+      "gleise": 1
+    },
+    {
+      "name": "Slough Slow",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Slough",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Slough-Paddington",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Slough",
+        "Bf from Slough",
+        "Bf Heathrow Airport Jn",
+        "Bf HAY",
+        "Bf Southall",
+        "Bf Hanwell",
+        "Bf WEA",
+        "Bf Ealing Broadway",
+        "Bf Acton West",
+        "Bf from Paddington",
+        "Anst Paddington"
+      ]
+    },
+    {
+      "name": "HAF-Paddington",
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Bf HAF",
+        "Bf HXX",
+        "Bf Tunnel Jn",
+        "Bf Heathrow Airport Jn",
+        "Bf HAY",
+        "Bf HAY Loop",
+        "Bf Southall",
+        "Bf Acton West",
+        "Bf from Paddington",
+        "Anst Paddington"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "grossbritannien",
+  "_aid": 1401,
+  "_build": 5851,
+  "_name": "Acton Main Line",
+  "_region": "Großbritannien London",
+  "_version": 3
+}

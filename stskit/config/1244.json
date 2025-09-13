@@ -1,0 +1,663 @@
+{
+  "default": true,
+  "elemente": [
+    {
+      "name": "Beernem",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bellem",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bruges",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hansbeke",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Landegem",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lichtervelde",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Maria-Aalter",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Oostkamp",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Tronchiennes",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZD",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Zedelgem",
+      "typ": "Bf",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Aalter",
+      "typ": "Bf",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "4G",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "4",
+      "gleise": 1
+    },
+    {
+      "name": "4",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "4",
+      "gleise": 1
+    },
+    {
+      "name": "1",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1",
+      "gleise": 1
+    },
+    {
+      "name": "1G",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1",
+      "gleise": 1
+    },
+    {
+      "name": "3",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "2",
+      "typ": "Gl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2",
+      "gleise": 1
+    },
+    {
+      "name": "Beernem",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Beernem"
+    },
+    {
+      "name": "Beernem",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Beernem",
+      "gleise": 1
+    },
+    {
+      "name": "Beernem",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Beernem",
+      "gleise": 1
+    },
+    {
+      "name": "Bellem",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bellem"
+    },
+    {
+      "name": "Bellem",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bellem",
+      "gleise": 1
+    },
+    {
+      "name": "Bellem",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bellem",
+      "gleise": 1
+    },
+    {
+      "name": "Bruges",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bruges"
+    },
+    {
+      "name": "Bruges",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bruges",
+      "gleise": 1
+    },
+    {
+      "name": "Bruges",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bruges",
+      "gleise": 1
+    },
+    {
+      "name": "Hansbeke",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hansbeke"
+    },
+    {
+      "name": "Hansbeke",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hansbeke",
+      "gleise": 1
+    },
+    {
+      "name": "Hansbeke",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hansbeke",
+      "gleise": 1
+    },
+    {
+      "name": "Landegem",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Landegem"
+    },
+    {
+      "name": "Landegem",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Landegem",
+      "gleise": 1
+    },
+    {
+      "name": "Landegem",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Landegem",
+      "gleise": 1
+    },
+    {
+      "name": "Lichtervelde",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lichtervelde"
+    },
+    {
+      "name": "Lichtervelde",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lichtervelde",
+      "gleise": 1
+    },
+    {
+      "name": "Lichtervelde",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lichtervelde",
+      "gleise": 1
+    },
+    {
+      "name": "Maria-Aalter",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Maria-Aalter"
+    },
+    {
+      "name": "Maria-Aalter",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Maria-Aalter",
+      "gleise": 1
+    },
+    {
+      "name": "Maria-Aalter",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Maria-Aalter",
+      "gleise": 1
+    },
+    {
+      "name": "Oostkamp",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Oostkamp"
+    },
+    {
+      "name": "Oostkamp",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Oostkamp",
+      "gleise": 1
+    },
+    {
+      "name": "Oostkamp",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Oostkamp",
+      "gleise": 1
+    },
+    {
+      "name": "Tronchiennes",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tronchiennes"
+    },
+    {
+      "name": "Tronchiennes",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tronchiennes",
+      "gleise": 1
+    },
+    {
+      "name": "Tronchiennes",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tronchiennes",
+      "gleise": 1
+    },
+    {
+      "name": "ZD 3",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZD"
+    },
+    {
+      "name": "ZD 3",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZD 3",
+      "gleise": 1
+    },
+    {
+      "name": "ZD 1",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZD 3",
+      "gleise": 1
+    },
+    {
+      "name": "ZD 2",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZD 3",
+      "gleise": 1
+    },
+    {
+      "name": "ZD 4",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZD 3",
+      "gleise": 1
+    },
+    {
+      "name": "ZD 3",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZD 3",
+      "gleise": 1
+    },
+    {
+      "name": "ZD 1",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZD 1",
+      "gleise": 1
+    },
+    {
+      "name": "ZD 2",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZD 2",
+      "gleise": 1
+    },
+    {
+      "name": "ZD 4",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZD 4",
+      "gleise": 1
+    },
+    {
+      "name": "Zedelgem",
+      "typ": "Bft",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Zedelgem"
+    },
+    {
+      "name": "Zedelgem",
+      "typ": "Bs",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Zedelgem",
+      "gleise": 1
+    },
+    {
+      "name": "Zedelgem",
+      "typ": "Gl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Zedelgem",
+      "gleise": 1
+    },
+    {
+      "name": "Lichtervelde",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "CNHI Landmaschinen",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bruges 2",
+      "typ": "Anst",
+      "auto": true,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bruges 1/3",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gand-Saint-Pierre",
+      "typ": "Anst",
+      "auto": false,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lichtervelde",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lichtervelde",
+      "gleise": 2
+    },
+    {
+      "name": "CNHI Landmaschinen",
+      "typ": "Agl",
+      "auto": true,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CNHI Landmaschinen",
+      "gleise": 1
+    },
+    {
+      "name": "3",
+      "typ": "Bft",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Aalter"
+    },
+    {
+      "name": "Bruges 2",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bruges 2",
+      "gleise": 2
+    },
+    {
+      "name": "Bruges 1",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bruges 1/3",
+      "gleise": 2
+    },
+    {
+      "name": "Bruges 3",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bruges 1/3",
+      "gleise": 2
+    },
+    {
+      "name": "Gand-Saint-Pierre Nah",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gand-Saint-Pierre",
+      "gleise": 2
+    },
+    {
+      "name": "Gand-Saint-Pierre Fern",
+      "typ": "Agl",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gand-Saint-Pierre",
+      "gleise": 2
+    },
+    {
+      "name": "4",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "1",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "3",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "2",
+      "typ": "Bs",
+      "auto": false,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Bruges-Grand-Saint-Pierre",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Bf Bruges",
+        "Bf Oostkamp",
+        "Bf Beernem",
+        "Bf Maria-Aalter",
+        "Bf Aalter",
+        "Bf Bellem",
+        "Bf Hansbeke",
+        "Bf Landegem",
+        "Bf Tronchiennes"
+      ]
+    },
+    {
+      "name": "Bruges - Lichtervelde",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Bruges 2",
+        "Bf Bruges",
+        "Bf ZD",
+        "Bf Zedelgem",
+        "Bf Lichtervelde",
+        "Anst Lichtervelde"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "benelux",
+  "_aid": 1244,
+  "_build": 5851,
+  "_name": "Aalter",
+  "_region": "Belgien",
+  "_version": 3
+}
