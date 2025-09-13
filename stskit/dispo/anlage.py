@@ -123,7 +123,7 @@ class Anlage:
         if self.anlageninfo is None:
             self.anlageninfo = client.anlageninfo
             self.aenderungen.add('anlageninfo')
-            self.gleisschema = Gleisschema.regionsschema(self.anlageninfo.region)
+            self.gleisschema = Gleisschema.regionsschema(self.anlageninfo.name, self.anlageninfo.region)
             self.aenderungen.add('gleisschema')
 
         if not self.signalgraph or 'anlageninfo' in self.aenderungen:

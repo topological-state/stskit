@@ -88,11 +88,12 @@ class Gleisschema:
     REGISTRY = {}
 
     def __init__(self):
+        self.stellwerk = 'Hbf'
         self.region = 'default'
         self.schema = 'default'
 
     @staticmethod
-    def regionsschema(region) -> 'Gleisschema':
+    def regionsschema(stellwerk, region) -> 'Gleisschema':
         """
         Gleisschema anhand Region ermitteln und instanzieren.
 
@@ -100,6 +101,7 @@ class Gleisschema:
         Anschließend wird das in Gleisschema.REGISTRY registrierte Schema instanziiert.
         Wenn die Region nicht in der REGIONEN_SCHEMA-Liste enthalten ist, wird das Standardgleisschema verwendet.
 
+        :param stellwerk: Name des Stellwerks
         :param region: z.b. 'Berlin Ostbahnhof'
         :return: gleisschema
         """
@@ -110,6 +112,7 @@ class Gleisschema:
             schema = 'default'
         cls = Gleisschema.REGISTRY.get(schema, Gleisschema)
         obj = cls()
+        obj.stellwerk = stellwerk
         obj.region = region
         return obj
 
@@ -153,8 +156,8 @@ class Gleisschema:
 
         FSP503 -> FSP
         NAH423b -> NAH
-        6 -> Hbf
-        10C-D -> Hbf
+        6 -> _Stellwerksname_
+        10C-D -> _Stellwerksname_
         BSGB D73 -> BSGB
         ZUE 12 -> ZUE
         BR 1b -> BR
@@ -195,7 +198,7 @@ class Gleisschema:
         if name:
             return name
         else:
-            return "Hbf"
+            return self.stellwerk
 
     def gleisname_kurz(self, gleis: str) -> str:
         """

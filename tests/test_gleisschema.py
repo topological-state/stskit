@@ -27,6 +27,7 @@ class TestAnlage(unittest.TestCase):
                  }
 
         gleisschema = Gleisschema()
+        gleisschema.stellwerk = 'Hbf'
 
         for gleis, bahnhof in tests.items():
             self.assertEqual(bahnhof, gleisschema.bahnhofname(gleis))
