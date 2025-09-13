@@ -2,13 +2,17 @@
 
 # Allgemeines
 
-1. Wenn die automatische Konfiguration in einem Stellwerk nicht richtig funktioniert, kann sie hier korrigiert werden.  
-2. Es wird empfohlen, zuerst die Anschlüsse und Bahnhöfe zu konfigurieren, erst dann die Strecken.
-3. Änderungen an der Konfiguration werden möglicherweise erst nach einem Neustart des Plugins sichtbar.
+- Wenn die automatische Konfiguration in einem Stellwerk nicht richtig funktioniert, kann sie hier korrigiert werden.  
+- Zuerst die Anschlüsse und Bahnhöfe zu konfigurieren, erst dann die Strecken.
+- Nach grösseren Änderungen oder vor einem Seitenwechsel *Anwenden* oder *OK* klicken.
+- Gewisse Änderungen an der Konfiguration werden erst nach einem Neustart des Plugins sichtbar.
+- Es gibt kein Undo. *Zurücksetzen* stellt den zuletzt gespeicherten Zustand wieder her.
 
 ## Anschlussstellen und Bahnhöfe
 
-stsDispo verwendet ein hierarchiches Bahnhofmodell mit vier Ebenen:
+stsDispo verwendet ein hierarchiches Bahnhofmodell mit vier Ebenen.
+Die Bezeichnungen sind an das Vorbild angelehnt, jedoch nicht deckungsgleich,
+z.B. wird ein Haltepunkt in stsDispo als Bahnhof geführt.
 
 ![Gleismodell](docs/bahnhofgraph.png)
 
@@ -54,20 +58,33 @@ Das Bahnhofmodell wird mittels folgender Prozeduren bearbeitet.
 
 Wenn Gleise (*Elemente*) zu einer falschen übergeordneten Gruppe gehören und die Zielgruppe bereits existiert:
 
-1. Zuzuordnenden Elemente in der Gleistabelle auswählen.
+1. Zuzuordnende Elemente in der Gleistabelle auswählen.
 2. Zielgruppe aus der Liste im Kombifeld der entsprechenden Ebene auswählen.
 3. Zugehörigen Knopf *Zuordnen* klicken.
 
-Wenn die Zielgruppe noch nicht existiert, zuerst gemäss Anleitung *Aufteilen* 
+Wenn die gewünschte Zielgruppe noch nicht existiert, zuerst gemäss Anleitung *Aufteilen* 
 die alte Gruppe auflösen und ggf. bereinigen.
+
+> _Beispiel:_ 
+> Die automatische Konfiguration ordnet das Wendegleis `Wende A` dem Bahnhof `Wende`.
+> Korrekt müsste es aber zum Bahnhof `A` gehören.
+> Um das zu korrigieren, das Gleis `Wende A` auswählen, aus der Bahnhofliste `A` auswählen und darunter *Zuordnen* klicken.
+> Das Gleis und sein Bahnhofteil `Wende A` werden in den Bahnhof `A` integriert.
 
 #### Aufteilen
 
 Wenn Gruppen Elemente enthalten, die nicht zusammengehören:
 
-1. Ein Gleis der aufzuteilenden Gruppe auswählen.
+1. Ein Gleis auswählen, das in eine neue Gruppe überführt werden soll.
 2. Knopf *Aufteilen* der entsprechenden Gruppenebene klicken.
-3. Neue Gruppen ggf. bereinigen oder umbenennen.
+3. Die neue Gruppe erhält den Namen der direkten Untergruppe.
+4. Neue Gruppen ggf. bereinigen oder umbenennen.
+
+> _Beispiel:_ 
+> Haltepunkte in Österreich (z.B. `A H1`) sollen als eigene Bahnhöfe abgebildet werden,
+> nachdem stsDispo sie fälschlich dem Bahnhof `A` zugeordnet hat (der Bahnhofteil `A H1` sei korrekt).
+> Zur Korrektur das Gleis `A H1` auswählen und *Bahnhof aufteilen* klicken.
+> Es wird ein neuer Bahnhof erstellt, der den Namen des Bahnhofteils des Gleises, also in diesem Fall `A H1`, übernimmt.
 
 #### Umbenennen
 
