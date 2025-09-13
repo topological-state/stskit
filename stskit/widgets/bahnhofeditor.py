@@ -194,18 +194,10 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
             element, _ = Counter(elements).most_common(1)[0]
 
         new_element = BahnhofElement(level, element)
-        replace = {gl: new_element for gl in gleise}
+        replacements = {gl: new_element for gl in gleise}
+        self._replace_parents(replacements)
 
-        self.beginResetModel()
-        try:
-            for gl, new in replace.items():
-                self.bahnhofgraph.replace_parent(gl, new)
-            self.bahnhofgraph.leere_gruppen_entfernen()
-        finally:
-            self._update()
-            self.endResetModel()
-
-        return set(replace.keys())
+        return set(replacements.keys())
 
     def ungroup_elements(self, elements: Set[BahnhofElement],
                         level: str) -> Set[BahnhofElement]:
@@ -225,27 +217,33 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
         This method modifies the bahnhofgraph by replacing parent-child relationships as necessary. If no replacements are made, an empty set is returned.
         """
 
-        replace = {}
+        replacements = {}
         for child in elements:
             if not self.bahnhofgraph.has_node(child):
                 continue  # Gleis existiert nicht
             parent = BahnhofElement(level, child.name)
             if self.bahnhofgraph.has_node(parent):
                 continue  # Bahnsteig existiert bereits
-            replace[child] = parent
-        if not replace:
+            replacements[child] = parent
+        if not replacements:
             return set()
 
+        self._replace_parents(replacements)
+
+        return set(replacements.keys())
+
+    def _replace_parents(self, replacements: Mapping[BahnhofElement, BahnhofElement]):
         self.beginResetModel()
         try:
-            for child, parent in replace.items():
-                self.bahnhofgraph.replace_parent(child, parent)
+            for child, parent in replacements.items():
+                try:
+                    self.bahnhofgraph.replace_parent(child, parent)
+                except ValueError:
+                    pass
             self.bahnhofgraph.leere_gruppen_entfernen()
         finally:
             self._update()
             self.endResetModel()
-
-        return set(replace.keys())
 
     def rename_element(self, level: str, old: str, new: str) -> Optional[BahnhofElement]:
         """

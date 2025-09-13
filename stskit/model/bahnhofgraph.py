@@ -334,10 +334,33 @@ class BahnhofGraph(nx.DiGraph):
         except KeyError:
             return None
 
+    def _find_parent_to_replace(self,
+                                gleis: BahnhofLabelType,
+                                level: str) -> Tuple[Optional[Sequence[BahnhofLabelType]], Optional[BahnhofLabelType], Optional[BahnsteigGraphNode]]:
+        """
+        Sucht den Parent eines bestimmten Typs des angegebenen Gleises.
+
+        Untermethode von replace_parent und can_replace_parent
+        """
+
+        old_path = [gleis] + [element for element in self.list_parents(gleis)]
+        old_parents = {element.typ: element for element in old_path}
+        try:
+            old_parent = old_parents[level]
+            old_data = self.nodes[old_parent]
+        except KeyError:
+            # Fehler im Graph: Das Gleis hat keinen entsprechenden Elternknoten!
+            logger.error(f"Fehler im Bahnhofgraph: Das Gleis {gleis} hat keinen Elternknoten vom Typ {level}!")
+            old_parent = None
+            old_data = None
+
+        return old_path, old_parent, old_data
+
     def replace_parent(self, gleis: BahnhofLabelType,
                        new_parent: BahnhofLabelType,
                        new_data: Optional[BahnsteigGraphNode] = None,
-                       del_old_parent: bool = False):
+                       del_old_parent: bool = False,
+                       dry_run: bool = False) -> bool:
         """
         Ersetzt den Elternknoten eines Gleises.
 
@@ -357,40 +380,42 @@ class BahnhofGraph(nx.DiGraph):
             Der Knoten kann existieren oder wird aus einer Kopie des alten neu erstellt.
         :param new_data: Daten des neuen Elternknotens. Wenn None, werden die alten Daten verwendet.
         :param del_old_parent: Alten Knoten löschen, wenn er keine Kinder hat. Standardmäßig False.
-        :return: Label des alten Knotens
+        :param dry_run: True = prüfen, ob die Aktion möglich ist, Graph aber nicht verändern.
+            Bei einem Fehler wird ein ValueError gemeldet.
+        :return: True wenn erfolgreich
+        :raise: ValueError, wenn der Stammknoten nicht gefunden wird oder das Gleis bereits zum neuen Stamm gehört.
         """
 
-        old_path = [gleis] + [element for element in self.list_parents(gleis)]
-        old_parents = {element.typ: element for element in old_path}
-        try:
-            old_parent = old_parents[new_parent.typ]
-            old_data = self.nodes[old_parent]
-        except KeyError:
-            # Fehler im Graph: Das Gleis hat keinen entsprechenden Elternknoten!
-            logger.error(f"Fehler im Bahnhofgraph: Das Gleis {gleis} hat keinen Elternknoten vom Typ {new_parent.typ}!")
-            return None
+        old_path, old_parent, old_data = self._find_parent_to_replace(gleis, new_parent.typ)
+        if old_parent is None:
+            raise ValueError(f"Gleis {gleis} hat keinen Stammknoten vom Typ {new_parent.typ}!")
+        if new_parent == old_parent:
+            raise ValueError(f"Gleis {gleis} ist schon ein Mitglied von {new_parent}!")
 
         if new_data is None and not self.has_node(new_parent):
             new_data = old_data.copy()
         if new_data is not None:
             new_data['name'] = new_parent.name
             new_data['typ'] = new_parent.typ
-            self.add_node(new_parent, **new_data)
+            if not dry_run:
+                self.add_node(new_parent, **new_data)
 
         for element in old_path:
             if self.has_edge(old_parent, element):
                 data = self.get_edge_data(old_parent, element)
-                self.add_edge(new_parent, element, **data)
-                self.nodes[element]['auto'] = False
-                self.remove_edge(old_parent, element)
+                if not dry_run:
+                    self.add_edge(new_parent, element, **data)
+                    self.nodes[element]['auto'] = False
+                    self.remove_edge(old_parent, element)
             if self.has_edge(element, old_parent):
                 data = self.get_edge_data(element, old_parent)
-                self.add_edge(element, new_parent, **data)
+                if not dry_run:
+                    self.add_edge(element, new_parent, **data)
 
-        if del_old_parent and not any(self.successors(old_parent)):
+        if not dry_run and del_old_parent and not any(self.successors(old_parent)):
             self.remove_node(old_parent)
 
-        return old_parent
+        return dry_run or self.has_edge(new_parent, gleis)
 
     def gleis_bahnsteig(self, gleis: str) -> str:
         """

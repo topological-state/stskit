@@ -225,8 +225,8 @@ class TestBahnhofGraph(unittest.TestCase):
         # Verify that the old parent node still exists
         self.assertTrue(self.graph.has_node(old_parent))
 
-        # Verify that the old label is returned
-        self.assertEqual(result, old_parent)
+        # Verify that the result indicates success
+        self.assertTrue(result)
 
         gleis = BahnhofLabelType('Gl', 'A2b')
         old_parent = BahnhofLabelType('Bs', 'A2')
@@ -236,6 +236,10 @@ class TestBahnhofGraph(unittest.TestCase):
 
         # Verify that the old parent node was removed
         self.assertFalse(self.graph.has_node(old_parent))
+
+        # Verify that the result indicates success
+        self.assertTrue(result)
+
 
 if __name__ == '__main__':
     unittest.main()
