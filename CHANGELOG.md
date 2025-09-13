@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.1.5
+
+### Features
+
+- Gleisbelegung: Gleise nach Bf-Bft-Bs gruppieren
+- Gleisbelegung: Gleise nach Konfiguration (`ordnung`-Attribut) sortieren (im GUI nicht änderbar)
+- Default-Bahnhofname von rein numerischen Gleisen ist neu der Stellwerksname (statt _Hbf_)
+
+### Closed issues
+
+- Bahnhofkonfiguration: Fehler beim Zuordnen in eigene Gruppe 
+
+### Beispielkonfigurationen
+
+- Aalter
+- Acton Main Line
+- Meidling
+- Mödling
+- Olten
+- St. Anton am Arlberg
+
 ## 2.1.4
 
 ### Features
