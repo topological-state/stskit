@@ -726,6 +726,7 @@ class GleisbelegungPlot:
         self.zentrale = zentrale
         self.anlage = zentrale.anlage
 
+        self.gleis_axis = "top"
         self.belegte_gleise_zeigen = False
 
         self._balken = None
@@ -792,7 +793,12 @@ class GleisbelegungPlot:
                 colors[slot] = 'yellow'
         colors = [colors[slot] for slot in slots]
 
-        self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
+        if self.gleis_axis == "top":
+            self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='left')
+            self._axes.tick_params(top=True, bottom=False, labeltop=True, labelbottom=False)
+        else:
+            self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
+            self._axes.tick_params(top=False, bottom=True, labeltop=False, labelbottom=True)
         self._axes.yaxis.set_major_formatter(hour_minutes_formatter)
         self._axes.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(1))
         self._axes.yaxis.set_major_locator(mpl.ticker.MultipleLocator(5))

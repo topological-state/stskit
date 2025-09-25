@@ -28,6 +28,7 @@ class BildfahrplanPlot:
         self.zentrale = zentrale
         self.anlage = zentrale.anlage
 
+        self.strecken_axis = "top"
         self.strecken_name: str = ""
         self.strecke_von: Optional[BahnhofElement] = None
         self.strecke_via: Optional[BahnhofElement] = None
@@ -312,7 +313,12 @@ class BildfahrplanPlot:
         x_labels = [s for _, s in self.strecke]
         x_labels_pos = self.distanz
 
-        self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
+        if self.strecken_axis == "top":
+            self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='left')
+            self._axes.tick_params(top=True, bottom=False, labeltop=True, labelbottom=False)
+        else:
+            self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
+            self._axes.tick_params(top=False, bottom=True, labeltop=False, labelbottom=True)
         self._axes.yaxis.set_major_formatter(hour_minutes_formatter)
         self._axes.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(1))
         self._axes.yaxis.set_major_locator(mpl.ticker.MultipleLocator(5))
