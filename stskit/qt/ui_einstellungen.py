@@ -17,11 +17,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractButton, QAbstractItemView, QApplication, QComboBox,
     QDialogButtonBox, QGroupBox, QHBoxLayout, QHeaderView,
-    QLabel, QListView, QMainWindow, QPushButton,
-    QSizePolicy, QSpacerItem, QSplitter, QTabWidget,
-    QTableView, QTextEdit, QVBoxLayout, QWidget)
+    QLabel, QLineEdit, QListView, QMainWindow,
+    QPushButton, QSizePolicy, QSpacerItem, QSplitter,
+    QTabWidget, QTableView, QTextEdit, QVBoxLayout,
+    QWidget)
 
-import stskit.qt.resources_rc
 
 class Ui_EinstellungenWindow(object):
     def setupUi(self, EinstellungenWindow):
@@ -38,75 +38,6 @@ class Ui_EinstellungenWindow(object):
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.tab_widget = QTabWidget(self.widget)
         self.tab_widget.setObjectName(u"tab_widget")
-        self.anst_tab = QWidget()
-        self.anst_tab.setObjectName(u"anst_tab")
-        self.anst_tab.setEnabled(True)
-        self.verticalLayout_15 = QVBoxLayout(self.anst_tab)
-        self.verticalLayout_15.setObjectName(u"verticalLayout_15")
-        self.anst_splitter = QSplitter(self.anst_tab)
-        self.anst_splitter.setObjectName(u"anst_splitter")
-        self.anst_splitter.setOrientation(Qt.Horizontal)
-        self.agl_table_view = QTableView(self.anst_splitter)
-        self.agl_table_view.setObjectName(u"agl_table_view")
-        self.agl_table_view.setAlternatingRowColors(True)
-        self.agl_table_view.setSelectionMode(QAbstractItemView.MultiSelection)
-        self.agl_table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.agl_table_view.setSortingEnabled(True)
-        self.anst_splitter.addWidget(self.agl_table_view)
-        self.anst_control_widget = QWidget(self.anst_splitter)
-        self.anst_control_widget.setObjectName(u"anst_control_widget")
-        self.verticalLayout_10 = QVBoxLayout(self.anst_control_widget)
-        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.agl_group = QGroupBox(self.anst_control_widget)
-        self.agl_group.setObjectName(u"agl_group")
-        self.verticalLayout_11 = QVBoxLayout(self.agl_group)
-        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
-        self.agl_combo = QComboBox(self.agl_group)
-        self.agl_combo.setObjectName(u"agl_combo")
-        self.agl_combo.setEditable(True)
-
-        self.verticalLayout_11.addWidget(self.agl_combo)
-
-
-        self.verticalLayout_10.addWidget(self.agl_group)
-
-        self.anst_group = QGroupBox(self.anst_control_widget)
-        self.anst_group.setObjectName(u"anst_group")
-        self.verticalLayout_14 = QVBoxLayout(self.anst_group)
-        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
-        self.anst_combo = QComboBox(self.anst_group)
-        self.anst_combo.setObjectName(u"anst_combo")
-        self.anst_combo.setEditable(True)
-
-        self.verticalLayout_14.addWidget(self.anst_combo)
-
-        self.anst_group_button = QPushButton(self.anst_group)
-        self.anst_group_button.setObjectName(u"anst_group_button")
-
-        self.verticalLayout_14.addWidget(self.anst_group_button)
-
-        self.anst_ungroup_button = QPushButton(self.anst_group)
-        self.anst_ungroup_button.setObjectName(u"anst_ungroup_button")
-
-        self.verticalLayout_14.addWidget(self.anst_ungroup_button)
-
-        self.anst_rename_button = QPushButton(self.anst_group)
-        self.anst_rename_button.setObjectName(u"anst_rename_button")
-
-        self.verticalLayout_14.addWidget(self.anst_rename_button)
-
-
-        self.verticalLayout_10.addWidget(self.anst_group)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_10.addItem(self.verticalSpacer_2)
-
-        self.anst_splitter.addWidget(self.anst_control_widget)
-
-        self.verticalLayout_15.addWidget(self.anst_splitter)
-
-        self.tab_widget.addTab(self.anst_tab, "")
         self.bahnhof_tab = QWidget()
         self.bahnhof_tab.setObjectName(u"bahnhof_tab")
         self.bahnhof_tab.setEnabled(True)
@@ -232,74 +163,146 @@ class Ui_EinstellungenWindow(object):
         self.verticalLayout_8.addWidget(self.bf_splitter)
 
         self.tab_widget.addTab(self.bahnhof_tab, "")
+        self.anst_tab = QWidget()
+        self.anst_tab.setObjectName(u"anst_tab")
+        self.anst_tab.setEnabled(True)
+        self.verticalLayout_15 = QVBoxLayout(self.anst_tab)
+        self.verticalLayout_15.setObjectName(u"verticalLayout_15")
+        self.anst_splitter = QSplitter(self.anst_tab)
+        self.anst_splitter.setObjectName(u"anst_splitter")
+        self.anst_splitter.setOrientation(Qt.Horizontal)
+        self.agl_table_view = QTableView(self.anst_splitter)
+        self.agl_table_view.setObjectName(u"agl_table_view")
+        self.agl_table_view.setAlternatingRowColors(True)
+        self.agl_table_view.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.agl_table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.agl_table_view.setSortingEnabled(True)
+        self.anst_splitter.addWidget(self.agl_table_view)
+        self.anst_control_widget = QWidget(self.anst_splitter)
+        self.anst_control_widget.setObjectName(u"anst_control_widget")
+        self.verticalLayout_10 = QVBoxLayout(self.anst_control_widget)
+        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+        self.agl_group = QGroupBox(self.anst_control_widget)
+        self.agl_group.setObjectName(u"agl_group")
+        self.verticalLayout_11 = QVBoxLayout(self.agl_group)
+        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
+        self.agl_combo = QComboBox(self.agl_group)
+        self.agl_combo.setObjectName(u"agl_combo")
+        self.agl_combo.setEditable(True)
+
+        self.verticalLayout_11.addWidget(self.agl_combo)
+
+
+        self.verticalLayout_10.addWidget(self.agl_group)
+
+        self.anst_group = QGroupBox(self.anst_control_widget)
+        self.anst_group.setObjectName(u"anst_group")
+        self.verticalLayout_14 = QVBoxLayout(self.anst_group)
+        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
+        self.anst_combo = QComboBox(self.anst_group)
+        self.anst_combo.setObjectName(u"anst_combo")
+        self.anst_combo.setEditable(True)
+
+        self.verticalLayout_14.addWidget(self.anst_combo)
+
+        self.anst_group_button = QPushButton(self.anst_group)
+        self.anst_group_button.setObjectName(u"anst_group_button")
+
+        self.verticalLayout_14.addWidget(self.anst_group_button)
+
+        self.anst_ungroup_button = QPushButton(self.anst_group)
+        self.anst_ungroup_button.setObjectName(u"anst_ungroup_button")
+
+        self.verticalLayout_14.addWidget(self.anst_ungroup_button)
+
+        self.anst_rename_button = QPushButton(self.anst_group)
+        self.anst_rename_button.setObjectName(u"anst_rename_button")
+
+        self.verticalLayout_14.addWidget(self.anst_rename_button)
+
+
+        self.verticalLayout_10.addWidget(self.anst_group)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_10.addItem(self.verticalSpacer_2)
+
+        self.anst_splitter.addWidget(self.anst_control_widget)
+
+        self.verticalLayout_15.addWidget(self.anst_splitter)
+
+        self.tab_widget.addTab(self.anst_tab, "")
         self.strecken_tab = QWidget()
         self.strecken_tab.setObjectName(u"strecken_tab")
         self.strecken_tab.setEnabled(True)
         self.verticalLayout_19 = QVBoxLayout(self.strecken_tab)
         self.verticalLayout_19.setObjectName(u"verticalLayout_19")
-        self.verticalLayout_18 = QVBoxLayout()
-        self.verticalLayout_18.setObjectName(u"verticalLayout_18")
-        self.verticalLayout_17 = QVBoxLayout()
+        self.splitter = QSplitter(self.strecken_tab)
+        self.splitter.setObjectName(u"splitter")
+        self.splitter.setOrientation(Qt.Vertical)
+        self.widget1 = QWidget(self.splitter)
+        self.widget1.setObjectName(u"widget1")
+        self.verticalLayout_17 = QVBoxLayout(self.widget1)
         self.verticalLayout_17.setObjectName(u"verticalLayout_17")
-        self.strecken_name_label = QLabel(self.strecken_tab)
+        self.verticalLayout_17.setContentsMargins(0, 0, 0, 0)
+        self.strecken_name_label = QLabel(self.widget1)
         self.strecken_name_label.setObjectName(u"strecken_name_label")
 
         self.verticalLayout_17.addWidget(self.strecken_name_label)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.strecken_name_combo = QComboBox(self.strecken_tab)
-        self.strecken_name_combo.setObjectName(u"strecken_name_combo")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.strecken_name_combo.sizePolicy().hasHeightForWidth())
-        self.strecken_name_combo.setSizePolicy(sizePolicy)
-        self.strecken_name_combo.setEditable(True)
+        self.strecken_liste = QListView(self.widget1)
+        self.strecken_liste.setObjectName(u"strecken_liste")
 
-        self.horizontalLayout.addWidget(self.strecken_name_combo)
+        self.horizontalLayout.addWidget(self.strecken_liste)
 
-        self.strecken_erstellen_button = QPushButton(self.strecken_tab)
+        self.verticalLayout_18 = QVBoxLayout()
+        self.verticalLayout_18.setObjectName(u"verticalLayout_18")
+        self.strecken_name_edit = QLineEdit(self.widget1)
+        self.strecken_name_edit.setObjectName(u"strecken_name_edit")
+
+        self.verticalLayout_18.addWidget(self.strecken_name_edit)
+
+        self.strecken_erstellen_button = QPushButton(self.widget1)
         self.strecken_erstellen_button.setObjectName(u"strecken_erstellen_button")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.strecken_erstellen_button.sizePolicy().hasHeightForWidth())
-        self.strecken_erstellen_button.setSizePolicy(sizePolicy1)
-        self.strecken_erstellen_button.setMinimumSize(QSize(26, 0))
-        self.strecken_erstellen_button.setMaximumSize(QSize(26, 26))
 
-        self.horizontalLayout.addWidget(self.strecken_erstellen_button)
+        self.verticalLayout_18.addWidget(self.strecken_erstellen_button)
 
-        self.strecken_loeschen_button = QPushButton(self.strecken_tab)
+        self.strecken_umbenennen_button = QPushButton(self.widget1)
+        self.strecken_umbenennen_button.setObjectName(u"strecken_umbenennen_button")
+
+        self.verticalLayout_18.addWidget(self.strecken_umbenennen_button)
+
+        self.strecken_loeschen_button = QPushButton(self.widget1)
         self.strecken_loeschen_button.setObjectName(u"strecken_loeschen_button")
-        sizePolicy1.setHeightForWidth(self.strecken_loeschen_button.sizePolicy().hasHeightForWidth())
-        self.strecken_loeschen_button.setSizePolicy(sizePolicy1)
-        self.strecken_loeschen_button.setMaximumSize(QSize(26, 26))
 
-        self.horizontalLayout.addWidget(self.strecken_loeschen_button)
+        self.verticalLayout_18.addWidget(self.strecken_loeschen_button)
 
-        self.strecken_auto_loeschen_button = QPushButton(self.strecken_tab)
-        self.strecken_auto_loeschen_button.setObjectName(u"strecken_auto_loeschen_button")
+        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.horizontalLayout.addWidget(self.strecken_auto_loeschen_button)
+        self.verticalLayout_18.addItem(self.verticalSpacer_5)
+
+
+        self.horizontalLayout.addLayout(self.verticalLayout_18)
 
 
         self.verticalLayout_17.addLayout(self.horizontalLayout)
 
-
-        self.verticalLayout_18.addLayout(self.verticalLayout_17)
-
-        self.horizontalLayout_4 = QHBoxLayout()
+        self.splitter.addWidget(self.widget1)
+        self.widget2 = QWidget(self.splitter)
+        self.widget2.setObjectName(u"widget2")
+        self.horizontalLayout_4 = QHBoxLayout(self.widget2)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_13 = QVBoxLayout()
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.strecken_auswahl_label = QLabel(self.strecken_tab)
+        self.strecken_auswahl_label = QLabel(self.widget2)
         self.strecken_auswahl_label.setObjectName(u"strecken_auswahl_label")
 
         self.verticalLayout_13.addWidget(self.strecken_auswahl_label)
 
-        self.strecken_auswahl_list = QListView(self.strecken_tab)
+        self.strecken_auswahl_list = QListView(self.widget2)
         self.strecken_auswahl_list.setObjectName(u"strecken_auswahl_list")
         self.strecken_auswahl_list.setDragEnabled(True)
         self.strecken_auswahl_list.setDragDropMode(QAbstractItemView.DragDrop)
@@ -318,32 +321,32 @@ class Ui_EinstellungenWindow(object):
 
         self.verticalLayout_12.addItem(self.verticalSpacer_3)
 
-        self.strecken_auswahl_button = QPushButton(self.strecken_tab)
+        self.strecken_auswahl_button = QPushButton(self.widget2)
         self.strecken_auswahl_button.setObjectName(u"strecken_auswahl_button")
 
         self.verticalLayout_12.addWidget(self.strecken_auswahl_button)
 
-        self.strecken_abwahl_button = QPushButton(self.strecken_tab)
+        self.strecken_abwahl_button = QPushButton(self.widget2)
         self.strecken_abwahl_button.setObjectName(u"strecken_abwahl_button")
 
         self.verticalLayout_12.addWidget(self.strecken_abwahl_button)
 
-        self.strecken_hoch_button = QPushButton(self.strecken_tab)
+        self.strecken_hoch_button = QPushButton(self.widget2)
         self.strecken_hoch_button.setObjectName(u"strecken_hoch_button")
 
         self.verticalLayout_12.addWidget(self.strecken_hoch_button)
 
-        self.strecken_runter_button = QPushButton(self.strecken_tab)
+        self.strecken_runter_button = QPushButton(self.widget2)
         self.strecken_runter_button.setObjectName(u"strecken_runter_button")
 
         self.verticalLayout_12.addWidget(self.strecken_runter_button)
 
-        self.strecken_interpolieren_button = QPushButton(self.strecken_tab)
+        self.strecken_interpolieren_button = QPushButton(self.widget2)
         self.strecken_interpolieren_button.setObjectName(u"strecken_interpolieren_button")
 
         self.verticalLayout_12.addWidget(self.strecken_interpolieren_button)
 
-        self.strecken_ordnen_button = QPushButton(self.strecken_tab)
+        self.strecken_ordnen_button = QPushButton(self.widget2)
         self.strecken_ordnen_button.setObjectName(u"strecken_ordnen_button")
 
         self.verticalLayout_12.addWidget(self.strecken_ordnen_button)
@@ -357,12 +360,12 @@ class Ui_EinstellungenWindow(object):
 
         self.verticalLayout_16 = QVBoxLayout()
         self.verticalLayout_16.setObjectName(u"verticalLayout_16")
-        self.strecken_abwahl_label = QLabel(self.strecken_tab)
+        self.strecken_abwahl_label = QLabel(self.widget2)
         self.strecken_abwahl_label.setObjectName(u"strecken_abwahl_label")
 
         self.verticalLayout_16.addWidget(self.strecken_abwahl_label)
 
-        self.strecken_abwahl_list = QListView(self.strecken_tab)
+        self.strecken_abwahl_list = QListView(self.widget2)
         self.strecken_abwahl_list.setObjectName(u"strecken_abwahl_list")
         self.strecken_abwahl_list.setDragEnabled(True)
         self.strecken_abwahl_list.setDragDropMode(QAbstractItemView.DragDrop)
@@ -375,11 +378,9 @@ class Ui_EinstellungenWindow(object):
 
         self.horizontalLayout_4.addLayout(self.verticalLayout_16)
 
+        self.splitter.addWidget(self.widget2)
 
-        self.verticalLayout_18.addLayout(self.horizontalLayout_4)
-
-
-        self.verticalLayout_19.addLayout(self.verticalLayout_18)
+        self.verticalLayout_19.addWidget(self.splitter)
 
         self.tab_widget.addTab(self.strecken_tab, "")
         self.zugschema_tab = QWidget()
@@ -439,7 +440,6 @@ class Ui_EinstellungenWindow(object):
 
         EinstellungenWindow.setCentralWidget(self.centralwidget)
 #if QT_CONFIG(shortcut)
-        self.strecken_name_label.setBuddy(self.strecken_name_combo)
         self.strecken_auswahl_label.setBuddy(self.strecken_auswahl_list)
         self.strecken_abwahl_label.setBuddy(self.strecken_abwahl_list)
         self.zugschema_name_label.setBuddy(self.zugschema_name_label)
@@ -458,27 +458,6 @@ class Ui_EinstellungenWindow(object):
 
     def retranslateUi(self, EinstellungenWindow):
         EinstellungenWindow.setWindowTitle(QCoreApplication.translate("EinstellungenWindow", u"Einstellungen", None))
-        self.agl_group.setTitle(QCoreApplication.translate("EinstellungenWindow", u"Filter", None))
-#if QT_CONFIG(tooltip)
-        self.agl_combo.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Anschlussgleise (Agl) filtern (leer = alle)", None))
-#endif // QT_CONFIG(tooltip)
-        self.anst_group.setTitle(QCoreApplication.translate("EinstellungenWindow", u"Anschlussstelle (Anst)", None))
-#if QT_CONFIG(tooltip)
-        self.anst_combo.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Ziel-Anschlussstelle", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.anst_group_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Ausgew\u00e4hlte Gleise der Ziel-Anschlussstelle zuordnen", None))
-#endif // QT_CONFIG(tooltip)
-        self.anst_group_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Zuordnen", None))
-#if QT_CONFIG(tooltip)
-        self.anst_ungroup_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Ausgew\u00e4hlte Gleise auf eigene Anschlussstellen aufteilen (Anst aufl\u00f6sen)", None))
-#endif // QT_CONFIG(tooltip)
-        self.anst_ungroup_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Aufteilen", None))
-#if QT_CONFIG(tooltip)
-        self.anst_rename_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Anschlussstelle umbenennen", None))
-#endif // QT_CONFIG(tooltip)
-        self.anst_rename_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Umbenennen", None))
-        self.tab_widget.setTabText(self.tab_widget.indexOf(self.anst_tab), QCoreApplication.translate("EinstellungenWindow", u"Anschlussstellen", None))
         self.gl_group.setTitle(QCoreApplication.translate("EinstellungenWindow", u"Filter", None))
 #if QT_CONFIG(tooltip)
         self.gl_combo.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Gleise (Gl) filtern (leer = alle)", None))
@@ -532,23 +511,37 @@ class Ui_EinstellungenWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.bf_rename_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Umbenennen", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.bahnhof_tab), QCoreApplication.translate("EinstellungenWindow", u"Bahnh\u00f6fe", None))
-        self.strecken_name_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Strecke", None))
+        self.agl_group.setTitle(QCoreApplication.translate("EinstellungenWindow", u"Filter", None))
 #if QT_CONFIG(tooltip)
-        self.strecken_name_combo.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Streckenauswahl", None))
+        self.agl_combo.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Anschlussgleise (Agl) filtern (leer = alle)", None))
 #endif // QT_CONFIG(tooltip)
-        self.strecken_name_combo.setPlaceholderText(QCoreApplication.translate("EinstellungenWindow", u"Streckenname", None))
+        self.anst_group.setTitle(QCoreApplication.translate("EinstellungenWindow", u"Anschlussstelle (Anst)", None))
+#if QT_CONFIG(tooltip)
+        self.anst_combo.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Ziel-Anschlussstelle", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.anst_group_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Ausgew\u00e4hlte Gleise der Ziel-Anschlussstelle zuordnen", None))
+#endif // QT_CONFIG(tooltip)
+        self.anst_group_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Zuordnen", None))
+#if QT_CONFIG(tooltip)
+        self.anst_ungroup_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Ausgew\u00e4hlte Gleise auf eigene Anschlussstellen aufteilen (Anst aufl\u00f6sen)", None))
+#endif // QT_CONFIG(tooltip)
+        self.anst_ungroup_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Aufteilen", None))
+#if QT_CONFIG(tooltip)
+        self.anst_rename_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Anschlussstelle umbenennen", None))
+#endif // QT_CONFIG(tooltip)
+        self.anst_rename_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Umbenennen", None))
+        self.tab_widget.setTabText(self.tab_widget.indexOf(self.anst_tab), QCoreApplication.translate("EinstellungenWindow", u"Anschlussstellen", None))
+        self.strecken_name_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Strecke", None))
 #if QT_CONFIG(tooltip)
         self.strecken_erstellen_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Neue Strecke", None))
 #endif // QT_CONFIG(tooltip)
-        self.strecken_erstellen_button.setText(QCoreApplication.translate("EinstellungenWindow", u"+", None))
+        self.strecken_erstellen_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Neu", None))
+        self.strecken_umbenennen_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Umbenennen", None))
 #if QT_CONFIG(tooltip)
         self.strecken_loeschen_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Strecke l\u00f6schen", None))
 #endif // QT_CONFIG(tooltip)
-        self.strecken_loeschen_button.setText(QCoreApplication.translate("EinstellungenWindow", u"-", None))
-#if QT_CONFIG(tooltip)
-        self.strecken_auto_loeschen_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Alle automatischen Strecken l\u00f6schen", None))
-#endif // QT_CONFIG(tooltip)
-        self.strecken_auto_loeschen_button.setText(QCoreApplication.translate("EinstellungenWindow", u"- auto", None))
+        self.strecken_loeschen_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Entfernen", None))
         self.strecken_auswahl_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Gew\u00e4hlte Stationen", None))
 #if QT_CONFIG(tooltip)
         self.strecken_auswahl_list.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Stationsliste der aktuellen Strecke", None))

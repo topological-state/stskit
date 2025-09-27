@@ -7,7 +7,8 @@ import networkx as nx
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import (Slot, Signal, QAbstractListModel, QModelIndex, QItemSelectionModel,
                             QStringListModel, QObject, QMimeData, QByteArray)
-from PySide6.QtWidgets import QWidget, QAbstractItemView
+from PySide6.QtWidgets import QWidget, QAbstractItemView, QStyledItemDelegate
+from PySide6.QtGui import QFont, QTextCharFormat, QColor
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement, BAHNHOFELEMENT_BESCHREIBUNG
@@ -17,6 +18,205 @@ from stskit.qt.ui_einstellungen import Ui_EinstellungenWindow
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+
+
+ROLE_ITALIC = QtCore.Qt.UserRole + 1
+ROLE_STRIKETHROUGH = QtCore.Qt.UserRole + 2
+
+
+class StyledTextDelegate(QStyledItemDelegate):
+    def initStyleOption(self, option, index):
+        super().initStyleOption(option, index)
+        if self.parent().model().data(index, ROLE_ITALIC):
+            option.font.setItalic(True)
+        if self.parent().model().data(index, ROLE_STRIKETHROUGH):
+            format = QTextCharFormat()
+            # format.setForeground(QColor("gray"))
+            format.setFontStrikeOut(True)
+            option.textCursor.mergeCharFormat(format)
+
+
+class StreckenListModel(QAbstractListModel):
+    """
+    ListModel für die Streckenliste
+
+    Attribute
+    =========
+
+    - anlage : Anlage
+      The Anlage object containing the BahnhofElements.
+    - rows : list of
+
+    """
+
+    def __init__(self, anlage: Anlage, parent=None):
+        super().__init__(parent)
+        self.anlage: Anlage = anlage
+        self.columns: List[str] = ["Name", "Auto", "Edit"]
+        self._namen: List[str] = []
+        self._status: Dict[str, Set[str]] = {}
+        self.sorted = False
+
+    def rowCount(self, parent=QtCore.QModelIndex()):
+        return len(self._namen)
+
+    def columnCount(self, parent, /):
+        return len(self.columns)
+
+    def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
+        if role == QtCore.Qt.DisplayRole:
+            if orientation == QtCore.Qt.Horizontal:
+                return self.columns[section]
+            elif orientation == QtCore.Qt.Vertical:
+                return self._namen[section]
+
+        return None
+
+    def data(self, index, role=QtCore.Qt.DisplayRole):
+        if not index.isValid():
+            return None
+        row = index.row()
+        column = index.column()
+        name = self._namen[row]
+        try:
+            column_name = self.columns[column]
+        except IndexError:
+            return None
+
+        if role == QtCore.Qt.UserRole:
+            if column_name == "Name":
+                return name
+            else:
+                return None
+
+        elif role == QtCore.Qt.DisplayRole:
+            if column_name == "Name":
+                return name
+            else:
+                return None
+
+        elif role == QtCore.Qt.CheckStateRole:
+            if column_name == "Auto":
+                return self.get_auto(name)
+            elif column_name == "Edit":
+                return self.get_edited(name)
+            else:
+                return None
+
+        elif role == ROLE_ITALIC:
+            return self.get_auto(name)
+
+        elif role == ROLE_STRIKETHROUGH:
+            return self.get_deleted(name)
+
+        elif role == QtCore.Qt.ToolTipRole:
+            tt = f"Strecke {name}"
+            if self.get_auto(name):
+                tt = f"{tt} (wurde automatisch erstellt)"
+            elif self.get_edited(name):
+                tt = f"{tt} (wurde bearbeitet)"
+            elif self.get_deleted(name):
+                tt = f"{tt} (wurde entfernt)"
+            return tt
+
+        elif role == QtCore.Qt.TextAlignmentRole:
+            return QtCore.Qt.AlignLeft + QtCore.Qt.AlignVCenter
+
+        return None
+
+    def flags(self, index):
+        if not index.isValid():
+            return QtCore.Qt.NoItemFlags
+
+        row = index.row()
+        column = index.column()
+
+        result = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+
+        if self.columns[column] in {"Auto", "Edit"}:
+            result |= QtCore.Qt.ItemIsUserCheckable
+
+        return result
+
+    def setData(self, index, value, role=QtCore.Qt.EditRole):
+        if not index.isValid():
+            return False
+
+        row = index.row()
+        column = index.column()
+        name = self._namen[row]
+        column_key = self.columns[column]
+
+        if role == QtCore.Qt.CheckStateRole:
+            # nicht editierbar
+            pass
+            # self.dataChanged.emit(index, index, [role])
+
+        return False
+
+    def add(self, name: str, status: Optional[Set[str]] = None):
+        if status is None:
+            status = {}
+        status.intersection_update({"auto", "edit", "delete"})
+        if "delete" in status:
+            status.discard("edit")
+        if name not in self._namen:
+            self.beginResetModel()
+            self._namen.append(name)
+            # self._sort()  # todo
+            self._status[name] = status
+            self.endResetModel()
+
+    def remove(self, name: str):
+        if name in self._namen:
+            self.beginResetModel()
+            try:
+                self._namen.remove(name)
+                del self._status[name]
+            except (ValueError, KeyError):
+                pass
+            self.endResetModel()
+
+    def update(self, strecken: List[str], status: Dict[str, Set[str]]):
+        self.beginResetModel()
+        self._namen = strecken.copy()
+        self._status = {name: set() for name in self._namen}
+        self._status.update(status)
+        self.endResetModel()
+        
+    def get_status(self, name: str) -> Set[str]:
+        return self._status.get(name, {})
+
+    def set_status(self, name: str, status: Set[str]):
+        self.beginResetModel()
+        self._status[name] = status
+        self.endResetModel()
+
+    def change_status(self, name: str, key: str, value: bool):
+        status = self.get_status(name)
+        if value:
+            status.add(key)
+        else:
+            status.discard(key)
+        self.set_status(name, status)
+
+    def get_auto(self, name: str) -> bool:
+        return "auto" in self._status.get(name, {})
+
+    def get_deleted(self, name: str) -> bool:
+        return "delete" in self._status.get(name, {})
+
+    def get_edited(self, name: str) -> bool:
+        return "edit" in self._status.get(name, {})
+
+    def set_auto(self, name: str, value: bool):
+        self.change_status(name, "auto", value)
+
+    def set_edited(self, name: str, value: bool):
+        self.change_status(name, "edit", value)
+
+    def set_deleted(self, name: str, value: bool):
+        self.change_status(name, "delete", value)
 
 
 class StreckenEditorModel(QAbstractListModel):
@@ -299,8 +499,11 @@ class StreckenEditor(QObject):
         self.ui.strecken_abwahl_list.setModel(self.abwahl_model)
         self.ui.strecken_abwahl_list.setSelectionMode(QAbstractItemView.SingleSelection)
         self.ui.strecken_abwahl_list.setAcceptDrops(True)
-        self.strecken_model = QStringListModel()
-        self.ui.strecken_name_combo.setModel(self.strecken_model)
+
+        self.strecken_model = StreckenListModel(anlage, parent)
+        self.ui.strecken_liste.setModel(self.strecken_model)
+        self.ui.strecken_liste.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.ui.strecken_liste.setItemDelegate(StyledTextDelegate(parent=self.ui.strecken_liste))
 
         self.ui.strecken_auswahl_button.clicked.connect(self.strecken_auswahl_button_clicked)
         self.ui.strecken_abwahl_button.clicked.connect(self.strecken_abwahl_button_clicked)
@@ -308,14 +511,14 @@ class StreckenEditor(QObject):
         self.ui.strecken_runter_button.clicked.connect(self.strecken_runter_button_clicked)
         self.ui.strecken_ordnen_button.clicked.connect(self.strecken_ordnen_button_clicked)
         self.ui.strecken_erstellen_button.clicked.connect(self.strecken_erstellen_button_clicked)
+        self.ui.strecken_umbenennen_button.clicked.connect(self.strecken_umbenennen_button_clicked)
         self.ui.strecken_loeschen_button.clicked.connect(self.strecken_loeschen_button_clicked)
-        self.ui.strecken_auto_loeschen_button.clicked.connect(self.strecken_auto_loeschen_button_clicked)
         self.ui.strecken_interpolieren_button.clicked.connect(self.strecken_interpolieren_button_clicked)
 
-        self.ui.strecken_name_combo.currentIndexChanged.connect(self.strecken_name_combo_index_changed)
-        self.ui.strecken_name_combo.editTextChanged.connect(self.strecken_name_combo_text_changed)
+        self.ui.strecken_liste.selectionModel().selectionChanged.connect(self.streckenliste_auswahl_changed)
         self.ui.strecken_auswahl_list.selectionModel().selectionChanged.connect(self.update_widget_states)
         self.ui.strecken_abwahl_list.selectionModel().selectionChanged.connect(self.update_widget_states)
+        self.ui.strecken_name_edit.textChanged.connect(self.strecken_name_edit_changed)
 
         self.auswahl_model.rowsInserted.connect(self.auswahl_rows_inserted)
         self.auswahl_model.rowsMoved.connect(self.auswahl_rows_moved)
@@ -324,9 +527,11 @@ class StreckenEditor(QObject):
         self.auswahl_model.drop_completed.connect(self.abwahl_model.on_drop_completed)
         self.abwahl_model.drop_completed.connect(self.auswahl_model.on_drop_completed)
 
+        self.in_update = False
         self.init_from_anlage()
+        self.strecken_name = self._default_strecke()
         self._streckenliste_changed()
-        self._select_strecke(self.strecken_name)
+        self._strecke_changed()
 
     def apply(self):
         """
@@ -345,7 +550,10 @@ class StreckenEditor(QObject):
         """
 
         self.init_from_anlage()
+        if self.strecken_name not in self.alle_strecken:
+            self.strecken_name = self._default_strecke()
         self._streckenliste_changed()
+        self._strecke_changed()
 
     def update_widgets(self):
         """
@@ -367,7 +575,7 @@ class StreckenEditor(QObject):
 
         if changed:
             self.alle_strecken = neue_strecken
-            self._select_strecke(self.strecken_name)
+            self._strecke_changed()
 
     def update_widget_states(self):
         en = len(self.ui.strecken_abwahl_list.selectedIndexes()) >= 1
@@ -378,10 +586,12 @@ class StreckenEditor(QObject):
         self.ui.strecken_runter_button.setEnabled(en)
 
         self.ui.strecken_erstellen_button.setEnabled(True)
-        en = len(self.alle_strecken) >= 1
+        strecken_auswahl = self.ui.strecken_liste.selectedIndexes()
+        strecken_edit = self.ui.strecken_name_edit.text()
+        en = len(strecken_auswahl) >= 1
         self.ui.strecken_loeschen_button.setEnabled(en)
-        en = len(self.auto_strecken) >= 1
-        self.ui.strecken_auto_loeschen_button.setEnabled(en)
+        en = len(strecken_auswahl) == 1 and len(strecken_edit) >= 1 and strecken_edit not in self.alle_strecken
+        self.ui.strecken_umbenennen_button.setEnabled(en)
 
         en = bool(self.strecken_name) and len(self.auswahl_model.rows) >= 2
         self.ui.strecken_interpolieren_button.setEnabled(en)
@@ -404,13 +614,14 @@ class StreckenEditor(QObject):
         self.edited_strecken = set()
         self.deleted_strecken = set()
 
+    def _default_strecke(self) -> Optional[str]:
         try:
-            self.strecken_name = min(self.ordnung, key=self.ordnung.get)
+            return min(self.ordnung, key=self.ordnung.get)
         except ValueError:
             try:
-                self.strecken_name = list(self.alle_strecken)[0]
+                return list(self.alle_strecken)[0]
             except IndexError:
-                pass
+                return None
 
     def save_to_anlage(self):
         for idx, name in enumerate(self.edited_strecken):
@@ -437,43 +648,72 @@ class StreckenEditor(QObject):
             return name in self.auto_strecken, name
 
         self.strecken_liste = sorted((name for name, strecke in self.alle_strecken.items()), key=strecken_key)
-        self.strecken_model.setStringList(self.strecken_liste)
+        status = {name: set() for name in self.strecken_liste}
+        for name in self.auto_strecken:
+            try:
+                status[name].add("auto")
+            except KeyError:
+                pass
+        for name in self.edited_strecken:
+            try:
+                status[name].add("edit")
+            except KeyError:
+                pass
+        for name in self.deleted_strecken:
+            try:
+                status[name].add("delete")
+            except KeyError:
+                pass
+        self.strecken_model.update(self.strecken_liste, status)
+
         try:
-            index = self.strecken_liste.index(self.strecken_name)
+            index = self.strecken_model.index(self.strecken_liste.index(self.strecken_name))
         except ValueError:
             pass
         else:
-            self.ui.strecken_name_combo.setCurrentIndex(index)
+            self.ui.strecken_liste.setCurrentIndex(index)
         self.update_widget_states()
 
-    def _select_strecke(self, name: str):
+    def select_strecke(self, name: str):
         """
         Strecke auswählen und Stationslisten aktualisieren
 
+        Wählt eine Strecke im UI und Modell aus.
         Die Modelle der Stationslisten werden aus alle_strecken aktualisiert (überschrieben!).
+        Die Stationslisten werden in jedem Fall neu aufgebaut, auch wenn der Name der Strecke sich nicht ändert.
 
-        :param name: Name der Strecke.
+        :param name: Name der Strecke. Muss existieren, sonst schlägt die Methode fehl.
 
         :return True, wenn der Vorgang erfolgreich war.
         """
 
+        if name not in self.alle_strecken:
+            return False
+
         try:
-            index = self.strecken_liste.index(name)
+            index = self.strecken_model.index(self.strecken_liste.index(self.strecken_name))
         except ValueError:
             return False
 
+        # dies triggert die aktualisierung
+        self.ui.strecken_liste.setCurrentIndex(index)
+        return True
+
+    def _strecke_changed(self):
+        """
+        Stationslisten gem. gewählter Strecke aktualisieren
+
+        Die Modelle der Stationslisten werden aus alle_strecken aktualisiert (überschrieben!).
+        Die gewählte Strecke steht in `self.strecken_name`.
+        """
+
         self.in_update = True
-        cur_name = self.ui.strecken_name_combo.currentText()
-        self.strecken_name = name
-        if name != cur_name:
-            self.ui.strecken_name_combo.setCurrentIndex(index)
-        stationen = self.alle_strecken.get(name, [])
+        stationen = self.alle_strecken.get(self.strecken_name, [])
         self.auswahl_model.update(stationen)
         uebrige = [bst for bst in self.anlage_bst if bst not in stationen]
         self.abwahl_model.update(uebrige)
         self.in_update = False
         self.update_widget_states()
-        return True
 
     def _strecke_edited(self):
         """
@@ -486,46 +726,26 @@ class StreckenEditor(QObject):
 
         self.alle_strecken[self.strecken_name] = list(self.auswahl_model.rows)
         self.edited_strecken.add(self.strecken_name)
+        self.auto_strecken.discard(self.strecken_name)
         self.deleted_strecken.discard(self.strecken_name)
+        self.strecken_model.set_status(self.strecken_name, {"edit"})
         self.update_widget_states()
 
     @Slot()
-    def strecken_name_combo_index_changed(self):
+    def streckenliste_auswahl_changed(self):
         if self.in_update:
             return
 
-        idx = self.ui.strecken_name_combo.currentIndex()
-        index = self.strecken_model.index(idx)
-        if index.isValid():
-            strecken_name = self.strecken_model.data(index)
-            if strecken_name != self.strecken_name:
-                self.strecken_name = strecken_name
-                self._select_strecke(self.strecken_name)
+        indexes = self.ui.strecken_liste.selectedIndexes()
+        if len(indexes) == 1:
+            name = self.strecken_model.data(indexes[0])
+        else:
+            name = ""
 
-    @Slot()
-    def strecken_name_combo_text_changed(self):
-        if self.in_update:
-            return
-
-        idx = self.ui.strecken_name_combo.currentIndex()
-        index = self.strecken_model.index(idx)
-        if index.isValid():
-            index_name = self.strecken_model.data(index)
-            new_name = self.ui.strecken_name_combo.currentText()
-            if new_name != index_name:
-                self.alle_strecken[new_name] = self.alle_strecken[index_name]
-                try:
-                    del self.alle_strecken[index_name]
-                except KeyError:
-                    pass
-                self.edited_strecken.discard(index_name)
-                self.auto_strecken.discard(new_name)
-                self.deleted_strecken.discard(new_name)
-                self.edited_strecken.add(new_name)
-                cursor_pos = self.ui.strecken_name_combo.lineEdit().cursorPosition()
-                self.strecken_model.setData(index, new_name)
-                self.ui.strecken_name_combo.lineEdit().setSelection(cursor_pos, 0)
-                self.strecken_name = new_name
+        if name != self.strecken_name:
+            self.strecken_name = name
+            self._strecke_changed()
+            self.ui.strecken_name_edit.setText(self.strecken_name)
 
     @Slot()
     def strecken_auswahl_button_clicked(self):
@@ -603,26 +823,54 @@ class StreckenEditor(QObject):
 
     @Slot()
     def strecken_loeschen_button_clicked(self):
-        try:
-            del self.alle_strecken[self.strecken_name]
-        except KeyError:
-            pass
-        self.edited_strecken.discard(self.strecken_name)
-        self.deleted_strecken.add(self.strecken_name)
+        indexes = self.ui.strecken_liste.selectedIndexes()
+        for index in indexes:
+            name = self.strecken_model.data(index)
+            try:
+                del self.alle_strecken[name]
+            except KeyError:
+                pass
+            self.edited_strecken.discard(name)
+            self.deleted_strecken.add(name)
         self._streckenliste_changed()
 
     @Slot()
     def strecken_erstellen_button_clicked(self):
-        name = "Unbenannt"
+        basis = name = self.ui.strecken_name_edit.text() or "Unbenannt"
         i = 1
         while name in self.alle_strecken:
             i += 1
-            name = "Unbenannt " + str(i)
+            name = f"{basis} {str(i)}"
 
         self.alle_strecken[name] = []
         self.edited_strecken.add(name)
+        self.strecken_name = name
         self._streckenliste_changed()
-        self._select_strecke(name)
+        self._strecke_changed()
+
+    @Slot()
+    def strecken_umbenennen_button_clicked(self):
+        if self.in_update:
+            return
+
+        old_name = self.strecken_name
+        new_name = self.ui.strecken_name_edit.text()
+        if new_name != old_name:
+            self.alle_strecken[new_name] = self.alle_strecken[old_name]
+            try:
+                del self.alle_strecken[old_name]
+            except KeyError:
+                pass
+            self.edited_strecken.discard(old_name)
+            self.auto_strecken.discard(new_name)
+            self.deleted_strecken.discard(new_name)
+            self.edited_strecken.add(new_name)
+            self.strecken_name = new_name
+            self._streckenliste_changed()
+
+    @Slot()
+    def strecken_name_edit_changed(self):
+        self.update_widget_states()
 
     @Slot()
     def strecken_auto_loeschen_button_clicked(self):
@@ -637,6 +885,9 @@ class StreckenEditor(QObject):
 
         if changed:
             self._streckenliste_changed()
+            if self.strecken_name in self.deleted_strecken:
+                self.strecken_name = ""
+            self._strecke_changed()
 
     @Slot()
     def strecken_interpolieren_button_clicked(self):
@@ -655,7 +906,8 @@ class StreckenEditor(QObject):
         if strecke:
             self.alle_strecken[self.strecken_name] = strecke
             self.edited_strecken.add(self.strecken_name)
-            self._select_strecke(self.strecken_name)
+            self.deleted_strecken.discard(self.strecken_name)
+            self._strecke_changed()
 
     @Slot()
     def strecken_ordnen_button_clicked(self):
@@ -702,7 +954,7 @@ class StreckenEditor(QObject):
 
         self.alle_strecken[self.strecken_name] = sorted(distanzen.keys(), key=lambda _item: distanzen[_item])
         self.edited_strecken.add(self.strecken_name)
-        self._select_strecke(self.strecken_name)
+        self._strecke_changed()
 
     @Slot()
     def auswahl_rows_inserted(self):
