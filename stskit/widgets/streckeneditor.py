@@ -52,7 +52,6 @@ class StreckenListModel(QAbstractListModel):
     def __init__(self, anlage: Anlage, parent=None):
         super().__init__(parent)
         self.anlage: Anlage = anlage
-        self.columns: List[str] = ["Name", "Auto", "Edit"]
         self._namen: List[str] = []
         self._status: Dict[str, Set[str]] = {}
         self.sorted = False
@@ -60,13 +59,10 @@ class StreckenListModel(QAbstractListModel):
     def rowCount(self, parent=QtCore.QModelIndex()):
         return len(self._namen)
 
-    def columnCount(self, parent, /):
-        return len(self.columns)
-
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
         if role == QtCore.Qt.DisplayRole:
             if orientation == QtCore.Qt.Horizontal:
-                return self.columns[section]
+                return "Strecke"
             elif orientation == QtCore.Qt.Vertical:
                 return self._namen[section]
 
@@ -76,47 +72,26 @@ class StreckenListModel(QAbstractListModel):
         if not index.isValid():
             return None
         row = index.row()
-        column = index.column()
         name = self._namen[row]
-        try:
-            column_name = self.columns[column]
-        except IndexError:
-            return None
 
         if role == QtCore.Qt.UserRole:
-            if column_name == "Name":
-                return name
-            else:
-                return None
+            return name
 
         elif role == QtCore.Qt.DisplayRole:
-            if column_name == "Name":
-                return name
-            else:
-                return None
+            return name
 
         elif role == QtCore.Qt.CheckStateRole:
-            if column_name == "Auto":
-                return self.get_auto(name)
-            elif column_name == "Edit":
-                return self.get_edited(name)
-            else:
-                return None
+            return None
 
         elif role == ROLE_ITALIC:
             return self.get_auto(name)
 
-        elif role == ROLE_STRIKETHROUGH:
-            return self.get_deleted(name)
-
         elif role == QtCore.Qt.ToolTipRole:
             tt = f"Strecke {name}"
             if self.get_auto(name):
-                tt = f"{tt} (wurde automatisch erstellt)"
+                tt = f"{tt} (automatisch erstellt)"
             elif self.get_edited(name):
-                tt = f"{tt} (wurde bearbeitet)"
-            elif self.get_deleted(name):
-                tt = f"{tt} (wurde entfernt)"
+                tt = f"{tt} (geändert)"
             return tt
 
         elif role == QtCore.Qt.TextAlignmentRole:
@@ -128,13 +103,7 @@ class StreckenListModel(QAbstractListModel):
         if not index.isValid():
             return QtCore.Qt.NoItemFlags
 
-        row = index.row()
-        column = index.column()
-
         result = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
-
-        if self.columns[column] in {"Auto", "Edit"}:
-            result |= QtCore.Qt.ItemIsUserCheckable
 
         return result
 
@@ -142,28 +111,16 @@ class StreckenListModel(QAbstractListModel):
         if not index.isValid():
             return False
 
-        row = index.row()
-        column = index.column()
-        name = self._namen[row]
-        column_key = self.columns[column]
-
-        if role == QtCore.Qt.CheckStateRole:
-            # nicht editierbar
-            pass
-            # self.dataChanged.emit(index, index, [role])
-
+        # nicht editierbar
         return False
 
     def add(self, name: str, status: Optional[Set[str]] = None):
         if status is None:
             status = {}
-        status.intersection_update({"auto", "edit", "delete"})
-        if "delete" in status:
-            status.discard("edit")
+        status.intersection_update({"auto", "edit"})
         if name not in self._namen:
             self.beginResetModel()
             self._namen.append(name)
-            # self._sort()  # todo
             self._status[name] = status
             self.endResetModel()
 
@@ -203,9 +160,6 @@ class StreckenListModel(QAbstractListModel):
     def get_auto(self, name: str) -> bool:
         return "auto" in self._status.get(name, {})
 
-    def get_deleted(self, name: str) -> bool:
-        return "delete" in self._status.get(name, {})
-
     def get_edited(self, name: str) -> bool:
         return "edit" in self._status.get(name, {})
 
@@ -214,9 +168,6 @@ class StreckenListModel(QAbstractListModel):
 
     def set_edited(self, name: str, value: bool):
         self.change_status(name, "edit", value)
-
-    def set_deleted(self, name: str, value: bool):
-        self.change_status(name, "delete", value)
 
 
 class StreckenEditorModel(QAbstractListModel):
@@ -657,11 +608,6 @@ class StreckenEditor(QObject):
         for name in self.edited_strecken:
             try:
                 status[name].add("edit")
-            except KeyError:
-                pass
-        for name in self.deleted_strecken:
-            try:
-                status[name].add("delete")
             except KeyError:
                 pass
         self.strecken_model.update(self.strecken_liste, status)
