@@ -240,41 +240,42 @@ class Ui_EinstellungenWindow(object):
         self.splitter = QSplitter(self.strecken_tab)
         self.splitter.setObjectName(u"splitter")
         self.splitter.setOrientation(Qt.Vertical)
-        self.widget1 = QWidget(self.splitter)
-        self.widget1.setObjectName(u"widget1")
-        self.verticalLayout_17 = QVBoxLayout(self.widget1)
+        self.splitter.setHandleWidth(8)
+        self.layoutWidget = QWidget(self.splitter)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.verticalLayout_17 = QVBoxLayout(self.layoutWidget)
         self.verticalLayout_17.setObjectName(u"verticalLayout_17")
         self.verticalLayout_17.setContentsMargins(0, 0, 0, 0)
-        self.strecken_name_label = QLabel(self.widget1)
+        self.strecken_name_label = QLabel(self.layoutWidget)
         self.strecken_name_label.setObjectName(u"strecken_name_label")
 
         self.verticalLayout_17.addWidget(self.strecken_name_label)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.strecken_liste = QListView(self.widget1)
+        self.strecken_liste = QListView(self.layoutWidget)
         self.strecken_liste.setObjectName(u"strecken_liste")
 
         self.horizontalLayout.addWidget(self.strecken_liste)
 
         self.verticalLayout_18 = QVBoxLayout()
         self.verticalLayout_18.setObjectName(u"verticalLayout_18")
-        self.strecken_name_edit = QLineEdit(self.widget1)
+        self.strecken_name_edit = QLineEdit(self.layoutWidget)
         self.strecken_name_edit.setObjectName(u"strecken_name_edit")
 
         self.verticalLayout_18.addWidget(self.strecken_name_edit)
 
-        self.strecken_erstellen_button = QPushButton(self.widget1)
+        self.strecken_erstellen_button = QPushButton(self.layoutWidget)
         self.strecken_erstellen_button.setObjectName(u"strecken_erstellen_button")
 
         self.verticalLayout_18.addWidget(self.strecken_erstellen_button)
 
-        self.strecken_umbenennen_button = QPushButton(self.widget1)
+        self.strecken_umbenennen_button = QPushButton(self.layoutWidget)
         self.strecken_umbenennen_button.setObjectName(u"strecken_umbenennen_button")
 
         self.verticalLayout_18.addWidget(self.strecken_umbenennen_button)
 
-        self.strecken_loeschen_button = QPushButton(self.widget1)
+        self.strecken_loeschen_button = QPushButton(self.layoutWidget)
         self.strecken_loeschen_button.setObjectName(u"strecken_loeschen_button")
 
         self.verticalLayout_18.addWidget(self.strecken_loeschen_button)
@@ -289,20 +290,20 @@ class Ui_EinstellungenWindow(object):
 
         self.verticalLayout_17.addLayout(self.horizontalLayout)
 
-        self.splitter.addWidget(self.widget1)
-        self.widget2 = QWidget(self.splitter)
-        self.widget2.setObjectName(u"widget2")
-        self.horizontalLayout_4 = QHBoxLayout(self.widget2)
+        self.splitter.addWidget(self.layoutWidget)
+        self.layoutWidget1 = QWidget(self.splitter)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.horizontalLayout_4 = QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_13 = QVBoxLayout()
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.strecken_auswahl_label = QLabel(self.widget2)
+        self.strecken_auswahl_label = QLabel(self.layoutWidget1)
         self.strecken_auswahl_label.setObjectName(u"strecken_auswahl_label")
 
         self.verticalLayout_13.addWidget(self.strecken_auswahl_label)
 
-        self.strecken_auswahl_list = QListView(self.widget2)
+        self.strecken_auswahl_list = QListView(self.layoutWidget1)
         self.strecken_auswahl_list.setObjectName(u"strecken_auswahl_list")
         self.strecken_auswahl_list.setDragEnabled(True)
         self.strecken_auswahl_list.setDragDropMode(QAbstractItemView.DragDrop)
@@ -321,32 +322,32 @@ class Ui_EinstellungenWindow(object):
 
         self.verticalLayout_12.addItem(self.verticalSpacer_3)
 
-        self.strecken_auswahl_button = QPushButton(self.widget2)
+        self.strecken_auswahl_button = QPushButton(self.layoutWidget1)
         self.strecken_auswahl_button.setObjectName(u"strecken_auswahl_button")
 
         self.verticalLayout_12.addWidget(self.strecken_auswahl_button)
 
-        self.strecken_abwahl_button = QPushButton(self.widget2)
+        self.strecken_abwahl_button = QPushButton(self.layoutWidget1)
         self.strecken_abwahl_button.setObjectName(u"strecken_abwahl_button")
 
         self.verticalLayout_12.addWidget(self.strecken_abwahl_button)
 
-        self.strecken_hoch_button = QPushButton(self.widget2)
+        self.strecken_hoch_button = QPushButton(self.layoutWidget1)
         self.strecken_hoch_button.setObjectName(u"strecken_hoch_button")
 
         self.verticalLayout_12.addWidget(self.strecken_hoch_button)
 
-        self.strecken_runter_button = QPushButton(self.widget2)
+        self.strecken_runter_button = QPushButton(self.layoutWidget1)
         self.strecken_runter_button.setObjectName(u"strecken_runter_button")
 
         self.verticalLayout_12.addWidget(self.strecken_runter_button)
 
-        self.strecken_interpolieren_button = QPushButton(self.widget2)
+        self.strecken_interpolieren_button = QPushButton(self.layoutWidget1)
         self.strecken_interpolieren_button.setObjectName(u"strecken_interpolieren_button")
 
         self.verticalLayout_12.addWidget(self.strecken_interpolieren_button)
 
-        self.strecken_ordnen_button = QPushButton(self.widget2)
+        self.strecken_ordnen_button = QPushButton(self.layoutWidget1)
         self.strecken_ordnen_button.setObjectName(u"strecken_ordnen_button")
 
         self.verticalLayout_12.addWidget(self.strecken_ordnen_button)
@@ -360,12 +361,12 @@ class Ui_EinstellungenWindow(object):
 
         self.verticalLayout_16 = QVBoxLayout()
         self.verticalLayout_16.setObjectName(u"verticalLayout_16")
-        self.strecken_abwahl_label = QLabel(self.widget2)
+        self.strecken_abwahl_label = QLabel(self.layoutWidget1)
         self.strecken_abwahl_label.setObjectName(u"strecken_abwahl_label")
 
         self.verticalLayout_16.addWidget(self.strecken_abwahl_label)
 
-        self.strecken_abwahl_list = QListView(self.widget2)
+        self.strecken_abwahl_list = QListView(self.layoutWidget1)
         self.strecken_abwahl_list.setObjectName(u"strecken_abwahl_list")
         self.strecken_abwahl_list.setDragEnabled(True)
         self.strecken_abwahl_list.setDragDropMode(QAbstractItemView.DragDrop)
@@ -378,7 +379,7 @@ class Ui_EinstellungenWindow(object):
 
         self.horizontalLayout_4.addLayout(self.verticalLayout_16)
 
-        self.splitter.addWidget(self.widget2)
+        self.splitter.addWidget(self.layoutWidget1)
 
         self.verticalLayout_19.addWidget(self.splitter)
 
