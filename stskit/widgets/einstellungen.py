@@ -11,6 +11,7 @@ from pathlib import Path
 
 from PySide6 import QtWidgets
 from PySide6.QtCore import Slot
+from PySide6.QtWidgets import QMessageBox
 
 from stskit.model.zugschema import Zugschema, ZugschemaBearbeitungModell
 from stskit.dispo.anlage import Anlage
@@ -59,6 +60,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
         self.ui.zugschema_details_table.setModel(self.zugschema_modell)
         self.ui.zugschema_name_combo.currentIndexChanged.connect(self.zugschema_changed)
 
+        self.ui.tab_widget.tabBar().currentChanged.connect(self.tab_changed)
         self.ui.dialog_button_box.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.apply_button_clicked)
         self.ui.dialog_button_box.button(QtWidgets.QDialogButtonBox.Reset).clicked.connect(self.reset_button_clicked)
 
@@ -107,6 +109,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
     def apply(self):
         self.bahnhof_editor.apply()
         self.strecken_editor.apply()
+        self.strecken_editor.reset()
         self.anlage.zugschema.load_config(self.zugschema.name, self.anlage.anlageninfo.region)
         self.zentrale.notify_anlage({'zugschema', 'bahnhofgraph'})
 
@@ -131,3 +134,18 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
     @Slot()
     def reset_button_clicked(self):
         self.reset()
+
+    @Slot(int)
+    def tab_changed(self, current_index):
+        if current_index == 2 and self.bahnhof_editor.changed:
+
+            result = QMessageBox.question(
+                self,
+                "Ungespeicherte Änderungen",
+                "Bahnhofänderungen bitte vor dem Bearbeiten der Strecken speichern.",
+                QMessageBox.Ok
+            )
+
+            return True
+
+        return False

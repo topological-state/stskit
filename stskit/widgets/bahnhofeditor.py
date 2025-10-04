@@ -336,7 +336,7 @@ class BahnhofEditor(QObject):
         super().__init__()
         self.anlage = anlage
         self.bahnhofgraph = anlage.bahnhofgraph.copy(as_view=False)
-        self.changes: GraphJournal = GraphJournal()
+        self.changed: bool = False
         self.parent = parent
         self.ui = ui
 
@@ -445,6 +445,7 @@ class BahnhofEditor(QObject):
 
         self.anlage.bahnhofgraph.clear()
         self.anlage.bahnhofgraph.update(self.bahnhofgraph)
+        self.changed = False
 
     def reset(self):
         """
@@ -458,6 +459,7 @@ class BahnhofEditor(QObject):
         self.gl_table_model.endResetModel()
         self.agl_table_model.endResetModel()
         self.update_widgets()
+        self.changed = False
 
     def get_gl_selection(self) -> Set[BahnhofElement]:
         """
@@ -639,6 +641,7 @@ class BahnhofEditor(QObject):
 
         if table_model.group_elements(gleise, level, element):
             self.update_widgets()
+            self.changed = True
 
     def ungroup_element(self, level: str):
         if level == 'Anst':
@@ -652,6 +655,7 @@ class BahnhofEditor(QObject):
 
         if table_model.ungroup_elements(sel, level):
             self.update_widgets()
+            self.changed = True
 
     def rename_element(self, level: str, combo: QtWidgets.QComboBox):
         """
@@ -676,6 +680,7 @@ class BahnhofEditor(QObject):
 
         if table_model.rename_element(level, old, new):
             self.update_widgets()
+            self.changed = True
 
     @Slot()
     def table_model_changed(self):
