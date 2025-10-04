@@ -75,7 +75,7 @@ def setup_logging(filename: Optional[str] = "", level: Optional[str] = "ERROR", 
         log_format = '%(asctime)s (%(name)s) %(levelname)s: %(message)s'
         formatter = logging.Formatter(log_format)
 
-        handler = logging.FileHandler(filename, mode="w", delay=True)
+        handler = logging.FileHandler(filename, mode="w", delay=True, encoding="utf-8")
         handler.setLevel(numeric_level)
         handler.setFormatter(formatter)
     else:
