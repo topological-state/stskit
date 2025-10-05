@@ -9,8 +9,8 @@ from PySide6.QtCore import Slot, QAbstractTableModel, QModelIndex, QSortFilterPr
 from PySide6.QtWidgets import QWidget, QAbstractItemView
 
 from stskit.dispo.anlage import Anlage
-from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement, BahnsteigGraphNode, BahnsteigGraphEdge
-from stskit.model.journal import GraphJournal
+from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement, BahnsteigGraphNode, BahnsteigGraphEdge, \
+    BAHNHOFELEMENT_TYPEN
 from stskit.qt.ui_einstellungen import Ui_EinstellungenWindow
 
 
@@ -429,14 +429,32 @@ class BahnhofEditor(QObject):
         self.ui.agl_table_view.resizeRowsToContents()
 
         self.gl_model.setStringList(sorted(_make_filter_list(self.bahnhofgraph.list_by_type({'Gl'}))))
-        self.bs_model.setStringList(sorted((bs.name for bs in self.bahnhofgraph.list_by_type({'Bs'}))))
-        self.bft_model.setStringList(sorted((bft.name for bft in self.bahnhofgraph.list_by_type({'Bft'}))))
-        self.bf_model.setStringList(sorted((bf.name for bf in self.bahnhofgraph.list_by_type({'Bf'}))))
         self.agl_model.setStringList(sorted(_make_filter_list(self.bahnhofgraph.list_by_type({'Agl'}))))
-        self.anst_model.setStringList(sorted((bf.name for bf in self.bahnhofgraph.list_by_type({'Anst'}))))
 
+        self.update_lists()
         self.update_gl_widget_states()
         self.update_agl_widget_states()
+
+    def update_lists(self):
+        gl_sel = self.get_gl_selection()
+        parents = {typ: set() for typ in BAHNHOFELEMENT_TYPEN}
+        uncles = {typ: set() for typ in BAHNHOFELEMENT_TYPEN}
+        for gl in gl_sel:
+            for be in self.bahnhofgraph.list_parents(gl):
+                parents[be.typ].add(be)
+        agl_sel = self.get_agl_selection()
+        for agl in agl_sel:
+            for be in self.bahnhofgraph.list_parents(agl):
+                parents[be.typ].add(be)
+
+        for typ in ['Bs', 'Bft', 'Bf', 'Anst']:
+            for parent in parents[typ]:
+                uncles[typ].update(self.bahnhofgraph.list_siblings(parent))
+
+        self.bs_model.setStringList(sorted((uncle.name for uncle in uncles['Bs'])))
+        self.bft_model.setStringList(sorted((uncle.name for uncle in uncles['Bft'])))
+        self.bf_model.setStringList(sorted((uncle.name for uncle in uncles['Bf'])))
+        self.anst_model.setStringList(sorted((uncle.name for uncle in uncles['Anst'])))
 
     def apply(self):
         """
@@ -518,8 +536,9 @@ class BahnhofEditor(QObject):
 
     @Slot('QItemSelection', 'QItemSelection')
     def gl_selection_changed(self, selected, deselected):
+        self.update_lists()
         selection = self.get_gl_selection()
-        new = selection - self.gl_last_selection
+        new = selection - self.gl_last_selection or selection
         self.gl_last_selection = selection
 
         try:
@@ -545,6 +564,7 @@ class BahnhofEditor(QObject):
 
     @Slot('QItemSelection', 'QItemSelection')
     def agl_selection_changed(self, selected, deselected):
+        self.update_lists()
         selection = self.get_agl_selection()
         new = selection - self.agl_last_selection
         self.agl_last_selection = selection
@@ -713,14 +733,17 @@ class BahnhofEditor(QObject):
     @Slot()
     def bf_rename_button_clicked(self):
         self.rename_element('Bf', self.ui.bf_combo)
+        self.update_gl_widget_states()
 
     @Slot()
     def bft_rename_button_clicked(self):
         self.rename_element('Bft', self.ui.bft_combo)
+        self.update_gl_widget_states()
 
     @Slot()
     def bs_rename_button_clicked(self):
         self.rename_element('Bs', self.ui.bs_combo)
+        self.update_gl_widget_states()
 
     @Slot()
     def bf_combo_index_changed(self):
@@ -771,6 +794,7 @@ class BahnhofEditor(QObject):
     @Slot()
     def anst_rename_button_clicked(self):
         self.rename_element('Anst', self.ui.anst_combo)
+        self.update_agl_widget_states()
 
     @Slot()
     def anst_combo_index_changed(self):

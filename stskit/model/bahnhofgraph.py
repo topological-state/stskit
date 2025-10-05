@@ -286,6 +286,17 @@ class BahnhofGraph(nx.DiGraph):
             logger.exception(e)
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
+    def list_siblings(self, label: BahnhofLabelType) -> Generator[BahnhofLabelType, None, None]:
+        """
+        Listet die Geschwisterelemente eines Bahnhofelements auf.
+
+        Geschwisterelemente haben den gleichen Typ und das gleiche Elternelement.
+        Das Originalelement ist enthalten.
+        """
+
+        parent = self.find_superior(label, {BAHNHOFELEMENT_HIERARCHIE[label.typ]})
+        yield from self.list_children(parent, {label.typ})
+
     def list_by_type(self, typen: Set[str]) -> Generator[BahnhofLabelType, None, None]:
         """
         Listet die alle Elemente bestimmter Typen auf.
