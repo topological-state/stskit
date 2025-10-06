@@ -514,6 +514,7 @@ class StreckenEditor(QObject):
         self.ui.strecken_auswahl_list.selectionModel().selectionChanged.connect(self.update_widget_states)
         self.ui.strecken_abwahl_list.selectionModel().selectionChanged.connect(self.update_widget_states)
         self.ui.strecken_name_edit.textChanged.connect(self.strecken_name_edit_changed)
+        self.ui.strecken_name_edit.returnPressed.connect(self.strecken_umbenennen_button_clicked)
 
         self.auswahl_model.rowsInserted.connect(self.auswahl_rows_inserted)
         self.auswahl_model.rowsMoved.connect(self.auswahl_rows_moved)
@@ -768,7 +769,8 @@ class StreckenEditor(QObject):
 
         for bst in move_items:
             self.auswahl_model.remove(bst)
-            self.abwahl_model.insert(0, bst)
+            if self.bahnhofgraph.has_node(bst):
+                self.abwahl_model.insert(0, bst)
 
         #self._strecke_edited()
         self.ui.strecken_auswahl_list.clearSelection()
@@ -823,7 +825,7 @@ class StreckenEditor(QObject):
 
     @Slot()
     def strecken_erstellen_button_clicked(self):
-        basis = name = self.ui.strecken_name_edit.text() or "Unbenannt"
+        basis = name = self.ui.strecken_name_edit.text() or "Strecke"
         i = 1
         while name in self.alle_strecken:
             i += 1
@@ -839,6 +841,9 @@ class StreckenEditor(QObject):
     def strecken_umbenennen_button_clicked(self):
         if self.in_update:
             return
+        if not self.strecken_name:
+            self.strecken_erstellen_button_clicked()
+            return
 
         old_name = self.strecken_name
         new_name = self.ui.strecken_name_edit.text()
@@ -851,9 +856,13 @@ class StreckenEditor(QObject):
             self.edited_strecken.discard(old_name)
             self.auto_strecken.discard(new_name)
             self.deleted_strecken.discard(new_name)
+            self.deleted_strecken.add(old_name)
             self.edited_strecken.add(new_name)
             self.strecken_name = new_name
+            if self.hauptstrecken_name == old_name:
+                self.hauptstrecken_name = new_name
             self._streckenliste_changed()
+            self._strecke_changed()
 
     @Slot()
     def strecken_model_data_changed(self):
