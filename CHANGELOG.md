@@ -1,5 +1,44 @@
 # Changelog
 
+## 2.1.6
+
+### Features
+
+- Bahnelementbeschriftung in Gleisbelegung und Streckenfahrplan an der oberen Achse
+- Default-Zugschema für neue Regionen in Frankreich und Italien
+- Verbesserungen am Streckeneditor
+  - Hauptstrecke auswählen
+  - Strecke umbenennen
+  - Strecke interpolieren (noch nicht voll zuverlässig)
+  - Aktualisierung aus Bahnhofeditor
+- Verbesserungen am Bahnhofeditor
+  - Warnung bei ungespeicherten Änderungen vor Seitenwechsel
+  - Nur erlaubte Zuordnungsziele in Auswahlboxen anbieten
+ 
+
+### Beispielkonfigurationen
+
+- Aaretal
+- Arth-Goldau
+- Brugg
+- Como S.G.
+- Emmental
+- Entlebuch
+- Fribourg
+- Gonzen
+- Haguenau
+- Huttwil
+- Kreuzlingen
+- Laufental
+- Namur
+- Obermodern
+- Palezieux-Romont
+- Romanshorn
+- Rovato
+- Tarvisio Boscov.
+- Venezia S.L.
+
+
 ## 2.1.5
 
 ### Features

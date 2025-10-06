@@ -3,9 +3,8 @@
 # Allgemeines
 
 - Wenn die automatische Konfiguration in einem Stellwerk nicht richtig funktioniert, kann sie hier korrigiert werden.  
-- Zuerst die Anschlüsse und Bahnhöfe zu konfigurieren, erst dann die Strecken.
+- Zuerst die Anschlüsse und Bahnhöfe konfigurieren, danach die Strecken.
 - Nach grösseren Änderungen oder vor einem Seitenwechsel *Anwenden* oder *OK* klicken.
-- Gewisse Änderungen an der Konfiguration werden erst nach einem Neustart des Plugins sichtbar.
 - Es gibt kein Undo. *Zurücksetzen* stellt den zuletzt gespeicherten Zustand wieder her.
 
 ## Anschlussstellen und Bahnhöfe
@@ -66,7 +65,7 @@ Wenn die gewünschte Zielgruppe noch nicht existiert, zuerst gemäss Anleitung *
 die alte Gruppe auflösen und ggf. bereinigen.
 
 > _Beispiel:_ 
-> Die automatische Konfiguration ordnet das Wendegleis `Wende A` dem Bahnhof `Wende`.
+> Die automatische Konfiguration ordnet das Wendegleis `Wende A` dem Bahnhof `Wende` zu.
 > Korrekt müsste es aber zum Bahnhof `A` gehören.
 > Um das zu korrigieren, das Gleis `Wende A` auswählen, aus der Bahnhofliste `A` auswählen und darunter *Zuordnen* klicken.
 > Das Gleis und sein Bahnhofteil `Wende A` werden in den Bahnhof `A` integriert.
@@ -91,8 +90,7 @@ Wenn Gruppen Elemente enthalten, die nicht zusammengehören:
 Alle Elemente ausser Gleisen können umbenannt werden.
 
 1. Umzubenennendes Element in der Tabelle auswählen.
-2. Namen überschreiben und Eingabetaste drücken. 
-   Alternativ den Namen im Kombifeld eintragen und den *Umbenennen*-Knopf klicken.
+2. Neuen Namen im Kombifeld eintragen und den *Umbenennen*-Knopf klicken.
  
 Der neue Namen muss auf der Ebene eindeutig sein, sonst wird er nicht angenommen.
 
@@ -102,14 +100,40 @@ Eine Strecke definiert eine Abfolge von Stationen (Anschlussstellen und Bahnhöf
 die im Streckenfahrplan grafisch dargestellt werden kann.
 
 Die konfigurierten Strecken können in der Listbox ausgewählt werden.
-Mit dem Minusknopf wird die gewählte Strecke gelöscht, mit dem Plusknopf kann eine neue hinzugefügt werden.
+Die aktuell gewählte Strecke wird in der Liste links unten dargestellt.
 
-Die aktuell gewählte Strecke wird in der Liste links dargestellt.
-Die Liste rechts zeigt die von der Strecke nicht berührten Stationen.
+Kursiv gesetzte Namen bezeichnen automatisch erstellte Strecken.
+Automatische Strecken werden bei Stellwerkupdates angepasst.
+Der Algorithmus kann jedoch in gewissen Stellwerken unzuverlässig sein.
+Mit den Knöpfen rechts können Strecken gelöscht, erstellt oder umbenannt werden.
+
+Mit dem Auswahlfeld kann eine Hauptstrecke ausgewählt werden.
+Diese wird beim Öffnen des Streckenfahrplans voreingestellt.
+Es empfiehlt sich also, hier die am Häufigsten benutzte Strecke zu markieren.
+
+Die Boxen unten zeigen zwei Listen von Stationen.
+Die linke Liste zeigt die aktuell bearbeitete Strecke,
+die rechte Liste enthält die von der Strecke unberührten Stationen.
+
 Stationen können zwischen den Listen verschoben werden durch Klicken und Ziehen oder mittels der Links/Rechts-Knöpfe.
 Stationen können innerhalb der Strecke angeordnet werden durck Klicken und Ziehen oder mittels der Hoch/Runter-Knöpfe.
-Mit dem Ordnen-Knopf wird die Strecke automatisch geordnet.
-Die automatische Ordnung kann jedoch fehlerhaft sein, insbesondere bei Haltepunkten.
+
+Mit dem Ordnen-Knopf wird die Strecke automatisch geordnet,
+der Interpolieren-Knopf fügt automatisch Stationen zwischen der ersten und letzten der Liste hinzu.
+Die bei diesen Funktionen benutzten Algorithmen können bei gewissen Stellwerken unzuverlässig sein.
+In diesem Fall muss die Strecke manuell konfiguriert werden.
+Manchmal hilft es auch, das Fenster zu schliessen und neu zu Öffnen, um den Bahnhofplan neu zu laden.
+
+_Empfehlungen:_
+- Es empfiehlt sich, möglichst wenige Strecken zu definieren.
+  Viele der automatisch erstellten Strecken sind zu kurz und können gelöscht werden.
+- Da der Streckenfahrplan von links nach rechts dargestellt wird,
+  sollte der Anfangspunkt eher links oben im Stellwerk liegen, der Endpunkt relativ dazu gesehen rechts unten.
+- Als Start- und Endpunkt können sowohl Anschlussstellen wie Bahnhöfe verwendet werden.
+  Anschlüsse können innerhalb der Strecke vorkommen, 
+  je nach Konfiguration kann dies jedoch die Darstellung des Streckenfahrplans beeinträchtigen.
+- Etwas Experimentieren kann nötig sein.
+
 
 ## Zugschema
 
@@ -119,7 +143,7 @@ Die Bearbeitung der Zugschemata ist nur über Konfigurationsdateien möglich.
 
 ## Persistenz
 
-Die hier gemachten Einstellungen werden beim Beenden des Programms in einer Konfigrurationsdatei im JSON-Format gespeichert.
+Die hier gemachten Einstellungen werden beim Beenden des Programms in einer Konfigurationsdatei im JSON-Format gespeichert.
 Die Konfigurationsdatei befindet sich im Home-/User-Verzeichnis unter `.stskit`.
 Der Dateiname entspricht der Anlagennummer im Stellwerksim.
 Die Konfigurationsdateien können nach dem Umbau eines Stellwerks fehlerhaft werden.
