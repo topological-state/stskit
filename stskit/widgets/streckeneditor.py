@@ -905,7 +905,12 @@ class StreckenEditor(QObject):
         except IndexError:
             return
 
-        strecke = self.anlage.liniengraph.strecke(start, ziel)
+        start_anlage = self.anlage.bahnhofgraph.map_from_other_graph(start, self.bahnhofgraph)
+        ziel_anlage =  self.anlage.bahnhofgraph.map_from_other_graph(ziel, self.bahnhofgraph)
+        strecke_anlage = self.anlage.liniengraph.strecke(start_anlage, ziel_anlage)
+        strecke = [self.bahnhofgraph.map_from_other_graph(bst, self.anlage.bahnhofgraph) for bst in strecke_anlage]
+        strecke = [bst for bst in strecke if bst is not None]
+
         if strecke:
             self.alle_strecken[self.strecken_name] = strecke
             self.edited_strecken.add(self.strecken_name)

@@ -463,6 +463,7 @@ class BahnhofEditor(QObject):
 
         self.anlage.bahnhofgraph.clear()
         self.anlage.bahnhofgraph.update(self.bahnhofgraph)
+        self.anlage.liniengraph_konfigurieren()
         self.changed = False
 
     def reset(self):

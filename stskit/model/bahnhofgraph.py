@@ -561,6 +561,28 @@ class BahnhofGraph(nx.DiGraph):
         for node in self.list_children(BahnhofLabelType('Bst', 'Anst'), {'Anst'}):
             yield node.name
 
+    def map_from_other_graph(self, original_element: BahnhofElement, original_graph: 'BahnhofGraph') -> Optional[BahnhofElement]:
+        """
+        Bahnhofelement von einem anderen Graphen übersetzen
+
+        Wenn zwei Graphen dieselbe Anlage abbilden, übersetzt diese Methode ein Bahnhofelement des anderen Graphen
+        anhand eines repräsentativen Gleises in ein Bahnhofelement des eigenen Graphen.
+        Beide Graphen müssen dieselben Gleise enthalten.
+
+        :param original_element: BahnhofElement im anderen Graphen.
+        :param original_graph: anderer BahnhofGraph, der original_element enthält.
+        """
+
+        if original_element.typ in {'Gl', 'Agl'}:
+            return original_element
+        else:
+            try:
+                gl = next(original_graph.list_children(original_element, {'Gl', 'Agl'}))
+                result = self.find_superior(gl, {original_element.typ})
+                return result
+            except KeyError:
+                return None
+
     def import_anlageninfo(self, anlageninfo: AnlagenInfo):
         """
         Importiert die Anlageninformation in den Stellwerksknoten.
