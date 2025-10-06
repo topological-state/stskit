@@ -1,372 +1,1989 @@
 {
-    "_aid": 444,
-    "_build": 5847,
-    "_name": "Pal\u00e9zieux - Romont",
-    "_region": "Westschweiz",
-    "_version": 2,
-    "zugschema": "schweiz",
-    "anschlussgruppen": {
-        "Abstellung": {
-            "__class__": "Set",
-            "data": [
-                "Abstellung"
-            ]
-        },
-        "CVN": {
-            "__class__": "Set",
-            "data": [
-                "CVN 804",
-                "CVN 904"
-            ]
-        },
-        "Ch\u00e2tel-St-Denis": {
-            "__class__": "Set",
-            "data": [
-                "Ch\u00e2tel-St-Denis"
-            ]
-        },
-        "LUY": {
-            "__class__": "Set",
-            "data": [
-                "LUY 926",
-                "LUY 826"
-            ]
-        },
-        "Montbovon": {
-            "__class__": "Set",
-            "data": [
-                "Montbovon"
-            ]
-        },
-        "Payerne": {
-            "__class__": "Set",
-            "data": [
-                "Payerne"
-            ]
-        },
-        "Tanklager": {
-            "__class__": "Set",
-            "data": [
-                "Tanklager"
-            ]
-        },
-        "VV": {
-            "__class__": "Set",
-            "data": [
-                "VV 301"
-            ]
-        }
+  "default": true,
+  "elemente": [
+    {
+      "name": "CHAT",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "BROF": {
-            "__class__": "Set",
-            "data": [
-                "BROF 1",
-                "BROF 2"
-            ]
-        },
-        "BROV": {
-            "__class__": "Set",
-            "data": [
-                "BROV"
-            ]
-        },
-        "BUL": {
-            "__class__": "Set",
-            "data": [
-                "BUL 1",
-                "BUL 2",
-                "BUL 3",
-                "BUL 1 kurz",
-                "BUL 5",
-                "BUL 4",
-                "BUL 7"
-            ]
-        },
-        "CHAT": {
-            "__class__": "Set",
-            "data": [
-                "CHAT 1",
-                "CHAT 2"
-            ]
-        },
-        "CHX": {
-            "__class__": "Set",
-            "data": [
-                "CHX"
-            ]
-        },
-        "ECU": {
-            "__class__": "Set",
-            "data": [
-                "ECU 1",
-                "ECU 2"
-            ]
-        },
-        "GM": {
-            "__class__": "Set",
-            "data": [
-                "GM 2",
-                "GM 1"
-            ]
-        },
-        "GRV": {
-            "__class__": "Set",
-            "data": [
-                "GRV 2",
-                "GRV 3"
-            ]
-        },
-        "GRY": {
-            "__class__": "Set",
-            "data": [
-                "GRY 2",
-                "GRY 1"
-            ]
-        },
-        "HEN": {
-            "__class__": "Set",
-            "data": [
-                "HEN"
-            ]
-        },
-        "LUC": {
-            "__class__": "Set",
-            "data": [
-                "LUC 1",
-                "LUC 2"
-            ]
-        },
-        "MD": {
-            "__class__": "Set",
-            "data": [
-                "MD 1",
-                "MD 2"
-            ]
-        },
-        "MRL": {
-            "__class__": "Set",
-            "data": [
-                "MRL"
-            ]
-        },
-        "OR": {
-            "__class__": "Set",
-            "data": [
-                "OR"
-            ]
-        },
-        "PAL": {
-            "__class__": "Set",
-            "data": [
-                "PAL 2",
-                "PAL 4",
-                "PAL 5",
-                "PAL 3B",
-                "PAL 3C",
-                "PAL 1"
-            ]
-        },
-        "PALV": {
-            "__class__": "Set",
-            "data": [
-                "PALV"
-            ]
-        },
-        "PAQ": {
-            "__class__": "Set",
-            "data": [
-                "PAQ"
-            ]
-        },
-        "PUI": {
-            "__class__": "Set",
-            "data": [
-                "PUI 2",
-                "PUI 1",
-                "PUI 3",
-                "PUI 8"
-            ]
-        },
-        "ROM": {
-            "__class__": "Set",
-            "data": [
-                "ROM 5",
-                "ROM 1",
-                "ROM 4G",
-                "ROM 5G",
-                "ROM 4",
-                "ROM 2",
-                "ROM 3",
-                "ROM 6",
-                "ROM 27",
-                "ROM 50",
-                "ROM 51",
-                "ROM 60"
-            ]
-        },
-        "SALE": {
-            "__class__": "Set",
-            "data": [
-                "SALE 2",
-                "SALE 1"
-            ]
-        },
-        "TDT": {
-            "__class__": "Set",
-            "data": [
-                "TDT"
-            ]
-        },
-        "TOUV": {
-            "__class__": "Set",
-            "data": [
-                "TOUV"
-            ]
-        },
-        "VAUL": {
-            "__class__": "Set",
-            "data": [
-                "VAUL 1",
-                "VAUL 2"
-            ]
-        },
-        "VD": {
-            "__class__": "Set",
-            "data": [
-                "VD 1",
-                "VD 2"
-            ]
-        },
-        "VUI": {
-            "__class__": "Set",
-            "data": [
-                "VUI 2",
-                "VUI 1"
-            ]
-        }
+    {
+      "name": "CHX",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "sektoren": {
-        "BUL 1": {
-            "__class__": "Set",
-            "data": [
-                "BUL 1",
-                "BUL 1 kurz"
-            ]
-        },
-        "PAL 3": {
-            "__class__": "Set",
-            "data": [
-                "PAL 3B",
-                "PAL 3C"
-            ]
-        },
-        "ROM 4": {
-            "__class__": "Set",
-            "data": [
-                "ROM 4",
-                "ROM 4G"
-            ]
-        },
-        "ROM 5": {
-            "__class__": "Set",
-            "data": [
-                "ROM 5G",
-                "ROM 5"
-            ]
-        }
+    {
+      "name": "ECU",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "CVN-LUY",
-    "strecken": {
-        "CVN-LUY": [
-            "CVN",
-            "GRV",
-            "PUI",
-            "MRL",
-            "PAL",
-            "PALV",
-            "OR",
-            "VD",
-            "ROM",
-            "LUY"
-        ],
-        "Ch\u00e2tel-St-Denis-Montbovon": [
-            "Ch\u00e2tel",
-            "BUL",
-            "TDT",
-            "PAQ",
-            "GRY",
-            "Montbovon"
-        ],
-        "Ch\u00e2tel-St-Denis-Broc-Fabrique": [
-            "Ch\u00e2tel",
-            "BUL",
-            "TOUV",
-            "BROV",
-            "BROF"
-        ],
-        "ROM-Montbovon": [
-            "ROM",
-            "VUI",
-            "SALE",
-            "VAUL",
-            "BUL",
-            "TDT",
-            "PAQ",
-            "GRY",
-            "Montbovon"
-        ],
-        "PAL-Payerne": [
-            "PAL",
-            "PALV",
-            "CHAT",
-            "ECU",
-            "MD",
-            "LUC",
-            "HEN",
-            "GM",
-            "Payerne"
-        ],
-        "CVN-Payerne": [
-            "CVN",
-            "GRV",
-            "PUI",
-            "MRL",
-            "PAL",
-            "PALV",
-            "CHAT",
-            "ECU",
-            "MD",
-            "LUC",
-            "HEN",
-            "GM",
-            "Payerne"
-        ],
-        "VV-LUY": [
-            "VV",
-            "PUI",
-            "MRL",
-            "PAL",
-            "PALV",
-            "OR",
-            "VD",
-            "ROM",
-            "LUY"
-        ],
-        "VV-Payerne": [
-            "VV",
-            "PUI",
-            "MRL",
-            "PAL",
-            "PALV",
-            "CHAT",
-            "ECU",
-            "MD",
-            "LUC",
-            "HEN",
-            "GM",
-            "Payerne"
-        ]
+    {
+      "name": "GM",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GRV",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HEN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LUC",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LVE",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MD",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MRL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "OR",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "PAL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "PALV",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "PUI",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ROM",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SALE",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "VAUL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "VD",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "VUI",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "CHAT",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHAT"
+    },
+    {
+      "name": "CHAT 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHAT 1",
+      "gleise": 1
+    },
+    {
+      "name": "CHAT 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHAT 2",
+      "gleise": 1
+    },
+    {
+      "name": "CHX",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHX"
+    },
+    {
+      "name": "CHX",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHX",
+      "gleise": 1
+    },
+    {
+      "name": "CHX",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHX",
+      "gleise": 1
+    },
+    {
+      "name": "ECU",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECU"
+    },
+    {
+      "name": "ECU 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECU 1",
+      "gleise": 1
+    },
+    {
+      "name": "ECU 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECU 2",
+      "gleise": 1
+    },
+    {
+      "name": "GM",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GM"
+    },
+    {
+      "name": "GM 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GM 2",
+      "gleise": 1
+    },
+    {
+      "name": "GM 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GM 1",
+      "gleise": 1
+    },
+    {
+      "name": "GRV",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRV"
+    },
+    {
+      "name": "GRV 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRV 2",
+      "gleise": 1
+    },
+    {
+      "name": "GRV 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRV 3",
+      "gleise": 1
+    },
+    {
+      "name": "HEN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HEN"
+    },
+    {
+      "name": "HEN",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HEN",
+      "gleise": 1
+    },
+    {
+      "name": "HEN",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HEN",
+      "gleise": 1
+    },
+    {
+      "name": "LUC",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUC"
+    },
+    {
+      "name": "LUC 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUC 1",
+      "gleise": 1
+    },
+    {
+      "name": "LUC 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUC 2",
+      "gleise": 1
+    },
+    {
+      "name": "LVE",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LVE"
+    },
+    {
+      "name": "LVE",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LVE",
+      "gleise": 1
+    },
+    {
+      "name": "LVE",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LVE",
+      "gleise": 1
+    },
+    {
+      "name": "MD 1",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD"
+    },
+    {
+      "name": "MD 11",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD"
+    },
+    {
+      "name": "MD 82",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD"
+    },
+    {
+      "name": "MD 84",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD"
+    },
+    {
+      "name": "MD 91",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD"
+    },
+    {
+      "name": "MD",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD"
+    },
+    {
+      "name": "MD 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 1",
+      "gleise": 1
+    },
+    {
+      "name": "MD 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 1",
+      "gleise": 1
+    },
+    {
+      "name": "MD 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 3",
+      "gleise": 1
+    },
+    {
+      "name": "MD 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 2",
+      "gleise": 1
+    },
+    {
+      "name": "MD 11",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 11",
+      "gleise": 1
+    },
+    {
+      "name": "MD 11",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 11",
+      "gleise": 1
+    },
+    {
+      "name": "MD 82",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 82",
+      "gleise": 1
+    },
+    {
+      "name": "MD 81",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 82",
+      "gleise": 1
+    },
+    {
+      "name": "MD 83",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 82",
+      "gleise": 1
+    },
+    {
+      "name": "MD 82",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 82",
+      "gleise": 1
+    },
+    {
+      "name": "MD 81",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 81",
+      "gleise": 1
+    },
+    {
+      "name": "MD 83",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 83",
+      "gleise": 1
+    },
+    {
+      "name": "MD 84",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 84",
+      "gleise": 1
+    },
+    {
+      "name": "MD 84",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 84",
+      "gleise": 1
+    },
+    {
+      "name": "MD 91",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 91",
+      "gleise": 1
+    },
+    {
+      "name": "MD 91",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 91",
+      "gleise": 1
+    },
+    {
+      "name": "MRL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MRL"
+    },
+    {
+      "name": "MRL",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MRL",
+      "gleise": 1
+    },
+    {
+      "name": "MRL",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MRL",
+      "gleise": 1
+    },
+    {
+      "name": "OR",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OR"
+    },
+    {
+      "name": "OR",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OR",
+      "gleise": 1
+    },
+    {
+      "name": "OR",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OR",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 2",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL"
+    },
+    {
+      "name": "PAL 6",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL"
+    },
+    {
+      "name": "PAL 17",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL"
+    },
+    {
+      "name": "PAL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL"
+    },
+    {
+      "name": "PAL 25",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 2",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 43",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 2",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 2",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 25",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 25",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 3",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 1",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 5",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 43",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 43",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 4",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 6",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 6",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 6",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 6",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 17",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 17",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 17",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL 17",
+      "gleise": 1
+    },
+    {
+      "name": "PALV",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PALV"
+    },
+    {
+      "name": "PALV",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PALV",
+      "gleise": 1
+    },
+    {
+      "name": "PALV",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PALV",
+      "gleise": 1
+    },
+    {
+      "name": "PUI 5",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI"
+    },
+    {
+      "name": "PUI 7",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI"
+    },
+    {
+      "name": "PUI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI"
+    },
+    {
+      "name": "PUI 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI 2",
+      "gleise": 1
+    },
+    {
+      "name": "PUI 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI 1",
+      "gleise": 1
+    },
+    {
+      "name": "PUI 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI 3",
+      "gleise": 1
+    },
+    {
+      "name": "PUI 5",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI 5",
+      "gleise": 1
+    },
+    {
+      "name": "PUI 5",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI 5",
+      "gleise": 1
+    },
+    {
+      "name": "PUI 7",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI 7",
+      "gleise": 1
+    },
+    {
+      "name": "PUI 7",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI 7",
+      "gleise": 1
+    },
+    {
+      "name": "PUI 8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI 8",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 3",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM"
+    },
+    {
+      "name": "ROM 13",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM"
+    },
+    {
+      "name": "ROM 43",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM"
+    },
+    {
+      "name": "ROM",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM"
+    },
+    {
+      "name": "ROM 35",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 3",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 36",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 3",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 7",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 3",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 3",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 3G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 3",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 27",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 27",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 35",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 35",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 4",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 4G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 4",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 6",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 1",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 36",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 36",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 2G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 2",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 2",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 7",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 7",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 13",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 13",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 16",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 13",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 14",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 13",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 15",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 13",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 13",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 13",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 16",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 16",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 14",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 14",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 15",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 15",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 43",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 43",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 43",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM 43",
+      "gleise": 1
+    },
+    {
+      "name": "SALE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SALE"
+    },
+    {
+      "name": "SALE 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SALE 1",
+      "gleise": 1
+    },
+    {
+      "name": "SALE 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SALE 2",
+      "gleise": 1
+    },
+    {
+      "name": "VAUL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VAUL"
+    },
+    {
+      "name": "VAUL 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VAUL 2",
+      "gleise": 1
+    },
+    {
+      "name": "VAUL 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VAUL 1",
+      "gleise": 1
+    },
+    {
+      "name": "VD",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VD"
+    },
+    {
+      "name": "VD 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VD 1",
+      "gleise": 1
+    },
+    {
+      "name": "VD 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VD 2",
+      "gleise": 1
+    },
+    {
+      "name": "VUI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VUI"
+    },
+    {
+      "name": "VUI 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VUI 1",
+      "gleise": 1
+    },
+    {
+      "name": "VUI 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VUI 2",
+      "gleise": 1
+    },
+    {
+      "name": "Vevey",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "PAL",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Nespresso",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LUY",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Tanklager",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Payerne",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "CVN",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bulle",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Le Verney",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MD",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Vevey",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vevey",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 6",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL",
+      "gleise": 1
+    },
+    {
+      "name": "Nespresso",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nespresso",
+      "gleise": 1
+    },
+    {
+      "name": "LUY 826",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUY",
+      "gleise": 1
+    },
+    {
+      "name": "LUY 926",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUY",
+      "gleise": 1
+    },
+    {
+      "name": "Tanklager",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tanklager",
+      "gleise": 1
+    },
+    {
+      "name": "Payerne",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Payerne",
+      "gleise": 1
+    },
+    {
+      "name": "CVN 804",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CVN",
+      "gleise": 1
+    },
+    {
+      "name": "CVN 904",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CVN",
+      "gleise": 1
+    },
+    {
+      "name": "Bulle",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bulle",
+      "gleise": 1
+    },
+    {
+      "name": "Le Verney",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le Verney",
+      "gleise": 1
+    },
+    {
+      "name": "MD 32",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD",
+      "gleise": 1
+    },
+    {
+      "name": "CHAT 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHAT",
+      "gleise": 1
+    },
+    {
+      "name": "CHAT 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHAT",
+      "gleise": 1
+    },
+    {
+      "name": "ECU 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECU",
+      "gleise": 1
+    },
+    {
+      "name": "ECU 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECU",
+      "gleise": 1
+    },
+    {
+      "name": "GM 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GM",
+      "gleise": 1
+    },
+    {
+      "name": "GM 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GM",
+      "gleise": 1
+    },
+    {
+      "name": "GRV 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRV",
+      "gleise": 1
+    },
+    {
+      "name": "GRV 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRV",
+      "gleise": 1
+    },
+    {
+      "name": "LUC 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUC",
+      "gleise": 1
+    },
+    {
+      "name": "LUC 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUC",
+      "gleise": 1
+    },
+    {
+      "name": "MD 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD",
+      "gleise": 1
+    },
+    {
+      "name": "MD 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL",
+      "gleise": 1
+    },
+    {
+      "name": "PAL 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAL",
+      "gleise": 1
+    },
+    {
+      "name": "PUI 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI",
+      "gleise": 1
+    },
+    {
+      "name": "PUI 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI",
+      "gleise": 1
+    },
+    {
+      "name": "PUI 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI",
+      "gleise": 1
+    },
+    {
+      "name": "PUI 8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUI",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 27",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM",
+      "gleise": 1
+    },
+    {
+      "name": "SALE 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SALE",
+      "gleise": 1
+    },
+    {
+      "name": "SALE 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SALE",
+      "gleise": 1
+    },
+    {
+      "name": "VAUL 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VAUL",
+      "gleise": 1
+    },
+    {
+      "name": "VAUL 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VAUL",
+      "gleise": 1
+    },
+    {
+      "name": "VD 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VD",
+      "gleise": 1
+    },
+    {
+      "name": "VD 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VD",
+      "gleise": 1
+    },
+    {
+      "name": "VUI 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VUI",
+      "gleise": 1
+    },
+    {
+      "name": "VUI 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VUI",
+      "gleise": 1
     }
+  ],
+  "strecken": [
+    {
+      "name": "CVN-LUY",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst CVN",
+        "Bf GRV",
+        "Bf PUI",
+        "Bf MRL",
+        "Bf PAL",
+        "Bf OR",
+        "Bf VD",
+        "Bf ROM",
+        "Anst LUY"
+      ]
+    },
+    {
+      "name": "LUY-Bulle",
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst LUY",
+        "Bf ROM",
+        "Bf VUI",
+        "Bf SALE",
+        "Bf VAUL",
+        "Anst Bulle"
+      ]
+    },
+    {
+      "name": "PAL-Payerne",
+      "ordnung": 9,
+      "auto": true,
+      "stationen": [
+        "Bf PAL",
+        "Bf PALV",
+        "Bf CHAT",
+        "Bf ECU",
+        "Bf MD",
+        "Bf LUC",
+        "Bf HEN",
+        "Bf GM",
+        "Anst Payerne"
+      ]
+    },
+    {
+      "name": "CVN-Payerne",
+      "ordnung": 109,
+      "auto": true,
+      "stationen": [
+        "Anst CVN",
+        "Bf GRV",
+        "Bf PUI",
+        "Bf MRL",
+        "Bf PAL",
+        "Bf PALV",
+        "Bf CHAT",
+        "Bf ECU",
+        "Bf MD",
+        "Bf LUC",
+        "Bf HEN",
+        "Bf GM",
+        "Anst Payerne"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 444,
+  "_build": 5851,
+  "_name": "Palézieux - Romont",
+  "_region": "Westschweiz",
+  "_version": 3
 }

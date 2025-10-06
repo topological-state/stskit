@@ -1,748 +1,650 @@
 {
-  "default": true,
+  "default": false,
   "elemente": [
     {
-      "name": "BRM",
+      "name": "Andenne",
       "typ": "Bf",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "BRU",
+      "name": "Java",
       "typ": "Bf",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "GD",
+      "name": "MD",
       "typ": "Bf",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "GRUO",
+      "name": "NA",
       "typ": "Bf",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "Oberwil",
+      "name": "Sclaigneaux",
       "typ": "Bf",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "SCHW",
+      "name": "Château",
       "typ": "Bf",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "SK",
+      "name": "Flémalle",
       "typ": "Bf",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "STN",
+      "name": "Namur",
       "typ": "Bf",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "WCHO",
+      "name": "Üst Beez",
       "typ": "Bf",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "WCHW",
-      "typ": "Bf",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "BRM",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRM"
-    },
-    {
-      "name": "BRM",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRM",
-      "gleise": 1
-    },
-    {
-      "name": "BRM",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRM",
-      "gleise": 1
-    },
-    {
-      "name": "BRU4",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRU"
-    },
-    {
-      "name": "BRU53",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRU"
-    },
-    {
-      "name": "BRU52",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRU"
-    },
-    {
-      "name": "BRU4",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRU4",
-      "gleise": 1
-    },
-    {
-      "name": "BRU5",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRU4",
-      "gleise": 1
-    },
-    {
-      "name": "BRU4",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRU4",
-      "gleise": 1
-    },
-    {
-      "name": "BRU2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRU2",
-      "gleise": 1
-    },
-    {
-      "name": "BRU52",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRU2",
-      "gleise": 1
-    },
-    {
-      "name": "BRU5",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRU5",
-      "gleise": 1
-    },
-    {
-      "name": "BRU3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRU3",
-      "gleise": 1
-    },
-    {
-      "name": "BRU53",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRU3",
-      "gleise": 1
-    },
-    {
-      "name": "BRU3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BRU53",
-      "gleise": 1
-    },
-    {
-      "name": "GD91",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD"
-    },
-    {
-      "name": "GD97",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD"
-    },
-    {
-      "name": "GD3",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD"
-    },
-    {
-      "name": "GD69",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD"
-    },
-    {
-      "name": "GD2",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD"
-    },
-    {
-      "name": "GD11",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD11",
-      "gleise": 1
-    },
-    {
-      "name": "GD71",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD11",
-      "gleise": 1
-    },
-    {
-      "name": "GD9",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD9",
-      "gleise": 1
-    },
-    {
-      "name": "GD69",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD9",
-      "gleise": 1
-    },
-    {
-      "name": "GD17",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD17",
-      "gleise": 1
-    },
-    {
-      "name": "GD56",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD56",
-      "gleise": 1
-    },
-    {
-      "name": "GD6",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD6",
-      "gleise": 1
-    },
-    {
-      "name": "GD3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD3",
-      "gleise": 1
-    },
-    {
-      "name": "GD5",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD5",
-      "gleise": 1
-    },
-    {
-      "name": "GD16",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD16",
-      "gleise": 1
-    },
-    {
-      "name": "GD4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD4",
-      "gleise": 1
-    },
-    {
-      "name": "GD2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD2",
-      "gleise": 1
-    },
-    {
-      "name": "GD8",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD8",
-      "gleise": 1
-    },
-    {
-      "name": "GD68",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD8",
-      "gleise": 1
-    },
-    {
-      "name": "GD91",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD91",
-      "gleise": 1
-    },
-    {
-      "name": "GD91",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD91",
-      "gleise": 1
-    },
-    {
-      "name": "GD97",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD97",
-      "gleise": 1
-    },
-    {
-      "name": "GD97",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GD97",
-      "gleise": 1
-    },
-    {
-      "name": "GRUO",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GRUO"
-    },
-    {
-      "name": "GRUO",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GRUO",
-      "gleise": 1
-    },
-    {
-      "name": "GRUO",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GRUO",
-      "gleise": 1
-    },
-    {
-      "name": "Oberwil",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Oberwil"
-    },
-    {
-      "name": "Oberwil",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Oberwil",
-      "gleise": 1
-    },
-    {
-      "name": "Oberwil",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Oberwil",
-      "gleise": 1
-    },
-    {
-      "name": "SCHW3",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SCHW"
-    },
-    {
-      "name": "SCHW2",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SCHW"
-    },
-    {
-      "name": "SCHW3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SCHW3",
-      "gleise": 1
-    },
-    {
-      "name": "SCHW2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SCHW3",
-      "gleise": 1
-    },
-    {
-      "name": "SCHW4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SCHW3",
-      "gleise": 1
-    },
-    {
-      "name": "SCHW3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SCHW3",
-      "gleise": 1
-    },
-    {
-      "name": "SCHW2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SCHW2",
-      "gleise": 1
-    },
-    {
-      "name": "SCHW4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SCHW4",
-      "gleise": 1
-    },
-    {
-      "name": "SCHW1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SCHW1",
-      "gleise": 1
-    },
-    {
-      "name": "SK",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SK"
-    },
-    {
-      "name": "SK",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SK",
-      "gleise": 1
-    },
-    {
-      "name": "SK",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SK",
-      "gleise": 1
-    },
-    {
-      "name": "STN",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "STN"
-    },
-    {
-      "name": "STN",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "STN",
-      "gleise": 1
-    },
-    {
-      "name": "STN",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "STN",
-      "gleise": 1
-    },
-    {
-      "name": "WCHO",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WCHO"
-    },
-    {
-      "name": "WCHO",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WCHO",
-      "gleise": 1
-    },
-    {
-      "name": "WCHO",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WCHO",
-      "gleise": 1
-    },
-    {
-      "name": "WCHW2",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WCHW"
-    },
-    {
-      "name": "WCHW3",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WCHW"
-    },
-    {
-      "name": "WCHW3",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WCHW2",
-      "gleise": 1
-    },
-    {
-      "name": "WCHW2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WCHW2",
-      "gleise": 1
-    },
-    {
-      "name": "WCHW3",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WCHW3",
-      "gleise": 1
-    },
-    {
-      "name": "Steinerberg",
-      "typ": "Anst",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "IM",
+      "name": "7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "7",
+      "gleise": 1
+    },
+    {
+      "name": "11",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "11",
+      "gleise": 1
+    },
+    {
+      "name": "11G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "11",
+      "gleise": 1
+    },
+    {
+      "name": "3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "9",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "9",
+      "gleise": 1
+    },
+    {
+      "name": "9G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "9",
+      "gleise": 1
+    },
+    {
+      "name": "2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2",
+      "gleise": 1
+    },
+    {
+      "name": "1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1",
+      "gleise": 1
+    },
+    {
+      "name": "4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "4",
+      "gleise": 1
+    },
+    {
+      "name": "5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "5",
+      "gleise": 1
+    },
+    {
+      "name": "6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "6",
+      "gleise": 1
+    },
+    {
+      "name": "10",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "10",
+      "gleise": 1
+    },
+    {
+      "name": "10G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "10",
+      "gleise": 1
+    },
+    {
+      "name": "8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "8",
+      "gleise": 1
+    },
+    {
+      "name": "8G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "8",
+      "gleise": 1
+    },
+    {
+      "name": "13",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "12",
+      "gleise": 1
+    },
+    {
+      "name": "12",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "12",
+      "gleise": 1
+    },
+    {
+      "name": "12b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "12",
+      "gleise": 1
+    },
+    {
+      "name": "13",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "13",
+      "gleise": 1
+    },
+    {
+      "name": "Andenne",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Andenne"
+    },
+    {
+      "name": "Andenne",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Andenne",
+      "gleise": 1
+    },
+    {
+      "name": "Andenne",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Andenne",
+      "gleise": 1
+    },
+    {
+      "name": "Château-de-Seilles",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Château-de-Seilles",
+      "gleise": 1
+    },
+    {
+      "name": "Flémalle-Haute",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Flémalle-Haute",
+      "gleise": 1
+    },
+    {
+      "name": "Java",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Java"
+    },
+    {
+      "name": "Java 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Java",
+      "gleise": 1
+    },
+    {
+      "name": "Java",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Java",
+      "gleise": 1
+    },
+    {
+      "name": "Java 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Java 3",
+      "gleise": 1
+    },
+    {
+      "name": "Java",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Java",
+      "gleise": 1
+    },
+    {
+      "name": "MD",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD"
+    },
+    {
+      "name": "MD 1",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD"
+    },
+    {
+      "name": "MD 3b",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD"
+    },
+    {
+      "name": "MD 3a",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD"
+    },
+    {
+      "name": "MD",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD",
+      "gleise": 1
+    },
+    {
+      "name": "MD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD",
+      "gleise": 1
+    },
+    {
+      "name": "MD 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 3",
+      "gleise": 1
+    },
+    {
+      "name": "MD 3a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 3",
+      "gleise": 1
+    },
+    {
+      "name": "MD 3b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 3",
+      "gleise": 1
+    },
+    {
+      "name": "MD 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 5",
+      "gleise": 1
+    },
+    {
+      "name": "MD 5a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 5",
+      "gleise": 1
+    },
+    {
+      "name": "MD 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 1",
+      "gleise": 1
+    },
+    {
+      "name": "MD 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 2",
+      "gleise": 1
+    },
+    {
+      "name": "NA",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NA"
+    },
+    {
+      "name": "NA 1",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NA"
+    },
+    {
+      "name": "NA 3b",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NA"
+    },
+    {
+      "name": "NA",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NA",
+      "gleise": 1
+    },
+    {
+      "name": "NA",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NA",
+      "gleise": 1
+    },
+    {
+      "name": "NA 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NA 1",
+      "gleise": 1
+    },
+    {
+      "name": "NA 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NA 1",
+      "gleise": 1
+    },
+    {
+      "name": "NA 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NA 1",
+      "gleise": 1
+    },
+    {
+      "name": "NA 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NA 3",
+      "gleise": 1
+    },
+    {
+      "name": "NA 3a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NA 3",
+      "gleise": 1
+    },
+    {
+      "name": "NA 3b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NA 3",
+      "gleise": 1
+    },
+    {
+      "name": "NA 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NA 2",
+      "gleise": 1
+    },
+    {
+      "name": "Sclaigneaux",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sclaigneaux"
+    },
+    {
+      "name": "Sclaigneaux",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sclaigneaux",
+      "gleise": 1
+    },
+    {
+      "name": "Sclaigneaux",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sclaigneaux",
+      "gleise": 1
+    },
+    {
+      "name": "Üst Beez",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Üst Beez",
+      "gleise": 1
+    },
+    {
+      "name": "Flémalle-Haute",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -750,7 +652,7 @@
       "flags": ""
     },
     {
-      "name": "Zug Oberwil",
+      "name": "Gembloux",
       "typ": "Anst",
       "auto": false,
       "ordnung": 0,
@@ -758,23 +660,7 @@
       "flags": ""
     },
     {
-      "name": "Kieswerk",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Abstellfeld",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Industrie",
+      "name": "Ronet",
       "typ": "Anst",
       "auto": false,
       "ordnung": 0,
@@ -782,7 +668,7 @@
       "flags": ""
     },
     {
-      "name": "Depot",
+      "name": "CLI Ronet",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -790,295 +676,457 @@
       "flags": ""
     },
     {
-      "name": "FL",
+      "name": "Dolomies",
       "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Steinerberg",
-      "typ": "Agl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
-      "flags": "",
-      "stamm": "Steinerberg",
-      "gleise": 1
+      "flags": ""
     },
     {
-      "name": "IM 846",
+      "name": "Dinant",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Ciney",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Flémalle-Haute",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IM",
-      "gleise": 1
-    },
-    {
-      "name": "IM 946",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "IM",
-      "gleise": 1
-    },
-    {
-      "name": "Zug Oberwil",
-      "typ": "Agl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Zug Oberwil",
-      "gleise": 1
-    },
-    {
-      "name": "Kieswerk",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Kieswerk",
-      "gleise": 1
-    },
-    {
-      "name": "Abstellfeld",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Abstellfeld",
-      "gleise": 1
-    },
-    {
-      "name": "Industrie",
-      "typ": "Agl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Industrie",
+      "stamm": "Flémalle-Haute",
       "gleise": 2
     },
     {
-      "name": "Depot",
+      "name": "Gembloux",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gembloux",
+      "gleise": 2
+    },
+    {
+      "name": "Ronet 1",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ronet",
+      "gleise": 2
+    },
+    {
+      "name": "Ronet 2",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ronet",
+      "gleise": 1
+    },
+    {
+      "name": "Ronet 3",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ronet",
+      "gleise": 1
+    },
+    {
+      "name": "CLI Ronet",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Depot",
-      "gleise": 1
+      "stamm": "CLI Ronet",
+      "gleise": 2
     },
     {
-      "name": "FL 897",
+      "name": "Dolomies 1",
       "typ": "Agl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "FL",
+      "stamm": "Dolomies",
       "gleise": 1
     },
     {
-      "name": "FL 997",
+      "name": "Dolomies 2",
       "typ": "Agl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "FL",
+      "stamm": "Dolomies",
       "gleise": 1
     },
     {
-      "name": "BRU2",
+      "name": "Dinant",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dinant",
+      "gleise": 2
+    },
+    {
+      "name": "Ciney",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ciney",
+      "gleise": 2
+    },
+    {
+      "name": "12",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BRU52",
+      "stamm": "12b",
       "gleise": 1
     },
     {
-      "name": "GD17",
+      "name": "Château",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Château"
+    },
+    {
+      "name": "Château-de-Seilles",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GD3",
+      "stamm": "Château",
       "gleise": 1
     },
     {
-      "name": "GD56",
+      "name": "Flémalle",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Flémalle"
+    },
+    {
+      "name": "Flémalle-Haute",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GD3",
+      "stamm": "Flémalle",
       "gleise": 1
     },
     {
-      "name": "GD3",
+      "name": "MD 1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GD3",
+      "stamm": "MD 1",
       "gleise": 1
     },
     {
-      "name": "GD5",
+      "name": "MD 2",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GD3",
+      "stamm": "MD 1",
       "gleise": 1
     },
     {
-      "name": "GD16",
+      "name": "MD 5",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GD3",
+      "stamm": "MD 3a",
       "gleise": 1
     },
     {
-      "name": "GD4",
+      "name": "MD 7a",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GD3",
+      "stamm": "MD 3a",
       "gleise": 1
     },
     {
-      "name": "GD2",
+      "name": "MD 9a",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GD3",
+      "stamm": "MD 3a",
       "gleise": 1
     },
     {
-      "name": "GD11",
+      "name": "MD 7a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 7a",
+      "gleise": 1
+    },
+    {
+      "name": "MD 9a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MD 9a",
+      "gleise": 1
+    },
+    {
+      "name": "MD 3",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GD69",
+      "stamm": "MD 3b",
       "gleise": 1
     },
     {
-      "name": "GD9",
+      "name": "NA 3",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GD69",
+      "stamm": "NA 3b",
       "gleise": 1
     },
     {
-      "name": "GD8",
+      "name": "1-7",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Namur"
+    },
+    {
+      "name": "8-11",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Namur"
+    },
+    {
+      "name": "12b",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Namur"
+    },
+    {
+      "name": "12",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Namur"
+    },
+    {
+      "name": "7",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GD69",
+      "stamm": "1-7",
       "gleise": 1
     },
     {
-      "name": "GD6",
+      "name": "3",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GD2",
+      "stamm": "1-7",
       "gleise": 1
     },
     {
-      "name": "SCHW1",
+      "name": "2",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SCHW2",
+      "stamm": "1-7",
       "gleise": 1
     },
     {
-      "name": "WCHW2",
+      "name": "1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "WCHW3",
+      "stamm": "1-7",
+      "gleise": 1
+    },
+    {
+      "name": "4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1-7",
+      "gleise": 1
+    },
+    {
+      "name": "5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1-7",
+      "gleise": 1
+    },
+    {
+      "name": "6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1-7",
+      "gleise": 1
+    },
+    {
+      "name": "11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "8-11",
+      "gleise": 1
+    },
+    {
+      "name": "9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "8-11",
+      "gleise": 1
+    },
+    {
+      "name": "10",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "8-11",
+      "gleise": 1
+    },
+    {
+      "name": "8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "8-11",
+      "gleise": 1
+    },
+    {
+      "name": "Üst Beez",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Üst Beez"
+    },
+    {
+      "name": "Üst Beez",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Üst Beez",
       "gleise": 1
     }
   ],
   "strecken": [
     {
-      "name": "Zug Oberwil-FL",
+      "name": "Ronet-Flémalle+",
       "ordnung": 1,
       "auto": false,
       "stationen": [
-        "Anst Zug Oberwil",
-        "Bf Oberwil",
-        "Bf WCHO",
-        "Bf WCHW",
-        "Bf GD",
-        "Bf STN",
-        "Bf SCHW",
-        "Bf BRU",
-        "Bf SK",
-        "Bf GRUO",
-        "Anst FL"
-      ]
-    },
-    {
-      "name": "IM-FL",
-      "ordnung": 2,
-      "auto": false,
-      "stationen": [
-        "Anst IM",
-        "Bf BRM",
-        "Bf GD",
-        "Bf STN",
-        "Bf SCHW",
-        "Bf BRU",
-        "Bf SK",
-        "Bf GRUO",
-        "Anst FL"
+        "Anst Ronet",
+        "Bf Namur",
+        "Bf Üst Beez",
+        "Bf MD",
+        "Bf NA",
+        "Bf Sclaigneaux",
+        "Bf Château",
+        "Bf Andenne",
+        "Bf Java",
+        "Bf Flémalle"
       ]
     }
   ],
   "streckenmarkierung": [],
-  "zugschema": "schweiz",
-  "_aid": 556,
+  "zugschema": "benelux",
+  "_aid": 1047,
   "_build": 5851,
-  "_name": "Arth-Goldau",
-  "_region": "Zentralschweiz",
+  "_name": "Namur",
+  "_region": "Belgien",
   "_version": 3
 }

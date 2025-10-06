@@ -1,8 +1,8 @@
 {
-  "default": false,
+  "default": true,
   "elemente": [
     {
-      "name": "Albate-Trecallo",
+      "name": "Beinheim",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -10,7 +10,7 @@
       "flags": ""
     },
     {
-      "name": "Anzano del Parco",
+      "name": "Beinheim-Roppenheim",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -18,7 +18,7 @@
       "flags": ""
     },
     {
-      "name": "Bivio/P.C. Rosales",
+      "name": "BHM",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -26,7 +26,7 @@
       "flags": ""
     },
     {
-      "name": "Brenna-Alzate",
+      "name": "BHW",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -34,7 +34,7 @@
       "flags": ""
     },
     {
-      "name": "CA",
+      "name": "DRS",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -42,7 +42,7 @@
       "flags": ""
     },
     {
-      "name": "Cantù-Cermenate",
+      "name": "Gambsheim",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -50,7 +50,7 @@
       "flags": ""
     },
     {
-      "name": "Ceriano Laghetto-Groane",
+      "name": "HMT",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -58,7 +58,7 @@
       "flags": ""
     },
     {
-      "name": "Cesano Maderno",
+      "name": "Hoelschloch-Surbourg",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -66,7 +66,7 @@
       "flags": ""
     },
     {
-      "name": "Cesano Maderno Groane",
+      "name": "Hoffen",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -74,7 +74,7 @@
       "flags": ""
     },
     {
-      "name": "CL",
+      "name": "HUS",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -82,7 +82,7 @@
       "flags": ""
     },
     {
-      "name": "CL manovra",
+      "name": "Kilstett",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -90,7 +90,7 @@
       "flags": ""
     },
     {
-      "name": "CO",
+      "name": "Kurtzenhouse",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -98,7 +98,7 @@
       "flags": ""
     },
     {
-      "name": "Como-Camerlata",
+      "name": "LW",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -106,7 +106,7 @@
       "flags": ""
     },
     {
-      "name": "CU",
+      "name": "Marienthal",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -114,7 +114,7 @@
       "flags": ""
     },
     {
-      "name": "Cucciago",
+      "name": "Mothern",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -122,7 +122,7 @@
       "flags": ""
     },
     {
-      "name": "SE",
+      "name": "Munchhausen",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -130,7 +130,7 @@
       "flags": ""
     },
     {
-      "name": "GR",
+      "name": "OBF",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -138,7 +138,7 @@
       "flags": ""
     },
     {
-      "name": "PMA",
+      "name": "Rountzenheim",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -146,7 +146,7 @@
       "flags": ""
     },
     {
-      "name": "Seveso-Baruccana",
+      "name": "RTZ",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -154,7 +154,55 @@
       "flags": ""
     },
     {
-      "name": "EA Chiasso",
+      "name": "RWG",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Sessenheim",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SSZ",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WAL",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WBG",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Weyersheim",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HAG",
       "typ": "Bf",
       "auto": false,
       "ordnung": 0,
@@ -162,7 +210,7 @@
       "flags": ""
     },
     {
-      "name": "EA Seveso",
+      "name": "HOD",
       "typ": "Bf",
       "auto": false,
       "ordnung": 0,
@@ -170,7 +218,7 @@
       "flags": ""
     },
     {
-      "name": "EA 8-14",
+      "name": "HRL",
       "typ": "Bf",
       "auto": false,
       "ordnung": 0,
@@ -178,7 +226,7 @@
       "flags": ""
     },
     {
-      "name": "EA Merone",
+      "name": "SSF",
       "typ": "Bf",
       "auto": false,
       "ordnung": 0,
@@ -186,1767 +234,2287 @@
       "flags": ""
     },
     {
-      "name": "A 8",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "A 8",
-      "gleise": 1
-    },
-    {
-      "name": "A 8-14",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "A 8",
-      "gleise": 1
-    },
-    {
-      "name": "A Chiasso",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "A Chiasso",
-      "gleise": 1
-    },
-    {
-      "name": "A Seveso",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "A Seveso",
-      "gleise": 1
-    },
-    {
-      "name": "Albate-Trecallo",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Albate-Trecallo"
-    },
-    {
-      "name": "Albate-Trecallo",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Albate-Trecallo",
-      "gleise": 1
-    },
-    {
-      "name": "Albate-Trecallo",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Albate-Trecallo",
-      "gleise": 1
-    },
-    {
-      "name": "Anzano del Parco",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Anzano del Parco"
-    },
-    {
-      "name": "Anzano del Parco",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Anzano del Parco",
-      "gleise": 1
-    },
-    {
-      "name": "Anzano del Parco",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Anzano del Parco",
-      "gleise": 1
-    },
-    {
-      "name": "Bivio/P.C. Rosales",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Bivio/P.C. Rosales"
-    },
-    {
-      "name": "Bivio/P.C. Rosales",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Bivio/P.C. Rosales",
-      "gleise": 1
-    },
-    {
-      "name": "Bivio/P.C. Rosales",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Bivio/P.C. Rosales",
-      "gleise": 1
-    },
-    {
-      "name": "Brenna-Alzate",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Brenna-Alzate"
-    },
-    {
-      "name": "Brenna-Alzate",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Brenna-Alzate",
-      "gleise": 1
-    },
-    {
-      "name": "Brenna-Alzate",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Brenna-Alzate",
-      "gleise": 1
-    },
-    {
-      "name": "CA 1",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA"
-    },
-    {
-      "name": "CA 1",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA 1",
-      "gleise": 1
-    },
-    {
-      "name": "CA 2",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA 1",
-      "gleise": 1
-    },
-    {
-      "name": "CA 3",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA 1",
-      "gleise": 1
-    },
-    {
-      "name": "CA 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA 1",
-      "gleise": 1
-    },
-    {
-      "name": "CA 1G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA 1",
-      "gleise": 1
-    },
-    {
-      "name": "CA 1W",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA 1",
-      "gleise": 1
-    },
-    {
-      "name": "CA 2",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA 2",
-      "gleise": 1
-    },
-    {
-      "name": "CA 2G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA 2",
-      "gleise": 1
-    },
-    {
-      "name": "CA 2a",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA 2",
-      "gleise": 1
-    },
-    {
-      "name": "CA 2b",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA 2",
-      "gleise": 1
-    },
-    {
-      "name": "CA 3",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA 3",
-      "gleise": 1
-    },
-    {
-      "name": "CA 3G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CA 3",
-      "gleise": 1
-    },
-    {
-      "name": "Cantù-Cermenate",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Cantù-Cermenate"
-    },
-    {
-      "name": "Cantù-Cermenate",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Cantù-Cermenate",
-      "gleise": 1
-    },
-    {
-      "name": "Cantù-Cermenate",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Cantù-Cermenate",
-      "gleise": 1
-    },
-    {
-      "name": "Ceriano Laghetto-Groane",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Ceriano Laghetto-Groane"
-    },
-    {
-      "name": "Ceriano Laghetto-Groane",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Ceriano Laghetto-Groane",
-      "gleise": 1
-    },
-    {
-      "name": "Ceriano Laghetto-Groane",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Ceriano Laghetto-Groane",
-      "gleise": 1
-    },
-    {
-      "name": "Cesano Maderno",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Cesano Maderno"
-    },
-    {
-      "name": "Cesano Maderno",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Cesano Maderno",
-      "gleise": 1
-    },
-    {
-      "name": "Cesano Maderno",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Cesano Maderno",
-      "gleise": 1
-    },
-    {
-      "name": "Cesano Maderno Groane",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Cesano Maderno Groane"
-    },
-    {
-      "name": "Cesano Maderno Groane",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Cesano Maderno Groane",
-      "gleise": 1
-    },
-    {
-      "name": "Cesano Maderno Groane",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Cesano Maderno Groane",
-      "gleise": 1
-    },
-    {
-      "name": "CL 1",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL"
-    },
-    {
-      "name": "CL 2",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL"
-    },
-    {
-      "name": "CL 1",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 1",
-      "gleise": 1
-    },
-    {
-      "name": "CL 3",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 1",
-      "gleise": 1
-    },
-    {
-      "name": "CL 2",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 1",
-      "gleise": 1
-    },
-    {
-      "name": "CL 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 1",
-      "gleise": 1
-    },
-    {
-      "name": "CL 1G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 1",
-      "gleise": 1
-    },
-    {
-      "name": "CL 3",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 3",
-      "gleise": 1
-    },
-    {
-      "name": "CL 3G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 3",
-      "gleise": 1
-    },
-    {
-      "name": "CL 2",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 2",
-      "gleise": 1
-    },
-    {
-      "name": "CL 2G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 2",
-      "gleise": 1
-    },
-    {
-      "name": "CL manovra",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL manovra"
-    },
-    {
-      "name": "CL manovra",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL manovra",
-      "gleise": 1
-    },
-    {
-      "name": "CL manovra",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL manovra",
-      "gleise": 1
-    },
-    {
-      "name": "CO 2",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO"
-    },
-    {
-      "name": "CO 3",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO"
-    },
-    {
-      "name": "CO 2",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 2",
-      "gleise": 1
-    },
-    {
-      "name": "CO 3",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 2",
-      "gleise": 1
-    },
-    {
-      "name": "CO 4",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 2",
-      "gleise": 1
-    },
-    {
-      "name": "CO 1",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 2",
-      "gleise": 1
-    },
-    {
-      "name": "CO 6",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 2",
-      "gleise": 1
-    },
-    {
-      "name": "CO 2",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 2",
-      "gleise": 1
-    },
-    {
-      "name": "CO 3G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 3",
-      "gleise": 1
-    },
-    {
-      "name": "CO 3",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 3",
-      "gleise": 1
-    },
-    {
-      "name": "CO 4",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 4",
-      "gleise": 1
-    },
-    {
-      "name": "CO 4G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 4",
-      "gleise": 1
-    },
-    {
-      "name": "CO 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 1",
-      "gleise": 1
-    },
-    {
-      "name": "CO 6",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 6",
-      "gleise": 1
-    },
-    {
-      "name": "CO 6G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 6",
-      "gleise": 1
-    },
-    {
-      "name": "Como-Camerlata",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Como-Camerlata"
-    },
-    {
-      "name": "Como-Camerlata",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Como-Camerlata",
-      "gleise": 1
-    },
-    {
-      "name": "Como-Camerlata corto",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Como-Camerlata",
-      "gleise": 1
-    },
-    {
-      "name": "Como-Camerlata lungo",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Como-Camerlata",
-      "gleise": 1
-    },
-    {
-      "name": "Como-Camerlata",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Como-Camerlata",
-      "gleise": 1
-    },
-    {
-      "name": "Como-Camerlata corto",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Como-Camerlata corto",
-      "gleise": 1
-    },
-    {
-      "name": "Como-Camerlata lungo",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Como-Camerlata lungo",
-      "gleise": 1
-    },
-    {
-      "name": "CU 2",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CU"
-    },
-    {
-      "name": "CU 2",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CU 2",
-      "gleise": 1
-    },
-    {
-      "name": "CU 1",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CU 2",
-      "gleise": 1
-    },
-    {
-      "name": "CU 2G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CU 2",
-      "gleise": 1
-    },
-    {
-      "name": "CU 2",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CU 2",
-      "gleise": 1
-    },
-    {
-      "name": "CU 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CU 1",
-      "gleise": 1
-    },
-    {
-      "name": "CU 1G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CU 1",
-      "gleise": 1
-    },
-    {
-      "name": "Cucciago",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Cucciago"
-    },
-    {
-      "name": "Cucciago",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Cucciago",
-      "gleise": 1
-    },
-    {
-      "name": "Cucciago",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Cucciago",
-      "gleise": 1
-    },
-    {
-      "name": "SE 3",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE"
-    },
-    {
-      "name": "SE 4",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE"
-    },
-    {
-      "name": "SE 3",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 3",
-      "gleise": 1
-    },
-    {
-      "name": "SE 1",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 3",
-      "gleise": 1
-    },
-    {
-      "name": "SE 5",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 3",
-      "gleise": 1
-    },
-    {
-      "name": "SE 4",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 3",
-      "gleise": 1
-    },
-    {
-      "name": "SE 2",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 3",
-      "gleise": 1
-    },
-    {
-      "name": "SE 6",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 3",
-      "gleise": 1
-    },
-    {
-      "name": "SE 3",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 3",
-      "gleise": 1
-    },
-    {
-      "name": "SE 3b",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 3",
-      "gleise": 1
-    },
-    {
-      "name": "E 8-14",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "E 8",
-      "gleise": 1
-    },
-    {
-      "name": "SE 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 1",
-      "gleise": 1
-    },
-    {
-      "name": "SE 5",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 5",
-      "gleise": 1
-    },
-    {
-      "name": "SE 4b",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 4",
-      "gleise": 1
-    },
-    {
-      "name": "SE 4",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 4",
-      "gleise": 1
-    },
-    {
-      "name": "SE 2",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 2",
-      "gleise": 1
-    },
-    {
-      "name": "SE 6",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 6",
-      "gleise": 1
-    },
-    {
-      "name": "E Chiasso",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "E Chiasso",
-      "gleise": 1
-    },
-    {
-      "name": "E Merone",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "E Merone",
-      "gleise": 1
-    },
-    {
-      "name": "E Seveso",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "E Seveso",
-      "gleise": 1
-    },
-    {
-      "name": "GR 2",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GR"
-    },
-    {
-      "name": "GR 2",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GR 2",
-      "gleise": 1
-    },
-    {
-      "name": "GR 1",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GR 2",
-      "gleise": 1
-    },
-    {
-      "name": "GR 3",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GR 2",
-      "gleise": 1
-    },
-    {
-      "name": "GR 2",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GR 2",
-      "gleise": 1
-    },
-    {
-      "name": "GR 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GR 1",
-      "gleise": 1
-    },
-    {
-      "name": "GR 3",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GR 3",
-      "gleise": 1
-    },
-    {
-      "name": "PMA 2",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PMA"
-    },
-    {
-      "name": "PMA 2",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PMA 2",
-      "gleise": 1
-    },
-    {
-      "name": "PMA 4",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PMA 2",
-      "gleise": 1
-    },
-    {
-      "name": "PMA 1",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PMA 2",
-      "gleise": 1
-    },
-    {
-      "name": "PMA 3",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PMA 2",
-      "gleise": 1
-    },
-    {
-      "name": "PMA 2",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PMA 2",
-      "gleise": 1
-    },
-    {
-      "name": "PMA 2G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PMA 2",
-      "gleise": 1
-    },
-    {
-      "name": "PMA 4",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PMA 4",
-      "gleise": 1
-    },
-    {
-      "name": "PMA 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PMA 1",
-      "gleise": 1
-    },
-    {
-      "name": "PMA 1G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PMA 1",
-      "gleise": 1
-    },
-    {
-      "name": "PMA 3",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PMA 3",
-      "gleise": 1
-    },
-    {
-      "name": "PMA 3A",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PMA 3",
-      "gleise": 1
-    },
-    {
-      "name": "Seveso-Baruccana",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Seveso-Baruccana"
-    },
-    {
-      "name": "Seveso-Baruccana",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Seveso-Baruccana",
-      "gleise": 1
-    },
-    {
-      "name": "Seveso-Baruccana",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Seveso-Baruccana",
-      "gleise": 1
-    },
-    {
-      "name": "Seveso",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Merone",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Saronno",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "7s",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Monza",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "7-14",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Bertani Trasporti",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Carnate",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "RFI",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "deposito Tn",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "5-8",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "6-7",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "BASF",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Chiasso 1",
-      "typ": "Anst",
+      "name": "Zu OBF",
+      "typ": "Bf",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "Chiasso 2",
-      "typ": "Anst",
+      "name": "Beinheim",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Beinheim"
+    },
+    {
+      "name": "Beinheim",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Beinheim",
+      "gleise": 1
+    },
+    {
+      "name": "Beinheim",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Beinheim",
+      "gleise": 1
+    },
+    {
+      "name": "Beinheim-Roppenheim",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Beinheim-Roppenheim"
+    },
+    {
+      "name": "Beinheim-Roppenheim",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Beinheim-Roppenheim",
+      "gleise": 1
+    },
+    {
+      "name": "Beinheim-Roppenheim",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Beinheim-Roppenheim",
+      "gleise": 1
+    },
+    {
+      "name": "BHM Heineken",
+      "typ": "Bft",
       "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM"
+    },
+    {
+      "name": "BHM",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM"
+    },
+    {
+      "name": "BHM 12",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM 12",
+      "gleise": 1
+    },
+    {
+      "name": "BHM 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM 1",
+      "gleise": 1
+    },
+    {
+      "name": "BHM A G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM A G",
+      "gleise": 1
+    },
+    {
+      "name": "BHM 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM 2",
+      "gleise": 1
+    },
+    {
+      "name": "BHM B G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM B G",
+      "gleise": 1
+    },
+    {
+      "name": "BHM B",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM B",
+      "gleise": 1
+    },
+    {
+      "name": "BHM 11",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM 11",
+      "gleise": 1
+    },
+    {
+      "name": "BHM A",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM A",
+      "gleise": 1
+    },
+    {
+      "name": "BHM Heineken",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM Heineken",
+      "gleise": 1
+    },
+    {
+      "name": "BHM Heineken",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM Heineken",
+      "gleise": 1
+    },
+    {
+      "name": "BHW 12",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHW"
+    },
+    {
+      "name": "BHW",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHW"
+    },
+    {
+      "name": "BHW 12",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHW 12",
+      "gleise": 1
+    },
+    {
+      "name": "BHW 11",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHW 12",
+      "gleise": 1
+    },
+    {
+      "name": "BHW 12",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHW 12",
+      "gleise": 1
+    },
+    {
+      "name": "BHW 11",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHW 11",
+      "gleise": 1
+    },
+    {
+      "name": "BHW A",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHW A",
+      "gleise": 1
+    },
+    {
+      "name": "BHW B",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHW B",
+      "gleise": 1
+    },
+    {
+      "name": "DRS",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DRS"
+    },
+    {
+      "name": "DRS",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DRS",
+      "gleise": 1
+    },
+    {
+      "name": "DRS",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DRS",
+      "gleise": 1
+    },
+    {
+      "name": "Gambsheim",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gambsheim"
+    },
+    {
+      "name": "Gambsheim",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gambsheim",
+      "gleise": 1
+    },
+    {
+      "name": "Gambsheim",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gambsheim",
+      "gleise": 1
+    },
+    {
+      "name": "HAG B",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG B",
+      "gleise": 1
+    },
+    {
+      "name": "HAG C",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG C",
+      "gleise": 1
+    },
+    {
+      "name": "HAG I",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG I",
+      "gleise": 1
+    },
+    {
+      "name": "HAG J",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG J",
+      "gleise": 1
+    },
+    {
+      "name": "HAG A",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG A",
+      "gleise": 1
+    },
+    {
+      "name": "HAG E",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG E",
+      "gleise": 1
+    },
+    {
+      "name": "HAG D",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG D",
+      "gleise": 1
+    },
+    {
+      "name": "HAG K",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG K",
+      "gleise": 1
+    },
+    {
+      "name": "HAG L",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG L",
+      "gleise": 1
+    },
+    {
+      "name": "HAG L",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG L",
+      "gleise": 1
+    },
+    {
+      "name": "HAG N",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG N",
+      "gleise": 1
+    },
+    {
+      "name": "HAG M",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG N",
+      "gleise": 1
+    },
+    {
+      "name": "HAG N",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG N",
+      "gleise": 1
+    },
+    {
+      "name": "HAG M",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG M",
+      "gleise": 1
+    },
+    {
+      "name": "HAG Wende",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG R",
+      "gleise": 1
+    },
+    {
+      "name": "HAG R",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG R",
+      "gleise": 1
+    },
+    {
+      "name": "HAG Q",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG R",
+      "gleise": 1
+    },
+    {
+      "name": "HAG Wende",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG Wende",
+      "gleise": 1
+    },
+    {
+      "name": "HAG R",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG R",
+      "gleise": 1
+    },
+    {
+      "name": "HAG Q",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG Q",
+      "gleise": 1
+    },
+    {
+      "name": "HMT",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HMT"
+    },
+    {
+      "name": "HMT 11",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HMT"
+    },
+    {
+      "name": "HMT 12",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HMT"
+    },
+    {
+      "name": "HMT",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HMT",
+      "gleise": 1
+    },
+    {
+      "name": "HMT",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HMT",
+      "gleise": 1
+    },
+    {
+      "name": "HMT 11",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HMT 11",
+      "gleise": 1
+    },
+    {
+      "name": "HMT 11",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HMT 11",
+      "gleise": 1
+    },
+    {
+      "name": "HMT 12",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HMT 12",
+      "gleise": 1
+    },
+    {
+      "name": "HMT 12",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HMT 12",
+      "gleise": 1
+    },
+    {
+      "name": "HOD A",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HOD A",
+      "gleise": 1
+    },
+    {
+      "name": "HOD B",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HOD B",
+      "gleise": 1
+    },
+    {
+      "name": "Hoelschloch-Surbourg",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hoelschloch-Surbourg"
+    },
+    {
+      "name": "Hoelschloch-Surbourg",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hoelschloch-Surbourg",
+      "gleise": 1
+    },
+    {
+      "name": "Hoelschloch-Surbourg",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hoelschloch-Surbourg",
+      "gleise": 1
+    },
+    {
+      "name": "Hoffen",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hoffen"
+    },
+    {
+      "name": "Hoffen",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hoffen",
+      "gleise": 1
+    },
+    {
+      "name": "Hoffen",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hoffen",
+      "gleise": 1
+    },
+    {
+      "name": "HRL A",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HRL A",
+      "gleise": 1
+    },
+    {
+      "name": "HRL B",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HRL B",
+      "gleise": 1
+    },
+    {
+      "name": "HRL C",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HRL C",
+      "gleise": 1
+    },
+    {
+      "name": "HUS",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HUS"
+    },
+    {
+      "name": "HUS",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HUS",
+      "gleise": 1
+    },
+    {
+      "name": "HUS",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HUS",
+      "gleise": 1
+    },
+    {
+      "name": "Kilstett",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kilstett"
+    },
+    {
+      "name": "Kilstett",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kilstett",
+      "gleise": 1
+    },
+    {
+      "name": "Kilstett",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kilstett",
+      "gleise": 1
+    },
+    {
+      "name": "Kurtzenhouse",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kurtzenhouse"
+    },
+    {
+      "name": "Kurtzenhouse",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kurtzenhouse",
+      "gleise": 1
+    },
+    {
+      "name": "Kurtzenhouse",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kurtzenhouse",
+      "gleise": 1
+    },
+    {
+      "name": "LW",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LW"
+    },
+    {
+      "name": "LW",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LW",
+      "gleise": 1
+    },
+    {
+      "name": "LW",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LW",
+      "gleise": 1
+    },
+    {
+      "name": "Marienthal",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Marienthal"
+    },
+    {
+      "name": "Marienthal",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Marienthal",
+      "gleise": 1
+    },
+    {
+      "name": "Marienthal",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Marienthal",
+      "gleise": 1
+    },
+    {
+      "name": "Mothern",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mothern"
+    },
+    {
+      "name": "Mothern",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mothern",
+      "gleise": 1
+    },
+    {
+      "name": "Mothern",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mothern",
+      "gleise": 1
+    },
+    {
+      "name": "Munchhausen",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Munchhausen"
+    },
+    {
+      "name": "Munchhausen",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Munchhausen",
+      "gleise": 1
+    },
+    {
+      "name": "Munchhausen",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Munchhausen",
+      "gleise": 1
+    },
+    {
+      "name": "OBF 4",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OBF"
+    },
+    {
+      "name": "OBF",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OBF"
+    },
+    {
+      "name": "OBF 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OBF 4",
+      "gleise": 1
+    },
+    {
+      "name": "OBF 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OBF 4",
+      "gleise": 1
+    },
+    {
+      "name": "OBF 10",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OBF 10",
+      "gleise": 1
+    },
+    {
+      "name": "OBF 20",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OBF 20",
+      "gleise": 1
+    },
+    {
+      "name": "OBF B",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OBF B",
+      "gleise": 1
+    },
+    {
+      "name": "OBF A",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OBF A",
+      "gleise": 1
+    },
+    {
+      "name": "Rountzenheim",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rountzenheim"
+    },
+    {
+      "name": "Rountzenheim",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rountzenheim",
+      "gleise": 1
+    },
+    {
+      "name": "Rountzenheim",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rountzenheim",
+      "gleise": 1
+    },
+    {
+      "name": "RTZ",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RTZ"
+    },
+    {
+      "name": "RTZ",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RTZ",
+      "gleise": 1
+    },
+    {
+      "name": "RTZ",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RTZ",
+      "gleise": 1
+    },
+    {
+      "name": "RWG 5",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG"
+    },
+    {
+      "name": "RWG Wende",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG"
+    },
+    {
+      "name": "RWG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG"
+    },
+    {
+      "name": "RWG 5",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG 5",
+      "gleise": 1
+    },
+    {
+      "name": "RWG 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG 5",
+      "gleise": 1
+    },
+    {
+      "name": "RWG 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG 5",
+      "gleise": 1
+    },
+    {
+      "name": "RWG 5",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG 5",
+      "gleise": 1
+    },
+    {
+      "name": "RWG 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG 4",
+      "gleise": 1
+    },
+    {
+      "name": "RWG 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG 3",
+      "gleise": 1
+    },
+    {
+      "name": "RWG B",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG B",
+      "gleise": 1
+    },
+    {
+      "name": "RWG A G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG A G",
+      "gleise": 1
+    },
+    {
+      "name": "RWG A",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG A",
+      "gleise": 1
+    },
+    {
+      "name": "RWG Wende",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG Wende",
+      "gleise": 1
+    },
+    {
+      "name": "RWG Wende",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG Wende",
+      "gleise": 1
+    },
+    {
+      "name": "Sessenheim",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sessenheim"
+    },
+    {
+      "name": "Sessenheim",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sessenheim",
+      "gleise": 1
+    },
+    {
+      "name": "Sessenheim",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sessenheim",
+      "gleise": 1
+    },
+    {
+      "name": "SSF A",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SSF A",
+      "gleise": 1
+    },
+    {
+      "name": "SSF A G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SSF A G",
+      "gleise": 1
+    },
+    {
+      "name": "SSF B G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SSF B G",
+      "gleise": 1
+    },
+    {
+      "name": "SSF B",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SSF B",
+      "gleise": 1
+    },
+    {
+      "name": "SSZ",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SSZ"
+    },
+    {
+      "name": "SSZ",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SSZ",
+      "gleise": 1
+    },
+    {
+      "name": "SSZ",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SSZ",
+      "gleise": 1
+    },
+    {
+      "name": "WAL",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WAL"
+    },
+    {
+      "name": "WAL",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WAL",
+      "gleise": 1
+    },
+    {
+      "name": "WAL",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WAL",
+      "gleise": 1
+    },
+    {
+      "name": "WBG 12",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG"
+    },
+    {
+      "name": "WBG 41",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG"
+    },
+    {
+      "name": "WBG 51",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG"
+    },
+    {
+      "name": "WBG Wende",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG"
+    },
+    {
+      "name": "WBG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG"
+    },
+    {
+      "name": "WBG 12",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG 12",
+      "gleise": 1
+    },
+    {
+      "name": "WBG 11",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG 12",
+      "gleise": 1
+    },
+    {
+      "name": "WBG 12",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG 12",
+      "gleise": 1
+    },
+    {
+      "name": "WBG 11",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG 11",
+      "gleise": 1
+    },
+    {
+      "name": "WBG 41",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG 41",
+      "gleise": 1
+    },
+    {
+      "name": "WBG 41",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG 41",
+      "gleise": 1
+    },
+    {
+      "name": "WBG 51",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG 51",
+      "gleise": 1
+    },
+    {
+      "name": "WBG 51",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG 51",
+      "gleise": 1
+    },
+    {
+      "name": "WBG C",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG C",
+      "gleise": 1
+    },
+    {
+      "name": "WBG A",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG A",
+      "gleise": 1
+    },
+    {
+      "name": "WBG B",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG B",
+      "gleise": 1
+    },
+    {
+      "name": "WBG Wende",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG Wende",
+      "gleise": 1
+    },
+    {
+      "name": "WBG Wende",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG Wende",
+      "gleise": 1
+    },
+    {
+      "name": "Weyersheim",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Weyersheim"
+    },
+    {
+      "name": "Weyersheim",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Weyersheim",
+      "gleise": 1
+    },
+    {
+      "name": "Weyersheim",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Weyersheim",
+      "gleise": 1
+    },
+    {
+      "name": "Lauterbourg",
+      "typ": "Anst",
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "Seveso",
+      "name": "Landau",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hausbergen",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Str. Ville",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Kuebelmuehle",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Roquette Freres",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Etesia",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Rhone Gaz",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Obermodern",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Arlanxeo",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wagram",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Vendenheim",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Heineken",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Technicentre SNCF",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lauterbourg",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Seveso",
+      "stamm": "Lauterbourg",
       "gleise": 1
     },
     {
-      "name": "Merone",
+      "name": "Landau",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Merone",
+      "stamm": "Landau",
       "gleise": 1
     },
     {
-      "name": "Saronno",
+      "name": "Hausbergen",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Saronno",
+      "stamm": "Hausbergen",
       "gleise": 2
     },
     {
-      "name": "7s",
+      "name": "Str. Ville",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "7s",
-      "gleise": 1
-    },
-    {
-      "name": "Monza",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Monza",
+      "stamm": "Str. Ville",
       "gleise": 2
     },
     {
-      "name": "7-14",
+      "name": "Kuebelmuehle",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "7-14",
+      "stamm": "Kuebelmuehle",
       "gleise": 1
     },
     {
-      "name": "Bertani Trasporti",
+      "name": "Roquette Freres",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Bertani Trasporti",
+      "stamm": "Roquette Freres",
       "gleise": 1
     },
     {
-      "name": "Carnate",
+      "name": "Etesia",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Carnate",
+      "stamm": "Etesia",
       "gleise": 1
     },
     {
-      "name": "RFI",
+      "name": "Rhone Gaz",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "RFI",
+      "stamm": "Rhone Gaz",
       "gleise": 1
     },
     {
-      "name": "deposito Tn",
+      "name": "Obermodern",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "deposito Tn",
-      "gleise": 1
-    },
-    {
-      "name": "5-8",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "5-8",
-      "gleise": 1
-    },
-    {
-      "name": "6-7",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "6-7",
-      "gleise": 1
-    },
-    {
-      "name": "BASF",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BASF",
-      "gleise": 1
-    },
-    {
-      "name": "EA Chiasso",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "EA Chiasso"
-    },
-    {
-      "name": "EA Seveso",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "EA Seveso"
-    },
-    {
-      "name": "A 8",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "EA 8-14"
-    },
-    {
-      "name": "EA 8-14",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "EA 8-14"
-    },
-    {
-      "name": "EA Merone",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "EA Merone"
-    },
-    {
-      "name": "CL 1 Tr",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 2",
-      "gleise": 1
-    },
-    {
-      "name": "CL 2 Tr",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 2",
-      "gleise": 1
-    },
-    {
-      "name": "CL 1 Tr",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 1 Tr",
-      "gleise": 1
-    },
-    {
-      "name": "CL 2 Tr",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CL 2 Tr",
-      "gleise": 1
-    },
-    {
-      "name": "CO 1 Tr",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 3",
-      "gleise": 1
-    },
-    {
-      "name": "CO 1 Tr",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "CO 1 Tr",
-      "gleise": 1
-    },
-    {
-      "name": "SE 1 Tr",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 4",
-      "gleise": 1
-    },
-    {
-      "name": "SE 1 Tr",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SE 1 Tr",
-      "gleise": 1
-    },
-    {
-      "name": "Chiasso 1",
-      "typ": "Agl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Chiasso 1",
+      "stamm": "Obermodern",
       "gleise": 2
     },
     {
-      "name": "Chiasso 2",
+      "name": "Arlanxeo",
       "typ": "Agl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Chiasso 2",
+      "stamm": "Arlanxeo",
+      "gleise": 1
+    },
+    {
+      "name": "Wagram",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wagram",
+      "gleise": 1
+    },
+    {
+      "name": "Vendenheim",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vendenheim",
       "gleise": 2
     },
     {
-      "name": "A Chiasso",
-      "typ": "Bs",
-      "auto": false,
+      "name": "Heineken",
+      "typ": "Agl",
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "EA Chiasso",
+      "stamm": "Heineken",
       "gleise": 1
     },
     {
-      "name": "E Chiasso",
-      "typ": "Bs",
-      "auto": false,
+      "name": "Technicentre SNCF",
+      "typ": "Agl",
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "EA Chiasso",
+      "stamm": "Technicentre SNCF",
       "gleise": 1
     },
     {
-      "name": "A Seveso",
+      "name": "HAG L",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG"
+    },
+    {
+      "name": "HAG N",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG"
+    },
+    {
+      "name": "HAG R",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG"
+    },
+    {
+      "name": "HAG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG"
+    },
+    {
+      "name": "HOD",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HOD"
+    },
+    {
+      "name": "HRL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HRL"
+    },
+    {
+      "name": "SSF",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SSF"
+    },
+    {
+      "name": "SSF A",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "EA Seveso",
+      "stamm": "SSF",
       "gleise": 1
     },
     {
-      "name": "E Seveso",
+      "name": "SSF A G",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "EA Seveso",
+      "stamm": "SSF",
       "gleise": 1
     },
     {
-      "name": "E 8",
+      "name": "SSF B G",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "EA 8-14",
+      "stamm": "SSF",
       "gleise": 1
     },
     {
-      "name": "E Merone",
+      "name": "SSF B",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "EA Merone",
+      "stamm": "SSF",
+      "gleise": 1
+    },
+    {
+      "name": "WBG C",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG",
+      "gleise": 1
+    },
+    {
+      "name": "WBG A",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG",
+      "gleise": 1
+    },
+    {
+      "name": "WBG B",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBG",
+      "gleise": 1
+    },
+    {
+      "name": "RWG B",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG",
+      "gleise": 1
+    },
+    {
+      "name": "RWG A G",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG",
+      "gleise": 1
+    },
+    {
+      "name": "RWG A",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RWG",
+      "gleise": 1
+    },
+    {
+      "name": "HRL A",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HRL",
+      "gleise": 1
+    },
+    {
+      "name": "HRL B",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HRL",
+      "gleise": 1
+    },
+    {
+      "name": "HRL C",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HRL",
+      "gleise": 1
+    },
+    {
+      "name": "HOD A",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HOD",
+      "gleise": 1
+    },
+    {
+      "name": "HOD B",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HOD",
+      "gleise": 1
+    },
+    {
+      "name": "OBF B",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OBF",
+      "gleise": 1
+    },
+    {
+      "name": "OBF A",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OBF",
+      "gleise": 1
+    },
+    {
+      "name": "BHM 12",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM",
+      "gleise": 1
+    },
+    {
+      "name": "BHM 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM",
+      "gleise": 1
+    },
+    {
+      "name": "BHM A G",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM",
+      "gleise": 1
+    },
+    {
+      "name": "BHM 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM",
+      "gleise": 1
+    },
+    {
+      "name": "BHM B G",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM",
+      "gleise": 1
+    },
+    {
+      "name": "BHM B",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM",
+      "gleise": 1
+    },
+    {
+      "name": "BHM 11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM",
+      "gleise": 1
+    },
+    {
+      "name": "BHM A",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHM",
+      "gleise": 1
+    },
+    {
+      "name": "BHW A",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHW",
+      "gleise": 1
+    },
+    {
+      "name": "BHW B",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BHW",
+      "gleise": 1
+    },
+    {
+      "name": "HAG B",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG",
+      "gleise": 1
+    },
+    {
+      "name": "HAG C",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG",
+      "gleise": 1
+    },
+    {
+      "name": "HAG I",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG",
+      "gleise": 1
+    },
+    {
+      "name": "HAG J",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG",
+      "gleise": 1
+    },
+    {
+      "name": "HAG A",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG",
+      "gleise": 1
+    },
+    {
+      "name": "HAG E",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG",
+      "gleise": 1
+    },
+    {
+      "name": "HAG D",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG",
+      "gleise": 1
+    },
+    {
+      "name": "HAG K",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAG",
+      "gleise": 1
+    },
+    {
+      "name": "Zu OBF",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Zu OBF"
+    },
+    {
+      "name": "OBF 10",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Zu OBF",
+      "gleise": 1
+    },
+    {
+      "name": "OBF 20",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Zu OBF",
       "gleise": 1
     }
   ],
   "strecken": [
     {
-      "name": "Chiasso-Monza",
+      "name": "Strasbourg-Lauterbourg",
       "ordnung": 1,
       "auto": false,
       "stationen": [
-        "Anst Chiasso 1",
-        "Bf EA Chiasso",
-        "Bf CO",
-        "Bf Como-Camerlata",
-        "Bf PMA",
-        "Bf Bivio/P.C. Rosales",
-        "Bf Cucciago",
-        "Bf Cantù-Cermenate",
-        "Bf CA",
-        "Bf CL",
-        "Bf SE",
-        "Anst Monza"
+        "Anst Str. Ville",
+        "Bf BHM",
+        "Bf HMT",
+        "Bf LW",
+        "Bf Kilstett",
+        "Bf Gambsheim",
+        "Bf HRL",
+        "Bf DRS",
+        "Bf Sessenheim",
+        "Bf Rountzenheim",
+        "Bf RWG",
+        "Bf Beinheim-Roppenheim",
+        "Bf Beinheim",
+        "Bf SSZ",
+        "Bf Munchhausen",
+        "Bf Mothern",
+        "Anst Lauterbourg"
       ]
     },
     {
-      "name": "Monza-Chiasso",
-      "ordnung": 101,
-      "auto": true,
+      "name": "Obermodern-Vendenheim",
+      "ordnung": 2,
+      "auto": false,
       "stationen": [
-        "Anst Monza",
-        "Bf SE",
-        "Bf CL",
-        "Bf CA",
-        "Bf Bivio/P.C. Rosales"
+        "Anst Obermodern",
+        "Bf HAG",
+        "Bf Marienthal",
+        "Bf BHW",
+        "Bf Kurtzenhouse",
+        "Bf Weyersheim",
+        "Bf HOD",
+        "Anst Vendenheim"
+      ]
+    },
+    {
+      "name": "Wissembourg-Roeschwoog",
+      "ordnung": 4,
+      "auto": false,
+      "stationen": [
+        "Bf WBG",
+        "Anst Landau",
+        "Bf RTZ",
+        "Bf HUS",
+        "Bf Hoffen",
+        "Bf SSF",
+        "Bf Hoelschloch-Surbourg",
+        "Bf WAL",
+        "Bf HAG",
+        "Bf Zu OBF",
+        "Bf OBF",
+        "Bf RWG"
       ]
     }
   ],
   "streckenmarkierung": [],
-  "zugschema": "italien",
-  "_aid": 347,
+  "zugschema": "frankreich",
+  "_aid": 1085,
   "_build": 5851,
-  "_name": "Como San Giovanni",
-  "_region": "Lombardia",
+  "_name": "Haguenau",
+  "_region": "Grand Est",
   "_version": 3
 }

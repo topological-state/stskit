@@ -1,317 +1,1642 @@
 {
-    "_aid": 516,
-    "_build": 5847,
-    "_name": "Kreuzlingen",
-    "_region": "Ostschweiz",
-    "_version": 2,
-    "zugschema": "schweiz",
-    "anschlussgruppen": {
-        "KODB": {
-            "__class__": "Set",
-            "data": [
-                "KODB 600",
-                "KODB 558"
-            ]
-        },
-        "Kehlhof": {
-            "__class__": "Set",
-            "data": [
-                "Kehlhof"
-            ]
-        },
-        "Mammern": {
-            "__class__": "Set",
-            "data": [
-                "Mammern"
-            ]
-        },
-        "Romanshorn": {
-            "__class__": "Set",
-            "data": [
-                "Romanshorn"
-            ]
-        },
-        "Umschlagplatz": {
-            "__class__": "Set",
-            "data": [
-                "Umschlagplatz"
-            ]
-        }
+  "default": true,
+  "elemente": [
+    {
+      "name": "A BERG",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "A BERG": {
-            "__class__": "Set",
-            "data": [
-                "A BERG"
-            ]
-        },
-        "A STK": {
-            "__class__": "Set",
-            "data": [
-                "A STK"
-            ]
-        },
-        "A UTW": {
-            "__class__": "Set",
-            "data": [
-                "A UTW"
-            ]
-        },
-        "ALN": {
-            "__class__": "Set",
-            "data": [
-                "ALN 1",
-                "ALN 2"
-            ]
-        },
-        "BER": {
-            "__class__": "Set",
-            "data": [
-                "BER 2",
-                "BER 1"
-            ]
-        },
-        "BERG": {
-            "__class__": "Set",
-            "data": [
-                "BERG 1",
-                "BERG 2"
-            ]
-        },
-        "BOT": {
-            "__class__": "Set",
-            "data": [
-                "BOT"
-            ]
-        },
-        "ERM": {
-            "__class__": "Set",
-            "data": [
-                "ERM 2",
-                "ERM 1"
-            ]
-        },
-        "GUET": {
-            "__class__": "Set",
-            "data": [
-                "GUET 3",
-                "GUET 2"
-            ]
-        },
-        "KR": {
-            "__class__": "Set",
-            "data": [
-                "KR 4",
-                "KR 1B",
-                "KR 2",
-                "KR 3",
-                "KR 1A",
-                "KR 41"
-            ]
-        },
-        "KRB": {
-            "__class__": "Set",
-            "data": [
-                "KRB 2",
-                "KRB 1"
-            ]
-        },
-        "KRH": {
-            "__class__": "Set",
-            "data": [
-                "KRH 2",
-                "KRH 3",
-                "KRH 1",
-                "KRH 30"
-            ]
-        },
-        "KURZ": {
-            "__class__": "Set",
-            "data": [
-                "KURZ"
-            ]
-        },
-        "KWL": {
-            "__class__": "Set",
-            "data": [
-                "KWL"
-            ]
-        },
-        "LDS": {
-            "__class__": "Set",
-            "data": [
-                "LDS"
-            ]
-        },
-        "LENG": {
-            "__class__": "Set",
-            "data": [
-                "LENG 2",
-                "LENG 1"
-            ]
-        },
-        "MANN": {
-            "__class__": "Set",
-            "data": [
-                "MANN"
-            ]
-        },
-        "MSCH": {
-            "__class__": "Set",
-            "data": [
-                "MSCH 2",
-                "MSCH 1"
-            ]
-        },
-        "MSPI": {
-            "__class__": "Set",
-            "data": [
-                "MSPI"
-            ]
-        },
-        "SHAU": {
-            "__class__": "Set",
-            "data": [
-                "SHAU 2",
-                "SHAU 3"
-            ]
-        },
-        "STK": {
-            "__class__": "Set",
-            "data": [
-                "STK 1",
-                "STK 2"
-            ]
-        },
-        "TAEG": {
-            "__class__": "Set",
-            "data": [
-                "TAEG 2",
-                "TAEG 1"
-            ]
-        },
-        "TAEM": {
-            "__class__": "Set",
-            "data": [
-                "TAEM"
-            ]
-        },
-        "TRIB": {
-            "__class__": "Set",
-            "data": [
-                "TRIB"
-            ]
-        },
-        "UTW": {
-            "__class__": "Set",
-            "data": [
-                "UTW 2",
-                "UTW 1"
-            ]
-        }
+    {
+      "name": "A UTW",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "Kehlhof-KODB",
-    "sektoren": {
-        "KR 1": {
-            "__class__": "Set",
-            "data": [
-                "KR 1A",
-                "KR 1B"
-            ]
-        }
+    {
+      "name": "ALN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "strecken": {
-        "KODB-Romanshorn": [
-            "KODB",
-            "KRH",
-            "KURZ",
-            "BOT",
-            "MSCH",
-            "MSPI",
-            "LDS",
-            "ALN",
-            "GUET",
-            "KWL",
-            "UTW",
-            "A UTW",
-            "Romanshorn"
-        ],
-        "Kehlhof-KODB": [
-            "Kehlhof",
-            "A BERG",
-            "BERG",
-            "SHAU",
-            "LENG",
-            "KRB",
-            "TAEM",
-            "KR",
-            "KODB"
-        ],
-        "Kehlhof-Romanshorn": [
-            "Kehlhof",
-            "A BERG",
-            "BERG",
-            "SHAU",
-            "LENG",
-            "KRB",
-            "TAEM",
-            "KR",
-            "KRH",
-            "KURZ",
-            "BOT",
-            "MSCH",
-            "MSPI",
-            "LDS",
-            "ALN",
-            "GUET",
-            "KWL",
-            "UTW",
-            "A UTW",
-            "Romanshorn"
-        ],
-        "Mammern-KODB": [
-            "Mammern",
-            "A STK",
-            "STK",
-            "BER",
-            "MANN",
-            "ERM",
-            "TRIB",
-            "TAEG",
-            "KR",
-            "KODB"
-        ],
-        "Mammern-Romanshorn": [
-            "Mammern",
-            "A STK",
-            "STK",
-            "BER",
-            "MANN",
-            "ERM",
-            "TRIB",
-            "TAEG",
-            "KR",
-            "KRH",
-            "KURZ",
-            "BOT",
-            "MSCH",
-            "MSPI",
-            "LDS",
-            "ALN",
-            "GUET",
-            "KWL",
-            "UTW",
-            "A UTW",
-            "Romanshorn"
-        ]
+    {
+      "name": "BER",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": [
-        ["SHAU", "LENG", "E"],
-        ["LENG", "KRB", "E"],
-        ["GUET", "KWL", "E"],
-        ["KWL", "UTW", "E"],
-        ["UTW", "A UTW", "E"],
-        ["A UTW", "Romanshorn", "E"]
-    ]
+    {
+      "name": "BERG",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BOT",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ERM",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GUET",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KR",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KRB",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KRH",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KURZ",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KWL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LDS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LENG",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MANN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MSCH",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MSPI",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SHAU",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "STK",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "TAEG",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "TAEM",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "TRIB",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "UTW",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "A BERG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "A BERG"
+    },
+    {
+      "name": "A BERG",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "A BERG",
+      "gleise": 1
+    },
+    {
+      "name": "A BERG",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "A BERG",
+      "gleise": 1
+    },
+    {
+      "name": "A UTW",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "A UTW"
+    },
+    {
+      "name": "A UTW",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "A UTW",
+      "gleise": 1
+    },
+    {
+      "name": "A UTW",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "A UTW",
+      "gleise": 1
+    },
+    {
+      "name": "ALN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALN"
+    },
+    {
+      "name": "ALN 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALN 1",
+      "gleise": 1
+    },
+    {
+      "name": "ALN 1G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALN 1",
+      "gleise": 1
+    },
+    {
+      "name": "ALN 2G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALN 2",
+      "gleise": 1
+    },
+    {
+      "name": "ALN 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALN 2",
+      "gleise": 1
+    },
+    {
+      "name": "BER",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BER"
+    },
+    {
+      "name": "BER 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BER 1",
+      "gleise": 1
+    },
+    {
+      "name": "BER 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BER 2",
+      "gleise": 1
+    },
+    {
+      "name": "BERG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BERG"
+    },
+    {
+      "name": "BERG 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BERG 2",
+      "gleise": 1
+    },
+    {
+      "name": "BERG 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BERG 1",
+      "gleise": 1
+    },
+    {
+      "name": "BOT",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOT"
+    },
+    {
+      "name": "BOT",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOT",
+      "gleise": 1
+    },
+    {
+      "name": "BOT",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOT",
+      "gleise": 1
+    },
+    {
+      "name": "ERM 60",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERM"
+    },
+    {
+      "name": "ERM",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERM"
+    },
+    {
+      "name": "ERM 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERM 1",
+      "gleise": 1
+    },
+    {
+      "name": "ERM 61",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERM 61",
+      "gleise": 1
+    },
+    {
+      "name": "ERM 60",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERM 60",
+      "gleise": 1
+    },
+    {
+      "name": "GUET 2",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GUET"
+    },
+    {
+      "name": "GUET",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GUET"
+    },
+    {
+      "name": "GUET 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GUET 2",
+      "gleise": 1
+    },
+    {
+      "name": "GUET 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GUET 2",
+      "gleise": 1
+    },
+    {
+      "name": "GUET 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GUET 1",
+      "gleise": 1
+    },
+    {
+      "name": "KR",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KR"
+    },
+    {
+      "name": "KR 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KR 2",
+      "gleise": 1
+    },
+    {
+      "name": "KR 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KR 3",
+      "gleise": 1
+    },
+    {
+      "name": "KR 1B",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KR 1",
+      "gleise": 1
+    },
+    {
+      "name": "KR 1A",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KR 1",
+      "gleise": 1
+    },
+    {
+      "name": "KR 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KR 4",
+      "gleise": 1
+    },
+    {
+      "name": "KR 41",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KR 41",
+      "gleise": 1
+    },
+    {
+      "name": "KRB",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRB"
+    },
+    {
+      "name": "KRB 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRB 1",
+      "gleise": 1
+    },
+    {
+      "name": "KRB 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRB 2",
+      "gleise": 1
+    },
+    {
+      "name": "KRH",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRH"
+    },
+    {
+      "name": "KRH 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRH 3",
+      "gleise": 1
+    },
+    {
+      "name": "KRH 3G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRH 3",
+      "gleise": 1
+    },
+    {
+      "name": "KRH 30",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRH 30",
+      "gleise": 1
+    },
+    {
+      "name": "KRH 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRH 2",
+      "gleise": 1
+    },
+    {
+      "name": "KRH 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRH 1",
+      "gleise": 1
+    },
+    {
+      "name": "KRH 1G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRH 1",
+      "gleise": 1
+    },
+    {
+      "name": "KURZ",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KURZ"
+    },
+    {
+      "name": "KURZ",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KURZ",
+      "gleise": 1
+    },
+    {
+      "name": "KURZ",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KURZ",
+      "gleise": 1
+    },
+    {
+      "name": "KWL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KWL"
+    },
+    {
+      "name": "KWL",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KWL",
+      "gleise": 1
+    },
+    {
+      "name": "KWL",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KWL",
+      "gleise": 1
+    },
+    {
+      "name": "LDS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LDS"
+    },
+    {
+      "name": "LDS",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LDS",
+      "gleise": 1
+    },
+    {
+      "name": "LDS",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LDS",
+      "gleise": 1
+    },
+    {
+      "name": "LENG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LENG"
+    },
+    {
+      "name": "LENG 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LENG 2",
+      "gleise": 1
+    },
+    {
+      "name": "LENG 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LENG 1",
+      "gleise": 1
+    },
+    {
+      "name": "MANN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MANN"
+    },
+    {
+      "name": "MANN",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MANN",
+      "gleise": 1
+    },
+    {
+      "name": "MANN",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MANN",
+      "gleise": 1
+    },
+    {
+      "name": "MSCH",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MSCH"
+    },
+    {
+      "name": "MSCH 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MSCH 2",
+      "gleise": 1
+    },
+    {
+      "name": "MSCH 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MSCH 1",
+      "gleise": 1
+    },
+    {
+      "name": "MSPI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MSPI"
+    },
+    {
+      "name": "MSPI",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MSPI",
+      "gleise": 1
+    },
+    {
+      "name": "MSPI",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MSPI",
+      "gleise": 1
+    },
+    {
+      "name": "SHAU 2",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SHAU"
+    },
+    {
+      "name": "SHAU",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SHAU"
+    },
+    {
+      "name": "SHAU 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SHAU 2",
+      "gleise": 1
+    },
+    {
+      "name": "SHAU 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SHAU 2",
+      "gleise": 1
+    },
+    {
+      "name": "SHAU 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SHAU 1",
+      "gleise": 1
+    },
+    {
+      "name": "STK 50",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STK"
+    },
+    {
+      "name": "STK",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STK"
+    },
+    {
+      "name": "STK 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STK 1",
+      "gleise": 1
+    },
+    {
+      "name": "STK 50",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STK 50",
+      "gleise": 1
+    },
+    {
+      "name": "STK 51",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STK 50",
+      "gleise": 1
+    },
+    {
+      "name": "STK 50",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STK 50",
+      "gleise": 1
+    },
+    {
+      "name": "STK 51",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STK 51",
+      "gleise": 1
+    },
+    {
+      "name": "TAEG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TAEG"
+    },
+    {
+      "name": "TAEG 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TAEG 2",
+      "gleise": 1
+    },
+    {
+      "name": "TAEG 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TAEG 1",
+      "gleise": 1
+    },
+    {
+      "name": "TAEM",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TAEM"
+    },
+    {
+      "name": "TAEM",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TAEM",
+      "gleise": 1
+    },
+    {
+      "name": "TAEM",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TAEM",
+      "gleise": 1
+    },
+    {
+      "name": "TRIB",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TRIB"
+    },
+    {
+      "name": "TRIB",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TRIB",
+      "gleise": 1
+    },
+    {
+      "name": "TRIB",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TRIB",
+      "gleise": 1
+    },
+    {
+      "name": "UTW",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UTW"
+    },
+    {
+      "name": "UTW 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UTW 1",
+      "gleise": 1
+    },
+    {
+      "name": "UTW 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UTW 2",
+      "gleise": 1
+    },
+    {
+      "name": "Mammern",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KODB",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Romanshorn",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Kehlhof",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Umschlagplatz",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Mammern",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mammern",
+      "gleise": 1
+    },
+    {
+      "name": "KODB 558",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KODB",
+      "gleise": 1
+    },
+    {
+      "name": "KODB 600",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KODB",
+      "gleise": 1
+    },
+    {
+      "name": "Romanshorn",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romanshorn",
+      "gleise": 1
+    },
+    {
+      "name": "Kehlhof",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kehlhof",
+      "gleise": 1
+    },
+    {
+      "name": "Umschlagplatz",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Umschlagplatz",
+      "gleise": 1
+    },
+    {
+      "name": "ALN 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALN",
+      "gleise": 1
+    },
+    {
+      "name": "ALN 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALN",
+      "gleise": 1
+    },
+    {
+      "name": "BER 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BER",
+      "gleise": 1
+    },
+    {
+      "name": "BER 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BER",
+      "gleise": 1
+    },
+    {
+      "name": "BERG 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BERG",
+      "gleise": 1
+    },
+    {
+      "name": "BERG 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BERG",
+      "gleise": 1
+    },
+    {
+      "name": "ERM 61",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERM 60",
+      "gleise": 1
+    },
+    {
+      "name": "ERM 60",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERM 60",
+      "gleise": 1
+    },
+    {
+      "name": "ERM 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERM",
+      "gleise": 1
+    },
+    {
+      "name": "GUET 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GUET",
+      "gleise": 1
+    },
+    {
+      "name": "KR 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KR",
+      "gleise": 1
+    },
+    {
+      "name": "KR 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KR",
+      "gleise": 1
+    },
+    {
+      "name": "KR 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KR",
+      "gleise": 1
+    },
+    {
+      "name": "KR 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KR",
+      "gleise": 1
+    },
+    {
+      "name": "KR 41",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KR",
+      "gleise": 1
+    },
+    {
+      "name": "KRB 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRB",
+      "gleise": 1
+    },
+    {
+      "name": "KRB 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRB",
+      "gleise": 1
+    },
+    {
+      "name": "KRH 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRH",
+      "gleise": 1
+    },
+    {
+      "name": "KRH 30",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRH",
+      "gleise": 1
+    },
+    {
+      "name": "KRH 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRH",
+      "gleise": 1
+    },
+    {
+      "name": "KRH 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KRH",
+      "gleise": 1
+    },
+    {
+      "name": "LENG 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LENG",
+      "gleise": 1
+    },
+    {
+      "name": "LENG 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LENG",
+      "gleise": 1
+    },
+    {
+      "name": "MSCH 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MSCH",
+      "gleise": 1
+    },
+    {
+      "name": "MSCH 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MSCH",
+      "gleise": 1
+    },
+    {
+      "name": "SHAU 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SHAU",
+      "gleise": 1
+    },
+    {
+      "name": "STK 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STK",
+      "gleise": 1
+    },
+    {
+      "name": "TAEG 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TAEG",
+      "gleise": 1
+    },
+    {
+      "name": "TAEG 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TAEG",
+      "gleise": 1
+    },
+    {
+      "name": "UTW 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UTW",
+      "gleise": 1
+    },
+    {
+      "name": "UTW 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UTW",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "KODB-Romanshorn",
+      "ordnung": 102,
+      "auto": true,
+      "stationen": [
+        "Anst KODB",
+        "Bf KRH",
+        "Bf KURZ",
+        "Bf BOT",
+        "Bf MSCH",
+        "Bf MSPI",
+        "Bf LDS",
+        "Bf ALN",
+        "Bf GUET",
+        "Bf KWL",
+        "Bf UTW",
+        "Anst Romanshorn"
+      ]
+    },
+    {
+      "name": "Kehlhof-KODB",
+      "ordnung": 103,
+      "auto": true,
+      "stationen": [
+        "Anst Kehlhof",
+        "Bf BERG",
+        "Bf SHAU",
+        "Bf LENG",
+        "Bf KRB",
+        "Bf TAEM",
+        "Bf KR",
+        "Anst KODB"
+      ]
+    },
+    {
+      "name": "Kehlhof-Romanshorn",
+      "ordnung": 105,
+      "auto": true,
+      "stationen": [
+        "Anst Kehlhof",
+        "Bf BERG",
+        "Bf SHAU",
+        "Bf LENG",
+        "Bf KRB",
+        "Bf TAEM",
+        "Bf KR",
+        "Anst KODB",
+        "Bf KRH",
+        "Bf KURZ",
+        "Bf BOT",
+        "Bf MSCH",
+        "Bf MSPI",
+        "Bf LDS",
+        "Bf ALN",
+        "Bf GUET",
+        "Bf KWL",
+        "Bf UTW",
+        "Anst Romanshorn"
+      ]
+    },
+    {
+      "name": "Mammern-KODB",
+      "ordnung": 106,
+      "auto": true,
+      "stationen": [
+        "Anst Mammern",
+        "Bf STK",
+        "Bf BER",
+        "Bf MANN",
+        "Bf ERM",
+        "Bf TRIB",
+        "Bf TAEG",
+        "Bf KR",
+        "Anst KODB"
+      ]
+    },
+    {
+      "name": "Mammern-Romanshorn",
+      "ordnung": 108,
+      "auto": true,
+      "stationen": [
+        "Anst Mammern",
+        "Bf STK",
+        "Bf BER",
+        "Bf MANN",
+        "Bf ERM",
+        "Bf TRIB",
+        "Bf TAEG",
+        "Bf KR",
+        "Anst KODB",
+        "Bf KRH",
+        "Bf KURZ",
+        "Bf BOT",
+        "Bf MSCH",
+        "Bf MSPI",
+        "Bf LDS",
+        "Bf ALN",
+        "Bf GUET",
+        "Bf KWL",
+        "Bf UTW",
+        "Anst Romanshorn"
+      ]
+    }
+  ],
+  "streckenmarkierung": [
+    {
+      "flags": "E",
+      "station1": "Bf KRB",
+      "station2": "Bf LENG"
+    },
+    {
+      "flags": "E",
+      "station1": "Bf LENG",
+      "station2": "Bf SHAU"
+    },
+    {
+      "flags": "E",
+      "station1": "Bf GUET",
+      "station2": "Bf KWL"
+    },
+    {
+      "flags": "E",
+      "station1": "Bf UTW",
+      "station2": "Bf KWL"
+    },
+    {
+      "flags": "E",
+      "station1": "Bf UTW",
+      "station2": "Bf A UTW"
+    },
+    {
+      "flags": "E",
+      "station1": "Anst Romanshorn",
+      "station2": "Bf A UTW"
+    }
+  ],
+  "zugschema": "schweiz",
+  "_aid": 516,
+  "_build": 5851,
+  "_name": "Kreuzlingen",
+  "_region": "Ostschweiz",
+  "_version": 3
 }

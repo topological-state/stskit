@@ -2,103 +2,7 @@
   "default": true,
   "elemente": [
     {
-      "name": "BDFS",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "BIG",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "BIGE",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "BK",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "GH",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "GRMA",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "HA",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "KF",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "LUGO",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "OBB",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "OD",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "RAM",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "SETB",
+      "name": "Bergamo",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -106,902 +10,1205 @@
       "flags": ""
     },
     {
-      "name": "SHIE",
+      "name": "Borgo S.Giovanni",
       "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "STAL",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "TI",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "WALK",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "ZAE",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "SWG",
-      "typ": "Bf",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "BDFS",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BDFS"
-    },
-    {
-      "name": "BDFS2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BDFS2",
-      "gleise": 1
-    },
-    {
-      "name": "BDFS1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BDFS1",
-      "gleise": 1
-    },
-    {
-      "name": "BIG1",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BIG"
-    },
-    {
-      "name": "BIG",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BIG"
-    },
-    {
-      "name": "BIG1",
-      "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
-      "flags": "",
-      "stamm": "BIG1",
-      "gleise": 1
+      "flags": ""
     },
     {
-      "name": "BIG1",
-      "typ": "Gl",
+      "name": "Bornato",
+      "typ": "Bf",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
-      "flags": "",
-      "stamm": "BIG1",
-      "gleise": 1
+      "flags": ""
     },
     {
-      "name": "BIG2",
-      "typ": "Gl",
-      "auto": false,
+      "name": "Brescia",
+      "typ": "Bf",
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
-      "flags": "",
-      "stamm": "BIG2",
-      "gleise": 1
+      "flags": ""
     },
     {
-      "name": "BIG3",
-      "typ": "Gl",
-      "auto": false,
+      "name": "Brescia Violino",
+      "typ": "Bf",
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
-      "flags": "",
-      "stamm": "BIG3",
-      "gleise": 1
+      "flags": ""
     },
     {
-      "name": "BIGE",
-      "typ": "Bft",
-      "auto": false,
+      "name": "Castegnato",
+      "typ": "Bf",
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
-      "flags": "",
-      "stamm": "BIGE"
+      "flags": ""
     },
     {
-      "name": "BIGE",
+      "name": "Cazzago S.Martino",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Chiari",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Chiuduno",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Cividate-Calcio",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Coccaglio",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Cologne",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Grumello",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Morgengo-Bariano",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Ospitaletto",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Paderno",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Palazzolo",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Passirano",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "PM Brescia Ovest",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Romano",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Rovato",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Rovato Centro",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Treviglio",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Vidalengo",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ma 31",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BIGE",
+      "stamm": "ma 31",
       "gleise": 1
     },
     {
-      "name": "BIGE",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BIGE",
-      "gleise": 1
-    },
-    {
-      "name": "BK40",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BK"
-    },
-    {
-      "name": "BK",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BK"
-    },
-    {
-      "name": "BK1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BK1",
-      "gleise": 1
-    },
-    {
-      "name": "BK40",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BK1",
-      "gleise": 1
-    },
-    {
-      "name": "BK41",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BK1",
-      "gleise": 1
-    },
-    {
-      "name": "BK3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BK3",
-      "gleise": 1
-    },
-    {
-      "name": "BK43",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BK3",
-      "gleise": 1
-    },
-    {
-      "name": "BK2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BK2",
-      "gleise": 1
-    },
-    {
-      "name": "BK42",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BK2",
-      "gleise": 1
-    },
-    {
-      "name": "BK1",
+      "name": "ma 21",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BK",
+      "stamm": "ma 31",
       "gleise": 1
     },
     {
-      "name": "BK2",
+      "name": "Asta BS",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BK",
+      "stamm": "ma 31",
       "gleise": 1
     },
     {
-      "name": "BK3",
+      "name": "ma 31",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ma 31",
+      "gleise": 1
+    },
+    {
+      "name": "ma 21",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ma 21",
+      "gleise": 1
+    },
+    {
+      "name": "Asta BS",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Asta BS",
+      "gleise": 1
+    },
+    {
+      "name": "Asta MI",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BK",
+      "stamm": "Asta MI",
       "gleise": 1
     },
     {
-      "name": "GH1",
-      "typ": "Bft",
-      "auto": false,
+      "name": "Asta MI",
+      "typ": "Gl",
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GH"
+      "stamm": "Asta MI",
+      "gleise": 1
     },
     {
-      "name": "GH",
+      "name": "Bergamo",
       "typ": "Bft",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GH"
+      "stamm": "Bergamo"
     },
     {
-      "name": "GH1",
+      "name": "Bergamo",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GH1",
+      "stamm": "Bergamo",
       "gleise": 1
     },
     {
-      "name": "GH1",
+      "name": "Bergamo",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GH1",
+      "stamm": "Bergamo",
       "gleise": 1
     },
     {
-      "name": "GH2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GH2",
-      "gleise": 1
-    },
-    {
-      "name": "GRMA",
+      "name": "Borgo S.Giovanni",
       "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GRMA"
+      "stamm": "Borgo S.Giovanni"
     },
     {
-      "name": "GRMA2",
+      "name": "Borgo S.Giovanni 2",
       "typ": "Gl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GRMA2",
+      "stamm": "Borgo S.Giovanni 2",
       "gleise": 1
     },
     {
-      "name": "GRMA1",
+      "name": "Borgo S.Giovanni 1",
       "typ": "Gl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GRMA1",
+      "stamm": "Borgo S.Giovanni 1",
       "gleise": 1
     },
     {
-      "name": "HA",
+      "name": "Bornato",
       "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HA"
+      "stamm": "Bornato"
     },
     {
-      "name": "HA3",
+      "name": "Bornato 3",
       "typ": "Gl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HA3",
+      "stamm": "Bornato 3",
       "gleise": 1
     },
     {
-      "name": "HA4",
+      "name": "Ospitaletto Asta",
       "typ": "Gl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HA4",
+      "stamm": "Ospitaletto Asta",
       "gleise": 1
     },
     {
-      "name": "HA2",
+      "name": "Ospitaletto m",
       "typ": "Gl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HA2",
+      "stamm": "Ospitaletto m",
       "gleise": 1
     },
     {
-      "name": "HA5",
+      "name": "Bornato 2",
       "typ": "Gl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HA5",
+      "stamm": "Bornato 2",
       "gleise": 1
     },
     {
-      "name": "KF",
+      "name": "Bornato 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bornato 1",
+      "gleise": 1
+    },
+    {
+      "name": "Brescia",
       "typ": "Bft",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "KF"
+      "stamm": "Brescia"
     },
     {
-      "name": "KF2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KF2",
-      "gleise": 1
-    },
-    {
-      "name": "KF5",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KF5",
-      "gleise": 1
-    },
-    {
-      "name": "KF6",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KF6",
-      "gleise": 1
-    },
-    {
-      "name": "KF4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KF4",
-      "gleise": 1
-    },
-    {
-      "name": "KF3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KF3",
-      "gleise": 1
-    },
-    {
-      "name": "LUGO",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LUGO"
-    },
-    {
-      "name": "LUGO2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LUGO2",
-      "gleise": 1
-    },
-    {
-      "name": "LUGO1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LUGO1",
-      "gleise": 1
-    },
-    {
-      "name": "LUGO3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LUGO3",
-      "gleise": 1
-    },
-    {
-      "name": "OBB1",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OBB"
-    },
-    {
-      "name": "OBB",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OBB"
-    },
-    {
-      "name": "OBB5",
+      "name": "Brescia",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OBB1",
+      "stamm": "Brescia",
       "gleise": 1
     },
     {
-      "name": "OBB6",
+      "name": "Brescia",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brescia",
+      "gleise": 1
+    },
+    {
+      "name": "Brescia Violino",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brescia Violino"
+    },
+    {
+      "name": "Brescia Violino",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OBB1",
+      "stamm": "Brescia Violino",
       "gleise": 1
     },
     {
-      "name": "OBB1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OBB1",
-      "gleise": 1
-    },
-    {
-      "name": "OBB5",
+      "name": "Brescia Violino",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OBB5",
+      "stamm": "Brescia Violino",
       "gleise": 1
     },
     {
-      "name": "OBB6",
-      "typ": "Gl",
+      "name": "Castegnato 2",
+      "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OBB6",
-      "gleise": 1
+      "stamm": "Castegnato"
     },
     {
-      "name": "OBB3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OBB3",
-      "gleise": 1
-    },
-    {
-      "name": "OBB4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OBB4",
-      "gleise": 1
-    },
-    {
-      "name": "OBB2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OBB2",
-      "gleise": 1
-    },
-    {
-      "name": "OD",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OD"
-    },
-    {
-      "name": "OD1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OD1",
-      "gleise": 1
-    },
-    {
-      "name": "OD2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OD2",
-      "gleise": 1
-    },
-    {
-      "name": "RAM23",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "RAM"
-    },
-    {
-      "name": "RAM",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "RAM"
-    },
-    {
-      "name": "RAM2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "RAM2",
-      "gleise": 1
-    },
-    {
-      "name": "RAM4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "RAM4",
-      "gleise": 1
-    },
-    {
-      "name": "RAM3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "RAM3",
-      "gleise": 1
-    },
-    {
-      "name": "RAM1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "RAM1",
-      "gleise": 1
-    },
-    {
-      "name": "RAM23",
+      "name": "Castegnato 2",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "RAM23",
+      "stamm": "Castegnato 2",
       "gleise": 1
     },
     {
-      "name": "RAM23",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "RAM23",
-      "gleise": 1
-    },
-    {
-      "name": "SETB",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SETB"
-    },
-    {
-      "name": "SETB",
+      "name": "Castegnato 1",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SETB",
+      "stamm": "Castegnato 2",
       "gleise": 1
     },
     {
-      "name": "SETB",
+      "name": "Castegnato 2",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SETB",
+      "stamm": "Castegnato 2",
       "gleise": 1
     },
     {
-      "name": "SWG1",
+      "name": "Castegnato 1",
       "typ": "Gl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SWG1",
+      "stamm": "Castegnato 1",
       "gleise": 1
     },
     {
-      "name": "SHIE",
+      "name": "Cazzago S.Martino",
       "typ": "Bft",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SHIE"
+      "stamm": "Cazzago S.Martino"
     },
     {
-      "name": "SHIE2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SHIE2",
-      "gleise": 1
-    },
-    {
-      "name": "SHIE1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SHIE1",
-      "gleise": 1
-    },
-    {
-      "name": "STAL",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "STAL"
-    },
-    {
-      "name": "STAL",
+      "name": "Cazzago S.Martino",
       "typ": "Bs",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "STAL",
+      "stamm": "Cazzago S.Martino",
       "gleise": 1
     },
     {
-      "name": "STAL",
+      "name": "Cazzago S.Martino",
       "typ": "Gl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "STAL",
+      "stamm": "Cazzago S.Martino",
       "gleise": 1
     },
     {
-      "name": "TI",
+      "name": "Chiari",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Chiari"
+    },
+    {
+      "name": "Chiari",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Chiari",
+      "gleise": 1
+    },
+    {
+      "name": "Chiari",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Chiari",
+      "gleise": 1
+    },
+    {
+      "name": "Chiuduno",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Chiuduno"
+    },
+    {
+      "name": "Chiuduno",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Chiuduno",
+      "gleise": 1
+    },
+    {
+      "name": "Chiuduno",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Chiuduno",
+      "gleise": 1
+    },
+    {
+      "name": "Cividate-Calcio",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Cividate-Calcio"
+    },
+    {
+      "name": "Cividate-Calcio",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Cividate-Calcio",
+      "gleise": 1
+    },
+    {
+      "name": "Cividate-Calcio",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Cividate-Calcio",
+      "gleise": 1
+    },
+    {
+      "name": "Coccaglio",
       "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TI"
+      "stamm": "Coccaglio"
     },
     {
-      "name": "TI1",
+      "name": "Coccaglio 1",
       "typ": "Gl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TI1",
+      "stamm": "Coccaglio 1",
       "gleise": 1
     },
     {
-      "name": "TI2",
+      "name": "Coccaglio 2",
       "typ": "Gl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TI2",
+      "stamm": "Coccaglio 2",
       "gleise": 1
     },
     {
-      "name": "WALK",
+      "name": "Cologne",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Cologne"
+    },
+    {
+      "name": "Cologne",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Cologne",
+      "gleise": 1
+    },
+    {
+      "name": "Cologne",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Cologne",
+      "gleise": 1
+    },
+    {
+      "name": "Grumello",
       "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "WALK"
+      "stamm": "Grumello"
     },
     {
-      "name": "WALK2",
+      "name": "Grumello 1",
       "typ": "Gl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "WALK2",
+      "stamm": "Grumello 1",
       "gleise": 1
     },
     {
-      "name": "WALK1",
+      "name": "Grumello 2",
       "typ": "Gl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "WALK1",
+      "stamm": "Grumello 2",
       "gleise": 1
     },
     {
-      "name": "ZAE",
+      "name": "Morgengo-Bariano",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Morgengo-Bariano"
+    },
+    {
+      "name": "Morgengo-Bariano",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Morgengo-Bariano",
+      "gleise": 1
+    },
+    {
+      "name": "Morgengo-Bariano",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Morgengo-Bariano",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto",
       "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "ZAE"
+      "stamm": "Ospitaletto"
     },
     {
-      "name": "ZAE1",
+      "name": "Ospitaletto Asta BS",
       "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ospitaletto Asta BS",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ospitaletto 1",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto 1E",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ospitaletto 1",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto 1w",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ospitaletto 1",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ospitaletto 2",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto 2w",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ospitaletto 2",
+      "gleise": 1
+    },
+    {
+      "name": "Paderno",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Paderno"
+    },
+    {
+      "name": "Paderno",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Paderno",
+      "gleise": 1
+    },
+    {
+      "name": "Paderno",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Paderno",
+      "gleise": 1
+    },
+    {
+      "name": "Palazzolo",
+      "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "ZAE1",
+      "stamm": "Palazzolo"
+    },
+    {
+      "name": "Palazzolo 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Palazzolo 1",
       "gleise": 1
     },
     {
-      "name": "ZAE2",
+      "name": "Palazzolo 2",
       "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Palazzolo 2",
+      "gleise": 1
+    },
+    {
+      "name": "Passirano",
+      "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "ZAE2",
+      "stamm": "Passirano"
+    },
+    {
+      "name": "Passirano 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Passirano 1",
       "gleise": 1
     },
     {
-      "name": "BLS Werkstätte",
+      "name": "Passirano 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Passirano 2",
+      "gleise": 1
+    },
+    {
+      "name": "PM Brescia Ovest",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PM Brescia Ovest"
+    },
+    {
+      "name": "PM Brescia Ovest",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PM Brescia Ovest",
+      "gleise": 1
+    },
+    {
+      "name": "PM Brescia Ovest",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PM Brescia Ovest",
+      "gleise": 1
+    },
+    {
+      "name": "Romano",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano"
+    },
+    {
+      "name": "Romano P corsa",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano P corsa",
+      "gleise": 1
+    },
+    {
+      "name": "Romano 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano 1",
+      "gleise": 1
+    },
+    {
+      "name": "Romano 1p",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano 1",
+      "gleise": 1
+    },
+    {
+      "name": "Romano 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano 3",
+      "gleise": 1
+    },
+    {
+      "name": "Romano 3 G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano 3",
+      "gleise": 1
+    },
+    {
+      "name": "Romano 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano 2",
+      "gleise": 1
+    },
+    {
+      "name": "ma 31",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato"
+    },
+    {
+      "name": "Asta MI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato"
+    },
+    {
+      "name": "Rovato",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato"
+    },
+    {
+      "name": "Rovato 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato 3",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato 2",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato FN 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato FN 1",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato FN 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato FN 2",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato FN W",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato FN W",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato 4",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 8",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato 8",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 6",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato 6",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 5",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato 5",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato 1",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 7",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato 7",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato Centro",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato Centro"
+    },
+    {
+      "name": "Rovato Centro",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato Centro",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato Centro",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato Centro",
+      "gleise": 1
+    },
+    {
+      "name": "Treviglio",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Treviglio"
+    },
+    {
+      "name": "Treviglio",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Treviglio",
+      "gleise": 1
+    },
+    {
+      "name": "Treviglio",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Treviglio",
+      "gleise": 1
+    },
+    {
+      "name": "Vidalengo",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vidalengo"
+    },
+    {
+      "name": "Vidalengo",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vidalengo",
+      "gleise": 1
+    },
+    {
+      "name": "Vidalengo",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vidalengo",
+      "gleise": 1
+    },
+    {
+      "name": "Brescia LL",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1009,7 +1216,7 @@
       "flags": ""
     },
     {
-      "name": "BDF",
+      "name": "Brescia AV/AC",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1017,7 +1224,7 @@
       "flags": ""
     },
     {
-      "name": "BEBECO G.",
+      "name": "Bergamo",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1025,31 +1232,7 @@
       "flags": ""
     },
     {
-      "name": "Zollbrück",
-      "typ": "Anst",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Bowil",
-      "typ": "Anst",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Heimberg",
-      "typ": "Anst",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "HA",
+      "name": "Treviglio AV/AC",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1057,15 +1240,7 @@
       "flags": ""
     },
     {
-      "name": "Tanklager",
-      "typ": "Anst",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "BEBECO O.",
+      "name": "Treviglio",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1073,39 +1248,7 @@
       "flags": ""
     },
     {
-      "name": "Sumiswald",
-      "typ": "Anst",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Worb",
-      "typ": "Anst",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "KF5*",
-      "typ": "Anst",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "KF8*",
-      "typ": "Anst",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "OBB5",
+      "name": "Brescia FN",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1113,702 +1256,556 @@
       "flags": ""
     },
     {
-      "name": "OBB6",
+      "name": "Paratico",
       "typ": "Anst",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "BK5",
+      "name": "Parco Rovato",
       "typ": "Anst",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "BLS Werkstätte",
+      "name": "Merci FN",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Merci FS",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Mercitalia",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Iseo",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Brescia LL",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BLS Werkstätte",
-      "gleise": 1
+      "stamm": "Brescia LL",
+      "gleise": 2
     },
     {
-      "name": "BDF 122",
+      "name": "Brescia AV/AC",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BDF",
-      "gleise": 1
+      "stamm": "Brescia AV/AC",
+      "gleise": 2
     },
     {
-      "name": "BDF 222",
+      "name": "Bergamo",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BDF",
+      "stamm": "Bergamo",
       "gleise": 1
     },
     {
-      "name": "BEBECO G.",
+      "name": "Treviglio AV/AC",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BEBECO G.",
-      "gleise": 1
+      "stamm": "Treviglio AV/AC",
+      "gleise": 2
     },
     {
-      "name": "Zollbrück",
-      "typ": "Agl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Zollbrück",
-      "gleise": 1
-    },
-    {
-      "name": "Bowil",
-      "typ": "Agl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Bowil",
-      "gleise": 1
-    },
-    {
-      "name": "Heimberg",
-      "typ": "Agl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Heimberg",
-      "gleise": 1
-    },
-    {
-      "name": "HA65",
+      "name": "Treviglio",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HA",
-      "gleise": 1
+      "stamm": "Treviglio",
+      "gleise": 2
     },
     {
-      "name": "Tanklager",
-      "typ": "Agl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Tanklager",
-      "gleise": 1
-    },
-    {
-      "name": "BEBECO O.",
+      "name": "Brescia FN",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BEBECO O.",
+      "stamm": "Brescia FN",
       "gleise": 1
     },
     {
-      "name": "BDFS2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BDFS",
-      "gleise": 1
-    },
-    {
-      "name": "BDFS1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BDFS",
-      "gleise": 1
-    },
-    {
-      "name": "BIG2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BIG",
-      "gleise": 1
-    },
-    {
-      "name": "BIG3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BIG",
-      "gleise": 1
-    },
-    {
-      "name": "GH2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GH",
-      "gleise": 1
-    },
-    {
-      "name": "GRMA2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GRMA",
-      "gleise": 1
-    },
-    {
-      "name": "GRMA1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GRMA",
-      "gleise": 1
-    },
-    {
-      "name": "HA3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "HA",
-      "gleise": 1
-    },
-    {
-      "name": "HA4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "HA",
-      "gleise": 1
-    },
-    {
-      "name": "HA2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "HA",
-      "gleise": 1
-    },
-    {
-      "name": "HA5",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "HA",
-      "gleise": 1
-    },
-    {
-      "name": "KF2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KF",
-      "gleise": 1
-    },
-    {
-      "name": "KF5",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KF",
-      "gleise": 1
-    },
-    {
-      "name": "KF6",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KF",
-      "gleise": 1
-    },
-    {
-      "name": "KF4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KF",
-      "gleise": 1
-    },
-    {
-      "name": "KF3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KF",
-      "gleise": 1
-    },
-    {
-      "name": "LUGO2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LUGO",
-      "gleise": 1
-    },
-    {
-      "name": "LUGO1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LUGO",
-      "gleise": 1
-    },
-    {
-      "name": "LUGO3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LUGO",
-      "gleise": 1
-    },
-    {
-      "name": "OBB1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OBB",
-      "gleise": 1
-    },
-    {
-      "name": "OBB3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OBB",
-      "gleise": 1
-    },
-    {
-      "name": "OBB4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OBB",
-      "gleise": 1
-    },
-    {
-      "name": "OBB2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OBB",
-      "gleise": 1
-    },
-    {
-      "name": "OD1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OD",
-      "gleise": 1
-    },
-    {
-      "name": "OD2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OD",
-      "gleise": 1
-    },
-    {
-      "name": "RAM2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "RAM",
-      "gleise": 1
-    },
-    {
-      "name": "RAM4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "RAM",
-      "gleise": 1
-    },
-    {
-      "name": "RAM3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "RAM",
-      "gleise": 1
-    },
-    {
-      "name": "RAM1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "RAM",
-      "gleise": 1
-    },
-    {
-      "name": "SHIE2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SHIE",
-      "gleise": 1
-    },
-    {
-      "name": "SHIE1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SHIE",
-      "gleise": 1
-    },
-    {
-      "name": "SWG",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SWG"
-    },
-    {
-      "name": "SWG1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SWG",
-      "gleise": 1
-    },
-    {
-      "name": "TI1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TI",
-      "gleise": 1
-    },
-    {
-      "name": "TI2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TI",
-      "gleise": 1
-    },
-    {
-      "name": "WALK2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WALK",
-      "gleise": 1
-    },
-    {
-      "name": "WALK1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WALK",
-      "gleise": 1
-    },
-    {
-      "name": "ZAE1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZAE",
-      "gleise": 1
-    },
-    {
-      "name": "ZAE2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZAE",
-      "gleise": 1
-    },
-    {
-      "name": "Sumiswald ETB",
+      "name": "Paratico",
       "typ": "Agl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Sumiswald",
+      "stamm": "Paratico",
       "gleise": 1
     },
     {
-      "name": "Worb SBB",
+      "name": "Parco Rovato",
       "typ": "Agl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Worb",
+      "stamm": "Parco Rovato",
       "gleise": 1
     },
     {
-      "name": "KF51-54",
+      "name": "Merci FN",
       "typ": "Agl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "KF5*",
+      "stamm": "Merci FN",
       "gleise": 1
     },
     {
-      "name": "KF86-87",
+      "name": "Merci FS",
       "typ": "Agl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "KF8*",
+      "stamm": "Merci FS",
       "gleise": 1
     },
     {
-      "name": "OBB5",
+      "name": "Mercitalia",
       "typ": "Agl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OBB5",
+      "stamm": "Mercitalia",
       "gleise": 1
     },
     {
-      "name": "OBB6",
+      "name": "Iseo",
       "typ": "Agl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OBB6",
+      "stamm": "Iseo",
       "gleise": 1
     },
     {
-      "name": "BK5",
-      "typ": "Agl",
+      "name": "Borgo S.Giovanni 2",
+      "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BK5",
+      "stamm": "Borgo S.Giovanni",
+      "gleise": 1
+    },
+    {
+      "name": "Borgo S.Giovanni 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Borgo S.Giovanni",
+      "gleise": 1
+    },
+    {
+      "name": "Bornato 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bornato",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto Asta",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bornato",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto m",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bornato",
+      "gleise": 1
+    },
+    {
+      "name": "Bornato 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bornato",
+      "gleise": 1
+    },
+    {
+      "name": "Bornato 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bornato",
+      "gleise": 1
+    },
+    {
+      "name": "Coccaglio 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Coccaglio",
+      "gleise": 1
+    },
+    {
+      "name": "Coccaglio 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Coccaglio",
+      "gleise": 1
+    },
+    {
+      "name": "Grumello 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Grumello",
+      "gleise": 1
+    },
+    {
+      "name": "Grumello 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Grumello",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto Asta BS",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ospitaletto",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ospitaletto",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ospitaletto",
+      "gleise": 1
+    },
+    {
+      "name": "Palazzolo 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Palazzolo",
+      "gleise": 1
+    },
+    {
+      "name": "Palazzolo 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Palazzolo",
+      "gleise": 1
+    },
+    {
+      "name": "Passirano 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Passirano",
+      "gleise": 1
+    },
+    {
+      "name": "Passirano 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Passirano",
+      "gleise": 1
+    },
+    {
+      "name": "Romano P corsa",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano",
+      "gleise": 1
+    },
+    {
+      "name": "Romano 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano",
+      "gleise": 1
+    },
+    {
+      "name": "Romano 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano",
+      "gleise": 1
+    },
+    {
+      "name": "Romano 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato FN 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato FN 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato FN W",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
       "gleise": 1
     }
   ],
   "strecken": [
     {
-      "name": "Burgdorf-Heimberg",
-      "ordnung": 1,
-      "auto": true,
+      "name": "Bergamo-Brescia",
+      "ordnung": 4,
+      "auto": false,
       "stationen": [
-        "Bf BDFS",
-        "Bf OBB",
-        "Bf HA",
-        "Bf SHIE",
-        "Bf BIGE",
-        "Bf WALK",
-        "Bf BIG",
-        "Bf GH",
-        "Bf KF",
-        "Bf STAL",
-        "Bf OD",
-        "Bf BK",
-        "Anst Heimberg"
+        "Anst Bergamo",
+        "Bf Grumello",
+        "Bf Palazzolo",
+        "Bf Cologne",
+        "Bf Coccaglio",
+        "Bf Ospitaletto",
+        "Anst Brescia LL"
       ]
     },
     {
-      "name": "Burgdorf-Zollbrück",
-      "ordnung": 102,
-      "auto": true,
-      "stationen": [
-        "Bf BDFS",
-        "Bf OBB",
-        "Bf HA",
-        "Bf LUGO",
-        "Bf RAM",
-        "Anst Zollbrück"
-      ]
-    },
-    {
-      "name": "Heimberg-Burgdorf",
-      "ordnung": 103,
-      "auto": true,
-      "stationen": [
-        "Anst Heimberg",
-        "Bf BK",
-        "Bf OD",
-        "Bf STAL",
-        "Bf KF",
-        "Bf GH",
-        "Bf BIG",
-        "Bf WALK",
-        "Bf BIGE",
-        "Bf SHIE",
-        "Bf HA",
-        "Bf OBB",
-        "Bf BDFS"
-      ]
-    },
-    {
-      "name": "Sumiswald-Zollbrück",
-      "ordnung": 104,
-      "auto": true,
-      "stationen": [
-        "Anst Sumiswald",
-        "Bf SWG",
-        "Bf GRMA",
-        "Bf RAM",
-        "Anst Zollbrück"
-      ]
-    },
-    {
-      "name": "Bowil-Worb",
-      "ordnung": 106,
-      "auto": true,
-      "stationen": [
-        "Anst Bowil",
-        "Bf ZAE",
-        "Bf KF",
-        "Bf TI",
-        "Anst Worb"
-      ]
-    },
-    {
-      "name": "Zollbrück-Burgdorf",
-      "ordnung": 106,
-      "auto": true,
-      "stationen": [
-        "Anst Zollbrück",
-        "Bf RAM",
-        "Bf LUGO",
-        "Bf HA",
-        "Bf OBB",
-        "Bf BDFS"
-      ]
-    },
-    {
-      "name": "Zollbrück-Sumiswald",
-      "ordnung": 107,
-      "auto": true,
-      "stationen": [
-        "Anst Zollbrück",
-        "Bf RAM",
-        "Bf GRMA",
-        "Bf SWG",
-        "Anst Sumiswald"
-      ]
-    },
-    {
-      "name": "Worb-Bowil",
+      "name": "Iseo-Brescia FN",
       "ordnung": 113,
       "auto": true,
       "stationen": [
-        "Anst Worb",
-        "Bf TI",
-        "Bf KF",
-        "Bf ZAE",
-        "Anst Bowil"
+        "Anst Iseo",
+        "Bf Bornato",
+        "Bf Passirano",
+        "Bf Paderno",
+        "Bf Castegnato",
+        "Bf Brescia Violino",
+        "Bf Borgo S.Giovanni",
+        "Anst Brescia FN"
+      ]
+    },
+    {
+      "name": "Treviglio-Brescia LL",
+      "ordnung": 120,
+      "auto": true,
+      "stationen": [
+        "Anst Treviglio",
+        "Bf Vidalengo",
+        "Bf Morgengo-Bariano",
+        "Bf Romano",
+        "Bf Cividate-Calcio",
+        "Bf Chiari",
+        "Bf Rovato",
+        "Bf Ospitaletto",
+        "Anst Brescia LL"
       ]
     }
   ],
   "streckenmarkierung": [],
-  "zugschema": "schweiz",
-  "_aid": 654,
+  "zugschema": "italien",
+  "_aid": 928,
   "_build": 5851,
-  "_name": "Emmental",
-  "_region": "Bern - Lötschberg",
+  "_name": "Rovato",
+  "_region": "Lombardia",
   "_version": 3
 }

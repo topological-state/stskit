@@ -1,0 +1,1543 @@
+{
+  "default": true,
+  "elemente": [
+    {
+      "name": "AVRY",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BF",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BFV",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "CHE",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "COT",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "DUED",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FRI",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FRPO",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GIV",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LUY",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "NEY",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ROS",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SCMI",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "VG",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "VZ",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "AVRY",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AVRY"
+    },
+    {
+      "name": "AVRY",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AVRY",
+      "gleise": 1
+    },
+    {
+      "name": "AVRY",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AVRY",
+      "gleise": 1
+    },
+    {
+      "name": "BF",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BF"
+    },
+    {
+      "name": "BF",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BF",
+      "gleise": 1
+    },
+    {
+      "name": "BF",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BF",
+      "gleise": 1
+    },
+    {
+      "name": "BFV 1",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BFV"
+    },
+    {
+      "name": "BFV 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BFV 1",
+      "gleise": 1
+    },
+    {
+      "name": "BFV 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BFV 1",
+      "gleise": 1
+    },
+    {
+      "name": "BFV 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BFV 1",
+      "gleise": 1
+    },
+    {
+      "name": "BFV 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BFV 2",
+      "gleise": 1
+    },
+    {
+      "name": "CHE 4",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHE"
+    },
+    {
+      "name": "CHE 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHE 4",
+      "gleise": 1
+    },
+    {
+      "name": "CHE 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHE 4",
+      "gleise": 1
+    },
+    {
+      "name": "CHE 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHE 4",
+      "gleise": 1
+    },
+    {
+      "name": "CHE 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHE 3",
+      "gleise": 1
+    },
+    {
+      "name": "COT",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COT"
+    },
+    {
+      "name": "COT",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COT",
+      "gleise": 1
+    },
+    {
+      "name": "COT",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COT",
+      "gleise": 1
+    },
+    {
+      "name": "DUED 1",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DUED"
+    },
+    {
+      "name": "DUED 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DUED 1",
+      "gleise": 1
+    },
+    {
+      "name": "DUED 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DUED 1",
+      "gleise": 1
+    },
+    {
+      "name": "DUED 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DUED 1",
+      "gleise": 1
+    },
+    {
+      "name": "DUED 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DUED 2",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 3",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI"
+    },
+    {
+      "name": "FRI 22",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI"
+    },
+    {
+      "name": "FRI 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 3",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 6",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 3",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 3",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 3",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 7",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 3",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 3",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 50",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 3",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 5",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 3",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 3",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 53",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 3",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 43",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 3",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 6",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 6",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 1",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 51",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 1",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 41",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 1",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 2",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 42",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 2",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 52",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 2",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 7",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 7",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 4",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 54",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 4",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 44",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 4",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 50",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 50",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 40",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 50",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 5",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 5",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 55",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 5",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 45",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 5",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 22",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 22",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 142",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 22",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 143",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 22",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 21",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 22",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 141",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 22",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 23",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 22",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 22",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 22",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 142",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 142",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 143",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 143",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 21",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 21",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 141",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 141",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 23",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI 23",
+      "gleise": 1
+    },
+    {
+      "name": "FRPO",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRPO"
+    },
+    {
+      "name": "FRPO",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRPO",
+      "gleise": 1
+    },
+    {
+      "name": "FRPO",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRPO",
+      "gleise": 1
+    },
+    {
+      "name": "GIV 2",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIV"
+    },
+    {
+      "name": "GIV 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIV 2",
+      "gleise": 1
+    },
+    {
+      "name": "GIV 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIV 2",
+      "gleise": 1
+    },
+    {
+      "name": "GIV 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIV 2",
+      "gleise": 1
+    },
+    {
+      "name": "GIV 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIV 1",
+      "gleise": 1
+    },
+    {
+      "name": "LUY 3",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUY"
+    },
+    {
+      "name": "LUY 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUY 3",
+      "gleise": 1
+    },
+    {
+      "name": "LUY 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUY 3",
+      "gleise": 1
+    },
+    {
+      "name": "LUY 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUY 3",
+      "gleise": 1
+    },
+    {
+      "name": "LUY 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUY 3",
+      "gleise": 1
+    },
+    {
+      "name": "LUY 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUY 3",
+      "gleise": 1
+    },
+    {
+      "name": "LUY 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUY 2",
+      "gleise": 1
+    },
+    {
+      "name": "LUY 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUY 1",
+      "gleise": 1
+    },
+    {
+      "name": "LUY 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUY 4",
+      "gleise": 1
+    },
+    {
+      "name": "NEY",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NEY"
+    },
+    {
+      "name": "NEY",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NEY",
+      "gleise": 1
+    },
+    {
+      "name": "NEY",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NEY",
+      "gleise": 1
+    },
+    {
+      "name": "ROS 4",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROS"
+    },
+    {
+      "name": "ROS 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROS 4",
+      "gleise": 1
+    },
+    {
+      "name": "ROS 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROS 4",
+      "gleise": 1
+    },
+    {
+      "name": "ROS 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROS 4",
+      "gleise": 1
+    },
+    {
+      "name": "ROS 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROS 3",
+      "gleise": 1
+    },
+    {
+      "name": "SCMI 1",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI"
+    },
+    {
+      "name": "SCMI 13",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI"
+    },
+    {
+      "name": "SCMI 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI 1",
+      "gleise": 1
+    },
+    {
+      "name": "SCMI 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI 1",
+      "gleise": 1
+    },
+    {
+      "name": "SCMI 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI 1",
+      "gleise": 1
+    },
+    {
+      "name": "SCMI 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI 1",
+      "gleise": 1
+    },
+    {
+      "name": "SCMI 1G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI 1",
+      "gleise": 1
+    },
+    {
+      "name": "SCMI 3G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI 3",
+      "gleise": 1
+    },
+    {
+      "name": "SCMI 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI 3",
+      "gleise": 1
+    },
+    {
+      "name": "SCMI 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI 2",
+      "gleise": 1
+    },
+    {
+      "name": "SCMI 2G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI 2",
+      "gleise": 1
+    },
+    {
+      "name": "SCMI 13",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI 13",
+      "gleise": 1
+    },
+    {
+      "name": "SCMI 13",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI 13",
+      "gleise": 1
+    },
+    {
+      "name": "VG",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VG"
+    },
+    {
+      "name": "VG",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VG",
+      "gleise": 1
+    },
+    {
+      "name": "VG",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VG",
+      "gleise": 1
+    },
+    {
+      "name": "VZ",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VZ"
+    },
+    {
+      "name": "VZ",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VZ",
+      "gleise": 1
+    },
+    {
+      "name": "VZ",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VZ",
+      "gleise": 1
+    },
+    {
+      "name": "FLM",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FRI",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ROM",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Grolley",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Pensier",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FRI dépôt",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SCMI",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GIV dépôt",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZI GIV",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FLM 955",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FLM",
+      "gleise": 1
+    },
+    {
+      "name": "FLM 855",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FLM",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 402",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI",
+      "gleise": 1
+    },
+    {
+      "name": "FRI 202",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 826",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM",
+      "gleise": 1
+    },
+    {
+      "name": "ROM 926",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROM",
+      "gleise": 1
+    },
+    {
+      "name": "Grolley",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Grolley",
+      "gleise": 1
+    },
+    {
+      "name": "Pensier",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pensier",
+      "gleise": 1
+    },
+    {
+      "name": "FRI dépôt",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FRI dépôt",
+      "gleise": 1
+    },
+    {
+      "name": "SCMI 4",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCMI",
+      "gleise": 1
+    },
+    {
+      "name": "GIV dépôt",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIV dépôt",
+      "gleise": 1
+    },
+    {
+      "name": "zone industrielle GIV",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZI GIV",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "FLM-ROM",
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst FLM",
+        "Bf SCMI",
+        "Bf DUED",
+        "Bf FRPO",
+        "Bf FRI",
+        "Bf VG",
+        "Bf AVRY",
+        "Bf ROS",
+        "Bf NEY",
+        "Bf COT",
+        "Bf CHE",
+        "Bf VZ",
+        "Bf LUY",
+        "Anst ROM"
+      ]
+    },
+    {
+      "name": "Flamatt-Romont",
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst FLM",
+        "Bf SCMI",
+        "Bf DUED",
+        "Bf FRPO",
+        "Bf FRI",
+        "Bf VG",
+        "Bf AVRY",
+        "Bf ROS",
+        "Bf NEY",
+        "Bf COT",
+        "Bf CHE",
+        "Bf VZ",
+        "Bf LUY",
+        "Anst ROM"
+      ]
+    },
+    {
+      "name": "ROM-FLM",
+      "ordnung": 3,
+      "auto": false,
+      "stationen": [
+        "Anst ROM",
+        "Bf LUY",
+        "Bf VZ",
+        "Bf CHE",
+        "Bf COT",
+        "Bf NEY",
+        "Bf ROS",
+        "Bf AVRY",
+        "Bf VG",
+        "Bf FRI",
+        "Bf FRPO",
+        "Bf DUED",
+        "Bf SCMI",
+        "Anst FLM"
+      ]
+    },
+    {
+      "name": "Romont-Flamatt",
+      "ordnung": 3,
+      "auto": false,
+      "stationen": [
+        "Anst ROM",
+        "Bf LUY",
+        "Bf VZ",
+        "Bf CHE",
+        "Bf COT",
+        "Bf NEY",
+        "Bf ROS",
+        "Bf AVRY",
+        "Bf VG",
+        "Bf FRI",
+        "Bf FRPO",
+        "Bf DUED",
+        "Bf SCMI",
+        "Anst FLM"
+      ]
+    },
+    {
+      "name": "Fribourg-Grolley",
+      "ordnung": 4,
+      "auto": false,
+      "stationen": [
+        "Bf FRI",
+        "Bf GIV",
+        "Bf BF",
+        "Anst Grolley"
+      ]
+    },
+    {
+      "name": "Fribourg-Pensier",
+      "ordnung": 5,
+      "auto": false,
+      "stationen": [
+        "Bf FRI",
+        "Bf GIV",
+        "Bf BFV",
+        "Anst Pensier"
+      ]
+    },
+    {
+      "name": "ROM-Grolley",
+      "ordnung": 110,
+      "auto": true,
+      "stationen": [
+        "Anst ROM",
+        "Bf LUY",
+        "Bf VZ",
+        "Bf CHE",
+        "Bf COT",
+        "Bf NEY",
+        "Bf ROS",
+        "Bf VG",
+        "Bf FRI",
+        "Bf GIV",
+        "Bf BF",
+        "Anst Grolley"
+      ]
+    },
+    {
+      "name": "ROM-Pensier",
+      "ordnung": 111,
+      "auto": true,
+      "stationen": [
+        "Anst ROM",
+        "Bf LUY",
+        "Bf VZ",
+        "Bf CHE",
+        "Bf COT",
+        "Bf NEY",
+        "Bf ROS",
+        "Bf VG",
+        "Bf FRI",
+        "Bf GIV",
+        "Bf BFV",
+        "Anst Pensier"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 624,
+  "_build": 5851,
+  "_name": "Fribourg/Freiburg",
+  "_region": "Westschweiz",
+  "_version": 3
+}
