@@ -20,19 +20,25 @@ logger.addHandler(logging.NullHandler())
 
 class AbstractBahnhofEditorModel(QAbstractTableModel):
     """
-    TableModel for editing BahnhofElements.
+    Abstract TableModel for editing BahnhofElements.
 
-    Attribute
-    =========
+    The inheriting class must set the `_columns` and `_gleistyp` attributes in its constructor.
 
-    - columns : list of str
-      List of column names.
-    - anlage : Anlage
-      The Anlage object containing the BahnhofElements.
-    - elemente : dict of BahnhofElement to any
-      Dictionary mapping BahnhofElements to their data.
-    - index : list of BahnhofElement
-      List of BahnhofElements sorted by some criterion (not specified in the code).
+    Attributes
+    ==========
+
+    - _gleistyp : 'Gl' or 'Agl', depending on which tree is edited.
+    - _columns : Column names displayed in the header row.
+        Supported column names are:
+        'Gl', 'Bs´, 'Bft', 'Bf', 'Agl', 'Anst', 'Sperrung', 'Stil', 'Sichtbar', 'N'
+    - bahnhofgraph : BahnhofGraph instance to be edited.
+    - rows: List of Gl or Agl elements to be displayed in rows.
+        This is a sorted list of the dictionary keys of row_data.
+    - row_data: Element data to be displayed in rows.
+        The dictionary keys correspond to `rows`, without order.
+        Each value contains a dictionary where the key corresponds to the column name
+        and value the data to be displayed in the cell.
+    - changed: Indicates whether data have changed.
     """
 
     def __init__(self, bahnhofgraph: BahnhofGraph, parent=None):
@@ -43,13 +49,34 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
         self.bahnhofgraph: BahnhofGraph = bahnhofgraph
         self.row_data: Dict[BahnhofElement, Any] = {}
         self.rows: List[BahnhofElement] = []
+        self.changed = False
 
     def update(self):
+        """
+        Update the row data and rows based on the current state of the bahnhofgraph.
+
+        The method iterates through all elements of a specific type in the graph,
+        and fills the `row_data` and `rows` attributes according to the description in the class header..
+
+        This function also signals a reset to associated views.
+        """
+
         self.beginResetModel()
         self._update()
         self.endResetModel()
 
     def _update(self):
+        """
+        (Internal) Update the row data and rows based on the current state of the bahnhofgraph.
+
+        The method iterates through all elements of a specific type in the graph,
+        and fills the `row_data` and `rows` attributes according to the description in the class header..
+
+        This function is internal.
+        It does not signal the change to associated views.
+        Use `update` unless you take care to signal the views.
+        """
+
         elemente = {}
 
         for gleis in self.bahnhofgraph.list_by_type({self._gleistyp}):
@@ -64,6 +91,31 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
 
         self.row_data = elemente
         self.rows = sorted(self.row_data.keys())
+
+    def _get_index(self, element: BahnhofElement) -> Tuple[QModelIndex, QModelIndex]:
+        """
+        Returns the QModelIndex of the first and last rows corresponding to a given element.
+
+        If element is a Gl (or Agl), the first and last rows are the same.
+        If element is a higher level, the indexes can span a range of rows.
+
+        Args:
+            element (BahnhofElement): The element for which to find the indexes.
+
+        Returns:
+            Tuple[QModelIndex, QModelIndex]: A tuple containing the QModelIndex of the first and last rows.
+            The first index points to column 0, the second index to the last column.
+
+        Raises:
+            KeyError: If element is not in bahnhofgraph.
+            ValueError: If the element is not in the table. (Should not happen if the table is up to date.)
+        """
+
+        gleise = self.bahnhofgraph.list_children(element, {self._gleistyp})
+        rows = [self.rows.index(gl) for gl in gleise]
+        index1 = self.index(min(rows), 0, QModelIndex())
+        index2 = self.index(max(rows), len(self._columns) - 1, QModelIndex())
+        return index1, index2
 
     def rowCount(self, parent=QtCore.QModelIndex()):
         return len(self.rows)
@@ -86,23 +138,14 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
             except KeyError:
                 return None
 
-        elif role == QtCore.Qt.DisplayRole:
+        elif role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
             try:
                 if col == 'Sperrung':
                     return None
                 else:
                     return str(data[col])
             except KeyError:
-                return '???'
-
-        elif role == QtCore.Qt.EditRole:
-            try:
-                if col == 'Sperrung':
-                    return None
-                else:
-                    return str(data[col])
-            except KeyError:
-                return '???'
+                return None
 
         elif role == QtCore.Qt.CheckStateRole:
             if col == 'Sperrung':
@@ -136,8 +179,9 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
 
         if role == QtCore.Qt.EditRole:
             if col in {'Bs', 'Bft', 'Bf', 'Anst'}:
-                self.rename_element(col, label.name, value)
-                self.dataChanged.emit(index, index)
+                element = self.bahnhofgraph.find_superior(label, {col})
+                self.rename_element(col, element.name, value)
+                return True
 
         elif role == QtCore.Qt.CheckStateRole:
             value = QtCore.Qt.CheckState(value)
@@ -145,10 +189,9 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
                 data[col] = value == QtCore.Qt.Checked
                 self.bahnhofgraph.nodes[label][col.lower()] = data[col]
                 self.dataChanged.emit(index, index)
-            else:
-                return False
+                return True
 
-        return True
+        return False
 
     def flags(self, index):
         if not index.isValid():
@@ -238,6 +281,7 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
             for child, parent in replacements.items():
                 try:
                     self.bahnhofgraph.replace_parent(child, parent)
+                    self.changed = True
                 except ValueError:
                     pass
             self.bahnhofgraph.leere_gruppen_entfernen()
@@ -245,31 +289,45 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
             self._update()
             self.endResetModel()
 
-    def rename_element(self, level: str, old: str, new: str) -> Optional[BahnhofElement]:
+    def rename_element(self, level: str, old: str, new: str) -> bool:
         """
         Renames an element in the graph and updates the model accordingly.
+
+        This is the public method that also signals the change to associated views.
         """
 
         old = BahnhofElement(level, old)
         new = BahnhofElement(level, new)
 
         if old == new:
-            return None   # Alter und neuer Name sind identisch
+            return False   # Alter und neuer Name sind identisch
         if old not in self.bahnhofgraph.nodes():
-            return  None  # Element existiert nicht
+            return  False  # Element existiert nicht
         if new in self.bahnhofgraph.nodes():
-            return  None  # Neuer Name existiert bereits
+            return  False  # Neuer Name existiert bereits
 
-        self.beginResetModel()
-        try:
-            nx.relabel_nodes(self.bahnhofgraph, {old: new}, copy=False)
-            self.bahnhofgraph.nodes[new]['auto'] = False
-            self.bahnhofgraph.nodes[new]['name'] = new.name
-        finally:
-            self._update()
-            self.endResetModel()
+        old_index_1, old_index_2 = self._get_index(old)
+        self._rename_element(old, new)
+        new_index_1, new_index_2 = self._get_index(new)
 
-        return new
+        index_1 = self.index(min(old_index_1.row(), new_index_1.row()), old_index_1.column(), QModelIndex())
+        index_2 = self.index(min(old_index_2.row(), new_index_2.row()), old_index_2.column(), QModelIndex())
+        self.dataChanged.emit(index_1, index_2)
+
+        return True
+
+    def _rename_element(self, old: BahnhofElement, new: BahnhofElement):
+        """
+        (Internal) Renames an element in the graph and updates the model accordingly.
+
+        This is method does not notify associated views.
+        """
+
+        nx.relabel_nodes(self.bahnhofgraph, {old: new}, copy=False)
+        self.bahnhofgraph.nodes[new]['auto'] = False
+        self.bahnhofgraph.nodes[new]['name'] = new.name
+        self.changed = True
+        self._update()
 
 
 class AnschlussEditorModel(AbstractBahnhofEditorModel):
@@ -336,9 +394,9 @@ class BahnhofEditor(QObject):
         super().__init__()
         self.anlage = anlage
         self.bahnhofgraph = anlage.bahnhofgraph.copy(as_view=False)
-        self.changed: bool = False
         self.parent = parent
         self.ui = ui
+        self.in_update = True
 
         self.gl_table_model = BahnhofEditorModel(self.bahnhofgraph)
         self.gl_table_filter = BahnhofEditorFilterProxy(parent)
@@ -378,7 +436,7 @@ class BahnhofEditor(QObject):
         self.ui.gl_combo.editTextChanged.connect(self.gl_combo_text_changed)
         self.ui.gl_table_view.selectionModel().selectionChanged.connect(
             self.gl_selection_changed)
-        self.gl_table_model.dataChanged.connect(self.table_model_changed)
+        self.gl_table_model.dataChanged.connect(self.gl_table_model_changed)
 
         self.agl_table_model = AnschlussEditorModel(self.bahnhofgraph)
         self.agl_table_filter = BahnhofEditorFilterProxy(parent)
@@ -405,80 +463,134 @@ class BahnhofEditor(QObject):
         self.ui.agl_combo.editTextChanged.connect(self.agl_combo_text_changed)
         self.ui.agl_table_view.selectionModel().selectionChanged.connect(
             self.agl_selection_changed)
-        self.agl_table_model.dataChanged.connect(self.table_model_changed)
+        self.agl_table_model.dataChanged.connect(self.agl_table_model_changed)
+
+        self.in_update = False
 
     def update_widgets(self):
         """
-        Update the widgets based on the current state of the anlage
+        Fully update the widgets based on the current state of self.bahnhofgraph.
         """
 
-        def _make_filter_list(gl_list: Iterable[BahnhofElement]) -> Iterable[str]:
-            result = {''}
-            for gl in gl_list:
-                mo = re.match(r'^[a-zA-Z]*', gl.name)
-                if mo:
-                    result.add(mo[0])
-            return result
-
+        self.in_update = True
         self.gl_table_model.update()
         self.agl_table_model.update()
+
+        self.update_lists()
+        self.update_gl_widget_states()
+        self.update_agl_widget_states()
+        self.adjust_geometry()
+        self.in_update = False
+
+    def update_lists_and_states(self, levels: Optional[Set[str]] = None):
+        """
+        Fully update the widgets based on the current state of self.bahnhofgraph.
+        """
+        if levels is None:
+            levels = set(BAHNHOFELEMENT_TYPEN)
+
+        self.in_update = True
+        self.update_lists(levels=levels)
+        if levels.intersection(['Gl', 'Bs', 'Bft', 'Bf']):
+            self.update_gl_combo_index()
+            self.update_gl_widget_states()
+        if levels.intersection(['Agl', 'Anst']):
+            self.update_agl_combo_index()
+            self.update_agl_widget_states()
+        self.adjust_geometry()
+        self.in_update = False
+
+    @staticmethod
+    def _make_filter_list(gl_list: Iterable[BahnhofElement]) -> Iterable[str]:
+        result = {''}
+        for gl in gl_list:
+            mo = re.match(r'^[a-zA-Z]*', gl.name)
+            if mo:
+                result.add(mo[0])
+        return result
+
+    def update_lists(self, levels: Optional[Set[str]] = None) -> None:
+        """
+        Update the listes of the combo boxes according to the current selection..
+
+        Parameters
+        ----------
+        levels : Optional[Set[str]], optional
+            A set of levels of combo boxes to update. Defaults to all BAHNHOFELEMENT_TYPEN.
+
+        """
+
+        if levels is None:
+            levels = set(BAHNHOFELEMENT_TYPEN)
+
+        if 'Gl' in levels:
+            gl_filter = sorted(self._make_filter_list(self.bahnhofgraph.list_by_type({'Gl'})))
+            self.gl_model.setStringList(gl_filter)
+
+        if 'Agl' in levels:
+            agl_filter = sorted(self._make_filter_list(self.bahnhofgraph.list_by_type({'Agl'})))
+            self.agl_model.setStringList(agl_filter)
+
+        if levels.intersection(['Bs', 'Bft', 'Bf', 'Anst']):
+            gl_sel = self.get_gl_selection()
+            parents = {typ: set() for typ in BAHNHOFELEMENT_TYPEN}
+            uncles = {typ: set() for typ in BAHNHOFELEMENT_TYPEN}
+            for gl in gl_sel:
+                for be in self.bahnhofgraph.list_parents(gl):
+                    parents[be.typ].add(be)
+            agl_sel = self.get_agl_selection()
+            for agl in agl_sel:
+                for be in self.bahnhofgraph.list_parents(agl):
+                    parents[be.typ].add(be)
+
+            for typ in ['Bs', 'Bft', 'Bf', 'Anst']:
+                for parent in parents[typ]:
+                    uncles[typ].update(self.bahnhofgraph.list_siblings(parent))
+
+            if 'Bs' in levels:
+                self.bs_model.setStringList(sorted((uncle.name for uncle in uncles['Bs'])))
+            if 'Bft' in levels:
+                self.bft_model.setStringList(sorted((uncle.name for uncle in uncles['Bft'])))
+            if 'Bf' in levels:
+                self.bf_model.setStringList(sorted((uncle.name for uncle in uncles['Bf'])))
+            if 'Anst' in levels:
+                self.anst_model.setStringList(sorted((uncle.name for uncle in uncles['Anst'])))
+
+    def adjust_geometry(self):
+        """
+        Adjust the geometry of the widgets based on their current content.
+        """
 
         self.ui.gl_table_view.resizeColumnsToContents()
         self.ui.gl_table_view.resizeRowsToContents()
         self.ui.agl_table_view.resizeColumnsToContents()
         self.ui.agl_table_view.resizeRowsToContents()
 
-        self.gl_model.setStringList(sorted(_make_filter_list(self.bahnhofgraph.list_by_type({'Gl'}))))
-        self.agl_model.setStringList(sorted(_make_filter_list(self.bahnhofgraph.list_by_type({'Agl'}))))
-
-        self.update_lists()
-        self.update_gl_widget_states()
-        self.update_agl_widget_states()
-
-    def update_lists(self):
-        gl_sel = self.get_gl_selection()
-        parents = {typ: set() for typ in BAHNHOFELEMENT_TYPEN}
-        uncles = {typ: set() for typ in BAHNHOFELEMENT_TYPEN}
-        for gl in gl_sel:
-            for be in self.bahnhofgraph.list_parents(gl):
-                parents[be.typ].add(be)
-        agl_sel = self.get_agl_selection()
-        for agl in agl_sel:
-            for be in self.bahnhofgraph.list_parents(agl):
-                parents[be.typ].add(be)
-
-        for typ in ['Bs', 'Bft', 'Bf', 'Anst']:
-            for parent in parents[typ]:
-                uncles[typ].update(self.bahnhofgraph.list_siblings(parent))
-
-        self.bs_model.setStringList(sorted((uncle.name for uncle in uncles['Bs'])))
-        self.bft_model.setStringList(sorted((uncle.name for uncle in uncles['Bft'])))
-        self.bf_model.setStringList(sorted((uncle.name for uncle in uncles['Bf'])))
-        self.anst_model.setStringList(sorted((uncle.name for uncle in uncles['Anst'])))
+    @property
+    def changed(self) -> bool:
+        return self.gl_table_model.changed or self.agl_table_model.changed
 
     def apply(self):
         """
-        Apply changes to the anlage based on the current state of the widgets
+        Apply changes to anlage based on the current state of the widgets
         """
 
         self.anlage.bahnhofgraph.clear()
         self.anlage.bahnhofgraph.update(self.bahnhofgraph)
         self.anlage.liniengraph_konfigurieren()
-        self.changed = False
+        self.gl_table_model.changed = False
+        self.agl_table_model.changed = False
 
     def reset(self):
         """
-        Reset all widgets to Anlage
+        Reset models and widgets to anlage
         """
 
-        self.gl_table_model.beginResetModel()
-        self.agl_table_model.beginResetModel()
         self.bahnhofgraph.clear()
         self.bahnhofgraph.update(self.anlage.bahnhofgraph)
-        self.gl_table_model.endResetModel()
-        self.agl_table_model.endResetModel()
         self.update_widgets()
-        self.changed = False
+        self.gl_table_model.changed = False
+        self.agl_table_model.changed = False
 
     def get_gl_selection(self) -> Set[BahnhofElement]:
         """
@@ -537,7 +649,34 @@ class BahnhofEditor(QObject):
 
     @Slot('QItemSelection', 'QItemSelection')
     def gl_selection_changed(self, selected, deselected):
-        self.update_lists()
+        """
+        Handles selection changes in the GL view and updates corresponding UI elements.
+
+        Parameters
+        ----------
+        selected : QItemSelection
+            The new items selected in the GL view.
+        deselected : QItemSelection
+            The items that have been deselected in the GL view.
+
+        Returns
+        -------
+        None
+
+        Details
+        ------
+        This method is triggered when the user selects or deselects items in the GL view.
+
+        1. Updates the lists of combo boxes.
+        2. Tries to select the corresponding element of the combo boxes.
+        3. Updates the widget states.
+        """
+
+        self.update_lists(levels={'Bs', 'Bft', 'Bf'})
+        self.update_gl_combo_index()
+        self.update_gl_widget_states()
+
+    def update_gl_combo_index(self):
         selection = self.get_gl_selection()
         new = selection - self.gl_last_selection or selection
         self.gl_last_selection = selection
@@ -546,26 +685,51 @@ class BahnhofEditor(QObject):
             new = list(new)[0]
             new_data = self.gl_table_model.row_data[new]
         except (IndexError, KeyError):
-            return
-
-        try:
-            self.ui.bf_combo.setCurrentIndex(self.bf_model.stringList().index(new_data['Bf']))
-        except (KeyError, ValueError):
             pass
-        try:
-            self.ui.bft_combo.setCurrentIndex(self.bft_model.stringList().index(new_data['Bft']))
-        except (KeyError, ValueError):
-            pass
-        try:
-            self.ui.bs_combo.setCurrentIndex(self.bs_model.stringList().index(new_data['Bs']))
-        except (KeyError, ValueError):
-            pass
-
-        self.update_gl_widget_states()
+        else:
+            try:
+                self.ui.bf_combo.setCurrentIndex(self.bf_model.stringList().index(new_data['Bf']))
+            except (KeyError, ValueError):
+                pass
+            try:
+                self.ui.bft_combo.setCurrentIndex(self.bft_model.stringList().index(new_data['Bft']))
+            except (KeyError, ValueError):
+                pass
+            try:
+                self.ui.bs_combo.setCurrentIndex(self.bs_model.stringList().index(new_data['Bs']))
+            except (KeyError, ValueError):
+                pass
 
     @Slot('QItemSelection', 'QItemSelection')
     def agl_selection_changed(self, selected, deselected):
-        self.update_lists()
+        """
+        Handles selection changes in the AGL view and updates corresponding UI elements.
+
+        Parameters
+        ----------
+        selected : QItemSelection
+            The new items selected in the GL view.
+        deselected : QItemSelection
+            The items that have been deselected in the GL view.
+
+        Returns
+        -------
+        None
+
+        Details
+        ------
+        This method is triggered when the user selects or deselects items in the AGL view.
+
+        1. Updates the lists of combo boxes.
+        2. Tries to select the corresponding element of the combo boxes.
+        3. Updates the widget states.
+        """
+
+        self.update_lists(levels={'Anst'})
+        self.update_agl_combo_index()
+        self.update_agl_widget_states()
+
+    def update_agl_combo_index(self):
         selection = self.get_agl_selection()
         new = selection - self.agl_last_selection
         self.agl_last_selection = selection
@@ -574,16 +738,18 @@ class BahnhofEditor(QObject):
             new = list(new)[0]
             new_data = self.agl_table_model.row_data[new]
         except (IndexError, KeyError):
-            return
-
-        try:
-            self.ui.anst_combo.setCurrentIndex(self.bf_model.stringList().index(new_data['Anst']))
-        except (KeyError, ValueError):
             pass
-
-        self.update_agl_widget_states()
+        else:
+            try:
+                self.ui.anst_combo.setCurrentIndex(self.bf_model.stringList().index(new_data['Anst']))
+            except (KeyError, ValueError):
+                pass
 
     def update_gl_widget_states(self):
+        """
+        Enables or disables buttons according to the current selection in the GL view.
+        """
+
         selection = self.get_gl_selection()
         bs_sel = {self.gl_table_model.row_data[gl]['Bs'] for gl in selection if 'Bs' in self.gl_table_model.row_data[gl]}
         bft_sel = {self.gl_table_model.row_data[gl]['Bft'] for gl in selection if 'Bft' in self.gl_table_model.row_data[gl]}
@@ -631,6 +797,10 @@ class BahnhofEditor(QObject):
         self.ui.bs_rename_button.setEnabled(en)
 
     def update_agl_widget_states(self):
+        """
+        Enables or disables buttons according to the current selection in the AGL view.
+        """
+
         selection = self.get_agl_selection()
         anst_sel = {self.agl_table_model.row_data[gl]['Anst'] for gl in selection}
 
@@ -661,8 +831,8 @@ class BahnhofEditor(QObject):
             raise ValueError(f'Invalid level {level}')
 
         if table_model.group_elements(gleise, level, element):
-            self.update_widgets()
-            self.changed = True
+            pass
+            # self.update_widgets()
 
     def ungroup_element(self, level: str):
         if level == 'Anst':
@@ -674,9 +844,7 @@ class BahnhofEditor(QObject):
         else:
             raise ValueError(f'Invalid level {level}')
 
-        if table_model.ungroup_elements(sel, level):
-            self.update_widgets()
-            self.changed = True
+        table_model.ungroup_elements(sel, level)
 
     def rename_element(self, level: str, combo: QtWidgets.QComboBox):
         """
@@ -699,13 +867,19 @@ class BahnhofEditor(QObject):
         old = sel.pop()
         new = combo.currentText()
 
-        if table_model.rename_element(level, old, new):
-            self.update_widgets()
-            self.changed = True
+        table_model.rename_element(level, old, new)
 
     @Slot()
-    def table_model_changed(self):
-        self.update_widgets()
+    def gl_table_model_changed(self):
+        if self.in_update:
+            return
+        self.update_lists_and_states(levels={'Bf', 'Bft', 'Bs', 'Gl'})
+
+    @Slot()
+    def agl_table_model_changed(self):
+        if self.in_update:
+            return
+        self.update_lists_and_states(levels={'Anst', 'Agl'})
 
     @Slot()
     def bf_group_button_clicked(self):
@@ -734,17 +908,14 @@ class BahnhofEditor(QObject):
     @Slot()
     def bf_rename_button_clicked(self):
         self.rename_element('Bf', self.ui.bf_combo)
-        self.update_gl_widget_states()
 
     @Slot()
     def bft_rename_button_clicked(self):
         self.rename_element('Bft', self.ui.bft_combo)
-        self.update_gl_widget_states()
 
     @Slot()
     def bs_rename_button_clicked(self):
         self.rename_element('Bs', self.ui.bs_combo)
-        self.update_gl_widget_states()
 
     @Slot()
     def bf_combo_index_changed(self):
@@ -781,8 +952,7 @@ class BahnhofEditor(QObject):
             self.gl_table_filter.filter_text = self.ui.gl_combo.currentText().casefold()
         finally:
             self.gl_table_filter.endResetModel()
-        self.ui.gl_table_view.resizeColumnsToContents()
-        self.ui.gl_table_view.resizeRowsToContents()
+        self.adjust_geometry()
 
     @Slot()
     def anst_group_button_clicked(self):
@@ -795,7 +965,6 @@ class BahnhofEditor(QObject):
     @Slot()
     def anst_rename_button_clicked(self):
         self.rename_element('Anst', self.ui.anst_combo)
-        self.update_agl_widget_states()
 
     @Slot()
     def anst_combo_index_changed(self):
@@ -816,5 +985,4 @@ class BahnhofEditor(QObject):
             self.agl_table_filter.filter_text = self.ui.agl_combo.currentText().casefold()
         finally:
             self.agl_table_filter.endResetModel()
-        self.ui.agl_table_view.resizeColumnsToContents()
-        self.ui.agl_table_view.resizeRowsToContents()
+        self.adjust_geometry()
