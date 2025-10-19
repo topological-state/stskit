@@ -48,6 +48,7 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
         self._gleistyp: str = ''
         self.bahnhofgraph: BahnhofGraph = bahnhofgraph
         self.row_data: Dict[BahnhofElement, Any] = {}
+        self.row_index: Dict[BahnhofElement, Tuple[Union[int, str], ...]] = {}
         self.rows: List[BahnhofElement] = []
         self.changed = False
 
@@ -70,7 +71,7 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
         (Internal) Update the row data and rows based on the current state of the bahnhofgraph.
 
         The method iterates through all elements of a specific type in the graph,
-        and fills the `row_data` and `rows` attributes according to the description in the class header..
+        and fills the `row_data` and `rows` attributes according to the description in the class header.
 
         This function is internal.
         It does not signal the change to associated views.
@@ -90,7 +91,8 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
             elemente[gleis] = pfad
 
         self.row_data = elemente
-        self.rows = sorted(self.row_data.keys())
+        self.row_index = self.bahnhofgraph.hierarchical_index(elemente.keys())
+        self.rows = list(elemente.keys())
 
     def _get_index(self, element: BahnhofElement) -> Tuple[QModelIndex, QModelIndex]:
         """
@@ -370,17 +372,20 @@ class BahnhofEditorFilterProxy(QSortFilterProxyModel):
         super().__init__(parent)
         self.filter_text: Optional[str] = None
 
-    def filterAcceptsRow(self, source_row, source_parent):
-        if not self.filter_text:
-            return True
-
+    def _get_source_model(self):
         model = self.sourceModel()
         while not isinstance(model, AbstractBahnhofEditorModel):
             try:
                 model = model.sourceModel()
             except AttributeError:
-                return True
+                pass
+        return model
 
+    def filterAcceptsRow(self, source_row, source_parent):
+        if not self.filter_text:
+            return True
+
+        model = self._get_source_model()
         try:
             element = model.rows[source_row]
         except (AttributeError, IndexError, KeyError):
@@ -388,6 +393,11 @@ class BahnhofEditorFilterProxy(QSortFilterProxyModel):
 
         return self.filter_text in element.name.casefold()
 
+    def lessThan(self, source_left, source_right, /):
+        model = self._get_source_model()
+        key_left = model.row_index[model.rows[source_left.row()]]
+        key_right = model.row_index[model.rows[source_right.row()]]
+        return key_left < key_right
 
 class BahnhofEditor(QObject):
     def __init__(self, anlage: Anlage, parent: QObject, ui: Ui_EinstellungenWindow):
@@ -401,7 +411,6 @@ class BahnhofEditor(QObject):
         self.gl_table_model = BahnhofEditorModel(self.bahnhofgraph)
         self.gl_table_filter = BahnhofEditorFilterProxy(parent)
         self.gl_table_filter.setSourceModel(self.gl_table_model)
-        self.gl_table_filter.setSortRole(QtCore.Qt.UserRole)
         self.ui.gl_table_view.setModel(self.gl_table_filter)
         self.ui.gl_table_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.ui.gl_table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -441,7 +450,6 @@ class BahnhofEditor(QObject):
         self.agl_table_model = AnschlussEditorModel(self.bahnhofgraph)
         self.agl_table_filter = BahnhofEditorFilterProxy(parent)
         self.agl_table_filter.setSourceModel(self.agl_table_model)
-        self.agl_table_filter.setSortRole(QtCore.Qt.UserRole)
         self.ui.agl_table_view.setModel(self.agl_table_filter)
         self.ui.agl_table_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.ui.agl_table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
