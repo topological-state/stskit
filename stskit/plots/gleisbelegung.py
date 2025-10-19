@@ -36,48 +36,6 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-GLEISNAME_REGEXP = re.compile(r"(\D*)(\d*)(\D*)")
-
-
-def gleisname_sortkey(gleis: str) -> Tuple[str, int, str]:
-    """
-    gleisname in sortierschlüssel umwandeln
-
-    annahme: gleisname setzt sich aus präfix, nummer und suffix zusammen.
-    präfix und suffix bestehen aus buchstaben und leerzeichen oder fehlen ganz.
-    präfix und suffix können durch leerzeichen von der nummer abgetrennt sein, müssen aber nicht.
-
-    :param gleis: gleisname, wie er im fahrplan der züge steht
-    :return: tupel (präfix, nummer, suffix). leerzeichen entfernt.
-    """
-
-    mo = re.match(GLEISNAME_REGEXP, gleis)
-    prefix = mo.group(1).replace(" ", "")
-    try:
-        nummer = int(mo.group(2))
-    except ValueError:
-        nummer = 0
-    suffix = mo.group(3).replace(" ", "")
-    return prefix, nummer, suffix
-
-
-def gleis_sektor_sortkey(gleis_sektor: Tuple[str, str]) -> Tuple[str, int, str, str, int, str]:
-    """
-    hauptgleis und sektorgleis in sortierschlüssel umwandeln
-
-    :param gleis_sektor: tupel aus hauptgleis und sektorgleis.
-        sektorgleis, wie es im fahrplan der züge steht,
-        hauptgleis, wie es in der anlagenkonfiguration steht.
-    :return: tupel aus präfix, nummer, suffix des hauptgleises
-        und darauf folgend präfix, nummer, suffix des sektorgleises,
-        jeweils wie von gleisname_sortkey.
-    """
-
-    g1, g2, g3 = gleisname_sortkey(gleis_sektor[0])
-    s1, s2, s3 = gleisname_sortkey(gleis_sektor[1])
-    return g1, g2, g3, s1, s2, s3
-
-
 @functools.total_ordering
 @dataclass
 class Slot:
@@ -376,23 +334,13 @@ class Gleisbelegung:
 
     def gleise_auswaehlen(self, gleise: Iterable[BahnhofElement]):
         """
-        Zu beobachtende Gleise wählen.
+        Darzustellende Gleise wählen.
 
-        :param gleise: Sequenz von Gleisnamen.
+        :param gleise: Darzustellende Gleise (vom Typ 'Gl' oder 'Agl').
         :return: None
         """
 
-        sortierung = {}
-        for g in gleise:
-            parents = [g] + list(self.anlage.bahnhofgraph.list_parents(g))
-            keys = []
-            for e in reversed(parents):
-                node = self.anlage.bahnhofgraph.nodes[e]
-                key = gleisname_sortkey(node.name)
-                keys.append(node.get('ordnung', 0))
-                keys.extend(key)
-            sortierung[g] = keys
-
+        sortierung = self.anlage.bahnhofgraph.hierarchical_index(gleise)
         self.gleise = sorted(gleise, key=sortierung.get)
 
     def slots_erstellen(self):

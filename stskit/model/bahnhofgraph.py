@@ -179,6 +179,7 @@ class BahnhofGraph(nx.DiGraph):
     def __init__(self, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
         self.ziel_gleis: Dict[Union[int, str], BahnhofLabelType] = {}
+        self.gleisschema = Gleisschema()
 
     def to_directed_class(self):
         return self.__class__
@@ -561,6 +562,39 @@ class BahnhofGraph(nx.DiGraph):
         for node in self.list_children(BahnhofLabelType('Bst', 'Anst'), {'Anst'}):
             yield node.name
 
+    def hierarchical_index(self, elements: Iterable[BahnhofElement]) -> Dict[BahnhofElement, Tuple[Union[int, str], ...]]:
+        """
+        Erstellt einen hierarchischen Sortierindex von Gleisen.
+
+        :param elements: Liste von Gleisen (Bahnhofelemente vom Typ Gl oder Agl)
+            Wenn leer oder None, werden alle Gleise und Anschlussgleise inkludiert.
+
+        :return Zuordnung Gleis -> Sortierschlüssel.
+            Die Schlüssel sind Tupel mit den Namen aller Elemente im Pfad vom Root-Element zum jeweiligen Gleis.
+
+            Namen, die numerische Elemente enthalten werden zusätzlich aufgespalten,
+            damit Gleisnummern numerisch sortiert werden.
+            Die Aufspaltung wird vom Gleisschema durchgeführt.
+
+            Der Dictionary kann in der sorted-Funktion verwendet werden:
+            `gleise = sorted(result.keys(), key=result.get)`
+        """
+
+        if not elements:
+            elements = self.list_by_type({'Gl', 'Agl'})
+
+        sortierung = {}
+        for be in elements:
+            parents = [be] + list(self.list_parents(be))
+            keys = []
+            for e in reversed(parents):
+                node = self.nodes[e]
+                key = self.gleisschema.gleisname_sortkey(node.name)
+                keys.append(node.get('ordnung', 0))
+                keys.extend(key)
+            sortierung[be] = tuple(keys)
+        return sortierung
+
     def map_from_other_graph(self, original_element: BahnhofElement, original_graph: 'BahnhofGraph') -> Optional[BahnhofElement]:
         """
         Bahnhofelement von einem anderen Graphen übersetzen
@@ -591,6 +625,7 @@ class BahnhofGraph(nx.DiGraph):
         anl_label = BahnhofLabelType('Stw', anlageninfo.name)
         self.add_node(anl_label, typ=anl_label.typ, name=anl_label.name, auto=True, aid=anlageninfo.aid,
                       region=anlageninfo.region, build=anlageninfo.build, online=anlageninfo.online)
+        self.gleisschema = Gleisschema.regionsschema(anlageninfo.name, anlageninfo.region)
 
     def import_bahnsteiggraph(self,
                               bahnsteiggraph: BahnsteigGraph,
