@@ -754,7 +754,6 @@ class StreckenEditor(QObject):
             self.abwahl_model.remove(bst)
             self.auswahl_model.insert(index, bst)
 
-        #self._strecke_edited()
         self.ui.strecken_auswahl_list.clearSelection()
         self.ui.strecken_abwahl_list.clearSelection()
 
@@ -772,7 +771,6 @@ class StreckenEditor(QObject):
             if self.bahnhofgraph.has_node(bst):
                 self.abwahl_model.insert(0, bst)
 
-        #self._strecke_edited()
         self.ui.strecken_auswahl_list.clearSelection()
         self.ui.strecken_abwahl_list.clearSelection()
 
@@ -791,8 +789,6 @@ class StreckenEditor(QObject):
             self.auswahl_model.move(dst_row, bst)
             dst_row += 1
 
-        #self._strecke_edited()
-
     @Slot()
     def strecken_runter_button_clicked(self):
         try:
@@ -807,8 +803,6 @@ class StreckenEditor(QObject):
         for bst in move_items:
             self.auswahl_model.move(dst_row, bst)
             dst_row -= 1
-
-        #self._strecke_edited()
 
     @Slot()
     def strecken_loeschen_button_clicked(self):
@@ -872,7 +866,6 @@ class StreckenEditor(QObject):
                 break
         else:
             self.hauptstrecken_name = None
-        print(f"hauptstrecken_name: {self.hauptstrecken_name}")
 
     def get_hauptstrecke(self) -> Optional[str]:
         for name in self.alle_strecken:
