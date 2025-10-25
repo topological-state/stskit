@@ -182,8 +182,8 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
         if role == QtCore.Qt.EditRole:
             if col in {'Bs', 'Bft', 'Bf', 'Anst'}:
                 element = self.bahnhofgraph.find_superior(label, {col})
-                self.rename_element(col, element.name, value)
-                return True
+                result = self.rename_element(col, element.name, value)
+                return result
 
         elif role == QtCore.Qt.CheckStateRole:
             value = QtCore.Qt.CheckState(value)
@@ -296,7 +296,20 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
         Renames an element in the graph and updates the model accordingly.
 
         This is the public method that also signals the change to associated views.
+
+        Parameters:
+            level (str): The level at which to rename an element.
+            old (str): The old element name.
+            new (str): The new element name.
+
+        Returns:
+            bool: True if the operation was successful. False otherwise.
         """
+
+        if level not in {'Bs', 'Bft', 'Bf', 'Anst'}:
+            return False   # Ungültiger Level
+        if not new:
+            return False   # Leerer String
 
         old = BahnhofElement(level, old)
         new = BahnhofElement(level, new)
