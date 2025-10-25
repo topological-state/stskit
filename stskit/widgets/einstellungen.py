@@ -51,6 +51,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
             self.setWindowTitle(f"Einstellungen")
 
         self.bahnhof_editor = BahnhofEditor(zentrale.anlage, parent=self, ui=self.ui)
+        self.bahnhof_editor.changed_Event.register(self.bahnhof_changed)
         self.strecken_editor = StreckenEditor(zentrale.anlage, parent=self, ui=self.ui)
 
         self.zugschema = Zugschema()
@@ -76,6 +77,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
 
         self.bahnhof_editor.update_widgets()
         self.strecken_editor.update_widgets()
+        self.ui.status_label.setVisible(self.bahnhof_editor.changed)
 
         schemas = sorted(self.zugschema_namen_nach_titel.keys())
         self.ui.zugschema_name_combo.clear()
@@ -149,3 +151,6 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
             return True
 
         return False
+
+    def bahnhof_changed(self, *args, **kwargs):
+        self.ui.status_label.setVisible(self.bahnhof_editor.changed)

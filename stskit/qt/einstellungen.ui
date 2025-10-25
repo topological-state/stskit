@@ -374,7 +374,7 @@
                <item>
                 <widget class="QLabel" name="strecken_name_label">
                  <property name="text">
-                  <string>Strecke</string>
+                  <string>Strecken</string>
                  </property>
                 </widget>
                </item>
@@ -441,7 +441,7 @@
                  <item>
                   <widget class="QLabel" name="strecken_auswahl_label">
                    <property name="text">
-                    <string>Gewählte Stationen</string>
+                    <string>Stationen</string>
                    </property>
                    <property name="buddy">
                     <cstring>strecken_auswahl_list</cstring>
@@ -659,6 +659,13 @@
            </item>
           </layout>
          </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="status_label">
+         <property name="text">
+          <string>Änderungen an der Bahnhofkonfiguration vor dem Seitenwechsel bitte speichern!</string>
+         </property>
         </widget>
        </item>
        <item>

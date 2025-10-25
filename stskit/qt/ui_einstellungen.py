@@ -429,6 +429,11 @@ class Ui_EinstellungenWindow(object):
 
         self.verticalLayout_3.addWidget(self.tab_widget)
 
+        self.status_label = QLabel(self.widget)
+        self.status_label.setObjectName(u"status_label")
+
+        self.verticalLayout_3.addWidget(self.status_label)
+
         self.dialog_button_box = QDialogButtonBox(self.widget)
         self.dialog_button_box.setObjectName(u"dialog_button_box")
         self.dialog_button_box.setOrientation(Qt.Horizontal)
@@ -533,7 +538,7 @@ class Ui_EinstellungenWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.anst_rename_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Umbenennen", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.anst_tab), QCoreApplication.translate("EinstellungenWindow", u"Anschlussstellen", None))
-        self.strecken_name_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Strecke", None))
+        self.strecken_name_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Strecken", None))
 #if QT_CONFIG(tooltip)
         self.strecken_erstellen_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Neue Strecke", None))
 #endif // QT_CONFIG(tooltip)
@@ -543,7 +548,7 @@ class Ui_EinstellungenWindow(object):
         self.strecken_loeschen_button.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Strecke l\u00f6schen", None))
 #endif // QT_CONFIG(tooltip)
         self.strecken_loeschen_button.setText(QCoreApplication.translate("EinstellungenWindow", u"Entfernen", None))
-        self.strecken_auswahl_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Gew\u00e4hlte Stationen", None))
+        self.strecken_auswahl_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Stationen", None))
 #if QT_CONFIG(tooltip)
         self.strecken_auswahl_list.setToolTip(QCoreApplication.translate("EinstellungenWindow", u"Stationsliste der aktuellen Strecke", None))
 #endif // QT_CONFIG(tooltip)
@@ -580,5 +585,6 @@ class Ui_EinstellungenWindow(object):
         self.zugschema_details_label.setText(QCoreApplication.translate("EinstellungenWindow", u"Kategorien", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.zugschema_tab), QCoreApplication.translate("EinstellungenWindow", u"Zugschema", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.hilfe_tab), QCoreApplication.translate("EinstellungenWindow", u"Hilfe", None))
+        self.status_label.setText(QCoreApplication.translate("EinstellungenWindow", u"\u00c4nderungen an der Bahnhofkonfiguration vor dem Seitenwechsel bitte speichern!", None))
     # retranslateUi
 

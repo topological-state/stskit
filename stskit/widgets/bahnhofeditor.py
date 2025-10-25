@@ -8,6 +8,7 @@ from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import Slot, QAbstractTableModel, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QStringListModel, QObject
 from PySide6.QtWidgets import QWidget, QAbstractItemView
 
+from stskit.utils.observer import Observable
 from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement, BahnsteigGraphNode, BahnsteigGraphEdge, \
     BAHNHOFELEMENT_TYPEN
@@ -419,6 +420,7 @@ class BahnhofEditor(QObject):
         self.bahnhofgraph = anlage.bahnhofgraph.copy(as_view=False)
         self.parent = parent
         self.ui = ui
+        self.changed_Event = Observable(self)
         self.in_update = True
 
         self.gl_table_model = BahnhofEditorModel(self.bahnhofgraph)
@@ -601,6 +603,7 @@ class BahnhofEditor(QObject):
         self.anlage.liniengraph_konfigurieren()
         self.gl_table_model.changed = False
         self.agl_table_model.changed = False
+        self.changed_Event.notify()
 
     def reset(self):
         """
@@ -612,6 +615,7 @@ class BahnhofEditor(QObject):
         self.update_widgets()
         self.gl_table_model.changed = False
         self.agl_table_model.changed = False
+        self.changed_Event.notify()
 
     def get_gl_selection(self) -> Set[BahnhofElement]:
         """
@@ -895,12 +899,14 @@ class BahnhofEditor(QObject):
         if self.in_update:
             return
         self.update_lists_and_states(levels={'Bf', 'Bft', 'Bs', 'Gl'})
+        self.changed_Event.notify()
 
     @Slot()
     def agl_table_model_changed(self):
         if self.in_update:
             return
         self.update_lists_and_states(levels={'Anst', 'Agl'})
+        self.changed_Event.notify()
 
     @Slot()
     def bf_group_button_clicked(self):
