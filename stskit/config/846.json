@@ -1,290 +1,1492 @@
 {
-    "_aid": 846,
-    "_build": 5851,
-    "_name": "Nyon",
-    "_region": "Westschweiz",
-    "_version": 2,
-    "anschlussgruppen": {
-        "Eysins": {
-            "__class__": "Set",
-            "data": [
-                "Eysins"
-            ]
-        },
-        "GE": {
-            "__class__": "Set",
-            "data": [
-                "GE 240",
-                "GE 140",
-                "GE 340"
-            ]
-        },
-        "LON": {
-            "__class__": "Set",
-            "data": [
-                "LON 206",
-                "LON 106"
-            ]
-        }
+  "default": false,
+  "elemente": [
+    {
+      "name": "ALL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "ALL": {
-            "__class__": "Set",
-            "data": [
-                "ALL 2G",
-                "ALL 3",
-                "ALL 3G",
-                "ALL 1G",
-                "ALL 1",
-                "ALL 2"
-            ]
-        },
-        "CHY": {
-            "__class__": "Set",
-            "data": [
-                "CHY 2",
-                "CHY 4",
-                "CHY 3",
-                "CHY 1"
-            ]
-        },
-        "COP": {
-            "__class__": "Set",
-            "data": [
-                "COP 2",
-                "COP 1",
-                "COP 3"
-            ]
-        },
-        "CRGD": {
-            "__class__": "Set",
-            "data": [
-                "CRGD 2",
-                "CRGD 1"
-            ]
-        },
-        "ETOY": {
-            "__class__": "Set",
-            "data": [
-                "ETOY"
-            ]
-        },
-        "FOU": {
-            "__class__": "Set",
-            "data": [
-                "FOU 33",
-                "FOU 31",
-                "FOU 32"
-            ]
-        },
-        "GDBE": {
-            "__class__": "Set",
-            "data": [
-                "GDBE"
-            ]
-        },
-        "GIBU": {
-            "__class__": "Set",
-            "data": [
-                "GIBU 3",
-                "GIBU 1",
-                "GIBU 2"
-            ]
-        },
-        "GLA": {
-            "__class__": "Set",
-            "data": [
-                "GLA 3",
-                "GLA 1",
-                "GLA 2"
-            ]
-        },
-        "MIES": {
-            "__class__": "Set",
-            "data": [
-                "MIES 1",
-                "MIES 2"
-            ]
-        },
-        "MOR": {
-            "__class__": "Set",
-            "data": [
-                "MOR 4G",
-                "MOR 2",
-                "MOR 3",
-                "MOR 1G",
-                "MOR 1",
-                "MOR 4"
-            ]
-        },
-        "NY": {
-            "__class__": "Set",
-            "data": [
-                "NY 1G",
-                "NY 3G",
-                "NY 3",
-                "NY 1",
-                "NY 2G",
-                "NY 2"
-            ]
-        },
-        "PTC": {
-            "__class__": "Set",
-            "data": [
-                "PTC"
-            ]
-        },
-        "ROL": {
-            "__class__": "Set",
-            "data": [
-                "ROL 1",
-                "ROL 2"
-            ]
-        },
-        "STJ": {
-            "__class__": "Set",
-            "data": [
-                "STJ"
-            ]
-        },
-        "STP": {
-            "__class__": "Set",
-            "data": [
-                "STP 3G",
-                "STP 2G",
-                "STP 1G",
-                "STP 2",
-                "STP 1",
-                "STP 3"
-            ]
-        },
-        "TAN": {
-            "__class__": "Set",
-            "data": [
-                "TAN"
-            ]
-        },
-        "TUI": {
-            "__class__": "Set",
-            "data": [
-                "TUI"
-            ]
-        },
-        "VSX": {
-            "__class__": "Set",
-            "data": [
-                "VSX 1",
-                "VSX 3",
-                "VSX 2"
-            ]
-        }
+    {
+      "name": "CHY",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "GE-LON",
-    "sektoren": {
-        "ALL 1": {
-            "__class__": "Set",
-            "data": [
-                "ALL 1G",
-                "ALL 1"
-            ]
-        },
-        "ALL 2": {
-            "__class__": "Set",
-            "data": [
-                "ALL 2G",
-                "ALL 2"
-            ]
-        },
-        "ALL 3": {
-            "__class__": "Set",
-            "data": [
-                "ALL 3G",
-                "ALL 3"
-            ]
-        },
-        "MOR 1": {
-            "__class__": "Set",
-            "data": [
-                "MOR 1G",
-                "MOR 1"
-            ]
-        },
-        "MOR 4": {
-            "__class__": "Set",
-            "data": [
-                "MOR 4G",
-                "MOR 4"
-            ]
-        },
-        "NY 1": {
-            "__class__": "Set",
-            "data": [
-                "NY 1G",
-                "NY 1"
-            ]
-        },
-        "NY 2": {
-            "__class__": "Set",
-            "data": [
-                "NY 2",
-                "NY 2G"
-            ]
-        },
-        "NY 3": {
-            "__class__": "Set",
-            "data": [
-                "NY 3",
-                "NY 3G"
-            ]
-        },
-        "STP 1": {
-            "__class__": "Set",
-            "data": [
-                "STP 1",
-                "STP 1G"
-            ]
-        },
-        "STP 2": {
-            "__class__": "Set",
-            "data": [
-                "STP 2",
-                "STP 2G"
-            ]
-        },
-        "STP 3": {
-            "__class__": "Set",
-            "data": [
-                "STP 3G",
-                "STP 3"
-            ]
-        }
+    {
+      "name": "COP",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "strecken": {
-        "GE-LON": [
-            "GE",
-            "CHY",
-            "TUI",
-            "VSX",
-            "GDBE",
-            "CRGD",
-            "VSX",
-            "PTC",
-            "MIES",
-            "TAN",
-            "COP",
-            "FOU",
-            "NY",
-            "GLA",
-            "GIBU",
-            "ROL",
-            "ALL",
-            "ETOY",
-            "STP",
-            "MOR",
-            "STJ",
-            "LON"
-        ]
+    {
+      "name": "CRGD",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": []
+    {
+      "name": "ETOY",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FOU",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GDBE",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GIBU",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GLA",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MIES",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MOR",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "NY",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "PTC",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ROL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "STJ",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "STP",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "TAN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "TUI",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "VSX",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ALL 83",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALL"
+    },
+    {
+      "name": "ALL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALL"
+    },
+    {
+      "name": "ALL 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALL 1",
+      "gleise": 1
+    },
+    {
+      "name": "ALL 1G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALL 1",
+      "gleise": 1
+    },
+    {
+      "name": "ALL 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALL 3",
+      "gleise": 1
+    },
+    {
+      "name": "ALL 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALL 2",
+      "gleise": 1
+    },
+    {
+      "name": "ALL 2G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALL 2",
+      "gleise": 1
+    },
+    {
+      "name": "ALL 83",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALL 83",
+      "gleise": 1
+    },
+    {
+      "name": "ALL 83",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALL 83",
+      "gleise": 1
+    },
+    {
+      "name": "CHY",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHY"
+    },
+    {
+      "name": "CHY 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHY 3",
+      "gleise": 1
+    },
+    {
+      "name": "CHY 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHY 4",
+      "gleise": 1
+    },
+    {
+      "name": "CHY 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHY 2",
+      "gleise": 1
+    },
+    {
+      "name": "CHY 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHY 1",
+      "gleise": 1
+    },
+    {
+      "name": "COP",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COP"
+    },
+    {
+      "name": "COP 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COP 3",
+      "gleise": 1
+    },
+    {
+      "name": "COP 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COP 2",
+      "gleise": 1
+    },
+    {
+      "name": "COP 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COP 1",
+      "gleise": 1
+    },
+    {
+      "name": "CRGD",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CRGD"
+    },
+    {
+      "name": "CRGD 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CRGD 1",
+      "gleise": 1
+    },
+    {
+      "name": "CRGD 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CRGD 2",
+      "gleise": 1
+    },
+    {
+      "name": "ETOY",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ETOY"
+    },
+    {
+      "name": "ETOY",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ETOY",
+      "gleise": 1
+    },
+    {
+      "name": "ETOY",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ETOY",
+      "gleise": 1
+    },
+    {
+      "name": "FOU",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FOU"
+    },
+    {
+      "name": "FOU 33",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FOU 33",
+      "gleise": 1
+    },
+    {
+      "name": "FOU 31",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FOU 31",
+      "gleise": 1
+    },
+    {
+      "name": "FOU 32",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FOU 32",
+      "gleise": 1
+    },
+    {
+      "name": "GDBE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GDBE"
+    },
+    {
+      "name": "GDBE",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GDBE",
+      "gleise": 1
+    },
+    {
+      "name": "GDBE",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GDBE",
+      "gleise": 1
+    },
+    {
+      "name": "GIBU",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIBU"
+    },
+    {
+      "name": "GIBU 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIBU 1",
+      "gleise": 1
+    },
+    {
+      "name": "GIBU 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIBU 3",
+      "gleise": 1
+    },
+    {
+      "name": "GIBU 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIBU 2",
+      "gleise": 1
+    },
+    {
+      "name": "GLA 4",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLA"
+    },
+    {
+      "name": "GLA 5",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLA"
+    },
+    {
+      "name": "GLA",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLA"
+    },
+    {
+      "name": "GLA 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLA 1",
+      "gleise": 1
+    },
+    {
+      "name": "GLA 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLA 3",
+      "gleise": 1
+    },
+    {
+      "name": "GLA 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLA 4",
+      "gleise": 1
+    },
+    {
+      "name": "GLA 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLA 4",
+      "gleise": 1
+    },
+    {
+      "name": "GLA 5",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLA 5",
+      "gleise": 1
+    },
+    {
+      "name": "GLA 5",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLA 5",
+      "gleise": 1
+    },
+    {
+      "name": "MIES",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MIES"
+    },
+    {
+      "name": "MIES 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MIES 1",
+      "gleise": 1
+    },
+    {
+      "name": "MIES 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MIES 2",
+      "gleise": 1
+    },
+    {
+      "name": "MOR",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOR"
+    },
+    {
+      "name": "MOR 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOR 2",
+      "gleise": 1
+    },
+    {
+      "name": "MOR 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOR 3",
+      "gleise": 1
+    },
+    {
+      "name": "MOR 4G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOR 4",
+      "gleise": 1
+    },
+    {
+      "name": "MOR 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOR 4",
+      "gleise": 1
+    },
+    {
+      "name": "MOR 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOR 1",
+      "gleise": 1
+    },
+    {
+      "name": "NY",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NY"
+    },
+    {
+      "name": "NY 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NY 1",
+      "gleise": 1
+    },
+    {
+      "name": "NY 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NY 2",
+      "gleise": 1
+    },
+    {
+      "name": "NY 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NY 3",
+      "gleise": 1
+    },
+    {
+      "name": "PTC",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PTC"
+    },
+    {
+      "name": "PTC",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PTC",
+      "gleise": 1
+    },
+    {
+      "name": "PTC",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PTC",
+      "gleise": 1
+    },
+    {
+      "name": "ROL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROL"
+    },
+    {
+      "name": "ROL 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROL 1",
+      "gleise": 1
+    },
+    {
+      "name": "ROL 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROL 2",
+      "gleise": 1
+    },
+    {
+      "name": "STJ",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STJ"
+    },
+    {
+      "name": "STJ",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STJ",
+      "gleise": 1
+    },
+    {
+      "name": "STJ",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STJ",
+      "gleise": 1
+    },
+    {
+      "name": "STP",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STP"
+    },
+    {
+      "name": "STP 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STP 2",
+      "gleise": 1
+    },
+    {
+      "name": "STP 2G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STP 2",
+      "gleise": 1
+    },
+    {
+      "name": "STP 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STP 1",
+      "gleise": 1
+    },
+    {
+      "name": "STP 1G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STP 1",
+      "gleise": 1
+    },
+    {
+      "name": "STP 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STP 3",
+      "gleise": 1
+    },
+    {
+      "name": "STP 3G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STP 3",
+      "gleise": 1
+    },
+    {
+      "name": "TAN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TAN"
+    },
+    {
+      "name": "TAN",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TAN",
+      "gleise": 1
+    },
+    {
+      "name": "TAN",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TAN",
+      "gleise": 1
+    },
+    {
+      "name": "TUI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TUI"
+    },
+    {
+      "name": "TUI",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TUI",
+      "gleise": 1
+    },
+    {
+      "name": "TUI",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TUI",
+      "gleise": 1
+    },
+    {
+      "name": "VSX",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VSX"
+    },
+    {
+      "name": "VSX 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VSX 3",
+      "gleise": 1
+    },
+    {
+      "name": "VSX 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VSX 1",
+      "gleise": 1
+    },
+    {
+      "name": "VSX 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VSX 2",
+      "gleise": 1
+    },
+    {
+      "name": "GE",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GLA",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MOR",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Eysins",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LON",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GE 443",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE",
+      "gleise": 1
+    },
+    {
+      "name": "GE 343",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE",
+      "gleise": 1
+    },
+    {
+      "name": "GE 243",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GE",
+      "gleise": 1
+    },
+    {
+      "name": "GLA 54",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLA",
+      "gleise": 1
+    },
+    {
+      "name": "MOR 24",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOR",
+      "gleise": 1
+    },
+    {
+      "name": "Eysins",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Eysins",
+      "gleise": 1
+    },
+    {
+      "name": "LON 406",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LON",
+      "gleise": 1
+    },
+    {
+      "name": "LON 306",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LON",
+      "gleise": 1
+    },
+    {
+      "name": "ALL 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALL",
+      "gleise": 1
+    },
+    {
+      "name": "ALL 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALL",
+      "gleise": 1
+    },
+    {
+      "name": "ALL 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALL",
+      "gleise": 1
+    },
+    {
+      "name": "CHY 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHY",
+      "gleise": 1
+    },
+    {
+      "name": "CHY 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHY",
+      "gleise": 1
+    },
+    {
+      "name": "CHY 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHY",
+      "gleise": 1
+    },
+    {
+      "name": "CHY 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHY",
+      "gleise": 1
+    },
+    {
+      "name": "COP 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COP",
+      "gleise": 1
+    },
+    {
+      "name": "COP 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COP",
+      "gleise": 1
+    },
+    {
+      "name": "COP 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COP",
+      "gleise": 1
+    },
+    {
+      "name": "CRGD 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CRGD",
+      "gleise": 1
+    },
+    {
+      "name": "CRGD 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CRGD",
+      "gleise": 1
+    },
+    {
+      "name": "FOU 33",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FOU",
+      "gleise": 1
+    },
+    {
+      "name": "FOU 31",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FOU",
+      "gleise": 1
+    },
+    {
+      "name": "FOU 32",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FOU",
+      "gleise": 1
+    },
+    {
+      "name": "GIBU 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIBU",
+      "gleise": 1
+    },
+    {
+      "name": "GIBU 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIBU",
+      "gleise": 1
+    },
+    {
+      "name": "GIBU 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GIBU",
+      "gleise": 1
+    },
+    {
+      "name": "GLA 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLA",
+      "gleise": 1
+    },
+    {
+      "name": "GLA 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLA",
+      "gleise": 1
+    },
+    {
+      "name": "MIES 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MIES",
+      "gleise": 1
+    },
+    {
+      "name": "MIES 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MIES",
+      "gleise": 1
+    },
+    {
+      "name": "MOR 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOR",
+      "gleise": 1
+    },
+    {
+      "name": "MOR 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOR",
+      "gleise": 1
+    },
+    {
+      "name": "MOR 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOR",
+      "gleise": 1
+    },
+    {
+      "name": "MOR 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOR",
+      "gleise": 1
+    },
+    {
+      "name": "NY 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NY",
+      "gleise": 1
+    },
+    {
+      "name": "NY 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NY",
+      "gleise": 1
+    },
+    {
+      "name": "NY 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NY",
+      "gleise": 1
+    },
+    {
+      "name": "ROL 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROL",
+      "gleise": 1
+    },
+    {
+      "name": "ROL 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ROL",
+      "gleise": 1
+    },
+    {
+      "name": "STP 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STP",
+      "gleise": 1
+    },
+    {
+      "name": "STP 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STP",
+      "gleise": 1
+    },
+    {
+      "name": "STP 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STP",
+      "gleise": 1
+    },
+    {
+      "name": "VSX 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VSX",
+      "gleise": 1
+    },
+    {
+      "name": "VSX 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VSX",
+      "gleise": 1
+    },
+    {
+      "name": "VSX 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VSX",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "GE-LON",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst GE",
+        "Bf CHY",
+        "Bf TUI",
+        "Bf GDBE",
+        "Bf CRGD",
+        "Bf VSX",
+        "Bf PTC",
+        "Bf MIES",
+        "Bf TAN",
+        "Bf COP",
+        "Bf FOU",
+        "Bf NY",
+        "Bf GLA",
+        "Bf GIBU",
+        "Bf ROL",
+        "Bf ALL",
+        "Bf ETOY",
+        "Bf STP",
+        "Bf MOR",
+        "Bf STJ",
+        "Anst LON"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 846,
+  "_build": 5851,
+  "_name": "Nyon",
+  "_region": "Westschweiz",
+  "_version": 3
 }

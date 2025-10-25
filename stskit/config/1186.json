@@ -1,199 +1,965 @@
 {
-    "_aid": 1186,
-    "_build": 5851,
-    "_name": "Uppsala",
-    "_region": "Sverige",
-    "_version": 2,
-    "anschlussgruppen": {
-        "Arlanda": {
-            "__class__": "Set",
-            "data": [
-                "Arlanda"
-            ]
-        },
-        "M\u00e4rsta": {
-            "__class__": "Set",
-            "data": [
-                "M\u00e4rsta"
-            ]
-        },
-        "Sala": {
-            "__class__": "Set",
-            "data": [
-                "Sala"
-            ]
-        },
-        "Sidosp\u00e5r N": {
-            "__class__": "Set",
-            "data": [
-                "Sidosp\u00e5r N"
-            ]
-        },
-        "Sidosp\u00e5r S": {
-            "__class__": "Set",
-            "data": [
-                "Sidosp\u00e5r S"
-            ]
-        },
-        "Tierp": {
-            "__class__": "Set",
-            "data": [
-                "Tierp"
-            ]
-        },
-        "prod": {
-            "__class__": "Set",
-            "data": [
-                "prod"
-            ]
-        }
+  "default": false,
+  "elemente": [
+    {
+      "name": "Arlanda",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "Bna": {
-            "__class__": "Set",
-            "data": [
-                "Bna 1",
-                "Bna 2"
-            ]
-        },
-        "Eby": {
-            "__class__": "Set",
-            "data": [
-                "Eby"
-            ]
-        },
-        "Kn": {
-            "__class__": "Set",
-            "data": [
-                "Kn 2",
-                "Kn 1 Gt",
-                "Kn 1",
-                "Kn 3",
-                "Kn 2 Gt"
-            ]
-        },
-        "Myn": {
-            "__class__": "Set",
-            "data": [
-                "Myn"
-            ]
-        },
-        "Sam": {
-            "__class__": "Set",
-            "data": [
-                "Sam"
-            ]
-        },
-        "S\u00e4y": {
-            "__class__": "Set",
-            "data": [
-                "S\u00e4y"
-            ]
-        },
-        "U": {
-            "__class__": "Set",
-            "data": [
-                "U 12",
-                "U 5",
-                "U 6",
-                "U 14",
-                "U 2",
-                "U 1",
-                "U 1/2",
-                "U 11",
-                "U 3",
-                "U 7",
-                "U 4",
-                "U 1N",
-                "U 8",
-                "U 13",
-                "U 6N"
-            ]
-        },
-        "Una": {
-            "__class__": "Set",
-            "data": [
-                "Una 3",
-                "Una 4"
-            ]
-        }
+    {
+      "name": "Bna",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "Tierp-Arlanda",
-    "sektoren": {
-        "Kn 1": {
-            "__class__": "Set",
-            "data": [
-                "Kn 1 Gt",
-                "Kn 1"
-            ]
-        },
-        "Kn 2": {
-            "__class__": "Set",
-            "data": [
-                "Kn 2",
-                "Kn 2 Gt"
-            ]
-        },
-        "U 1": {
-            "__class__": "Set",
-            "data": [
-                "U 1N",
-                "U 1"
-            ]
-        },
-        "U 6": {
-            "__class__": "Set",
-            "data": [
-                "U 6",
-                "U 6N"
-            ]
-        }
+    {
+      "name": "Eby",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "strecken": {
-        "Sala-Arlanda": [
-            "Sala",
-            "Bna",
-            "Una",
-            "U",
-            "S\u00e4y",
-            "Eby",
-            "Kn",
-            "Myn",
-            "Arlanda"
-        ],
-        "Sala-M\u00e4rsta": [
-            "Sala",
-            "Bna",
-            "Una",
-            "U",
-            "S\u00e4y",
-            "Eby",
-            "Kn",
-            "Myn",
-            "M\u00e4rsta"
-        ],
-        "Tierp-Arlanda": [
-            "Tierp",
-            "Sam",
-            "U",
-            "S\u00e4y",
-            "Eby",
-            "Kn",
-            "Myn",
-            "Arlanda"
-        ],
-        "Tierp-M\u00e4rsta": [
-            "Tierp",
-            "Sam",
-            "U",
-            "S\u00e4y",
-            "Eby",
-            "Kn",
-            "Myn",
-            "M\u00e4rsta"
-        ]
+    {
+      "name": "Kn",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": [],
-    "zugschema": "schweden"
+    {
+      "name": "Myn",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Märsta",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Sala",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Sam",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Säy",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "U",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Una",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Arlanda",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Arlanda"
+    },
+    {
+      "name": "Arlanda",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Arlanda",
+      "gleise": 1
+    },
+    {
+      "name": "Arlanda",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Arlanda",
+      "gleise": 1
+    },
+    {
+      "name": "Bna",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bna"
+    },
+    {
+      "name": "Bna 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bna 2",
+      "gleise": 1
+    },
+    {
+      "name": "Bna 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bna 1",
+      "gleise": 1
+    },
+    {
+      "name": "Eby",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Eby"
+    },
+    {
+      "name": "Eby",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Eby",
+      "gleise": 1
+    },
+    {
+      "name": "Eby",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Eby",
+      "gleise": 1
+    },
+    {
+      "name": "Kn",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kn"
+    },
+    {
+      "name": "Kn 1 Gt",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kn 1",
+      "gleise": 1
+    },
+    {
+      "name": "Kn 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kn 1",
+      "gleise": 1
+    },
+    {
+      "name": "Kn 2 Gt",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kn 2",
+      "gleise": 1
+    },
+    {
+      "name": "Kn 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kn 2",
+      "gleise": 1
+    },
+    {
+      "name": "Kn 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kn 3",
+      "gleise": 1
+    },
+    {
+      "name": "Myn",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Myn"
+    },
+    {
+      "name": "Myn",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Myn",
+      "gleise": 1
+    },
+    {
+      "name": "Myn",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Myn",
+      "gleise": 1
+    },
+    {
+      "name": "Märsta",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Märsta"
+    },
+    {
+      "name": "Märsta",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Märsta",
+      "gleise": 1
+    },
+    {
+      "name": "Märsta",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Märsta",
+      "gleise": 1
+    },
+    {
+      "name": "Sala",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sala"
+    },
+    {
+      "name": "Sala",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sala",
+      "gleise": 1
+    },
+    {
+      "name": "Sala",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sala",
+      "gleise": 1
+    },
+    {
+      "name": "Sam",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sam"
+    },
+    {
+      "name": "Sam",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sam",
+      "gleise": 1
+    },
+    {
+      "name": "Sam",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sam",
+      "gleise": 1
+    },
+    {
+      "name": "Säy",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Säy"
+    },
+    {
+      "name": "Säy",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Säy",
+      "gleise": 1
+    },
+    {
+      "name": "Säy",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Säy",
+      "gleise": 1
+    },
+    {
+      "name": "U",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U"
+    },
+    {
+      "name": "U 7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 7",
+      "gleise": 1
+    },
+    {
+      "name": "U 6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 6",
+      "gleise": 1
+    },
+    {
+      "name": "U 6N",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 6",
+      "gleise": 1
+    },
+    {
+      "name": "U 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 1",
+      "gleise": 1
+    },
+    {
+      "name": "U 1N",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 1",
+      "gleise": 1
+    },
+    {
+      "name": "U 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 5",
+      "gleise": 1
+    },
+    {
+      "name": "U 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 2",
+      "gleise": 1
+    },
+    {
+      "name": "U 8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 8",
+      "gleise": 1
+    },
+    {
+      "name": "U 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 3",
+      "gleise": 1
+    },
+    {
+      "name": "U 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 4",
+      "gleise": 1
+    },
+    {
+      "name": "U 12",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 12",
+      "gleise": 1
+    },
+    {
+      "name": "U 14",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 14",
+      "gleise": 1
+    },
+    {
+      "name": "U 13",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 13",
+      "gleise": 1
+    },
+    {
+      "name": "U 11",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 11",
+      "gleise": 1
+    },
+    {
+      "name": "Una",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Una"
+    },
+    {
+      "name": "Una 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Una 4",
+      "gleise": 1
+    },
+    {
+      "name": "Una 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Una 3",
+      "gleise": 1
+    },
+    {
+      "name": "Arlanda",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Märsta",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Sala",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Sidospår S",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "prod",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Tierp",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Sidospår N",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Arlanda",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Arlanda",
+      "gleise": 2
+    },
+    {
+      "name": "Märsta",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Märsta",
+      "gleise": 2
+    },
+    {
+      "name": "Sala",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sala",
+      "gleise": 1
+    },
+    {
+      "name": "Sidospår S",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sidospår S",
+      "gleise": 1
+    },
+    {
+      "name": "prod",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "prod",
+      "gleise": 1
+    },
+    {
+      "name": "Tierp",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tierp",
+      "gleise": 2
+    },
+    {
+      "name": "Sidospår N",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sidospår N",
+      "gleise": 1
+    },
+    {
+      "name": "Bna 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bna",
+      "gleise": 1
+    },
+    {
+      "name": "Bna 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bna",
+      "gleise": 1
+    },
+    {
+      "name": "Kn 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kn",
+      "gleise": 1
+    },
+    {
+      "name": "Kn 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kn",
+      "gleise": 1
+    },
+    {
+      "name": "Kn 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kn",
+      "gleise": 1
+    },
+    {
+      "name": "U 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 12",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 14",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 13",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 1/2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U",
+      "gleise": 1
+    },
+    {
+      "name": "U 1/2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "U 1/2",
+      "gleise": 1
+    },
+    {
+      "name": "Una 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Una",
+      "gleise": 1
+    },
+    {
+      "name": "Una 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Una",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Sala-Arlanda",
+      "ordnung": 106,
+      "auto": true,
+      "stationen": [
+        "Anst Sala",
+        "Bf Bna",
+        "Bf Una",
+        "Bf U",
+        "Bf Kn",
+        "Bf Myn",
+        "Bf Arlanda",
+        "Anst Arlanda"
+      ]
+    },
+    {
+      "name": "Sala-Märsta",
+      "ordnung": 107,
+      "auto": true,
+      "stationen": [
+        "Anst Sala",
+        "Bf Bna",
+        "Bf Una",
+        "Bf U",
+        "Bf Kn",
+        "Bf Myn",
+        "Bf Märsta",
+        "Anst Märsta"
+      ]
+    },
+    {
+      "name": "Tierp-Arlanda",
+      "ordnung": 109,
+      "auto": true,
+      "stationen": [
+        "Anst Tierp",
+        "Bf Sam",
+        "Bf U",
+        "Bf Kn",
+        "Bf Myn",
+        "Bf Arlanda",
+        "Anst Arlanda"
+      ]
+    },
+    {
+      "name": "Tierp-Märsta",
+      "ordnung": 110,
+      "auto": true,
+      "stationen": [
+        "Anst Tierp",
+        "Bf Sam",
+        "Bf U",
+        "Bf Kn",
+        "Bf Myn",
+        "Bf Märsta",
+        "Anst Märsta"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweden",
+  "_aid": 1186,
+  "_build": 5851,
+  "_name": "Uppsala",
+  "_region": "Sverige",
+  "_version": 3
 }

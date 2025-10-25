@@ -1,129 +1,688 @@
 {
-    "_aid": 658,
-    "_build": 5851,
-    "_name": "Lausanne",
-    "_region": "Westschweiz",
-    "_version": 2,
-    "anschlussgruppen": {
-        "CU": {
-            "__class__": "Set",
-            "data": [
-                "CU 102",
-                "CU 202"
-            ]
-        },
-        "D-Gruppe": {
-            "__class__": "Set",
-            "data": [
-                "D-Gruppe"
-            ]
-        },
-        "GRV": {
-            "__class__": "Set",
-            "data": [
-                "GRV 805",
-                "GRV 905"
-            ]
-        },
-        "J-Gruppe": {
-            "__class__": "Set",
-            "data": [
-                "J-Gruppe"
-            ]
-        },
-        "LSSB": {
-            "__class__": "Set",
-            "data": [
-                "LSSB"
-            ]
-        },
-        "P-Gruppe": {
-            "__class__": "Set",
-            "data": [
-                "P-Gruppe"
-            ]
-        },
-        "REN": {
-            "__class__": "Set",
-            "data": [
-                "REN 812",
-                "REN 814",
-                "REN 811",
-                "REN 815",
-                "REN 813"
-            ]
-        }
+  "default": false,
+  "elemente": [
+    {
+      "name": "BOSS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "BOSS": {
-            "__class__": "Set",
-            "data": [
-                "BOSS"
-            ]
-        },
-        "CVN": {
-            "__class__": "Set",
-            "data": [
-                "CVN 2",
-                "CVN 1"
-            ]
-        },
-        "LS": {
-            "__class__": "Set",
-            "data": [
-                "LS 4",
-                "LS 2",
-                "LS 6",
-                "LS 5",
-                "LS 8",
-                "LS 3",
-                "LS 1",
-                "LS 9",
-                "LS 70",
-                "LS 7",
-                "LS T4",
-                "LS T3"
-            ]
-        },
-        "PRMA": {
-            "__class__": "Set",
-            "data": [
-                "PRMA"
-            ]
-        },
-        "PU": {
-            "__class__": "Set",
-            "data": [
-                "PU"
-            ]
-        },
-        "PUN": {
-            "__class__": "Set",
-            "data": [
-                "PUN"
-            ]
-        }
+    {
+      "name": "CVN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "REN-GRV",
-    "sektoren": {},
-    "strecken": {
-        "REN-CU": [
-            "REN",
-            "PRMA",
-            "LS",
-            "PU",
-            "CU"
-        ],
-        "REN-GRV": [
-            "REN",
-            "PRMA",
-            "LS",
-            "PUN",
-            "CVN",
-            "BOSS",
-            "GRV"
-        ]
+    {
+      "name": "LS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": []
+    {
+      "name": "PRMA",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "PU",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "PUN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BOSS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOSS"
+    },
+    {
+      "name": "BOSS",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOSS",
+      "gleise": 1
+    },
+    {
+      "name": "BOSS",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOSS",
+      "gleise": 1
+    },
+    {
+      "name": "CVN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CVN"
+    },
+    {
+      "name": "CVN 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CVN 1",
+      "gleise": 1
+    },
+    {
+      "name": "CVN 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CVN 2",
+      "gleise": 1
+    },
+    {
+      "name": "LS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS"
+    },
+    {
+      "name": "LS 9",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "S",
+      "stamm": "LS 9",
+      "gleise": 1
+    },
+    {
+      "name": "LS 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS 5",
+      "gleise": 1
+    },
+    {
+      "name": "LS 7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS 7",
+      "gleise": 1
+    },
+    {
+      "name": "LS 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS 4",
+      "gleise": 1
+    },
+    {
+      "name": "LS 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS 2",
+      "gleise": 1
+    },
+    {
+      "name": "LS 70",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS 70",
+      "gleise": 1
+    },
+    {
+      "name": "LS 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS 3",
+      "gleise": 1
+    },
+    {
+      "name": "LS 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS 1",
+      "gleise": 1
+    },
+    {
+      "name": "LS 6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS 6",
+      "gleise": 1
+    },
+    {
+      "name": "LS 8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS 8",
+      "gleise": 1
+    },
+    {
+      "name": "LS T4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS T4",
+      "gleise": 1
+    },
+    {
+      "name": "LS T3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS T3",
+      "gleise": 1
+    },
+    {
+      "name": "PRMA",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PRMA"
+    },
+    {
+      "name": "PRMA",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PRMA",
+      "gleise": 1
+    },
+    {
+      "name": "PRMA",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PRMA",
+      "gleise": 1
+    },
+    {
+      "name": "PU",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PU"
+    },
+    {
+      "name": "PU",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PU",
+      "gleise": 1
+    },
+    {
+      "name": "PU",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PU",
+      "gleise": 1
+    },
+    {
+      "name": "PUN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUN"
+    },
+    {
+      "name": "PUN",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUN",
+      "gleise": 1
+    },
+    {
+      "name": "PUN",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PUN",
+      "gleise": 1
+    },
+    {
+      "name": "GRV",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LSSB",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "REN",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "P-Gruppe",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "CU",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "J-Gruppe",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "D-Gruppe",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GRV 805",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRV",
+      "gleise": 1
+    },
+    {
+      "name": "GRV 905",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRV",
+      "gleise": 1
+    },
+    {
+      "name": "LSSB",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LSSB",
+      "gleise": 1
+    },
+    {
+      "name": "REN 815",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REN",
+      "gleise": 1
+    },
+    {
+      "name": "REN 812",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REN",
+      "gleise": 1
+    },
+    {
+      "name": "REN 813",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REN",
+      "gleise": 1
+    },
+    {
+      "name": "REN 811",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REN",
+      "gleise": 1
+    },
+    {
+      "name": "REN 814",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REN",
+      "gleise": 1
+    },
+    {
+      "name": "P-Gruppe",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "P-Gruppe",
+      "gleise": 1
+    },
+    {
+      "name": "CU 102",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CU",
+      "gleise": 1
+    },
+    {
+      "name": "CU 202",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CU",
+      "gleise": 1
+    },
+    {
+      "name": "J-Gruppe",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "J-Gruppe",
+      "gleise": 1
+    },
+    {
+      "name": "D-Gruppe",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "D-Gruppe",
+      "gleise": 1
+    },
+    {
+      "name": "CVN 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CVN",
+      "gleise": 1
+    },
+    {
+      "name": "CVN 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CVN",
+      "gleise": 1
+    },
+    {
+      "name": "LS 9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS",
+      "gleise": 1
+    },
+    {
+      "name": "LS 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS",
+      "gleise": 1
+    },
+    {
+      "name": "LS 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS",
+      "gleise": 1
+    },
+    {
+      "name": "LS 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS",
+      "gleise": 1
+    },
+    {
+      "name": "LS 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS",
+      "gleise": 1
+    },
+    {
+      "name": "LS 70",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS",
+      "gleise": 1
+    },
+    {
+      "name": "LS 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS",
+      "gleise": 1
+    },
+    {
+      "name": "LS 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS",
+      "gleise": 1
+    },
+    {
+      "name": "LS 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS",
+      "gleise": 1
+    },
+    {
+      "name": "LS 8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS",
+      "gleise": 1
+    },
+    {
+      "name": "LS T4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS",
+      "gleise": 1
+    },
+    {
+      "name": "LS T3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LS",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "REN-CU",
+      "ordnung": 116,
+      "auto": true,
+      "stationen": [
+        "Anst REN",
+        "Bf PRMA",
+        "Bf LS",
+        "Bf PU",
+        "Anst CU"
+      ]
+    },
+    {
+      "name": "REN-GRV",
+      "ordnung": 117,
+      "auto": true,
+      "stationen": [
+        "Anst REN",
+        "Bf PRMA",
+        "Bf LS",
+        "Bf PUN",
+        "Bf CVN",
+        "Bf BOSS",
+        "Anst GRV"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 658,
+  "_build": 5851,
+  "_name": "Lausanne",
+  "_region": "Westschweiz",
+  "_version": 3
 }

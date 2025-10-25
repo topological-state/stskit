@@ -1,207 +1,1623 @@
 {
-    "_aid": 565,
-    "_build": 5847,
-    "_name": "Yverdon-les-Bains",
-    "_region": "Westschweiz",
-    "_version": 2,
-    "zugschema": "schweiz",
-    "anschlussgruppen": {
-        "BY": {
-            "__class__": "Set",
-            "data": [
-                "BY 506",
-                "BY 606"
-            ]
-        },
-        "D-Gruppe": {
-            "__class__": "Set",
-            "data": [
-                "D-Gruppe"
-            ]
-        },
-        "DAIL E/A": {
-            "__class__": "Set",
-            "data": ["DAIL 45"]
-        },
-        "ECL E/A": {
-            "__class__": "Set",
-            "data": [
-                "ECL 37",
-                "ECL 38"
-            ]
-        },
-        "Estavayer": {
-            "__class__": "Set",
-            "data": [
-                "Estavayer"
-            ]
-        },
-        "GOR": {
-            "__class__": "Set",
-            "data": [
-                "GOR 213",
-                "GOR 113"
-            ]
-        },
-        "LSA": {
-            "__class__": "Set",
-            "data": [
-                "LSA 213",
-                "LSA 113"
-            ]
-        },
-        "ONB Industrie": {
-            "__class__": "Set",
-            "data": [
-                "ONB Industrie"
-            ]
-        }
+  "default": true,
+  "elemente": [
+    {
+      "name": "BAV",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "BAV": {
-            "__class__": "Set",
-            "data": [
-                "BAV"
-            ]
-        },
-        "CC": {
-            "__class__": "Set",
-            "data": [
-                "CC"
-            ]
-        },
-        "CHP": {
-            "__class__": "Set",
-            "data": [
-                "CHP"
-            ]
-        },
-        "CHS": {
-            "__class__": "Set",
-            "data": [
-                "CHS 2",
-                "CHS 1"
-            ]
-        },
-        "CHV": {
-            "__class__": "Set",
-            "data": [
-                "CHV 2",
-                "CHV 3",
-                "CHV 1"
-            ]
-        },
-        "COS": {
-            "__class__": "Set",
-            "data": [
-                "COS 2",
-                "COS 1",
-                "COS 3"
-            ]
-        },
-        "DAIL": {
-            "__class__": "Set",
-            "data": [
-                "DAIL 4",
-                "DAIL 3"
-            ]
-        },
-        "ECL": {
-            "__class__": "Set",
-            "data": [
-                "ECL 2",
-                "ECL 1",
-                "ECL 36"
-            ]
-        },
-        "EP": {
-            "__class__": "Set",
-            "data": [
-                "EP 1",
-                "EP 2"
-            ]
-        },
-        "ESP": {
-            "__class__": "Set",
-            "data": [
-                "ESP"
-            ]
-        },
-        "GRS": {
-            "__class__": "Set",
-            "data": [
-                "GRS 2",
-                "GRS 1",
-                "GRS 3"
-            ]
-        },
-        "ONB": {
-            "__class__": "Set",
-            "data": [
-                "ONB 5",
-                "ONB 3",
-                "ONB 4"
-            ]
-        },
-        "YND": {
-            "__class__": "Set",
-            "data": [
-                "YND 3",
-                "YND 2"
-            ]
-        },
-        "YV": {
-            "__class__": "Set",
-            "data": [
-                "YV 2",
-                "YV 3",
-                "YV 1",
-                "YV 43",
-                "YV 4",
-                "YV 14"
-            ]
-        }
+    {
+      "name": "CC",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "sektoren": {},
-    "hauptstrecke": "BY-GOR",
-    "strecken": {
-        "BY-GOR": [
-            "BY",
-            "COS",
-            "ECL",
-            "BAV",
-            "ESP",
-            "EP",
-            "YV",
-            "GRS",
-            "ONB",
-            "CC",
-            "GOR"
-        ],
-        "BY-LSA": [
-            "BY",
-            "COS",
-            "ECL",
-            "LSA"
-        ],
-        "Estavayer-GOR": [
-            "Estavayer",
-            "CHS",
-            "YND",
-            "CHP",
-            "YV",
-            "GRS",
-            "ONB",
-            "CC",
-            "GOR"
-        ],
-        "Estavayer-YV": [
-            "Estavayer",
-            "CHS",
-            "YND",
-            "CHP",
-            "YV"
-        ]
+    {
+      "name": "CHP",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "CHS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "CHV",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "COS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "DAIL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ECL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EP",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ESP",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GRS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ONB",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Tanklager",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "YND",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "YV",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BAV",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BAV"
+    },
+    {
+      "name": "BAV",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BAV",
+      "gleise": 1
+    },
+    {
+      "name": "BAV",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BAV",
+      "gleise": 1
+    },
+    {
+      "name": "CC",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CC"
+    },
+    {
+      "name": "CC",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CC",
+      "gleise": 1
+    },
+    {
+      "name": "CC",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CC",
+      "gleise": 1
+    },
+    {
+      "name": "CHP",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHP"
+    },
+    {
+      "name": "CHP",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHP",
+      "gleise": 1
+    },
+    {
+      "name": "CHP",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHP",
+      "gleise": 1
+    },
+    {
+      "name": "CHS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHS"
+    },
+    {
+      "name": "CHS 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHS 1",
+      "gleise": 1
+    },
+    {
+      "name": "CHS 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHS 2",
+      "gleise": 1
+    },
+    {
+      "name": "CHV 3",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV"
+    },
+    {
+      "name": "CHV 21",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV"
+    },
+    {
+      "name": "CHV",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV"
+    },
+    {
+      "name": "CHV 34",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV 3",
+      "gleise": 1
+    },
+    {
+      "name": "CHV 31",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV 3",
+      "gleise": 1
+    },
+    {
+      "name": "CHV 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV 3",
+      "gleise": 1
+    },
+    {
+      "name": "CHV 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV 2",
+      "gleise": 1
+    },
+    {
+      "name": "CHV 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV 1",
+      "gleise": 1
+    },
+    {
+      "name": "CHV 34",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV 34",
+      "gleise": 1
+    },
+    {
+      "name": "CHV 31",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV 31",
+      "gleise": 1
+    },
+    {
+      "name": "CHV 21",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV 21",
+      "gleise": 1
+    },
+    {
+      "name": "CHV 21",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV 21",
+      "gleise": 1
+    },
+    {
+      "name": "COS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COS"
+    },
+    {
+      "name": "COS 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COS 1",
+      "gleise": 1
+    },
+    {
+      "name": "COS 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COS 3",
+      "gleise": 1
+    },
+    {
+      "name": "COS 3G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COS 3",
+      "gleise": 1
+    },
+    {
+      "name": "COS 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COS 2",
+      "gleise": 1
+    },
+    {
+      "name": "DAIL 1",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL"
+    },
+    {
+      "name": "DAIL 34",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL"
+    },
+    {
+      "name": "DAIL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL"
+    },
+    {
+      "name": "DAIL 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL 1",
+      "gleise": 1
+    },
+    {
+      "name": "DAIL 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL 1",
+      "gleise": 1
+    },
+    {
+      "name": "DAIL 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL 1",
+      "gleise": 1
+    },
+    {
+      "name": "DAIL 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL 4",
+      "gleise": 1
+    },
+    {
+      "name": "DAIL 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL 2",
+      "gleise": 1
+    },
+    {
+      "name": "DAIL 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL 3",
+      "gleise": 1
+    },
+    {
+      "name": "DAIL 34",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL 34",
+      "gleise": 1
+    },
+    {
+      "name": "DAIL 34",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL 34",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 10",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL"
+    },
+    {
+      "name": "ECL 16",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL"
+    },
+    {
+      "name": "ECL 37",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL"
+    },
+    {
+      "name": "ECL 71",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL"
+    },
+    {
+      "name": "ECL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL"
+    },
+    {
+      "name": "ECL 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 2",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 1",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 10",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 10",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 10",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 10",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 16",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 16",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 16",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 16",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 37",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 37",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 31",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 37",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 32",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 37",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 37",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 37",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 31",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 31",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 32",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 32",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 36",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 36",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 71",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 71",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 71",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL 71",
+      "gleise": 1
+    },
+    {
+      "name": "EP",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EP"
+    },
+    {
+      "name": "EP 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EP 2",
+      "gleise": 1
+    },
+    {
+      "name": "EP 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EP 1",
+      "gleise": 1
+    },
+    {
+      "name": "ESP",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESP"
+    },
+    {
+      "name": "ESP",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESP",
+      "gleise": 1
+    },
+    {
+      "name": "ESP",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESP",
+      "gleise": 1
+    },
+    {
+      "name": "GRS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRS"
+    },
+    {
+      "name": "GRS 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRS 1",
+      "gleise": 1
+    },
+    {
+      "name": "GRS 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRS 2",
+      "gleise": 1
+    },
+    {
+      "name": "GRS 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRS 3",
+      "gleise": 1
+    },
+    {
+      "name": "ONB",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ONB"
+    },
+    {
+      "name": "ONB 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ONB 4",
+      "gleise": 1
+    },
+    {
+      "name": "ONB 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ONB 3",
+      "gleise": 1
+    },
+    {
+      "name": "ONB 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ONB 5",
+      "gleise": 1
+    },
+    {
+      "name": "Tanklager",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tanklager"
+    },
+    {
+      "name": "Tanklager",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tanklager",
+      "gleise": 1
+    },
+    {
+      "name": "Tanklager",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tanklager",
+      "gleise": 1
+    },
+    {
+      "name": "YND",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YND"
+    },
+    {
+      "name": "YND 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YND 3",
+      "gleise": 1
+    },
+    {
+      "name": "YND 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YND 2",
+      "gleise": 1
+    },
+    {
+      "name": "YV 24",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV"
+    },
+    {
+      "name": "YV 34",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV"
+    },
+    {
+      "name": "YV",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV"
+    },
+    {
+      "name": "YV 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV 2",
+      "gleise": 1
+    },
+    {
+      "name": "YV 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV 4",
+      "gleise": 1
+    },
+    {
+      "name": "YV 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV 1",
+      "gleise": 1
+    },
+    {
+      "name": "YV 43",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV 43",
+      "gleise": 1
+    },
+    {
+      "name": "YV 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV 3",
+      "gleise": 1
+    },
+    {
+      "name": "YV 24",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV 24",
+      "gleise": 1
+    },
+    {
+      "name": "YV 24",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV 24",
+      "gleise": 1
+    },
+    {
+      "name": "YV 34",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV 34",
+      "gleise": 1
+    },
+    {
+      "name": "YV 34",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV 34",
+      "gleise": 1
+    },
+    {
+      "name": "CHV",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Les Granges",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Paketzentrum",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Infra",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ECL",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Tanklager",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "COS",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "YV",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GOR",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "VU",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Estavayer",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LSA",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ONB",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "DAIL E/A",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "CHV 81",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV",
+      "gleise": 1
+    },
+    {
+      "name": "Les Granges",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Les Granges",
+      "gleise": 1
+    },
+    {
+      "name": "Paketzentrum",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Paketzentrum",
+      "gleise": 1
+    },
+    {
+      "name": "Infra",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Infra",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 10",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL",
+      "gleise": 1
+    },
+    {
+      "name": "Tanklager",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tanklager",
+      "gleise": 1
+    },
+    {
+      "name": "COS 98",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COS",
+      "gleise": 1
+    },
+    {
+      "name": "YV 34",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV",
+      "gleise": 1
+    },
+    {
+      "name": "GOR 113",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GOR",
+      "gleise": 1
+    },
+    {
+      "name": "GOR 213",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GOR",
+      "gleise": 1
+    },
+    {
+      "name": "VU 507",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VU",
+      "gleise": 1
+    },
+    {
+      "name": "VU 607",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VU",
+      "gleise": 1
+    },
+    {
+      "name": "Estavayer",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Estavayer",
+      "gleise": 1
+    },
+    {
+      "name": "LSA 820",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LSA",
+      "gleise": 1
+    },
+    {
+      "name": "LSA 920",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LSA",
+      "gleise": 1
+    },
+    {
+      "name": "ONB 31",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ONB",
+      "gleise": 1
+    },
+    {
+      "name": "CHS 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHS",
+      "gleise": 1
+    },
+    {
+      "name": "CHS 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHS",
+      "gleise": 1
+    },
+    {
+      "name": "CHV 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV",
+      "gleise": 1
+    },
+    {
+      "name": "CHV 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV",
+      "gleise": 1
+    },
+    {
+      "name": "CHV 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CHV",
+      "gleise": 1
+    },
+    {
+      "name": "COS 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COS",
+      "gleise": 1
+    },
+    {
+      "name": "COS 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COS",
+      "gleise": 1
+    },
+    {
+      "name": "COS 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "COS",
+      "gleise": 1
+    },
+    {
+      "name": "DAIL 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL",
+      "gleise": 1
+    },
+    {
+      "name": "DAIL 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL",
+      "gleise": 1
+    },
+    {
+      "name": "ECL 36",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ECL",
+      "gleise": 1
+    },
+    {
+      "name": "EP 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EP",
+      "gleise": 1
+    },
+    {
+      "name": "EP 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EP",
+      "gleise": 1
+    },
+    {
+      "name": "GRS 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRS",
+      "gleise": 1
+    },
+    {
+      "name": "GRS 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRS",
+      "gleise": 1
+    },
+    {
+      "name": "GRS 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GRS",
+      "gleise": 1
+    },
+    {
+      "name": "ONB 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ONB",
+      "gleise": 1
+    },
+    {
+      "name": "ONB 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ONB",
+      "gleise": 1
+    },
+    {
+      "name": "ONB 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ONB",
+      "gleise": 1
+    },
+    {
+      "name": "YND 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YND",
+      "gleise": 1
+    },
+    {
+      "name": "YND 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YND",
+      "gleise": 1
+    },
+    {
+      "name": "YV 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV",
+      "gleise": 1
+    },
+    {
+      "name": "YV 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV",
+      "gleise": 1
+    },
+    {
+      "name": "YV 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV",
+      "gleise": 1
+    },
+    {
+      "name": "YV 43",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV",
+      "gleise": 1
+    },
+    {
+      "name": "YV 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "YV",
+      "gleise": 1
+    },
+    {
+      "name": "DAIL 45",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DAIL E/A",
+      "gleise": 1
     }
+  ],
+  "strecken": [
+    {
+      "name": "VU-GOR",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst VU",
+        "Bf COS",
+        "Bf DAIL",
+        "Bf ECL",
+        "Bf BAV",
+        "Bf CHV",
+        "Bf ESP",
+        "Bf EP",
+        "Bf YV",
+        "Bf GRS",
+        "Bf ONB",
+        "Bf CC",
+        "Anst GOR"
+      ]
+    },
+    {
+      "name": "Estavayer-YV",
+      "ordnung": 100,
+      "auto": true,
+      "stationen": [
+        "Anst Estavayer",
+        "Bf CHS",
+        "Bf YND",
+        "Bf CHP",
+        "Bf YV"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 565,
+  "_build": 5851,
+  "_name": "Yverdon-les-Bains",
+  "_region": "Westschweiz",
+  "_version": 3
 }

@@ -1,232 +1,1196 @@
 {
-    "_aid": 667,
-    "_build": 5851,
-    "_name": "Biel/Bienne",
-    "_region": "Westschweiz",
-    "_version": 2,
-    "zugschema": "schweiz",
-    "anschlussgruppen": {
-        "BGG": {
-            "__class__": "Set",
-            "data": [
-                "BGG 128",
-                "BGG 228"
-            ]
-        },
-        "BI 96": {
-            "__class__": "Set",
-            "data": [
-                "BI 96"
-            ]
-        },
-        "BIRB": {
-            "__class__": "Set",
-            "data": [
-                "BIRB 495",
-                "BIRB 500",
-                "BIRB 396",
-                "BIRB 600"
-            ]
-        },
-        "BIRB A": {
-            "__class__": "Set",
-            "data": [
-                "BIRB A61"
-            ]
-        },
-        "Depot Ost": {
-            "__class__": "Set",
-            "data": [
-                "Depot Ost"
-            ]
-        },
-        "Grenchen Nord": {
-            "__class__": "Set",
-            "data": [
-                "Grenchen Nord"
-            ]
-        },
-        "LD": {
-            "__class__": "Set",
-            "data": [
-                "LD 711",
-                "LD 811"
-            ]
-        },
-        "Mahlenwald": {
-            "__class__": "Set",
-            "data": [
-                "Mahlenwald"
-            ]
-        },
-        "SEL": {
-            "__class__": "Set",
-            "data": [
-                "SEL 581",
-                "SEL 681"
-            ]
-        }
+  "default": false,
+  "elemente": [
+    {
+      "name": "BET",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "BET": {
-            "__class__": "Set",
-            "data": [
-                "BET"
-            ]
-        },
-        "BI": {
-            "__class__": "Set",
-            "data": [
-                "BI1",
-                "BI2",
-                "BI3",
-                "BI4",
-                "BI5",
-                "BI6",
-                "BI7",
-                "BI8",
-                "BI9AB",
-                "BI9CD",
-                "BI10AB",
-                "BI10CD",
-                "BI97",
-                "BI81"
-            ]
-        },
-        "BIBD": {
-            "__class__": "Set",
-            "data": [
-                "BIBD"
-            ]
-        },
-        "BIM": {
-            "__class__": "Set",
-            "data": [
-                "BIM"
-            ]
-        },
-        "GS": {
-            "__class__": "Set",
-            "data": [
-                "GS1",
-                "GS3",
-                "GS2"
-            ]
-        },
-        "LEN": {
-            "__class__": "Set",
-            "data": [
-                "LEN2",
-                "LEN1",
-                "LEN3"
-            ]
-        },
-        "LIG": {
-            "__class__": "Set",
-            "data": [
-                "LIG"
-            ]
-        },
-        "NV": {
-            "__class__": "Set",
-            "data": [
-                "NV"
-            ]
-        },
-        "PIE": {
-            "__class__": "Set",
-            "data": [
-                "PIE"
-            ]
-        },
-        "RB West": {
-            "__class__": "Set",
-            "data": [
-                "RB West"
-            ]
-        },
-        "TUE": {
-            "__class__": "Set",
-            "data": [
-                "TUE1",
-                "TUE2"
-            ]
-        },
-        "TWN": {
-            "__class__": "Set",
-            "data": [
-                "TWN3",
-                "TWN2"
-            ]
-        }
+    {
+      "name": "BI",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "LD-SEL",
-    "sektoren": {
-        "BI10": {
-            "__class__": "Set",
-            "data": [
-                "BI10AB",
-                "BI10CD"
-            ]
-        },
-        "BI9": {
-            "__class__": "Set",
-            "data": [
-                "BI9CD",
-                "BI9AB"
-            ]
-        }
+    {
+      "name": "BIBD",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "strecken": {
-        "BI-Grenchen Nord": [
-            "BI",
-            "BIM",
-            "BIBD",
-            "PIE",
-            "LEN",
-            "Grenchen Nord"
-        ],
-        "LD-BGG": [
-            "LD",
-            "NV",
-            "LIG",
-            "TWN",
-            "TUE",
-            "BI",
-            "BGG"
-        ],
-        "LD-Grenchen Nord": [
-            "LD",
-            "NV",
-            "LIG",
-            "TWN",
-            "TUE",
-            "BI",
-            "BIM",
-            "BIBD",
-            "PIE",
-            "LEN",
-            "Grenchen Nord"
-        ],
-        "LD-SEL": [
-            "LD",
-            "NV",
-            "LIG",
-            "TWN",
-            "TUE",
-            "BI",
-            "BIM",
-            "BIBD",
-            "PIE",
-            "LEN",
-            "GS",
-            "BET",
-            "SEL"
-        ]
+    {
+      "name": "BIM",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": [
-        ["LIG", "TWN", "E"],
-        ["LEN", "Grenchen Nord", "E"]
-    ]
+    {
+      "name": "BIPO",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LEN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LIG",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "NV",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "PIE",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "RB West",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "TUE",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "TWN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BET",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BET"
+    },
+    {
+      "name": "BET",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BET",
+      "gleise": 1
+    },
+    {
+      "name": "BET",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BET",
+      "gleise": 1
+    },
+    {
+      "name": "BI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI"
+    },
+    {
+      "name": "BI7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI7",
+      "gleise": 1
+    },
+    {
+      "name": "BI9CD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI9",
+      "gleise": 1
+    },
+    {
+      "name": "BI9AB",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI9",
+      "gleise": 1
+    },
+    {
+      "name": "BI1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI1",
+      "gleise": 1
+    },
+    {
+      "name": "BI5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI5",
+      "gleise": 1
+    },
+    {
+      "name": "BI8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI8",
+      "gleise": 1
+    },
+    {
+      "name": "BI3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI3",
+      "gleise": 1
+    },
+    {
+      "name": "BI4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI4",
+      "gleise": 1
+    },
+    {
+      "name": "BI2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI2",
+      "gleise": 1
+    },
+    {
+      "name": "BI10CD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI10",
+      "gleise": 1
+    },
+    {
+      "name": "BI10AB",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI10",
+      "gleise": 1
+    },
+    {
+      "name": "BI6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI6",
+      "gleise": 1
+    },
+    {
+      "name": "BI81",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI81",
+      "gleise": 1
+    },
+    {
+      "name": "BI97",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI97",
+      "gleise": 1
+    },
+    {
+      "name": "BIBD",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIBD"
+    },
+    {
+      "name": "BIBD",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIBD",
+      "gleise": 1
+    },
+    {
+      "name": "BIBD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIBD",
+      "gleise": 1
+    },
+    {
+      "name": "BIM",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIM"
+    },
+    {
+      "name": "BIM",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIM",
+      "gleise": 1
+    },
+    {
+      "name": "BIM",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIM",
+      "gleise": 1
+    },
+    {
+      "name": "BIPO",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIPO"
+    },
+    {
+      "name": "BIPO1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIPO1",
+      "gleise": 1
+    },
+    {
+      "name": "BIPO3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIPO3",
+      "gleise": 1
+    },
+    {
+      "name": "BIPO2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIPO2",
+      "gleise": 1
+    },
+    {
+      "name": "GS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GS"
+    },
+    {
+      "name": "GS1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GS1",
+      "gleise": 1
+    },
+    {
+      "name": "GS2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GS2",
+      "gleise": 1
+    },
+    {
+      "name": "GS3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GS3",
+      "gleise": 1
+    },
+    {
+      "name": "LEN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LEN"
+    },
+    {
+      "name": "LEN3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LEN3",
+      "gleise": 1
+    },
+    {
+      "name": "LEN1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LEN1",
+      "gleise": 1
+    },
+    {
+      "name": "LEN2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LEN2",
+      "gleise": 1
+    },
+    {
+      "name": "LIG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LIG"
+    },
+    {
+      "name": "LIG",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LIG",
+      "gleise": 1
+    },
+    {
+      "name": "LIG",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LIG",
+      "gleise": 1
+    },
+    {
+      "name": "NV",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NV"
+    },
+    {
+      "name": "NV",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NV",
+      "gleise": 1
+    },
+    {
+      "name": "NV",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NV",
+      "gleise": 1
+    },
+    {
+      "name": "PIE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PIE"
+    },
+    {
+      "name": "PIE",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PIE",
+      "gleise": 1
+    },
+    {
+      "name": "PIE",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PIE",
+      "gleise": 1
+    },
+    {
+      "name": "RB West",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RB West"
+    },
+    {
+      "name": "RB West",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RB West",
+      "gleise": 1
+    },
+    {
+      "name": "RB West",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RB West",
+      "gleise": 1
+    },
+    {
+      "name": "TUE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TUE"
+    },
+    {
+      "name": "TUE1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TUE1",
+      "gleise": 1
+    },
+    {
+      "name": "TUE2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TUE2",
+      "gleise": 1
+    },
+    {
+      "name": "TWN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TWN"
+    },
+    {
+      "name": "TWN3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TWN3",
+      "gleise": 1
+    },
+    {
+      "name": "TWN2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TWN2",
+      "gleise": 1
+    },
+    {
+      "name": "BIRB",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Grenchen Nord",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SEL",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BIRB A",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Depot Ost",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BGG",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Mahlenwald",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LD",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BI 96",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BIRB 495",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIRB",
+      "gleise": 1
+    },
+    {
+      "name": "BIRB 396",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIRB",
+      "gleise": 1
+    },
+    {
+      "name": "BIRB 500",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIRB",
+      "gleise": 1
+    },
+    {
+      "name": "BIRB 600",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIRB",
+      "gleise": 1
+    },
+    {
+      "name": "Grenchen Nord",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Grenchen Nord",
+      "gleise": 1
+    },
+    {
+      "name": "SEL 681",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SEL",
+      "gleise": 1
+    },
+    {
+      "name": "SEL 581",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SEL",
+      "gleise": 1
+    },
+    {
+      "name": "BIRB A61",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIRB A",
+      "gleise": 1
+    },
+    {
+      "name": "Depot Ost",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Depot Ost",
+      "gleise": 1
+    },
+    {
+      "name": "BGG 228",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BGG",
+      "gleise": 1
+    },
+    {
+      "name": "BGG 128",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BGG",
+      "gleise": 1
+    },
+    {
+      "name": "Mahlenwald",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mahlenwald",
+      "gleise": 1
+    },
+    {
+      "name": "LD 711",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LD",
+      "gleise": 1
+    },
+    {
+      "name": "LD 811",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LD",
+      "gleise": 1
+    },
+    {
+      "name": "BI7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI",
+      "gleise": 1
+    },
+    {
+      "name": "BI9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI",
+      "gleise": 1
+    },
+    {
+      "name": "BI1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI",
+      "gleise": 1
+    },
+    {
+      "name": "BI5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI",
+      "gleise": 1
+    },
+    {
+      "name": "BI8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI",
+      "gleise": 1
+    },
+    {
+      "name": "BI3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI",
+      "gleise": 1
+    },
+    {
+      "name": "BI4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI",
+      "gleise": 1
+    },
+    {
+      "name": "BI2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI",
+      "gleise": 1
+    },
+    {
+      "name": "BI10",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI",
+      "gleise": 1
+    },
+    {
+      "name": "BI6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI",
+      "gleise": 1
+    },
+    {
+      "name": "BI81",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI",
+      "gleise": 1
+    },
+    {
+      "name": "BI97",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI",
+      "gleise": 1
+    },
+    {
+      "name": "BIPO1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIPO",
+      "gleise": 1
+    },
+    {
+      "name": "BIPO3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIPO",
+      "gleise": 1
+    },
+    {
+      "name": "BIPO2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIPO",
+      "gleise": 1
+    },
+    {
+      "name": "GS1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GS",
+      "gleise": 1
+    },
+    {
+      "name": "GS2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GS",
+      "gleise": 1
+    },
+    {
+      "name": "GS3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GS",
+      "gleise": 1
+    },
+    {
+      "name": "LEN3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LEN",
+      "gleise": 1
+    },
+    {
+      "name": "LEN1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LEN",
+      "gleise": 1
+    },
+    {
+      "name": "LEN2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LEN",
+      "gleise": 1
+    },
+    {
+      "name": "TUE1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TUE",
+      "gleise": 1
+    },
+    {
+      "name": "TUE2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TUE",
+      "gleise": 1
+    },
+    {
+      "name": "TWN3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TWN",
+      "gleise": 1
+    },
+    {
+      "name": "TWN2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "TWN",
+      "gleise": 1
+    },
+    {
+      "name": "BI 96",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BI 96",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "LD-SEL",
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst LD",
+        "Bf NV",
+        "Bf LIG",
+        "Bf TWN",
+        "Bf TUE",
+        "Bf BI",
+        "Bf BIM",
+        "Bf BIPO",
+        "Bf BIBD",
+        "Bf PIE",
+        "Bf LEN",
+        "Bf GS",
+        "Bf BET",
+        "Anst SEL"
+      ]
+    },
+    {
+      "name": "BI-Grenchen Nord",
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Bf BI",
+        "Bf BIM",
+        "Bf BIPO",
+        "Bf BIBD",
+        "Bf PIE",
+        "Bf LEN",
+        "Anst Grenchen Nord"
+      ]
+    },
+    {
+      "name": "LD-Grenchen Nord",
+      "ordnung": 4,
+      "auto": false,
+      "stationen": [
+        "Anst LD",
+        "Bf NV",
+        "Bf LIG",
+        "Bf TWN",
+        "Bf TUE",
+        "Bf BI",
+        "Bf BIM",
+        "Bf BIPO",
+        "Bf BIBD",
+        "Bf PIE",
+        "Bf LEN",
+        "Anst Grenchen Nord"
+      ]
+    },
+    {
+      "name": "LD-BGG",
+      "ordnung": 133,
+      "auto": true,
+      "stationen": [
+        "Anst LD",
+        "Bf NV",
+        "Bf LIG",
+        "Bf TWN",
+        "Bf TUE",
+        "Bf BI",
+        "Anst BGG"
+      ]
+    }
+  ],
+  "streckenmarkierung": [
+    {
+      "flags": "E",
+      "station1": "Bf LIG",
+      "station2": "Bf TWN"
+    },
+    {
+      "flags": "E",
+      "station1": "Bf LEN",
+      "station2": "Anst Grenchen Nord"
+    }
+  ],
+  "zugschema": "schweiz",
+  "_aid": 667,
+  "_build": 5851,
+  "_name": "Biel/Bienne",
+  "_region": "Westschweiz",
+  "_version": 3
 }

@@ -194,6 +194,16 @@
       "flags": ""
     },
     {
+      "name": "Asta BS",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ma 31",
+      "gleise": 1
+    },
+    {
       "name": "ma 31",
       "typ": "Bs",
       "auto": false,
@@ -215,42 +225,32 @@
     },
     {
       "name": "Asta BS",
-      "typ": "Bs",
+      "typ": "Gl",
       "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ma 31",
-      "gleise": 1
-    },
-    {
-      "name": "ma 31",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ma 31",
-      "gleise": 1
-    },
-    {
-      "name": "ma 21",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ma 21",
-      "gleise": 1
-    },
-    {
-      "name": "Asta BS",
-      "typ": "Gl",
-      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Asta BS",
+      "gleise": 1
+    },
+    {
+      "name": "ma 31",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ma 31",
+      "gleise": 1
+    },
+    {
+      "name": "ma 21",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ma 21",
       "gleise": 1
     },
     {
@@ -266,7 +266,7 @@
     {
       "name": "Asta MI",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -314,7 +314,7 @@
     {
       "name": "Borgo S.Giovanni 2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -324,7 +324,7 @@
     {
       "name": "Borgo S.Giovanni 1",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -341,19 +341,19 @@
       "stamm": "Bornato"
     },
     {
-      "name": "Bornato 3",
+      "name": "Bornato 1",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Bornato 3",
+      "stamm": "Bornato 1",
       "gleise": 1
     },
     {
       "name": "Ospitaletto Asta",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -361,19 +361,9 @@
       "gleise": 1
     },
     {
-      "name": "Ospitaletto m",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Ospitaletto m",
-      "gleise": 1
-    },
-    {
       "name": "Bornato 2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -381,13 +371,23 @@
       "gleise": 1
     },
     {
-      "name": "Bornato 1",
+      "name": "Bornato 3",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Bornato 1",
+      "stamm": "Bornato 3",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto m",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ospitaletto m",
       "gleise": 1
     },
     {
@@ -625,7 +625,7 @@
     {
       "name": "Coccaglio 1",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -635,7 +635,7 @@
     {
       "name": "Coccaglio 2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -681,23 +681,23 @@
       "stamm": "Grumello"
     },
     {
-      "name": "Grumello 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Grumello 1",
-      "gleise": 1
-    },
-    {
       "name": "Grumello 2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Grumello 2",
+      "gleise": 1
+    },
+    {
+      "name": "Grumello 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Grumello 1",
       "gleise": 1
     },
     {
@@ -739,19 +739,9 @@
       "stamm": "Ospitaletto"
     },
     {
-      "name": "Ospitaletto Asta BS",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Ospitaletto Asta BS",
-      "gleise": 1
-    },
-    {
       "name": "Ospitaletto 1",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -761,7 +751,7 @@
     {
       "name": "Ospitaletto 1E",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -771,7 +761,7 @@
     {
       "name": "Ospitaletto 1w",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -781,7 +771,7 @@
     {
       "name": "Ospitaletto 2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -791,11 +781,21 @@
     {
       "name": "Ospitaletto 2w",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Ospitaletto 2",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto Asta BS",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ospitaletto Asta BS",
       "gleise": 1
     },
     {
@@ -839,7 +839,7 @@
     {
       "name": "Palazzolo 1",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -849,7 +849,7 @@
     {
       "name": "Palazzolo 2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -866,23 +866,23 @@
       "stamm": "Passirano"
     },
     {
-      "name": "Passirano 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Passirano 1",
-      "gleise": 1
-    },
-    {
       "name": "Passirano 2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Passirano 2",
+      "gleise": 1
+    },
+    {
+      "name": "Passirano 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Passirano 1",
       "gleise": 1
     },
     {
@@ -924,9 +924,29 @@
       "stamm": "Romano"
     },
     {
+      "name": "Romano 3 G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano 3",
+      "gleise": 1
+    },
+    {
+      "name": "Romano 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Romano 3",
+      "gleise": 1
+    },
+    {
       "name": "Romano P corsa",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -934,19 +954,9 @@
       "gleise": 1
     },
     {
-      "name": "Romano 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Romano 1",
-      "gleise": 1
-    },
-    {
       "name": "Romano 1p",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -954,29 +964,19 @@
       "gleise": 1
     },
     {
-      "name": "Romano 3",
+      "name": "Romano 1",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Romano 3",
-      "gleise": 1
-    },
-    {
-      "name": "Romano 3 G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Romano 3",
+      "stamm": "Romano 1",
       "gleise": 1
     },
     {
       "name": "Romano 2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -1011,9 +1011,29 @@
       "stamm": "Rovato"
     },
     {
+      "name": "Rovato 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato 5",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato 7",
+      "gleise": 1
+    },
+    {
       "name": "Rovato 3",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -1021,29 +1041,9 @@
       "gleise": 1
     },
     {
-      "name": "Rovato 2",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Rovato 2",
-      "gleise": 1
-    },
-    {
-      "name": "Rovato FN 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Rovato FN 1",
-      "gleise": 1
-    },
-    {
       "name": "Rovato FN 2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -1053,7 +1053,7 @@
     {
       "name": "Rovato FN W",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -1061,19 +1061,19 @@
       "gleise": 1
     },
     {
-      "name": "Rovato 4",
+      "name": "Rovato FN 1",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Rovato 4",
+      "stamm": "Rovato FN 1",
       "gleise": 1
     },
     {
       "name": "Rovato 8",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -1081,9 +1081,29 @@
       "gleise": 1
     },
     {
+      "name": "Rovato 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato 2",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato 4",
+      "gleise": 1
+    },
+    {
       "name": "Rovato 6",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -1091,33 +1111,13 @@
       "gleise": 1
     },
     {
-      "name": "Rovato 5",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Rovato 5",
-      "gleise": 1
-    },
-    {
       "name": "Rovato 1",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Rovato 1",
-      "gleise": 1
-    },
-    {
-      "name": "Rovato 7",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Rovato 7",
       "gleise": 1
     },
     {
@@ -1444,7 +1444,7 @@
       "gleise": 1
     },
     {
-      "name": "Bornato 3",
+      "name": "Bornato 1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
@@ -1464,16 +1464,6 @@
       "gleise": 1
     },
     {
-      "name": "Ospitaletto m",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Bornato",
-      "gleise": 1
-    },
-    {
       "name": "Bornato 2",
       "typ": "Bs",
       "auto": false,
@@ -1484,7 +1474,17 @@
       "gleise": 1
     },
     {
-      "name": "Bornato 1",
+      "name": "Bornato 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bornato",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto m",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
@@ -1514,16 +1514,6 @@
       "gleise": 1
     },
     {
-      "name": "Grumello 1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Grumello",
-      "gleise": 1
-    },
-    {
       "name": "Grumello 2",
       "typ": "Bs",
       "auto": false,
@@ -1534,13 +1524,13 @@
       "gleise": 1
     },
     {
-      "name": "Ospitaletto Asta BS",
+      "name": "Grumello 1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Ospitaletto",
+      "stamm": "Grumello",
       "gleise": 1
     },
     {
@@ -1555,6 +1545,16 @@
     },
     {
       "name": "Ospitaletto 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ospitaletto",
+      "gleise": 1
+    },
+    {
+      "name": "Ospitaletto Asta BS",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
@@ -1584,6 +1584,16 @@
       "gleise": 1
     },
     {
+      "name": "Passirano 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Passirano",
+      "gleise": 1
+    },
+    {
       "name": "Passirano 1",
       "typ": "Bs",
       "auto": false,
@@ -1594,13 +1604,13 @@
       "gleise": 1
     },
     {
-      "name": "Passirano 2",
+      "name": "Romano 3",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Passirano",
+      "stamm": "Romano",
       "gleise": 1
     },
     {
@@ -1624,16 +1634,6 @@
       "gleise": 1
     },
     {
-      "name": "Romano 3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Romano",
-      "gleise": 1
-    },
-    {
       "name": "Romano 2",
       "typ": "Bs",
       "auto": false,
@@ -1644,27 +1644,27 @@
       "gleise": 1
     },
     {
+      "name": "Rovato 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
       "name": "Rovato 3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Rovato",
-      "gleise": 1
-    },
-    {
-      "name": "Rovato 2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Rovato",
-      "gleise": 1
-    },
-    {
-      "name": "Rovato FN 1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
@@ -1694,7 +1694,7 @@
       "gleise": 1
     },
     {
-      "name": "Rovato 4",
+      "name": "Rovato FN 1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
@@ -1714,6 +1714,26 @@
       "gleise": 1
     },
     {
+      "name": "Rovato 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
+      "name": "Rovato 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rovato",
+      "gleise": 1
+    },
+    {
       "name": "Rovato 6",
       "typ": "Bs",
       "auto": false,
@@ -1724,27 +1744,7 @@
       "gleise": 1
     },
     {
-      "name": "Rovato 5",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Rovato",
-      "gleise": 1
-    },
-    {
       "name": "Rovato 1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Rovato",
-      "gleise": 1
-    },
-    {
-      "name": "Rovato 7",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
