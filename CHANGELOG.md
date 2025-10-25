@@ -1,5 +1,30 @@
 # Changelog
 
+## 2.1.7
+
+### Features
+
+- Verbesserungen am Bahnhofeditor
+  - Hierarchische Gleissortierung
+  - In-place-Umbenennen von Bahnhofelementen
+  - Leere Eingabe ignorieren
+
+
+### Beispielkonfigurationen
+
+- Biel/Bienne
+- Chiasso 2025
+- Lausanne
+- Nyon
+- Renens
+- Rovato
+- Rovereto/Domegliara
+- Trento
+- St-Maurice-Martigny
+- Uppsala
+- Vevey
+- Yverdon-les-Bains
+
 ## 2.1.6
 
 ### Features
