@@ -19,7 +19,7 @@ import os
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
 from stskit.dispo.anlage import Anlage
-from stskit.model.journal import GraphJournal, JournalIDType
+from stskit.model.journal import JournalEntry, JournalIDType
 from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
 from stskit.model.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode, ZielLabelType
@@ -71,13 +71,13 @@ class Betrieb:
                     wartend2 = self._betriebshalt_statt_durchfahrt(wartend2, 1)
                 except ValueError:
                     wartend2 = None
-        print(self.anlage.ereignisgraph.node_info(wartend2))
+        print(self.anlage.dispo_ereignisgraph.node_info(wartend2))
 
         abzuwarten2 = self._get_ereignis_label(abzuwarten, {'Ab'})
         if abzuwarten2 is None:
             abzuwarten2 = self._get_ereignis_label(abzuwarten, {'An'})
             wartezeit = max(1, wartezeit)
-        print(self.anlage.ereignisgraph.node_info(abzuwarten2))
+        print(self.anlage.dispo_ereignisgraph.node_info(abzuwarten2))
 
         if wartend2 and abzuwarten2:
             return self._abhaengigkeit_setzen(wartend2, abzuwarten2, wartezeit, dry_run)
@@ -139,11 +139,11 @@ class Betrieb:
             objekt = objekt.node_id
 
         if hasattr(objekt, "zid") and hasattr(objekt, "ort") and hasattr(objekt, "zeit"):
-            objekt = self.anlage.zielgraph.nodes[objekt]
+            objekt = self.anlage.dispo_zielgraph.nodes[objekt]
 
         if hasattr(objekt, "fid"):
-            for label in self.anlage.ereignisgraph.zugpfad(objekt.zid):
-                data = self.anlage.ereignisgraph.nodes[label]
+            for label in self.anlage.dispo_ereignisgraph.zugpfad(objekt.zid):
+                data = self.anlage.dispo_ereignisgraph.nodes[label]
                 if (data.typ in typen and
                         data.plan == objekt.plan and
                         objekt.p_an - 0.001 <= data.t_plan <= objekt.p_ab + 0.001):
@@ -163,17 +163,17 @@ class Betrieb:
         Gemeinsamer Teil von Abfahrt/Ankunft abwarten
         """
 
-        eg = self.anlage.ereignisgraph
-        egj = GraphJournal(target_graph=eg)
+        eg = self.anlage.dispo_ereignisgraph
+        egj = JournalEntry(target_graph='ereignisgraph')
 
         edge = EreignisGraphEdge(typ="A", zid=subjekt.zid, dt_fdl=wartezeit or 0, quelle='fdl')
         if eg.has_node(objekt) and eg.has_node(subjekt):
             if not dry_run:
                 egj.add_edge(objekt, subjekt, **edge)
-                egj.replay()
+                egj.replay(graph=eg)
                 typ = "Abfahrt" if objekt.typ == "Ab" else "Ankunft"
                 jid = JournalIDType(typ, subjekt.zid, eg.nodes[subjekt].plan_bst)
-                self.anlage.fdl_korrekturen.add_journal(jid, egj)
+                self.anlage.dispo_journal.add_entry(jid, egj)
                 print(f"Korrektur {jid} gesetzt: {subjekt} wartet auf {objekt}")
             return objekt, subjekt
         else:
@@ -204,8 +204,8 @@ class Betrieb:
                            relativ: bool = False):
 
         n = ereignis
-        eg = self.anlage.ereignisgraph
-        egj = GraphJournal(target_graph=eg)
+        eg = self.anlage.dispo_ereignisgraph
+        egj = JournalEntry(target_graph='ereignisgraph')
 
         for pre in eg.predecessors(n):
             edge_data = eg.edges[(pre, n)]
@@ -222,9 +222,9 @@ class Betrieb:
                 dt = wartezeit
             egj.change_edge(pre, n, dt_fdl=dt)
 
-        egj.replay()
+        egj.replay(graph=eg)
         jid = JournalIDType("Wartezeit", ereignis.zid, eg.nodes[ereignis].plan_bst)
-        self.anlage.fdl_korrekturen.add_journal(jid, egj)
+        self.anlage.dispo_journal.add_entry(jid, egj)
         print("Wartezeit geändert:", jid)
 
     def abfahrt_zuruecksetzen(self,
@@ -243,14 +243,14 @@ class Betrieb:
         if abzuwarten is not None:
             abzuwarten = self._get_ereignis_label(abzuwarten, {'An'})
 
-        eg = self.anlage.ereignisgraph
+        eg = self.anlage.dispo_ereignisgraph
 
         ereignis_data = eg.nodes[wartend]
-        for jid, j in self.anlage.fdl_korrekturen.collection.items():
+        for jid, j in self.anlage.dispo_journal.entries.items():
             if (jid.typ in {"Ankunft", "Abfahrt"} and
                     jid.zid == wartend.zid and
                     jid.bst == ereignis_data.plan_bst):
-                self.anlage.fdl_korrekturen.delete_journal(jid)
+                self.anlage.dispo_journal.delete_entry(jid)
                 print("Korrektur gelöscht:", jid)
                 break
 
@@ -280,8 +280,8 @@ class Betrieb:
         ValueError: Betriebshalt konnte nicht gesetzt werden.
         """
 
-        eg = self.anlage.ereignisgraph
-        zg = self.anlage.zielgraph
+        eg = self.anlage.dispo_ereignisgraph
+        zg = self.anlage.dispo_zielgraph
 
         an2_label = durchfahrt
         an3_label = eg.next_ereignis(an2_label)
@@ -313,24 +313,24 @@ class Betrieb:
         abfahrt_edge = copy.copy(edge_alt)
         abfahrt_edge.quelle = 'fdl'
 
-        egj = GraphJournal(target_graph=eg)
+        egj = JournalEntry(target_graph='ereignisgraph')
         egj.add_node(ab2_label, **ab2_node)
         egj.add_edge(an2_label, ab2_label, **halt_edge)
         egj.add_edge(ab2_label, an3_label, **abfahrt_edge)
         egj.remove_edge(an2_label, an3_label)
 
-        zgj = GraphJournal(target_graph=zg)
+        zgj = JournalEntry(target_graph='zielgraph')
         ziel = zg.nodes[an2_node.fid]
         zgj.change_node(an2_node.fid, flags=ziel.flags.replace('D', ''))
 
-        egj.replay()
-        zgj.replay()
+        egj.replay(graph=eg)
+        zgj.replay(graph=zg)
 
         jid = JournalIDType(typ="Betriebshalt", zid=an2_node.zid, bst=an2_node.plan_bst)
-        self.anlage.fdl_korrekturen.add_journal(jid, egj, zgj)
+        self.anlage.dispo_journal.add_entry(jid, egj, zgj)
         print(f"Betriebshalt {jid} erstellt")
-        print(f"    Ankunft: {self.anlage.ereignisgraph.node_info(an2_label)}")
-        print(f"    Abfahrt: {self.anlage.ereignisgraph.node_info(ab2_label)}")
+        print(f"    Ankunft: {self.anlage.dispo_ereignisgraph.node_info(an2_label)}")
+        print(f"    Abfahrt: {self.anlage.dispo_ereignisgraph.node_info(ab2_label)}")
 
         return ab2_label
 
@@ -365,8 +365,8 @@ class Betrieb:
         ValueError: Betriebshalt konnte nicht gesetzt werden.
         """
 
-        eg = self.anlage.ereignisgraph
-        zg = self.anlage.zielgraph
+        eg = self.anlage.dispo_ereignisgraph
+        zg = self.anlage.dispo_zielgraph
 
         ab1_label = vorher
         an3_label = eg.next_ereignis(ab1_label)
@@ -423,21 +423,21 @@ class Betrieb:
         abfahrt_edge.dt_max = math.inf
         abfahrt_edge.dt_fdl = 0
 
-        egj = GraphJournal(target_graph=eg)
+        egj = JournalEntry(target_graph='ereignisgraph')
         egj.add_node(ab2_label, **ab2_node)
         egj.add_node(an2_label, **an2_node)
         egj.add_edge(ab1_label, an2_label, **ankunft_edge)
         egj.add_edge(an2_label, ab2_label, **halt_edge)
         egj.add_edge(ab2_label, an3_label, **abfahrt_edge)
         egj.remove_edge(ab1_label, an3_label)
-        egj.replay(eg)
+        egj.replay(graph=eg)
 
         jid = JournalIDType(typ="Betriebshalt", zid=an2_node.zid, bst=an2_node.plan_bst)
-        self.anlage.fdl_korrekturen.add_journal(jid, egj)
+        self.anlage.dispo_journal.add_entry(jid, egj)
         print(f"Betriebshalt {jid} erstellt")
-        print(f"    Ankunft: {self.anlage.ereignisgraph.node_info(an2_label)}")
-        print(f"    Abfahrt: {self.anlage.ereignisgraph.node_info(ab2_label)}")
-        print(f"    vorher:  {self.anlage.ereignisgraph.node_info(vorher)}")
+        print(f"    Ankunft: {self.anlage.dispo_ereignisgraph.node_info(an2_label)}")
+        print(f"    Abfahrt: {self.anlage.dispo_ereignisgraph.node_info(ab2_label)}")
+        print(f"    vorher:  {self.anlage.dispo_ereignisgraph.node_info(vorher)}")
 
         return ab2_label
 
@@ -445,17 +445,17 @@ class Betrieb:
         """
         Betriebshalt aus Ereignisgraph loeschen
 
-        Der Betriebshalt wird aus dem fdl_korrekturen-Journal gelöscht.
+        Der Betriebshalt wird aus dem Dispojournal gelöscht.
         Der Ereignisgraph wird direkt nicht verändert und muss neu aufgebaut werden.
 
         halt_ereignis: Ereignislabel von An2 oder Ab2
         """
 
         ereignis_label = self._get_ereignis_label(halt_ereignis, {'An'})
-        ereignis_data = self.anlage.ereignisgraph.nodes[ereignis_label]
-        for jid, j in self.anlage.fdl_korrekturen.collection.items():
+        ereignis_data = self.anlage.dispo_ereignisgraph.nodes[ereignis_label]
+        for jid in self.anlage.dispo_journal.entries:
             if jid.typ == "Betriebshalt" and jid.zid == halt_ereignis.zid and jid.bst == ereignis_data.plan_bst:
-                self.anlage.fdl_korrekturen.delete_journal(jid)
+                self.anlage.dispo_journal.delete_entry(jid)
                 break
 
     def betriebshalt_einfuegen(self,

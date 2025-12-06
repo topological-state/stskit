@@ -16,7 +16,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 import networkx as nx
 
 from stskit.dispo.config import Config
-from stskit.model.journal import JournalCollection, JournalIDType, GraphJournal
+from stskit.model.journal import Journal
 from stskit.plugin.stsgraph import GraphClient
 from stskit.plugin.stsobj import Ereignis, AnlagenInfo, time_to_minutes
 from stskit.model.signalgraph import SignalGraph
@@ -51,10 +51,12 @@ class Anlage:
         self.bahnhofgraph = BahnhofGraph()
         self.liniengraph = LinienGraph()
         self.zuggraph = ZugGraph()
-        self.zielgraph = ZielGraph()
-        self.ereignisgraph = EreignisGraph()
+        self.original_zielgraph = ZielGraph()
+        self.original_ereignisgraph = EreignisGraph()
 
-        self.fdl_korrekturen = JournalCollection()
+        self.dispo_journal = Journal()
+        self.dispo_zielgraph = ZielGraph()
+        self.dispo_ereignisgraph = EreignisGraph()
 
         self.strecken = Strecken()
         self.strecken.liniengraph = self.liniengraph
@@ -89,15 +91,18 @@ class Anlage:
             else:
                 break
 
-        self.zielgraph.einfahrtszeiten_korrigieren(self.liniengraph, self.bahnhofgraph)
-        self.ereignisgraph.zielgraph_importieren(self.zielgraph)
-        self.fdl_korrekturen.replay()
-        self.ereignisgraph.prognose()
-        self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
+        self.original_zielgraph.einfahrtszeiten_korrigieren(self.liniengraph, self.bahnhofgraph)
+        self.original_ereignisgraph.zielgraph_importieren(self.original_zielgraph)
+
+        self.dispo_zielgraph = self.original_zielgraph.copy(as_view=False)
+        self.dispo_ereignisgraph = self.original_ereignisgraph.copy(as_view=False)
+        self.dispo_journal.replay(graph_map={'ereignisgraph': self.dispo_ereignisgraph, 'zielgraph': self.dispo_zielgraph})
+        self.dispo_ereignisgraph.prognose()
+        self.dispo_ereignisgraph.verspaetungen_nach_zielgraph(self.dispo_zielgraph)
 
         if logger.isEnabledFor(logging.DEBUG):
-            write_gml(self.zielgraph, debug_path / f"{self.anlageninfo.aid}.zielgraph.gml")
-            write_gml(self.ereignisgraph, debug_path / f"{self.anlageninfo.aid}.ereignisgraph.gml")
+            write_gml(self.dispo_zielgraph, debug_path / f"{self.anlageninfo.aid}.zielgraph.gml")
+            write_gml(self.dispo_ereignisgraph, debug_path / f"{self.anlageninfo.aid}.ereignisgraph.gml")
             # with open(debug_path / f"{self.anlageninfo.aid}.strecken.json", "w") as f:
             #     json.dump(self.strecken.strecken, f)
 
@@ -141,7 +146,7 @@ class Anlage:
 
         self.zuggraph = client.zuggraph.copy(as_view=True)
         self.aenderungen.add('zuggraph')
-        self.zielgraph = client.zielgraph.copy(as_view=False)
+        self.original_zielgraph = client.zielgraph.copy(as_view=False)
         self.aenderungen.add('zielgraph')
 
     def _load_config(self, config_path):
@@ -208,7 +213,7 @@ class Anlage:
         # abhängigkeiten
         if self.liniengraph:
             aenderungen = self.aenderungen.copy()
-        elif self.bahnhofgraph and self.zielgraph:
+        elif self.bahnhofgraph and self.original_zielgraph:
             aenderungen = {'bahnhofgraph', 'zielgraph'}
         else:
             aenderungen = set()
@@ -308,10 +313,10 @@ class Anlage:
         und als Linie eingefügt.
         """
 
-        for node1, node2, kante in self.zielgraph.edges(data=True):
+        for node1, node2, kante in self.original_zielgraph.edges(data=True):
             if kante.typ == 'P':
-                ziel1_data = self.zielgraph.nodes[node1]
-                ziel2_data = self.zielgraph.nodes[node2]
+                ziel1_data = self.original_zielgraph.nodes[node1]
+                ziel2_data = self.original_zielgraph.nodes[node2]
                 try:
                     bst1 = self.bahnhofgraph.find_superior(ziel1_data.plan_bst, {'Bf', 'Anst'})
                     bst2 = self.bahnhofgraph.find_superior(ziel2_data.plan_bst, {'Bf', 'Anst'})
@@ -444,4 +449,4 @@ class Anlage:
         self.config.save(p)
 
     def sim_ereignis_uebernehmen(self, ereignis: Ereignis):
-        self.ereignisgraph.sim_ereignis_uebernehmen(ereignis)
+        self.original_ereignisgraph.sim_ereignis_uebernehmen(ereignis)

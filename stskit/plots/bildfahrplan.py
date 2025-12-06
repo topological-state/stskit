@@ -224,7 +224,7 @@ class BildfahrplanPlot:
 
         strecke = set(self.strecke)
 
-        for node, data in self.anlage.ereignisgraph.nodes(data=True):
+        for node, data in self.anlage.dispo_ereignisgraph.nodes(data=True):
             try:
                 if t0 <= data.t_eff <= t1:
                     bst = bst_von_gleis(data.gleis)
@@ -233,11 +233,11 @@ class BildfahrplanPlot:
             except AttributeError:
                 continue
 
-        for u, v, data in self.anlage.ereignisgraph.edges(data=True):
+        for u, v, data in self.anlage.dispo_ereignisgraph.edges(data=True):
             if data.typ in {'P', 'D', 'H', 'B', 'E', 'F', 'K', 'A'} and (u in self.bildgraph or v in self.bildgraph):
                 zug = self.anlage.zuggraph.nodes[data.zid]
-                u_data = self.anlage.ereignisgraph.nodes[u]
-                v_data = self.anlage.ereignisgraph.nodes[v]
+                u_data = self.anlage.dispo_ereignisgraph.nodes[u]
+                v_data = self.anlage.dispo_ereignisgraph.nodes[v]
                 u_v_data = data.copy()
                 u_v_data['farbe'] = self.anlage.zugschema.zugfarbe(zug)
                 u_v_data['titel'] = self.zugbeschriftung.format_trasse_label(zug, abfahrt=u_data, ankunft=v_data)

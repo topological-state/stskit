@@ -419,7 +419,7 @@ class Rangierplan:
         Wenn beide Relationen fehlen, können die Ursprungs- und Ersatzloks nicht zugeordnet werden.
         """
 
-        for fid, ziel in self.anlage.zielgraph.nodes(data=True):
+        for fid, ziel in self.anlage.dispo_zielgraph.nodes(data=True):
             if fid in self.rangierliste:
                 continue
 
@@ -468,7 +468,7 @@ class Rangierplan:
         """
 
         for fid, rd in self.rangierliste.items():
-            ziel = self.anlage.zielgraph.nodes[fid]
+            ziel = self.anlage.dispo_zielgraph.nodes[fid]
 
             rd.gleis = ziel.gleis
             rd.p_an = ziel.p_an
@@ -476,8 +476,8 @@ class Rangierplan:
                 rd.p_ab = ziel.p_ab
             except AttributeError:
                 try:
-                    fid2 = self.anlage.zielgraph.next_node(fid, ersatz_erlaubt=True)
-                    ziel2 = self.anlage.zielgraph.nodes[fid2]
+                    fid2 = self.anlage.dispo_zielgraph.next_node(fid, ersatz_erlaubt=True)
+                    ziel2 = self.anlage.dispo_zielgraph.nodes[fid2]
                     rd.p_ab = ziel2.p_an
                 except (AttributeError, KeyError, ValueError):
                     rd.p_ab = None
@@ -530,11 +530,11 @@ class Rangierplan:
         :param rd: Rangierdaten des Zuges.
         """
 
-        if rd.ersatzlok_zid not in self.anlage.zielgraph.zuganfaenge:
+        if rd.ersatzlok_zid not in self.anlage.dispo_zielgraph.zuganfaenge:
             return
 
-        for fid in self.anlage.zielgraph.zugpfad(rd.ersatzlok_zid):
-            ziel = self.anlage.zielgraph.nodes[fid]
+        for fid in self.anlage.dispo_zielgraph.zugpfad(rd.ersatzlok_zid):
+            ziel = self.anlage.dispo_zielgraph.nodes[fid]
             if ziel.plan == rd.plan:
                 rd.ersatzlok_status.gleisfehler = ziel.gleis != rd.gleis
                 break

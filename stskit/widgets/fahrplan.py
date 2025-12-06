@@ -52,7 +52,7 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
 
     @property
     def zielgraph(self) -> ZielGraph:
-        return self.anlage.zielgraph
+        return self.anlage.dispo_zielgraph
 
     def update(self):
         """
@@ -255,7 +255,7 @@ class ZuglisteFilterProxy(QSortFilterProxyModel):
 
     @property
     def zielgraph(self) -> ZielGraph:
-        return self.anlage.zielgraph
+        return self.anlage.dispo_zielgraph
 
     @property
     def simzeit(self) -> int:
@@ -362,7 +362,7 @@ class FahrplanModell(QtCore.QAbstractTableModel):
 
     @property
     def zielgraph(self) -> ZielGraph:
-        return self.anlage.zielgraph
+        return self.anlage.dispo_zielgraph
 
     def set_zug(self, zid: int):
         """

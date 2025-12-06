@@ -1,0 +1,62 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object "client" as client #orangered
+object "konfiguration" as konfiguration #darkorange
+object "editor" as editor #orangered
+
+object "signalgraph" as signalgraph #limegreen
+object "bahnsteiggraph" as bahnsteiggraph #limegreen
+object "bahnhofgraph" as bahnhofgraph #limegreen
+object "liniengraph" as liniengraph #limegreen
+object "zuggraph" as zuggraph #limegreen
+object "original-zielgraph" as original_zielgraph #limegreen
+object "original-ereignisgraph" as original_ereignisgraph #limegreen
+object "dispo-zielgraph" as dispo_zielgraph #limegreen
+object "dispo-ereignisgraph" as dispo_ereignisgraph #limegreen
+
+object "strecken" as strecken #limegreen
+object "gleisbelegung" as gleisbelegung #cornflowerblue
+object "anschlussmatrix" as anschlussmatrix #cornflowerblue
+object "streckenfahrplan" as streckenfahrplan #cornflowerblue
+object "zugfahrplan" as zugfahrplan #cornflowerblue
+object "rangierplan" as rangierplan #cornflowerblue
+object "fdl-korrekturen" as fdl #orangered
+
+client --> signalgraph : init
+client --> bahnsteiggraph : init
+client --> zuggraph : poll, ereignisse
+client --> liniengraph : ereignisse
+client --> original_zielgraph : poll, ereignisse
+client --> dispo_ereignisgraph : ereignisse
+signalgraph --> bahnhofgraph
+bahnsteiggraph --> bahnhofgraph
+bahnhofgraph --> liniengraph
+original_zielgraph --> liniengraph
+original_zielgraph --> dispo_zielgraph
+original_zielgraph --> original_ereignisgraph
+original_ereignisgraph --> dispo_ereignisgraph
+liniengraph --> strecken
+
+konfiguration --> bahnhofgraph
+konfiguration --> liniengraph
+konfiguration --> strecken
+
+editor --> bahnhofgraph : einstellungen
+editor --> strecken : einstellungen
+
+dispo_zielgraph --> gleisbelegung
+dispo_ereignisgraph --> anschlussmatrix
+dispo_ereignisgraph --> streckenfahrplan
+dispo_zielgraph --> rangierplan
+dispo_zielgraph --> zugfahrplan
+
+fdl --> dispo_ereignisgraph : dispo
+fdl --> dispo_zielgraph : dispo
+dispo_ereignisgraph --> dispo_ereignisgraph : prognose
+dispo_ereignisgraph --> dispo_zielgraph : verspätungen
+liniengraph --> original_zielgraph : einfahrtszeiten
+
+strecken --> streckenfahrplan
+
+@enduml

@@ -12,7 +12,7 @@ from PySide6.QtGui import QFont, QTextCharFormat, QColor
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement, BAHNHOFELEMENT_BESCHREIBUNG
-from stskit.model.journal import GraphJournal
+from stskit.model.journal import JournalEntry
 from stskit.qt.ui_einstellungen import Ui_EinstellungenWindow
 
 
@@ -469,7 +469,7 @@ class StreckenEditor(QObject):
         super().__init__()
         self.anlage = anlage
         self.bahnhofgraph = anlage.bahnhofgraph.copy(as_view=False)
-        self.changes: GraphJournal = GraphJournal()
+        self.changes: JournalEntry = JournalEntry()
         self.parent = parent
         self.ui = ui
         self.in_update = True

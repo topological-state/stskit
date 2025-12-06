@@ -33,7 +33,7 @@ class ZielPlot:
 
     @property
     def zielgraph(self) -> ZielGraph:
-        return self.anlage.zielgraph
+        return self.anlage.dispo_zielgraph
 
     def select_zug(self, zid: int):
         """

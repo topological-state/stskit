@@ -4,14 +4,14 @@ Diese Änderungen können z.B. nach einem neuen Import vom Simulator auf die jew
 um den Betriebszustand wiederherzustellen.
 """
 
-from typing import Any, Dict, Iterable, List, Mapping, NamedTuple, Optional, Sequence, Set, Tuple, Union
+from typing import Any, Dict, Hashable, Iterable, List, Mapping, NamedTuple, Optional, Protocol, Sequence, Set, Tuple, Union
 
 import networkx as nx
 
 from stskit.model.bahnhofgraph import BahnhofElement
 
 
-class GraphJournal:
+class JournalEntry:
     """
     Journal von Änderungen an einem Graphen.
 
@@ -34,7 +34,7 @@ class GraphJournal:
     """
 
     def __init__(self,
-                 target_graph: Optional[nx.Graph] = None,
+                 target_graph: Optional[Union[nx.Graph, Hashable]] = None,
                  target_node: Optional[Any] = None):
         self.target_graph = target_graph
         self.target_node = target_node
@@ -121,7 +121,7 @@ class GraphJournal:
         else:
             self.changed_edges[(u, v)] = data
 
-    def merge(self, other: 'Journal'):
+    def merge(self, other: 'JournalEntry'):
         """
         Mit anderem Journal zusammenführen
 
@@ -137,7 +137,7 @@ class GraphJournal:
         for node, data in other.changed_nodes.items():
             self.change_node(node, **data)
 
-    def replay(self, graph: Optional[nx.Graph] = None):
+    def replay(self, graph: Optional[nx.Graph] = None, graph_map: Optional[Mapping[Any, nx.Graph]] = None) -> Dict[str, Set[Hashable]]:
         """
         Journal abspielen
 
@@ -162,61 +162,86 @@ class GraphJournal:
         ------
 
         Dictionary mit Fehlermeldungen.
+        Moegliche Keys: 'remove_edge', 'add_edge', 'change_edge', 'remove_node', 'add_node', 'change_node'.
+        Values: Set von edge oder node Labels.
         """
+
+        fails = {}
+        def _failed(operation, item):
+            if operation in fails:
+                fails[operation].add(item)
+            else:
+                fails[operation] = {item}
 
         if graph is None:
             graph = self.target_graph
-
-        failed_remove_edge = set()
-        failed_change_edge = set()
-        failed_remove_node = set()
-        failed_change_node = set()
+        if not isinstance(graph, nx.Graph):
+            graph = graph_map.get(graph)
+        if graph is None:
+            _failed('unresolved_target', self.target_graph)
 
         for edge in self.removed_edges:
             try:
                 graph.remove_edge(*edge)
-            except nx.NetworkXError:
-                failed_remove_edge.add(edge)
+            except (AttributeError, nx.NetworkXError):
+                _failed('remove_edge', edge)
 
         for label in self.removed_nodes:
             try:
                 graph.remove_node(label)
-            except nx.NetworkXError:
-                failed_remove_node.add(label)
+            except (AttributeError, nx.NetworkXError):
+                _failed('remove_node', label)
 
         for label, data in self.added_nodes.items():
-            if graph.has_node(label):
-                graph.nodes[label].clear()
-            graph.add_node(label, **data)
+            try:
+                if graph.has_node(label):
+                    graph.nodes[label].clear()
+                graph.add_node(label, **data)
+            except (AttributeError, nx.NetworkXError):
+                _failed('add_node', label)
 
         for edge, data in self.added_edges.items():
-            if graph.has_edge(*edge):
-                graph.edges[edge].clear()
-            graph.add_edge(*edge, **data)
+            try:
+                if graph.has_edge(*edge):
+                    graph.edges[edge].clear()
+                graph.add_edge(*edge, **data)
+            except (AttributeError, nx.NetworkXError):
+                _failed('add_edge', edge)
 
         for label, data in self.changed_nodes.items():
-            if graph.has_node(label):
-                graph.add_node(label, **data)
-            else:
-                failed_change_node.add(label)
+            try:
+                if graph.has_node(label):
+                    graph.add_node(label, **data)
+                else:
+                    _failed('change_node', label)
+            except (AttributeError, nx.NetworkXError):
+                _failed('change_node', label)
 
         for edge, data in self.changed_edges.items():
-            if graph.has_edge(*edge):
-                graph.add_edge(*edge, **data)
-            else:
-                failed_change_edge.add(edge)
-
-        fails = {}
-        if failed_remove_edge:
-            fails['remove_edges'] = failed_remove_edge
-        if failed_change_edge:
-            fails['change_edges'] = failed_change_edge
-        if failed_remove_node:
-            fails['remove_nodes'] = failed_remove_node
-        if failed_change_node:
-            fails['change_nodes'] = failed_change_node
+            try:
+                if graph.has_edge(*edge):
+                    graph.add_edge(*edge, **data)
+                else:
+                    _failed('change_edge', edge)
+            except (AttributeError, nx.NetworkXError):
+                _failed('change_edge', edge)
 
         return fails
+
+
+class JournalEntryGroup:
+    def __init__(self, *entries):
+        self.entries: List[JournalEntry] = list(entries)
+
+    def add_entry(self, entry: JournalEntry):
+        self.entries.append(entry)
+
+    def remove_entry(self, entry: JournalEntry):
+        self.entries.remove(entry)
+
+    def replay(self, graph_map: Optional[Union[Mapping[Hashable, nx.Graph]]] = None):
+        for entry in self.entries:
+            entry.replay(graph_map=graph_map)
 
 
 class JournalIDType(NamedTuple):
@@ -226,37 +251,35 @@ class JournalIDType(NamedTuple):
     Ein Journal wird durch Typ, Zug, Bst identifiziert.
     """
 
-    typ: str  # Betriebshalt, Ankunft, Abfahrt
+    typ: str  # Betriebshalt, Ankunft, Abfahrt, Kreuzung
     zid: int
     bst: BahnhofElement
 
     def __str__(self):
         return f"{self.typ}, {self.zid}, {self.bst}"
 
-class JournalCollection:
-    """
-    Kollektion von Journals.
 
-    JournalCollection wird zum Erfassen von Fdl-Korrekturen an den Graphdaten verwendet.
-    Es erlaubt, Journals von verschiedenen Graphen unter einer Korrektur-ID zusammenzufassen.
+class Journal:
+    """
+    Journal von Aenderungen an einem Graph
+
+    Journal wird zum Erfassen von Fdl-Korrekturen an den Graphdaten verwendet.
+    Es erlaubt, Aenderungen an verschiedenen Graphen unter einer Korrektur-ID zusammenzufassen.
 
     Anhand der Korrektur-ID können Journals wiedergefunden und gelöscht werden.
     Es werden dann jeweils alle zu einem Ereignis gehörenden Korrekturen gelöscht.
     """
     
     def __init__(self):
-        self.collection: Dict[JournalIDType, List[GraphJournal]] = {}
+        self.entries: Dict[Hashable, Union[JournalEntry, JournalEntryGroup]] = {}
 
-    def replay(self):
-        for journal_list in self.collection.values():
-            for journal in journal_list:
-                journal.replay(journal.target_graph)
+    def replay(self, graph_map: Optional[Union[Mapping[Hashable, nx.Graph]]] = None):
+        for entry in self.entries.values():
+            entry.replay(graph_map=graph_map)
 
-    def add_journal(self, id_, *journals: GraphJournal):
-        if id_ not in self.collection:
-            self.collection[id_] = []
-        for journal in journals:
-            self.collection[id_].append(journal)
+    def add_entry(self, id_, *entries: JournalEntry):
+        group = JournalEntryGroup(*entries)
+        self.entries[id_] = group
 
-    def delete_journal(self, id_):
-        del self.collection[id_]
+    def delete_entry(self, id_: Hashable):
+        del self.entries[id_]
