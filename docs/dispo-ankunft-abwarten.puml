@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+'Ankunft abwarten
+'Anschluss abwarten
+
+'Zug 1
+object "1 B an" as B1an
+object "1 B ab" as B1ab #red {
+(bei Bh neu)
+}
+object "1 C an" as C1an
+
+B1an --> B1ab : H/B
+B1ab --> C1an : P
+
+'Zug 2
+object "2 A ab" as A2ab
+object "2 B an" as B2an
+object "2 B ab" as B2ab
+
+A2ab --> B2an : P
+B2an --> B2ab : H/E/F/K/B
+
+B2an --[#red]> B1ab : A(t)
+
+@enduml

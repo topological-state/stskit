@@ -1,0 +1,38 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+'Zug 1
+object "1 A ab" as A1ab
+object "1 B an" as B1an {
+P/E/F/K
+}
+object "1 B ab" as B1ab #red {
+(bei Bh neu)
+}
+object "1 C an" as C1an
+
+A1ab --> B1an
+B1an --> B1ab : B/H
+B1ab --> C1an
+
+'Zug 2
+object "2 C ab" as C2ab
+object "2 B an" as B2an {
+P/E/F/K
+}
+object "2 B ab" as B2ab #red {
+(bei Bh neu)
+}
+object "2 A an" as A2an
+
+C2ab --> B2an
+B2an --> B2ab : B/H
+B2ab --> A2an
+
+'Kreuzung (bei eingleisiger Strecke)
+'Gegenseitig Ankunft abwarten
+
+B2an --[#red]> B1ab : A(t)
+B1an --[#red]> B2ab : A(t)
+
+@enduml

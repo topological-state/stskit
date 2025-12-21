@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+'Verschiebung
+
+'Zug 1
+object "1 A ab" as A1ab
+object "1 B an" as B1an
+object "1 B ab" as B1ab #red {
+bei Bh neu
+}
+object "1 C an" as C1an
+
+A1ab --> B1an : P
+B1an --> B1ab : H
+B1ab --> C1an : P
+
+object V #red {
+delta
+}
+
+'Trasse verschieben
+'Verzögerung, Verspätung
+
+B1an --[#red]> V : A
+V --[#red]> B1ab : A
+
+@enduml

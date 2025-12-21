@@ -1,0 +1,75 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+!pragma teoz true
+
+participant Aarau order 1
+queue "A-B" as AB order 2
+participant Baden order 3
+queue "B-C" as BC order 4
+participant Chur order 5
+
+== Ankunft / Anschluss abwarten ==
+
+Aarau ->(10) Baden ++ : 1
+note right: ggf. Betriebshalt
+Aarau --> Baden : 2
+note left: Herkunft beliebig
+...Umsteigezeit...
+Baden ->(10) Chur -- : 1
+note right
+1 fährt nach
+Ankunft 2 ab
+end note
+
+== Abfahrt abwarten / überholung ==
+
+Aarau ->(10) Baden ++ : 1
+note right: ggf. Betriebshalt
+Baden -->(10) Chur : 2
+note right: Ziel beliebig
+...Abstand...
+Baden ->(10) Chur -- : 1
+note right
+1 fährt nach
+Abfahrt 2 ab
+end note
+
+== Kreuzung ==
+
+Aarau ->(10) Baden ++ : 1
+note right: ggf. Betriebshalt
+Chur -->(10) Baden ++ : 2
+...Stellzeit...
+Baden ->(10) Chur -- : 1
+note right
+Züge fahren nach
+letzter Ankunft ab
+end note
+&Baden -->(10) Aarau -- : 2
+
+== Folgen ==
+
+Aarau -> AB ++ : 1
+note left: Herkunft beliebig
+note right: kein Betriebshalt
+Aarau -->(20) Baden : 2
+...Gleisfreigabe...
+AB -> Baden -- : 1
+note right
+1 kommt nach 2 an
+end note
+
+== Verschieben ==
+
+Aarau ->(10) Baden ++ : 1
+note right: ggf. Betriebshalt
+...manuelle Verzögerung...
+Baden ->(10) Chur -- : 1
+note right
+Abfahrt wird um
+eine bestimte Zeit
+verzögert
+end note
+
+
+@enduml

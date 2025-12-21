@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+'Ankunft im nächsten Bahnhof abwarten
+
+'Zug 1
+object "1 A ab" as A1ab
+object "1 ..." as S1
+object "1 B an" as B1an
+
+A1ab --> S1
+S1 --> B1an : P
+
+'Zug 2
+object "2 A ab" as A2ab
+object "2 B an" as B2an
+object "2 C an" as C2an
+
+A2ab --> B2an : P
+B2an --> C2an : P
+
+B2an --[#red]> B1an : A(t)
+
+@enduml
