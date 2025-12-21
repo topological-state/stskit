@@ -13,5 +13,5 @@ object "Zug 1 ab" as zug1ab {
     p = p<sub>ab</sub>
 }
 
-zug1an -> zug1ab: H (dt<sub>min</sub>)
+zug1an --> zug1ab: H (dt<sub>min</sub>)
 @enduml

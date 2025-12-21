@@ -25,7 +25,7 @@ object "Zug 2 ab" as zug2ab {
     p = p<sub>ab,2</sub>
 }
 
-zug1an -> kupplung: K (dt<sub>min</sub>)
-zug2an -> kupplung: H
-kupplung -> zug2ab: H
+zug1an --> kupplung: K (dt<sub>min</sub>)
+zug2an --> kupplung: H
+kupplung --> zug2ab: H
 @enduml

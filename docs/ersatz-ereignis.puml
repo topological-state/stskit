@@ -19,6 +19,6 @@ object "Zug 2 ab" as zug2ab {
     p = p<sub>ab,2</sub>
 }
 
-zug1an -> ersatz: E (dt<sub>min</sub>)
-ersatz -> zug2ab: H
+zug1an --> ersatz: E (dt<sub>min</sub>)
+ersatz --> zug2ab: H
 @enduml

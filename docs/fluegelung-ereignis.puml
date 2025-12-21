@@ -25,8 +25,8 @@ object "Zug 2 ab" as zug2ab {
     p = p<sub>ab,2</sub>
 }
 
-zug1an -> fluegelung: F (dt<sub>min</sub>)
-fluegelung -> zug1ab: H
-fluegelung -> zug2ab: H
+zug1an --> fluegelung: F (dt<sub>min</sub>)
+fluegelung --> zug1ab: H
+fluegelung --> zug2ab: H
 
 @enduml
