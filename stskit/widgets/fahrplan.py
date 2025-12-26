@@ -19,6 +19,7 @@ from stskit.qt.ui_fahrplan import Ui_FahrplanWidget
 from stskit.model.zielgraph import ZielGraph, ZielGraphNode, ZielLabelType
 from stskit.model.zuggraph import ZugGraph, ZugGraphNode
 from stskit.plots.zielplot import ZielPlot
+from stskit.widgets.dispoeditor import DispoModell
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -588,6 +589,16 @@ class FahrplanWindow(QtWidgets.QWidget):
 
         self.zielplot = ZielPlot(zentrale.anlage)
 
+        self.dispo_modell = DispoModell(zentrale.anlage)
+        self.dispo_sort_filter = QSortFilterProxyModel(self)
+        self.dispo_sort_filter.setSourceModel(self.dispo_modell)
+        self.ui.dispo_table.setModel(self.dispo_sort_filter)
+        self.ui.dispo_table.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.ui.dispo_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.ui.dispo_table.verticalHeader().setVisible(False)
+        self.ui.dispo_table.sortByColumn(0, QtCore.Qt.AscendingOrder)
+        self.ui.dispo_table.setSortingEnabled(True)
+
     def closeEvent(self, event, /):
         self.zentrale.anlage_update.unregister(self)
         self.zentrale.plan_update.unregister(self)
@@ -612,6 +623,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.zugliste_modell.update()
         self.fahrplan_modell.update()
         self.folgezug_modell.update()
+        self.dispo_modell.update()
 
         if model_index:
             view_index = self.zugliste_sort_filter.mapFromSource(model_index)
@@ -620,6 +632,8 @@ class FahrplanWindow(QtWidgets.QWidget):
 
         self.ui.zugliste_view.resizeColumnsToContents()
         self.ui.zugliste_view.resizeRowsToContents()
+        self.ui.dispo_table.resizeColumnsToContents()
+        self.ui.dispo_table.resizeRowsToContents()
 
     @QtCore.Slot('QItemSelection', 'QItemSelection')
     def zugliste_selection_changed(self, selected, deselected):

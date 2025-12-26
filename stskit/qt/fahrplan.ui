@@ -13,13 +13,16 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout_5">
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="QTabWidget" name="zugliste_widget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
       <widget class="QWidget" name="zugliste_tab">
        <attribute name="title">
         <string>Züge</string>
@@ -174,6 +177,16 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="dispo_tab">
+       <attribute name="title">
+        <string>Dispo</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QTableView" name="dispo_table"/>
+        </item>
+       </layout>
+      </widget>
      </widget>
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="currentIndex">
@@ -234,8 +247,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>348</width>
-             <height>736</height>
+             <width>387</width>
+             <height>733</height>
             </rect>
            </property>
           </widget>

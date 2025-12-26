@@ -4,6 +4,7 @@ Diese Änderungen können z.B. nach einem neuen Import vom Simulator auf die jew
 um den Betriebszustand wiederherzustellen.
 """
 
+from collections import defaultdict
 from typing import Any, Dict, Hashable, Iterable, List, Mapping, NamedTuple, Optional, Protocol, Sequence, Set, Tuple, Union
 
 import networkx as nx
@@ -34,16 +35,69 @@ class JournalEntry:
     """
 
     def __init__(self,
-                 target_graph: Optional[Union[nx.Graph, Hashable]] = None,
-                 target_node: Optional[Any] = None):
+                 target_graph: Optional[Hashable] = None,
+                 target_node: Optional[Hashable] = None):
         self.target_graph = target_graph
         self.target_node = target_node
-        self.removed_nodes: Set[Any] = set()
-        self.added_nodes: Dict[Any, Any] = {}
-        self.changed_nodes: Dict[Any, Any] = {}
-        self.removed_edges: Set[Tuple[Any, Any]] = set()
-        self.added_edges: Dict[Tuple[Any, Any], Any] = {}
-        self.changed_edges: Dict[Tuple[Any, Any], Any] = {}
+        self.removed_nodes: Set[Hashable] = set()
+        self.added_nodes: Dict[Hashable, Mapping] = {}
+        self.changed_nodes: Dict[Hashable, Mapping] = {}
+        self.removed_edges: Set[Tuple[Hashable, Hashable]] = set()
+        self.added_edges: Dict[Tuple[Hashable, Hashable], Mapping] = {}
+        self.changed_edges: Dict[Tuple[Hashable, Hashable], Mapping] = {}
+
+    def nodes(self) -> Set[Tuple[Hashable, Hashable]]:
+        """
+        Betroffene Knoten auflisten
+        """
+
+        _nodes = {self.target_node}
+        _nodes.update(self.removed_nodes)
+        _nodes.update(self.added_nodes)
+        _nodes.update(self.changed_nodes)
+        _nodes.update((e[0] for e in self.removed_edges))
+        _nodes.update((e[1] for e in self.removed_edges))
+        _nodes.update((e[0] for e in self.added_edges))
+        _nodes.update((e[1] for e in self.added_edges))
+        _nodes.update((e[0] for e in self.changed_edges))
+        _nodes.update((e[1] for e in self.changed_edges))
+        _nodes.discard(None)
+
+        return _nodes
+
+    def summary(self) -> Dict[Tuple[Hashable, Hashable], Set[str]]:
+        """
+        Zusammenfassung von Aenderungen
+
+        Listet zu jedem betroffenen Knoten die gemachten Aenderungen.
+        Die Aenderungen werden als String in einem Set wiedergegeben.
+        '.' steht fuer den Targetknoten, '+' fuer einen neuen Knoten, '-' fuer einen geloeschten Knoten
+        und '*' fuer einen geaenderten Knoten.
+        """
+
+        target = defaultdict(set)
+        if self.target_node is not None:
+            target[(self.target_graph, self.target_node)] = {'.'}
+
+        removed = defaultdict(set)
+        removed.update({(self.target_graph, n): {'-'} for n in self.removed_nodes})
+        removed.update({(self.target_graph, e[0]): {'-'} for e in self.removed_edges})
+        removed.update({(self.target_graph, e[1]): {'-'} for e in self.removed_edges})
+
+        added = defaultdict(set)
+        added.update({(self.target_graph, n): {'+'} for n in self.added_nodes})
+        added.update({(self.target_graph, e[0]): {'+'} for e in self.added_edges})
+        added.update({(self.target_graph, e[1]): {'+'} for e in self.added_edges})
+
+        changed = defaultdict(set)
+        changed.update({(self.target_graph, n): {'*'} for n in self.changed_nodes})
+        changed.update({(self.target_graph, e[0]): {'*'} for e in self.changed_edges})
+        changed.update({(self.target_graph, e[1]): {'*'} for e in self.changed_edges})
+
+        nodes = target | removed | added | changed
+        result = {n: target[n] | removed[n] | added[n] | changed[n] for n in nodes}
+
+        return result
 
     def clear(self):
         """
@@ -57,21 +111,21 @@ class JournalEntry:
         self.added_edges = {}
         self.changed_edges = {}
 
-    def remove_node(self, n):
+    def remove_node(self, n: Hashable):
         """
         Knoten löschen
         """
 
         self.removed_nodes.add(n)
 
-    def remove_edge(self, u, v):
+    def remove_edge(self, u: Hashable, v: Hashable):
         """
         Kante löschen
         """
 
         self.removed_edges.add((u, v))
 
-    def add_node(self, n, **data):
+    def add_node(self, n: Hashable, **data):
         """
         Knoten hinzufügen
 
@@ -81,7 +135,7 @@ class JournalEntry:
 
         self.added_nodes[n] = data
 
-    def add_edge(self, u, v, **data):
+    def add_edge(self, u: Hashable, v: Hashable, **data):
         """
         Kante hinzufügen
 
@@ -91,7 +145,7 @@ class JournalEntry:
 
         self.added_edges[(u, v)] = data
 
-    def change_node(self, n, **data):
+    def change_node(self, n: Hashable, **data):
         """
         Knoten ändern
 
@@ -106,7 +160,7 @@ class JournalEntry:
         else:
             self.changed_nodes[n] = data
 
-    def change_edge(self, u, v, **data):
+    def change_edge(self, u: Hashable, v: Hashable, **data):
         """
         Kantenanttribute ändern
 
@@ -137,7 +191,7 @@ class JournalEntry:
         for node, data in other.changed_nodes.items():
             self.change_node(node, **data)
 
-    def replay(self, graph: Optional[nx.Graph] = None, graph_map: Optional[Mapping[Any, nx.Graph]] = None) -> Dict[str, Set[Hashable]]:
+    def replay(self, graph: Optional[nx.Graph] = None, graph_map: Optional[Mapping[Hashable, nx.Graph]] = None) -> Dict[str, Set[Hashable]]:
         """
         Journal abspielen
 
@@ -243,6 +297,31 @@ class JournalEntryGroup:
         for entry in self.entries:
             entry.replay(graph_map=graph_map)
 
+    def nodes(self) -> Set[Tuple[Hashable, Hashable]]:
+        """
+        Betroffene Knoten auflisten
+        """
+
+        nodes = [entry.nodes() for entry in self.entries]
+        return set().union(*nodes)
+
+    def summary(self) -> Dict[Tuple[Hashable, Hashable], Set[str]]:
+        """
+        Zusammenfassung von Aenderungen
+
+        Listet zu jedem betroffenen Knoten die gemachten Aenderungen.
+        Die Aenderungen werden als String in einem Set wiedergegeben.
+        '.' steht fuer den Targetknoten, '+' fuer einen neuen Knoten, '-' fuer einen geloeschten Knoten
+        und '*' fuer einen geaenderten Knoten.
+        """
+
+        summary: Dict[Tuple[Hashable, Hashable], Set[str]] = defaultdict(set)
+        for entry in self.entries:
+            entry_summary = entry.summary()
+            for n in entry_summary:
+                summary[n].update(entry_summary[n])
+
+        return summary
 
 class JournalIDType(NamedTuple):
     """

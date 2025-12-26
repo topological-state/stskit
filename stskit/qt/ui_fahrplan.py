@@ -26,8 +26,8 @@ class Ui_FahrplanWidget(object):
         if not FahrplanWidget.objectName():
             FahrplanWidget.setObjectName(u"FahrplanWidget")
         FahrplanWidget.resize(1101, 803)
-        self.verticalLayout = QVBoxLayout(FahrplanWidget)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.horizontalLayout_5 = QHBoxLayout(FahrplanWidget)
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.splitter = QSplitter(FahrplanWidget)
         self.splitter.setObjectName(u"splitter")
         self.splitter.setOrientation(Qt.Horizontal)
@@ -115,6 +115,16 @@ class Ui_FahrplanWidget(object):
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
 
         self.zugliste_widget.addTab(self.zugliste_tab, "")
+        self.dispo_tab = QWidget()
+        self.dispo_tab.setObjectName(u"dispo_tab")
+        self.horizontalLayout_4 = QHBoxLayout(self.dispo_tab)
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.dispo_table = QTableView(self.dispo_tab)
+        self.dispo_table.setObjectName(u"dispo_table")
+
+        self.horizontalLayout_4.addWidget(self.dispo_table)
+
+        self.zugliste_widget.addTab(self.dispo_tab, "")
         self.splitter.addWidget(self.zugliste_widget)
         self.tabWidget_2 = QTabWidget(self.splitter)
         self.tabWidget_2.setObjectName(u"tabWidget_2")
@@ -152,7 +162,7 @@ class Ui_FahrplanWidget(object):
         self.grafik_area.setWidgetResizable(True)
         self.grafik_widget = QWidget()
         self.grafik_widget.setObjectName(u"grafik_widget")
-        self.grafik_widget.setGeometry(QRect(0, 0, 348, 736))
+        self.grafik_widget.setGeometry(QRect(0, 0, 387, 733))
         self.grafik_area.setWidget(self.grafik_widget)
 
         self.verticalLayout_3.addWidget(self.grafik_area)
@@ -160,7 +170,7 @@ class Ui_FahrplanWidget(object):
         self.tabWidget_2.addTab(self.grafik_tab, "")
         self.splitter.addWidget(self.tabWidget_2)
 
-        self.verticalLayout.addWidget(self.splitter)
+        self.horizontalLayout_5.addWidget(self.splitter)
 
 #if QT_CONFIG(shortcut)
         self.vorlaufzeit_label.setBuddy(self.vorlaufzeit_spin)
@@ -171,6 +181,7 @@ class Ui_FahrplanWidget(object):
 
         self.retranslateUi(FahrplanWidget)
 
+        self.zugliste_widget.setCurrentIndex(0)
         self.tabWidget_2.setCurrentIndex(0)
 
 
@@ -188,6 +199,7 @@ class Ui_FahrplanWidget(object):
         self.nachlaufzeit_spin.setSpecialValueText(QCoreApplication.translate("FahrplanWidget", u"unbegrenzt", None))
         self.nachlaufzeit_spin.setSuffix(QCoreApplication.translate("FahrplanWidget", u" Min.", None))
         self.zugliste_widget.setTabText(self.zugliste_widget.indexOf(self.zugliste_tab), QCoreApplication.translate("FahrplanWidget", u"Z\u00fcge", None))
+        self.zugliste_widget.setTabText(self.zugliste_widget.indexOf(self.dispo_tab), QCoreApplication.translate("FahrplanWidget", u"Dispo", None))
         self.fahrplan_label.setText(QCoreApplication.translate("FahrplanWidget", u"Fahrplan", None))
         self.folgezug_label.setText(QCoreApplication.translate("FahrplanWidget", u"Folgezug", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.fahrplan_tab), QCoreApplication.translate("FahrplanWidget", u"Fahrplan", None))
