@@ -85,7 +85,7 @@ class Betrieb:
     def ankunft_abwarten(self,
                          wartend: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                          abzuwarten: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                         wartezeit: int = 1,
+                         wartezeit: int = 0,
                          dry_run: bool = False) -> Optional[Tuple[EreignisLabelType, EreignisLabelType]]:
         """
         Ankunft/Kreuzung/Anschluss abwarten
@@ -121,6 +121,46 @@ class Betrieb:
         abzuwarten2 = self._get_ereignis_label(abzuwarten, {'An'})
         if wartend2 and abzuwarten2:
             return self._abhaengigkeit_setzen(wartend2, abzuwarten2, wartezeit, dry_run)
+
+    def kreuzung_abwarten(self,
+                         ankunft1: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                         ankunft2: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                         wartezeit: int = 0,
+                         dry_run: bool = False) -> Optional[List[Tuple[EreignisLabelType, EreignisLabelType]]]:
+        """
+        Kreuzung abwarten
+
+        Wird in folgenden Situationen angewendet:
+
+        - Kreuzung auf eingleisiger Strecke.
+
+        Zuege können als Ereignisse oder Fahrplanziele angegeben werden.
+        In letzterem Fall wird zuerst das zugehörige Ankunftsereignis gesucht.
+        Ereignisse und Ziele können als Label oder Node Data angegeben werden.
+
+        Bemerkung: Bei Durchfahrt kann ein Zug nicht warten.
+        In diesem Fall wird implizit ein Betriebshalt eingefügt.
+
+        ankunft1, ankunft2: Ankunftsereignisse der kreuzenden Zuege (Ereignis- oder Ziel-, -Label oder -Daten)
+        wartezeit: Zusätzliche Wartezeit
+        dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
+        """
+
+        ankunft1 = self._get_ereignis_label(ankunft1, {'An'})
+        ankunft2 = self._get_ereignis_label(ankunft2, {'An'})
+        if ankunft1 is None or ankunft2 is None:
+            return None
+        abfahrt1 = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft1)  # any type
+        abfahrt2 = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft2)  # any type
+        kante1 = self.ankunft_abwarten(abfahrt1, ankunft2, wartezeit, dry_run) if abfahrt1 is not None else None
+        kante2 = self.ankunft_abwarten(abfahrt2, ankunft1, wartezeit, dry_run) if abfahrt2 is not None else None
+        return [kante for kante in [kante1, kante2] if kante is not None]
+
+    def zug_folgen(self):
+        pass
+
+    def trasse_verschieben(self):
+        pass
 
     def _get_ereignis_label(self,
                             objekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],

@@ -49,6 +49,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionLoeschen.triggered.connect(self.action_loeschen)
         self.ui.actionAnkunftAbwarten.triggered.connect(self.action_ankunft_abwarten)
         self.ui.actionAbfahrtAbwarten.triggered.connect(self.action_abfahrt_abwarten)
+        self.ui.actionKreuzung.triggered.connect(self.action_kreuzung_abwarten)
+        self.ui.actionZugfolge.setEnabled(False)
         self.ui.actionBetriebshaltEinfuegen.triggered.connect(self.action_betriebshalt_einfuegen)
         self.ui.actionActionBetriebshaltLoeschen.triggered.connect(self.action_betriebshalt_loeschen)
 
@@ -192,6 +194,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionMinusEins.setEnabled(display_mode and trasse_auswahl)
         self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and self.kann_abfahrt_abwarten() is not None)
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and self.kann_ankunft_abwarten() is not None)
+        self.ui.actionKreuzung.setEnabled(display_mode and self.kann_kreuzung_abwarten() is not None)
 
         self.updating = False
 
@@ -354,7 +357,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     @Slot()
     def action_ankunft_abwarten(self):
         """
-        Ankunft des zweiten Zuges abwarten (Anschluss/Kreuzung)
+        Ankunft des zweiten Zuges abwarten (Anschluss)
 
         Bedingungen
         - Zwei Kanten selektiert.
@@ -393,6 +396,39 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             return
 
         return ziel, referenz
+
+    @Slot()
+    def action_kreuzung_abwarten(self):
+        """
+        Ankunft von zwei Zuegen abwarten (Kreuzung)
+
+        Bedingungen
+        - Zwei Kanten selektiert.
+        - Beide Kanten enden im gleichen Bahnhof.
+        """
+
+        nodes = self.kann_kreuzung_abwarten()
+        if nodes is None:
+            return
+
+        ankunft1, ankunft2 = nodes
+        self.zentrale.betrieb.kreuzung_abwarten(ankunft1, ankunft2)
+
+        self.plot.clear_selection()
+        self.grafik_update()
+        self.update_actions()
+
+    def kann_kreuzung_abwarten(self):
+        try:
+            ankunft1 = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][1]]
+            ankunft2 = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[1][1]]
+        except (IndexError, KeyError):
+            return
+
+        if ankunft1.bst != ankunft2.bst:
+            return
+
+        return ankunft1, ankunft2
 
     @Slot()
     def action_betriebshalt_einfuegen(self):

@@ -233,11 +233,12 @@
    <addaction name="separator"/>
    <addaction name="actionAnkunftAbwarten"/>
    <addaction name="actionAbfahrtAbwarten"/>
+   <addaction name="actionKreuzung"/>
    <addaction name="actionLoeschen"/>
   </widget>
   <action name="actionSetup">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/equalizer.png</normaloff>
      <disabledoff>:/equalizer-dis.png</disabledoff>:/equalizer.png</iconset>
    </property>
@@ -253,7 +254,7 @@
   </action>
   <action name="actionAnzeige">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/slots.png</normaloff>
      <disabledoff>:/slots-dis.png</disabledoff>:/slots.png</iconset>
    </property>
@@ -269,7 +270,7 @@
   </action>
   <action name="actionPlusEins">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/clock--plus.png</normaloff>:/clock--plus.png</iconset>
    </property>
    <property name="text">
@@ -284,7 +285,7 @@
   </action>
   <action name="actionMinusEins">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/clock--minus.png</normaloff>:/clock--minus.png</iconset>
    </property>
    <property name="text">
@@ -299,7 +300,7 @@
   </action>
   <action name="actionFix">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/clock--pencil.png</normaloff>:/clock--pencil.png</iconset>
    </property>
    <property name="text">
@@ -314,7 +315,7 @@
   </action>
   <action name="actionLoeschen">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/chain--return.png</normaloff>:/chain--return.png</iconset>
    </property>
    <property name="text">
@@ -329,37 +330,37 @@
   </action>
   <action name="actionAnkunftAbwarten">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/chain--arrow-in.png</normaloff>:/chain--arrow-in.png</iconset>
    </property>
    <property name="text">
-    <string>Ankunft</string>
+    <string>Ankunft abwarten</string>
    </property>
    <property name="toolTip">
-    <string>Kreuzung/Ankunft von zweitem gewählten Zug abwarten (K)</string>
+    <string>Anschluss: Ankunft von zweitem gewählten Zug abwarten (N)</string>
    </property>
    <property name="shortcut">
-    <string>K</string>
+    <string>N</string>
    </property>
   </action>
   <action name="actionAbfahrtAbwarten">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/chain--arrow.png</normaloff>:/chain--arrow.png</iconset>
    </property>
    <property name="text">
     <string>Abfahrt</string>
    </property>
    <property name="toolTip">
-    <string>Überholung/Abfahrt von zweitem gewählten Zug abwarten (F)</string>
+    <string>Überholung: Abfahrt von zweitem gewählten Zug abwarten (B)</string>
    </property>
    <property name="shortcut">
-    <string>F</string>
+    <string>B</string>
    </property>
   </action>
   <action name="actionWarnungSetzen">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/flag.png</normaloff>:/flag.png</iconset>
    </property>
    <property name="text">
@@ -374,7 +375,7 @@
   </action>
   <action name="actionWarnungIgnorieren">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/flag-green.png</normaloff>:/flag-green.png</iconset>
    </property>
    <property name="text">
@@ -389,7 +390,7 @@
   </action>
   <action name="actionWarnungReset">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/flag-white.png</normaloff>:/flag-white.png</iconset>
    </property>
    <property name="text">
@@ -413,7 +414,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/funnel-small.png</normaloff>
      <disabledoff>:/funnel-small-dis</disabledoff>:/funnel-small.png</iconset>
    </property>
@@ -427,7 +428,24 @@
     <string>B</string>
    </property>
   </action>
+  <action name="actionKreuzung">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/chain--2in-1out.png</normaloff>:/chain--2in-1out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Kreuzung</string>
+   </property>
+   <property name="toolTip">
+    <string>Kreuzung: Ankunft beider Züge abwarten (K)</string>
+   </property>
+   <property name="shortcut">
+    <string>K</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

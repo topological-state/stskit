@@ -61,6 +61,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.actionLoeschen.triggered.connect(self.action_loeschen)
         self.ui.actionAnkunftAbwarten.triggered.connect(self.action_ankunft_abwarten)
         self.ui.actionAbfahrtAbwarten.triggered.connect(self.action_abfahrt_abwarten)
+        self.ui.actionKreuzung.triggered.connect(self.action_kreuzung)
         self.ui.stackedWidget.currentChanged.connect(self.page_changed)
 
         self.ui.vorlaufzeit_spin.valueChanged.connect(self.vorlaufzeit_changed)
@@ -100,6 +101,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.actionMinusEins.setEnabled(display_mode and len(self.plot._slot_auswahl))
         self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and len(self.plot._slot_auswahl) == 2)
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and len(self.plot._slot_auswahl) == 2)
+        self.ui.actionKreuzung.setEnabled(display_mode and len(self.plot._slot_auswahl) == 2)
 
     def update_widgets(self):
         self.ui.vorlaufzeit_spin.setValue(self.plot.vorlaufzeit)
@@ -242,7 +244,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         try:
             ziel = self.plot._slot_auswahl[0].fid
         except (IndexError, KeyError):
-            return None
+            return
 
         self.zentrale.betrieb.wartezeit_aendern(ziel, 1, True)
 
@@ -251,7 +253,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         try:
             ziel = self.plot._slot_auswahl[0].fid
         except (IndexError, KeyError):
-            return None
+            return
 
         self.zentrale.betrieb.wartezeit_aendern(ziel, -1, True)
 
@@ -260,7 +262,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         try:
             ziel = self.plot._slot_auswahl[0].fid
         except (IndexError, KeyError):
-            return None
+            return
 
         self.zentrale.betrieb.abfahrt_zuruecksetzen(ziel)
 
@@ -270,7 +272,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             ziel = self.plot._slot_auswahl[0].fid
             referenz = self.plot._slot_auswahl[1].fid
         except (IndexError, KeyError):
-            return None
+            return
 
         self.zentrale.betrieb.abfahrt_abwarten(ziel, referenz)
 
@@ -280,9 +282,19 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             ziel = self.plot._slot_auswahl[0].fid
             referenz = self.plot._slot_auswahl[1].fid
         except (IndexError, KeyError):
-            return None
+            return
 
         self.zentrale.betrieb.ankunft_abwarten(ziel, referenz)
+
+    @Slot()
+    def action_kreuzung(self):
+        try:
+            ziel = self.plot._slot_auswahl[0].fid
+            referenz = self.plot._slot_auswahl[1].fid
+        except (IndexError, KeyError):
+            return
+
+        self.zentrale.betrieb.kreuzung_abwarten(ziel, referenz)
 
     @Slot()
     def action_warnung_ignorieren(self):

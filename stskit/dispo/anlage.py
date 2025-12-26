@@ -450,3 +450,4 @@ class Anlage:
 
     def sim_ereignis_uebernehmen(self, ereignis: Ereignis):
         self.original_ereignisgraph.sim_ereignis_uebernehmen(ereignis)
+        self.dispo_ereignisgraph.sim_ereignis_uebernehmen(ereignis)

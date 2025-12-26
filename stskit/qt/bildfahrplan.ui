@@ -304,9 +304,12 @@
    <addaction name="actionPlusEins"/>
    <addaction name="actionMinusEins"/>
    <addaction name="actionFix"/>
+   <addaction name="actionVerspaetungLoeschen"/>
    <addaction name="separator"/>
    <addaction name="actionAnkunftAbwarten"/>
    <addaction name="actionAbfahrtAbwarten"/>
+   <addaction name="actionKreuzung"/>
+   <addaction name="actionZugfolge"/>
    <addaction name="actionLoeschen"/>
    <addaction name="separator"/>
    <addaction name="actionBetriebshaltEinfuegen"/>
@@ -314,7 +317,7 @@
   </widget>
   <action name="actionSetup">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/equalizer.png</normaloff>
      <disabledoff>:/equalizer-dis.png</disabledoff>:/equalizer.png</iconset>
    </property>
@@ -330,7 +333,7 @@
   </action>
   <action name="actionAnzeige">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/slots.png</normaloff>
      <disabledoff>:/slots-dis.png</disabledoff>:/slots.png</iconset>
    </property>
@@ -346,7 +349,7 @@
   </action>
   <action name="actionPlusEins">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/clock--plus.png</normaloff>:/clock--plus.png</iconset>
    </property>
    <property name="text">
@@ -361,7 +364,7 @@
   </action>
   <action name="actionMinusEins">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/clock--minus.png</normaloff>:/clock--minus.png</iconset>
    </property>
    <property name="text">
@@ -376,7 +379,7 @@
   </action>
   <action name="actionFix">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/clock--pencil.png</normaloff>:/clock--pencil.png</iconset>
    </property>
    <property name="text">
@@ -391,7 +394,7 @@
   </action>
   <action name="actionLoeschen">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/chain--return.png</normaloff>:/chain--return.png</iconset>
    </property>
    <property name="text">
@@ -406,62 +409,105 @@
   </action>
   <action name="actionAnkunftAbwarten">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/chain--arrow-in.png</normaloff>:/chain--arrow-in.png</iconset>
    </property>
    <property name="text">
-    <string>Ankunft</string>
+    <string>Ankunft abwarten</string>
    </property>
    <property name="toolTip">
-    <string>Kreuzung/Ankunft von zweitem gewählten Zug abwarten (K)</string>
+    <string>Anschluss: Ankunft von zweitem gewählten Zug abwarten (N)</string>
    </property>
    <property name="shortcut">
-    <string>K</string>
+    <string>N</string>
    </property>
   </action>
   <action name="actionAbfahrtAbwarten">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/chain--arrow.png</normaloff>:/chain--arrow.png</iconset>
    </property>
    <property name="text">
-    <string>Abfahrt</string>
+    <string>Abfahrt abwarten</string>
    </property>
    <property name="toolTip">
-    <string>Überholung/Abfahrt von zweitem gewählten Zug abwarten (F)</string>
+    <string>Überholung: Abfahrt von zweitem gewählten Zug abwarten (B)</string>
    </property>
    <property name="shortcut">
-    <string>F</string>
+    <string>B</string>
    </property>
   </action>
   <action name="actionBetriebshaltEinfuegen">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/node-insert.png</normaloff>:/node-insert.png</iconset>
    </property>
    <property name="text">
     <string>Betriebshalt</string>
    </property>
    <property name="toolTip">
-    <string>Betriebshalt einfügen (B)</string>
+    <string>Betriebshalt einfügen (H)</string>
    </property>
    <property name="shortcut">
-    <string>B</string>
+    <string>H</string>
    </property>
   </action>
   <action name="actionActionBetriebshaltLoeschen">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/node-delete.png</normaloff>:/node-delete.png</iconset>
    </property>
    <property name="text">
     <string>Betriebshalt löschen</string>
    </property>
    <property name="toolTip">
-    <string>Betriebshalt löschen (Shift+B)</string>
+    <string>Betriebshalt löschen (Shift+H)</string>
    </property>
    <property name="shortcut">
-    <string>Shift+B</string>
+    <string>Shift+H</string>
+   </property>
+  </action>
+  <action name="actionKreuzung">
+   <property name="icon">
+    <iconset>
+     <normalon>:/chain--2in-1out.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Kreuzung</string>
+   </property>
+   <property name="toolTip">
+    <string>Kreuzung: Ankunft beider Züge abwarten (K)</string>
+   </property>
+   <property name="shortcut">
+    <string>K</string>
+   </property>
+  </action>
+  <action name="actionZugfolge">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/chain--1in-1out.png</normaloff>:/chain--1in-1out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zugfolge</string>
+   </property>
+   <property name="toolTip">
+    <string>Zugfolge: Ankunft nach zweitem gewählten Zug (F)</string>
+   </property>
+   <property name="shortcut">
+    <string>F</string>
+   </property>
+  </action>
+  <action name="actionVerspaetungLoeschen">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/clock--return.png</normaloff>:/clock--return.png</iconset>
+   </property>
+   <property name="text">
+    <string>Verspätung zurücksetzen</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+V</string>
    </property>
   </action>
  </widget>
