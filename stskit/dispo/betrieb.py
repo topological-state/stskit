@@ -18,8 +18,10 @@ import math
 import os
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
 
+import networkx as nx
+
 from stskit.dispo.anlage import Anlage
-from stskit.model.journal import JournalEntry, JournalIDType
+from stskit.model.journal import JournalEntry, JournalIDType, JournalEntryGroup
 from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
 from stskit.model.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode, ZielLabelType
@@ -36,12 +38,14 @@ class Betrieb:
 
     def update(self, anlage: Anlage, config_path: os.PathLike):
         self.anlage = anlage
+        self.journal_bereinigen()
 
     def abfahrt_abwarten(self,
-                         wartend: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                         abzuwarten: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                         wartende_abfahrt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                         abzuwartende_abfahrt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                          wartezeit: int = 1,
-                         dry_run: bool = False) -> Optional[Tuple[EreignisLabelType, EreignisLabelType]]:
+                         journal: JournalEntryGroup | None = None,
+                         dry_run: bool = False) -> JournalEntryGroup:
         """
         Abfahrt/Überholung abwarten
 
@@ -57,36 +61,44 @@ class Betrieb:
         Bemerkung: Bei Durchfahrt kann ein Zug nicht warten.
         In diesem Fall wird implizit ein Betriebshalt eingefügt.
 
-        wartend: Wartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten)
-        abzuwarten: Abzuwartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten).
+        wartende_abfahrt: Wartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten)
+        abzuwartende_abfahrt: Abzuwartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten).
         wartezeit: Zusätzliche Wartezeit
         dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
         """
 
-        wartend2 = self._get_ereignis_label(wartend, {'Ab'})
-        if wartend2 is None:
-            wartend2 = self._get_ereignis_label(wartend, {'An'})
-            if wartend2 is not None:
-                try:
-                    wartend2 = self._betriebshalt_statt_durchfahrt(wartend2, 1)
-                except ValueError:
-                    wartend2 = None
-        print(self.anlage.dispo_ereignisgraph.node_info(wartend2))
+        if journal is None:
+            journal = JournalEntryGroup()
+            journal.title = "Abfahrt abwarten"
+            journal.timestamp = self.anlage.simzeit_minuten
 
-        abzuwarten2 = self._get_ereignis_label(abzuwarten, {'Ab'})
-        if abzuwarten2 is None:
-            abzuwarten2 = self._get_ereignis_label(abzuwarten, {'An'})
+        abzuwartendes_label, _ = self._ereignis_label_finden(abzuwartende_abfahrt, {'Ab'})
+        if abzuwartendes_label is None:
+            abzuwartendes_label, _ = self._ereignis_label_finden(abzuwartende_abfahrt, {'An'})
             wartezeit = max(1, wartezeit)
-        print(self.anlage.dispo_ereignisgraph.node_info(abzuwarten2))
 
-        if wartend2 and abzuwarten2:
-            return self._abhaengigkeit_setzen(wartend2, abzuwarten2, wartezeit, dry_run)
+        wartendes_label, wartendes_data = self._wartende_abfahrt_suchen(journal, wartende_abfahrt)
+
+        if wartendes_label and abzuwartendes_label:
+            egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=wartendes_label)
+            edge = EreignisGraphEdge(typ="A", zid=wartendes_label.zid, dt_fdl=wartezeit or 0, quelle='fdl')
+            egj.add_edge(abzuwartendes_label, wartendes_label, **edge)
+            journal.add_entry(egj)
+            journal.valid = True
+
+        if not dry_run and journal.valid:
+            bst = wartendes_data.plan_bst
+            jid = JournalIDType("Abfahrt", wartendes_label.zid, bst)
+            self._journal_anwenden(jid, journal)
+
+        return journal
 
     def ankunft_abwarten(self,
-                         wartend: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                         abzuwarten: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                         wartende_abfahrt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                         abzuwartende_ankunft: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                          wartezeit: int = 0,
-                         dry_run: bool = False) -> Optional[Tuple[EreignisLabelType, EreignisLabelType]]:
+                         journal: JournalEntryGroup | None = None,
+                         dry_run: bool = False) -> JournalEntryGroup:
         """
         Ankunft/Kreuzung/Anschluss abwarten
 
@@ -103,30 +115,62 @@ class Betrieb:
         Bemerkung: Bei Durchfahrt kann ein Zug nicht warten.
         In diesem Fall wird implizit ein Betriebshalt eingefügt.
 
-        wartend: Wartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten)
-        abzuwarten: Abzuwartende Ankunft (Ereignis- oder Ziel-, -Label oder -Daten).
+        wartende_abfahrt: Wartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten)
+        abzuwartende_ankunft: Abzuwartende Ankunft (Ereignis- oder Ziel-, -Label oder -Daten).
         wartezeit: Zusätzliche Wartezeit
         dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
         """
 
-        wartend2 = self._get_ereignis_label(wartend, {'Ab'})
-        if wartend2 is None:
-            wartend2 = self._get_ereignis_label(wartend, {'An'})
-            if wartend2 is not None:
-                try:
-                    wartend2 = self._betriebshalt_statt_durchfahrt(wartend2, 1)
-                except ValueError:
-                    wartend2 = None
+        if journal is None:
+            journal = JournalEntryGroup()
+            journal.title = "Ankunft abwarten"
+            journal.timestamp = self.anlage.simzeit_minuten
 
-        abzuwarten2 = self._get_ereignis_label(abzuwarten, {'An'})
-        if wartend2 and abzuwarten2:
-            return self._abhaengigkeit_setzen(wartend2, abzuwarten2, wartezeit, dry_run)
+        abzuwartendes_label, _ = self._ereignis_label_finden(abzuwartende_ankunft, {'An'})
+
+        wartendes_label, wartendes_data = self._wartende_abfahrt_suchen(journal, wartende_abfahrt)
+
+        if wartendes_label and abzuwartendes_label:
+            egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=wartendes_label)
+            edge = EreignisGraphEdge(typ="A", zid=wartendes_label.zid, dt_fdl=wartezeit or 0, quelle='fdl')
+            egj.add_edge(abzuwartendes_label, wartendes_label, **edge)
+            journal.add_entry(egj)
+            journal.valid = True
+
+        if not dry_run and journal.valid:
+            bst = wartendes_data.plan_bst
+            jid = JournalIDType("Ankunft", wartendes_label.zid, bst)
+            self._journal_anwenden(jid, journal)
+
+        return journal
+
+    def _wartende_abfahrt_suchen(self,
+                                 journal: JournalEntryGroup,
+                                 wartend: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode) -> Tuple[EreignisLabelType | None, EreignisGraphNode | None]:
+
+        """
+        Abfahrtsereignis des wartenden Zuges suchen oder erstellen
+
+        Erstellt ggf. einen Betriebshalt
+        """
+
+        label, data = self._ereignis_label_finden(wartend, {'Ab'})
+        if label is None:
+            label, data = self._ereignis_label_finden(wartend, {'An'})
+            if label is not None:
+                try:
+                    label, data = self._betriebshalt_statt_durchfahrt(journal, label, 1)
+                except ValueError:
+                    label = data = None
+
+        return label, data
 
     def kreuzung_abwarten(self,
-                         ankunft1: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                         ankunft2: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                         wartezeit: int = 0,
-                         dry_run: bool = False) -> Optional[List[Tuple[EreignisLabelType, EreignisLabelType]]]:
+                          ankunft1_label: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                          ankunft2_label: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                          wartezeit: int = 0,
+                          journal: JournalEntryGroup | None = None,
+                          dry_run: bool = False) -> JournalEntryGroup:
         """
         Kreuzung abwarten
 
@@ -146,15 +190,41 @@ class Betrieb:
         dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
         """
 
-        ankunft1 = self._get_ereignis_label(ankunft1, {'An'})
-        ankunft2 = self._get_ereignis_label(ankunft2, {'An'})
-        if ankunft1 is None or ankunft2 is None:
-            return None
-        abfahrt1 = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft1)  # any type
-        abfahrt2 = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft2)  # any type
-        kante1 = self.ankunft_abwarten(abfahrt1, ankunft2, wartezeit, dry_run) if abfahrt1 is not None else None
-        kante2 = self.ankunft_abwarten(abfahrt2, ankunft1, wartezeit, dry_run) if abfahrt2 is not None else None
-        return [kante for kante in [kante1, kante2] if kante is not None]
+        if journal is None:
+            journal = JournalEntryGroup()
+            journal.title = "Kreuzung"
+            journal.timestamp = self.anlage.simzeit_minuten
+
+        ankunft1_label, _ = self._ereignis_label_finden(ankunft1_label, {'An'})
+        ankunft2_label, _ = self._ereignis_label_finden(ankunft2_label, {'An'})
+        if ankunft1_label is None or ankunft2_label is None:
+            return journal
+
+        next1 = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft1_label)
+        abfahrt1_label, abfahrt1_data = self._wartende_abfahrt_suchen(journal, next1)
+        next2 = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft2_label)
+        abfahrt2_label, abfahrt2_data = self._wartende_abfahrt_suchen(journal, next2)
+        if abfahrt1_label is None or abfahrt2_label is None:
+            return journal
+
+        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=abfahrt1_label)
+        edge = EreignisGraphEdge(typ="A", zid=abfahrt1_label.zid, dt_fdl=wartezeit or 0, quelle='fdl')
+        egj.add_edge(ankunft2_label, abfahrt1_label, **edge)
+        journal.add_entry(egj)
+
+        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=abfahrt2_label)
+        edge = EreignisGraphEdge(typ="A", zid=abfahrt2_label.zid, dt_fdl=wartezeit or 0, quelle='fdl')
+        egj.add_edge(ankunft1_label, abfahrt2_label, **edge)
+        journal.add_entry(egj)
+
+        journal.valid = True
+
+        if not dry_run and journal.valid:
+            abfahrt_data = abfahrt1_data if abfahrt1_label.zeit <= abfahrt2_label.zeit else abfahrt2_data
+            jid = JournalIDType("Kreuzung", abfahrt_data.zid, abfahrt_data.plan_bst)
+            self._journal_anwenden(jid, journal)
+
+        return journal
 
     def zug_folgen(self):
         pass
@@ -162,9 +232,9 @@ class Betrieb:
     def trasse_verschieben(self):
         pass
 
-    def _get_ereignis_label(self,
-                            objekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                            typen: Set[str]) -> Optional[EreignisLabelType]:
+    def _ereignis_label_finden(self,
+                               objekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                               typen: Set[str]) -> Tuple[EreignisLabelType | None, EreignisGraphNode | None]:
         """
         Ereignislabel zu Ziel- oder Ereignis-Argument herausfinden
 
@@ -175,11 +245,15 @@ class Betrieb:
         Zieldaten: Attribut fid
         """
 
+        data = None
+
         if hasattr(objekt, "node_id"):
+            data = objekt
             objekt = objekt.node_id
 
         if hasattr(objekt, "zid") and hasattr(objekt, "ort") and hasattr(objekt, "zeit"):
             objekt = self.anlage.dispo_zielgraph.nodes[objekt]
+            data = None
 
         if hasattr(objekt, "fid"):
             for label in self.anlage.dispo_ereignisgraph.zugpfad(objekt.zid):
@@ -191,53 +265,83 @@ class Betrieb:
                     break
             else:
                 objekt = None
+                data = None
 
-        return objekt
+        if data is None and self.anlage.dispo_ereignisgraph.has_node(objekt):
+            data = self.anlage.dispo_ereignisgraph.nodes[objekt]
 
-    def _abhaengigkeit_setzen(self,
-                         subjekt: EreignisLabelType,
-                         objekt: EreignisLabelType,
-                         wartezeit: int,
-                         dry_run: bool = False) -> Optional[Tuple[EreignisLabelType, EreignisLabelType]]:
+        return objekt, data
+
+    def _journal_anwenden(self, jid: JournalIDType, journal: JournalEntryGroup):
+        self.anlage.dispo_journal.add_entry(jid, journal)
+        gm = {'ereignisgraph': self.anlage.dispo_ereignisgraph,
+              'zielgraph': self.anlage.dispo_zielgraph}
+        journal.replay(graph_map=gm)
+
+    def journal_bereinigen(self):
         """
-        Gemeinsamer Teil von Abfahrt/Ankunft abwarten
+        Vergangene Abhaengigkeiten bereinigen
         """
 
-        eg = self.anlage.dispo_ereignisgraph
-        egj = JournalEntry(target_graph='ereignisgraph')
+        entfernen = []
+        for jid, j in self.anlage.dispo_journal.entries.items():
+            if not self.anlage.zuggraph.has_node(jid.zid) or self.anlage.zuggraph.nodes[jid.zid].get("ausgefahren", False):
+                entfernen.append(jid)
+                continue
 
-        edge = EreignisGraphEdge(typ="A", zid=subjekt.zid, dt_fdl=wartezeit or 0, quelle='fdl')
-        if eg.has_node(objekt) and eg.has_node(subjekt):
-            if not dry_run:
-                egj.add_edge(objekt, subjekt, **edge)
-                egj.replay(graph=eg)
-                typ = "Abfahrt" if objekt.typ == "Ab" else "Ankunft"
-                jid = JournalIDType(typ, subjekt.zid, eg.nodes[subjekt].plan_bst)
-                self.anlage.dispo_journal.add_entry(jid, egj)
-                print(f"Korrektur {jid} gesetzt: {subjekt} wartet auf {objekt}")
-            return objekt, subjekt
-        else:
-            return None
+            for node in j.target_nodes():
+                if self.anlage.dispo_ereignisgraph.has_node(node):
+                    data = self.anlage.dispo_ereignisgraph.nodes[node]
+                    if data.get("t_mess") is None:
+                        break
+            else:
+                entfernen.append(jid)
+        for jid in entfernen:
+            self.anlage.dispo_journal.delete_entry(jid)
 
     def vorzeitige_abfahrt(self,
-                           abfahrt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                           abfahrt_label: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                            verfruehung: int,
                            relativ: bool = False):
+        """
+        Vorzeitige Abfahrt
+        """
 
-        abfahrt = self._get_ereignis_label(abfahrt, {'Ab'})
-        if abfahrt:
-            return self._wartezeit_aendern(abfahrt, "H", -verfruehung, relativ=relativ)
+        journal = JournalEntryGroup()
+        journal.title = "Vorzeitige Abfahrt"
+        journal.timestamp = self.anlage.simzeit_minuten
+
+        abfahrt_label, abfahrt_data = self._ereignis_label_finden(abfahrt_label, {'Ab'})
+        if abfahrt_label:
+            self._wartezeit_aendern(journal, abfahrt_label, "H", -verfruehung, relativ=relativ)
+
+        if journal.valid:
+            jid = JournalIDType("Wartezeit", abfahrt_data.zid, abfahrt_data.plan_bst)
+            self._journal_anwenden(jid, journal)
 
     def wartezeit_aendern(self,
-                          abfahrt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                          abfahrt_label: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                           wartezeit: int,
                           relativ: bool = False):
+        """
+        Wartezeit ändern
+        """
 
-        abfahrt = self._get_ereignis_label(abfahrt, {'Ab'})
-        if abfahrt:
-            return self._wartezeit_aendern(abfahrt, "A", wartezeit, relativ=relativ)
+        journal = JournalEntryGroup()
+        journal.title = "Wartezeit ändern"
+        journal.timestamp = self.anlage.simzeit_minuten
+
+        abfahrt_label, abfahrt_data = self._ereignis_label_finden(abfahrt_label, {'Ab'})
+        if abfahrt_label:
+            self._wartezeit_aendern(journal, abfahrt_label, "A", wartezeit, relativ=relativ)
+
+        if journal.valid:
+            jid = JournalIDType("Wartezeit", abfahrt_data.zid, abfahrt_data.plan_bst)
+            self._journal_anwenden(jid, journal)
+            logger.debug(f"Wartezeit geändert, {jid}")
 
     def _wartezeit_aendern(self,
+                           journal: JournalEntryGroup,
                            ereignis: EreignisLabelType,
                            kantentyp: str,
                            wartezeit: int,
@@ -245,7 +349,7 @@ class Betrieb:
 
         n = ereignis
         eg = self.anlage.dispo_ereignisgraph
-        egj = JournalEntry(target_graph='ereignisgraph')
+        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=n)
 
         for pre in eg.predecessors(n):
             edge_data = eg.edges[(pre, n)]
@@ -262,10 +366,7 @@ class Betrieb:
                 dt = wartezeit
             egj.change_edge(pre, n, dt_fdl=dt)
 
-        egj.replay(graph=eg)
-        jid = JournalIDType("Wartezeit", ereignis.zid, eg.nodes[ereignis].plan_bst)
-        self.anlage.dispo_journal.add_entry(jid, egj)
-        print("Wartezeit geändert:", jid)
+        journal.add_entry(egj)
 
     def abfahrt_zuruecksetzen(self,
                               wartend: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
@@ -279,25 +380,21 @@ class Betrieb:
             Im Moment nicht verwendet.
         """
 
-        wartend = self._get_ereignis_label(wartend, {'Ab'})
-        if abzuwarten is not None:
-            abzuwarten = self._get_ereignis_label(abzuwarten, {'An'})
-
-        eg = self.anlage.dispo_ereignisgraph
-
-        ereignis_data = eg.nodes[wartend]
+        # wartend_label, _ = self._ereignis_label_finden(wartend, {'Ab', 'An'})
+        zid = wartend.zid
+        loeschen = []
         for jid, j in self.anlage.dispo_journal.entries.items():
-            if (jid.typ in {"Ankunft", "Abfahrt"} and
-                    jid.zid == wartend.zid and
-                    jid.bst == ereignis_data.plan_bst):
-                self.anlage.dispo_journal.delete_entry(jid)
-                print("Korrektur gelöscht:", jid)
-                break
-
+            zids = {node.zid for node in j.target_nodes() if hasattr(node, 'zid')}
+            if zid in zids and jid.typ in {"Ankunft", "Abfahrt", "Kreuzung"}:
+                loeschen.append(jid)
+        for jid in loeschen:
+            self.anlage.dispo_journal.delete_entry(jid)
+            logger.debug("Korrektur gelöscht: {jid}")
 
     def _betriebshalt_statt_durchfahrt(self,
+                                       journal: JournalEntryGroup,
                                        durchfahrt: EreignisLabelType,
-                                       wartezeit: int = 1) -> EreignisLabelType:
+                                       wartezeit: int = 1) -> Tuple[EreignisLabelType, EreignisGraphNode]:
 
         """
         Betriebshalt statt Durchfahrt
@@ -353,31 +450,31 @@ class Betrieb:
         abfahrt_edge = copy.copy(edge_alt)
         abfahrt_edge.quelle = 'fdl'
 
-        egj = JournalEntry(target_graph='ereignisgraph')
+        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=ab2_label)
         egj.add_node(ab2_label, **ab2_node)
         egj.add_edge(an2_label, ab2_label, **halt_edge)
         egj.add_edge(ab2_label, an3_label, **abfahrt_edge)
         egj.remove_edge(an2_label, an3_label)
+        journal.add_entry(egj)
 
-        zgj = JournalEntry(target_graph='zielgraph')
+        zgj = JournalEntry[str, ZielLabelType, ZielGraphNode](target_graph='zielgraph', target_node=an2_node.fid)
         ziel = zg.nodes[an2_node.fid]
         zgj.change_node(an2_node.fid, flags=ziel.flags.replace('D', ''))
+        journal.add_entry(zgj)
 
-        egj.replay(graph=eg)
-        zgj.replay(graph=zg)
+        logger.debug(f"Betriebshalt erstellt")
+        logger.debug(f"    Ankunft: {self.anlage.dispo_ereignisgraph.node_info(an2_label)}")
+        logger.debug(f"    Abfahrt: {self.anlage.dispo_ereignisgraph.node_info(ab2_label)}")
 
-        jid = JournalIDType(typ="Betriebshalt", zid=an2_node.zid, bst=an2_node.plan_bst)
-        self.anlage.dispo_journal.add_entry(jid, egj, zgj)
-        print(f"Betriebshalt {jid} erstellt")
-        print(f"    Ankunft: {self.anlage.dispo_ereignisgraph.node_info(an2_label)}")
-        print(f"    Abfahrt: {self.anlage.dispo_ereignisgraph.node_info(ab2_label)}")
-
-        return ab2_label
+        assert isinstance(ab2_label, EreignisLabelType)
+        assert isinstance(ab2_node, EreignisGraphNode)
+        return ab2_label, ab2_node
 
     def _betriebshalt_auf_strecke(self,
+                                  journal: JournalEntryGroup,
                                   vorher: EreignisLabelType,
                                   bst: BahnhofElement,
-                                  wartezeit: int = 1) -> EreignisLabelType:
+                                  wartezeit: int = 1) -> Tuple[EreignisLabelType, EreignisGraphNode]:
 
         """
         Betriebshalt unterwegs (Bst nicht im Fahrplan)
@@ -463,45 +560,30 @@ class Betrieb:
         abfahrt_edge.dt_max = math.inf
         abfahrt_edge.dt_fdl = 0
 
-        egj = JournalEntry(target_graph='ereignisgraph')
+        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=ab2_label)
         egj.add_node(ab2_label, **ab2_node)
         egj.add_node(an2_label, **an2_node)
         egj.add_edge(ab1_label, an2_label, **ankunft_edge)
         egj.add_edge(an2_label, ab2_label, **halt_edge)
         egj.add_edge(ab2_label, an3_label, **abfahrt_edge)
         egj.remove_edge(ab1_label, an3_label)
-        egj.replay(graph=eg)
+        journal.add_entry(egj)
 
-        jid = JournalIDType(typ="Betriebshalt", zid=an2_node.zid, bst=an2_node.plan_bst)
-        self.anlage.dispo_journal.add_entry(jid, egj)
-        print(f"Betriebshalt {jid} erstellt")
-        print(f"    Ankunft: {self.anlage.dispo_ereignisgraph.node_info(an2_label)}")
-        print(f"    Abfahrt: {self.anlage.dispo_ereignisgraph.node_info(ab2_label)}")
-        print(f"    vorher:  {self.anlage.dispo_ereignisgraph.node_info(vorher)}")
+        # todo : zielgraph?
 
-        return ab2_label
+        logger.debug(f"Betriebshalt erstellt")
+        logger.debug(f"    Ankunft: {self.anlage.dispo_ereignisgraph.node_info(an2_label)}")
+        logger.debug(f"    Abfahrt: {self.anlage.dispo_ereignisgraph.node_info(ab2_label)}")
+        logger.debug(f"    vorher:  {self.anlage.dispo_ereignisgraph.node_info(vorher)}")
 
-    def _betriebshalt_loeschen(self, halt_ereignis: EreignisLabelType):
-        """
-        Betriebshalt aus Ereignisgraph loeschen
-
-        Der Betriebshalt wird aus dem Dispojournal gelöscht.
-        Der Ereignisgraph wird direkt nicht verändert und muss neu aufgebaut werden.
-
-        halt_ereignis: Ereignislabel von An2 oder Ab2
-        """
-
-        ereignis_label = self._get_ereignis_label(halt_ereignis, {'An'})
-        ereignis_data = self.anlage.dispo_ereignisgraph.nodes[ereignis_label]
-        for jid in self.anlage.dispo_journal.entries:
-            if jid.typ == "Betriebshalt" and jid.zid == halt_ereignis.zid and jid.bst == ereignis_data.plan_bst:
-                self.anlage.dispo_journal.delete_entry(jid)
-                break
+        return ab2_label, ab2_node
 
     def betriebshalt_einfuegen(self,
                                vorheriges_ziel: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                                gleis: Union[str, BahnhofElement],
-                               wartezeit: int = 1):
+                               wartezeit: int = 1,
+                               journal: JournalEntryGroup | None = None,
+                               dry_run: bool = False) -> JournalEntryGroup:
         """
         Betriebshalt einfügen
 
@@ -514,23 +596,52 @@ class Betrieb:
         wartezeit: Wartezeit in Minuten
         """
 
-        vorher_label = self._get_ereignis_label(vorheriges_ziel, {'Ab'})
+        if journal is None:
+            journal = JournalEntryGroup()
+            journal.title = "Betriebshalt"
+            journal.timestamp = self.anlage.simzeit_minuten
+
+        vorher_label, _ = self._ereignis_label_finden(vorheriges_ziel, {'Ab'})
         if vorher_label is None:
-            vorher_label = self._get_ereignis_label(vorheriges_ziel, {'An'})
+            vorher_label, _ = self._ereignis_label_finden(vorheriges_ziel, {'An'})
         if vorher_label is None:
-            raise ValueError(f"Ereignis {vorheriges_ziel} nicht gefunden.")
+            return journal
 
         if vorher_label.typ == 'Ab':
             if not hasattr(gleis, 'typ'):
                 gleis = BahnhofElement('Gl', gleis)
-            self._betriebshalt_auf_strecke(vorher_label, gleis, wartezeit)
+            abfahrt_label, abfahrt_data = self._betriebshalt_auf_strecke(journal, vorher_label, gleis, wartezeit)
         elif vorher_label.typ == 'An':
-            self._betriebshalt_statt_durchfahrt(vorher_label, wartezeit)
+            abfahrt_label, abfahrt_data = self._betriebshalt_statt_durchfahrt(journal, vorher_label, wartezeit)
         else:
-            raise  ValueError(f"Kann nach Ereignis {vorheriges_ziel} keinen Betriebshalt einfügen.")
+            return journal
 
-    def betriebshalt_loeschen(self, betriebshalt: EreignisLabelType):
-        self._betriebshalt_loeschen(betriebshalt)
+        journal.valid = True
+
+        if not dry_run and journal.valid:
+            jid = JournalIDType(typ="Betriebshalt", zid=abfahrt_label.zid, bst=abfahrt_data.plan_bst)
+            self._journal_anwenden(jid, journal)
+
+        return journal
+
+    def betriebshalt_loeschen(self, halt_ereignis: EreignisLabelType):
+        """
+        Betriebshalt aus Ereignisgraph loeschen
+
+        Der Betriebshalt wird aus dem Dispojournal gelöscht.
+        Der Ereignisgraph wird direkt nicht verändert und muss neu aufgebaut werden.
+
+        halt_ereignis: Ereignislabel von An2 oder Ab2
+        """
+
+        ereignis_label, ereignis_data = self._ereignis_label_finden(halt_ereignis, {'An'})
+        if ereignis_label is None:
+            return
+
+        for jid in self.anlage.dispo_journal.entries:
+            if jid.typ == "Betriebshalt" and jid.zid == ereignis_label.zid:
+                self.anlage.dispo_journal.delete_entry(jid)
+                logger.debug("Betriebshalt gelöscht: {jid}")
 
     def bst_verbinden(self):
         pass

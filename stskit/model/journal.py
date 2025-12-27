@@ -12,7 +12,7 @@ import networkx as nx
 from stskit.model.bahnhofgraph import BahnhofElement
 
 
-class JournalEntry:
+class JournalEntry[G, N, D]:
     """
     Journal von Änderungen an einem Graphen.
 
@@ -32,21 +32,24 @@ class JournalEntry:
     Das Journal enthält zu jedem Knoten/jeder Kante maximal einen Lösch-, Einfügungs- und Änderungseintrag.
     Die Einträge Einfügen und Löschen wirken auf den gesamten Knoten bzw. Kante inklusive allen Attributen.
     Änderungen wirken auf einzelne Attribute. Die Änderungen werden gesammelt.
+    
+    Der generische Typ G ist die Graphklasse, N der Knotenlabeltyp und D der Knotendatentyp,
+    die in dem Eintrag verwendet werden koennen.
     """
 
     def __init__(self,
-                 target_graph: Optional[Hashable] = None,
-                 target_node: Optional[Hashable] = None):
+                 target_graph: Optional[G] = None,
+                 target_node: Optional[N] = None):
         self.target_graph = target_graph
         self.target_node = target_node
-        self.removed_nodes: Set[Hashable] = set()
-        self.added_nodes: Dict[Hashable, Mapping] = {}
-        self.changed_nodes: Dict[Hashable, Mapping] = {}
-        self.removed_edges: Set[Tuple[Hashable, Hashable]] = set()
-        self.added_edges: Dict[Tuple[Hashable, Hashable], Mapping] = {}
-        self.changed_edges: Dict[Tuple[Hashable, Hashable], Mapping] = {}
+        self.removed_nodes: Set[N] = set()
+        self.added_nodes: Dict[N, D] = {}
+        self.changed_nodes: Dict[N, D] = {}
+        self.removed_edges: Set[Tuple[N, N]] = set()
+        self.added_edges: Dict[Tuple[N, N], D] = {}
+        self.changed_edges: Dict[Tuple[N, N], D] = {}
 
-    def nodes(self) -> Set[Tuple[Hashable, Hashable]]:
+    def nodes(self) -> Set[Tuple[G, N]]:
         """
         Betroffene Knoten auflisten
         """
@@ -62,10 +65,11 @@ class JournalEntry:
         _nodes.update((e[0] for e in self.changed_edges))
         _nodes.update((e[1] for e in self.changed_edges))
         _nodes.discard(None)
+        _nodes = set(((self.target_graph, node) for node in _nodes))
 
         return _nodes
 
-    def summary(self) -> Dict[Tuple[Hashable, Hashable], Set[str]]:
+    def summary(self) -> Dict[Tuple[G, N], Set[str]]:
         """
         Zusammenfassung von Aenderungen
 
@@ -111,21 +115,21 @@ class JournalEntry:
         self.added_edges = {}
         self.changed_edges = {}
 
-    def remove_node(self, n: Hashable):
+    def remove_node(self, n: N):
         """
         Knoten löschen
         """
 
         self.removed_nodes.add(n)
 
-    def remove_edge(self, u: Hashable, v: Hashable):
+    def remove_edge(self, u: N, v: N):
         """
         Kante löschen
         """
 
         self.removed_edges.add((u, v))
 
-    def add_node(self, n: Hashable, **data):
+    def add_node(self, n: N, **data):
         """
         Knoten hinzufügen
 
@@ -135,7 +139,7 @@ class JournalEntry:
 
         self.added_nodes[n] = data
 
-    def add_edge(self, u: Hashable, v: Hashable, **data):
+    def add_edge(self, u: N, v: N, **data):
         """
         Kante hinzufügen
 
@@ -145,7 +149,7 @@ class JournalEntry:
 
         self.added_edges[(u, v)] = data
 
-    def change_node(self, n: Hashable, **data):
+    def change_node(self, n: N, **data):
         """
         Knoten ändern
 
@@ -160,7 +164,7 @@ class JournalEntry:
         else:
             self.changed_nodes[n] = data
 
-    def change_edge(self, u: Hashable, v: Hashable, **data):
+    def change_edge(self, u: N, v: N, **data):
         """
         Kantenanttribute ändern
 
@@ -191,7 +195,7 @@ class JournalEntry:
         for node, data in other.changed_nodes.items():
             self.change_node(node, **data)
 
-    def replay(self, graph: Optional[nx.Graph] = None, graph_map: Optional[Mapping[Hashable, nx.Graph]] = None) -> Dict[str, Set[Hashable]]:
+    def replay(self, graph: Optional[nx.Graph] = None, graph_map: Optional[Mapping[G, nx.Graph]] = None) -> Dict[str, Set[N]]:
         """
         Journal abspielen
 
@@ -286,8 +290,12 @@ class JournalEntry:
 class JournalEntryGroup:
     def __init__(self, *entries):
         self.entries: List[JournalEntry] = list(entries)
+        self.title: str = ""
+        self.timestamp: int = 0
+        self.valid: bool = False
 
     def add_entry(self, entry: JournalEntry):
+        assert isinstance(entry, JournalEntry)
         self.entries.append(entry)
 
     def remove_entry(self, entry: JournalEntry):
@@ -296,6 +304,10 @@ class JournalEntryGroup:
     def replay(self, graph_map: Optional[Union[Mapping[Hashable, nx.Graph]]] = None):
         for entry in self.entries:
             entry.replay(graph_map=graph_map)
+
+    def target_nodes(self) -> Set[Hashable]:
+        nodes = {entry.target_node for entry in self.entries}
+        return nodes
 
     def nodes(self) -> Set[Tuple[Hashable, Hashable]]:
         """
@@ -356,9 +368,8 @@ class Journal:
         for entry in self.entries.values():
             entry.replay(graph_map=graph_map)
 
-    def add_entry(self, id_, *entries: JournalEntry):
-        group = JournalEntryGroup(*entries)
-        self.entries[id_] = group
+    def add_entry(self, id_, entry: JournalEntry | JournalEntryGroup):
+        self.entries[id_] = entry
 
     def delete_entry(self, id_: Hashable):
         del self.entries[id_]
