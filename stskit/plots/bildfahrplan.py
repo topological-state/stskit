@@ -52,6 +52,7 @@ class BildfahrplanPlot:
         self.auswahl_geaendert = Observable(self)
         self.auswahl_text: List[str] = []
         self.auswahl_kanten: List[Tuple[EreignisLabelType, ...]] = []
+        self.auswahl_knoten: List[EreignisLabelType] = []
         self.auswahl_bahnhoefe: List[BahnhofElement] = []
 
         self._canvas = canvas
@@ -168,6 +169,29 @@ class BildfahrplanPlot:
             mitten = []
         self.naechster_bahnhof = {s: bf for s, bf in zip(mitten, self.strecke)}
 
+    marker_style = {
+        'An': '.',
+        'Ab': '.',
+        'D': '',
+        'E': '*',
+        'F': '*',
+        'K': '*',
+        'B': 'P',
+        'A': 'v',
+        'S': 'o',
+    }
+
+    line_style = {
+        'B': '--',
+        'E': '--',
+        'F': '--',
+        'H': '--',
+        'K': '--',
+        'P': '-',
+        'D': '-',
+        'A': ':',
+    }
+
     def update_ereignisgraph(self):
         """
         Zuege aus Ereignisgrpah uebernhemen.
@@ -185,6 +209,7 @@ class BildfahrplanPlot:
         '*' (Stern) E/F/K
         'P' (fettes plus) Betriebshalt
         'v' (Dreieck unten) abhängiger Halt
+        'o' (Kreis) Auswahl
 
         Verwendete Linienstile
         ----------------------
@@ -194,7 +219,8 @@ class BildfahrplanPlot:
         ':' (gepunktet) Abhängigkeit
         """
 
-        def bst_von_gleis(gl: Union[str, BahnhofElement]) -> Optional[BahnhofElement]:
+        def _bst_von_gleis(gl: Union[str, BahnhofElement]) -> Optional[BahnhofElement]:
+            bst = None
             try:
                 if isinstance(gl, BahnhofElement):
                     bst = gl
@@ -202,20 +228,20 @@ class BildfahrplanPlot:
                     bst = self.anlage.bahnhofgraph.find_name(gl)
                 if bst.typ not in {'Bf', 'Anst'}:
                     bst = self.anlage.bahnhofgraph.find_superior(bst, {'Bf', 'Anst'})
-                if bst in strecke:
-                    return bst
-                else:
-                    return None
+                return bst
             except (AttributeError, IndexError, KeyError) as e:
                 logger.error(f"Error in bst_von_gleis: {gl} -> {bst}", exc_info=e)
                 return None
 
-        def _add_node(ereignis_label, ereignis_data, bst):
-            zug = self.anlage.zuggraph.nodes[ereignis_data.zid]
+        def _add_node(ereignis_label: EreignisLabelType,
+                      ereignis_data: EreignisGraphNode,
+                      bst: BahnhofElement,
+                      typ: str = None) -> None:
+            zug = self.anlage.zuggraph.nodes[data.zid]
             d = ereignis_data.copy()
             d['bst'] = bst
             d['farbe'] = self.anlage.zugschema.zugfarbe(zug)
-            d['marker'] = '.'
+            d['marker'] = self.marker_style.get(typ or ereignis_data.typ, '')
             self.bildgraph.add_node(ereignis_label, **d)
 
         self.bildgraph.clear()
@@ -224,59 +250,65 @@ class BildfahrplanPlot:
 
         strecke = set(self.strecke)
 
-        for node, data in self.anlage.dispo_ereignisgraph.nodes(data=True):
+        for u, v, data in self.anlage.dispo_ereignisgraph.edges(data=True):
+            u_data = self.anlage.dispo_ereignisgraph.nodes[u]
+            v_data = self.anlage.dispo_ereignisgraph.nodes[v]
+            u_bst = _bst_von_gleis(u_data.gleis_bst or u_data.gleis)
+            v_bst = _bst_von_gleis(v_data.gleis_bst or v_data.gleis)
+            if u_bst not in strecke and v_bst not in strecke:
+                continue
+
             try:
-                if t0 <= data.t_eff <= t1:
-                    bst = bst_von_gleis(data.gleis)
-                    if bst is not None:
-                        _add_node(node, data, bst)
+                if not (t0 <= u_data.t_eff <= t1) and not (t0 <= v_data.t_eff <= t1):
+                    continue
             except AttributeError:
                 continue
 
-        for u, v, data in self.anlage.dispo_ereignisgraph.edges(data=True):
-            if data.typ in {'P', 'D', 'H', 'B', 'E', 'F', 'K', 'A'} and (u in self.bildgraph or v in self.bildgraph):
-                zug = self.anlage.zuggraph.nodes[data.zid]
-                u_data = self.anlage.dispo_ereignisgraph.nodes[u]
-                v_data = self.anlage.dispo_ereignisgraph.nodes[v]
-                u_v_data = data.copy()
-                u_v_data['farbe'] = self.anlage.zugschema.zugfarbe(zug)
-                u_v_data['titel'] = self.zugbeschriftung.format_trasse_label(zug, abfahrt=u_data, ankunft=v_data)
-                u_v_data['fontstyle'] = "normal"
-                u_v_data['linewidth'] = 1
-                u_v_data['linestyle'] = '--' if data.typ in {"B", "D", "E", "F", "H"} else "-"
-                if data.typ == 'A':
-                    u_v_data['linestyle'] = ':'
-                    u_v_data['farbe'] = 'silver'
+            if data.typ not in {'P', 'D', 'H', 'B', 'E', 'F', 'K'}:
+                continue
 
-                if u not in self.bildgraph:
-                    bst = bst_von_gleis(u_data.gleis_bst or u_data.gleis)
-                    if bst is not None:
-                        _add_node(u, u_data, bst)
-                    else:
-                        continue
-                if v not in self.bildgraph:
-                    bst = bst_von_gleis(v_data.gleis_bst or v_data.gleis)
-                    if bst is not None:
-                        _add_node(v, v_data, bst)
-                    else:
-                        continue
+            zug = self.anlage.zuggraph.nodes[data.zid]
+            u_v_data = data.copy()
+            u_v_data['titel'] = self.zugbeschriftung.format_trasse_label(zug, abfahrt=u_data, ankunft=v_data)
+            u_v_data['fontstyle'] = "normal"
+            u_v_data['linestyle'] = self.line_style.get(data.typ, '-')
+            u_v_data['linewidth'] = 1
+            u_v_data['farbe'] = 'silver' if data.typ == 'A' else self.anlage.zugschema.zugfarbe(zug)
+
+            if u_bst in strecke:
+                line_type = data.typ if data.typ in {'B', 'D'} else None
+                _add_node(u, u_data, u_bst, typ=line_type)
+            else:
+                u_v_data = None
+            if v_bst in strecke:
+                line_type = data.typ if data.typ in {'A', 'B'} else None
+                _add_node(v, v_data, v_bst, typ=line_type)
+            else:
+                u_v_data = None
+            if u_v_data is not None:
                 self.bildgraph.add_edge(u, v, **u_v_data)
 
-                if data.typ == "B":
-                    self.bildgraph.nodes[v]['marker'] = 'P'
-                elif data.typ == 'A':
-                    self.bildgraph.nodes[v]['marker'] = 'v'
+        # abhaengigkeiten
+        for u, v, data in self.anlage.dispo_ereignisgraph.edges(data=True):
+            if data.typ not in {'A'}:
+                continue
+
+            if u not in self.bildgraph or v not in self.bildgraph:
+                continue
+
+            u_v_data = data.copy()
+            u_v_data['titel'] = ''
+            u_v_data['fontstyle'] = "normal"
+            u_v_data['linestyle'] = self.line_style.get(data.typ, '-')
+            u_v_data['linewidth'] = 1
+            u_v_data['farbe'] = 'silver'
+            self.bildgraph.nodes[v]['marker'] = self.marker_style.get(data.typ, '')
+            self.bildgraph.add_edge(u, v, **u_v_data)
 
     def line_args(self, start: EreignisGraphNode, ziel: EreignisGraphNode, data: EreignisGraphEdge) -> Dict[str, Any]:
         args = {'color': data.farbe,
                 'linewidth': data.linewidth,
-                'linestyle': data.linestyle,
-                'marker': start.marker}
-
-        try:
-            args['markevery'] = [data.typ in {"B", "E", "F", "H"}, data.typ in {"B", "H"}]
-        except AttributeError:
-            args['marker'] = ""
+                'linestyle': data.linestyle}
 
         try:
             if data.auswahl == 1:
@@ -293,17 +325,21 @@ class BildfahrplanPlot:
         return args
 
     def marker_args(self, start: EreignisGraphNode) -> Dict[str, Any]:
-        args = {'c': start.farbe}
+        args = {'c': start.farbe,
+                'marker': start.marker,
+                }
 
         try:
-            if start.typ == "Ab":
-                args['marker'] = start.marker
-            elif start.typ in {"E", "F", "K"}:
-                args['marker'] = "*"
-            else:
-                args['marker'] = ""
+            if start.auswahl == 1:
+                args['c'] = 'yellow'
+                args['marker'] = self.marker_style['S']
+                args['alpha'] = 0.5
+            elif start.auswahl == 2:
+                args['c'] = 'cyan'
+                args['marker'] = self.marker_style['S']
+                args['alpha'] = 0.5
         except AttributeError:
-            args['marker'] = ""
+            pass
 
         return args
 
@@ -366,6 +402,8 @@ class BildfahrplanPlot:
                                                     **self.line_args(u_data, v_data, data))
                         mpl_lines[0].edge = (u, v, s_key)
 
+                        if not data.titel:
+                            continue
                         seg = [[pos_x[0], pos_y[0]], [pos_x[1], pos_y[1]]]
                         pix = self._axes.transData.transform(seg)
                         cx = (seg[0][0] + seg[1][0]) / 2 + off_x
@@ -387,15 +425,15 @@ class BildfahrplanPlot:
                 logger.debug(v)
                 logger.debug(v_data)
 
-        for u in self.bildgraph.nodes(data=False):
-            u_data = self.bildgraph.nodes[u]
+        for u, u_data in self.bildgraph.nodes(data=True):
             try:
-                if u_data.typ in {"E", "F", "K"}:
-                    for s_u, s_v, s_key, s_data in self.streckengraph.edges(u_data.bst, keys=True, data=True):
-                        if s_v == u_data.bst:
-                            pos_x = s_data['s0']
-                            pos_y = u_data.t_eff
-                            self._axes.scatter(pos_x, pos_y, **self.marker_args(u_data))
+                if not u_data.get('marker', ''):
+                    continue
+                for s_u, s_v, s_key, s_data in self.streckengraph.edges(u_data.bst, keys=True, data=True):
+                    if s_v == u_data.bst:
+                        pos_x = s_data['s0']
+                        pos_y = u_data.t_eff
+                        self._axes.scatter(pos_x, pos_y, **self.marker_args(u_data))
             except AttributeError as e:
                 logger.debug("Fehlendes Attribut im Bildgraph beim Knotenzeichnen", exc_info=e)
 
@@ -562,12 +600,23 @@ class BildfahrplanPlot:
                     bahnhof = bf
                     break
 
+        if bahnhof is None:
+            return
+
         edge_data = self.bildgraph.get_edge_data(u, v)
         if edge_data is not None and bahnhof is not None:
             self.auswahl_kanten.append((u, v))
-            self.auswahl_bahnhoefe.append(bahnhof)
             idx = min(2, len(self.auswahl_kanten))
             edge_data.auswahl = idx
+
+        for node in [u, v]:
+            node_data = self.bildgraph.nodes[node]
+            if node_data.bst == bahnhof:
+                self.auswahl_bahnhoefe.append(bahnhof)
+                self.auswahl_knoten.append(node)
+                idx = min(2, len(self.auswahl_knoten))
+                node_data.auswahl = idx
+                break
 
     def clear_selection(self):
         """
@@ -583,7 +632,12 @@ class BildfahrplanPlot:
             if edge_data is not None:
                 edge_data.auswahl = 0
 
+        for node in self.auswahl_knoten:
+            node_data = self.bildgraph.nodes[node]
+            node_data.auswahl = 0
+
         self.auswahl_kanten = []
+        self.auswahl_knoten = []
         self.auswahl_bahnhoefe = []
         self.auswahl_text = []
 

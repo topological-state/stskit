@@ -112,6 +112,7 @@ class EreignisGraphNode(dict):
     marker = dict_property("marker", str,
                            "Grafiksymbol nach Matplotlib-Notation. "
                            "Wird vom Bildfahrplan genutzt. Sonst undefiniert!")
+    auswahl = dict_property("auswahl", int)
 
     @property
     def node_id(self) -> EreignisLabelType:
