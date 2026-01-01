@@ -65,6 +65,9 @@ class Betrieb:
         abzuwartende_abfahrt: Abzuwartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten).
         wartezeit: Zusätzliche Wartezeit
         dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
+
+        Exceptions: KeyError, ValueError
+
         """
 
         if journal is None:
@@ -72,23 +75,26 @@ class Betrieb:
             journal.title = "Abfahrt abwarten"
             journal.timestamp = self.anlage.simzeit_minuten
 
-        abzuwartendes_label, _ = self._ereignis_label_finden(abzuwartende_abfahrt, {'Ab'})
-        if abzuwartendes_label is None:
-            abzuwartendes_label, _ = self._ereignis_label_finden(abzuwartende_abfahrt, {'An'})
+        abzuwarten_label, abzuwarten_data = self._ereignis_label_finden(abzuwartende_abfahrt, {'Ab'})
+        if abzuwarten_label is None:
+            abzuwarten_label, _ = self._ereignis_label_finden(abzuwartende_abfahrt, {'An'})
             wartezeit = max(1, wartezeit)
 
-        wartendes_label, wartendes_data = self._wartende_abfahrt_suchen(journal, wartende_abfahrt)
+        wartend_label, wartend_data = self._wartende_abfahrt_suchen(journal, wartende_abfahrt)
+        if wartend_label is None or abzuwarten_label is None:
+            raise ValueError(f"Ungueltige Ereignisangaben {abzuwartende_abfahrt=} -> {wartende_abfahrt=}")
 
-        if wartendes_label and abzuwartendes_label:
-            egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=wartendes_label)
-            edge = EreignisGraphEdge(typ="A", zid=wartendes_label.zid, dt_fdl=wartezeit or 0, quelle='fdl')
-            egj.add_edge(abzuwartendes_label, wartendes_label, **edge)
-            journal.add_entry(egj)
-            journal.valid = True
+        abzuwarten_bst = self.anlage.bahnhofgraph.find_superior(abzuwarten_data.plan_bst, {'Bf', 'Anst'})
+        wartend_bst = self.anlage.bahnhofgraph.find_superior(wartend_data.plan_bst, {'Bf', 'Anst'})
+
+        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=wartend_label)
+        edge = EreignisGraphEdge(typ="A", zid=wartend_label.zid, dt_fdl=wartezeit or 0, quelle='fdl')
+        egj.add_edge(abzuwarten_label, wartend_label, **edge)
+        journal.add_entry(egj)
+        journal.valid = True
 
         if not dry_run and journal.valid:
-            bst = wartendes_data.plan_bst
-            jid = JournalIDType("Abfahrt", wartendes_label.zid, bst)
+            jid = JournalIDType("Abfahrt", wartend_label.zid, wartend_bst)
             self._journal_anwenden(jid, journal)
 
         return journal
@@ -126,20 +132,22 @@ class Betrieb:
             journal.title = "Ankunft abwarten"
             journal.timestamp = self.anlage.simzeit_minuten
 
-        abzuwartendes_label, _ = self._ereignis_label_finden(abzuwartende_ankunft, {'An'})
+        abzuwarten_label, abzuwarten_data = self._ereignis_label_finden(abzuwartende_ankunft, {'An'})
+        wartend_label, wartend_data = self._wartende_abfahrt_suchen(journal, wartende_abfahrt)
+        if wartend_label is None or abzuwarten_label is None:
+            raise ValueError(f"Ungueltige Ereignisangaben {abzuwartende_ankunft=} -> {wartende_abfahrt=}")
 
-        wartendes_label, wartendes_data = self._wartende_abfahrt_suchen(journal, wartende_abfahrt)
+        abzuwarten_bst = self.anlage.bahnhofgraph.find_superior(abzuwarten_data.plan_bst, {'Bf', 'Anst'})
+        wartend_bst = self.anlage.bahnhofgraph.find_superior(wartend_data.plan_bst, {'Bf', 'Anst'})
 
-        if wartendes_label and abzuwartendes_label:
-            egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=wartendes_label)
-            edge = EreignisGraphEdge(typ="A", zid=wartendes_label.zid, dt_fdl=wartezeit or 0, quelle='fdl')
-            egj.add_edge(abzuwartendes_label, wartendes_label, **edge)
-            journal.add_entry(egj)
-            journal.valid = True
+        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=wartend_label)
+        edge = EreignisGraphEdge(typ="A", zid=wartend_label.zid, dt_fdl=wartezeit or 0, quelle='fdl')
+        egj.add_edge(abzuwarten_label, wartend_label, **edge)
+        journal.add_entry(egj)
+        journal.valid = True
 
         if not dry_run and journal.valid:
-            bst = wartendes_data.plan_bst
-            jid = JournalIDType("Ankunft", wartendes_label.zid, bst)
+            jid = JournalIDType("Ankunft", wartend_label.zid, wartend_bst)
             self._journal_anwenden(jid, journal)
 
         return journal
@@ -166,8 +174,8 @@ class Betrieb:
         return label, data
 
     def kreuzung_abwarten(self,
-                          ankunft1_label: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                          ankunft2_label: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                          ankunft1: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                          ankunft2: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                           wartezeit: int = 0,
                           journal: JournalEntryGroup | None = None,
                           dry_run: bool = False) -> JournalEntryGroup:
@@ -195,17 +203,22 @@ class Betrieb:
             journal.title = "Kreuzung"
             journal.timestamp = self.anlage.simzeit_minuten
 
-        ankunft1_label, _ = self._ereignis_label_finden(ankunft1_label, {'An'})
-        ankunft2_label, _ = self._ereignis_label_finden(ankunft2_label, {'An'})
+        ankunft1_label, _ = self._ereignis_label_finden(ankunft1, {'An'})
+        ankunft2_label, _ = self._ereignis_label_finden(ankunft2, {'An'})
         if ankunft1_label is None or ankunft2_label is None:
-            return journal
+            raise ValueError(f"Ungueltige Ereignisangaben {ankunft1} x {ankunft2}")
 
         next1 = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft1_label)
         abfahrt1_label, abfahrt1_data = self._wartende_abfahrt_suchen(journal, next1)
         next2 = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft2_label)
         abfahrt2_label, abfahrt2_data = self._wartende_abfahrt_suchen(journal, next2)
         if abfahrt1_label is None or abfahrt2_label is None:
-            return journal
+            raise ValueError(f"Finde keine Abfahrtsereignisse zu {ankunft1_label} x {ankunft2_label}")
+
+        abfahrt1_bst = self.anlage.bahnhofgraph.find_superior(abfahrt1_data.plan_bst, {'Bf', 'Anst'})
+        abfahrt2_bst = self.anlage.bahnhofgraph.find_superior(abfahrt2_data.plan_bst, {'Bf', 'Anst'})
+        if abfahrt1_bst != abfahrt2_bst:
+            raise ValueError(f"Kreuzung {ankunft1_label} X {ankunft2_label} in verschiedenen Bahnhoefen ({abfahrt1_bst}, {abfahrt2_bst}) nicht moeglich")
 
         egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=abfahrt1_label)
         edge = EreignisGraphEdge(typ="A", zid=abfahrt1_label.zid, dt_fdl=wartezeit or 0, quelle='fdl')
@@ -220,8 +233,8 @@ class Betrieb:
         journal.valid = True
 
         if not dry_run and journal.valid:
-            abfahrt_data = abfahrt1_data if abfahrt1_label.zeit <= abfahrt2_label.zeit else abfahrt2_data
-            jid = JournalIDType("Kreuzung", abfahrt_data.zid, abfahrt_data.plan_bst)
+            abfahrt_bst, abfahrt_data = (abfahrt1_bst, abfahrt1_data) if abfahrt1_label.zeit <= abfahrt2_label.zeit else (abfahrt2_bst, abfahrt2_data)
+            jid = JournalIDType("Kreuzung", abfahrt_data.zid, abfahrt_bst)
             self._journal_anwenden(jid, journal)
 
         return journal
@@ -300,7 +313,7 @@ class Betrieb:
             self.anlage.dispo_journal.delete_entry(jid)
 
     def vorzeitige_abfahrt(self,
-                           abfahrt_label: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                           abfahrt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                            verfruehung: int,
                            relativ: bool = False):
         """
@@ -311,16 +324,19 @@ class Betrieb:
         journal.title = "Vorzeitige Abfahrt"
         journal.timestamp = self.anlage.simzeit_minuten
 
-        abfahrt_label, abfahrt_data = self._ereignis_label_finden(abfahrt_label, {'Ab'})
-        if abfahrt_label:
-            self._wartezeit_aendern(journal, abfahrt_label, "H", -verfruehung, relativ=relativ)
+        abfahrt_label, abfahrt_data = self._ereignis_label_finden(abfahrt, {'Ab'})
+        if abfahrt_label is None:
+            raise ValueError(f"Ungueltige Ereignisangabe {abfahrt}")
+
+        self._wartezeit_aendern(journal, abfahrt_label, "H", -verfruehung, relativ=relativ)
+        abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {'Bf', 'Anst'})
 
         if journal.valid:
-            jid = JournalIDType("Wartezeit", abfahrt_data.zid, abfahrt_data.plan_bst)
+            jid = JournalIDType("Wartezeit", abfahrt_data.zid, abfahrt_bst)
             self._journal_anwenden(jid, journal)
 
     def wartezeit_aendern(self,
-                          abfahrt_label: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                          abfahrt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                           wartezeit: int,
                           relativ: bool = False):
         """
@@ -331,12 +347,15 @@ class Betrieb:
         journal.title = "Wartezeit ändern"
         journal.timestamp = self.anlage.simzeit_minuten
 
-        abfahrt_label, abfahrt_data = self._ereignis_label_finden(abfahrt_label, {'Ab'})
-        if abfahrt_label:
-            self._wartezeit_aendern(journal, abfahrt_label, "A", wartezeit, relativ=relativ)
+        abfahrt_label, abfahrt_data = self._ereignis_label_finden(abfahrt, {'Ab'})
+        if abfahrt_label is None:
+            raise ValueError(f"Ungueltige Ereignisangabe {abfahrt}")
+
+        self._wartezeit_aendern(journal, abfahrt_label, "A", wartezeit, relativ=relativ)
+        abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {'Bf', 'Anst'})
 
         if journal.valid:
-            jid = JournalIDType("Wartezeit", abfahrt_data.zid, abfahrt_data.plan_bst)
+            jid = JournalIDType("Wartezeit", abfahrt_data.zid, abfahrt_bst)
             self._journal_anwenden(jid, journal)
             logger.debug(f"Wartezeit geändert, {jid}")
 
@@ -616,10 +635,11 @@ class Betrieb:
         else:
             return journal
 
+        abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {'Bf', 'Anst'})
         journal.valid = True
 
         if not dry_run and journal.valid:
-            jid = JournalIDType(typ="Betriebshalt", zid=abfahrt_label.zid, bst=abfahrt_data.plan_bst)
+            jid = JournalIDType(typ="Betriebshalt", zid=abfahrt_label.zid, bst=abfahrt_bst)
             self._journal_anwenden(jid, journal)
 
         return journal

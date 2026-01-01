@@ -277,9 +277,11 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         try:
             ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
         except (IndexError, KeyError):
-            return None
-        else:
+            return
+        try:
             self.zentrale.betrieb.wartezeit_aendern(ziel, 1, True)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
@@ -290,9 +292,11 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         try:
             ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
         except (IndexError, KeyError):
-            return None
-        else:
+            return
+        try:
             self.zentrale.betrieb.wartezeit_aendern(ziel, -1, True)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
@@ -303,9 +307,11 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         try:
             ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
         except (IndexError, KeyError):
-            return None
-        else:
+            return
+        try:
             self.zentrale.betrieb.abfahrt_zuruecksetzen(ziel)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
@@ -324,9 +330,11 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         nodes = self.kann_abfahrt_abwarten()
         if nodes is None:
             return
-        else:
+        try:
             ziel, referenz = nodes
             self.zentrale.betrieb.abfahrt_abwarten(ziel, referenz)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
@@ -367,9 +375,11 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         nodes = self.kann_ankunft_abwarten()
         if nodes is None:
             return
-        else:
+        try:
             ziel, referenz = nodes
             self.zentrale.betrieb.ankunft_abwarten(ziel, referenz)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
@@ -410,23 +420,25 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         nodes = self.kann_kreuzung_abwarten()
         if nodes is None:
             return
-
-        ankunft1, ankunft2 = nodes
-        self.zentrale.betrieb.kreuzung_abwarten(ankunft1, ankunft2)
+        try:
+            ankunft1, ankunft2 = nodes
+            self.zentrale.betrieb.kreuzung_abwarten(ankunft1, ankunft2)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
         self.update_actions()
 
-    def kann_kreuzung_abwarten(self):
+    def kann_kreuzung_abwarten(self) -> Tuple[EreignisGraphNode, EreignisGraphNode] | None:
         try:
             ankunft1 = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][1]]
             ankunft2 = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[1][1]]
         except (IndexError, KeyError):
-            return
+            return None
 
         if ankunft1.bst != ankunft2.bst:
-            return
+            return None
 
         return ankunft1, ankunft2
 
@@ -436,8 +448,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
         except (IndexError, KeyError):
             return
-
-        self.zentrale.betrieb.betriebshalt_einfuegen(ziel, self.plot.auswahl_bahnhoefe[0], wartezeit=1)
+        try:
+            self.zentrale.betrieb.betriebshalt_einfuegen(ziel, self.plot.auswahl_bahnhoefe[0], wartezeit=1)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
@@ -450,7 +464,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         except (IndexError, KeyError):
             return
 
-        self.zentrale.betrieb.betriebshalt_loeschen(ziel)
+        try:
+            self.zentrale.betrieb.betriebshalt_loeschen(ziel)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()

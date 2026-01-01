@@ -344,7 +344,7 @@ class JournalIDType(NamedTuple):
 
     typ: str  # Betriebshalt, Ankunft, Abfahrt, Kreuzung
     zid: int
-    bst: BahnhofElement
+    bst: BahnhofElement  # Bahnhof oder Anschlussstelle
 
     def __str__(self):
         return f"{self.typ}, {self.zid}, {self.bst}"

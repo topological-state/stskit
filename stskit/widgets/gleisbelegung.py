@@ -245,8 +245,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             ziel = self.plot._slot_auswahl[0].fid
         except (IndexError, KeyError):
             return
-
-        self.zentrale.betrieb.wartezeit_aendern(ziel, 1, True)
+        try:
+            self.zentrale.betrieb.wartezeit_aendern(ziel, 1, True)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
     @Slot()
     def action_minus_eins(self):
@@ -254,8 +256,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             ziel = self.plot._slot_auswahl[0].fid
         except (IndexError, KeyError):
             return
-
-        self.zentrale.betrieb.wartezeit_aendern(ziel, -1, True)
+        try:
+            self.zentrale.betrieb.wartezeit_aendern(ziel, -1, True)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
     @Slot()
     def action_loeschen(self):
@@ -263,8 +267,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             ziel = self.plot._slot_auswahl[0].fid
         except (IndexError, KeyError):
             return
-
-        self.zentrale.betrieb.abfahrt_zuruecksetzen(ziel)
+        try:
+            self.zentrale.betrieb.abfahrt_zuruecksetzen(ziel)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
     @Slot()
     def action_abfahrt_abwarten(self):
@@ -273,8 +279,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             referenz = self.plot._slot_auswahl[1].fid
         except (IndexError, KeyError):
             return
-
-        self.zentrale.betrieb.abfahrt_abwarten(ziel, referenz)
+        try:
+            self.zentrale.betrieb.abfahrt_abwarten(ziel, referenz)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
     @Slot()
     def action_ankunft_abwarten(self):
@@ -283,8 +291,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             referenz = self.plot._slot_auswahl[1].fid
         except (IndexError, KeyError):
             return
-
-        self.zentrale.betrieb.ankunft_abwarten(ziel, referenz)
+        try:
+            self.zentrale.betrieb.ankunft_abwarten(ziel, referenz)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
     @Slot()
     def action_kreuzung(self):
@@ -293,8 +303,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             referenz = self.plot._slot_auswahl[1].fid
         except (IndexError, KeyError):
             return
-
-        self.zentrale.betrieb.kreuzung_abwarten(ziel, referenz)
+        try:
+            self.zentrale.betrieb.kreuzung_abwarten(ziel, referenz)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
 
     @Slot()
     def action_warnung_ignorieren(self):
