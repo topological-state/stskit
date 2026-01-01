@@ -305,6 +305,12 @@ class BildfahrplanPlot:
             self.bildgraph.nodes[v]['marker'] = self.marker_style.get(data.typ, '')
             self.bildgraph.add_edge(u, v, **u_v_data)
 
+        # todo : auswahl beibehalten
+        self.auswahl_kanten = []
+        self.auswahl_knoten = []
+        self.auswahl_bahnhoefe = []
+        self.auswahl_text = []
+
     def line_args(self, start: EreignisGraphNode, ziel: EreignisGraphNode, data: EreignisGraphEdge) -> Dict[str, Any]:
         args = {'color': data.farbe,
                 'linewidth': data.linewidth,
@@ -601,9 +607,12 @@ class BildfahrplanPlot:
                     break
 
         if bahnhof is None:
-            return
+            self.clear_selection()
 
         edge_data = self.bildgraph.get_edge_data(u, v)
+        if edge_data.typ not in {'P'}:
+            self.clear_selection()
+
         if edge_data is not None and bahnhof is not None:
             self.auswahl_kanten.append((u, v))
             idx = min(2, len(self.auswahl_kanten))
@@ -612,11 +621,27 @@ class BildfahrplanPlot:
         for node in [u, v]:
             node_data = self.bildgraph.nodes[node]
             if node_data.bst == bahnhof:
-                self.auswahl_bahnhoefe.append(bahnhof)
-                self.auswahl_knoten.append(node)
-                idx = min(2, len(self.auswahl_knoten))
-                node_data.auswahl = idx
                 break
+        else:
+            node = EreignisLabelType(edge_data.zid, t, 'S')
+            node_data = {
+                'zid': edge_data.zid,
+                'typ': 'S',
+                'quelle': 'auswahl',
+                'zeit': t,
+                't_plan': t,
+                't_prog': t,
+                's': x,
+                'bst': bahnhof,
+                'marker': self.marker_style['S'],
+                'farbe': 'yellow',
+            }
+            self.bildgraph.add_node(node, **node_data)
+
+        self.auswahl_bahnhoefe.append(bahnhof)
+        self.auswahl_knoten.append(node)
+        idx = min(2, len(self.auswahl_knoten))
+        self.bildgraph.nodes[node].auswahl = idx
 
     def clear_selection(self):
         """
@@ -633,8 +658,14 @@ class BildfahrplanPlot:
                 edge_data.auswahl = 0
 
         for node in self.auswahl_knoten:
-            node_data = self.bildgraph.nodes[node]
-            node_data.auswahl = 0
+            try:
+                node_data = self.bildgraph.nodes[node]
+                if node_data.typ == 'S':
+                    self.bildgraph.remove_node(node)
+                else:
+                    node_data.auswahl = 0
+            except KeyError:
+                pass
 
         self.auswahl_kanten = []
         self.auswahl_knoten = []
