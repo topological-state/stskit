@@ -399,13 +399,26 @@ class Betrieb:
             Im Moment nicht verwendet.
         """
 
-        # wartend_label, _ = self._ereignis_label_finden(wartend, {'Ab', 'An'})
+        wartend_label, wartend_data = self._ereignis_label_finden(wartend, {'Ab', 'An'})
         zid = wartend.zid
+        bst = self.anlage.bahnhofgraph.find_superior(wartend_data.plan_bst, {'Bf', 'Anst'})
+
         loeschen = []
         for jid, j in self.anlage.dispo_journal.entries.items():
-            zids = {node.zid for node in j.target_nodes() if hasattr(node, 'zid')}
-            if zid in zids and jid.typ in {"Ankunft", "Abfahrt", "Kreuzung"}:
-                loeschen.append(jid)
+            if jid.typ not in {"Ankunft", "Abfahrt", "Kreuzung"}:
+                continue
+
+            for node in j.target_nodes():
+                try:
+                    node_data = self.anlage.dispo_ereignisgraph.nodes[node]
+                    node_zid = node_data.zid
+                    node_bst = self.anlage.bahnhofgraph.find_superior(node_data.plan_bst, {'Bf', 'Anst'})
+                except KeyError:
+                    continue
+                else:
+                    if zid == node_zid and bst == node_bst:
+                        loeschen.append(jid)
+
         for jid in loeschen:
             self.anlage.dispo_journal.delete_entry(jid)
             logger.debug("Korrektur gelöscht: {jid}")
