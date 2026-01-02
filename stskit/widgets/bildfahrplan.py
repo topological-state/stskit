@@ -305,7 +305,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     @Slot()
     def action_loeschen(self):
         try:
-            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
+            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_knoten[0]]
         except (IndexError, KeyError):
             return
         try:
@@ -320,11 +320,20 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     @Slot()
     def action_abfahrt_abwarten(self):
         """
-        Abfahrt des zweiten Zuges abwarten (Anschluss/Kreuzung)
+        Abfahrt eines Zuges abwarten, Ueberholung
 
-        Bedingungen
-        - Zwei Kanten selektiert.
-        - Beide Kanten gehen vom gleichen Bahnhof ab.
+        Mögliche Auswahl von Kanten und Knoten:
+        - Wartender Zug:
+          - Regulärer Abfahrtsknoten am Kantenanfang: erlaubt!
+          - Regulärer Ankunftsknoten am Kantenanfang: erlaubt, Betriebshalt wird eingefügt.
+          - Regulärer Ankunftsknoten am Kantenende: nicht erlaubt!
+          - Freier Auswahlknoten: nicht erlaubt!
+        - Abzuwartender Zug:
+          - Regulärer Abfahrtsknoten am Kantenanfang: erlaubt!
+          - Regulärer Ankunftsknoten am Kantenanfang: nicht erlaubt! (Zuerst manuell einen Betriebshalt einfuegen.)
+          - Regulärer Ankunftsknoten am Kantenende: nicht erlaubt!
+          - Freier Auswahlknoten: nicht erlaubt!
+        - Knoten in verschiedenen Bahnhöfen: erlaubt, aber möglicherweise nicht sinnvoll.
         """
 
         nodes = self.kann_abfahrt_abwarten()
@@ -332,7 +341,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             return
         try:
             ziel, referenz = nodes
-            self.zentrale.betrieb.abfahrt_abwarten(ziel, referenz)
+            self.zentrale.betrieb.abfahrt_abwarten(ziel, referenz, wartezeit=2)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
@@ -342,34 +351,64 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     def kann_abfahrt_abwarten(self) -> Optional[Tuple[EreignisGraphNode, EreignisGraphNode]]:
         """
-        Prüfen ob "Abfahrt abwarten" für aktuelle Auswahl möglich ist
+        Prüfen, ob "Abfahrt abwarten" für aktuelle Auswahl möglich ist
 
-        Bedingungen
-        - Zwei Kanten selektiert.
-        - Beide Kanten gehen vom gleichen Bahnhof ab.
+        Bedingungen siehe action_abfahrt_abwarten.
 
-        :return: Zielereignis und Referenzereignis wenn Befehl mäglich ist, sonst None
+        Returns:
+            Zielereignis und Referenzereignis, wenn der Befehl möglich ist, sonst None
         """
 
         try:
-            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
-            referenz = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[1][0]]
+            ziel_edge = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[0])
+            if ziel_edge.typ not in {'P'}:
+                return None
+            ziel_node = self.plot.auswahl_knoten[0]
+            ziel_data = self.plot.bildgraph.nodes[ziel_node]
+            if ziel_node != self.plot.auswahl_kanten[0][0]:
+                return None
+            if ziel_node.typ not in {'Ab', 'An'}:
+                return None
         except (IndexError, KeyError):
             return None
 
-        if ziel.bst != referenz.bst:
+        try:
+            ref_edge = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[1])
+            if ref_edge.typ not in {'P'}:
+                return None
+            ref_node = self.plot.auswahl_knoten[1]
+            ref_data = self.plot.bildgraph.nodes[ref_node]
+            if ref_node != self.plot.auswahl_kanten[1][0]:
+                return None
+            if ref_node.typ not in {'Ab'}:
+                return None
+        except (IndexError, KeyError):
             return None
 
-        return ziel, referenz
+        if ziel_node.zid == ref_node.zid:
+            return None
+        if ziel_data.bst != ref_data.bst:
+            return None
+
+        return ziel_data, ref_data
 
     @Slot()
     def action_ankunft_abwarten(self):
         """
-        Ankunft des zweiten Zuges abwarten (Anschluss)
+        Ankunft eines Zuges (Anschluss) abwarten
 
-        Bedingungen
-        - Zwei Kanten selektiert.
-        - Zweite Kante endet im Bahnhof, wo die erste Kante abgeht.
+        Mögliche Auswahl von Kanten und Knoten:
+        - Wartender Zug:
+          - Regulärer Abfahrtsknoten am Kantenanfang: erlaubt!
+          - Regulärer Ankunftsknoten am Kantenanfang: erlaubt, Betriebshalt wird eingefügt.
+          - Regulärer Ankunftsknoten am Kantenende: erlaubt! (halbe Kreuzung)
+          - Freier Auswahlknoten: nicht erlaubt!
+        - Abzuwartender Zug:
+          - Regulärer Abfahrtsknoten am Kantenanfang: nicht erlaubt!
+          - Regulärer Ankunftsknoten am Kantenanfang: nicht erlaubt!
+          - Regulärer Ankunftsknoten am Kantenende: erlaubt!
+          - Freier Auswahlknoten: nicht erlaubt!
+        - Knoten in verschiedenen Bahnhöfen: erlaubt, aber möglicherweise nicht sinnvoll.
         """
 
         nodes = self.kann_ankunft_abwarten()
@@ -377,7 +416,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             return
         try:
             ziel, referenz = nodes
-            self.zentrale.betrieb.ankunft_abwarten(ziel, referenz)
+            self.zentrale.betrieb.ankunft_abwarten(ziel, referenz, wartezeit=1)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
@@ -387,34 +426,59 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     def kann_ankunft_abwarten(self) -> Optional[Tuple[EreignisGraphNode, EreignisGraphNode]]:
         """
-        Prüfen ob "Ankunft abwarten" für aktuelle Auswahl möglich ist
+        Prüfen, ob "Ankunft abwarten" für aktuelle Auswahl möglich ist
 
-        Bedingungen
-        - Zwei Kanten selektiert.
-        - Zweite Kante endet im Bahnhof, wo die erste Kante abgeht.
+        Bedingungen siehe action_abfahrt_abwarten.
 
-        :return: Zielereignis und Referenzereignis wenn Befehl mäglich ist, sonst None
+        Returns:
+            Zielereignis und Referenzereignis, wenn der Befehl möglich ist, sonst None
         """
 
         try:
-            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
-            referenz = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[1][1]]
+            ziel_edge = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[0])
+            if ziel_edge.typ not in {'P'}:
+                return None
+            ziel_node = self.plot.auswahl_knoten[0]
+            ziel_data = self.plot.bildgraph.nodes[ziel_node]
+            if ziel_node != self.plot.auswahl_kanten[0][0] and ziel_node != self.plot.auswahl_kanten[0][1]:
+                return None
+            if ziel_node.typ not in {'Ab', 'An'}:
+                return None
         except (IndexError, KeyError):
-            return
+            return None
 
-        if ziel.bst != referenz.bst:
-            return
+        try:
+            ref_edge = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[1])
+            if ref_edge.typ not in {'P'}:
+                return None
+            ref_node = self.plot.auswahl_knoten[1]
+            ref_data = self.plot.bildgraph.nodes[ref_node]
+            if ref_node != self.plot.auswahl_kanten[1][1]:
+                return None
+            if ref_node.typ not in {'An'}:
+                return None
+        except (IndexError, KeyError):
+            return None
 
-        return ziel, referenz
+        if ziel_node.zid == ref_node.zid:
+            return None
+        if ziel_data.bst != ref_data.bst:
+            return None
+
+        return ziel_data, ref_data
 
     @Slot()
     def action_kreuzung_abwarten(self):
         """
-        Ankunft von zwei Zuegen abwarten (Kreuzung)
+        Gegenseitige Ankunft abwarten (Kreuzung)
 
-        Bedingungen
-        - Zwei Kanten selektiert.
-        - Beide Kanten enden im gleichen Bahnhof.
+        Mögliche Auswahl von Kanten und Knoten:
+        - Beide Züge:
+          - Regulärer Abfahrtsknoten am Kantenanfang: nicht erlaubt!
+          - Regulärer Ankunftsknoten am Kantenanfang: nicht erlaubt!
+          - Regulärer Ankunftsknoten am Kantenende: erlaubt!
+          - Freier Auswahlknoten: nicht erlaubt!
+        - Knoten in verschiedenen Bahnhöfen: erlaubt, aber möglicherweise nicht sinnvoll.
         """
 
         nodes = self.kann_kreuzung_abwarten()
@@ -422,7 +486,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             return
         try:
             ankunft1, ankunft2 = nodes
-            self.zentrale.betrieb.kreuzung_abwarten(ankunft1, ankunft2)
+            self.zentrale.betrieb.kreuzung_abwarten(ankunft1, ankunft2, wartezeit=0)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
@@ -432,15 +496,37 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     def kann_kreuzung_abwarten(self) -> Tuple[EreignisGraphNode, EreignisGraphNode] | None:
         try:
-            ankunft1 = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][1]]
-            ankunft2 = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[1][1]]
+            edge1 = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[0])
+            if edge1.typ not in {'P'}:
+                return None
+            node1 = self.plot.auswahl_knoten[0]
+            data1 = self.plot.bildgraph.nodes[node1]
+            if node1 != self.plot.auswahl_kanten[0][1]:
+                return None
+            if node1.typ not in {'An'}:
+                return None
         except (IndexError, KeyError):
             return None
 
-        if ankunft1.bst != ankunft2.bst:
+        try:
+            edge2 = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[1])
+            if edge2.typ not in {'P'}:
+                return None
+            node2 = self.plot.auswahl_knoten[1]
+            data2 = self.plot.bildgraph.nodes[node2]
+            if node2 != self.plot.auswahl_kanten[1][1]:
+                return None
+            if node2.typ not in {'An'}:
+                return None
+        except (IndexError, KeyError):
             return None
 
-        return ankunft1, ankunft2
+        if node1.zid == node2.zid:
+            return None
+        if data1.bst != data2.bst:
+            return None
+
+        return data1, data2
 
     @Slot()
     def action_betriebshalt_einfuegen(self):
