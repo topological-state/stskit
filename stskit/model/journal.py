@@ -373,3 +373,6 @@ class Journal:
 
     def delete_entry(self, id_: Hashable):
         del self.entries[id_]
+
+    def clear(self):
+        self.entries.clear()
