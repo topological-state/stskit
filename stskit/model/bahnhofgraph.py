@@ -250,9 +250,6 @@ class BahnhofGraph(nx.DiGraph):
         It organizes these parent nodes into a nested dictionary where the keys are the Gl or Agl nodes,
         and the values are dictionaries mapping child node types to their corresponding child nodes.
 
-        Parameters:
-            None
-
         Returns:
             Dict[BahnhofLabelType, Dict[str, BahnhofLabelType]]: A dictionary containing parent nodes for each Gl and Agl node.
         """
