@@ -9,13 +9,14 @@ from matplotlib.image import AxesImage
 from matplotlib.text import Text
 import networkx as nx
 
-from stskit.utils.observer import Observable
 from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
+from stskit.model.journal import Journal, JournalEntry
 from stskit.model.zuggraph import ZugGraphNode
+from stskit.model.zugschema import Zugbeschriftung
 from stskit.plugin.stsobj import format_verspaetung, format_minutes
 from stskit.plots.plotbasics import hour_minutes_formatter
-from stskit.model.zugschema import Zugbeschriftung
+from stskit.utils.observer import Observable
 from stskit.zentrale import DatenZentrale
 
 
@@ -54,6 +55,7 @@ class BildfahrplanPlot:
         self.auswahl_kanten: List[Tuple[EreignisLabelType, ...]] = []
         self.auswahl_knoten: List[EreignisLabelType] = []
         self.auswahl_bahnhoefe: List[BahnhofElement] = []
+        self._auswahl_journal: Journal = Journal()
 
         self._canvas = canvas
         self._axes = self._canvas.figure.subplots()
@@ -305,11 +307,7 @@ class BildfahrplanPlot:
             self.bildgraph.nodes[v]['marker'] = self.marker_style.get(data.typ, '')
             self.bildgraph.add_edge(u, v, **u_v_data)
 
-        # todo : auswahl beibehalten
-        self.auswahl_kanten = []
-        self.auswahl_knoten = []
-        self.auswahl_bahnhoefe = []
-        self.auswahl_text = []
+        self.update_selection()
 
     def line_args(self, start: EreignisGraphNode, ziel: EreignisGraphNode, data: EreignisGraphEdge) -> Dict[str, Any]:
         args = {'color': data.farbe,
@@ -599,6 +597,11 @@ class BildfahrplanPlot:
         :return: None
         """
 
+        edge_data = self.bildgraph.get_edge_data(u, v)
+        if edge_data is None or edge_data.typ not in {'P'}:
+            self.clear_selection()
+            return
+
         bahnhof = None
         if x is not None:
             for s, bf in self.naechster_bahnhof.items():
@@ -608,19 +611,17 @@ class BildfahrplanPlot:
 
         if bahnhof is None:
             self.clear_selection()
+            return
 
-        edge_data = self.bildgraph.get_edge_data(u, v)
-        if edge_data.typ not in {'P'}:
-            self.clear_selection()
-
-        if edge_data is not None and bahnhof is not None:
-            self.auswahl_kanten.append((u, v))
-            idx = min(2, len(self.auswahl_kanten))
-            edge_data.auswahl = idx
+        journal_entry = JournalEntry(target_graph='bildgraph', target_node=v)
+        self.auswahl_kanten.append((u, v))
+        idx = min(2, len(self.auswahl_kanten))
+        journal_entry.change_edge(u, v, auswahl=idx)
 
         for node in [u, v]:
             node_data = self.bildgraph.nodes[node]
             if node_data.bst == bahnhof:
+                journal_entry.change_node(node, auswahl=idx)
                 break
         else:
             node = EreignisLabelType(edge_data.zid, t, 'S')
@@ -635,13 +636,14 @@ class BildfahrplanPlot:
                 'bst': bahnhof,
                 'marker': self.marker_style['S'],
                 'farbe': 'yellow',
+                'auswahl': idx,
             }
-            self.bildgraph.add_node(node, **node_data)
+            journal_entry.add_node(node, **node_data)
 
         self.auswahl_bahnhoefe.append(bahnhof)
         self.auswahl_knoten.append(node)
-        idx = min(2, len(self.auswahl_knoten))
-        self.bildgraph.nodes[node].auswahl = idx
+        self._auswahl_journal.add_entry((self.zeit, idx), journal_entry)
+        self._auswahl_journal.replay(graph_map={'bildgraph': self.bildgraph})
 
     def clear_selection(self):
         """
@@ -671,6 +673,28 @@ class BildfahrplanPlot:
         self.auswahl_knoten = []
         self.auswahl_bahnhoefe = []
         self.auswahl_text = []
+        self._auswahl_journal.clear()
+
+    def update_selection(self):
+        """
+        Auswahl nachfuehren
+
+        - Auswahl loeschen, wenn sie aus dem Zeitfenster gelaufen ist.
+        - Journal auf `bildgraph` anwenden.
+        """
+
+        t0 = self.zeit - self.nachlaufzeit
+        for u, v in self.auswahl_kanten:
+            for node in [u, v]:
+                node_data = self.bildgraph.nodes[node]
+                if node_data.t_eff >= t0:
+                    break
+            else:
+                self.clear_selection()
+                self.auswahl_geaendert.notify()
+                return
+
+        self._auswahl_journal.replay(graph_map={'bildgraph': self.bildgraph})
 
     def format_zuginfo(self, u: EreignisLabelType, v: EreignisLabelType):
         """
