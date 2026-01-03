@@ -1,6 +1,6 @@
 import itertools
 import logging
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Iterable
 
 from PySide6.QtCore import Slot, QStringListModel
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -9,7 +9,7 @@ from PySide6 import QtWidgets
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BahnhofElement
-from stskit.model.ereignisgraph import EreignisGraphNode, EreignisGraphEdge
+from stskit.model.ereignisgraph import EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
 from stskit.plugin.stsobj import time_to_minutes
 from stskit.plugin.stsplugin import PluginClient
 from stskit.plots.bildfahrplan import BildfahrplanPlot
@@ -19,6 +19,31 @@ from stskit.qt.ui_bildfahrplan import Ui_BildfahrplanWindow
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+
+
+class GleiswahlDialog(QtWidgets.QDialog):
+    def __init__(self, gleise: Iterable[str], parent=None):
+        super(GleiswahlDialog, self).__init__(parent)
+
+        self.auswahl: str = ""
+        self.setWindowTitle("Gleis wählen")
+
+        self.list_box = QtWidgets.QListWidget()
+        self.list_box.addItems(list(gleise))
+        self.list_box.currentTextChanged.connect(self.text_changed)
+
+        buttons = QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
+        self.button_box = QtWidgets.QDialogButtonBox(buttons)
+        self.button_box.accepted.connect(self.accept)
+        self.button_box.rejected.connect(self.reject)
+
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(self.list_box)
+        layout.addWidget(self.button_box)
+        self.setLayout(layout)
+
+    def text_changed(self, text):
+        self.auswahl = text
 
 
 class BildFahrplanWindow(QtWidgets.QMainWindow):
@@ -195,6 +220,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and self.kann_abfahrt_abwarten() is not None)
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and self.kann_ankunft_abwarten() is not None)
         self.ui.actionKreuzung.setEnabled(display_mode and self.kann_kreuzung_abwarten() is not None)
+        self.ui.actionBetriebshaltEinfuegen.setEnabled(display_mode and self.kann_betriebshalt_einfuegen() is not None)
 
         self.updating = False
 
@@ -530,18 +556,66 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     @Slot()
     def action_betriebshalt_einfuegen(self):
-        try:
-            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
-        except (IndexError, KeyError):
+        """
+        Betriebshalt einfügen
+
+        Mögliche Auswahl von Kanten und Knoten:
+          - Regulärer Abfahrtsknoten: nicht erlaubt!
+          - Regulärer Ankunftsknoten am Kantenanfang: erlaubt!
+          - Regulärer Ankunftsknoten am Kantenende: erlaubt!
+          - Freier Auswahlknoten (Bahnhof verschieden von Kantenenden): erlaubt!
+        """
+
+        node_data = self.kann_betriebshalt_einfuegen()
+        if node_data is None:
             return
+        else:
+            node, data = node_data
+
+        if data.typ == 'S':
+            gleise = sorted(self.anlage.bahnhofgraph.bahnhofgleise(data.bst.name))
+            dlg = GleiswahlDialog(gleise, parent=self)
+            if dlg.exec():
+                gleis = BahnhofElement('Gl', dlg.auswahl)
+            else:
+                return
+        else:
+            gleis = data.plan_bst
+
         try:
-            self.zentrale.betrieb.betriebshalt_einfuegen(ziel, self.plot.auswahl_bahnhoefe[0], wartezeit=1)
+            self.zentrale.betrieb.betriebshalt_einfuegen(node, gleis, wartezeit=1)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
         self.update_actions()
+
+    def kann_betriebshalt_einfuegen(self) -> Tuple[EreignisLabelType, EreignisGraphNode] | None:
+        """
+        Prüfen, ob bei der aktuellen Trassenauswahl ein Betriebshalt eingefügt werden kann
+
+        Returns:
+            Label des Referenzknotens und Daten des ausgewählten Knotens, wenn ein Halt eingefügt werden kann, sonst None.
+            Referenz und Auswahl gehören zum gleichen Knoten, wenn der Knoten in einen Betriebshalt umgewandelt werden kann.
+            Wenn ein neuer Halt eingefügt werden muss, ist die Referenz der Ausgangsknoten der gewählten Kante.
+        """
+        try:
+            edge1 = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[0])
+            if edge1.typ not in {'P'}:
+                return None
+            node1 = self.plot.auswahl_knoten[0]
+            data1 = self.plot.bildgraph.nodes[node1]
+            if node1.typ == 'S' and self.anlage.bahnhofgraph.has_node(data1.bst):
+                node1 = self.plot.auswahl_kanten[0][0]
+            elif node1.typ == 'An':
+                pass
+            else:
+                return None
+        except (AttributeError, IndexError, KeyError):
+            return None
+
+        return node1, data1
 
     @Slot()
     def action_betriebshalt_loeschen(self):

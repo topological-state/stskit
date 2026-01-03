@@ -459,6 +459,7 @@ class Betrieb:
         an3_node = eg.nodes[an3_label]
         edge_alt = eg.edges[(an2_label, an3_label)]
 
+        # todo : durchfahrten haben bereits jetzt An und Ab!
         if edge_alt.typ != 'P':
             raise ValueError(f"Kante {an2_label}-{an3_label} (Typ {edge_alt.typ}) ist keine Planfahrt.")
         if an2_node.typ != 'An':
@@ -574,8 +575,14 @@ class Betrieb:
 
         ankunft_edge = copy.copy(alt_edge)
         ankunft_edge.quelle = 'fdl'
-        ankunft_edge.dt_min = alt_edge.dt_min * teiler
-        ankunft_edge.ds = alt_edge.ds * teiler
+        try:
+            ankunft_edge.dt_min = alt_edge.dt_min * teiler
+        except AttributeError:
+            pass
+        try:
+            ankunft_edge.ds = alt_edge.ds * teiler
+        except AttributeError:
+            pass
         ankunft_edge.dt_max = math.inf
         ankunft_edge.dt_fdl = 0
 
@@ -583,12 +590,18 @@ class Betrieb:
         halt_edge.typ = 'B'
         halt_edge.dt_min = 0
         halt_edge.dt_max = math.inf
-        halt_edge.dt_fdl = max(alt_edge.dt_fdl, wartezeit)
+        try:
+            halt_edge.dt_fdl = max(alt_edge.dt_fdl, wartezeit)
+        except AttributeError:
+            halt_edge.dt_fdl = wartezeit
         halt_edge.ds = 0
 
         abfahrt_edge = copy.copy(alt_edge)
         abfahrt_edge.dt_min = alt_edge.dt_min * (1. - teiler)
-        abfahrt_edge.ds = alt_edge.ds * (1. - teiler)
+        try:
+            abfahrt_edge.ds = alt_edge.ds * (1. - teiler)
+        except AttributeError:
+            pass
         abfahrt_edge.dt_max = math.inf
         abfahrt_edge.dt_fdl = 0
 
@@ -623,36 +636,60 @@ class Betrieb:
         wird die Durchfahrt in einen Betriebshalt umgewandelt.
         Ansonsten wird ein neues Fahrziel eingefügt.
 
-        vorheriges_ziel: Vorheriges Abfahrts- oder Durchfahrtsereignis.
-        gleis: Gleis, an dem gehalten wird.
-        wartezeit: Wartezeit in Minuten
+        Die Funktion prüft nicht, ob die Betriebsstelle auf dem Weg des Zugs liegt!
+
+        Unterstützte Fälle:
+            1. vorheriges_ziel bezeichnet ein Ankunftsereignis oder ein Fahrziel mit Durchfahrt.
+                gleis gehört zu der Betriebsstelle des Ereignisses bzw. Ziels.
+                Die Durchfahrt wird in einen Betriebshalt umgewandelt.
+            2. vorheriges_ziel bezeichnet ein Ankunfts- oder Abfahrtsereignis oder ein Fahrziel mit Halt oder Durchfahrt.
+                gleis gehört zu einer Betriebsstelle, die im Fahrplan des Zuges _nicht_ vorkommt.
+                Der Betriebshalt wird als neues Fahrziel eingefügt.
+
+        Args:
+            vorheriges_ziel: Ereignis oder Fahrziel, das zum Betriebshalt wird oder dem Betriebshalt vorangeht.
+            gleis: Gleis, an dem gehalten wird.
+            wartezeit: Wartezeit in Minuten
+            journal: Bestehende JournalEntryGroup zu der die Aenderungen hinzugefügt werden.
+                Per default erstellt die Funktion eine neue Gruppe.
+            dry_run: Falls True, werden die notwendigen Aenderungen berechnet und als JournalEntryGroup zurückgeliefert.
+                Falls False (default), werden die Aenderungen ausserdem gleich angewendet.
+
+        Returns:
+            JournalEntryGroup mit den gemachten bzw. erforderlichen Aenderungen.
+            Bei dry_run = False wurden diese bereits auf die dispo-Graphen angewendet.
         """
 
         if journal is None:
             journal = JournalEntryGroup()
             journal.title = "Betriebshalt"
             journal.timestamp = self.anlage.simzeit_minuten
+            journal.valid = True
 
         vorher_label, _ = self._ereignis_label_finden(vorheriges_ziel, {'Ab'})
         if vorher_label is None:
             vorher_label, _ = self._ereignis_label_finden(vorheriges_ziel, {'An'})
         if vorher_label is None:
+            journal.valid = False
             return journal
 
-        if vorher_label.typ == 'Ab':
-            if not hasattr(gleis, 'typ'):
-                gleis = BahnhofElement('Gl', gleis)
-            abfahrt_label, abfahrt_data = self._betriebshalt_auf_strecke(journal, vorher_label, gleis, wartezeit)
-        elif vorher_label.typ == 'An':
-            abfahrt_label, abfahrt_data = self._betriebshalt_statt_durchfahrt(journal, vorher_label, wartezeit)
+        vorher_node = self.anlage.dispo_ereignisgraph.nodes[vorher_label]
+        vorher_bst = self.anlage.bahnhofgraph.find_superior(vorher_node.plan_bst, {'Bf', 'Anst'})
+        if not hasattr(gleis, 'typ'):
+            gleis = BahnhofElement('Gl', gleis)
+        halt_bst = self.anlage.bahnhofgraph.find_superior(gleis, {'Bf', 'Anst'})
+
+        if vorher_bst == halt_bst:
+            if vorher_label.typ == 'An':
+                abfahrt_label, abfahrt_data = self._betriebshalt_statt_durchfahrt(journal, vorher_label, wartezeit)
+            else:
+                journal.valid = False
+                return journal
         else:
-            return journal
-
-        abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {'Bf', 'Anst'})
-        journal.valid = True
+            abfahrt_label, abfahrt_data = self._betriebshalt_auf_strecke(journal, vorher_label, gleis, wartezeit)
 
         if not dry_run and journal.valid:
-            jid = JournalIDType(typ="Betriebshalt", zid=abfahrt_label.zid, bst=abfahrt_bst)
+            jid = JournalIDType(typ="Betriebshalt", zid=abfahrt_label.zid, bst=halt_bst)
             self._journal_anwenden(jid, journal)
 
         return journal
