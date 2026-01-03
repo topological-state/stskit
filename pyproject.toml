@@ -31,3 +31,8 @@ dev = [
 
 [tool.uv]
 python-preference = "only-managed"
+
+[tool.ruff.lint]
+select = ["A", "ASYNC", "B", "COM", "E", "F", "PLC", "PLE", "W", "YTT"]
+# select = ["A", "ASYNC", "B", "COM", "E", "F", "PLC", "PLE", "RUF", "W", "YTT"]
+ignore = ["A001", "A002", "B007", "B008", "B904", "B905", "F401", "F821", "F841", "E501", "E741", "PLC0206", "W291", "W293"]
