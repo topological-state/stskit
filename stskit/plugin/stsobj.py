@@ -691,19 +691,19 @@ class FahrplanZeileID(NamedTuple):
 
 class FahrplanZeile:
     """
-    fahrplanzeile
+    Fahrplanzeile
 
-    flags:
-    - A: vorzeitige abfahrt
-    - Bn: themenflag
-    - D: durchfahrt
-    - E(zid): ersatzzug
-    - F(zid): flügeln
-    - K(zid): kuppeln
-    - L: lokumlauf
-    - P: anfangsaufstellungsplatz
-    - R: richtungsänderung
-    - W[enr][enr]: lokwechsel
+    Flags:
+      - `A`: Vorzeitige Abfahrt möglich
+      - `Bn`: Themenflag
+      - `D`: Durchfahrt
+      - `E(zid)`: Nummernwechsel
+      - `F(zid)`: Flügeln
+      - `K(zid)`: Kuppeln
+      - `L`: Lokumlauf
+      - `P`: Anfangsaufstellungsplatz
+      - `R`: Richtungsänderung
+      - `W[enr][enr]`: Lokwechsel
     """
     tag = 'gleis'
 
