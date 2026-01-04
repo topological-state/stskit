@@ -61,13 +61,19 @@ class Betrieb:
         Bemerkung: Bei Durchfahrt kann ein Zug nicht warten.
         In diesem Fall wird implizit ein Betriebshalt eingefügt.
 
-        wartende_abfahrt: Wartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten)
-        abzuwartende_abfahrt: Abzuwartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten).
-        wartezeit: Zusätzliche Wartezeit
-        dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
+        Args:
+            wartende_abfahrt: Wartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten)
+            abzuwartende_abfahrt: Abzuwartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten).
+            wartezeit: Zusätzliche Wartezeit
+            journal: Änderungen an 'ereignisgraph' und 'zielgraph' als JournalEntry-Einträge.
+                Optional, per Default wird eine neue Journalgruppe angelegt.
+            dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
 
-        Exceptions: KeyError, ValueError
+        Returns:
+            journal: Änderungen an 'ereignisgraph' und 'zielgraph' als JournalEntry-Einträge.
 
+        Raises:
+            KeyError, ValueError
         """
 
         if journal is None:
@@ -80,7 +86,7 @@ class Betrieb:
             abzuwarten_label, _ = self._ereignis_label_finden(abzuwartende_abfahrt, {'An'})
             wartezeit = max(1, wartezeit)
 
-        wartend_label, wartend_data = self._wartende_abfahrt_suchen(journal, wartende_abfahrt)
+        wartend_label, wartend_data = self._wartende_abfahrt_finden(journal, wartende_abfahrt)
         if wartend_label is None or abzuwarten_label is None:
             raise ValueError(f"Ungueltige Ereignisangaben {abzuwartende_abfahrt=} -> {wartende_abfahrt=}")
 
@@ -121,10 +127,19 @@ class Betrieb:
         Bemerkung: Bei Durchfahrt kann ein Zug nicht warten.
         In diesem Fall wird implizit ein Betriebshalt eingefügt.
 
-        wartende_abfahrt: Wartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten)
-        abzuwartende_ankunft: Abzuwartende Ankunft (Ereignis- oder Ziel-, -Label oder -Daten).
-        wartezeit: Zusätzliche Wartezeit
-        dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
+        Args:
+            wartende_abfahrt: Wartende Abfahrt (Ereignis- oder Ziel-, -Label oder -Daten)
+            abzuwartende_ankunft: Abzuwartende Ankunft (Ereignis- oder Ziel-, -Label oder -Daten).
+            wartezeit: Zusätzliche Wartezeit
+            journal: Änderungen an 'ereignisgraph' und 'zielgraph' als JournalEntry-Einträge.
+                Optional, per Default wird eine neue Journalgruppe angelegt.
+            dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
+
+        Returns:
+            journal: Änderungen an 'ereignisgraph' und 'zielgraph' als JournalEntry-Einträge.
+
+        Raises:
+            KeyError, ValueError
         """
 
         if journal is None:
@@ -133,7 +148,7 @@ class Betrieb:
             journal.timestamp = self.anlage.simzeit_minuten
 
         abzuwarten_label, abzuwarten_data = self._ereignis_label_finden(abzuwartende_ankunft, {'An'})
-        wartend_label, wartend_data = self._wartende_abfahrt_suchen(journal, wartende_abfahrt)
+        wartend_label, wartend_data = self._wartende_abfahrt_finden(journal, wartende_abfahrt)
         if wartend_label is None or abzuwarten_label is None:
             raise ValueError(f"Ungueltige Ereignisangaben {abzuwartende_ankunft=} -> {wartende_abfahrt=}")
 
@@ -152,27 +167,31 @@ class Betrieb:
 
         return journal
 
-    def _wartende_abfahrt_suchen(self,
+    def _wartende_abfahrt_finden(self,
                                  journal: JournalEntryGroup,
                                  wartend: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode) -> Tuple[EreignisLabelType | None, EreignisGraphNode | None]:
-
         """
-        Abfahrtsereignis des wartenden Zuges suchen oder erstellen
+        Abfahrtsereignis des wartenden Zuges suchen, ggf. Betriebshalt erstellen
 
-        Erstellt ggf. einen Betriebshalt
+        Erstellt einen Betriebshalt, wenn das Abfahrtereignis zu einer Durchfahrt (Kante vom Typ D) gehört.
+
+        Args:
+            journal: Änderungen an 'ereignisgraph' und 'zielgraph' als JournalEntry-Einträge.
+            wartend: Abfahrtereignis oder Fahrziel, wo der Zug warten soll.
+
+        Returns:
+            Ereignislabel und -daten der Abfahrt. None, wenn nicht gefunden.
         """
 
-        # todo : durchfahrt detektieren (eingehende kante)
-        label, data = self._ereignis_label_finden(wartend, {'Ab'})
-        if label is None:
-            label, data = self._ereignis_label_finden(wartend, {'An'})
-            if label is not None:
-                try:
-                    label, data = self._betriebshalt_statt_durchfahrt(journal, label, 1)
-                except ValueError:
-                    label = data = None
+        abfahrt_data = None
+        ankunft_label, abfahrt_label = self._ankunft_abfahrt_finden(wartend)
+        kante = self.anlage.dispo_ereignisgraph.get_edge_data(ankunft_label, abfahrt_label)
+        if kante is not None and kante.typ == 'D':
+            abfahrt_label, abfahrt_data = self._betriebshalt_statt_durchfahrt(journal, ankunft_label, 1)
+        elif abfahrt_data is None and ankunft_label is not None:
+            abfahrt_data = self.anlage.dispo_ereignisgraph.nodes[abfahrt_label]
 
-        return label, data
+        return abfahrt_label, abfahrt_data
 
     def kreuzung_abwarten(self,
                           ankunft1: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
@@ -183,20 +202,31 @@ class Betrieb:
         """
         Kreuzung abwarten
 
-        Wird in folgenden Situationen angewendet:
+        Zwei Züge kreuzen sich an einer Ausweichstelle auf einer eingleisigen Strecke.
+        Der frühere wartet auf die Ankunft des späteren.
+        Die Abhängigkeit ist symmetrisch, die Züge können frühestens abfahren, wenn beide angekommen sind.
 
-        - Kreuzung auf eingleisiger Strecke.
-
-        Zuege können als Ereignisse oder Fahrplanziele angegeben werden.
-        In letzterem Fall wird zuerst das zugehörige Ankunftsereignis gesucht.
+        Züge können als Ereignisse oder Fahrplanziele angegeben werden.
         Ereignisse und Ziele können als Label oder Node Data angegeben werden.
+        Im Fall von Ereignissen kann jeweils das zu dem Halt oder der Durchfahrt
+        gehörende Ankunfts- oder Abfahrtsereignis angegeben werden.
+        Beide Ziele müssen im gleichen Bahnhof liegen.
 
-        Bemerkung: Bei Durchfahrt kann ein Zug nicht warten.
-        In diesem Fall wird implizit ein Betriebshalt eingefügt.
+        Bei Durchfahrt wird implizit ein Betriebshalt eingefügt.
 
-        ankunft1, ankunft2: Ankunftsereignisse der kreuzenden Zuege (Ereignis- oder Ziel-, -Label oder -Daten)
-        wartezeit: Zusätzliche Wartezeit
-        dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
+        Args:
+            ankunft1: Ankunft oder Abfahrt des ersten Zuges (Ereignis- oder Ziel-, -Label oder -Daten)
+            ankunft2: Ankunft oder Abfahrt des zweiten Zuges (Ereignis- oder Ziel-, -Label oder -Daten)
+            wartezeit: Zusätzliche Wartezeit
+            journal: Änderungen an 'ereignisgraph' und 'zielgraph' als JournalEntry-Einträge.
+                Optional, per Default wird eine neue Journalgruppe angelegt.
+            dry_run: Wenn False, nur prüfen, ob Abwarten möglich ist.
+
+        Returns:
+            journal: Änderungen an 'ereignisgraph' und 'zielgraph' als JournalEntry-Einträge.
+
+        Raises:
+            KeyError, ValueError
         """
 
         if journal is None:
@@ -204,17 +234,22 @@ class Betrieb:
             journal.title = "Kreuzung"
             journal.timestamp = self.anlage.simzeit_minuten
 
-        ankunft1_label, _ = self._ereignis_label_finden(ankunft1, {'An'})
-        ankunft2_label, _ = self._ereignis_label_finden(ankunft2, {'An'})
+        ankunft1_label, abfahrt1_label = self._ankunft_abfahrt_finden(ankunft1)
+        ankunft2_label, abfahrt2_label = self._ankunft_abfahrt_finden(ankunft2)
+
         if ankunft1_label is None or ankunft2_label is None:
             raise ValueError(f"Ungueltige Ereignisangaben {ankunft1} x {ankunft2}")
-
-        next1 = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft1_label)
-        abfahrt1_label, abfahrt1_data = self._wartende_abfahrt_suchen(journal, next1)
-        next2 = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft2_label)
-        abfahrt2_label, abfahrt2_data = self._wartende_abfahrt_suchen(journal, next2)
         if abfahrt1_label is None or abfahrt2_label is None:
             raise ValueError(f"Finde keine Abfahrtsereignisse zu {ankunft1_label} x {ankunft2_label}")
+        abfahrt1_data = self.anlage.dispo_ereignisgraph.nodes[abfahrt1_label]
+        abfahrt2_data = self.anlage.dispo_ereignisgraph.nodes[abfahrt2_label]
+
+        kante1 = self.anlage.dispo_ereignisgraph.get_edge_data(ankunft1_label, abfahrt1_label)
+        if kante1 is not None and kante1.typ == 'D':
+            abfahrt1_label, abfahrt1_data = self._betriebshalt_statt_durchfahrt(journal, ankunft1_label, wartezeit)
+        kante2 = self.anlage.dispo_ereignisgraph.get_edge_data(ankunft2_label, abfahrt2_label)
+        if kante2 is not None and kante2.typ == 'D':
+            abfahrt2_label, abfahrt2_data = self._betriebshalt_statt_durchfahrt(journal, ankunft2_label, wartezeit)
 
         abfahrt1_bst = self.anlage.bahnhofgraph.find_superior(abfahrt1_data.plan_bst, {'Bf', 'Anst'})
         abfahrt2_bst = self.anlage.bahnhofgraph.find_superior(abfahrt2_data.plan_bst, {'Bf', 'Anst'})
@@ -245,6 +280,30 @@ class Betrieb:
 
     def trasse_verschieben(self):
         pass
+
+    def _ankunft_abfahrt_finden(self,
+                                ereignis_oder_ziel: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode) -> tuple[
+                                EreignisLabelType | None, EreignisLabelType | None]:
+        """
+        Zu einem Ereignis oder Ziel gehörende Ankunft- und Abfahrtereignisse finden
+
+        Args:
+            ereignis_oder_ziel. Das Ereignis oder Ziel muss zu einem Halt oder einer Fahrt gehören.
+
+        Returns:
+            Ankunft und Abfahrtereignisse. None, wenn nicht gefunden.
+        """
+        vorher_label, _ = self._ereignis_label_finden(ereignis_oder_ziel, {'An', 'Ab'})
+        if vorher_label.typ == 'An':
+            ankunft1_label = vorher_label
+            abfahrt1_label = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft1_label, "Ab")
+        elif vorher_label.typ == 'Ab':
+            abfahrt1_label = vorher_label
+            ankunft1_label = self.anlage.dispo_ereignisgraph.prev_ereignis(abfahrt1_label, "An")
+        else:
+            ankunft1_label = None
+            abfahrt1_label = None
+        return ankunft1_label, abfahrt1_label
 
     def _ereignis_label_finden(self,
                                objekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
@@ -673,18 +732,9 @@ class Betrieb:
             journal.timestamp = self.anlage.simzeit_minuten
             journal.valid = True
 
-        vorher_label, _ = self._ereignis_label_finden(vorheriges_ziel, {'An', 'Ab'})
-        if vorher_label.typ == 'An':
-            ankunft1_label = vorher_label
-            abfahrt1_label = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft1_label, "Ab")
-        elif vorher_label.typ == 'Ab':
-            abfahrt1_label = vorher_label
-            ankunft1_label = self.anlage.dispo_ereignisgraph.prev_ereignis(abfahrt1_label, "An")
-        else:
-            ankunft1_label = None
-            abfahrt1_label = None
-        if vorher_label is None or abfahrt1_label is None or ankunft1_label is None:
-            raise ValueError(f"Ungültiges Referenzereignis {vorher_label} für Betriebshalt")
+        ankunft1_label, abfahrt1_label = self._ankunft_abfahrt_finden(vorheriges_ziel)
+        if abfahrt1_label is None or ankunft1_label is None:
+            raise ValueError(f"Ungültige Referenz {vorheriges_ziel} für Betriebshalt")
 
         vorher_node = self.anlage.dispo_ereignisgraph.nodes[abfahrt1_label]
         vorher_bst = self.anlage.bahnhofgraph.find_superior(vorher_node.plan_bst, {'Bf', 'Anst'})
