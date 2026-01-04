@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object "Zug 1 an" as zug1an {
+    zid = 1
+    typ = An
+    p = p<sub>an</sub>
+}
+
+object "Zug 1 ab" as zug1ab {
+    zid = 1
+    typ = Ab
+    p = p<sub>ab</sub>
+}
+
+zug1an --> zug1ab: D (dt<sub>min</sub> = 0)
+@enduml

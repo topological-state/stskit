@@ -162,6 +162,7 @@ class Betrieb:
         Erstellt ggf. einen Betriebshalt
         """
 
+        # todo : durchfahrt detektieren (eingehende kante)
         label, data = self._ereignis_label_finden(wartend, {'Ab'})
         if label is None:
             label, data = self._ereignis_label_finden(wartend, {'An'})
@@ -320,6 +321,8 @@ class Betrieb:
         Vorzeitige Abfahrt
         """
 
+        # todo : ueberarbeiten
+
         journal = JournalEntryGroup()
         journal.title = "Vorzeitige Abfahrt"
         journal.timestamp = self.anlage.simzeit_minuten
@@ -342,6 +345,8 @@ class Betrieb:
         """
         Wartezeit ändern
         """
+
+        # todo : ueberarbeiten
 
         journal = JournalEntryGroup()
         journal.title = "Wartezeit ändern"
@@ -425,54 +430,45 @@ class Betrieb:
 
     def _betriebshalt_statt_durchfahrt(self,
                                        journal: JournalEntryGroup,
-                                       durchfahrt: EreignisLabelType,
+                                       ankunftsereignis: EreignisLabelType,
                                        wartezeit: int = 1) -> Tuple[EreignisLabelType, EreignisGraphNode]:
 
         """
         Betriebshalt statt Durchfahrt
 
-        Ersetzt die Ereignisfolge `Ab1 --P--> An2 --P--> An3` (Durchfahrt in 2)
+        Ersetzt die Ereignisfolge `Ab1 --P--> An2 --D--> Ab2 --P--> An3` (Durchfahrt in 2)
         durch `Ab1 --P--> An2 --B--> Ab2 --P--> An3`
-        Es werden ein neuer Knoten und zwei neue Kanten eingefuegt.
-        Die Kante von An2 nach An3 wird entfernt.
 
-        durchfahrt: Durchfahrtsereignis An2
+        Args:
+            journal: Aenderungen an 'ereignisgraph' und 'zielgraph' als JournalEntry-Einträge.
+            ankunftsereignis: Ankunftsereignis An2 am Durchfahrtsbahnhof
+            wartezeit: Voraussichtliche Wartezeit
 
-        Return
-        ------
+        Returns:
+            Ereignislabel des Abfahrtsknotens
 
-        Ereignislabel des Abfahrtsknotens
-
-        Exceptions
-        ----------
-
-        ValueError: Betriebshalt konnte nicht gesetzt werden.
+        Raises:
+            ValueError: Betriebshalt konnte nicht gesetzt werden.
         """
 
+        if not isinstance(ankunftsereignis, EreignisLabelType):
+            raise ValueError(f"Argument ankunftsereignis ({type(ankunftsereignis)}) ist kein Ereignislabel.")
+
         eg = self.anlage.dispo_ereignisgraph
-        zg = self.anlage.dispo_zielgraph
-
-        an2_label = durchfahrt
-        an3_label = eg.next_ereignis(an2_label)
-
+        an2_label = ankunftsereignis
+        ab2_label = eg.next_ereignis(an2_label)
         an2_node = eg.nodes[an2_label]
-        an3_node = eg.nodes[an3_label]
-        edge_alt = eg.edges[(an2_label, an3_label)]
+        ab2_node = eg.nodes[ab2_label]
 
-        # todo : durchfahrten haben bereits jetzt An und Ab!
-        if edge_alt.typ != 'P':
-            raise ValueError(f"Kante {an2_label}-{an3_label} (Typ {edge_alt.typ}) ist keine Planfahrt.")
+        edge_alt = eg.edges[(an2_label, ab2_label)]
+        if edge_alt.typ != 'D':
+            raise ValueError(f"Kante {an2_label} --{edge_alt.typ}--> {ab2_label} ist keine Durchfahrt.")
         if an2_node.typ != 'An':
             raise ValueError(f"Ursprungsereignis {an2_label} ist keine Ankunft.")
-        if an3_node.typ != 'An':
-            raise ValueError(f"Folgeereignis {an3_label} ist keine Ankunft.")
+        if ab2_node.typ != 'Ab':
+            raise ValueError(f"Folgeereignis {ab2_label} ist keine Abfahrt.")
 
-        ab2_node = copy.copy(an2_node)
-        ab2_node.typ = 'Ab'
-        ab2_node.quelle = 'fdl'
-        ab2_label = ab2_node.node_id
-
-        halt_edge = copy.copy(edge_alt)
+        halt_edge = EreignisGraphEdge()
         halt_edge.typ = 'B'
         halt_edge.quelle = 'fdl'
         halt_edge.dt_min = 0
@@ -480,33 +476,24 @@ class Betrieb:
         halt_edge.dt_fdl = wartezeit
         halt_edge.ds = 0
 
-        abfahrt_edge = copy.copy(edge_alt)
-        abfahrt_edge.quelle = 'fdl'
-
-        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=ab2_label)
-        egj.add_node(ab2_label, **ab2_node)
-        egj.add_edge(an2_label, ab2_label, **halt_edge)
-        egj.add_edge(ab2_label, an3_label, **abfahrt_edge)
-        egj.remove_edge(an2_label, an3_label)
+        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=an2_label)
+        egj.change_edge(an2_label, ab2_label, **halt_edge)
         journal.add_entry(egj)
 
         zgj = JournalEntry[str, ZielLabelType, ZielGraphNode](target_graph='zielgraph', target_node=an2_node.fid)
-        ziel = zg.nodes[an2_node.fid]
-        zgj.change_node(an2_node.fid, flags=ziel.flags.replace('D', ''))
+        zgj.change_node(an2_node.fid, typ='B')
         journal.add_entry(zgj)
 
         logger.debug(f"Betriebshalt erstellt")
         logger.debug(f"    Ankunft: {self.anlage.dispo_ereignisgraph.node_info(an2_label)}")
         logger.debug(f"    Abfahrt: {self.anlage.dispo_ereignisgraph.node_info(ab2_label)}")
 
-        assert isinstance(ab2_label, EreignisLabelType)
-        assert isinstance(ab2_node, EreignisGraphNode)
         return ab2_label, ab2_node
 
     def _betriebshalt_auf_strecke(self,
                                   journal: JournalEntryGroup,
-                                  vorher: EreignisLabelType,
-                                  bst: BahnhofElement,
+                                  vorherige_abfahrt: EreignisLabelType,
+                                  halte_gleis: BahnhofElement,
                                   wartezeit: int = 1) -> Tuple[EreignisLabelType, EreignisGraphNode]:
 
         """
@@ -517,28 +504,26 @@ class Betrieb:
         Es werden zwei neue Knoten und drei neue Kanten eingefuegt.
         Die Kante von Ab1 nach An3 wird entfernt.
 
-        Argumente
-        ---------
+        Args:
+            journal: Aenderungen an 'ereignisgraph' und 'zielgraph' als JournalEntry-Einträge.
+            vorherige_abfahrt: Vorhergehendes Abfahrtsereignis im Ereignisgraph
+            halte_gleis: Gleis für Betriebshalt in Betriebsstellen-Notation. Muss vom Typ 'Gl' sein.
+            wartezeit: Voraussichtliche Wartezeit in Minuten
 
-        vorher: Vorhergehendes Ereignis im Ereignisgraph
+        Returns:
+            Ereignislabel des Abfahrtsknotens
 
-        bst: Plangleis in Betriebsstellen-Notation. Muss vom Typ 'Gl' sein.
-
-        Return
-        ------
-
-        Ereignislabel des Abfahrtsknotens
-
-        Exceptions
-        ----------
-
-        ValueError: Betriebshalt konnte nicht gesetzt werden.
+        Raises:
+            ValueError: Betriebshalt konnte nicht gesetzt werden.
         """
+
+        if not isinstance(vorherige_abfahrt, EreignisLabelType):
+            raise ValueError(f"Argument vorherige_abfahrt ({type(vorherige_abfahrt)}) ist kein Ereignislabel.")
 
         eg = self.anlage.dispo_ereignisgraph
         zg = self.anlage.dispo_zielgraph
 
-        ab1_label = vorher
+        ab1_label = vorherige_abfahrt
         an3_label = eg.next_ereignis(ab1_label)
 
         ab1_node = eg.nodes[ab1_label]
@@ -546,26 +531,26 @@ class Betrieb:
         alt_edge = eg.edges[(ab1_label, an3_label)]
 
         if alt_edge.typ != 'P':
-            raise ValueError(f"Abfolge {ab1_label}-{an3_label} ist keine Planfahrt.")
+            raise ValueError(f"Kante {ab1_label} --{alt_edge.typ}--> {an3_label} ist keine Planfahrt.")
         if ab1_node.typ != 'Ab':
             raise ValueError(f"Ursprungsereignis {ab1_label} ist keine Abfahrt.")
         if an3_node.typ != 'An':
             raise ValueError(f"Folgeereignis {ab1_label} ist keine Ankunft.")
-        if bst.typ != 'Gl':
-            raise ValueError(f"Ungültige Gleisbezeichnung {bst}.")
+        if halte_gleis.typ != 'Gl':
+            raise ValueError(f"Ungültige Gleisbezeichnung {halte_gleis}.")
 
         teiler: float = 0.5
 
         an2_node = copy.copy(ab1_node)
         an2_node.quelle = 'fdl'
         an2_node.typ = 'An'
-        an2_node.fid = None
-        an2_node.plan = an2_node.gleis = bst.name
-        an2_node.plan_bst = an2_node.gleis_bst = bst
+        an2_node.plan = an2_node.gleis = halte_gleis.name
+        an2_node.plan_bst = an2_node.gleis_bst = halte_gleis
         an2_node.t_plan = an2_node.zeit = ab1_node.zeit + teiler * (an3_node.zeit - ab1_node.zeit)
         an2_node.t_mess = None
         an2_node.s = an2_node.zeit = ab1_node.s + teiler * (an3_node.s - ab1_node.s)
         an2_label = an2_node.node_id
+        an2_node.fid = ZielLabelType(ab1_node.zid, int(an2_node.t_plan), halte_gleis.name)
 
         ab2_node = copy.copy(an2_node)
         ab2_node.typ = 'Ab'
@@ -614,12 +599,34 @@ class Betrieb:
         egj.remove_edge(ab1_label, an3_label)
         journal.add_entry(egj)
 
-        # todo : zielgraph?
+        ziel1 = zg.nodes[ab1_node.fid]
+        ziel3 = zg.nodes[an3_node.fid]
+        ziel2 = ZielGraphNode()
+        ziel2.fid = an2_node.fid
+        ziel2.zid = an2_node.zid
+        ziel2.typ = 'B'
+        ziel2.plan = ziel2.gleis = halte_gleis.name
+        ziel2.p_an = an2_node.t_plan
+        ziel2.p_ab = ab2_node.t_plan
+        ziel2.flags = ""
+        ziel2.lokwechsel = None
+        ziel2.lokumlauf = False
+
+        edge12 = ZielGraphEdge()
+        edge12.typ = 'B'
+        edge23 = copy.copy(edge12)
+
+        zgj = JournalEntry[str, ZielLabelType, ZielGraphNode](target_graph='zielgraph', target_node=an2_node.fid)
+        zgj.add_node(ziel2.fid, **ziel2)
+        zgj.add_edge(ziel1.fid, ziel2.fid, **edge12)
+        zgj.add_edge(ziel2.fid, ziel3.fid, **edge23)
+        zgj.remove_edge(ziel1.fid, ziel3.fid)
+        journal.add_entry(zgj)
 
         logger.debug(f"Betriebshalt erstellt")
         logger.debug(f"    Ankunft: {self.anlage.dispo_ereignisgraph.node_info(an2_label)}")
         logger.debug(f"    Abfahrt: {self.anlage.dispo_ereignisgraph.node_info(ab2_label)}")
-        logger.debug(f"    vorher:  {self.anlage.dispo_ereignisgraph.node_info(vorher)}")
+        logger.debug(f"    vorher:  {self.anlage.dispo_ereignisgraph.node_info(vorherige_abfahrt)}")
 
         return ab2_label, ab2_node
 
@@ -666,27 +673,29 @@ class Betrieb:
             journal.timestamp = self.anlage.simzeit_minuten
             journal.valid = True
 
-        vorher_label, _ = self._ereignis_label_finden(vorheriges_ziel, {'Ab'})
-        if vorher_label is None:
-            vorher_label, _ = self._ereignis_label_finden(vorheriges_ziel, {'An'})
-        if vorher_label is None:
-            journal.valid = False
-            return journal
+        vorher_label, _ = self._ereignis_label_finden(vorheriges_ziel, {'An', 'Ab'})
+        if vorher_label.typ == 'An':
+            ankunft1_label = vorher_label
+            abfahrt1_label = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft1_label, "Ab")
+        elif vorher_label.typ == 'Ab':
+            abfahrt1_label = vorher_label
+            ankunft1_label = self.anlage.dispo_ereignisgraph.prev_ereignis(abfahrt1_label, "An")
+        else:
+            ankunft1_label = None
+            abfahrt1_label = None
+        if vorher_label is None or abfahrt1_label is None or ankunft1_label is None:
+            raise ValueError(f"Ungültiges Referenzereignis {vorher_label} für Betriebshalt")
 
-        vorher_node = self.anlage.dispo_ereignisgraph.nodes[vorher_label]
+        vorher_node = self.anlage.dispo_ereignisgraph.nodes[abfahrt1_label]
         vorher_bst = self.anlage.bahnhofgraph.find_superior(vorher_node.plan_bst, {'Bf', 'Anst'})
         if not hasattr(gleis, 'typ'):
             gleis = BahnhofElement('Gl', gleis)
         halt_bst = self.anlage.bahnhofgraph.find_superior(gleis, {'Bf', 'Anst'})
 
         if vorher_bst == halt_bst:
-            if vorher_label.typ == 'An':
-                abfahrt_label, abfahrt_data = self._betriebshalt_statt_durchfahrt(journal, vorher_label, wartezeit)
-            else:
-                journal.valid = False
-                return journal
+            abfahrt_label, abfahrt_data = self._betriebshalt_statt_durchfahrt(journal, ankunft1_label, wartezeit)
         else:
-            abfahrt_label, abfahrt_data = self._betriebshalt_auf_strecke(journal, vorher_label, gleis, wartezeit)
+            abfahrt_label, abfahrt_data = self._betriebshalt_auf_strecke(journal, abfahrt1_label, gleis, wartezeit)
 
         if not dry_run and journal.valid:
             jid = JournalIDType(typ="Betriebshalt", zid=abfahrt_label.zid, bst=halt_bst)
@@ -703,6 +712,8 @@ class Betrieb:
 
         halt_ereignis: Ereignislabel von An2 oder Ab2
         """
+
+        # todo : ueberarbeiten
 
         ereignis_label, ereignis_data = self._ereignis_label_finden(halt_ereignis, {'An'})
         if ereignis_label is None:

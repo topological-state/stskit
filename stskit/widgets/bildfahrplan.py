@@ -608,7 +608,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             data1 = self.plot.bildgraph.nodes[node1]
             if node1.typ == 'S' and self.anlage.bahnhofgraph.has_node(data1.bst):
                 node1 = self.plot.auswahl_kanten[0][0]
-            elif node1.typ == 'An':
+            elif node1.typ == 'Ab':
                 pass
             else:
                 return None
