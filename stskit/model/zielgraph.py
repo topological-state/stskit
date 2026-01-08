@@ -190,7 +190,7 @@ class ZielGraphNode(dict):
 
         d = cls(
             obj=fahrplanzeile,
-            fid=fahrplanzeile.fid,
+            fid=ZielLabelType.from_fahrplanzeile(fahrplanzeile.fid),
             zid=fahrplanzeile.zug.zid,
             plan=fahrplanzeile.plan,
             gleis=fahrplanzeile.gleis,
