@@ -668,11 +668,12 @@ class Betrieb:
         ziel2.p_an = an2_node.t_plan
         ziel2.p_ab = ab2_node.t_plan
         ziel2.flags = ""
+        ziel2.status = ""
         ziel2.lokwechsel = None
         ziel2.lokumlauf = False
 
         edge12 = ZielGraphEdge()
-        edge12.typ = 'B'
+        edge12.typ = 'P'
         edge23 = copy.copy(edge12)
 
         zgj = JournalEntry[str, ZielLabelType, ZielGraphNode](target_graph='zielgraph', target_node=an2_node.fid)
