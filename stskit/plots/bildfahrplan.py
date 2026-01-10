@@ -148,7 +148,7 @@ class BildfahrplanPlot:
 
         self.strecke = strecke
         if strecke:
-            sd = self.anlage.liniengraph.strecken_zeitachse(strecke, parameter='fahrzeit_schnitt')
+            sd = self.anlage.liniengraph.strecken_zeitachse(strecke, metrik='fahrzeit_schnitt')
             self.distanz = sd
 
             for ia, a in enumerate(zip(self.strecke, self.distanz)):

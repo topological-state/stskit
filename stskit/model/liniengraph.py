@@ -233,7 +233,7 @@ class LinienGraph(nx.Graph):
 
         return strecken
 
-    def strecken_zeitachse(self, strecke: List[BahnhofElement], parameter: str = 'fahrzeit_min') -> List[Union[int, float]]:
+    def strecken_zeitachse(self, strecke: List[BahnhofElement], metrik: str = 'fahrzeit_min') -> List[Union[int, float]]:
         """
         Distanzen entlang einer Strecke berechnen
 
@@ -245,29 +245,47 @@ class LinienGraph(nx.Graph):
         2. Vom parameter-Argument bezeichnetes Attribut der Liniengraph-Kante.
         3. 1 (default, auch bei fehlender Kante im Liniengraph).
 
-        :param strecke: Liste von Linienpunkten
-        :param parameter: Zu verwendender Zeitparameter, fahrzeit_min, fahrzeit_schnitt, fahrzeit_max.
-        :return: distanz = Fahrzeit in Minuten.
+        Args:
+            strecke: Liste von Linienpunkten
+            metrik: Kantenattribut im Liniengraph:
+                fahrzeit_min, fahrzeit_schnitt oder fahrzeit_max.
+
+        Returns: distanz = Fahrzeit in Minuten.
             Die Liste enthält die gleiche Anzahl Elemente wie die Strecke.
             Das erste Element ist 0.
         """
 
         kanten = zip(strecke[:-1], strecke[1:])
-        distanz = 0
-        result = [distanz]
+        integrierte_distanz = 0.
+        result = [integrierte_distanz]
         for kante in kanten:
             u, v = kante
-            try:
-                data = self[u][v]
-                zeit = data.get('fahrzeit_manuell', 0) or data.get(parameter, 0)
-            except KeyError:
-                logger.warning(f"Verbindung {u}-{v} nicht im Liniengraph.")
-                zeit = 0
-
-            distanz += max(1, zeit)
-            result.append(float(distanz))
+            integrierte_distanz += self.distanz(u, v, metrik)
+            result.append(integrierte_distanz)
 
         return result
+
+    def distanz(self, u: BahnhofElement, v: BahnhofElement, metrik: str) -> Any:
+        """
+        Distanz zwischen zwei Bahnh"ofen
+
+        Es muss eine direkte Kante zwischen den zwei Bahnh"ofen bestehen.
+
+        Args:
+            u: Erste Betriebsstelle (Bf oder Anst)
+            v: Zweite Betriebsstelle (Bf oder Anst)
+            metrik: Kantenattribut im Liniengraph:
+                fahrzeit_min, fahrzeit_schnitt oder fahrzeit_max.
+        """
+
+        try:
+            data = self[u][v]
+            zeit = data.get('fahrzeit_manuell', 0) or data.get(metrik, 0)
+        except KeyError:
+            logger.warning(f"Verbindung {u}-{v} nicht im Liniengraph.")
+            zeit = 0
+
+        return max(1, zeit)
 
     def import_konfiguration(self,
                              streckenmarkierung_konfig: Iterable[Dict[str, Any]],
