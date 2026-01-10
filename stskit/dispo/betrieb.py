@@ -188,7 +188,7 @@ class Betrieb:
         kante = self.anlage.dispo_ereignisgraph.get_edge_data(ankunft_label, abfahrt_label)
         if kante is not None and kante.typ == 'D':
             abfahrt_label, abfahrt_data = self._betriebshalt_statt_durchfahrt(journal, ankunft_label, 1)
-        elif abfahrt_data is None and ankunft_label is not None:
+        elif abfahrt_data is None and abfahrt_label is not None:
             abfahrt_data = self.anlage.dispo_ereignisgraph.nodes[abfahrt_label]
 
         return abfahrt_label, abfahrt_data
