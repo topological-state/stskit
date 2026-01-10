@@ -582,8 +582,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         else:
             gleis = data.plan_bst
 
+        data.gleis_bst = data.plan_bst = gleis
+        data.gleis = data.plan = gleis.name
         try:
-            self.zentrale.betrieb.betriebshalt_einfuegen(node, gleis, wartezeit=1)
+            self.zentrale.betrieb.betriebshalt_einfuegen(node, data.gleis_bst, data.t_plan, wartezeit=1)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 

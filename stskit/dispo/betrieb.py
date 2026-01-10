@@ -552,7 +552,8 @@ class Betrieb:
     def _betriebshalt_auf_strecke(self,
                                   journal: JournalEntryGroup,
                                   vorherige_abfahrt: EreignisLabelType,
-                                  halte_gleis: BahnhofElement,
+                                  gleis: BahnhofElement,
+                                  ankunftszeit: float | int,
                                   wartezeit: int = 1) -> Tuple[EreignisLabelType, EreignisGraphNode]:
 
         """
@@ -566,7 +567,8 @@ class Betrieb:
         Args:
             journal: Aenderungen an 'ereignisgraph' und 'zielgraph' als JournalEntry-Einträge.
             vorherige_abfahrt: Vorhergehendes Abfahrtsereignis im Ereignisgraph
-            halte_gleis: Gleis für Betriebshalt in Betriebsstellen-Notation. Muss vom Typ 'Gl' sein.
+            gleis: Gleis für Betriebshalt in Betriebsstellen-Notation. Muss vom Typ 'Gl' sein.
+            ankunftszeit: Ankunftszeit in Minuten.
             wartezeit: Voraussichtliche Wartezeit in Minuten
 
         Returns:
@@ -595,26 +597,26 @@ class Betrieb:
             raise ValueError(f"Ursprungsereignis {ab1_label} ist keine Abfahrt.")
         if an3_node.typ != 'An':
             raise ValueError(f"Folgeereignis {ab1_label} ist keine Ankunft.")
-        if halte_gleis.typ != 'Gl':
-            raise ValueError(f"Ungültige Gleisbezeichnung {halte_gleis}.")
+        if gleis.typ != 'Gl':
+            raise ValueError(f"Ungültige Gleisbezeichnung {gleis}.")
 
-        teiler: float = 0.5
+        try:
+            teiler = (ab1_node.t_plan - ankunftszeit) / (ab1_node.t_plan - an3_node.t_plan)
+        except ZeroDivisionError:
+            teiler = 0.5
 
         an2_node = copy.copy(ab1_node)
         an2_node.quelle = 'fdl'
         an2_node.typ = 'An'
-        an2_node.plan = an2_node.gleis = halte_gleis.name
-        an2_node.plan_bst = an2_node.gleis_bst = halte_gleis
-        an2_node.t_plan = an2_node.zeit = ab1_node.zeit + teiler * (an3_node.zeit - ab1_node.zeit)
+        an2_node.plan = an2_node.gleis = gleis.name
+        an2_node.plan_bst = an2_node.gleis_bst = gleis
+        an2_node.t_plan = an2_node.zeit = ankunftszeit
         an2_node.t_mess = None
-        an2_node.s = an2_node.zeit = ab1_node.s + teiler * (an3_node.s - ab1_node.s)
         an2_label = an2_node.node_id
-        an2_node.fid = ZielLabelType(ab1_node.zid, int(an2_node.t_plan), halte_gleis.name)
+        an2_node.fid = ZielLabelType(ab1_node.zid, int(an2_node.t_plan), an2_node.gleis)
 
         ab2_node = copy.copy(an2_node)
         ab2_node.typ = 'Ab'
-        an2_node.t_plan = an2_node.zeit = ab1_node.zeit + (1. - teiler) * (an3_node.zeit - ab1_node.zeit)
-        an2_node.s = an2_node.zeit = ab1_node.s + (1. - teiler) * (an3_node.s - ab1_node.s)
         ab2_label = ab2_node.node_id
 
         ankunft_edge = copy.copy(alt_edge)
@@ -664,7 +666,7 @@ class Betrieb:
         ziel2.fid = an2_node.fid
         ziel2.zid = an2_node.zid
         ziel2.typ = 'B'
-        ziel2.plan = ziel2.gleis = halte_gleis.name
+        ziel2.plan = ziel2.gleis = gleis.name
         ziel2.p_an = an2_node.t_plan
         ziel2.p_ab = ab2_node.t_plan
         ziel2.flags = ""
@@ -692,7 +694,8 @@ class Betrieb:
 
     def betriebshalt_einfuegen(self,
                                vorheriges_ziel: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                               gleis: Union[str, BahnhofElement],
+                               gleis: BahnhofElement,
+                               ankunftszeit: float | int,
                                wartezeit: int = 1,
                                journal: JournalEntryGroup | None = None,
                                dry_run: bool = False) -> JournalEntryGroup:
@@ -715,7 +718,8 @@ class Betrieb:
 
         Args:
             vorheriges_ziel: Ereignis oder Fahrziel, das zum Betriebshalt wird oder dem Betriebshalt vorangeht.
-            gleis: Gleis, an dem gehalten wird.
+            gleis: Gleis für Betriebshalt in Betriebsstellen-Notation. Muss vom Typ 'Gl' sein.
+            ankunftszeit: Ankunftszeit in Minuten.
             wartezeit: Wartezeit in Minuten
             journal: Bestehende JournalEntryGroup zu der die Aenderungen hinzugefügt werden.
                 Per default erstellt die Funktion eine neue Gruppe.
@@ -734,19 +738,19 @@ class Betrieb:
             journal.valid = True
 
         ankunft1_label, abfahrt1_label = self._ankunft_abfahrt_finden(vorheriges_ziel)
-        if abfahrt1_label is None or ankunft1_label is None:
+        if abfahrt1_label is None is None:
             raise ValueError(f"Ungültige Referenz {vorheriges_ziel} für Betriebshalt")
 
         vorher_node = self.anlage.dispo_ereignisgraph.nodes[abfahrt1_label]
         vorher_bst = self.anlage.bahnhofgraph.find_superior(vorher_node.plan_bst, {'Bf', 'Anst'})
-        if not hasattr(gleis, 'typ'):
-            gleis = BahnhofElement('Gl', gleis)
         halt_bst = self.anlage.bahnhofgraph.find_superior(gleis, {'Bf', 'Anst'})
 
         if vorher_bst == halt_bst:
+            if ankunft1_label is None:
+                raise ValueError(f"Ungültige Referenz {vorheriges_ziel} für Betriebshalt in {halt_bst}")
             abfahrt_label, abfahrt_data = self._betriebshalt_statt_durchfahrt(journal, ankunft1_label, wartezeit)
         else:
-            abfahrt_label, abfahrt_data = self._betriebshalt_auf_strecke(journal, abfahrt1_label, gleis, wartezeit)
+            abfahrt_label, abfahrt_data = self._betriebshalt_auf_strecke(journal, abfahrt1_label, gleis, ankunftszeit, wartezeit)
 
         if not dry_run and journal.valid:
             jid = JournalIDType(typ="Betriebshalt", zid=abfahrt_label.zid, bst=halt_bst)

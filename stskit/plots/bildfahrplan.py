@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
 import matplotlib as mpl
 import numpy as np
+import numpy.typing as npt
 from matplotlib.lines import Line2D
 from matplotlib.image import AxesImage
 from matplotlib.text import Text
@@ -41,10 +42,8 @@ class BildfahrplanPlot:
 
         # bahnhofname -> distanz [minuten]
         self.strecke: List[BahnhofElement] = []
-        self.distanz: List[float] = []
+        self.distanz: npt.NDArray[np.float64] = np.array([])
         self.linienstil: List[str] = []
-        # ortskoordinate der segmentmitte -> linker bahnhof
-        self.naechster_bahnhof: Dict[float, BahnhofElement] = {}
 
         self.zeit = 0
         self.vorlaufzeit = 55
@@ -149,7 +148,7 @@ class BildfahrplanPlot:
         self.strecke = strecke
         if strecke:
             sd = self.anlage.liniengraph.strecken_zeitachse(strecke, metrik='fahrzeit_schnitt')
-            self.distanz = sd
+            self.distanz = np.array(sd)
 
             for ia, a in enumerate(zip(self.strecke, self.distanz)):
                 for ib, b in enumerate(zip(self.strecke[ia:], self.distanz[ia:])):
@@ -161,15 +160,8 @@ class BildfahrplanPlot:
 
             self.linienstil = [self.anlage.bahnhofgraph.nodes.get(s, {}).get('linienstil', ':') for s in self.strecke]
         else:
-            self.distanz = []
+            self.distanz = np.array([])
             self.linienstil = []
-
-        try:
-            mitten = [(s1 + s2) / 2 for s1, s2 in zip(self.distanz[:-1], self.distanz[1:])]
-            mitten.append(self.distanz[-1] + (self.distanz[-1] - self.distanz[-2]) / 2)
-        except IndexError:
-            mitten = []
-        self.naechster_bahnhof = {s: bf for s, bf in zip(mitten, self.strecke)}
 
     marker_style = {
         'An': '.',
@@ -404,7 +396,8 @@ class BildfahrplanPlot:
                                                     picker=True,
                                                     pickradius=5,
                                                     **self.line_args(u_data, v_data, data))
-                        mpl_lines[0].edge = (u, v, s_key)
+                        mpl_lines[0].strecken_edge = (s_u, s_v, s_key)
+                        mpl_lines[0].ereignis_edge = (u, v)
 
                         if not data.titel:
                             continue
@@ -564,21 +557,22 @@ class BildfahrplanPlot:
             self._pick_event = True
             if isinstance(event.artist, Line2D):
                 try:
-                    edge = event.artist.edge
+                    ereignis_edge = event.artist.ereignis_edge
+                    strecken_edge = event.artist.strecken_edge
                 except AttributeError:
                     return
                 else:
-                    self.select_edge(edge[0], edge[1], event.mouseevent.xdata, event.mouseevent.ydata)
+                    self.select_trasse(strecken_edge, ereignis_edge, event.mouseevent.xdata, event.mouseevent.ydata)
             elif isinstance(event.artist, Text):
                 pass
 
             self.auswahl_text = [self.format_zuginfo(*tr) for tr in self.auswahl_kanten]
 
-    def select_edge(self,
-                    u: EreignisLabelType,
-                    v: EreignisLabelType,
-                    x: Optional[float],
-                    t: Optional[float]):
+    def select_trasse(self,
+                      strecken_edge: Tuple[BahnhofElement, BahnhofElement, int],
+                      ereignis_edge: Tuple[EreignisLabelType, EreignisLabelType],
+                      x: Optional[float],
+                      t: Optional[float]):
         """
         Zugtrasse selektieren
 
@@ -590,59 +584,65 @@ class BildfahrplanPlot:
         Die Grafik wird nicht aktualisiert.
         Observers werden nicht benachrichtigt.
 
-        :param u: Ausgangspunkt der Trasse im Ereignisgraph
-        :param v: Zielpunkt der Trasse im Ereignisgraph
-        :param x: Ortskoordinate des Mausklicks
-        :param t: Zeitkoordinate des Mausklicks (im Moment nicht verwendet)
-        :return: None
+        Args:
+            strecken_edge: Trasse im Streckengraph
+            ereignis_edge: Trasse im Ereignisgraph bzw. Bildgraph
+            x: Ortskoordinate des Mausklicks. Wenn sie fehlt, wird die Auswahl gelöscht (clear_selection).
+            t: Zeitkoordinate des Mausklicks (im Moment nicht verwendet)
         """
 
-        edge_data = self.bildgraph.get_edge_data(u, v)
-        if edge_data is None or edge_data.typ not in {'P'}:
+        ereignis_data: EreignisGraphEdge = self.bildgraph.get_edge_data(*ereignis_edge)
+        if ereignis_data is None or ereignis_data.typ not in {'P'}:
             self.clear_selection()
             return
 
-        bahnhof = None
-        if x is not None:
-            for s, bf in self.naechster_bahnhof.items():
-                if x < s:
-                    bahnhof = bf
-                    break
+        bahnhof_index = np.argmin(np.abs(x - self.distanz))
+        bahnhof = self.strecke[bahnhof_index]
 
-        if bahnhof is None:
-            self.clear_selection()
-            return
+        journal_entry = JournalEntry(target_graph='bildgraph', target_node=ereignis_edge[1])
+        self.auswahl_kanten.append(ereignis_edge)
+        auswahl_idx = min(2, len(self.auswahl_kanten))
+        journal_entry.change_edge(*ereignis_edge, auswahl=auswahl_idx)
 
-        journal_entry = JournalEntry(target_graph='bildgraph', target_node=v)
-        self.auswahl_kanten.append((u, v))
-        idx = min(2, len(self.auswahl_kanten))
-        journal_entry.change_edge(u, v, auswahl=idx)
-
-        for node in [u, v]:
+        for node in ereignis_edge:
             node_data = self.bildgraph.nodes[node]
             if node_data.bst == bahnhof:
-                journal_entry.change_node(node, auswahl=idx)
+                journal_entry.change_node(node, auswahl=auswahl_idx)
                 break
         else:
-            node = EreignisLabelType(edge_data.zid, t, 'S')
+            strecken_data = self.streckengraph.get_edge_data(*strecken_edge)
+            s = self.distanz[bahnhof_index]
+            try:
+                s0 = strecken_data['s0']
+                s1 = strecken_data['s1']
+                teiler = (s - s0) / (s1 - s0)
+            except (IndexError, KeyError, ZeroDivisionError):
+                logger.warning(f"Fehler beim Berechnen der Bahnhofkoordinate zu x = {x} auf Trasse {strecken_edge}.")
+                teiler = 0.5
+
+            t0 = self.bildgraph.nodes[ereignis_edge[0]]['t_plan']
+            t1 = self.bildgraph.nodes[ereignis_edge[1]]['t_plan']
+            t = teiler * (t1 - t0) + t0
+
+            node = EreignisLabelType(ereignis_data.zid, t, 'S')
             node_data = {
-                'zid': edge_data.zid,
+                'zid': ereignis_data.zid,
                 'typ': 'S',
                 'quelle': 'auswahl',
                 'zeit': t,
                 't_plan': t,
                 't_prog': t,
-                's': x,
+                's': s,
                 'bst': bahnhof,
                 'marker': self.marker_style['S'],
                 'farbe': 'yellow',
-                'auswahl': idx,
+                'auswahl': auswahl_idx,
             }
             journal_entry.add_node(node, **node_data)
 
         self.auswahl_bahnhoefe.append(bahnhof)
         self.auswahl_knoten.append(node)
-        self._auswahl_journal.add_entry((self.zeit, idx), journal_entry)
+        self._auswahl_journal.add_entry((self.zeit, auswahl_idx), journal_entry)
         self._auswahl_journal.replay(graph_map={'bildgraph': self.bildgraph})
 
     def clear_selection(self):
