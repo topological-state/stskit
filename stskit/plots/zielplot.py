@@ -216,7 +216,11 @@ class ZielPlot:
                     farbe = "darkcyan"
                 elif data.status == "an" or data.gleis == zug.gleis:
                     farbe = "cyan"
+                elif data.typ == "B":
+                    farbe = "orange"
             elif not zug.gleis:
                 farbe = "darkcyan"
+            elif data.typ == "B":
+                farbe = "orange"
 
         return farbe

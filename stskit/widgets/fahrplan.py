@@ -355,7 +355,7 @@ class FahrplanModell(QtCore.QAbstractTableModel):
         self.zug: Optional[ZugGraphNode] = None
         self.zugpfad: List[ZielLabelType] = []
         self.zweige: Dict[ZielLabelType, ZielLabelType] = {}
-        self._columns: List[str] = ['Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Vorgang', 'Vermerke']
+        self._columns: List[str] = ['Gleis', 'An', 'VAn', 'Ab', 'VAb', 'Flags', 'Vermerke']
 
     @property
     def zuggraph(self) -> ZugGraph:
@@ -459,11 +459,8 @@ class FahrplanModell(QtCore.QAbstractTableModel):
                     return ""
             elif col == 'Flags':
                 return str(ziel.flags)
-            elif col == 'Vorgang':
-                return self.format_vorgang(ziel)
             elif col == 'Vermerke':
-                # todo
-                return None
+                return self.format_vermerke(ziel)
             else:
                 return None
 
@@ -473,23 +470,33 @@ class FahrplanModell(QtCore.QAbstractTableModel):
                     return QtGui.QColor("darkCyan")
                 elif ziel.status == "an" or ziel.gleis == self.zug.gleis:
                     return QtGui.QColor("cyan")
+                elif ziel.typ == "B":
+                    return QtGui.QColor("orange")
                 else:
                     return None
             elif self.zug.ausgefahren:
                 return QtGui.QColor("darkCyan")
             elif self.zug.gleis:
-                return None
+                if ziel.typ == "B":
+                    return QtGui.QColor("orange")
+                else:
+                    return None
             else:
                 return QtGui.QColor("red")
 
         elif role == QtCore.Qt.TextAlignmentRole:
             return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
 
-    def format_vorgang(self, ziel: ZielGraphNode) -> str:
+    def format_vermerke(self, ziel: ZielGraphNode) -> str:
+        """
+        Formatiert die Vermerkzelle.
+
+        Zu den Vermerken gehören: Abhängigkeiten, Ersatz, Kupplung, Flügelung, Betriebshalt.
+        """
         operations = []
 
         for u, v, d in self.zielgraph.in_edges(ziel.fid, data=True):
-            if d.typ in {"E", "K", "F"}:
+            if d.typ in {"A", "E", "K", "F"}:
                 try:
                     ursprung = self.zuggraph.nodes[u[0]]
                     ursprung_name = ursprung.name
@@ -497,6 +504,9 @@ class FahrplanModell(QtCore.QAbstractTableModel):
                     ursprung_name = "?"
 
                 operations.append(f"{d.typ} ← {ursprung_name}")
+
+        if ziel.typ == "B":
+            operations.append("B")
 
         for u, v, d in self.zielgraph.out_edges(ziel.fid, data=True):
             if d.typ in {"E", "K", "F"}:
