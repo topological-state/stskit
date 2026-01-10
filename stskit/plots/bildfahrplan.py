@@ -164,9 +164,11 @@ class BildfahrplanPlot:
             self.linienstil = []
 
     marker_style = {
-        'An': '.',
-        'Ab': '.',
-        'D': '',
+        'An': '|',
+        'Ab': '|',
+        'D': '|',
+        'H': '.',
+        'P': '|',
         'E': '*',
         'F': '*',
         'K': '*',
@@ -174,6 +176,8 @@ class BildfahrplanPlot:
         'A': 'v',
         'S': 'o',
     }
+
+    marker_priority = " |.P*vo"
 
     line_style = {
         'B': '--',
@@ -230,12 +234,18 @@ class BildfahrplanPlot:
         def _add_node(ereignis_label: EreignisLabelType,
                       ereignis_data: EreignisGraphNode,
                       bst: BahnhofElement,
+                      farbe: str,
                       typ: str = None) -> None:
-            zug = self.anlage.zuggraph.nodes[data.zid]
-            d = ereignis_data.copy()
+            if self.bildgraph.has_node(ereignis_label):
+                d = self.bildgraph.nodes[ereignis_label]
+            else:
+                d = ereignis_data.copy()
             d['bst'] = bst
-            d['farbe'] = self.anlage.zugschema.zugfarbe(zug)
-            d['marker'] = self.marker_style.get(typ or ereignis_data.typ, '')
+            d['farbe'] = farbe
+            markers = [self.marker_style.get(typ, ''),
+                       self.marker_style.get(ereignis_data.typ, ''),
+                       d.get('marker', '')]
+            d['marker'] = max(*markers, key=lambda x: self.marker_priority.index(x))
             self.bildgraph.add_node(ereignis_label, **d)
 
         self.bildgraph.clear()
@@ -262,21 +272,22 @@ class BildfahrplanPlot:
                 continue
 
             zug = self.anlage.zuggraph.nodes[data.zid]
+            zugfarbe = self.anlage.zugschema.zugfarbe(zug)
             u_v_data = data.copy()
             u_v_data['titel'] = self.zugbeschriftung.format_trasse_label(zug, abfahrt=u_data, ankunft=v_data)
             u_v_data['fontstyle'] = "normal"
             u_v_data['linestyle'] = self.line_style.get(data.typ, '-')
             u_v_data['linewidth'] = 1
-            u_v_data['farbe'] = 'silver' if data.typ == 'A' else self.anlage.zugschema.zugfarbe(zug)
+            u_v_data['farbe'] = 'silver' if data.typ == 'A' else zugfarbe
 
             if u_bst in strecke:
-                line_type = data.typ if data.typ in {'B', 'D'} else None
-                _add_node(u, u_data, u_bst, typ=line_type)
+                line_type = data.typ if data.typ in {'B', 'D', 'H', 'P'} else None
+                _add_node(u, u_data, u_bst, zugfarbe, typ=line_type)
             else:
                 u_v_data = None
             if v_bst in strecke:
-                line_type = data.typ if data.typ in {'A', 'B'} else None
-                _add_node(v, v_data, v_bst, typ=line_type)
+                line_type = data.typ if data.typ in {'A', 'B', 'D', 'H', 'P'} else None
+                _add_node(v, v_data, v_bst, zugfarbe, typ=line_type)
             else:
                 u_v_data = None
             if u_v_data is not None:
