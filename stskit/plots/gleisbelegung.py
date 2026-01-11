@@ -651,7 +651,7 @@ class Gleisbelegung:
                     w += "-reihenfolge"
 
             else:
-                raise ValueError(f"Fehlerhaftes Argument in Gleisbelegung._zugfolgewarnung")
+                raise ValueError("Fehlerhaftes Argument in Gleisbelegung._zugfolgewarnung")
 
             k = SlotWarnung(gleise={s1.gleis, s2.gleis})
             k.status = w

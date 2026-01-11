@@ -687,10 +687,10 @@ class FahrplanWindow(QtWidgets.QWidget):
                     break
             else:
                 self.folgezug_modell.set_zug(0)
-                self.ui.folgezug_label.setText(f"Kein Folgezug")
+                self.ui.folgezug_label.setText("Kein Folgezug")
         else:
             self.folgezug_modell.set_zug(0)
-            self.ui.folgezug_label.setText(f"Kein Folgezug")
+            self.ui.folgezug_label.setText("Kein Folgezug")
 
     def grafik_update(self):
         self.zielplot.draw(self._axes)

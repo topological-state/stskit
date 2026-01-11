@@ -86,7 +86,7 @@ class FahrzeitAuswertung:
             try:
                 d = {'gleis_zeiten': dict(nx.node_link_data(self.gleis_zeiten, edges="edges")),
                      'bahnhof_zeiten': dict(nx.node_link_data(self.bahnhof_zeiten, edges="edges"))}
-                p = Path.home() / r".stskit" / f"auswertung.json"
+                p = Path.home() / r".stskit" / "auswertung.json"
                 with open(p, "w", encoding='utf-8') as fp:
                     json.dump(d, fp, sort_keys=True, indent=4, cls=JSONEncoder)
             except AttributeError:
@@ -490,5 +490,5 @@ class Auswertung:
                     zeit += 24 * 60 * 60
                 gesamt += zeit
 
-        setattr(zug, 'rotzeit', datetime.timedelta(seconds=gesamt))
+        zug.rotzeit = datetime.timedelta(seconds=gesamt)
         return gesamt

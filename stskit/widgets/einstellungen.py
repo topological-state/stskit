@@ -48,7 +48,7 @@ class EinstellungenWindow(QtWidgets.QMainWindow):
         try:
             self.setWindowTitle(f"Einstellungen {self.anlage.anlageninfo.name}")
         except AttributeError:
-            self.setWindowTitle(f"Einstellungen")
+            self.setWindowTitle("Einstellungen")
 
         self.bahnhof_editor = BahnhofEditor(zentrale.anlage, parent=self, ui=self.ui)
         self.bahnhof_editor.changed_Event.register(self.bahnhof_changed)

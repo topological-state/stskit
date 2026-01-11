@@ -66,7 +66,7 @@ class Config(UserDict):
 
         self.import_v2(d)
         self.loaded_from = path
-        logger.info(f"Konfiguration geladen. Version 2.")
+        logger.info("Konfiguration geladen. Version 2.")
 
     def load_v3(self, path: Path):
         if not self.schema_path:

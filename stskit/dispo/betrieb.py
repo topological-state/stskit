@@ -543,7 +543,7 @@ class Betrieb:
         zgj.change_node(an2_node.fid, typ='B')
         journal.add_entry(zgj)
 
-        logger.debug(f"Betriebshalt erstellt")
+        logger.debug("Betriebshalt erstellt")
         logger.debug(f"    Ankunft: {self.anlage.dispo_ereignisgraph.node_info(an2_label)}")
         logger.debug(f"    Abfahrt: {self.anlage.dispo_ereignisgraph.node_info(ab2_label)}")
 
@@ -685,7 +685,7 @@ class Betrieb:
         zgj.remove_edge(ziel1.fid, ziel3.fid)
         journal.add_entry(zgj)
 
-        logger.debug(f"Betriebshalt erstellt")
+        logger.debug("Betriebshalt erstellt")
         logger.debug(f"    Ankunft: {self.anlage.dispo_ereignisgraph.node_info(an2_label)}")
         logger.debug(f"    Abfahrt: {self.anlage.dispo_ereignisgraph.node_info(ab2_label)}")
         logger.debug(f"    vorher:  {self.anlage.dispo_ereignisgraph.node_info(vorherige_abfahrt)}")

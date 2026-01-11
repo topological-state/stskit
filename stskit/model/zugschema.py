@@ -239,7 +239,7 @@ class Zugschema:
                 name = sorted(self.schemadateien.keys())[0]
                 p = self.schemadateien[name]
             except IndexError:
-                logger.error(f"Kein Zugschema definiert")
+                logger.error("Kein Zugschema definiert")
                 return
 
         try:

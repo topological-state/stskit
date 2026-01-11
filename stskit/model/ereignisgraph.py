@@ -1528,7 +1528,7 @@ class PlanfahrtEdgeBuilder(ZielEreignisEdgeBuilder):
                 dt_min=node2_builder.nodes[0].t_plan - node1_builder.nodes[-1].t_plan,
             )
         except IndexError:
-            logger.debug(f"PlanfahrtEdgeBuilder.set_edge(): keine Nodes")
+            logger.debug("PlanfahrtEdgeBuilder.set_edge(): keine Nodes")
         else:
             self.edges.append(edge)
 
