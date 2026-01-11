@@ -576,6 +576,166 @@ class TestEreignisPrognose(unittest.TestCase):
             types[typ] += 1
         self.assertDictEqual(types, expected_types, "Kantentypen")
 
+    def szenario3(self):
+        """
+        Ersatz und Kuppeln in Klosters
+
+        Es wurde ein Fall beobachtet, in dem beim Kuppeln neben der ausgehenden K-Kante auch noch eine ausgehende
+        H-Kante erstellt wurde.
+        """
+        self.zielgraph = ZielGraph()
+
+        nodes = [
+            # D
+            ZielGraphNode(
+                fid=ZielLabelType(171846, 1099, "CDUE 1"),
+                zid=171846,
+                typ='D',
+                plan='CDUE 1',
+                gleis='CDUE 1',
+                flags='D',
+                mindestaufenthalt=0,
+                status='',
+                p_an=1099,
+                v_an=0,
+                v_ab=0
+            ),  # 0  -> # 1 P
+            # kupplungsquelle
+            ZielGraphNode(
+                fid=ZielLabelType(171846, 1108, "KLO 2A"),
+                zid=171846,
+                typ='H',
+                plan='KLO 2A',
+                gleis='KLO 2A',
+                flags='K(183996)',
+                mindestaufenthalt=PlanungParams.mindestaufenthalt_kupplung,
+                status='',
+                p_an=1108,
+                v_an=0,
+                v_ab=0
+            ),  # 1 -> #2 K
+            # kupplungsziel
+            ZielGraphNode(
+                fid=ZielLabelType(183996, 1110, "KLO 2A"),
+                zid=183996,
+                typ='H',
+                plan='KLO 2A',
+                gleis='KLO 2A',
+                flags='',
+                mindestaufenthalt=0,
+                status='',
+                p_an=1110,
+                p_ab=1110,
+                v_an=0,
+                v_ab=0
+            ),  # 2 -> #3
+            # P
+            ZielGraphNode(
+                fid=ZielLabelType(183996, 322, "KLOD 1"),
+                zid=183996,
+                typ='H',
+                plan='KLOD 1',
+                gleis='KLOD 1',
+                flags='P[l]',
+                mindestaufenthalt=0,
+                status='',
+                p_an=1113,
+                p_ab=1113,
+                v_an=0,
+                v_ab=0
+            ),  # 3
+            # E
+            ZielGraphNode(
+                fid=ZielLabelType(36484, 1106, "KLO 2A"),
+                zid=36484,
+                typ='H',
+                plan='KLO 2A',
+                gleis='KLO 2A',
+                flags='E1(183996)',
+                mindestaufenthalt=0,
+                status='',
+                p_an=1106,
+                v_an=0,
+                v_ab=0
+            ),  # 4 -> # 2 E
+            # einfahrt
+            ZielGraphNode(
+                fid=ZielLabelType(36484, 0, 3),
+                zid=36484,
+                typ='E',
+                plan='Selfranga',
+                gleis='Selfranga',
+                flags='',
+                mindestaufenthalt=0,
+                status='',
+                p_an=1105,
+                v_an=0,
+                v_ab=0
+            ),  # 5 -> # 4 P
+        ]
+
+        edges = [
+            (0, 1, 'P'),
+            (1, 2, 'K'),
+            (2, 3, 'P'),
+            (4, 2, 'E'),
+            (5, 4, 'P'),
+        ]
+
+        for node in nodes:
+            self.zielgraph.add_node(node.fid, **node)
+
+        for edge in edges:
+            self.zielgraph.add_edge(nodes[edge[0]].fid, nodes[edge[1]].fid, typ=edge[2])
+
+        self.ereignisgraph = EreignisGraph()
+        self.ereignisgraph.zielgraph_importieren(self.zielgraph)
+
+    def test_import_szenario3(self):
+        """
+        Import aus Zielgraph im Szenario 3 überprüfen.
+
+        Wir testen summarisch:
+        - Isomorphie mit Referenzgraph
+        - Anzahl Knoten nach Typen
+        - Anzahl Kanten nach Typen
+        """
+
+        self.szenario3()
+
+        # nx.write_gml(self.ereignisgraph, "ereignisgraph-szenario2.gml", stringizer=str)
+        self.assertGreaterEqual(len(self.ereignisgraph.nodes), 10)
+        self.assertGreaterEqual(len(self.ereignisgraph.edges), 9)
+
+        iso_edges = [
+            (11, 12, 'D'),
+            (12, 13, 'P'),
+            (13, 14, 'K'),
+            (14, 15, 'H'),
+            (15, 16, 'P'),
+            (16, 17, 'H'),
+            (21, 22, 'P'),
+            (22, 23, 'E'),
+            (23, 14, 'H'),
+        ]
+        iso_graph = nx.DiGraph()
+        for edge in iso_edges:
+            iso_graph.add_edge(edge[0], edge[1], typ=edge[2])
+
+        self.assertTrue(nx.is_isomorphic(self.ereignisgraph, iso_graph), 'isomorphic graph')
+
+        types = {'Ab': 0, 'An': 0, 'E': 0, 'K': 0, 'F': 0}
+        expected_types = {'Ab': 4, 'An': 4, 'E': 1, 'K': 1, 'F': 0}
+        for node, typ in self.ereignisgraph.nodes(data='typ'):
+            types[typ] += 1
+        self.assertDictEqual(types, expected_types, "Knotentypen")
+
+        types = {'D': 0, 'P': 0, 'H': 0, 'E': 0, 'K': 0, 'F': 0}
+        expected_types = {'D': 1, 'P': 3, 'H': 3, 'E': 1, 'K': 1, 'F': 0}
+        for u, v, typ in self.ereignisgraph.edges(data='typ'):
+            types[typ] += 1
+        self.assertDictEqual(types, expected_types, "Kantentypen")
+
 
 if __name__ == '__main__':
     unittest.main()

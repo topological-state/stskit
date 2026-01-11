@@ -462,7 +462,39 @@ class EreignisGraph(nx.DiGraph):
         for builder in edge_builders.values():
             builder.add_to_graph()
 
+        self._import_validieren()
         self._zuganfaenge_suchen()
+
+    def _import_validieren(self):
+        """
+        Mögliche Probleme beim Import beheben.
+
+        Wir prüfen auf folgende Fälle:
+        - Hängende H-Kante neben K-Kante
+        """
+
+        knoten_loeschen = set()
+
+        def _k_nachbarn_pruefen():
+            for _u, _v, _d in self.out_edges(u, data=True):
+                if _d.typ in {'P', 'D', 'H', 'E', 'F'}:
+                    logger.warning(f"Hängende {_d.typ}-Ereigniskante ({_u}, {_v}) neben Kupplung ({u}, {v}).")
+                    knoten_loeschen.add(_v)
+
+        for u, v, d in self.edges(data=True):
+            if d.typ == 'K':
+                _k_nachbarn_pruefen()
+
+        # def _zuganfang_pruefen():
+        #     if self.in_degree(n) == 0:
+        #         logger.warning(f"Hängender {d.typ}-Ereignisknoten {n}.")
+        #         knoten_loeschen.add(n)
+        #
+        # for n, d in self.nodes(data=True):
+        #     if d.typ == 'An':
+        #         _zuganfang_pruefen()
+
+        self.remove_nodes_from(knoten_loeschen)
 
     def prognose(self):
         """
