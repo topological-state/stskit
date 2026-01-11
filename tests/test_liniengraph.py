@@ -20,7 +20,7 @@ class TestStreckenZeitachse(unittest.TestCase):
         self.assertEqual(expected_result, result)
 
     def test_strecken_zeitachse_missing_attribute(self):
-        result = self.graph.strecken_zeitachse([self.bf_A, self.bf_B, self.bf_C], parameter='fahrzeit_max')
+        result = self.graph.strecken_zeitachse([self.bf_A, self.bf_B, self.bf_C], metrik='fahrzeit_max')
         expected_result = [0.0, 5.0, 6.0]
         self.assertEqual(expected_result, result)
 
