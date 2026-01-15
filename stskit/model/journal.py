@@ -365,14 +365,44 @@ class Journal:
         self.entries: Dict[Hashable, Union[JournalEntry, JournalEntryGroup]] = {}
 
     def replay(self, graph_map: Optional[Union[Mapping[Hashable, nx.Graph]]] = None):
+        """
+        Journal abspielen
+
+        Die Zielgraphen werden anhand des target_graph-Attributs der JournalEntry bestimmt.
+        target_graph kann entweder einen Identifikationsschlüssel enthalten, der mittels der graph_map zugeordnet wird,
+        oder direkt eine Graphinstanz.
+
+        Args:
+            graph_map: Ordnet den target_graph-Attributen der Einträge die Graphen zu, die verändert werden.
+                Wird keine Zuordnung angegeben, müssen die Graphen direkt in den Einträgen angegeben sein.
+        """
         for entry in self.entries.values():
             entry.replay(graph_map=graph_map)
 
     def add_entry(self, id_, entry: JournalEntry | JournalEntryGroup):
+        """
+        Journaleintrag hinzufügen
+
+        Args:
+            id_: Identifikation des Eintrags. Anhand der ID kann er später wieder gelöscht werden.
+            entry: Eintrag oder Gruppe
+        """
         self.entries[id_] = entry
 
     def delete_entry(self, id_: Hashable):
+        """
+        Journaleintrag löschen
+
+        Args:
+            id_: ID, die in add_entry verwendet wurde.
+
+        Raises:
+            KeyError wenn der Eintrag nicht existiert.
+        """
         del self.entries[id_]
 
     def clear(self):
+        """
+        Alle Journaleinträge löschen
+        """
         self.entries.clear()

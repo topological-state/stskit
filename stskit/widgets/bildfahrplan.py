@@ -220,7 +220,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and self.kann_abfahrt_abwarten() is not None)
         self.ui.actionAnkunftAbwarten.setEnabled(display_mode and self.kann_ankunft_abwarten() is not None)
         self.ui.actionKreuzung.setEnabled(display_mode and self.kann_kreuzung_abwarten() is not None)
-        self.ui.actionBetriebshaltEinfuegen.setEnabled(display_mode and self.kann_betriebshalt_einfuegen() is not None)
+        bh_aus = display_mode and self.kann_betriebshalt_loeschen() is not None
+        bh_ein = display_mode and not bh_aus and self.kann_betriebshalt_einfuegen() is not None
+        self.ui.actionBetriebshaltEinfuegen.setEnabled(bh_ein)
+        self.ui.actionActionBetriebshaltLoeschen.setEnabled(bh_aus)
 
         self.updating = False
 
@@ -621,16 +624,40 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     @Slot()
     def action_betriebshalt_loeschen(self):
-        try:
-            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
-        except (IndexError, KeyError):
+        node_data = self.kann_betriebshalt_loeschen()
+        if node_data is None:
             return
+        else:
+            node, data = node_data
 
         try:
-            self.zentrale.betrieb.betriebshalt_loeschen(ziel)
+            self.zentrale.betrieb.betriebshalt_loeschen(node)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
         self.update_actions()
+
+    def kann_betriebshalt_loeschen(self) -> Tuple[EreignisLabelType, EreignisGraphEdge] | None:
+        """
+        Prüfen, ob bei der aktuellen Trassenauswahl ein Betriebshalt gelöscht werden kann
+
+        Returns:
+            Label des ausgewählten Knotens und Kante des Betriebshalts, wenn ein Halt gelöscht werden kann, sonst None.
+        """
+
+        try:
+            node = self.plot.auswahl_knoten[0]
+        except (IndexError, KeyError):
+            return None
+
+        try:
+            for u, v, data in self.plot.bildgraph.in_edges(node, data=True):
+                if data['typ'] == 'B':
+                    return node, data
+            for u, v, data in self.plot.bildgraph.out_edges(node, data=True):
+                if data['typ'] == 'B':
+                    return node, data
+        except (AttributeError, IndexError, KeyError):
+            return None

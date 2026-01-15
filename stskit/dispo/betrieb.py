@@ -758,26 +758,26 @@ class Betrieb:
 
         return journal
 
-    def betriebshalt_loeschen(self, halt_ereignis: EreignisLabelType):
+    def betriebshalt_loeschen(self, betriebshalt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode]):
         """
-        Betriebshalt aus Ereignisgraph loeschen
+        Betriebshalt aus Ereignisgraph löschen
 
         Der Betriebshalt wird aus dem Dispojournal gelöscht.
         Der Ereignisgraph wird direkt nicht verändert und muss neu aufgebaut werden.
 
-        halt_ereignis: Ereignislabel von An2 oder Ab2
+        Args:
+            betriebshalt: Zum Betriebshalt gehöriges Ankunfts- oder Abfahrtsereignis oder Ziel.
+
+        Raises:
+            KeyError: Betriebshalt nicht gefunden.
         """
 
-        # todo : ueberarbeiten
-
-        ereignis_label, ereignis_data = self._ereignis_label_finden(halt_ereignis, {'An'})
-        if ereignis_label is None:
-            return
-
-        for jid in self.anlage.dispo_journal.entries:
-            if jid.typ == "Betriebshalt" and jid.zid == ereignis_label.zid:
-                self.anlage.dispo_journal.delete_entry(jid)
-                logger.debug("Betriebshalt gelöscht: {jid}")
+        ankunft_label, abfahrt_label = self._ankunft_abfahrt_finden(betriebshalt)
+        abfahrt_node = self.anlage.dispo_ereignisgraph.nodes[abfahrt_label]
+        bst = self.anlage.bahnhofgraph.find_superior(abfahrt_node.plan_bst, {'Bf', 'Anst'})
+        jid = JournalIDType(typ="Betriebshalt", zid=abfahrt_label.zid, bst=bst)
+        self.anlage.dispo_journal.delete_entry(jid)
+        logger.debug("Betriebshalt gelöscht: {jid}")
 
     def bst_verbinden(self):
         pass
