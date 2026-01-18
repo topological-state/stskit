@@ -1,6 +1,10 @@
-import itertools
+"""
+Bildfahrplanfenster
+"""
+
+from collections import namedtuple
 import logging
-from typing import Optional, Tuple, Iterable
+from typing import Generator, Optional, Tuple, Iterable
 
 from PySide6.QtCore import Slot, QStringListModel
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -19,6 +23,22 @@ from stskit.qt.ui_bildfahrplan import Ui_BildfahrplanWindow
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+
+
+AuswahlMuster = namedtuple(
+    "AuswahlMuster",
+    "index typ knoten kante"
+)
+
+def auswahl_muster_filtern(alle_muster: Iterable[AuswahlMuster],
+                           index: int | None = None,
+                           typ: str | None = None) -> Generator[AuswahlMuster, None, None]:
+    """
+    Liste von Auswahlmustern nach Index und/oder Typ filtern
+    """
+    for muster in alle_muster:
+        if (index is None or muster.index == index) and (typ is None or muster.typ == typ):
+            yield muster
 
 
 class GleiswahlDialog(QtWidgets.QDialog):
@@ -214,14 +234,40 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionSetup.setEnabled(display_mode)
         self.ui.actionAnzeige.setEnabled(not display_mode and len(self.plot.strecke) >= 2)
         self.ui.actionFix.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionLoeschen.setEnabled(display_mode and trasse_auswahl)
-        self.ui.actionPlusEins.setEnabled(display_mode and trasse_auswahl)
-        self.ui.actionMinusEins.setEnabled(display_mode and trasse_auswahl)
-        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and self.kann_abfahrt_abwarten() is not None)
-        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and self.kann_ankunft_abwarten() is not None)
-        self.ui.actionKreuzung.setEnabled(display_mode and self.kann_kreuzung_abwarten() is not None)
-        bh_aus = display_mode and self.kann_betriebshalt_loeschen() is not None
-        bh_ein = display_mode and not bh_aus and self.kann_betriebshalt_einfuegen() is not None
+
+        auswahl_muster = self.auswahl_unterscheiden() if display_mode and trasse_auswahl else []
+        auswahl_indices = {m.index for m in auswahl_muster}
+        auswahl_typen = {m.typ for m in auswahl_muster}
+        auswahl_index_typen = {(m.index, m.typ) for m in auswahl_muster}
+
+        w = len(auswahl_indices) == 1 and bool(auswahl_typen.intersection({'A-Ab', 'A-An', 'H-Ab', 'P-An'}))
+        self.ui.actionPlusEins.setEnabled(w)
+        self.ui.actionMinusEins.setEnabled(w)
+        w = len(auswahl_indices) == 1 and bool(auswahl_typen.intersection({'A-Ab', 'A-An'}))
+        self.ui.actionLoeschen.setEnabled(w)
+
+        w1 = (len(auswahl_indices) == 2 and
+             bool(auswahl_index_typen.intersection({(0, 'H-Ab'), (0, 'S')})) and
+             bool(auswahl_index_typen.intersection({(1, 'H-Ab')})))
+        self.ui.actionAbfahrtAbwarten.setEnabled(w1)
+        w2 = (len(auswahl_indices) == 2 and
+             bool(auswahl_index_typen.intersection({(0, 'H-Ab'), (0, 'S')})) and
+             bool(auswahl_index_typen.intersection({(1, 'An-H')})))
+        self.ui.actionAnkunftAbwarten.setEnabled(w2)
+        w3 = (len(auswahl_indices) == 2 and
+             bool(auswahl_index_typen.intersection({(0, 'H-Ab'), (0, 'S')})) and
+             bool(auswahl_index_typen.intersection({(1, 'H-Ab'), (1, 'S')})))
+        self.ui.actionKreuzung.setEnabled(w3)
+
+        w = len(auswahl_indices) == 1 and bool(auswahl_typen.intersection({'H-Ab', 'S'}))
+        if w:
+            m1 = next(auswahl_muster_filtern(auswahl_muster, index=0, typ='H-Ab'), None)
+            m2 = next(auswahl_muster_filtern(auswahl_muster, index=0, typ='S'), None)
+            bh_aus = m1 is not None and m1.kante.typ == 'B'
+            bh_ein = m2 is not None or m1 is not None and m1.kante.typ == 'D'
+        else:
+            bh_aus = False
+            bh_ein = False
         self.ui.actionBetriebshaltEinfuegen.setEnabled(bh_ein)
         self.ui.actionActionBetriebshaltLoeschen.setEnabled(bh_aus)
 
@@ -301,10 +347,69 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.zuginfoLabel.setText(text)
         self.update_actions()
 
+    def auswahl_unterscheiden(self) -> list[AuswahlMuster] | None:
+        """
+        Mustererkennung Trassenauswahl
+
+        - A-An: Ankunft mit eingehender Kante vom Typ A.
+        - A-Ab: Abfahrt mit eingehender Kante vom Typ A.
+        - H-Ab: Abfahrt mit eingehender Kante vom Typ B, D oder H (Halt oder Durchfahrt).
+        - P-An: Ankunft mit eingehender Kante vom Typ P (Fahrt).
+        - An-H: Ankunft mit ausgehender Kante vom Typ B, D oder H.
+        - S: Freier Auswahlknoten und Kante vom Typ P (Fahrt).
+
+        Hinweis: Es können mehrere Muster gleichzeitig gegeben sein.
+
+        Returns:
+            Liste mit allen zutreffenden Mustern.
+        """
+
+        muster: list[AuswahlMuster] = []
+
+        for index, node_label in enumerate(self.plot.auswahl_knoten):
+            try:
+                node_data = self.plot.bildgraph.nodes[node_label]
+            except KeyError:
+                continue
+
+            if node_data.typ == 'S':
+                edge_data = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[index], default=None)
+                if edge_data.typ == 'P':
+                    muster.append(AuswahlMuster(index, 'S', node_data, edge_data))
+                continue
+
+            try:
+                for u, v, data in self.plot.bildgraph.in_edges(node_label, data=True):
+                    if data.typ == 'A':
+                        muster.append(AuswahlMuster(index, 'A-' + node_data.typ, node_data, data))
+                    elif node_data['typ'] == 'Ab' and data['typ'] in {'B', 'D', 'H'}:
+                        muster.append(AuswahlMuster(index, 'H-Ab', node_data, data))
+                    elif node_data['typ'] == 'An' and data['typ'] == 'P':
+                        muster.append(AuswahlMuster(index, 'P-An', node_data, data))
+                for u, v, data in self.plot.bildgraph.out_edges(node_label, data=True):
+                    if node_data['typ'] == 'An' and data['typ'] in {'B', 'D', 'H'}:
+                        muster.append(AuswahlMuster(index, 'An-H', node_data, data))
+            except KeyError:
+                pass
+
+        return muster
+
     @Slot()
     def action_plus_eins(self):
+        """
+        Dauer erhöhen
+
+        Die folgenden Fälle sind möglich. Der erste zutreffende wird ausgeführt.
+        - Anschlusszeit erhöhen: Ausgewählter Knoten hat eingehende Kante A. (A-An, A-Ab)
+            Das fdl-Attribut der Kante wird um eine Minute erhöht.
+        - Haltezeit erhöhen: Ausgewählter Knoten ist Abfahrt von Kante B, D oder H. (H-Ab)
+            Das fdl-Attribut der Haltekante wird um eine Minute erhöht.
+        - Fahrzeit erhöhen: Ausgewählter Knoten ist Ankunft von Kante P. (P-An)
+            Das fdl-Attribut der Fahrtkante wird um eine Minute erhöht.
+        """
+
         try:
-            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
+            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_knoten[0]]
         except (IndexError, KeyError):
             return
         try:
@@ -318,8 +423,17 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     @Slot()
     def action_minus_eins(self):
+        """
+        Dauer erniedrigen
+
+        Die folgenden Fälle sind möglich. Der erste zutreffende wird ausgeführt.
+        - Anschlusszeit erniedrigen: Ausgewählter Knoten hat eingehende Kante A
+        - Haltezeit erniedrigen: Ausgewählter Knoten ist Abfahrt von Kante B, D oder H
+        - Fahrzeit erniedrigen: Ausgewählter Knoten ist Ankunft von Kante P
+        """
+
         try:
-            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_kanten[0][0]]
+            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_knoten[0]]
         except (IndexError, KeyError):
             return
         try:
