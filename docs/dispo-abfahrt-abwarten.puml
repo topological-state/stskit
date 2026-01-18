@@ -14,12 +14,10 @@ B1ab --> C1an: P
 
 'Zug 2
 object "2 B an" as B2an
-object "2 B ab" as B2ab #red {
-(bei Bh neu)
-}
+object "2 B ab" as B2ab
 object "2 C an" as C2an
 
-B2an --> B2ab: H/B
+B2an --[#red]> B2ab: H/B
 B2ab --> C2an: P
 
 B2ab --[#red]> B1ab : A(t)

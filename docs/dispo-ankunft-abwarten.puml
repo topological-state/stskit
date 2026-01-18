@@ -6,12 +6,10 @@
 
 'Zug 1
 object "1 B an" as B1an
-object "1 B ab" as B1ab #red {
-(bei Bh neu)
-}
+object "1 B ab" as B1ab
 object "1 C an" as C1an
 
-B1an --> B1ab : H/B
+B1an --[#red]> B1ab : H/B
 B1ab --> C1an : P
 
 'Zug 2
