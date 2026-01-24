@@ -13,20 +13,17 @@ Dank der zentralen Schnittstelle werden:
 """
 
 import copy
+import itertools
 import logging
 import math
 import os
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
-
-import networkx as nx
+from typing import Any, Optional, Set, Tuple, Union
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.journal import JournalEntry, JournalIDType, JournalEntryGroup
 from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
 from stskit.model.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode, ZielLabelType
-from stskit.model.zuggraph import ZugGraph
-from stskit.model.zugschema import Zugschema
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -194,8 +191,7 @@ class Betrieb:
         return abfahrt_label, abfahrt_data
 
     def kreuzung_abwarten(self,
-                          ankunft1: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                          ankunft2: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                          *knoten: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                           wartezeit: int = 0,
                           journal: JournalEntryGroup | None = None,
                           dry_run: bool = False) -> JournalEntryGroup:
@@ -215,8 +211,8 @@ class Betrieb:
         Bei Durchfahrt wird implizit ein Betriebshalt eingefügt.
 
         Args:
-            ankunft1: Ankunft oder Abfahrt des ersten Zuges (Ereignis- oder Ziel-, -Label oder -Daten)
-            ankunft2: Ankunft oder Abfahrt des zweiten Zuges (Ereignis- oder Ziel-, -Label oder -Daten)
+            knoten: Ankünfte oder Abfahrten der Züge (Ereignis- oder Ziel-, -Label oder -Daten).
+                Es werden genau zwei Argumente erwartet.
             wartezeit: Zusätzliche Wartezeit
             journal: Änderungen an 'ereignisgraph' und 'zielgraph' als JournalEntry-Einträge.
                 Optional, per Default wird eine neue Journalgruppe angelegt.
@@ -234,43 +230,38 @@ class Betrieb:
             journal.title = "Kreuzung"
             journal.timestamp = self.anlage.simzeit_minuten
 
-        ankunft1_label, abfahrt1_label = self._ankunft_abfahrt_finden(ankunft1)
-        ankunft2_label, abfahrt2_label = self._ankunft_abfahrt_finden(ankunft2)
+        labels = [self._ankunft_abfahrt_finden(k) for k in knoten]
+        labels_set = {l for l in itertools.chain(*labels) if l is not None}
+        zids_set = {l.zid for l in labels_set}
+        if len(labels_set) != 4 or len(zids_set) != 2:
+            raise ValueError("Ungültige/unvollständige Kreuzungsangaben.")
 
-        if ankunft1_label is None or ankunft2_label is None:
-            raise ValueError(f"Ungueltige Ereignisangaben {ankunft1} x {ankunft2}")
-        if abfahrt1_label is None or abfahrt2_label is None:
-            raise ValueError(f"Finde keine Abfahrtsereignisse zu {ankunft1_label} x {ankunft2_label}")
-        abfahrt1_data = self.anlage.dispo_ereignisgraph.nodes[abfahrt1_label]
-        abfahrt2_data = self.anlage.dispo_ereignisgraph.nodes[abfahrt2_label]
+        for label in labels:
+            kante = self.anlage.dispo_ereignisgraph.get_edge_data(*label)
+            if kante.typ == 'D':
+                self._betriebshalt_statt_durchfahrt(journal, label[0], wartezeit)
 
-        kante1 = self.anlage.dispo_ereignisgraph.get_edge_data(ankunft1_label, abfahrt1_label)
-        if kante1 is not None and kante1.typ == 'D':
-            abfahrt1_label, abfahrt1_data = self._betriebshalt_statt_durchfahrt(journal, ankunft1_label, wartezeit)
-        kante2 = self.anlage.dispo_ereignisgraph.get_edge_data(ankunft2_label, abfahrt2_label)
-        if kante2 is not None and kante2.typ == 'D':
-            abfahrt2_label, abfahrt2_data = self._betriebshalt_statt_durchfahrt(journal, ankunft2_label, wartezeit)
+        ankunft_labels = [l[0] for l in labels]
+        abfahrt_labels = [l[1] for l in labels]
 
-        abfahrt1_bst = self.anlage.bahnhofgraph.find_superior(abfahrt1_data.plan_bst, {'Bf', 'Anst'})
-        abfahrt2_bst = self.anlage.bahnhofgraph.find_superior(abfahrt2_data.plan_bst, {'Bf', 'Anst'})
-        if abfahrt1_bst != abfahrt2_bst:
-            raise ValueError(f"Kreuzung {ankunft1_label} X {ankunft2_label} in verschiedenen Bahnhoefen ({abfahrt1_bst}, {abfahrt2_bst}) nicht moeglich")
+        abfahrt_data = [self.anlage.dispo_ereignisgraph.nodes[l] for l in abfahrt_labels]
+        bst = {self.anlage.bahnhofgraph.find_superior(d.plan_bst, {'Bf', 'Anst'}) for d in abfahrt_data}
+        if len(bst) != 1:
+            raise ValueError("Kreuzung in verschiedenen Bahnhöfen nicht möglich")
 
-        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=abfahrt1_label)
-        edge = EreignisGraphEdge(typ="A", zid=abfahrt1_label.zid, dt_fdl=wartezeit or 0, quelle='fdl')
-        egj.add_edge(ankunft2_label, abfahrt1_label, **edge)
-        journal.add_entry(egj)
-
-        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=abfahrt2_label)
-        edge = EreignisGraphEdge(typ="A", zid=abfahrt2_label.zid, dt_fdl=wartezeit or 0, quelle='fdl')
-        egj.add_edge(ankunft1_label, abfahrt2_label, **edge)
-        journal.add_entry(egj)
-
-        journal.valid = True
+        warte_kanten = itertools.product(ankunft_labels, abfahrt_labels)
+        for kante in warte_kanten:
+            if kante[0].zid != kante[1].zid:
+                edge = EreignisGraphEdge(typ="A", zid=kante[1].zid, dt_fdl=wartezeit or 0, quelle='fdl')
+                egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=kante[1])
+                egj.add_edge(*kante, **edge)
+                journal.add_entry(egj)
+                journal.valid = True
 
         if not dry_run and journal.valid:
-            abfahrt_bst, abfahrt_data = (abfahrt1_bst, abfahrt1_data) if abfahrt1_label.zeit <= abfahrt2_label.zeit else (abfahrt2_bst, abfahrt2_data)
-            jid = JournalIDType("Kreuzung", abfahrt_data.zid, abfahrt_bst)
+            items = sorted(zip(abfahrt_labels, abfahrt_data, bst), key=lambda x: x[0].zeit)
+            _, jid_data, jid_bst = items[0]
+            jid = JournalIDType("Kreuzung", jid_data.zid, jid_bst)
             self._journal_anwenden(jid, journal)
 
         return journal

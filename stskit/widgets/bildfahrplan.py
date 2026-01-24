@@ -3,8 +3,9 @@ Bildfahrplanfenster
 """
 
 from collections import namedtuple
+from functools import partial, wraps
 import logging
-from typing import Generator, Optional, Tuple, Iterable
+from typing import Callable, Generator, Optional, Tuple, Iterable
 
 from PySide6.QtCore import Slot, QStringListModel
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -32,12 +33,12 @@ AuswahlMuster = namedtuple(
 
 def auswahl_muster_filtern(alle_muster: Iterable[AuswahlMuster],
                            index: int | None = None,
-                           typ: str | None = None) -> Generator[AuswahlMuster, None, None]:
+                           typen: set[str] | None = None) -> Generator[AuswahlMuster, None, None]:
     """
     Liste von Auswahlmustern nach Index und/oder Typ filtern
     """
     for muster in alle_muster:
-        if (index is None or muster.index == index) and (typ is None or muster.typ == typ):
+        if (index is None or muster.index == index) and (typen is None or muster.typ in typen):
             yield muster
 
 
@@ -238,6 +239,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         auswahl_muster = self.auswahl_unterscheiden() if display_mode and trasse_auswahl else []
         auswahl_indices = {m.index for m in auswahl_muster}
         auswahl_typen = {m.typ for m in auswahl_muster}
+        auswahl_zid = {m.knoten.zid for m in auswahl_muster}
+        auswahl_bst = {m.knoten.bst for m in auswahl_muster}
         auswahl_index_typen = {(m.index, m.typ) for m in auswahl_muster}
 
         w = len(auswahl_indices) == 1 and bool(auswahl_typen.intersection({'A-Ab', 'A-An', 'H-Ab', 'P-An'}))
@@ -247,22 +250,26 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionLoeschen.setEnabled(w)
 
         w1 = (len(auswahl_indices) == 2 and
-             bool(auswahl_index_typen.intersection({(0, 'H-Ab'), (0, 'S')})) and
-             bool(auswahl_index_typen.intersection({(1, 'H-Ab')})))
+              len(auswahl_zid) == 2 and
+              bool(auswahl_index_typen.intersection({(0, 'H-Ab')})) and
+              bool(auswahl_index_typen.intersection({(1, 'H-Ab')})))
         self.ui.actionAbfahrtAbwarten.setEnabled(w1)
         w2 = (len(auswahl_indices) == 2 and
-             bool(auswahl_index_typen.intersection({(0, 'H-Ab'), (0, 'S')})) and
-             bool(auswahl_index_typen.intersection({(1, 'An-H')})))
+              len(auswahl_zid) == 2 and
+              bool(auswahl_index_typen.intersection({(0, 'H-Ab')})) and
+              bool(auswahl_index_typen.intersection({(1, 'An-H')})))
         self.ui.actionAnkunftAbwarten.setEnabled(w2)
         w3 = (len(auswahl_indices) == 2 and
-             bool(auswahl_index_typen.intersection({(0, 'H-Ab'), (0, 'S')})) and
-             bool(auswahl_index_typen.intersection({(1, 'H-Ab'), (1, 'S')})))
+              len(auswahl_zid) == 2 and
+              len(auswahl_bst) == 1 and
+              bool(auswahl_index_typen.intersection({(0, 'H-Ab')})) and
+              bool(auswahl_index_typen.intersection({(1, 'H-Ab')})))
         self.ui.actionKreuzung.setEnabled(w3)
 
         w = len(auswahl_indices) == 1 and bool(auswahl_typen.intersection({'H-Ab', 'S'}))
         if w:
-            m1 = next(auswahl_muster_filtern(auswahl_muster, index=0, typ='H-Ab'), None)
-            m2 = next(auswahl_muster_filtern(auswahl_muster, index=0, typ='S'), None)
+            m1 = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab'}), None)
+            m2 = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'S'}), None)
             bh_aus = m1 is not None and m1.kante.typ == 'B'
             bh_ein = m2 is not None or m1 is not None and m1.kante.typ == 'D'
         else:
@@ -624,52 +631,18 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         - Knoten in verschiedenen Bahnhöfen: erlaubt, aber möglicherweise nicht sinnvoll.
         """
 
-        nodes = self.kann_kreuzung_abwarten()
-        if nodes is None:
-            return
+        auswahl_muster = self.auswahl_unterscheiden()
+        auswahl_muster = sorted(auswahl_muster_filtern(auswahl_muster, typen={'H-Ab', 'S'}),
+                                key=lambda k: k.index)[:2]
+        auswahl_knoten = [m.knoten for m in auswahl_muster]
         try:
-            ankunft1, ankunft2 = nodes
-            self.zentrale.betrieb.kreuzung_abwarten(ankunft1, ankunft2, wartezeit=0)
-        except (KeyError, ValueError) as e:
+            self.zentrale.betrieb.kreuzung_abwarten(*auswahl_knoten, wartezeit=0)
+        except (KeyError, TypeError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
         self.update_actions()
-
-    def kann_kreuzung_abwarten(self) -> Tuple[EreignisGraphNode, EreignisGraphNode] | None:
-        try:
-            edge1 = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[0])
-            if edge1.typ not in {'P'}:
-                return None
-            node1 = self.plot.auswahl_knoten[0]
-            data1 = self.plot.bildgraph.nodes[node1]
-            if node1 != self.plot.auswahl_kanten[0][1]:
-                return None
-            if node1.typ not in {'An'}:
-                return None
-        except (IndexError, KeyError):
-            return None
-
-        try:
-            edge2 = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[1])
-            if edge2.typ not in {'P'}:
-                return None
-            node2 = self.plot.auswahl_knoten[1]
-            data2 = self.plot.bildgraph.nodes[node2]
-            if node2 != self.plot.auswahl_kanten[1][1]:
-                return None
-            if node2.typ not in {'An'}:
-                return None
-        except (IndexError, KeyError):
-            return None
-
-        if node1.zid == node2.zid:
-            return None
-        if data1.bst != data2.bst:
-            return None
-
-        return data1, data2
 
     @Slot()
     def action_betriebshalt_einfuegen(self):
