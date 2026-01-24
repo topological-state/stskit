@@ -631,18 +631,20 @@ class BildfahrplanPlot:
                 logger.warning(f"Fehler beim Berechnen der Bahnhofkoordinate zu x = {x} auf Trasse {strecken_edge}.")
                 teiler = 0.5
 
-            t0 = self.bildgraph.nodes[ereignis_edge[0]]['t_plan']
-            t1 = self.bildgraph.nodes[ereignis_edge[1]]['t_plan']
-            t = teiler * (t1 - t0) + t0
+            def t_interpol(edge, key, _teiler):
+                _t = [self.bildgraph.nodes[n][key] for n in edge]
+                return _teiler * (_t[1] - _t[0]) + _t[0]
 
-            node = EreignisLabelType(ereignis_data.zid, t, 'S')
+            t_plan = t_interpol(ereignis_edge, 't_plan', teiler)
+            t_prog = t_interpol(ereignis_edge, 't_prog', teiler)
+            node = EreignisLabelType(ereignis_data.zid, t_plan, 'S')
             node_data = {
                 'zid': ereignis_data.zid,
                 'typ': 'S',
                 'quelle': 'auswahl',
-                'zeit': t,
-                't_plan': t,
-                't_prog': t,
+                'zeit': t_plan,
+                't_plan': t_plan,
+                't_prog': t_prog,
                 's': s,
                 'bst': bahnhof,
                 'marker': self.marker_style['S'],
