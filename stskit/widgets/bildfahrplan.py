@@ -472,101 +472,46 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         """
         Abfahrt eines Zuges abwarten, Ueberholung
 
-        Mögliche Auswahl von Kanten und Knoten:
-        - Wartender Zug:
-          - Regulärer Abfahrtsknoten am Kantenanfang: erlaubt!
-          - Regulärer Ankunftsknoten am Kantenanfang: erlaubt, Betriebshalt wird eingefügt.
-          - Regulärer Ankunftsknoten am Kantenende: nicht erlaubt!
-          - Freier Auswahlknoten: nicht erlaubt!
-        - Abzuwartender Zug:
-          - Regulärer Abfahrtsknoten am Kantenanfang: erlaubt!
-          - Regulärer Ankunftsknoten am Kantenanfang: nicht erlaubt! (Zuerst manuell einen Betriebshalt einfuegen.)
-          - Regulärer Ankunftsknoten am Kantenende: nicht erlaubt!
-          - Freier Auswahlknoten: nicht erlaubt!
-        - Knoten in verschiedenen Bahnhöfen: erlaubt, aber möglicherweise nicht sinnvoll.
+        Freie Auswahl ist nicht erlaubt (zuerst Betriebshalt einfügen!).
+        Bei Durchfahrt wird automatisch ein Betriebshalt erstellt.
+
+        Erforderliches Auswahlmuster (s. `auswahl_unterscheiden`):
+            - Wartender Zug: 'H-Ab' nach B/D/H-Kante.
+            - Abzuwartender Zug: 'An-H'
         """
 
-        nodes = self.kann_abfahrt_abwarten()
-        if nodes is None:
-            return
+        auswahl_muster = self.auswahl_unterscheiden()
+        ziel = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab'}))
+        referenz = next(auswahl_muster_filtern(auswahl_muster, index=1, typen={'H-Ab'}))
+
         try:
-            ziel, referenz = nodes
-            self.zentrale.betrieb.abfahrt_abwarten(ziel, referenz, wartezeit=2)
+            self.zentrale.betrieb.abfahrt_abwarten(ziel.knoten, referenz.knoten, wartezeit=2)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
         self.update_actions()
-
-    def kann_abfahrt_abwarten(self) -> Optional[Tuple[EreignisGraphNode, EreignisGraphNode]]:
-        """
-        Prüfen, ob "Abfahrt abwarten" für aktuelle Auswahl möglich ist
-
-        Bedingungen siehe action_abfahrt_abwarten.
-
-        Returns:
-            Zielereignis und Referenzereignis, wenn der Befehl möglich ist, sonst None
-        """
-
-        try:
-            ziel_edge = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[0])
-            if ziel_edge.typ not in {'P'}:
-                return None
-            ziel_node = self.plot.auswahl_knoten[0]
-            ziel_data = self.plot.bildgraph.nodes[ziel_node]
-            if ziel_node != self.plot.auswahl_kanten[0][0]:
-                return None
-            if ziel_node.typ not in {'Ab', 'An'}:
-                return None
-        except (IndexError, KeyError):
-            return None
-
-        try:
-            ref_edge = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[1])
-            if ref_edge.typ not in {'P'}:
-                return None
-            ref_node = self.plot.auswahl_knoten[1]
-            ref_data = self.plot.bildgraph.nodes[ref_node]
-            if ref_node != self.plot.auswahl_kanten[1][0]:
-                return None
-            if ref_node.typ not in {'Ab'}:
-                return None
-        except (IndexError, KeyError):
-            return None
-
-        if ziel_node.zid == ref_node.zid:
-            return None
-        if ziel_data.bst != ref_data.bst:
-            return None
-
-        return ziel_data, ref_data
 
     @Slot()
     def action_ankunft_abwarten(self):
         """
         Ankunft eines Zuges (Anschluss) abwarten
 
-        Mögliche Auswahl von Kanten und Knoten:
-        - Wartender Zug:
-          - Regulärer Abfahrtsknoten am Kantenanfang: erlaubt!
-          - Regulärer Ankunftsknoten am Kantenanfang: erlaubt, Betriebshalt wird eingefügt.
-          - Regulärer Ankunftsknoten am Kantenende: erlaubt! (halbe Kreuzung)
-          - Freier Auswahlknoten: nicht erlaubt!
-        - Abzuwartender Zug:
-          - Regulärer Abfahrtsknoten am Kantenanfang: nicht erlaubt!
-          - Regulärer Ankunftsknoten am Kantenanfang: nicht erlaubt!
-          - Regulärer Ankunftsknoten am Kantenende: erlaubt!
-          - Freier Auswahlknoten: nicht erlaubt!
-        - Knoten in verschiedenen Bahnhöfen: erlaubt, aber möglicherweise nicht sinnvoll.
+        Freie Auswahl ist nicht erlaubt (zuerst Betriebshalt einfügen!).
+        Bei Durchfahrt wird automatisch ein Betriebshalt erstellt.
+
+        Erforderliches Auswahlmuster (s. `auswahl_unterscheiden`):
+            - Wartender Zug: 'H-Ab' nach B/D/H-Kante.
+            - Abzuwartender Zug: 'An-H'
         """
 
-        nodes = self.kann_ankunft_abwarten()
-        if nodes is None:
-            return
+        auswahl_muster = self.auswahl_unterscheiden()
+        ziel = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab'}))
+        referenz = next(auswahl_muster_filtern(auswahl_muster, index=1, typen={'An-H'}))
+
         try:
-            ziel, referenz = nodes
-            self.zentrale.betrieb.ankunft_abwarten(ziel, referenz, wartezeit=1)
+            self.zentrale.betrieb.ankunft_abwarten(ziel.knoten, referenz.knoten, wartezeit=1)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
@@ -574,66 +519,21 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.grafik_update()
         self.update_actions()
 
-    def kann_ankunft_abwarten(self) -> Optional[Tuple[EreignisGraphNode, EreignisGraphNode]]:
-        """
-        Prüfen, ob "Ankunft abwarten" für aktuelle Auswahl möglich ist
-
-        Bedingungen siehe action_abfahrt_abwarten.
-
-        Returns:
-            Zielereignis und Referenzereignis, wenn der Befehl möglich ist, sonst None
-        """
-
-        try:
-            ziel_edge = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[0])
-            if ziel_edge.typ not in {'P'}:
-                return None
-            ziel_node = self.plot.auswahl_knoten[0]
-            ziel_data = self.plot.bildgraph.nodes[ziel_node]
-            if ziel_node != self.plot.auswahl_kanten[0][0] and ziel_node != self.plot.auswahl_kanten[0][1]:
-                return None
-            if ziel_node.typ not in {'Ab', 'An'}:
-                return None
-        except (IndexError, KeyError):
-            return None
-
-        try:
-            ref_edge = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[1])
-            if ref_edge.typ not in {'P'}:
-                return None
-            ref_node = self.plot.auswahl_knoten[1]
-            ref_data = self.plot.bildgraph.nodes[ref_node]
-            if ref_node != self.plot.auswahl_kanten[1][1]:
-                return None
-            if ref_node.typ not in {'An'}:
-                return None
-        except (IndexError, KeyError):
-            return None
-
-        if ziel_node.zid == ref_node.zid:
-            return None
-        if ziel_data.bst != ref_data.bst:
-            return None
-
-        return ziel_data, ref_data
-
     @Slot()
     def action_kreuzung_abwarten(self):
         """
         Gegenseitige Ankunft abwarten (Kreuzung)
 
-        Mögliche Auswahl von Kanten und Knoten:
-        - Beide Züge:
-          - Regulärer Abfahrtsknoten am Kantenanfang: nicht erlaubt!
-          - Regulärer Ankunftsknoten am Kantenanfang: nicht erlaubt!
-          - Regulärer Ankunftsknoten am Kantenende: erlaubt!
-          - Freier Auswahlknoten: nicht erlaubt!
-        - Knoten in verschiedenen Bahnhöfen: erlaubt, aber möglicherweise nicht sinnvoll.
+        Es müssen Abfahrtsereignisse (Halt, Durchfahrt, Betriebshalt) von zwei Zügen ausgewählt sein.
+        Falls am gewünschten Ort kein Fahrplaneintrag besteht, muss vorgängig ein Betriebshalt erstellt werden.
+
+        Erforderliches Auswahlmuster (s. `auswahl_unterscheiden`):
+            - Beide Züge: 'H-Ab' nach B/D/H-Kante.
         """
 
         auswahl_muster = self.auswahl_unterscheiden()
-        auswahl_muster = sorted(auswahl_muster_filtern(auswahl_muster, typen={'H-Ab', 'S'}),
-                                key=lambda k: k.index)[:2]
+        auswahl_muster = sorted(auswahl_muster_filtern(auswahl_muster, typen={'H-Ab'}),
+                                key=lambda k: k.index)
         auswahl_knoten = [m.knoten for m in auswahl_muster]
         try:
             self.zentrale.betrieb.kreuzung_abwarten(*auswahl_knoten, wartezeit=0)
@@ -649,18 +549,23 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         """
         Betriebshalt einfügen
 
-        Mögliche Auswahl von Kanten und Knoten:
-          - Regulärer Abfahrtsknoten: nicht erlaubt!
-          - Regulärer Ankunftsknoten am Kantenanfang: erlaubt!
-          - Regulärer Ankunftsknoten am Kantenende: erlaubt!
-          - Freier Auswahlknoten (Bahnhof verschieden von Kantenenden): erlaubt!
+
+        Ein Betriebshalt kann entweder an einem Fahrplanziel mit Durchfahrt
+        oder an einem Bahnhof auf der Strecke (ohne Fahrplaneintrag) eingefügt werden.
+        Im letzteren Fall ist ein 'freier' Knoten vom Typ S ausgewählt.
+        Der Benutzer wird in einem GleiswahlDialog aufgefordert, das Zielgleis festzulegen.
+
+        Erforderliches Auswahlmuster (s. `auswahl_unterscheiden`):
+            - 'H-Ab'
+            - 'S' mit 'D'-Kante
         """
 
-        node_data = self.kann_betriebshalt_einfuegen()
-        if node_data is None:
+        auswahl_muster = self.auswahl_unterscheiden()
+        if len(auswahl_muster) != 1 or auswahl_muster[0].typ not in {'H-Ab', 'S'}:
+            self.ui.zuginfoLabel.setText("Ungültige Auswahl")
             return
         else:
-            node, data = node_data
+            data = auswahl_muster[0].knoten
 
         if data.typ == 'S':
             gleise = sorted(self.anlage.bahnhofgraph.bahnhofgleise(data.bst.name))
@@ -675,76 +580,37 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         data.gleis_bst = data.plan_bst = gleis
         data.gleis = data.plan = gleis.name
         try:
-            self.zentrale.betrieb.betriebshalt_einfuegen(node, data.gleis_bst, data.t_plan, wartezeit=1)
+            self.zentrale.betrieb.betriebshalt_einfuegen(data, data.gleis_bst, data.t_plan, wartezeit=1)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
         self.update_actions()
-
-    def kann_betriebshalt_einfuegen(self) -> Tuple[EreignisLabelType, EreignisGraphNode] | None:
-        """
-        Prüfen, ob bei der aktuellen Trassenauswahl ein Betriebshalt eingefügt werden kann
-
-        Returns:
-            Label des Referenzknotens und Daten des ausgewählten Knotens, wenn ein Halt eingefügt werden kann, sonst None.
-            Referenz und Auswahl gehören zum gleichen Knoten, wenn der Knoten in einen Betriebshalt umgewandelt werden kann.
-            Wenn ein neuer Halt eingefügt werden muss, ist die Referenz der Ausgangsknoten der gewählten Kante.
-        """
-        try:
-            edge1 = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[0])
-            if edge1.typ not in {'P'}:
-                return None
-            node1 = self.plot.auswahl_knoten[0]
-            data1 = self.plot.bildgraph.nodes[node1]
-            if node1.typ == 'S' and self.anlage.bahnhofgraph.has_node(data1.bst):
-                node1 = self.plot.auswahl_kanten[0][0]
-            elif node1.typ == 'Ab':
-                pass
-            else:
-                return None
-        except (AttributeError, IndexError, KeyError):
-            return None
-
-        return node1, data1
 
     @Slot()
     def action_betriebshalt_loeschen(self):
-        node_data = self.kann_betriebshalt_loeschen()
-        if node_data is None:
+        """
+        Betriebshalt löschen
+
+        Der Betriebshalt muss ausgewählt sein und einen Dispo-Journaleintrag haben.
+
+        Erforderliches Auswahlmuster (s. `auswahl_unterscheiden`):
+            - 'H-Ab' mit 'B'-Kante
+        """
+
+        auswahl_muster = self.auswahl_unterscheiden()
+        if len(auswahl_muster) != 1 or auswahl_muster[0].kante.typ not in {'B'}:
+            self.ui.zuginfoLabel.setText("Ungültige Auswahl")
             return
         else:
-            node, data = node_data
+            data = auswahl_muster[0].knoten
 
         try:
-            self.zentrale.betrieb.betriebshalt_loeschen(node)
+            self.zentrale.betrieb.betriebshalt_loeschen(data)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
         self.grafik_update()
         self.update_actions()
-
-    def kann_betriebshalt_loeschen(self) -> Tuple[EreignisLabelType, EreignisGraphEdge] | None:
-        """
-        Prüfen, ob bei der aktuellen Trassenauswahl ein Betriebshalt gelöscht werden kann
-
-        Returns:
-            Label des ausgewählten Knotens und Kante des Betriebshalts, wenn ein Halt gelöscht werden kann, sonst None.
-        """
-
-        try:
-            node = self.plot.auswahl_knoten[0]
-        except (IndexError, KeyError):
-            return None
-
-        try:
-            for u, v, data in self.plot.bildgraph.in_edges(node, data=True):
-                if data['typ'] == 'B':
-                    return node, data
-            for u, v, data in self.plot.bildgraph.out_edges(node, data=True):
-                if data['typ'] == 'B':
-                    return node, data
-        except (AttributeError, IndexError, KeyError):
-            return None
