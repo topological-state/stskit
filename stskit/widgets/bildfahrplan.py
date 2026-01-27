@@ -3,6 +3,7 @@ Bildfahrplanfenster
 """
 
 from collections import namedtuple
+from dataclasses import dataclass, field
 from functools import partial, wraps
 import logging
 from typing import Callable, Generator, Optional, Tuple, Iterable
@@ -25,11 +26,43 @@ from stskit.qt.ui_bildfahrplan import Ui_BildfahrplanWindow
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
+@dataclass(order=True, frozen=True)
+class AuswahlMuster:
+    """
+    Ausgewählte Kombination von Knoten und Kante
 
-AuswahlMuster = namedtuple(
-    "AuswahlMuster",
-    "index typ knoten kante"
-)
+    Je nach relativer Position eines Mausklicks zu einer Trasse
+    kann eines oder mehrere der folgenden Muster unterschieden werden:
+
+        - A-An: Ankunft mit eingehender Kante vom Typ A.
+        - A-Ab: Abfahrt mit eingehender Kante vom Typ A.
+        - H-Ab: Abfahrt mit eingehender Kante vom Typ B, D oder H (Halt oder Durchfahrt).
+        - P-An: Ankunft mit eingehender Kante vom Typ P (Fahrt).
+        - An-H: Ankunft mit ausgehender Kante vom Typ B, D oder H.
+        - S: Freier Auswahlknoten und Kante vom Typ P (Fahrt).
+
+    S. BildFahrplanWindow.auswahl_unterscheiden
+
+    Attributes:
+        index: Reihenfolge des Auswahlvorgangs (0 = erste Auswahl).
+        typ: Kurzbezeichnung des Musterstyps (siehe Aufzählung oben).
+        knoten: Daten des ausgewählten Knotens.
+            Der Knoten kann entweder der start- oder ziel-Knoten der Kante sein,
+            oder im Fall des S-Musters ein freier Knoten, der im Graph nicht vorkommt.
+        kante: Daten der ausgewählten Kante.
+            Die Kante existiert im Bildgraph zwischen den start- und ziel-Knoten.
+        start: Label des Ausgangspunkts der Kante.
+            Der entsprechende Knoten muss im Bildgraph vorkommen.
+        ziel: Label des Endpunkts der Kante.
+            Der entsprechende Knoten muss im Bildgraph vorkommen.
+    """
+    index: int
+    typ: str
+    knoten: EreignisGraphNode = field(compare=False)
+    kante: EreignisGraphEdge = field(compare=False)
+    start: EreignisLabelType
+    ziel: EreignisLabelType
+
 
 def auswahl_muster_filtern(alle_muster: Iterable[AuswahlMuster],
                            index: int | None = None,
@@ -210,7 +243,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.via_combo.setEnabled(enable_detailwahl)
         self.ui.nach_combo.setEnabled(enable_detailwahl)
 
-        self.strecke_model.setStringList(map(str, self.plot.strecke))
+        self.strecke_model.setStringList([str(be) for be in self.plot.strecke])
 
         if self.plot.strecken_name:
             titel = f"Streckenfahrplan {self.plot.strecken_name}"
@@ -382,20 +415,20 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             if node_data.typ == 'S':
                 edge_data = self.plot.bildgraph.get_edge_data(*self.plot.auswahl_kanten[index], default=None)
                 if edge_data.typ == 'P':
-                    muster.append(AuswahlMuster(index, 'S', node_data, edge_data))
+                    muster.append(AuswahlMuster(index, 'S', node_data, edge_data, *self.plot.auswahl_kanten[index]))
                 continue
 
             try:
                 for u, v, data in self.plot.bildgraph.in_edges(node_label, data=True):
                     if data.typ == 'A':
-                        muster.append(AuswahlMuster(index, 'A-' + node_data.typ, node_data, data))
+                        muster.append(AuswahlMuster(index, 'A-' + node_data.typ, node_data, data, u, v))
                     elif node_data['typ'] == 'Ab' and data['typ'] in {'B', 'D', 'H'}:
-                        muster.append(AuswahlMuster(index, 'H-Ab', node_data, data))
+                        muster.append(AuswahlMuster(index, 'H-Ab', node_data, data, u, v))
                     elif node_data['typ'] == 'An' and data['typ'] == 'P':
-                        muster.append(AuswahlMuster(index, 'P-An', node_data, data))
+                        muster.append(AuswahlMuster(index, 'P-An', node_data, data, u, v))
                 for u, v, data in self.plot.bildgraph.out_edges(node_label, data=True):
                     if node_data['typ'] == 'An' and data['typ'] in {'B', 'D', 'H'}:
-                        muster.append(AuswahlMuster(index, 'An-H', node_data, data))
+                        muster.append(AuswahlMuster(index, 'An-H', node_data, data, u, v))
             except KeyError:
                 pass
 
@@ -403,48 +436,43 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     @Slot()
     def action_plus_eins(self):
+        self.action_dauer_aendern(+1, True)
+
+    @Slot()
+    def action_minus_eins(self):
+        self.action_dauer_aendern(-1, True)
+
+    def action_dauer_aendern(self, dt: int, relativ: bool):
         """
         Dauer erhöhen
 
         Die folgenden Fälle sind möglich. Der erste zutreffende wird ausgeführt.
-        - Anschlusszeit erhöhen: Ausgewählter Knoten hat eingehende Kante A. (A-An, A-Ab)
+        - Anschlusszeit erhöhen: Ausgewählter Knoten hat eingehende Kante A (A-An, A-Ab).
             Das fdl-Attribut der Kante wird um eine Minute erhöht.
-        - Haltezeit erhöhen: Ausgewählter Knoten ist Abfahrt von Kante B, D oder H. (H-Ab)
+        - Haltezeit erhöhen: Ausgewählter Knoten ist Abfahrt von Kante B, D oder H (H-Ab).
             Das fdl-Attribut der Haltekante wird um eine Minute erhöht.
-        - Fahrzeit erhöhen: Ausgewählter Knoten ist Ankunft von Kante P. (P-An)
+        - Fahrzeit erhöhen: Ausgewählter Knoten ist Ankunft von Kante P (P-An).
             Das fdl-Attribut der Fahrtkante wird um eine Minute erhöht.
         """
 
+        auswahl_muster = self.auswahl_unterscheiden()
         try:
-            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_knoten[0]]
-        except (IndexError, KeyError):
+            muster = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab', 'P-An', 'A-An', 'A-Ab'}))
+        except StopIteration:
+            self.ui.zuginfoLabel.setText("Ungültige Auswahl")
             return
-        try:
-            self.zentrale.betrieb.wartezeit_aendern(ziel, 1, True)
-        except (KeyError, ValueError) as e:
-            self.ui.zuginfoLabel.setText(str(e))
 
-        self.plot.clear_selection()
-        self.grafik_update()
-        self.update_actions()
-
-    @Slot()
-    def action_minus_eins(self):
-        """
-        Dauer erniedrigen
-
-        Die folgenden Fälle sind möglich. Der erste zutreffende wird ausgeführt.
-        - Anschlusszeit erniedrigen: Ausgewählter Knoten hat eingehende Kante A
-        - Haltezeit erniedrigen: Ausgewählter Knoten ist Abfahrt von Kante B, D oder H
-        - Fahrzeit erniedrigen: Ausgewählter Knoten ist Ankunft von Kante P
-        """
-
-        try:
-            ziel = self.plot.bildgraph.nodes[self.plot.auswahl_knoten[0]]
-        except (IndexError, KeyError):
+        if muster.typ in {'A-An', 'A-Ab', 'P-An'}:
+            target = muster.ziel
+            kante = (muster.start, muster.ziel)
+        elif muster.typ in {'H-Ab'}:
+            target = muster.start
+            kante = None
+        else:
             return
+
         try:
-            self.zentrale.betrieb.wartezeit_aendern(ziel, -1, True)
+            self.zentrale.betrieb.wartezeit_aendern(target, kante, dt, relativ)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
@@ -481,8 +509,12 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         """
 
         auswahl_muster = self.auswahl_unterscheiden()
-        ziel = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab'}))
-        referenz = next(auswahl_muster_filtern(auswahl_muster, index=1, typen={'H-Ab'}))
+        try:
+            ziel = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab'}))
+            referenz = next(auswahl_muster_filtern(auswahl_muster, index=1, typen={'H-Ab'}))
+        except StopIteration:
+            self.ui.zuginfoLabel.setText("Ungültige Auswahl")
+            return
 
         try:
             self.zentrale.betrieb.abfahrt_abwarten(ziel.knoten, referenz.knoten, wartezeit=2)
@@ -507,8 +539,12 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         """
 
         auswahl_muster = self.auswahl_unterscheiden()
-        ziel = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab'}))
-        referenz = next(auswahl_muster_filtern(auswahl_muster, index=1, typen={'An-H'}))
+        try:
+            ziel = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab'}))
+            referenz = next(auswahl_muster_filtern(auswahl_muster, index=1, typen={'An-H'}))
+        except StopIteration:
+            self.ui.zuginfoLabel.setText("Ungültige Auswahl")
+            return
 
         try:
             self.zentrale.betrieb.ankunft_abwarten(ziel.knoten, referenz.knoten, wartezeit=1)

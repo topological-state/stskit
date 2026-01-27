@@ -337,7 +337,10 @@ class Betrieb:
         return objekt, data
 
     def _journal_anwenden(self, jid: JournalIDType, journal: JournalEntryGroup):
-        self.anlage.dispo_journal.add_entry(jid, journal)
+        try:
+            self.anlage.dispo_journal.entries[jid].merge(journal)
+        except KeyError:
+            self.anlage.dispo_journal.add_entry(jid, journal)
         gm = {'ereignisgraph': self.anlage.dispo_ereignisgraph,
               'zielgraph': self.anlage.dispo_zielgraph}
         journal.replay(graph_map=gm)
@@ -389,25 +392,31 @@ class Betrieb:
             self._journal_anwenden(jid, journal)
 
     def wartezeit_aendern(self,
-                          abfahrt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                          target: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode,
+                          kante: Tuple[EreignisLabelType, EreignisLabelType] | None,
                           wartezeit: int,
                           relativ: bool = False):
         """
         Wartezeit ändern
-        """
 
-        # todo : ueberarbeiten
+        Die Wartezeit kann geändert werden für:
+        - Eingehende Abhängigkeit
+        - Halt, Durchfahrt, Betriebshalt
+        """
 
         journal = JournalEntryGroup()
         journal.title = "Wartezeit ändern"
         journal.timestamp = self.anlage.simzeit_minuten
 
-        abfahrt_label, abfahrt_data = self._ereignis_label_finden(abfahrt, {'Ab'})
-        if abfahrt_label is None:
-            raise ValueError(f"Ungueltige Ereignisangabe {abfahrt}")
-
-        self._wartezeit_aendern(journal, abfahrt_label, "A", wartezeit, relativ=relativ)
+        ankunft, abfahrt = self._ankunft_abfahrt_finden(target)
+        if ankunft is None or abfahrt is None:
+            raise ValueError(f"Ungültige Ereignisangabe {target}")
+        if kante is None:
+            kante = (ankunft, abfahrt)
+        abfahrt_data = self.anlage.dispo_ereignisgraph.nodes[abfahrt]
         abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {'Bf', 'Anst'})
+
+        self._wartezeit_aendern(journal, abfahrt, kante, wartezeit, relativ=relativ)
 
         if journal.valid:
             jid = JournalIDType("Wartezeit", abfahrt_data.zid, abfahrt_bst)
@@ -416,30 +425,24 @@ class Betrieb:
 
     def _wartezeit_aendern(self,
                            journal: JournalEntryGroup,
-                           ereignis: EreignisLabelType,
-                           kantentyp: str,
+                           target: EreignisLabelType,
+                           kante: Tuple[EreignisLabelType, EreignisLabelType],
                            wartezeit: int,
                            relativ: bool = False):
 
-        n = ereignis
         eg = self.anlage.dispo_ereignisgraph
-        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=n)
+        egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=target)
+        edge_data = eg.edges[kante]
 
-        for pre in eg.predecessors(n):
-            edge_data = eg.edges[(pre, n)]
-            if edge_data.typ != kantentyp:
-                continue
-
-            if relativ:
-                try:
-                    startwert = edge_data.dt_fdl
-                except (AttributeError, KeyError):
-                    startwert = 0
-                dt = startwert + wartezeit
-            else:
-                dt = wartezeit
-            egj.change_edge(pre, n, dt_fdl=dt)
-
+        if relativ:
+            try:
+                startwert = edge_data.dt_fdl
+            except (AttributeError, KeyError):
+                startwert = 0
+            dt = startwert + wartezeit
+        else:
+            dt = wartezeit
+        egj.change_edge(*kante, dt_fdl=dt)
         journal.add_entry(egj)
 
     def abfahrt_zuruecksetzen(self,
