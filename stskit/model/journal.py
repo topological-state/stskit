@@ -4,8 +4,10 @@ Diese Änderungen können z.B. nach einem neuen Import vom Simulator auf die jew
 um den Betriebszustand wiederherzustellen.
 """
 
+from __future__ import annotations
 from collections import defaultdict
-from typing import Any, Dict, Hashable, Iterable, List, Mapping, NamedTuple, Optional, Protocol, Sequence, Set, Tuple, Union
+from collections.abc import Hashable, Mapping
+from typing import NamedTuple
 
 import networkx as nx
 
@@ -38,18 +40,18 @@ class JournalEntry[G, N, D]:
     """
 
     def __init__(self,
-                 target_graph: Optional[G] = None,
-                 target_node: Optional[N] = None):
+                 target_graph: G | None = None,
+                 target_node: N | None = None):
         self.target_graph = target_graph
         self.target_node = target_node
-        self.removed_nodes: Set[N] = set()
-        self.added_nodes: Dict[N, D] = {}
-        self.changed_nodes: Dict[N, D] = {}
-        self.removed_edges: Set[Tuple[N, N]] = set()
-        self.added_edges: Dict[Tuple[N, N], D] = {}
-        self.changed_edges: Dict[Tuple[N, N], D] = {}
+        self.removed_nodes: set[N] = set()
+        self.added_nodes: dict[N, D] = {}
+        self.changed_nodes: dict[N, D] = {}
+        self.removed_edges: set[tuple[N, N]] = set()
+        self.added_edges: dict[tuple[N, N], D] = {}
+        self.changed_edges: dict[tuple[N, N], D] = {}
 
-    def nodes(self) -> Set[Tuple[G, N]]:
+    def nodes(self) -> set[tuple[G, N]]:
         """
         Betroffene Knoten auflisten
         """
@@ -69,12 +71,12 @@ class JournalEntry[G, N, D]:
 
         return _nodes
 
-    def summary(self) -> Dict[Tuple[G, N], Set[str]]:
+    def summary(self) -> dict[tuple[G, N], set[str]]:
         """
         Zusammenfassung von Aenderungen
 
         Listet zu jedem betroffenen Knoten die gemachten Aenderungen.
-        Die Aenderungen werden als String in einem Set wiedergegeben.
+        Die Aenderungen werden als String in einem set wiedergegeben.
         '.' steht fuer den Targetknoten, '+' fuer einen neuen Knoten, '-' fuer einen geloeschten Knoten
         und '*' fuer einen geaenderten Knoten.
         """
@@ -179,13 +181,17 @@ class JournalEntry[G, N, D]:
         else:
             self.changed_edges[(u, v)] = data
 
-    def merge(self, other: 'JournalEntry'):
+    def merge(self, other: JournalEntry):
         """
         Mit anderem Journal zusammenführen
 
         Hat den gleichen Effekt, wie wenn die add-, change-, remove-Methoden für jedes Element aufgerufen würden.
         """
 
+        if self.target_graph != other.target_graph or self.target_node != other.target_node:
+            raise ValueError(f"JournalEntry.merge: Inkompatibler Journaleintrag {other.target_graph}/{other.target_node} "
+                             f"zu {self.target_graph}/{self.target_node}")
+        
         self.removed_edges.update(other.removed_edges)
         self.removed_nodes.update(other.removed_nodes)
         self.added_edges.update(other.added_edges)
@@ -195,7 +201,7 @@ class JournalEntry[G, N, D]:
         for node, data in other.changed_nodes.items():
             self.change_node(node, **data)
 
-    def replay(self, graph: Optional[nx.Graph] = None, graph_map: Optional[Mapping[G, nx.Graph]] = None) -> Dict[str, Set[N]]:
+    def replay(self, graph: nx.Graph | None = None, graph_map: Mapping[G, nx.Graph] | None = None) -> dict[str, set[N]]:
         """
         Journal abspielen
 
@@ -221,7 +227,7 @@ class JournalEntry[G, N, D]:
 
         Dictionary mit Fehlermeldungen.
         Moegliche Keys: 'remove_edge', 'add_edge', 'change_edge', 'remove_node', 'add_node', 'change_node'.
-        Values: Set von edge oder node Labels.
+        Values: set von edge oder node Labels.
         """
 
         fails = {}
@@ -289,7 +295,7 @@ class JournalEntry[G, N, D]:
 
 class JournalEntryGroup:
     def __init__(self, *entries):
-        self.entries: List[JournalEntry] = list(entries)
+        self.entries: list[JournalEntry] = list(entries)
         self.title: str = ""
         self.timestamp: int = 0
         self.valid: bool = False
@@ -301,15 +307,22 @@ class JournalEntryGroup:
     def remove_entry(self, entry: JournalEntry):
         self.entries.remove(entry)
 
-    def replay(self, graph_map: Optional[Union[Mapping[Hashable, nx.Graph]]] = None):
+    def merge(self, entry: JournalEntry | JournalEntryGroup):
+        if isinstance(entry, JournalEntry):
+            self.add_entry(entry)
+        elif isinstance(entry, JournalEntryGroup):
+            for _entry in entry.entries:
+                self.add_entry(_entry)
+
+    def replay(self, graph_map: Mapping[Hashable, nx.Graph] | None = None):
         for entry in self.entries:
             entry.replay(graph_map=graph_map)
 
-    def target_nodes(self) -> Set[Hashable]:
+    def target_nodes(self) -> set[Hashable]:
         nodes = {entry.target_node for entry in self.entries}
         return nodes
 
-    def nodes(self) -> Set[Tuple[Hashable, Hashable]]:
+    def nodes(self) -> set[tuple[Hashable, Hashable]]:
         """
         Betroffene Knoten auflisten
         """
@@ -317,17 +330,17 @@ class JournalEntryGroup:
         nodes = [entry.nodes() for entry in self.entries]
         return set().union(*nodes)
 
-    def summary(self) -> Dict[Tuple[Hashable, Hashable], Set[str]]:
+    def summary(self) -> dict[tuple[Hashable, Hashable], set[str]]:
         """
         Zusammenfassung von Aenderungen
 
         Listet zu jedem betroffenen Knoten die gemachten Aenderungen.
-        Die Aenderungen werden als String in einem Set wiedergegeben.
+        Die Aenderungen werden als String in einem set wiedergegeben.
         '.' steht fuer den Targetknoten, '+' fuer einen neuen Knoten, '-' fuer einen geloeschten Knoten
         und '*' fuer einen geaenderten Knoten.
         """
 
-        summary: Dict[Tuple[Hashable, Hashable], Set[str]] = defaultdict(set)
+        summary: dict[tuple[Hashable, Hashable], set[str]] = defaultdict(set)
         for entry in self.entries:
             entry_summary = entry.summary()
             for n in entry_summary:
@@ -335,12 +348,15 @@ class JournalEntryGroup:
 
         return summary
 
+
 class JournalIDType(NamedTuple):
     """
     Identifikation des Journals
 
     Ein Journal wird durch Typ, Zug, Bst identifiziert.
     """
+
+    # todo : diese klasse passt nicht in dieses modul
 
     typ: str  # Betriebshalt, Ankunft, Abfahrt, Kreuzung
     zid: int
@@ -362,9 +378,9 @@ class Journal:
     """
     
     def __init__(self):
-        self.entries: Dict[Hashable, Union[JournalEntry, JournalEntryGroup]] = {}
+        self.entries: dict[Hashable, JournalEntry | JournalEntryGroup] = {}
 
-    def replay(self, graph_map: Optional[Union[Mapping[Hashable, nx.Graph]]] = None):
+    def replay(self, graph_map: Mapping[Hashable, nx.Graph] | None = None):
         """
         Journal abspielen
 
