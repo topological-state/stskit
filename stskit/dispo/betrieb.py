@@ -417,6 +417,7 @@ class Betrieb:
         abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {'Bf', 'Anst'})
 
         self._wartezeit_aendern(journal, abfahrt, kante, wartezeit, relativ=relativ)
+        journal.valid = True
 
         if journal.valid:
             jid = JournalIDType("Wartezeit", abfahrt_data.zid, abfahrt_bst)
