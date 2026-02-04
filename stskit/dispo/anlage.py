@@ -302,7 +302,7 @@ class Anlage:
             strecken = {f"{strecke[0].name}-{strecke[-1].name}": strecke for strecke in strecken}
             for index, name in enumerate(sorted(strecken.keys())):
                 if self.strecken.auto.get(name, create_auto):
-                    self.strecken.add_strecke(name, strecken[name], 100 + index, True)
+                    self.strecken.add_strecke(name, strecken[name], 100 + index, auto=True)
                     self.aenderungen.add('strecken')
 
     def liniengraph_konfigurieren(self):

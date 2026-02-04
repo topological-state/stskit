@@ -110,9 +110,13 @@
                         "type": "string"
                     },
                     "ordnung": {
-                        "description": "Sortierordnung, 1 = Hauptstrecke",
+                        "description": "Sortierordnung",
                         "type": "integer",
                         "minimum": 1
+                    },
+                    "haupt": {
+                        "description": "Hauptstrecke = Voreinstellung im Streckenfahrplan. Es darf nur eine Strecke True sein.",
+                        "type": "boolean"
                     },
                     "stationen": {
                         "description": "Stationsliste",

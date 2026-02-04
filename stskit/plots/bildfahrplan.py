@@ -78,21 +78,24 @@ class BildfahrplanPlot:
         :return: None
         """
 
-        strecken = [(name, len(strecke)) for name, strecke in self.anlage.strecken.strecken.items()]
-        try:
-            laengste_strecke = max(strecken, key=lambda x: x[1])
-            laengste_strecke = laengste_strecke[0]
-        except (ValueError, IndexError):
-            laengste_strecke = ""
+        def laengste_strecke() -> str:
+            _strecken = [(_name, len(_strecke)) for _name, _strecke in self.anlage.strecken.strecken.items()]
+            try:
+                _laengste_strecke = max(_strecken, key=lambda x: x[1])
+                _laengste_strecke = _laengste_strecke[0]
+            except (ValueError, IndexError):
+                _laengste_strecke = ""
+            return _laengste_strecke
 
         try:
             self.strecken_name = self.anlage.strecken.hauptstrecke
             strecke = self.anlage.strecken.strecken[self.anlage.strecken.hauptstrecke]
         except KeyError:
-            self.strecken_name = ""
+            self.strecken_name = laengste_strecke()
             try:
-                strecke = self.anlage.strecken.strecken[laengste_strecke]
+                strecke = self.anlage.strecken.strecken[self.strecken_name]
             except KeyError:
+                self.strecken_name = ""
                 strecke = []
 
         try:

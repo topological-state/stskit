@@ -606,10 +606,7 @@ class StreckenEditor(QObject):
         self.anlage_strecken = {k: self.anlage.strecken.strecken[k] for k in self.anlage.strecken.strecken}
         self.auto_strecken = {k for k in self.anlage.strecken.strecken if self.anlage.strecken.auto.get(k, False)}
         self.alle_strecken = self.anlage_strecken.copy()
-        try:
-            self.hauptstrecken_name = [name for name, ordnung in self.anlage.strecken.ordnung.items() if ordnung == 1][0]
-        except IndexError:
-            self.hauptstrecken_name = None
+        self.hauptstrecken_name = self.anlage.strecken.hauptstrecke
         self.edited_strecken = set()
         self.deleted_strecken = set()
 
@@ -624,16 +621,14 @@ class StreckenEditor(QObject):
     def save_to_anlage(self):
         auto_idx_0 = max(len(self.alle_strecken) + 1, 100)
         for idx, name in enumerate(self.alle_strecken):
-            if name == self.hauptstrecken_name:
-                ordnung = 1
-            else:
-                ordnung = idx + 2 if name not in self.auto_strecken else auto_idx_0 + idx
+            haupt = name == self.hauptstrecken_name
+            ordnung = idx + 1 if name not in self.auto_strecken else auto_idx_0 + idx
             if name in self.edited_strecken:
-                self.anlage.strecken.add_strecke(name, self.alle_strecken[name], ordnung, False)
+                self.anlage.strecken.add_strecke(name, self.alle_strecken[name], ordnung, auto=False, hauptstrecke=haupt)
                 self.auto_strecken.discard(name)
             elif name in self.anlage.strecken.ordnung:
                 self.anlage.strecken.ordnung[name] = ordnung
-            if ordnung == 1:
+            if haupt:
                 self.anlage.strecken.hauptstrecke = name
         for name in self.deleted_strecken:
             self.anlage.strecken.remove_strecke(name)

@@ -333,8 +333,12 @@ class Strecken:
     Verwaltet konfigurierte Verbindungen zwischen Bahnhöfen.
     Strecken werden aus dem Liniengraph automatisch erstellt oder aus der Konfiguration gelesen.
 
-    Sortierung:
-    Die Streckenliste kann durch das Attribut `ordnung` geordnet werden.
+    Attribute:
+        - liniengraph:
+        - strecken: Die Streckendefinition ist ein Dictionary Streckenname -> Liste von Stationen.
+        - ordnung: Die Streckenliste wird anhand dieses Index sortiert.
+        - auto: Strecke wurde automatisch generiert. False, wenn der Benutzer sie bearbeitet hat.
+        - hauptstrecke: Name der Hauptstrecke. Wird beim Oeffnen des Streckenfahrplans voreingestellt.
     """
 
     def __init__(self):
@@ -369,7 +373,9 @@ class Strecken:
                     name: str,
                     stationen: Iterable[BahnhofElement],
                     ordnung: int = 99,
-                    auto: bool = True) -> None:
+                    auto: bool = True,
+                    hauptstrecke: bool | None = None,
+                    ) -> None:
         """
         Strecke definieren
         """
@@ -381,8 +387,11 @@ class Strecken:
         self.strecken[name] = list(stationen)
         self.ordnung[name] = ordnung
         self.auto[name] = auto
-        if ordnung == 1:
-            self.hauptstrecke = name
+        if hauptstrecke is not None:
+            if hauptstrecke:
+                self.hauptstrecke = name
+            elif self.hauptstrecke == name:
+                self.hauptstrecke = None
 
     def remove_strecke(self, name: str):
         """
@@ -444,6 +453,7 @@ class Strecken:
         """
 
         strecken = {}
+        haupt = {}
         ordnung = {}
         auto = {}
         for strecke_kfg in strecken_konfig:
@@ -459,6 +469,7 @@ class Strecken:
                 key = "-".join((str(strecke[0]), str(strecke[-1])))
 
             strecken[key] = strecke
+            haupt[key] = strecke_kfg.get('haupt', False)
             ordnung[key] = strecke_kfg.get('ordnung', 99)
             auto[key] = strecke_kfg.get('auto', True)
 
@@ -467,15 +478,11 @@ class Strecken:
             self.ordnung[key] = ordnung[key]
             self.auto[key] = auto[key]
 
-        try:
-            hauptstrecke = sorted(ordnung.keys(), key=ordnung.get)[0]
-            if ordnung[hauptstrecke] == 1:
-                self.hauptstrecke = hauptstrecke
-            else:
-                self.hauptstrecke = None
-        except IndexError:
+        hauptstrecken = [k for k, v in haupt.items() if v]
+        if hauptstrecken:
+            self.hauptstrecke = min(hauptstrecken, key=ordnung.get)
+        else:
             self.hauptstrecke = None
-
 
     def export_konfiguration(self) -> Sequence[Dict[str, Any]]:
         """
@@ -487,6 +494,7 @@ class Strecken:
         for key in sorted(self.ordnung.keys(), key=self.ordnung.get):
             stationen = [str(station) for station in self.strecken[key]]
             konfig.append({'name': key,
+                           'haupt': key == self.hauptstrecke,
                            'ordnung': self.ordnung[key],
                            'auto': self.auto[key],
                            'stationen': stationen})
