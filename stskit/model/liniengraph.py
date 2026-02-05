@@ -347,7 +347,16 @@ class Strecken:
         self.strecken: Dict[str, List[BahnhofElement]] = {}
         self.ordnung: Dict[str, int] = {}
         self.auto: Dict[str, bool] = {}
-        self.hauptstrecke: Optional[str] = None
+        self._hauptstrecke: Optional[str] = None
+
+    @property
+    def hauptstrecke(self) -> str | None:
+        return self._hauptstrecke
+
+    @hauptstrecke.setter
+    def hauptstrecke(self, name: str | None) -> None:
+        if name is None or name in self.strecken:
+            self._hauptstrecke = name
 
     def streckengraph(self, strecke: str) -> LinienGraph:
         """
@@ -374,7 +383,6 @@ class Strecken:
                     stationen: Iterable[BahnhofElement],
                     ordnung: int = 99,
                     auto: bool = True,
-                    hauptstrecke: bool | None = None,
                     ) -> None:
         """
         Strecke definieren
@@ -387,11 +395,6 @@ class Strecken:
         self.strecken[name] = list(stationen)
         self.ordnung[name] = ordnung
         self.auto[name] = auto
-        if hauptstrecke is not None:
-            if hauptstrecke:
-                self.hauptstrecke = name
-            elif self.hauptstrecke == name:
-                self.hauptstrecke = None
 
     def remove_strecke(self, name: str):
         """
@@ -410,8 +413,8 @@ class Strecken:
             del self.auto[name]
         except KeyError:
             pass
-        if self.hauptstrecke == name:
-            self.hauptstrecke = None
+        if self._hauptstrecke == name:
+            self._hauptstrecke = None
 
     def clear(self):
         """
@@ -421,7 +424,7 @@ class Strecken:
         self.strecken.clear()
         self.ordnung.clear()
         self.auto.clear()
-        self.hauptstrecke = None
+        self._hauptstrecke = None
 
     def validate(self, bahnhofgraph: BahnhofGraph):
         """

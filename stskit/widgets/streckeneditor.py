@@ -621,15 +621,13 @@ class StreckenEditor(QObject):
     def save_to_anlage(self):
         auto_idx_0 = max(len(self.alle_strecken) + 1, 100)
         for idx, name in enumerate(self.alle_strecken):
-            haupt = name == self.hauptstrecken_name
             ordnung = idx + 1 if name not in self.auto_strecken else auto_idx_0 + idx
             if name in self.edited_strecken:
-                self.anlage.strecken.add_strecke(name, self.alle_strecken[name], ordnung, auto=False, hauptstrecke=haupt)
+                self.anlage.strecken.add_strecke(name, self.alle_strecken[name], ordnung, auto=False)
                 self.auto_strecken.discard(name)
             elif name in self.anlage.strecken.ordnung:
                 self.anlage.strecken.ordnung[name] = ordnung
-            if haupt:
-                self.anlage.strecken.hauptstrecke = name
+        self.anlage.strecken.hauptstrecke = self.hauptstrecken_name
         for name in self.deleted_strecken:
             self.anlage.strecken.remove_strecke(name)
             self.auto_strecken.discard(name)
