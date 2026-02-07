@@ -228,7 +228,7 @@ class Zugschema:
             name = name.lower()
         else:
             try:
-                name = REGIONEN_SCHEMA[region.split()[0]].lower()
+                name = REGIONEN_SCHEMA[region.split(maxsplit=1)[0]].lower()
             except (IndexError, KeyError):
                 name = "deutschland"
 
