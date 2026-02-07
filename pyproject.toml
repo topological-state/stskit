@@ -28,6 +28,7 @@ dev = [
     "nuitka>=2.7.7",
     "pynose>=1.5.5",
     "ruff>=0.14.10",
+    "ty>=0.0.15",
 ]
 
 [tool.uv]
@@ -37,3 +38,26 @@ dev = [
 select = ["A", "ASYNC", "B", "E", "F", "PLC", "PLE", "W", "YTT"]
 # select = ["A", "ASYNC", "B", "COM", "E", "F", "PLC", "PLE", "RUF", "W", "YTT"]
 ignore = ["A001", "A002", "B007", "B008", "B904", "B905", "F401", "F821", "F841", "E501", "E741", "PLC0206", "W291", "W293"]
+
+[tool.ty.rules]
+# todo: enable rules one by one and fix errors!
+invalid-argument-type = "ignore"
+invalid-assignment = "ignore"
+#invalid-context-manager = "ignore"
+invalid-method-override = "ignore"
+invalid-parameter-default = "ignore"
+invalid-return-type = "ignore"
+#missing-argument = "ignore"
+#no-matching-overload = "ignore"
+#not-iterable = "ignore"
+#not-subscriptable = "ignore"
+possibly-missing-attribute = "ignore"
+unresolved-attribute = "ignore"
+unresolved-reference = "ignore"
+#unsupported-operator = "ignore"
+
+[tool.ty.src]
+include = [
+    "stskit",
+#    "tests",
+]
