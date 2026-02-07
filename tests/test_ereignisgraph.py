@@ -6,11 +6,25 @@ from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphEdge, Ereigni
 from stskit.model.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode, PlanungParams, ZielLabelType
 
 
-class TestEreignisPrognose(unittest.TestCase):
+class TestEreignisGraph(unittest.TestCase):
     """
-    Prognose testen in einem Beispielgraph
+    Ereignisgraph testen
     """
     def szenario1(self):
+        """
+        Beispielgraph 1
+
+        Zielgraph:
+            0 E11  -P->  1 D11  -P->  2 H11E12  -E->  3 H12  -P->  4 H12K13  -K-> 6
+            5 E13  -P->  6 H13  -P->  7 H13F14  -P->  8 A13
+            7  -F->  9 H14  -P->  10 A14
+
+        Ereignisgraph:
+            11Ab  -P->  11An  -D->  11Ab  -P->  11An  -E->  11E  -H->  12Ab  -P->  12An  -K->  13K
+            13Ab  -P->  13An  -H-> ->  13K  -H->  13Ab  -P->  13An  -F-> ->  13F  -H->  13Ab  -P->  13An
+            13F  -H-> 14Ab  -P->  14An
+        """
+
         self.zielgraph = ZielGraph()
 
         nodes = [
@@ -92,7 +106,7 @@ class TestEreignisPrognose(unittest.TestCase):
                 typ='E',
                 plan='Agl 2',
                 gleis='Agl 2',
-                flags='K(13)',
+                flags='',
                 mindestaufenthalt=PlanungParams.mindestaufenthalt_kupplung,
                 status='',
                 p_an=330,
@@ -252,6 +266,14 @@ class TestEreignisPrognose(unittest.TestCase):
         self.assertDictEqual(types, expected_types, "Kantentypen")
 
     def test_zugpfad(self):
+        """
+        Zugpfad-Methode testen
+
+            11Ab  -P->  11An  -D->  11Ab  -P->  11An  -E->  11E  -H->  12Ab  -P->  12An  -K->  13K
+            13Ab  -P->  13An  -H-> ->  13K  -H->  13Ab  -P->  13An  -F-> ->  13F  -H->  13Ab  -P->  13An
+            13F  -H-> 14Ab  -P->  14An
+
+        """
         self.szenario1()
         act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(11)]
         exp = [(11, 'Ab'), (11, 'An'), (11, 'Ab'), (11, 'An'), (11, 'E')]
@@ -266,19 +288,52 @@ class TestEreignisPrognose(unittest.TestCase):
         exp = [(14, 'Ab'), (14, 'An')]
         self.assertListEqual(act, exp, "Zug 14")
 
-        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(11, kuppeln=True)]
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(11, ersatz=True)]
+        exp = [(11, 'Ab'), (11, 'An'), (11, 'Ab'), (11, 'An'), (11, 'E'), (12, 'Ab'), (12, 'An'),]
+        self.assertListEqual(act, exp, "Zug 11 ersetzt")
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(11, ersatz=True, kuppeln=True)]
         exp = [(11, 'Ab'), (11, 'An'), (11, 'Ab'), (11, 'An'), (11, 'E'), (12, 'Ab'), (12, 'An'),
                (13, 'K'), (13, 'Ab'), (13, 'An'), (13, 'F'), (13, 'Ab'), (13, 'An')]
-        self.assertListEqual(act, exp, "Zug 11 gekuppelt")
-        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(12, kuppeln=True)]
+        self.assertListEqual(act, exp, "Zug 11 durchgehend")
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(12, ersatz=True, kuppeln=True)]
         exp = [(12, 'Ab'), (12, 'An'), (13, 'K'), (13, 'Ab'), (13, 'An'), (13, 'F'), (13, 'Ab'), (13, 'An')]
         self.assertListEqual(act, exp, "Zug 12 gekuppelt")
-        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(13, kuppeln=True)]
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(13, ersatz=True, kuppeln=True)]
         exp = [(13, 'Ab'), (13, 'An'), (13, 'K'), (13, 'Ab'), (13, 'An'), (13, 'F'), (13, 'Ab'), (13, 'An')]
         self.assertListEqual(act, exp, "Zug 13")
-        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(14, kuppeln=True)]
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(13, kuppeln=True, fluegeln=True)]
+        exp = [(13, 'Ab'), (13, 'An'), (13, 'K'), (13, 'Ab'), (13, 'An'), (13, 'F'), (14, 'Ab'), (14, 'An')]
+        self.assertListEqual(act, exp, "Zug 13 fluegeln")
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.zugpfad(14, kuppeln=True, fluegeln=True)]
         exp = [(14, 'Ab'), (14, 'An')]
         self.assertListEqual(act, exp, "Zug 14")
+
+    def test_rueckpfad(self):
+        self.szenario1()
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.rueckpfad(11)]
+        exp = [(11, 'Ab'), (11, 'An'), (11, 'Ab'), (11, 'An'), (11, 'E')]
+        self.assertListEqual(act, list(reversed(exp)), "Zug 11")
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.rueckpfad(12)]
+        exp = [(12, 'Ab'), (12, 'An')]
+        self.assertListEqual(act, list(reversed(exp)), "Zug 12")
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.rueckpfad(13)]
+        exp = [(13, 'Ab'), (13, 'An'), (13, 'K'), (13, 'Ab'), (13, 'An'), (13, 'F'), (13, 'Ab'), (13, 'An')]
+        self.assertListEqual(act, list(reversed(exp)), "Zug 13")
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.rueckpfad(14)]
+        exp = [(14, 'Ab'), (14, 'An')]
+        self.assertListEqual(act, list(reversed(exp)), "Zug 14")
+
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.rueckpfad(13, ersatz=True)]
+        exp = [(13, 'Ab'), (13, 'An'), (13, 'K'), (13, 'Ab'), (13, 'An'), (13, 'F'), (13, 'Ab'), (13, 'An')]
+        self.assertListEqual(act, list(reversed(exp)), "Zug 13 durchgehend")
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.rueckpfad(13, fluegeln=True)]
+        self.assertListEqual(act, list(reversed(exp)), "Zug 13 fluegeln")
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.rueckpfad(13, fluegeln=True, kuppeln=True)]
+        exp = [(12, 'Ab'), (12, 'An'), (13, 'K'), (13, 'Ab'), (13, 'An'), (13, 'F'), (13, 'Ab'), (13, 'An')]
+        self.assertListEqual(act, list(reversed(exp)), "Zug 13 fluegeln + kuppeln")
+        act = [(n[0], self.ereignisgraph.nodes[n]['typ']) for n in self.ereignisgraph.rueckpfad(14, ersatz=True, fluegeln=True)]
+        exp = [(13, 'Ab'), (13, 'An'), (13, 'K'), (13, 'Ab'), (13, 'An'), (13, 'F'), (14, 'Ab'), (14, 'An')]
+        self.assertListEqual(act, list(reversed(exp)), "Zug 14 fluegeln")
 
     def test_prognose_1(self):
         """

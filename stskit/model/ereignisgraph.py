@@ -26,16 +26,15 @@ Der Ablauf ist wie folgt:
 """
 
 from abc import ABCMeta, abstractmethod
+from collections.abc import Generator
 import copy
-import itertools
 import logging
 import math
-from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Optional, Sequence, Set, Tuple, TypeVar, Union
+from typing import List, NamedTuple, Optional
 
 import networkx as nx
 
 from stskit.plugin.stsobj import Ereignis, format_minutes
-from stskit.plugin.stsobj import time_to_minutes
 from stskit.model.graphbasics import dict_property
 from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.zielgraph import ZielGraph, ZielGraphNode, ZielGraphEdge, ZielLabelType, MIN_MINUTES
@@ -215,11 +214,12 @@ class EreignisGraph(nx.DiGraph):
 
     def __init__(self, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
-        self.zuege: Set[int] = set()
-        self.zuganfaenge: Dict[int, EreignisLabelType] = {}
-        self.zugpositionen: Dict[int, EreignisLabelType] = {}
-        self.zugplangleise: Dict[int, str] = {}
-        self.zugplanereignisse: Dict[int, EreignisLabelType] = {}
+        self.zuege: set[int] = set()
+        self.zuganfaenge: dict[int, EreignisLabelType] = {}
+        self.zugenden: dict[int, EreignisLabelType] = {}
+        self.zugpositionen: dict[int, EreignisLabelType] = {}
+        self.zugplangleise: dict[int, str] = {}
+        self.zugplanereignisse: dict[int, EreignisLabelType] = {}
 
     def copy(self, as_view=False):
         obj = super().copy(as_view)
@@ -227,12 +227,14 @@ class EreignisGraph(nx.DiGraph):
         if as_view:
             obj.zuege = self.zuege
             obj.zuganfaenge = self.zuganfaenge
+            obj.zugenden = self.zugenden
             obj.zugpositionen = self.zugpositionen
             obj.zugplangleise = self.zugplangleise
             obj.zugplanereignisse = self.zugplanereignisse
         else:
             obj.zuege = self.zuege.copy()
             obj.zuganfaenge = self.zuganfaenge.copy()
+            obj.zugenden = self.zugenden.copy()
             obj.zugpositionen = self.zugpositionen.copy()
             obj.zugplangleise = self.zugplangleise.copy()
             obj.zugplanereignisse = self.zugplanereignisse.copy()
@@ -280,53 +282,147 @@ class EreignisGraph(nx.DiGraph):
 
         return result
 
-    def zugpfad(self, zid: int,
-                start: Optional[EreignisLabelType] = None,
-                stop: Optional[EreignisLabelType] = None,
-                kuppeln: bool = False) -> Iterable[EreignisLabelType]:
+    def zugpfad(self,
+                zid: int,
+                start: EreignisLabelType | None = None,
+                stop: EreignisLabelType | None = None,
+                ersatz: bool = False,
+                kuppeln: bool = False,
+                fluegeln: bool = False,
+                ) -> Generator[EreignisLabelType, None, None]:
         """
-        Generator für die Knoten eines Zuges
+        Generator für die fortlaufenden Ereignisse eines Zuges
         
-        Beginnend mit dem Startknoten liefert der Generator die Knoten-IDs eines Zuges
+        Beginnend mit dem Startknoten liefert der Generator die Ereignis-IDs eines Zuges
         in der Reihenfolge ihres Auftretens.
 
-        :param zid: Zug-ID
-        :param start: Knoten-ID des ersten Knotens.
-            Falls None (default) der erste Knoten des Zuges mit ID (zid, 0).
-        :param stop: Knoten-ID des ersten nicht mehr gelieferten Knotens.
-            Falls None (default) werden die Knoten bis einschliesslich des letzten des Zuges geliefert.
-        :param kuppeln: Wenn True, fährt der Generator mit dem Folgezug (nach Ersatz oder Kuppeln) fort.
-            Beim Flügeln, verläuft der Pfad immer über den Stammzug.
-        :return: Generator von Knoten-IDs.
+        Das Verhalten des Generators bei Ersatz/Flügeln/Kuppeln kann mit Flags angepasst werden.
+
+        Args:
+            zid: Zug-ID
+            start: Knoten-ID des ersten Knotens.
+                Falls None (default) der erste Knoten des Zuges mit ID (zid, 0).
+            stop: Knoten-ID des ersten nicht mehr gelieferten Knotens.
+                Falls None (default) werden die Knoten bis einschliesslich des letzten des Zuges geliefert.
+            ersatz: Wenn True, fährt der Generator bei Ersatz mit dem Folgezug fort.
+                Ansonsten stoppt der Generator nach dem Ankunftsknoten des Stammzuges.
+            kuppeln: Wenn True, fährt der Generator beim Kuppeln mit dem Folgezug fort.
+                Ansonsten stoppt der Generator nach dem Ankunftsknoten des endenden Zuges.
+            fluegeln: Wenn False (default), läuft der Generator durchgehend über den Stammzug.
+                Wenn True, läuft der Generator über den geflügelten Zug.
+
+        Returns:
+            Generator von Knoten-IDs.
         """
 
-        node = self.zuganfaenge[zid]
-        if not self.has_node(node):
-            logger.debug(f"EreignisGraph.zugpfad(zid={zid}, start={start}, stop={stop}), node {node} fehlt.")
+        aktuell = self.zuganfaenge[zid]
+        if not self.has_node(aktuell):
+            logger.debug(f"EreignisGraph.zugpfad(zid={zid}, start={start}, stop={stop}), node {aktuell} fehlt.")
             return
 
-        while node is not None:
-            if node == start:
+        while aktuell is not None:
+            if aktuell == start:
                 start = None
-            if node == stop:
+            if aktuell == stop:
                 return
             if start is None:
-                yield node
+                yield aktuell
 
-            for n in self.successors(node):
-                if n.zid == zid:
-                    node = n
+            for nachher in self.successors(aktuell):
+                knoten_typ = self.nodes[aktuell]['typ']
+                kanten_typ = self.edges[(aktuell, nachher)]['typ']
+
+                if knoten_typ == 'F' and fluegeln:
+                    if nachher.zid == zid:
+                        # stamm ignorieren
+                        continue
+                    elif kanten_typ == 'H':
+                        # fluegel
+                        aktuell = nachher
+                        zid = nachher.zid
+                        break
+                elif nachher.zid == zid:
+                    aktuell = nachher
                     break
-                elif kuppeln and self.nodes[n]['typ'] == 'K':
-                    node = n
-                    zid = n.zid
+                elif ersatz and knoten_typ == 'E' and kanten_typ == 'H':
+                    aktuell = nachher
+                    zid = nachher.zid
                     break
-                elif kuppeln and self.nodes[node]['typ'] == 'E' and self.edges[(node, n)]['typ'] == 'H':
-                    node = n
-                    zid = n.zid
+                elif kuppeln and kanten_typ == 'K' and self.nodes[nachher]['typ'] == 'K':
+                    aktuell = nachher
+                    zid = nachher.zid
                     break
             else:
-                node = None
+                aktuell = None
+
+    def rueckpfad(self,
+                  zid: int,
+                  start: EreignisLabelType | None = None,
+                  stop: EreignisLabelType | None = None,
+                  ersatz: bool = False,
+                  fluegeln: bool = False,
+                  kuppeln: bool = False,
+                  ) -> Generator[EreignisLabelType, None, None]:
+        """
+        Rückwärts laufender Generator für die Ereignisse eines Zuges
+
+        Beginnend mit dem Startknoten liefert der Generator die Ereignis-IDs eines Zuges
+        entgegen der Reihenfolge ihres Auftretens.
+
+        Das Verhalten des Generators bei Ersatz/Flügeln/Kuppeln kann mit Flags angepasst werden.
+
+        Args:
+            zid: Zug-ID
+            start: Knoten-ID des ersten Knotens.
+                Falls None (default) der letzte Knoten des Zuges.
+            stop: Knoten-ID des ersten nicht mehr gelieferten Knotens.
+                Falls None (default) werden die Knoten bis einschliesslich des letzten des Zuges geliefert.
+            ersatz: Wenn True, fährt der Generator bei Ersatz mit dem Stammzug fort.
+                Ansonsten stoppt der Generator nach dem Abfahrtsknoten des Folgezuges.
+            fluegeln: Wenn True, fährt der Generator mit dem Stammzug fort.
+                Ansonsten stoppt der Generator nach dem Abfahrtsknoten des Folgezuges.
+            kuppeln: Wenn False (default), läuft der Generator durchgehend über den Stammzug.
+                Wenn True, läuft der Generator über den endenden Zug.
+        Returns:
+            Generator von Knoten-IDs.
+        """
+
+        aktuell = self.zugenden[zid]
+        if not self.has_node(aktuell):
+            logger.debug(f"EreignisGraph.rueckpfad(zid={zid}, start={start}, stop={stop}), node {aktuell} fehlt.")
+            return
+
+        while aktuell is not None:
+            if aktuell == start:
+                start = None
+            if aktuell == stop:
+                return
+            if start is None:
+                yield aktuell
+
+            for vorher in self.predecessors(aktuell):
+                knoten_typ = self.nodes[vorher]['typ']
+                kanten_typ = self.edges[(vorher, aktuell)]['typ']
+                if self.nodes[aktuell]['typ'] == 'K' and kuppeln:
+                    if kanten_typ == 'K':
+                        aktuell = vorher
+                        zid = vorher.zid
+                        break
+                    else:
+                        continue
+                elif vorher.zid == zid:
+                    aktuell = vorher
+                    break
+                elif ersatz and knoten_typ == 'E':
+                    aktuell = vorher
+                    zid = vorher.zid
+                    break
+                elif fluegeln and knoten_typ == 'F' and kanten_typ == 'H':
+                    aktuell = vorher
+                    zid = vorher.zid
+                    break
+            else:
+                aktuell = None
 
     def prev_ereignis(self, label: EreignisLabelType, typ: Optional[str] = None) -> Optional[EreignisLabelType]:
         """
@@ -392,6 +488,21 @@ class EreignisGraph(nx.DiGraph):
                     break
             else:
                 self.zuganfaenge[node.zid] = node
+
+    def _zugenden_suchen(self):
+        """
+        Endknoten jedes Zuges markieren
+
+        Der Endknoten eines Zuges ist in zugenden verzeichnet.
+        Dies ist unabhängig davon, ob der Zug ausfährt oder in einen andern Zug übergeht.
+        """
+
+        for node in self.nodes:
+            for s in self.successors(node):
+                if s.zid == node.zid:
+                    break
+            else:
+                self.zugenden[node.zid] = node
 
     def zielgraph_importieren(self, zg: ZielGraph, clean=False, quelle='sts'):
         """
@@ -464,6 +575,7 @@ class EreignisGraph(nx.DiGraph):
 
         self._import_validieren()
         self._zuganfaenge_suchen()
+        self._zugenden_suchen()
 
     def _import_validieren(self):
         """
@@ -1108,7 +1220,7 @@ class EreignisGraph(nx.DiGraph):
             if zid is not None:
                 kwargs['zid'] = zid
 
-        for label in self.zugpfad(start_zid, kuppeln=True):
+        for label in self.zugpfad(start_zid, ersatz=True, kuppeln=True):
             if start is not None:
                 if label == start:
                     start = None
