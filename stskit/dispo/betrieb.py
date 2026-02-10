@@ -17,7 +17,7 @@ import itertools
 import logging
 import math
 import os
-from typing import Any, Optional, Set, Tuple, Union
+from typing import Any, Optional, Set, Tuple, Union, NamedTuple
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.journal import JournalEntry, JournalIDType, JournalEntryGroup
@@ -78,16 +78,15 @@ class Betrieb:
             journal.title = "Abfahrt abwarten"
             journal.timestamp = self.anlage.simzeit_minuten
 
-        abzuwarten_label, abzuwarten_data = self._ereignis_label_finden(abzuwartende_abfahrt, {'Ab'})
+        abzuwarten_label = self._ereignis_label_finden(abzuwartende_abfahrt, {'Ab'})
         if abzuwarten_label is None:
-            abzuwarten_label, _ = self._ereignis_label_finden(abzuwartende_abfahrt, {'An'})
+            abzuwarten_label = self._ereignis_label_finden(abzuwartende_abfahrt, {'An'})
             wartezeit = max(1, wartezeit)
 
         wartend_label, wartend_data = self._wartende_abfahrt_finden(journal, wartende_abfahrt)
         if wartend_label is None or abzuwarten_label is None:
             raise ValueError(f"Ungueltige Ereignisangaben {abzuwartende_abfahrt=} -> {wartende_abfahrt=}")
 
-        abzuwarten_bst = self.anlage.bahnhofgraph.find_superior(abzuwarten_data.plan_bst, {'Bf', 'Anst'})
         wartend_bst = self.anlage.bahnhofgraph.find_superior(wartend_data.plan_bst, {'Bf', 'Anst'})
 
         egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=wartend_label)
@@ -144,12 +143,11 @@ class Betrieb:
             journal.title = "Ankunft abwarten"
             journal.timestamp = self.anlage.simzeit_minuten
 
-        abzuwarten_label, abzuwarten_data = self._ereignis_label_finden(abzuwartende_ankunft, {'An'})
+        abzuwarten_label = self._ereignis_label_finden(abzuwartende_ankunft, {'An'})
         wartend_label, wartend_data = self._wartende_abfahrt_finden(journal, wartende_abfahrt)
         if wartend_label is None or abzuwarten_label is None:
             raise ValueError(f"Ungueltige Ereignisangaben {abzuwartende_ankunft=} -> {wartende_abfahrt=}")
 
-        abzuwarten_bst = self.anlage.bahnhofgraph.find_superior(abzuwarten_data.plan_bst, {'Bf', 'Anst'})
         wartend_bst = self.anlage.bahnhofgraph.find_superior(wartend_data.plan_bst, {'Bf', 'Anst'})
 
         egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=wartend_label)
@@ -230,33 +228,31 @@ class Betrieb:
             journal.title = "Kreuzung"
             journal.timestamp = self.anlage.simzeit_minuten
 
-        labels = [self._ankunft_abfahrt_finden(k) for k in knoten]
-        labels_set = {l for l in itertools.chain(*labels) if l is not None}
-        zids_set = {l.zid for l in labels_set}
-        if len(labels_set) != 4 or len(zids_set) != 2:
+        zugpfade = [self._halt_ereignispfad_finden(k) for k in knoten]
+        laengen = [len(pfad) for pfad in zugpfade]
+        if min(laengen) < 2:
             raise ValueError("Ungültige/unvollständige Kreuzungsangaben.")
 
-        for label in labels:
-            kante = self.anlage.dispo_ereignisgraph.get_edge_data(*label)
+        for pfad in zugpfade:
+            kante = self.anlage.dispo_ereignisgraph.get_edge_data(*pfad[-2:])
             if kante.typ == 'D':
-                self._betriebshalt_statt_durchfahrt(journal, label[0], wartezeit)
+                self._betriebshalt_statt_durchfahrt(journal, pfad[-2], wartezeit)
 
-        ankunft_labels = [l[0] for l in labels]
-        abfahrt_labels = [l[1] for l in labels]
+        ankunft_labels = [l[0] for l in zugpfade]
+        abfahrt_labels = [l[-1] for l in zugpfade]
 
         abfahrt_data = [self.anlage.dispo_ereignisgraph.nodes[l] for l in abfahrt_labels]
         bst = {self.anlage.bahnhofgraph.find_superior(d.plan_bst, {'Bf', 'Anst'}) for d in abfahrt_data}
         if len(bst) != 1:
             raise ValueError("Kreuzung in verschiedenen Bahnhöfen nicht möglich")
 
-        warte_kanten = itertools.product(ankunft_labels, abfahrt_labels)
+        warte_kanten = [(ankunft_labels[0], abfahrt_labels[1]), (ankunft_labels[1], abfahrt_labels[0])]
         for kante in warte_kanten:
-            if kante[0].zid != kante[1].zid:
-                edge = EreignisGraphEdge(typ="A", zid=kante[1].zid, dt_fdl=wartezeit or 0, quelle='fdl')
-                egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=kante[1])
-                egj.add_edge(*kante, **edge)
-                journal.add_entry(egj)
-                journal.valid = True
+            edge = EreignisGraphEdge(typ="A", zid=kante[1].zid, dt_fdl=wartezeit or 0, quelle='fdl')
+            egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=kante[1])
+            egj.add_edge(*kante, **edge)
+            journal.add_entry(egj)
+            journal.valid = True
 
         if not dry_run and journal.valid:
             items = sorted(zip(abfahrt_labels, abfahrt_data, bst), key=lambda x: x[0].zeit)
@@ -273,8 +269,8 @@ class Betrieb:
         pass
 
     def _ankunft_abfahrt_finden(self,
-                                ereignis_oder_ziel: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode) -> tuple[
-                                EreignisLabelType | None, EreignisLabelType | None]:
+                                ereignis_oder_ziel: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode,
+                                ) -> tuple[EreignisLabelType | None, EreignisLabelType | None]:
         """
         Zu einem Ereignis oder Ziel gehörende Ankunft- und Abfahrtereignisse finden
 
@@ -284,57 +280,116 @@ class Betrieb:
         Returns:
             Ankunft und Abfahrtereignisse. None, wenn nicht gefunden.
         """
-        vorher_label, _ = self._ereignis_label_finden(ereignis_oder_ziel, {'An', 'Ab'})
+        vorher_label = self._ereignis_label_finden(ereignis_oder_ziel, {'An', 'Ab'})
+        if vorher_label is None:
+            return None, None
         if vorher_label.typ == 'An':
             ankunft1_label = vorher_label
             abfahrt1_label = self.anlage.dispo_ereignisgraph.next_ereignis(ankunft1_label, "Ab")
         elif vorher_label.typ == 'Ab':
             abfahrt1_label = vorher_label
-            ankunft1_label = self.anlage.dispo_ereignisgraph.prev_ereignis(abfahrt1_label, "An")
+            ankunft1_label = self.anlage.dispo_ereignisgraph.prev_ereignis(abfahrt1_label)
         else:
             ankunft1_label = None
             abfahrt1_label = None
         return ankunft1_label, abfahrt1_label
 
+    def _halt_ereignispfad_finden(self,
+                                ereignis_oder_ziel: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode,
+                                ) -> list[EreignisLabelType]:
+        """
+        Zu einem Halt oder Ziel gehörende Ereignisse finden
+
+        Liefert die zu einem Halt gehörenden Ereignisse von Ankunft bis Abfahrt entlang des Zugpfads.
+        Im einfachsten Fall sind dies ein Ankunfts- und ein Abfahrtsereignis.
+        Im Fall von E/F/K kann der Pfad länger sein und mehr als zwei Ereignisse enthalten.
+        Die Anfangs- und Endknoten können dann auch verschiedene Zugnummern aufweisen.
+
+        Args:
+            ereignis_oder_ziel. Das Ereignis oder Ziel muss zu einem Halt oder Durchfahrt gehören.
+
+        Returns:
+            Liste von Ereignissen als Ausschnitt aus dem Zugpfad von Ankunft bis Abfahrt.
+            Wenn kein geschlossenes Segment gefunden werden kann, ist die Liste leer.
+        """
+
+        ziel_label = self._ereignis_label_finden(ereignis_oder_ziel, {'An', 'Ab'})
+        ereignisse: list[EreignisLabelType] = []
+
+        match ziel_label:
+            case None:
+                pass
+
+            case EreignisLabelType(zid=zid, typ='An'):
+                for ereignis in self.anlage.dispo_ereignisgraph.zugpfad(zid, start=ziel_label, ersatz=True, kuppeln=True):
+                    ereignisse.append(ereignis)
+                    if ereignis.typ == 'Ab':
+                        break
+                else:
+                    ereignisse = []
+
+            case EreignisLabelType(zid=zid, typ='Ab'):
+                for ereignis in self.anlage.dispo_ereignisgraph.rueckpfad(zid, start=ziel_label, ersatz=True, fluegeln=True):
+                    ereignisse.insert(0, ereignis)
+                    if ereignis.typ == 'An':
+                        break
+                else:
+                    ereignisse = []
+
+        return ereignisse
+
     def _ereignis_label_finden(self,
-                               objekt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                               typen: Set[str]) -> Tuple[EreignisLabelType | None, EreignisGraphNode | None]:
+                               ereignis_oder_ziel: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode,
+                               typen: set[str],
+                               ) -> EreignisLabelType | None:
         """
-        Ereignislabel zu Ziel- oder Ereignis-Argument herausfinden
+        Ereignis zu Fahrziel oder Ereignis herausfinden
 
-        Unterscheidung von Argumenten:
-        Ereignislabel: NamedTuple(zid, zeit, typ)
-        Ereignisdaten: Attribut node_id
-        Ziellabel: NamedTuple(zid, zeit, ort)
-        Zieldaten: Attribut fid
+        Liefert das erste Ereignis eines Zuges, das zu den angegebenen Argumenten passt.
+        Wenn das Argument ein Ereignis ist, wird es geliefert, falls es einen der angegebenen Typen hat.
+        Wenn das Argument ein Fahrziel ist, wird das erste Ereignis geliefert,
+        das zu diesem Ziel gehört und einen der angegebenen Typen hat.
+        Anderenfalls wird None zurückgegeben.
+
+        Hinweis: Wenn das Argument ein Ereignis ist, sucht die Methode nicht nach einem anderen Ereignistyp.
+
+        Args:
+            ereignis_oder_ziel: Folgende Argumente werden erkannt:
+                - Ereignislabel: Attribute zid, zeit und typ
+                - Ereignisdaten: Attribut node_id
+                - Ziellabel: Attribute zid, zeit und ort
+                - Zieldaten: Attribut fid
+
+        Returns:
+            Entsprechendes Ereignislabel oder None
         """
 
-        data = None
+        ereignis_label: EreignisLabelType | None = None
 
-        if hasattr(objekt, "node_id"):
-            data = objekt
-            objekt = objekt.node_id
+        def _ziel_ereignis(**kwargs) -> EreignisLabelType | None:
+            for _label in self.anlage.dispo_ereignisgraph.zugpfad(kwargs['zid']):
+                _data = self.anlage.dispo_ereignisgraph.nodes[_label]
+                if (_data.typ in typen and
+                        _data.plan == kwargs['plan'] and
+                        kwargs['p_an'] - 0.001 <= _data.t_plan <= kwargs['p_ab'] + 0.001):
+                    return _label
+            return None
 
-        if hasattr(objekt, "zid") and hasattr(objekt, "ort") and hasattr(objekt, "zeit"):
-            objekt = self.anlage.dispo_zielgraph.nodes[objekt]
-            data = None
+        match ereignis_oder_ziel:
+            case EreignisLabelType(typ=typ) if typ in typen:
+                ereignis_label = ereignis_oder_ziel
 
-        if hasattr(objekt, "fid"):
-            for label in self.anlage.dispo_ereignisgraph.zugpfad(objekt.zid):
-                data = self.anlage.dispo_ereignisgraph.nodes[label]
-                if (data.typ in typen and
-                        data.plan == objekt.plan and
-                        objekt.p_an - 0.001 <= data.t_plan <= objekt.p_ab + 0.001):
-                    objekt = label
-                    break
-            else:
-                objekt = None
-                data = None
+            case EreignisGraphNode(node_id=node_id) if node_id.typ in typen:
+                ereignis_label: EreignisLabelType = node_id
 
-        if data is None and self.anlage.dispo_ereignisgraph.has_node(objekt):
-            data = self.anlage.dispo_ereignisgraph.nodes[objekt]
+            case ZielLabelType():
+                ziel_data: ZielGraphNode = self.anlage.dispo_zielgraph.nodes[ereignis_oder_ziel]
+                ereignis_label = _ziel_ereignis(**ziel_data)
 
-        return objekt, data
+            case ZielGraphNode():
+                ereignis_label = _ziel_ereignis(**ereignis_oder_ziel)
+
+        return ereignis_label
 
     def _journal_anwenden(self, jid: JournalIDType, journal: JournalEntryGroup):
         try:
@@ -367,29 +422,31 @@ class Betrieb:
             self.anlage.dispo_journal.delete_entry(jid)
 
     def vorzeitige_abfahrt(self,
-                           abfahrt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
+                           target: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
                            verfruehung: int,
                            relativ: bool = False):
         """
         Vorzeitige Abfahrt
         """
 
-        # todo : ueberarbeiten
-
         journal = JournalEntryGroup()
         journal.title = "Vorzeitige Abfahrt"
         journal.timestamp = self.anlage.simzeit_minuten
 
-        abfahrt_label, abfahrt_data = self._ereignis_label_finden(abfahrt, {'Ab'})
-        if abfahrt_label is None:
-            raise ValueError(f"Ungueltige Ereignisangabe {abfahrt}")
-
-        self._wartezeit_aendern(journal, abfahrt_label, "H", -verfruehung, relativ=relativ)
+        ankunft, abfahrt = self._ankunft_abfahrt_finden(target)
+        if ankunft is None or abfahrt is None:
+            raise ValueError(f"Ungültige Ereignisangabe {target}")
+        kante = (ankunft, abfahrt)
+        abfahrt_data = self.anlage.dispo_ereignisgraph.nodes[abfahrt]
         abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {'Bf', 'Anst'})
+
+        self._wartezeit_aendern(journal, abfahrt, kante, -verfruehung, relativ=relativ)
+        journal.valid = True
 
         if journal.valid:
             jid = JournalIDType("Wartezeit", abfahrt_data.zid, abfahrt_bst)
             self._journal_anwenden(jid, journal)
+            logger.debug(f"Wartezeit geändert, {jid}")
 
     def wartezeit_aendern(self,
                           target: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode,
@@ -458,7 +515,10 @@ class Betrieb:
             Im Moment nicht verwendet.
         """
 
-        wartend_label, wartend_data = self._ereignis_label_finden(wartend, {'Ab', 'An'})
+        wartend_label = self._ereignis_label_finden(wartend, {'Ab', 'An'})
+        if wartend_label is None:
+            raise ValueError(f"Fehlerhafte Referenz beim Korrektur Rücksetzen: {wartend}")
+        wartend_data = self.anlage.dispo_ereignisgraph.nodes[wartend_label]
         zid = wartend.zid
         bst = self.anlage.bahnhofgraph.find_superior(wartend_data.plan_bst, {'Bf', 'Anst'})
 

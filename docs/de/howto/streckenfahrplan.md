@@ -21,8 +21,9 @@ Auf die gewählten Liniensegmente können folgende Aktionen aus der Werkzeugleis
   - +/- 1 Minute
   - bei Abhängigkeit: zusätzliche Wartezeit
 - Abhängigkeit bearbeiten
-  - Ankunft/Kreuzung abwarten
-  - Abfahrt/Überholung abwarten
+  - Ankunft abwarten (Anschluss)
+  - Abfahrt abwarten (Überholung)
+  - Gegenseitige Ankunft abwarten (Kreuzung)
   - zurücksetzen
 
 Um eine Abhängigkeit zu setzen, müssen zwei Segmente ausgewählt werden.
