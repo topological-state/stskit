@@ -49,5 +49,8 @@
         <file alias="node-select-previous.png">icons/node-select-previous.png</file>
         <file alias="node-select.png">icons/node-select.png</file>
         <file alias="node.png">icons/node.png</file>
+        <file alias="clock--cross.png">icons/clock--cross.png</file>
+        <file alias="hourglass--cross.png">icons/hourglass--cross.png</file>
+        <file alias="hourglass--return.png">icons/hourglass--return.png</file>
     </qresource>
 </RCC>

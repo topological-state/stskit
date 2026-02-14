@@ -97,6 +97,7 @@ class EreignisGraphNode(dict):
     t_plan = dict_property("t_plan", Optional[float], "Geplante Uhrzeit in Minuten")
     t_prog = dict_property("t_prog", Optional[float], "Geschätzte Uhrzeit in Minuten")
     t_mess = dict_property("t_mess", Optional[float], "Gemessene Uhrzeit in Minuten")
+    vorzeitig = dict_property("vorzeitig", bool, "Vorzeitige Abfahrt möglich")
     s = dict_property("s", float, "Ort in Minuten")
 
     # die folgenden properties werden vom bildfahrplan genutzt und sind ausserhalb undefiniert!
@@ -1427,6 +1428,7 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
                 plan_bst=ziel_node.plan_bst,
                 gleis=ziel_node.gleis,
                 gleis_bst=ziel_node.gleis_bst,
+                vorzeitig='A' in ziel_node.flags,
                 s=0
             )
             try:

@@ -304,6 +304,7 @@
    <addaction name="actionPlusEins"/>
    <addaction name="actionMinusEins"/>
    <addaction name="actionFix"/>
+   <addaction name="actionVorzeitigeAbfahrt"/>
    <addaction name="actionVerspaetungLoeschen"/>
    <addaction name="separator"/>
    <addaction name="actionAnkunftAbwarten"/>
@@ -508,6 +509,21 @@
    </property>
    <property name="shortcut">
     <string>Shift+V</string>
+   </property>
+  </action>
+  <action name="actionVorzeitigeAbfahrt">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/clock--cross.png</normaloff>:/clock--cross.png</iconset>
+   </property>
+   <property name="text">
+    <string>Vorzeitige Abfahrt</string>
+   </property>
+   <property name="toolTip">
+    <string>Vorzeitige Abfahrt vermerken (A)</string>
+   </property>
+   <property name="shortcut">
+    <string>A</string>
    </property>
   </action>
  </widget>

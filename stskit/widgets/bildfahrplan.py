@@ -132,6 +132,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionZugfolge.setEnabled(False)
         self.ui.actionBetriebshaltEinfuegen.triggered.connect(self.action_betriebshalt_einfuegen)
         self.ui.actionActionBetriebshaltLoeschen.triggered.connect(self.action_betriebshalt_loeschen)
+        self.ui.actionVorzeitigeAbfahrt.triggered.connect(self.action_vorzeitige_abfahrt)
 
         self.ui.stackedWidget.currentChanged.connect(self.page_changed)
 
@@ -281,6 +282,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionMinusEins.setEnabled(w)
         w = len(auswahl_indices) == 1 and bool(auswahl_typen.intersection({'A-Ab', 'A-An'}))
         self.ui.actionLoeschen.setEnabled(w)
+        w = len(auswahl_indices) == 1 and bool(auswahl_typen.intersection({'H-Ab'}))
+        self.ui.actionVorzeitigeAbfahrt.setEnabled(w)
 
         w1 = (len(auswahl_indices) == 2 and
               len(auswahl_zid) == 2 and
@@ -473,6 +476,39 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         try:
             self.zentrale.betrieb.wartezeit_aendern(target, kante, dt, relativ)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
+
+        self.plot.clear_selection()
+        self.grafik_update()
+        self.update_actions()
+
+    @Slot()
+    def action_vorzeitige_abfahrt(self):
+        """
+        Vorzeitige Abfahrt
+
+        Die Wartezeit wird auf das Minimum reduziert.
+
+        Die folgenden Fälle sind möglich. Der erste zutreffende wird ausgeführt.
+        - Haltezeit verkürzen: Ausgewählter Knoten ist Abfahrt von Kante H (H-Ab).
+            Das fdl-Attribut der Haltekante wird um eine Minute erhöht.
+        """
+
+        auswahl_muster = self.auswahl_unterscheiden()
+        try:
+            muster = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab'}))
+        except StopIteration:
+            self.ui.zuginfoLabel.setText("Ungültige Auswahl")
+            return
+
+        if muster.typ in {'H-Ab'}:
+            target = muster.start
+        else:
+            return
+
+        try:
+            self.zentrale.betrieb.vorzeitige_abfahrt(target)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
