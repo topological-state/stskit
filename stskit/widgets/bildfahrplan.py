@@ -597,26 +597,31 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         """
 
         auswahl_muster = self.auswahl_unterscheiden()
-        if len(auswahl_muster) != 1 or auswahl_muster[0].typ not in {'H-Ab', 'S'}:
+        if len(auswahl_muster) == 1:
+            halt_data = auswahl_muster[0].knoten
+            kante = (auswahl_muster[0].start, auswahl_muster[0].ziel)
+        else:
             self.ui.zuginfoLabel.setText("Ungültige Auswahl")
             return
-        else:
-            data = auswahl_muster[0].knoten
 
-        if data.typ == 'S':
-            gleise = sorted(self.anlage.bahnhofgraph.bahnhofgleise(data.bst.name))
-            dlg = GleiswahlDialog(gleise, parent=self)
-            if dlg.exec():
-                gleis = BahnhofElement('Gl', dlg.auswahl)
-            else:
+        match auswahl_muster[0].typ:
+            case 'H-Ab':
+                gleis = halt_data.gleis_bst
+                zeit = halt_data.t_plan
+            case 'S':
+                gleise = sorted(self.anlage.bahnhofgraph.bahnhofgleise(halt_data.bst.name))
+                dlg = GleiswahlDialog(gleise, parent=self)
+                if dlg.exec():
+                    gleis = BahnhofElement('Gl', dlg.auswahl)
+                    zeit = halt_data.t_plan
+                else:
+                    return
+            case _:
+                self.ui.zuginfoLabel.setText("Ungültige Auswahl")
                 return
-        else:
-            gleis = data.plan_bst
 
-        data.gleis_bst = data.plan_bst = gleis
-        data.gleis = data.plan = gleis.name
         try:
-            self.zentrale.betrieb.betriebshalt_einfuegen(data, data.gleis_bst, data.t_plan, wartezeit=1)
+            self.zentrale.betrieb.betriebshalt_einfuegen(halt_data, kante, gleis, zeit, wartezeit=1)
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
