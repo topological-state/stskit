@@ -1,61 +1,109 @@
-from dataclasses import dataclass, field
-from typing import Any, Dict, Hashable, Iterable, List, Mapping, Optional, Sequence, Set, Tuple, Union
+"""
+dispoeditor-Modul
+
+Das dispoeditor-Modul deklariert ein Qt-Tabellenmodell für das Dispositionsjournal.
+Dadurch kann das Journal eingesehen (und in einer späteren Version) bearbeitet werden.
+"""
+
+import logging
+from typing import Any
 
 from PySide6 import QtCore
-from PySide6.QtCore import Slot, QModelIndex, QSortFilterProxyModel, QItemSelectionModel, QAbstractTableModel, Qt
-from PySide6.QtGui import QColor, QKeySequence, QShortcut
-from PySide6.QtWidgets import QWidget, QAbstractItemView
+from PySide6.QtCore import QModelIndex, QAbstractTableModel, Qt
+from PySide6.QtGui import QColor
 
 from stskit.dispo.anlage import Anlage
-from stskit.model.bahnhofgraph import BahnhofElement
-from stskit.model.journal import Journal, JournalIDType
-from stskit.model.zuggraph import ZugGraphNode
+from stskit.model.journal import Journal, JournalIDType, JournalEntryGroup, JournalEntry
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class DispoModell(QAbstractTableModel):
     """
     Datenmodell für Dispotabelle
+
+    Listet die einzelnen Dispobefehle in einem benutzerfreundlichen Format.
     """
 
     def __init__(self, anlage: Anlage):
         super().__init__()
 
         self._anlage = anlage
-        self._columns: List[str] = ['typ', 'zid', 'gleis', 'zug', 'details']
-        self._column_titles: Dict[str, str] = {'typ': 'Typ', 'zid': 'ID', 'gleis': 'Gleis', 'zug': 'Zug', 'details': 'Details'}
-        self._rows: List[JournalIDType] = []
-        self._summary: Dict[JournalIDType, Dict[Tuple[Hashable, Hashable], Set[str]]] = {}
-        # self._zid: Dict[JournalIDType, Set[int]] = {}
-        # self._zug: Dict[JournalIDType, Set[str]] = {}
-        # self._bst: Dict[JournalIDType, Set[BahnhofElement]] = {}
-        self._changes: Dict[JournalIDType, str] = {}
+        self._column_titles: dict[str, str] = {#'zid': 'ID',
+                                               'zug': 'Zug',
+                                               'gleis': 'Gleis',
+                                               'typ': 'Befehl',
+                                               #'rzid': 'Gegen-ID',
+                                               'rzug': 'Gegenzug',
+                                               'rgleis': 'Gegengleis',
+                                               #'details': 'Details',
+                                               }
+        self._columns: list[str] = list(self._column_titles.keys())
+        self._rows: list[JournalIDType] = []
+        self._data: dict[JournalIDType, dict[str, str | int]] = {}
 
-    def format_change(self, change: Dict[Tuple[Hashable, Hashable], Set[str]]) -> str:
-        texts = []
-        elements = [(*element, flags) for element, flags in change.items()]
-        elements = sorted(elements, key=lambda x: (x[1].zid, x[1].zeit))
-        for element in elements:
-            graph, node, flags = element
-            flags_text = "".join(sorted(flags, reverse=True))
-            if graph == 'ereignisgraph':
-                node_text = f"{node.zid} {node.typ} {node.zeit}"
-            elif graph == 'zielgraph':
-                node_text = f"{node.zid} {node.ort} {node.zeit}"
-            else:
-                continue
+    def _get_zug_data(self, zid: int) -> dict[str, str | int]:
+        try:
+            zug = self._anlage.zuggraph.nodes[zid]
+            result = dict(zid=zid, zug=zug.name)
+        except (IndexError, KeyError):
+            result = dict(zid=zid, zug=f"({zid})")
+        return result
 
-            text = f"({node_text}) {flags_text}"
-            texts.append(text)
+    def _get_journal_data(self,
+                          zid: int,
+                          entry: JournalEntry | JournalEntryGroup,
+                          ) -> dict[str, str | int]:
+        result = {}
 
-        return ", ".join(texts)
+        if isinstance(entry, JournalEntryGroup):
+            for _entry in entry.entries:
+                result.update(self._get_journal_data(zid, _entry))
+
+        elif isinstance(entry, JournalEntry):
+            if entry.target_node.zid == zid and entry.target_graph == 'ereignisgraph':
+                node_data = self._anlage.dispo_ereignisgraph.nodes[entry.target_node]
+                result['gleis'] = node_data.gleis
+                for edge, edge_data in entry.added_edges.items():
+                    if edge[0].zid != zid and edge_data.get('typ') == 'A':
+                        node_data = self._anlage.dispo_ereignisgraph.nodes[edge[0]]
+                        zug_data = self._get_zug_data(node_data.zid)
+                        result['rzid'] = node_data.zid
+                        result['rzug'] = zug_data.get('zug', '')
+                        result['rgleis'] = node_data.gleis
+                        break
+
+        return result
 
     def update(self):
         self.beginResetModel()
         self._rows = sorted(self.dispo_journal().entries.keys())
-        self._summary = {jid: self.dispo_journal().entries[jid].summary() for jid in self._rows}
-        for jid, change in self._summary.items():
-            self._changes[jid] = self.format_change(change)
+
+        for jid in self._rows:
+            entry = self.dispo_journal().entries[jid]
+            data = {'typ': jid.typ,
+                    'zid': jid.zid,
+                    'gleis': jid.bst,
+                    'zug': '',
+                    'rzug': '',
+                    'rzid': '',
+                    'rgleis': '',
+                    'details': '',
+                    }
+            data.update(self._get_zug_data(jid.zid))
+            data.update(self._get_journal_data(jid.zid, entry))
+            self._data[jid] = data
+
         self.endResetModel()
+
+    def get_data(self,
+                 row: int | None = None,
+                 jid: JournalIDType | None = None,
+                 ) -> dict[str, str | int]:
+        if row is not None:
+            jid = self._rows[row]
+        return self._data[jid]
 
     def dispo_journal(self) -> Journal:
         return self._anlage.dispo_journal
@@ -86,47 +134,35 @@ class DispoModell(QAbstractTableModel):
         try:
             jid = self._rows[index.row()]
             col = self._columns[index.column()]
+            _data = self._data[jid]
+            _item = _data[col]
         except (IndexError, KeyError):
             return None
 
-        try:
-            zug = self._anlage.zuggraph.nodes[jid.zid]
-        except (IndexError, KeyError):
-            zug = ZugGraphNode(zid=jid.zid, name="(?)")
-
         if role == Qt.UserRole:
-            if col == 'typ':
-                return jid.typ
-            elif col == 'zid':
-                return jid.zid
-            elif col == 'gleis':
-                return jid.bst
-            elif col == 'zug':
-                return zug.name
-            elif col == 'details':
-                return self._summary.get(jid)
-            else:
-                return None
+            return _item
 
         if role == Qt.DisplayRole:
-            if col == 'typ':
-                return jid.typ
-            elif col == 'zid':
-                return jid.zid
-            elif col == 'gleis':
-                return str(jid.bst)
-            elif col == 'zug':
-                return zug.name
-            elif col == 'details':
-                return str(self._changes.get(jid))
-            else:
-                return None
+            return str(_item)
 
         elif role == Qt.TextAlignmentRole:
-            if col == 'details':
+            if col in {'typ', 'details'}:
                 return Qt.AlignVCenter
             else:
                 return Qt.AlignHCenter + Qt.AlignVCenter
+
+        elif role == QtCore.Qt.ForegroundRole:
+            zug = self._anlage.zuggraph.nodes[jid.zid]
+            zugschema = self._anlage.zugschema
+            if zug.sichtbar:
+                rgb = zugschema.zugfarbe_rgb(zug)
+                farbe = QColor(*rgb)
+            elif zug.gleis:
+                rgb = zugschema.zugfarbe_rgb(zug)
+                farbe = QColor(*rgb)
+            else:
+                farbe = QColor("gray")
+            return farbe
 
         return None
 

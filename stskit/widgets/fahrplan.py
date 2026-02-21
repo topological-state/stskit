@@ -603,6 +603,8 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.dispo_sort_filter = QSortFilterProxyModel(self)
         self.dispo_sort_filter.setSourceModel(self.dispo_modell)
         self.ui.dispo_table.setModel(self.dispo_sort_filter)
+        self.ui.dispo_table.selectionModel().selectionChanged.connect(
+            self.dispo_selection_changed)
         self.ui.dispo_table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.ui.dispo_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.dispo_table.verticalHeader().setVisible(False)
@@ -659,38 +661,70 @@ class FahrplanWindow(QtWidgets.QWidget):
             index = self.zugliste_sort_filter.mapToSource(index)
             row = index.row()
             zug = self.zugliste_modell.get_zug(row)
-            self.ui.fahrplan_label.setText(f"Stammzug {zug.name}")
-            self.fahrplan_modell.set_zug(zug.zid)
-            self.zielplot.select_zug(zug.zid)
+            zid = zug.zid
         except IndexError:
-            pass
+            zid = None
         else:
             self.ui.fahrplan_view.resizeColumnsToContents()
             self.ui.fahrplan_view.resizeRowsToContents()
-        self.update_folgezug()
+
+        if zid is not None:
+            folge_zid = self.get_folgezug(zid)
+        else:
+            folge_zid = None
+
+        self.update_zugfahrplan('stamm', zid, 'Stammzug')
+        self.update_zugfahrplan('folge', folge_zid, 'Folgezug')
         self.grafik_update()
 
-    def update_folgezug(self):
-        if self.fahrplan_modell.zid:
-            for fid1 in self.fahrplan_modell.zugpfad:
-                try:
-                    fid2 = self.fahrplan_modell.zweige[fid1]
-                    ziel2 = self.fahrplan_modell.zielgraph.nodes[fid2]
-                    zug2 = self.fahrplan_modell.zuggraph.nodes[ziel2.zid]
-                except KeyError:
-                    continue
-                else:
-                    self.folgezug_modell.set_zug(ziel2.zid)
-                    self.ui.folgezug_label.setText(f"Folgezug {zug2.name}")
-                    self.ui.folgezug_view.resizeColumnsToContents()
-                    self.ui.folgezug_view.resizeRowsToContents()
-                    break
-            else:
-                self.folgezug_modell.set_zug(0)
-                self.ui.folgezug_label.setText("Kein Folgezug")
+    def get_folgezug(self, zid: int) -> int | None:
+        for node in self.zentrale.anlage.dispo_ereignisgraph.zugpfad(zid, ersatz=True, kuppeln=True):
+            if node.zid != zid:
+                return node.zid
+        return None
+
+    @QtCore.Slot('QItemSelection', 'QItemSelection')
+    def dispo_selection_changed(self, selected, deselected):
+        """
+        fahrplan eines angewählten zuges darstellen.
+
+        :param selected: nicht verwendet (die auswahl wird aus dem widget ausgelesen).
+        :param deselected: nicht verwendet
+        :return: None
+        """
+        try:
+            index = self.ui.dispo_table.selectedIndexes()[0]
+            index = self.dispo_sort_filter.mapToSource(index)
+            row = index.row()
+            dispo = self.dispo_modell.get_data(row=row)
+        except IndexError:
+            dispo = {}
         else:
-            self.folgezug_modell.set_zug(0)
-            self.ui.folgezug_label.setText("Kein Folgezug")
+            self.ui.dispo_table.resizeColumnsToContents()
+            self.ui.dispo_table.resizeRowsToContents()
+
+        self.update_zugfahrplan('stamm', dispo.get('zid'), 'Zug')
+        self.update_zugfahrplan('folge', dispo.get('rzid'), 'Gegenzug')
+        self.grafik_update()
+
+    def update_zugfahrplan(self, panel: str, zid: int | None, title: str, ):
+        if self.zentrale.anlage.zuggraph.has_node(zid):
+            zug = self.zentrale.anlage.zuggraph.nodes[zid]
+            title = f"{title} {zug.name}"
+        else:
+            title = f"Kein {title}"
+
+        if panel == 'stamm':
+            self.ui.fahrplan_label.setText(title)
+            self.fahrplan_modell.set_zug(zid)
+            self.zielplot.select_zug(zid)
+            self.ui.fahrplan_view.resizeColumnsToContents()
+            self.ui.fahrplan_view.resizeRowsToContents()
+        elif panel == 'folge':
+            self.ui.folgezug_label.setText(title)
+            self.folgezug_modell.set_zug(zid)
+            self.ui.folgezug_view.resizeColumnsToContents()
+            self.ui.folgezug_view.resizeRowsToContents()
 
     def grafik_update(self):
         self.zielplot.draw(self._axes)
