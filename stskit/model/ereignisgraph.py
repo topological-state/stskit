@@ -741,9 +741,9 @@ class EreignisGraph(nx.DiGraph):
 
             try:
                 v = ereignis_data.t_eff - ereignis_data.t_plan
-            except AttributeError:
+            except (AttributeError, TypeError):
                 logger.warning(f"Unvollständige Zeitinformation für Verspätungsberechnung: {ereignis_data}")
-                return
+                continue
 
             # todo : E/F/K beachten
             if ereignis_data.typ == 'Ab':

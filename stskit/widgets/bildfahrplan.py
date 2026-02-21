@@ -503,7 +503,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             return
 
         if muster.typ in {'H-Ab'}:
-            target = muster.start
+            target = muster.ziel
         else:
             return
 

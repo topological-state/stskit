@@ -994,7 +994,7 @@ class ZugFormatter:
                 v = self._ziel.v_an
             else:
                 v = 0
-        except (AttributeError, KeyError):
+        except (AttributeError, KeyError, TypeError):
             return ""
 
         v += 0.5
@@ -1020,7 +1020,7 @@ class ZugFormatter:
                 v = self._ziel.v_ab
             else:
                 v = 0
-        except (AttributeError, KeyError):
+        except (AttributeError, KeyError, TypeError):
             return ""
 
         v += 0.5

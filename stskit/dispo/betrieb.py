@@ -416,7 +416,7 @@ class Betrieb:
         journal.valid = True
 
         if journal.valid:
-            jid = JournalIDType("Abfahrtszeit", abfahrt_data.zid, abfahrt_bst)
+            jid = JournalIDType("Vorzeitige Abfahrt", abfahrt_data.zid, abfahrt_bst)
             self._journal_anwenden(jid, journal)
             logger.debug(f"Abfahrtszeit geändert, {jid}")
 
