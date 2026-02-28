@@ -4,6 +4,7 @@ dispoeditor-Modul
 Das dispoeditor-Modul deklariert ein Qt-Tabellenmodell für das Dispositionsjournal.
 Dadurch kann das Journal eingesehen (und in einer späteren Version) bearbeitet werden.
 """
+from stskit.dispo.betrieb import Betrieb
 
 import logging
 from typing import Any
@@ -26,10 +27,11 @@ class DispoModell(QAbstractTableModel):
     Listet die einzelnen Dispobefehle in einem benutzerfreundlichen Format.
     """
 
-    def __init__(self, anlage: Anlage):
+    def __init__(self, anlage: Anlage, betrieb: Betrieb):
         super().__init__()
 
         self._anlage = anlage
+        self._betrieb = betrieb
         self._column_titles: dict[str, str] = {#'zid': 'ID',
                                                'zug': 'Zug',
                                                'gleis': 'Gleis',
@@ -63,11 +65,11 @@ class DispoModell(QAbstractTableModel):
 
         elif isinstance(entry, JournalEntry):
             if entry.target_node.zid == zid and entry.target_graph == 'ereignisgraph':
-                node_data = self._anlage.dispo_ereignisgraph.nodes[entry.target_node]
+                node_data = self._betrieb.ereignisgraph.nodes[entry.target_node]
                 result['gleis'] = node_data.gleis
                 for edge, edge_data in entry.added_edges.items():
                     if edge[0].zid != zid and edge_data.get('typ') == 'A':
-                        node_data = self._anlage.dispo_ereignisgraph.nodes[edge[0]]
+                        node_data = self._betrieb.ereignisgraph.nodes[edge[0]]
                         zug_data = self._get_zug_data(node_data.zid)
                         result['rzid'] = node_data.zid
                         result['rzug'] = zug_data.get('zug', '')
@@ -106,7 +108,7 @@ class DispoModell(QAbstractTableModel):
         return self._data[jid]
 
     def dispo_journal(self) -> Journal:
-        return self._anlage.dispo_journal
+        return self._betrieb.journal
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
         return len(self._columns)

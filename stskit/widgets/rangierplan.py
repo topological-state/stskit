@@ -11,6 +11,7 @@ from PySide6.QtGui import QColor, QKeySequence, QShortcut
 from PySide6.QtWidgets import QWidget, QAbstractItemView
 
 from stskit.dispo.anlage import Anlage
+from stskit.dispo.betrieb import Betrieb
 from stskit.plugin.stsobj import Ereignis
 from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.zielgraph import ZielGraphNode, ZielLabelType
@@ -354,8 +355,9 @@ class Rangiervorgang:
 
 
 class Rangierplan:
-    def __init__(self, anlage: Anlage):
+    def __init__(self, anlage: Anlage, betrieb: Betrieb):
         self.anlage = anlage
+        self.betrieb: Betrieb = betrieb
         self.rangierliste: Dict[ZielLabelType, Rangiervorgang] = {}
         # zugname, zid
         self.loks: Dict[str, int] = {}
@@ -419,7 +421,7 @@ class Rangierplan:
         Wenn beide Relationen fehlen, können die Ursprungs- und Ersatzloks nicht zugeordnet werden.
         """
 
-        for fid, ziel in self.anlage.dispo_zielgraph.nodes(data=True):
+        for fid, ziel in self.betrieb.zielgraph.nodes(data=True):
             if fid in self.rangierliste:
                 continue
 
@@ -468,7 +470,7 @@ class Rangierplan:
         """
 
         for fid, rd in self.rangierliste.items():
-            ziel = self.anlage.dispo_zielgraph.nodes[fid]
+            ziel = self.betrieb.zielgraph.nodes[fid]
 
             rd.gleis = ziel.gleis
             rd.p_an = ziel.p_an
@@ -476,8 +478,8 @@ class Rangierplan:
                 rd.p_ab = ziel.p_ab
             except AttributeError:
                 try:
-                    fid2 = self.anlage.dispo_zielgraph.next_node(fid, ersatz_erlaubt=True)
-                    ziel2 = self.anlage.dispo_zielgraph.nodes[fid2]
+                    fid2 = self.betrieb.zielgraph.next_node(fid, ersatz_erlaubt=True)
+                    ziel2 = self.betrieb.zielgraph.nodes[fid2]
                     rd.p_ab = ziel2.p_an
                 except (AttributeError, KeyError, ValueError):
                     rd.p_ab = None
@@ -530,11 +532,11 @@ class Rangierplan:
         :param rd: Rangierdaten des Zuges.
         """
 
-        if rd.ersatzlok_zid not in self.anlage.dispo_zielgraph.zuganfaenge:
+        if rd.ersatzlok_zid not in self.betrieb.zielgraph.zuganfaenge:
             return
 
-        for fid in self.anlage.dispo_zielgraph.zugpfad(rd.ersatzlok_zid):
-            ziel = self.anlage.dispo_zielgraph.nodes[fid]
+        for fid in self.betrieb.zielgraph.zugpfad(rd.ersatzlok_zid):
+            ziel = self.betrieb.zielgraph.nodes[fid]
             if ziel.plan == rd.plan:
                 rd.ersatzlok_status.gleisfehler = ziel.gleis != rd.gleis
                 break
@@ -639,7 +641,7 @@ class RangiertabelleModell(QAbstractTableModel):
     Datenmodell für Rangiertabelle
     """
 
-    def __init__(self, anlage: Anlage):
+    def __init__(self, anlage: Anlage, betrieb: Betrieb):
         super().__init__()
 
         self._columns: List[str] = ['Zug',
@@ -655,7 +657,7 @@ class RangiertabelleModell(QAbstractTableModel):
                                     'E von',
                                     'E Status']
         self.rangierziele: List[ZielLabelType] = []
-        self.rangierplan = Rangierplan(anlage)
+        self.rangierplan = Rangierplan(anlage, betrieb)
 
     def update(self):
         self.beginResetModel()
@@ -911,7 +913,7 @@ class RangierplanWindow(QWidget):
 
         self.setWindowTitle("Rangierplan")
 
-        self.rangiertabelle_modell = RangiertabelleModell(zentrale.anlage)
+        self.rangiertabelle_modell = RangiertabelleModell(zentrale.anlage, zentrale.betrieb)
         self.rangiertabelle_modell.zugschema = self.zentrale.anlage.zugschema
 
         self.rangiertabelle_sort_filter = RangiertabelleFilterProxy(self)
@@ -937,7 +939,7 @@ class RangierplanWindow(QWidget):
         self.ui.suche_zug_edit.textEdited.connect(self.suche_zug_changed)
         self.ui.suche_loeschen_button.clicked.connect(self.suche_loeschen_clicked)
 
-        self.fahrplan_modell = FahrplanModell(zentrale.anlage)
+        self.fahrplan_modell = FahrplanModell(zentrale.anlage, zentrale.betrieb)
         self.fahrplan_modell._columns = ['An', 'VAn', 'Gleis', 'Flags']
         self.ui.fahrplan_view.setModel(self.fahrplan_modell)
         self.ui.fahrplan_view.setSelectionMode(QAbstractItemView.SingleSelection)

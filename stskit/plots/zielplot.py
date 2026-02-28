@@ -6,6 +6,7 @@ import networkx as nx
 import numpy as np
 
 from stskit.dispo.anlage import Anlage
+from stskit.dispo.betrieb import Betrieb
 from stskit.model.zielgraph import ZielGraph, ZielGraphNode
 from stskit.model.zuggraph import ZugGraph, ZugGraphNode
 
@@ -21,8 +22,9 @@ def format_zeit(minuten: int, verspaetung: int) -> str:
 
 
 class ZielPlot:
-    def __init__(self, anlage: Anlage):
+    def __init__(self, anlage: Anlage, betrieb: Betrieb) -> None:
         self.anlage = anlage
+        self.betrieb = betrieb
         self.zugzielgraph = ZielGraph()
         self.zid: Optional[int] = None
         self.positionen = {}
@@ -33,7 +35,7 @@ class ZielPlot:
 
     @property
     def zielgraph(self) -> ZielGraph:
-        return self.anlage.dispo_zielgraph
+        return self.betrieb.zielgraph
 
     def select_zug(self, zid: int):
         """
@@ -53,10 +55,13 @@ class ZielPlot:
         """
 
         g = self.zielgraph.to_undirected(as_view=True)
-        node = self.zielgraph.zuganfaenge[self.zid]
-        nodes = nx.node_connected_component(g, node)
-        nodes = [node for node in nodes if not self.zuggraph.nodes[node[0]]['ausgefahren']]
-        self.zugzielgraph = nx.subgraph(self.zielgraph, nodes)
+        node = self.zielgraph.zuganfaenge.get(self.zid)
+        if node is not None:
+            nodes = nx.node_connected_component(g, node)
+            nodes = [node for node in nodes if not self.zuggraph.nodes[node[0]]['ausgefahren']]
+            self.zugzielgraph = nx.subgraph(self.zielgraph, nodes)
+        else:
+            self.zugzielgraph = nx.DiGraph()
 
     def draw(self, axes):
         axes.clear()

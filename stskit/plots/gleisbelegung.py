@@ -296,6 +296,7 @@ class Gleisbelegung:
     def __init__(self, zentrale: DatenZentrale):
         self.zentrale: DatenZentrale = zentrale
         self.anlage = zentrale.anlage
+        self.betrieb = zentrale.betrieb
         self.gleise: List[BahnhofElement] = []
         self.slots: Dict[Any, Slot] = {}
         self.gleis_slots: Dict[BahnhofElement, Dict[Any, Slot]] = {}
@@ -353,7 +354,7 @@ class Gleisbelegung:
         keys_bisherige = set(self.slots.keys())
         undirected_zuggraph = self.anlage.zuggraph.to_undirected(as_view=True)
 
-        for fid, ziel_data in self.anlage.dispo_zielgraph.nodes(data=True):
+        for fid, ziel_data in self.betrieb.zielgraph.nodes(data=True):
             if fid.zid < 0:
                 continue
 
@@ -449,7 +450,7 @@ class Gleisbelegung:
 
         for slot in self.slots.values():
             zug_data = self.anlage.zuggraph.nodes[slot.zid]
-            ziel_data = self.anlage.dispo_zielgraph.nodes[slot.fid]
+            ziel_data = self.betrieb.zielgraph.nodes[slot.fid]
             slot.info = self.zugbeschriftung.format_slot_info(zug_data, ziel=ziel_data)
             slot.titel = self.zugbeschriftung.format_slot_label(zug_data, ziel=ziel_data)
             slot.farbe = self.anlage.zugschema.zugfarbe(zug_data)
@@ -523,8 +524,8 @@ class Gleisbelegung:
         for s1, s2 in itertools.permutations(slots, 2):
             if s1.zid == s2.zid:
                 continue
-            elif self.zentrale.anlage.dispo_zielgraph.has_successor(s1.fid, s2.fid):
-                verbindungsdaten = self.zentrale.anlage.dispo_zielgraph.get_edge_data(s1.fid, s2.fid)
+            elif self.betrieb.zielgraph.has_successor(s1.fid, s2.fid):
+                verbindungsdaten = self.betrieb.zielgraph.get_edge_data(s1.fid, s2.fid)
                 if verbindungsdaten.typ in {'E', 'F'}:
                     s2.verbunden = True
                 yield from self._zugfolgewarnung(s1, s2, verbindungsdaten.typ)

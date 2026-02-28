@@ -16,13 +16,17 @@ import copy
 import logging
 import math
 import os
+from pathlib import Path
 from typing import Any, Optional, Set, Tuple, Union
 
 from stskit.dispo.anlage import Anlage
-from stskit.model.journal import JournalEntry, JournalIDType, JournalEntryGroup
+from stskit.model.journal import JournalEntry, JournalIDType, JournalEntryGroup, Journal
 from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.ereignisgraph import EreignisGraph, EreignisGraphNode, EreignisGraphEdge, EreignisLabelType
 from stskit.model.zielgraph import ZielGraph, ZielGraphEdge, ZielGraphNode, ZielLabelType
+from stskit.plugin.stsobj import Ereignis
+from stskit.utils.export import write_gml
+from stskit.utils.observer import Observable
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -30,11 +34,41 @@ logger.addHandler(logging.NullHandler())
 
 class Betrieb:
     def __init__(self):
-        self.anlage: Anlage = Anlage()
+        self.anlage: Anlage | None = None
+        self.config_path: Path = Path()
+        self.zielgraph = ZielGraph()
+        self.ereignisgraph = EreignisGraph()
+        self.journal = Journal()
+        self.on_change = Observable(self)
 
     def update(self, anlage: Anlage, config_path: os.PathLike):
         self.anlage = anlage
+        self.config_path = Path(config_path)
+        self._internal_update()
+
+    def _internal_update(self):
+        self.zielgraph = self.anlage.zielgraph.copy(as_view=False)
+        self.ereignisgraph = self.anlage.ereignisgraph.copy(as_view=False)
+
         self.journal_bereinigen()
+        self.journal.replay(graph_map={'ereignisgraph': self.ereignisgraph,
+                                       'zielgraph': self.zielgraph})
+
+        self.ereignisgraph.prognose()
+        self.ereignisgraph.verspaetungen_nach_zielgraph(self.zielgraph)
+
+        self.on_change.trigger()
+
+    def save_graphs(self):
+        if logger.isEnabledFor(logging.DEBUG):
+            debug_path = self.config_path / "debug"
+            write_gml(self.zielgraph, debug_path / f"{self.anlage.anlageninfo.aid}.zielgraph.gml")
+            write_gml(self.ereignisgraph, debug_path / f"{self.anlage.anlageninfo.aid}.ereignisgraph.gml")
+            # with open(debug_path / f"{self.anlageninfo.aid}.strecken.json", "w") as f:
+            #     json.dump(self.strecken.strecken, f)
+
+    def sim_ereignis_uebernehmen(self, ereignis: Ereignis) -> None:
+        self.ereignisgraph.sim_ereignis_uebernehmen(ereignis)
 
     def abfahrt_abwarten(self,
                          wartende_abfahrt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
@@ -153,10 +187,10 @@ class Betrieb:
             raise ValueError("Ungültige/unvollständige Zugsangaben.")
 
         wartend_label = pfad[-1]
-        wartend_data = self.anlage.dispo_ereignisgraph.nodes[wartend_label]
+        wartend_data = self.ereignisgraph.nodes[wartend_label]
         bst = self.anlage.bahnhofgraph.find_superior(wartend_data.plan_bst, {'Bf', 'Anst'})
 
-        haltekante = self.anlage.dispo_ereignisgraph.get_edge_data(*pfad[-2:])
+        haltekante = self.ereignisgraph.get_edge_data(*pfad[-2:])
         if haltekante.typ == 'D':
             self._betriebshalt_statt_durchfahrt(journal, pfad[0], wartezeit)
 
@@ -217,14 +251,14 @@ class Betrieb:
             raise ValueError("Ungültige/unvollständige Kreuzungsangaben.")
 
         for pfad in zugpfade:
-            kante = self.anlage.dispo_ereignisgraph.get_edge_data(*pfad[-2:])
+            kante = self.ereignisgraph.get_edge_data(*pfad[-2:])
             if kante.typ == 'D':
                 self._betriebshalt_statt_durchfahrt(journal, pfad[0], wartezeit)
 
         ankunft_labels = [l[0] for l in zugpfade]
         abfahrt_labels = [l[-1] for l in zugpfade]
 
-        abfahrt_data = [self.anlage.dispo_ereignisgraph.nodes[l] for l in abfahrt_labels]
+        abfahrt_data = [self.ereignisgraph.nodes[l] for l in abfahrt_labels]
         bst = {self.anlage.bahnhofgraph.find_superior(d.plan_bst, {'Bf', 'Anst'}) for d in abfahrt_data}
         if len(bst) != 1:
             raise ValueError("Kreuzung in verschiedenen Bahnhöfen nicht möglich")
@@ -287,7 +321,7 @@ class Betrieb:
                 pass
 
             case EreignisLabelType(zid=zid, typ='An'):
-                for ereignis in self.anlage.dispo_ereignisgraph.zugpfad(zid, start=ziel_label, ersatz=True, kuppeln=True):
+                for ereignis in self.ereignisgraph.zugpfad(zid, start=ziel_label, ersatz=True, kuppeln=True):
                     ereignisse.append(ereignis)
                     if ereignis.typ == 'Ab':
                         break
@@ -295,7 +329,7 @@ class Betrieb:
                     ereignisse = []
 
             case EreignisLabelType(zid=zid, typ='Ab'):
-                for ereignis in self.anlage.dispo_ereignisgraph.rueckpfad(zid, start=ziel_label, ersatz=True, fluegeln=True):
+                for ereignis in self.ereignisgraph.rueckpfad(zid, start=ziel_label, ersatz=True, fluegeln=True):
                     ereignisse.insert(0, ereignis)
                     if ereignis.typ == 'An':
                         break
@@ -333,8 +367,8 @@ class Betrieb:
         ereignis_label: EreignisLabelType | None = None
 
         def _ziel_ereignis(**kwargs) -> EreignisLabelType | None:
-            for _label in self.anlage.dispo_ereignisgraph.zugpfad(kwargs['zid']):
-                _data = self.anlage.dispo_ereignisgraph.nodes[_label]
+            for _label in self.ereignisgraph.zugpfad(kwargs['zid']):
+                _data = self.ereignisgraph.nodes[_label]
                 if (_data.typ in typen and
                         _data.plan == kwargs['plan'] and
                         kwargs['p_an'] - 0.001 <= _data.t_plan <= kwargs['p_ab'] + 0.001):
@@ -349,7 +383,7 @@ class Betrieb:
                 ereignis_label: EreignisLabelType = node_id
 
             case ZielLabelType():
-                ziel_data: ZielGraphNode = self.anlage.dispo_zielgraph.nodes[ereignis_oder_ziel]
+                ziel_data: ZielGraphNode = self.zielgraph.nodes[ereignis_oder_ziel]
                 ereignis_label = _ziel_ereignis(**ziel_data)
 
             case ZielGraphNode():
@@ -359,12 +393,11 @@ class Betrieb:
 
     def _journal_anwenden(self, jid: JournalIDType, journal: JournalEntryGroup):
         try:
-            self.anlage.dispo_journal.entries[jid].merge(journal)
+            self.journal.entries[jid].merge(journal)
         except KeyError:
-            self.anlage.dispo_journal.add_entry(jid, journal)
-        gm = {'ereignisgraph': self.anlage.dispo_ereignisgraph,
-              'zielgraph': self.anlage.dispo_zielgraph}
-        journal.replay(graph_map=gm)
+            self.journal.add_entry(jid, journal)
+
+        self._internal_update()
 
     def journal_bereinigen(self):
         """
@@ -372,22 +405,22 @@ class Betrieb:
         """
 
         entfernen = []
-        for jid, j in self.anlage.dispo_journal.entries.items():
+        for jid, j in self.journal.entries.items():
             if not self.anlage.zuggraph.has_node(jid.zid) or self.anlage.zuggraph.nodes[jid.zid].get("ausgefahren", False):
                 entfernen.append(jid)
                 logger.debug(f"journal_bereinigen: {jid} (zug ausgefahren)")
                 continue
 
             for node in j.target_nodes():
-                if self.anlage.dispo_ereignisgraph.has_node(node):
-                    data = self.anlage.dispo_ereignisgraph.nodes[node]
+                if self.ereignisgraph.has_node(node):
+                    data = self.ereignisgraph.nodes[node]
                     if data.get("t_mess") is None:
                         break
             else:
                 entfernen.append(jid)
                 logger.debug(f"journal_bereinigen: {jid} (ereignis passiert)")
         for jid in entfernen:
-            self.anlage.dispo_journal.delete_entry(jid)
+            self.journal.delete_entry(jid)
 
     def vorzeitige_abfahrt(self,
                            target: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
@@ -405,7 +438,7 @@ class Betrieb:
             raise ValueError(f"Ungültige Ereignisangabe {target}")
 
         abfahrt = pfad[-1]
-        abfahrt_data = self.anlage.dispo_ereignisgraph.nodes[abfahrt]
+        abfahrt_data = self.ereignisgraph.nodes[abfahrt]
         abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {'Bf', 'Anst'})
         if not abfahrt_data.vorzeitig:
             raise ValueError("Vorzeitige Abfahrt nicht erlaubt.")
@@ -443,7 +476,7 @@ class Betrieb:
         if kante is None:
             kante = tuple(pfad[-2:])
         abfahrt = pfad[-1]
-        abfahrt_data = self.anlage.dispo_ereignisgraph.nodes[abfahrt]
+        abfahrt_data = self.ereignisgraph.nodes[abfahrt]
         abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {'Bf', 'Anst'})
 
         self._wartezeit_aendern(journal, abfahrt, kante, wartezeit, relativ=relativ)
@@ -461,7 +494,7 @@ class Betrieb:
                            wartezeit: int,
                            relativ: bool = False):
 
-        eg = self.anlage.dispo_ereignisgraph
+        eg = self.ereignisgraph
         egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=target)
         edge_data = eg.edges[kante]
 
@@ -491,18 +524,18 @@ class Betrieb:
         wartend_label = self._ereignis_label_finden(wartend, {'Ab', 'An'})
         if wartend_label is None:
             raise ValueError(f"Fehlerhafte Referenz beim Korrektur Rücksetzen: {wartend}")
-        wartend_data = self.anlage.dispo_ereignisgraph.nodes[wartend_label]
+        wartend_data = self.ereignisgraph.nodes[wartend_label]
         zid = wartend.zid
         bst = self.anlage.bahnhofgraph.find_superior(wartend_data.plan_bst, {'Bf', 'Anst'})
 
         loeschen = []
-        for jid, j in self.anlage.dispo_journal.entries.items():
+        for jid, j in self.journal.entries.items():
             if jid.typ not in {"Ankunft", "Abfahrt", "Kreuzung"}:
                 continue
 
             for node in j.target_nodes():
                 try:
-                    node_data = self.anlage.dispo_ereignisgraph.nodes[node]
+                    node_data = self.ereignisgraph.nodes[node]
                     node_zid = node_data.zid
                     node_bst = self.anlage.bahnhofgraph.find_superior(node_data.plan_bst, {'Bf', 'Anst'})
                 except KeyError:
@@ -512,7 +545,7 @@ class Betrieb:
                         loeschen.append(jid)
 
         for jid in loeschen:
-            self.anlage.dispo_journal.delete_entry(jid)
+            self.journal.delete_entry(jid)
             logger.debug("Korrektur gelöscht: {jid}")
 
     def _betriebshalt_statt_durchfahrt(self,
@@ -541,7 +574,7 @@ class Betrieb:
         if not isinstance(ankunftsereignis, EreignisLabelType):
             raise ValueError(f"Argument ankunftsereignis ({type(ankunftsereignis)}) ist kein Ereignislabel.")
 
-        eg = self.anlage.dispo_ereignisgraph
+        eg = self.ereignisgraph
         an2_label = ankunftsereignis
         ab2_label = eg.next_ereignis(an2_label)
         an2_node = eg.nodes[an2_label]
@@ -572,8 +605,8 @@ class Betrieb:
         journal.add_entry(zgj)
 
         logger.debug("Betriebshalt erstellt")
-        logger.debug(f"    Ankunft: {self.anlage.dispo_ereignisgraph.node_info(an2_label)}")
-        logger.debug(f"    Abfahrt: {self.anlage.dispo_ereignisgraph.node_info(ab2_label)}")
+        logger.debug(f"    Ankunft: {self.ereignisgraph.node_info(an2_label)}")
+        logger.debug(f"    Abfahrt: {self.ereignisgraph.node_info(ab2_label)}")
 
         return ab2_label
 
@@ -609,8 +642,8 @@ class Betrieb:
         if not isinstance(vorherige_abfahrt, EreignisLabelType):
             raise ValueError(f"Argument vorherige_abfahrt ({type(vorherige_abfahrt)}) ist kein Ereignislabel.")
 
-        eg = self.anlage.dispo_ereignisgraph
-        zg = self.anlage.dispo_zielgraph
+        eg = self.ereignisgraph
+        zg = self.zielgraph
 
         ab1_label = vorherige_abfahrt
         an3_label = eg.next_ereignis(ab1_label)
@@ -714,9 +747,9 @@ class Betrieb:
         journal.add_entry(zgj)
 
         logger.debug("Betriebshalt erstellt")
-        logger.debug(f"    Ankunft: {self.anlage.dispo_ereignisgraph.node_info(an2_label)}")
-        logger.debug(f"    Abfahrt: {self.anlage.dispo_ereignisgraph.node_info(ab2_label)}")
-        logger.debug(f"    vorher:  {self.anlage.dispo_ereignisgraph.node_info(vorherige_abfahrt)}")
+        logger.debug(f"    Ankunft: {self.ereignisgraph.node_info(an2_label)}")
+        logger.debug(f"    Abfahrt: {self.ereignisgraph.node_info(ab2_label)}")
+        logger.debug(f"    vorher:  {self.ereignisgraph.node_info(vorherige_abfahrt)}")
 
         return ab2_label
 
@@ -776,7 +809,7 @@ class Betrieb:
         else:
             raise ValueError("Betriebshalt nicht möglich.")
 
-        abfahrt_node = self.anlage.dispo_ereignisgraph.nodes[abfahrt_label]
+        abfahrt_node = self.ereignisgraph.nodes[abfahrt_label]
         abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_node.plan_bst, {'Bf', 'Anst'})
         halt_bst = self.anlage.bahnhofgraph.find_superior(gleis, {'Bf', 'Anst'})
 
@@ -809,10 +842,10 @@ class Betrieb:
         if len(pfad) < 2:
             raise ValueError(f"Ungültige Referenz {betriebshalt} für Betriebshalt")
         ankunft_label, abfahrt_label = pfad[0], pfad[-1]
-        abfahrt_node = self.anlage.dispo_ereignisgraph.nodes[abfahrt_label]
+        abfahrt_node = self.ereignisgraph.nodes[abfahrt_label]
         bst = self.anlage.bahnhofgraph.find_superior(abfahrt_node.plan_bst, {'Bf', 'Anst'})
         jid = JournalIDType(typ="Betriebshalt", zid=abfahrt_label.zid, bst=bst)
-        self.anlage.dispo_journal.delete_entry(jid)
+        self.journal.delete_entry(jid)
         logger.debug("Betriebshalt gelöscht: {jid}")
 
     def bst_verbinden(self):

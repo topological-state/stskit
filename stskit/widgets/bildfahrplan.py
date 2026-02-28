@@ -479,10 +479,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
-        self.plot.clear_selection()
-        self.grafik_update()
-        self.update_actions()
-
     @Slot()
     def action_vorzeitige_abfahrt(self):
         """
@@ -513,8 +509,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
-        self.grafik_update()
-        self.update_actions()
 
     @Slot()
     def action_loeschen(self):
@@ -528,8 +522,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
-        self.grafik_update()
-        self.update_actions()
 
     @Slot()
     def action_abfahrt_abwarten(self):
@@ -558,8 +550,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
-        self.grafik_update()
-        self.update_actions()
 
     @Slot()
     def action_ankunft_abwarten(self):
@@ -588,8 +578,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
-        self.grafik_update()
-        self.update_actions()
 
     @Slot()
     def action_kreuzung_abwarten(self):
@@ -613,8 +601,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
-        self.grafik_update()
-        self.update_actions()
 
     @Slot()
     def action_betriebshalt_einfuegen(self):
@@ -662,8 +648,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
-        self.grafik_update()
-        self.update_actions()
 
     @Slot()
     def action_betriebshalt_loeschen(self):
@@ -689,5 +673,3 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             self.ui.zuginfoLabel.setText(str(e))
 
         self.plot.clear_selection()
-        self.grafik_update()
-        self.update_actions()

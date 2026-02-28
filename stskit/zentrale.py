@@ -80,9 +80,16 @@ class DatenZentrale:
         self.auswertung: Optional[Auswertung] = None
         self.plan_update = Observable(self)
         self.anlage_update = Observable(self)
-        self.betrieb_update = Observable(self)
+        self._betrieb_update = Observable(self)
         self.auswertung_update = Observable(self)
         self.plugin_ereignis = Observable(self)
+
+    @property
+    def betrieb_update(self) -> Observable:
+        if self.betrieb is not None:
+            return self.betrieb.on_change
+        else:
+            return self._betrieb_update
 
     async def update(self):
         """
@@ -165,6 +172,8 @@ class DatenZentrale:
 
         if self.anlage:
             self.anlage.sim_ereignis_uebernehmen(ereignis)
+        if self.betrieb:
+            self.betrieb.sim_ereignis_uebernehmen(ereignis)
         if self.auswertung:
             self.auswertung.ereignis_uebernehmen(ereignis)
 

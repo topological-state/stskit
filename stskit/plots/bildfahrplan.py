@@ -35,7 +35,7 @@ class BildfahrplanPlot:
         self.strecke_von: Optional[BahnhofElement] = None
         self.strecke_via: Optional[BahnhofElement] = None
         self.strecke_nach: Optional[BahnhofElement] = None
-        self.zugbeschriftung = Zugbeschriftung(self.zentrale.anlage)
+        self.zugbeschriftung = Zugbeschriftung(self.anlage)
 
         self.bildgraph = EreignisGraph()
         self.streckengraph = nx.MultiDiGraph()
@@ -256,10 +256,10 @@ class BildfahrplanPlot:
         t1 = self.zeit + self.vorlaufzeit + 10
 
         strecke = set(self.strecke)
-
-        for u, v, data in self.anlage.dispo_ereignisgraph.edges(data=True):
-            u_data = self.anlage.dispo_ereignisgraph.nodes[u]
-            v_data = self.anlage.dispo_ereignisgraph.nodes[v]
+        ereignisgraph = self.zentrale.betrieb.ereignisgraph
+        for u, v, data in ereignisgraph.edges(data=True):
+            u_data = ereignisgraph.nodes[u]
+            v_data = ereignisgraph.nodes[v]
             u_bst = _bst_von_gleis(u_data.gleis_bst or u_data.gleis)
             v_bst = _bst_von_gleis(v_data.gleis_bst or v_data.gleis)
             if u_bst not in strecke and v_bst not in strecke:
@@ -297,7 +297,7 @@ class BildfahrplanPlot:
                 self.bildgraph.add_edge(u, v, **u_v_data)
 
         # abhaengigkeiten
-        for u, v, data in self.anlage.dispo_ereignisgraph.edges(data=True):
+        for u, v, data in ereignisgraph.edges(data=True):
             if data.typ not in {'A'}:
                 continue
 
@@ -610,6 +610,7 @@ class BildfahrplanPlot:
             self.clear_selection()
             return
 
+        assert isinstance(x, float)
         bahnhof_index = np.argmin(np.abs(x - self.distanz))
         bahnhof = self.strecke[bahnhof_index]
 
@@ -728,7 +729,7 @@ class BildfahrplanPlot:
         ankunft = self.bildgraph.nodes[v]
 
         try:
-            zug = self.zentrale.anlage.zuggraph.nodes[abfahrt.zid]
+            zug = self.anlage.zuggraph.nodes[abfahrt.zid]
         except KeyError:
             info = f"[{abfahrt.zid}]"
         else:

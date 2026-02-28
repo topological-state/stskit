@@ -13,6 +13,7 @@ from PySide6.QtCore import Slot, QModelIndex, QSortFilterProxyModel, QItemSelect
 from PySide6.QtWidgets import QAbstractItemView
 
 from stskit.dispo.anlage import Anlage
+from stskit.dispo.betrieb import Betrieb
 from stskit.zentrale import DatenZentrale
 from stskit.plugin.stsobj import format_verspaetung, format_minutes
 from stskit.qt.ui_fahrplan import Ui_FahrplanWidget
@@ -39,10 +40,11 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
     es wird davon ausgegangen, dass die zugliste nicht häufing verändert wird
     und dass änderungen sofort über set_zugliste angezeigt werden.
     """
-    def __init__(self, anlage: Anlage):
+    def __init__(self, anlage: Anlage, betrieb: Betrieb):
         super().__init__()
 
         self.anlage = anlage
+        self.betrieb = betrieb
         self.zid_liste: List[int] = []
         self._columns: List[str] = ['Zug', 'Status', 'Von', 'Nach', 'Einfahrt', 'Ausfahrt', 'Gleis', 'Verspätung']
         self.zugschema = None
@@ -53,7 +55,7 @@ class ZuglisteModell(QtCore.QAbstractTableModel):
 
     @property
     def zielgraph(self) -> ZielGraph:
-        return self.anlage.dispo_zielgraph
+        return self.betrieb.zielgraph
 
     def update(self):
         """
@@ -251,14 +253,6 @@ class ZuglisteFilterProxy(QSortFilterProxyModel):
         self._zugliste_model: ZuglisteModell = None
 
     @property
-    def zuggraph(self) -> ZugGraph:
-        return self.anlage.zuggraph
-
-    @property
-    def zielgraph(self) -> ZielGraph:
-        return self.anlage.dispo_zielgraph
-
-    @property
     def simzeit(self) -> int:
         return self._simzeit
 
@@ -347,10 +341,11 @@ class FahrplanModell(QtCore.QAbstractTableModel):
 
     der anzuzeigende zug wird durch set_zug gesetzt.
     """
-    def __init__(self, anlage: Anlage):
+    def __init__(self, anlage: Anlage, betrieb: Betrieb):
         super().__init__()
 
         self.anlage = anlage
+        self.betrieb = betrieb
         self.zid: int = 0
         self.zug: Optional[ZugGraphNode] = None
         self.zugpfad: List[ZielLabelType] = []
@@ -363,7 +358,7 @@ class FahrplanModell(QtCore.QAbstractTableModel):
 
     @property
     def zielgraph(self) -> ZielGraph:
-        return self.anlage.dispo_zielgraph
+        return self.betrieb.zielgraph
 
     def set_zug(self, zid: int):
         """
@@ -563,7 +558,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui.display_layout.setObjectName("display_layout")
         self.ui.display_layout.addWidget(self.display_canvas)
 
-        self.zugliste_modell = ZuglisteModell(zentrale.anlage)
+        self.zugliste_modell = ZuglisteModell(zentrale.anlage, zentrale.betrieb)
 
         self.zugliste_modell.zugschema = self.zentrale.anlage.zugschema
         self.zugliste_sort_filter = ZuglisteFilterProxy(self)
@@ -585,21 +580,21 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.ui.suche_zug_edit.textEdited.connect(self.suche_zug_changed)
         self.ui.suche_loeschen_button.clicked.connect(self.suche_loeschen_clicked)
 
-        self.fahrplan_modell = FahrplanModell(zentrale.anlage)
+        self.fahrplan_modell = FahrplanModell(zentrale.anlage, zentrale.betrieb)
         self.ui.fahrplan_view.setModel(self.fahrplan_modell)
         self.ui.fahrplan_view.setSelectionMode(QAbstractItemView.SingleSelection)
         self.ui.fahrplan_view.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.fahrplan_view.verticalHeader().setVisible(False)
 
-        self.folgezug_modell = FahrplanModell(zentrale.anlage)
+        self.folgezug_modell = FahrplanModell(zentrale.anlage, zentrale.betrieb)
         self.ui.folgezug_view.setModel(self.folgezug_modell)
         self.ui.folgezug_view.setSelectionMode(QAbstractItemView.SingleSelection)
         self.ui.folgezug_view.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.folgezug_view.verticalHeader().setVisible(False)
 
-        self.zielplot = ZielPlot(zentrale.anlage)
+        self.zielplot = ZielPlot(zentrale.anlage, zentrale.betrieb)
 
-        self.dispo_modell = DispoModell(zentrale.anlage)
+        self.dispo_modell = DispoModell(zentrale.anlage, zentrale.betrieb)
         self.dispo_sort_filter = QSortFilterProxyModel(self)
         self.dispo_sort_filter.setSourceModel(self.dispo_modell)
         self.ui.dispo_table.setModel(self.dispo_sort_filter)
@@ -678,7 +673,7 @@ class FahrplanWindow(QtWidgets.QWidget):
         self.grafik_update()
 
     def get_folgezug(self, zid: int) -> int | None:
-        for node in self.zentrale.anlage.dispo_ereignisgraph.zugpfad(zid, ersatz=True, kuppeln=True):
+        for node in self.zentrale.betrieb.ereignisgraph.zugpfad(zid, ersatz=True, kuppeln=True):
             if node.zid != zid:
                 return node.zid
         return None
