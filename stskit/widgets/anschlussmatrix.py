@@ -329,13 +329,9 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                 else:
                     if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in\
                             {ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN, ANSCHLUSS_OK}:
-                        self.zentrale.betrieb.abfahrt_abwarten(self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
+                        self.zentrale.betrieb.ankunft_abwarten(self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
                                                                self.anschlussmatrix.ankunft_ereignisse[zid_an],
                                                                self.anschlussmatrix.umsteigezeit)
-
-        self.daten_update()
-        self.grafik_update()
-        self.update_actions()
 
     @Slot()
     def action_abfahrt_abwarten(self):
@@ -368,10 +364,6 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                         self.zentrale.betrieb.abfahrt_abwarten(self.anschlussmatrix.abfahrt_ereignisse[_zid_ab],
                                                                self.anschlussmatrix.abfahrt_ereignisse[_zid_an])
 
-        self.daten_update()
-        self.grafik_update()
-        self.update_actions()
-
     @Slot()
     def action_anschluss_aufgeben(self):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
@@ -395,32 +387,19 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
             i_ab = self.anschlussmatrix.zid_abfahrten_index.index(zid_ab)
             i_an = self.anschlussmatrix.zid_ankuenfte_index.index(zid_an)
             if self.anschlussmatrix.anschlussstatus[i_ab, i_an] in {ANSCHLUSS_ABWARTEN}:
-                self.zentrale.betrieb.abfahrt_zuruecksetzen(self.anschlussmatrix.abfahrt_ereignisse[zid_ab],
-                                                            self.anschlussmatrix.ankunft_ereignisse[zid_an])
-
-        self.daten_update()
-        self.grafik_update()
-        self.update_actions()
+                self.zentrale.betrieb.abfahrt_zuruecksetzen(self.anschlussmatrix.abfahrt_ereignisse[zid_ab])
 
     @Slot()
     def action_plus_eins(self):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         for zid_ab, zid_an in auswahl:
-            self.zentrale.betrieb.wartezeit_aendern(self.anschlussmatrix.abfahrt_ereignisse[zid_ab], 1, True)
-
-        self.daten_update()
-        self.grafik_update()
-        self.update_actions()
+            self.zentrale.betrieb.wartezeit_aendern(self.anschlussmatrix.abfahrt_ereignisse[zid_ab], None, 1, True)
 
     @Slot()
     def action_minus_eins(self):
         auswahl = self.anschlussmatrix.auswahl_expandieren(self.anschlussmatrix.anschluss_auswahl)
         for zid_ab, zid_an in auswahl:
-            self.zentrale.betrieb.wartezeit_aendern(self.anschlussmatrix.abfahrt_ereignisse[zid_ab], -1, True)
-
-        self.daten_update()
-        self.grafik_update()
-        self.update_actions()
+            self.zentrale.betrieb.wartezeit_aendern(self.anschlussmatrix.abfahrt_ereignisse[zid_ab], None, -1, True)
 
     @Slot()
     def action_zug_ausblenden(self):
