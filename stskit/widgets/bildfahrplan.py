@@ -430,7 +430,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                     elif node_data['typ'] == 'An' and data['typ'] == 'P':
                         muster.append(AuswahlMuster(index, 'P-An', node_data, data, u, v))
                 for u, v, data in self.plot.bildgraph.out_edges(node_label, data=True):
-                    if node_data['typ'] == 'An' and data['typ'] in {'B', 'D', 'H'}:
+                    if node_data['typ'] == 'An' and data['typ'] in {'B', 'D', 'H', 'E', 'F', 'K'}:
                         muster.append(AuswahlMuster(index, 'An-H', node_data, data, u, v))
             except KeyError:
                 pass
