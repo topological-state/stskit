@@ -620,21 +620,35 @@ class FahrplanWindow(QtWidgets.QWidget):
 
         :return: None
         """
+
+        # memorize selection
         try:
             view_index = self.ui.zugliste_view.selectedIndexes()[0]
-            model_index = self.zugliste_sort_filter.mapToSource(view_index)
+            zug_index = self.zugliste_sort_filter.mapToSource(view_index)
         except IndexError:
-            model_index = None
+            zug_index = None
+
+        try:
+            view_index = self.ui.dispo_table.selectedIndexes()[0]
+            dispo_index = self.dispo_sort_filter.mapToSource(view_index)
+        except IndexError:
+            dispo_index = None
 
         self.zugliste_sort_filter.simzeit = self.zentrale.simzeit_minuten
         self.zugliste_modell.update()
+        self.dispo_modell.update()
         self.fahrplan_modell.update()
         self.folgezug_modell.update()
-        self.dispo_modell.update()
 
-        if model_index:
-            view_index = self.zugliste_sort_filter.mapFromSource(model_index)
+        # restore selection
+        if zug_index:
+            view_index = self.zugliste_sort_filter.mapFromSource(zug_index)
             self.ui.zugliste_view.selectionModel().select(view_index, QItemSelectionModel.SelectionFlag.Select |
+                                                       QItemSelectionModel.SelectionFlag.Rows)
+
+        if dispo_index:
+            view_index = self.dispo_sort_filter.mapFromSource(dispo_index)
+            self.ui.dispo_table.selectionModel().select(view_index, QItemSelectionModel.SelectionFlag.Select |
                                                        QItemSelectionModel.SelectionFlag.Rows)
 
         self.ui.zugliste_view.resizeColumnsToContents()
@@ -668,9 +682,10 @@ class FahrplanWindow(QtWidgets.QWidget):
         else:
             folge_zid = None
 
-        self.update_zugfahrplan('stamm', zid, 'Stammzug')
-        self.update_zugfahrplan('folge', folge_zid, 'Folgezug')
-        self.grafik_update()
+        if self.ui.zugliste_widget.currentIndex() == 0:
+            self.update_zugfahrplan('stamm', zid, 'Stammzug')
+            self.update_zugfahrplan('folge', folge_zid, 'Folgezug')
+            self.grafik_update()
 
     def get_folgezug(self, zid: int) -> int | None:
         for node in self.zentrale.betrieb.ereignisgraph.zugpfad(zid, ersatz=True, kuppeln=True):
@@ -698,9 +713,10 @@ class FahrplanWindow(QtWidgets.QWidget):
             self.ui.dispo_table.resizeColumnsToContents()
             self.ui.dispo_table.resizeRowsToContents()
 
-        self.update_zugfahrplan('stamm', dispo.get('zid'), 'Zug')
-        self.update_zugfahrplan('folge', dispo.get('rzid'), 'Gegenzug')
-        self.grafik_update()
+        if self.ui.zugliste_widget.currentIndex() == 1:
+            self.update_zugfahrplan('stamm', dispo.get('zid'), 'Zug')
+            self.update_zugfahrplan('folge', dispo.get('rzid'), 'Gegenzug')
+            self.grafik_update()
 
     def update_zugfahrplan(self, panel: str, zid: int | None, title: str, ):
         if self.zentrale.anlage.zuggraph.has_node(zid):
