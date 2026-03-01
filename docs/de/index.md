@@ -9,16 +9,16 @@ Es liest die Live-Daten des laufenden Spiels aus, stellt sie grafisch dar, und u
 _STSkit_ enthält eine Implementierung der Stellwerksim Plugin-Schnittstelle in Python, die du auch in eigenen Projekten verwenden kannst.
 
 
-### Hauptmerkmale
+## Hauptmerkmale
 
 - Grafische und tabellarische Fahrpläne
-  - Automatische Verspätungsprognose entlang der Zugketten mit Berücksichtigung der verschiedenen Betriebsvorgänge.
-  - Korrekturmöglichkeiten und Erfassung von Abhängigkeiten (Anschlüsse, Kreuzungen, Überholungen)
+    - Automatische Verspätungsprognose entlang der Zugketten mit Berücksichtigung der verschiedenen Betriebsvorgänge.
+    - Korrekturmöglichkeiten und Erfassung von Abhängigkeiten (Anschlüsse, Kreuzungen, Überholungen)
 - Gleisbelegungsplan
-  - Warnung vor Gleis- und Sektorkonflikten
-  - Hervorhebung von Kupplungsvorgängen
+    - Warnung vor Gleis- und Sektorkonflikten
+    - Hervorhebung von Kupplungsvorgängen
 - Einfahrts- und Ausfahrtstabellen
-  - Abschätzung der effektiven Ein- und Ausfahrtszeiten
+    - Abschätzung der effektiven Ein- und Ausfahrtszeiten
 - Anschlussmatrix
 - Rangierplan
 - Ereignisticker

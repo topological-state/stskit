@@ -30,15 +30,19 @@ Desktop.ini
 # VirtualEnv
 env/
 venv/
+.venv/
 
 .ipynb*/
 patch/
 research/
-varianten/
+varia/
 
 # Packaging files
 build/
 dist/
+site/
 
 playground.py
 *.log
+*.bin
+*.exe

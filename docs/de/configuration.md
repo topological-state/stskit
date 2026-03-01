@@ -21,10 +21,8 @@ Da die Dokumentation auf dieser Seite möglicherweise nicht aktuell ist, empfieh
 Konfigurationsdateien zu weiteren Stellwerken können dem Autor zugeschickt oder via Pull-Request angeboten werden.
 
 Der Name einer Konfigurationsdatei setzt sich aus der Stellwerk-ID und der Endung `json` zusammen.
-Das Beispiel unten zeigt die Datei `812.json`.
 Der Inhalt der Konfigurationsdateien ist im [JSON-Format](https://de.wikipedia.org/wiki/JavaScript_Object_Notation).
-Er gliedert sich in die im weiteren beschriebenen Abschnitte.
-
-Bei JSON-Dateien auf Kommas und Klammern achten!
-Leerzeichen und Zeilenwechsel ausserhalb von Anführungszeichen können weggelassen werden. 
-Umlaute im UTF-8 Encoding sind erlaubt, werden aber vom Plugin als `\u....` Codes geschrieben.
+Bei JSON-Dateien auf Kommas, Klammern und (doppelte) Anführungszeichen achten!
+Leerzeichen und Zeilenwechsel ausserhalb von Anführungszeichen sind rein kosmetisch. 
+Umlaute im UTF-8 Encoding sind erlaubt.
+Das STSdispo selber schreibt sie jedoch im `\u....` Format.
