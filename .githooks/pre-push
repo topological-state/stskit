@@ -19,6 +19,7 @@ echo -e "${YELLOW}Checking Python files...${NC}"
 
 # Lint
 if ! uvx ruff check --extend-exclude=.*,build*; then
+    echo -e "Linting failed."
     PASS=false
 fi
 
@@ -29,7 +30,14 @@ uv sync
 echo -e "${YELLOW}Running Python tests...${NC}"
 
 if ! uv run nosetests; then
-    echo -e "Tests failed. Push aborted."
+    echo -e "Tests failed."
+    PASS=false
+fi
+
+echo -e "${YELLOW}Building documentation...${NC}"
+
+if ! uv run zensical build --clean; then
+    echo -e "Building documentation failed."
     PASS=false
 fi
 
@@ -38,6 +46,6 @@ if [ "$PASS" = true ]; then
     echo -e "${GREEN}All checks passed!${NC}"
     exit 0
 else
-    echo -e "${RED}Some checks failed. Please fix issues before committing.${NC}"
+    echo -e "${RED}Some checks failed. Please fix issues before pushing.${NC}"
     exit 1
 fi
