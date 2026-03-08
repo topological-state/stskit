@@ -1,44 +1,47 @@
 """
-stellwerksim plugin-client
+Stellwerksim Plugin-Client
 
-dieses modul stellt eine PluginClient-klasse zur verfügung, die die kommunikation mit dem simulator übernimmt.
-der client speichert auch alle anlagen- und fahrplandaten zwischen und verarbeitet ereignisse.
-der PluginClient übersetzt anfragen in xml und sendet sie an den simulator.
-die xml-antworten übersetzt er in python-objekte.
+Dieses Modul stellt eine PluginClient-Klasse zur Verfügung, die die Kommunikation mit dem Simulator übernimmt.
+Der Client speichert auch alle Anlagen- und Fahrplandaten zwischen und verarbeitet Ereignisse.
+Der PluginClient übersetzt Anfragen in xml und sendet sie an den Simulator.
+Die xml-Antworten übersetzt er in Python-Objekte.
 
-asynchrone kommunikation:
+Asynchrone Kommunikation:
 
-die kommunikation verläuft asynchron und ist nach der trio-bibliothek modelliert.
-es gibt einen socket-stream für die xml-kommunikation mit dem simulator.
-die request-methoden senden anfragen via diesen stream.
-antworten werden innerhalb der receiver-methode, die in einem eigenen task gestartet wird, verarbeitet
-und als python-objekte in die antworten- oder ereignis-queues gestellt.
-die request-methoden holen die antworten dort ab.
-für ereignisse kann das hauptprogramm einen separaten task starten und die queue auslesen.
+Die Kommunikation verläuft asynchron und ist nach der trio-Bibliothek modelliert.
+Es gibt einen Socket-Stream für die xml-Kommunikation mit dem Simulator.
+Die request-Methoden senden Anfragen via diesen Stream.
+Antworten werden innerhalb der Receiver-Methode, die in einem eigenen trio-Task gestartet wird, verarbeitet
+und als Python-Objekte in die Antworten- oder Ereignis-Queues gestellt.
+Die request-Methoden holen die Antworten dort ab.
+Für Ereignisse kann das Hauptprogramm einen separaten Task starten und die Queue auslesen.
 
-vorsicht ist bei der verwendung von parallelen tasks geboten,
-damit sich zwei serveranfragen nicht überschneiden können.
-am besten werden alle anfragen im gleichen task gestellt.
-in einem separaten task wird die ereignis-queue abgefragt.
+Vorsicht ist bei der Verwendung von parallelen Tasks geboten,
+damit sich zwei Serveranfragen nicht überschneiden können.
+Am besten werden alle Anfragen im gleichen trio-Task gestellt.
+In einem separaten Task wird die Ereignis-Queue abgefragt.
 
-beispiele für die implementation zeigen das testprogramm unten, oder weitere im paket enthaltenen programme.
+Beispiele für die Implementation zeigen das Testprogramm unten, oder weitere im Paket enthaltene Programme.
 
-logging:
+Logging:
 
-stsplugin nutzt einen eigenen logger mit dem namen "stsplugin" aus dem logging modul der standardbibliothek.
-vorsicht: auf stufe DEBUG wird die gesamte kommunikation mit dem simulator ausgegeben!
-wenn dies nicht gewünscht wird, der rest des programms aber auf DEBUG bleiben soll,
-kann die stufe dieses moduls individuell angepasst werden durch
-"logging.getLogger('stskit.interface.stsplugin').setLevel(logging.WARNING)".
+stsplugin nutzt einen eigenen Logger mit dem namen "stsplugin" aus dem logging-Modul der Standardbibliothek.
+
+tip:
+    Auf Stufe DEBUG wird die gesamte Kommunikation mit dem Simulator ausgegeben!
+    Wenn dies nicht gewünscht wird, der Rest des Programms aber auf DEBUG bleiben soll,
+    kann die Stufe dieses Moduls individuell angepasst werden durch
+    `logging.getLogger('stskit.interface.stsplugin').setLevel(logging.WARNING)`.
 """
 import sys
 
+from collections.abc import Iterable
 import trio
 import datetime
 import html.entities
 import logging
 import re
-from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Set, Tuple, Union
+from typing import Any, Callable
 import untangle
 import xml.sax
 
@@ -76,63 +79,60 @@ class PluginClient:
     """
     PluginClient - der Kern der Plugin-Schnittstelle
 
-    Attribute
-    ---------
+    Attrs:
 
-    name: Name des Plugins. Wird beim Start im Sim angezeigt.
-    autor: Autor des Plugins. Wird beim Start im Sim angezeigt.
-    version: Version des Plugins. Wird beim Start im Sim angezeigt.
-    text: Beschreibung des Plugins. Wird beim Start im Sim angezeigt.
+        name: Name des Plugins. Wird beim Start im Sim angezeigt.
+        autor: Autor des Plugins. Wird beim Start im Sim angezeigt.
+        version: Version des Plugins. Wird beim Start im Sim angezeigt.
+        text: Beschreibung des Plugins. Wird beim Start im Sim angezeigt.
 
-    anlageninfo: AnlagenInfo vom Simulator. Wird durch request_anlageninfo abgefragt.
+        anlageninfo: AnlagenInfo vom Simulator. Wird durch request_anlageninfo abgefragt.
 
-    bahnsteigliste: Liste von BahnsteigInfo-Objekten. Wird durch request_bahnsteigliste abgefragt.
+        bahnsteigliste: Liste von BahnsteigInfo-Objekten. Wird durch request_bahnsteigliste abgefragt.
 
-    zugliste: List von ZugDetails-Objekten mit den Informationen zu den Zügen.
-        Wird durch request_zugliste und request_zugdetails abgefragt.
+        zugliste: List von ZugDetails-Objekten mit den Informationen zu den Zügen.
+            Wird durch request_zugliste und request_zugdetails abgefragt.
 
-    wege: Dict von Knoten-objekten repräsentiert den Wege-Graph.
-        Der Dict ist nach Knoten.key aufgeschlüsselt.
-        Dies ist für die meisten Element die enr.
-        Für Bahnsteige und Haltepunkte ist es der Name.
-        Vorsicht: Bahnsteige und Einfahrten/Ausfahrten können den gleichen Namen haben.
-    wege_nach_enr: Wege-Graph nach enr-Nummern aufgeschlüsselt.
-        Der Dict enthält die Knoten-Objekte, die eine enr-Nummer deklariert haben:
-        Signale, Weichen, Einfahrten und Ausfahrten.
-    wege_nach_namen: Wege-Graph nach knoten-Namen aufgeschlüsselt.
-        Der Dict enthält die Knoten-Objekte, die einen Namen deklariert haben.
-        Weil der Name nicht eindeutig ist
-        (Anschlüsse und Bahnsteige haben z.B. in einigen Stellwerken den gleichen Namen),
-        sind die Werte des Dicts Sets.
-    wege_nach_typ: Wege-Graph nach Typnummer aufgeschlüsselt.
-        Der Dict enthält Sets von Knoten-objekten.
-    wege_verbindungen: Set von Zweiertuples Knoten.key mit den Verbindungen zwischen Knoten.
-        Kann als Kantenliste für den Aufbau von Graphen verwendet werden.
-        Achtung: Es kann Kanten geben, deren Endpunkt in `wege` keinen Knoten haben, s. `fehlende_wege_knoten`.
+        wege: Dict von Knoten-objekten repräsentiert den Wege-Graph.
+            Der Dict ist nach Knoten.key aufgeschlüsselt.
+            Dies ist für die meisten Element die enr.
+            Für Bahnsteige und Haltepunkte ist es der Name.
+            Vorsicht: Bahnsteige und Einfahrten/Ausfahrten können den gleichen Namen haben.
+        wege_nach_enr: Wege-Graph nach enr-Nummern aufgeschlüsselt.
+            Der Dict enthält die Knoten-Objekte, die eine enr-Nummer deklariert haben:
+            Signale, Weichen, Einfahrten und Ausfahrten.
+        wege_nach_namen: Wege-Graph nach knoten-Namen aufgeschlüsselt.
+            Der Dict enthält die Knoten-Objekte, die einen Namen deklariert haben.
+            Weil der Name nicht eindeutig ist
+            (Anschlüsse und Bahnsteige haben z.B. in einigen Stellwerken den gleichen Namen),
+            sind die Werte des Dicts Sets.
+        wege_nach_typ: Wege-Graph nach Typnummer aufgeschlüsselt.
+            Der Dict enthält Sets von Knoten-objekten.
+        wege_verbindungen: Set von Zweiertuples Knoten.key mit den Verbindungen zwischen Knoten.
+            Kann als Kantenliste für den Aufbau von Graphen verwendet werden.
+            Achtung: Es kann Kanten geben, deren Endpunkt in `wege` keinen Knoten haben, s. `fehlende_wege_knoten`.
 
-    fehlende_wege_knoten: Set von Wegeknoten, die in einer `wege_verbindungen` vorkommen,
-        aber in `wege` nicht erfasst sind.
-        Gewisse Rangiersignale aus Einfahrten (Beispiele S210, S289, S308, S218 in Bozen) haben keinen Knoten,
-        d.h. wir können ihren Typ und Namen nicht ermitteln.
-        Diese Signale fehlen dann auch im Signalgraph.
-        Aktuell sollte dies aber kein Problem darstellen.
-    fehlende_wege_kanten: Set von Verbindungen analog `wege_verbindungen`,
-        von denen mindestens ein Endpunkt in `wege` nicht erfasst ist.
-        Der entsprechende Endpunkt ist in `fehlende_wege_knoten` eingetragen.
-        Die nicht aufgelösten Kanten sind trotzdem in `wege_verbindungen` enthalten.
+        fehlende_wege_knoten: Set von Wegeknoten, die in einer `wege_verbindungen` vorkommen,
+            aber in `wege` nicht erfasst sind.
+            Gewisse Rangiersignale aus Einfahrten (Beispiele S210, S289, S308, S218 in Bozen) haben keinen Knoten,
+            d.h. wir können ihren Typ und Namen nicht ermitteln.
+            Diese Signale fehlen dann auch im Signalgraph.
+            Aktuell sollte dies aber kein Problem darstellen.
+        fehlende_wege_kanten: Set von Verbindungen analog `wege_verbindungen`,
+            von denen mindestens ein Endpunkt in `wege` nicht erfasst ist.
+            Der entsprechende Endpunkt ist in `fehlende_wege_knoten` eingetragen.
+            Die nicht aufgelösten Kanten sind trotzdem in `wege_verbindungen` enthalten.
 
-    Verwendung
-    ----------
-
-    Siehe Beispielcode am Ende des Moduls (test-Funktion).
+    Usage:
+        Siehe Beispielcode am Ende des Moduls (test-Funktion).
     """
 
     def __init__(self, name: str, autor: str, version: str, text: str):
-        self._stream: Optional[trio.abc.Stream] = None
-        self._antwort_channel_in: Optional[trio.MemorySendChannel[untangle.Element]] = None
-        self._antwort_channel_out: Optional[trio.MemoryReceiveChannel[untangle.Element]] = None
-        self._ereignis_channel_in: Optional[trio.MemorySendChannel[Ereignis]] = None
-        self._ereignis_channel_out: Optional[trio.MemoryReceiveChannel[Ereignis]] = None
+        self._stream: trio.abc.Stream | None = None
+        self._antwort_channel_in: trio.MemorySendChannel[untangle.Element] | None = None
+        self._antwort_channel_out: trio.MemoryReceiveChannel[untangle.Element] | None = None
+        self._ereignis_channel_in: trio.MemorySendChannel[Ereignis] | None = None
+        self._ereignis_channel_out: trio.MemoryReceiveChannel[Ereignis] | None = None
 
         self.connected = trio.Event()
         self.registered = trio.Event()
@@ -142,20 +142,20 @@ class PluginClient:
         self.version: str = version
         self.text: str = text
 
-        self.anlageninfo: Optional[AnlagenInfo] = None
-        self.bahnsteigliste: Dict[str, BahnsteigInfo] = {}
-        self.wege: Dict[Union[int, str], Knoten] = {}
-        self.wege_nach_enr: Dict[int, Knoten] = {}
-        self.wege_nach_namen: Dict[str, Set[Knoten]] = {}
-        self.wege_nach_typ: Dict[int, Set[Knoten]] = {}
-        self.wege_nach_typ_namen: Dict[int, Dict[str, Knoten]] = {}
-        self.wege_verbindungen: Set[Tuple[Union[int, str], Union[int, str]]] = set()
-        self.fehlende_wege_knoten: Set[Union[int, str]] = set()
-        self.fehlende_wege_kanten: Set[Tuple[Union[int, str], Union[int, str]]] = set()
-        self.zugliste: Dict[int, ZugDetails] = {}
-        self.zuggattungen: Set[str] = set()
+        self.anlageninfo: AnlagenInfo | None = None
+        self.bahnsteigliste: dict[str, BahnsteigInfo] = {}
+        self.wege: dict[int | str, Knoten] = {}
+        self.wege_nach_enr: dict[int, Knoten] = {}
+        self.wege_nach_namen: dict[str, set[Knoten]] = {}
+        self.wege_nach_typ: dict[int, set[Knoten]] = {}
+        self.wege_nach_typ_namen: dict[int, dict[str, Knoten]] = {}
+        self.wege_verbindungen: set[tuple[int | str, int | str]] = set()
+        self.fehlende_wege_knoten: set[int | str] = set()
+        self.fehlende_wege_kanten: set[tuple[int | str, int | str]] = set()
+        self.zugliste: dict[int, ZugDetails] = {}
+        self.zuggattungen: set[str] = set()
 
-        self.registrierte_ereignisse: Dict[str, Set[int]] = {art: set() for art in Ereignis.arten}
+        self.registrierte_ereignisse: dict[str, set[int]] = {art: set() for art in Ereignis.arten}
 
         self.client_datetime: datetime.datetime = datetime.datetime.now()
         self.server_datetime: datetime.datetime = datetime.datetime.now()
@@ -218,15 +218,18 @@ class PluginClient:
         self.connected = trio.Event()
         self.registered = trio.Event()
 
-    async def _send_request(self, tag, **kwargs):
+    async def _send_request(self,
+                            tag: str,
+                            **kwargs: str | int,
+                            ) -> None:
         """
-        anfrage senden.
+        Anfrage senden.
 
-        diese coroutine wartet ggf., bis der sendepuffer wieder bereit ist.
+        Diese coroutine wartet ggf., bis der Sendepuffer wieder bereit ist.
 
-        :param tag: name des xml-tags
-        :param kwargs: (dict) attribute des xml-tags
-        :return: None
+        Args:
+            tag: Name des xml-Tags
+            kwargs: Attribute des xml-Tags
         """
         args = [f"{k}='{v}'" for k, v in kwargs.items()]
         args = " ".join(args)
@@ -238,14 +241,14 @@ class PluginClient:
 
     async def receiver(self, *, task_status=trio.TASK_STATUS_IGNORED):
         """
-        empfangsschleife: antworten empfangen und verteilen
+        Empfangsschleife: Antworten empfangen und verteilen
 
-        alle antworten ausser ereignisse werden in untangle.Element objekte gepackt
-        und and den antworten-channel übergeben.
-        ereignisse werden als model.Ereignis-objekte an den ereignisse-channel übergeben.
+        Alle Antworten ausser Ereignisse werden in untangle.Element-Objekte gepackt
+        und an die Antworten-Queue übergeben.
+        Ereignisse werden als stskit.model.Ereignis-Objekte an die Ereignisse-Queue übergeben.
 
-        diese coroutine muss explizit in einer trio.nursery gestartet werden
-        und läuft, bis die verbindung unterbrochen wird.
+        Diese Coroutine muss explizit in einer trio.nursery gestartet werden
+        und läuft, bis die Verbindung unterbrochen wird.
         """
 
         parser: Any = xml.sax.make_parser()
@@ -308,12 +311,10 @@ class PluginClient:
 
     async def register(self) -> None:
         """
-        klient beim simulator registrieren.
+        Klient beim Simulator registrieren.
 
-        die funktion muss als erste nach dem connect aufgerufen werden,
-        da sie auch die statusantwort nach der verbindungsaufnahme auswertet.
-
-        :return: None
+        Diese Funktion muss als erste nach dem Verbinden aufgerufen werden,
+        da sie auch die Statusantwort nach der Verbindungsaufnahme auswertet.
         """
         status = await self.antwort_channel_out.receive()
         check_status(status)
@@ -324,26 +325,22 @@ class PluginClient:
         check_status(status)
         self.registered.set()
 
-    async def request_anlageninfo(self):
+    async def request_anlageninfo(self) -> None:
         """
-        anlageninfo anfordern.
+        Anlageninfo anfordern.
 
-        die antwort wird im anlageninfo attribut gespeichert.
-
-        :return: None
+        Die antwort wird im anlageninfo-Attribut gespeichert.
         """
         await self._send_request(AnlagenInfo.tag)
         response = await self.antwort_channel_out.receive()
         self.anlageninfo = AnlagenInfo().update(response.anlageninfo)
 
-    async def request_bahnsteigliste(self):
+    async def request_bahnsteigliste(self) -> None:
         """
         Bahnsteigliste anfordern.
 
         Die Liste wird im Attribut `bahnsteigliste` gespeichert.
         Die Methode löst auch die `nachbarn` der Bahnsteige auf.
-
-        :return: None
         """
 
         self.bahnsteigliste = {}
@@ -362,20 +359,22 @@ class PluginClient:
 
     async def request_simzeit(self) -> datetime.datetime:
         """
-        simulatorzeit anfragen.
+        Simulatorzeit anfragen.
 
-        die funktion fragt die aktuelle simulatorzeit an und liefert sie in einem datetime.time objekt.
+        Die funktion fragt die aktuelle Simulatorzeit an und liefert sie in einem `datetime.time`-Objekt.
 
-        basierend auf der antwort setzt sie ausserdem client_datetime, server_datetime und time_offset.
-        diese attribute können benutzt werden, um die simulatorzeit zu berechnen (calc_simzeit funktion),
-        ohne dass eine erneute anfrage geschickt werden muss.
+        Basierend auf der antwort setzt sie ausserdem `client_datetime`, `server_datetime` und `time_offset`.
+        Diese attribute können benutzt werden, um die Simulatorzeit zu berechnen (`calc_simzeit`-Funktion),
+        ohne dass eine erneute Anfrage geschickt werden muss.
 
-        bemerkung: client_datetime und server_datetime enthalten das aktuelle datum.
-        das ist nötig, um den time_offset als timedelta zu berechnen.
-        da der simulator kein datum kennt, sollten die datumsfelder nicht beachtet werden.
-        die datetime.datetime.time-methode ist ein schneller weg, ein datetime.time-objekt zu erhalten.
+        Info:
+            `client_datetime` und `server_datetime` enthalten das aktuelle Datum.
+            Das ist nötig, um den `time_offset` als `timedelta` zu berechnen.
+            Da der Simulator kein Datum kennt, sollten die Datumsfelder nicht beachtet werden.
+            Die `datetime.datetime.time`-Methode ist ein schneller Weg, ein `datetime.time`-Objekt zu erhalten.
 
-        :return: (datetime.datetime)
+        Returns:
+            Aktuelle Simulatorzeit
         """
         self.client_datetime = datetime.datetime.now()
         await self._send_request("simzeit", sender=0)
@@ -390,21 +389,22 @@ class PluginClient:
 
     def calc_simzeit(self) -> datetime.datetime:
         """
-        simulatorzeit ohne serverabfrage abschätzen.
+        Simulatorzeit ohne Serverabfrage abschätzen.
 
-        der time_offset muss vorher einmal mittels request_simzeit kalibriert worden sein.
+        Der `time_offset` muss vorher einmal mittels `request_simzeit` kalibriert worden sein.
 
-        der rückgabewert enthält das aktuelle (client-)datum.
-        das ist nötig, damit mit der uhrzeit gerechnet werden kann.
-        da der simulator kein datum kennt, sollten die datumsfelder nach der rechnung nicht beachtet werden.
-        der fahrplan (in FahrplanZeile) enthält lediglich datetime.time objekte.
-        ein datetime.time-objekt kann einfach über die time-methode extrahiert werden.
+        Der Rückgabewert enthält das aktuelle (Client-)Datum.
+        Das ist nötig, damit mit der Uhrzeit gerechnet werden kann.
+        Da der Simulator kein Datum kennt, sollten die Datumsfelder nach der Rechnung nicht beachtet werden.
+        Der Fahrplan (in `FahrplanZeile`) enthält lediglich `datetime.time`-Objekte.
+        Ein `datetime.time`-Objekt kann einfach über die `time`-Methode extrahiert werden.
 
-        :return: (datetime.datetime)
+        Returns:
+            Extrapolierte Simulatorzeit
         """
         return datetime.datetime.now() + self.time_offset
 
-    async def request_wege(self):
+    async def request_wege(self) -> None:
         """
         Wege-Graph anfragen
 
@@ -417,21 +417,16 @@ class PluginClient:
         ist der Schlüssel des Wege-Dict zweiteilig und enthält den Elementtyp und
         - je nach Typ - entweder die enr oder den Namen.
 
-        Die methode aktualisiert folgende Attribute:
+        Die Methode aktualisiert folgende Attribute:
         wege, wege_nach_enr, wege_nach_namen, wege_nach_typ, wege_verbindungen,
         fehlende_wege_knoten, fehlende_wege_kanten.
 
-        Bemerkungen
-        -----------
+        Teilweise fehlen wichtige Gleisverbindungen in dem Graphen, z.B. von Anschlüssen ans Gleisnetz.
 
-        - Teilweise fehlen wichtige Gleisverbindungen in dem Graphen, z.B. von Anschlüssen ans Gleisnetz.
-
-        - Rangiersignale aus Einfahrten (Beispiele S210, S289, S308, S218 in Bozen) haben keinen Knoten,
-          werden aber in Kanten referenziert.
-          Wir geben in diesem Fall eine Info-Meldung 'Nicht auflösbare Elementreferenz' ins Log
-          und schreiben die Verbindung und Referenz in die fehlende_wege_knoten- und fehlende_wege_kanten-Listen.
-
-        :return: None
+        Rangiersignale aus Einfahrten (Beispiele S210, S289, S308, S218 in Bozen) haben keinen Knoten,
+        werden aber in Kanten referenziert.
+        Wir geben in diesem Fall eine Info-Meldung 'Nicht auflösbare Elementreferenz' ins Log
+        und schreiben die Verbindung und Referenz in die fehlende_wege_knoten- und fehlende_wege_kanten-Listen.
         """
 
         await self._send_request("wege")
@@ -510,7 +505,7 @@ class PluginClient:
         logger.info(f"Wege: Fehlende Knoten {self.fehlende_wege_knoten}")
         logger.info(f"Wege: Fehlende Kanten {self.fehlende_wege_kanten}")
 
-    async def request_zugdetails(self, zid: Optional[Union[int, Iterable[int]]] = None):
+    async def request_zugdetails(self, zid: int | Iterable[int] | None = None) -> None:
         """
         ZugDetails eines, mehrerer oder aller Züge anfragen.
 
@@ -519,8 +514,8 @@ class PluginClient:
         Wenn ein Fehler auftritt (weil z.B. der Zug nicht mehr im Stellwerk ist),
         wird der Zug aus der Zugliste gelöscht.
 
-        :param zid: Einzelne Zug-ID, Iterable von Zug-IDs, oder None (alle in der Zugliste).
-        :return: None
+        Args:
+            zid: Einzelne Zug-ID, Iterable von Zug-IDs, oder None (alle in der Zugliste).
         """
 
         if zid is not None:
@@ -543,8 +538,11 @@ class PluginClient:
         Wenn ein Fehler auftritt (weil z.B. der Zug nicht mehr im Stellwerk ist),
         wird der Zug aus der Zugliste gelöscht.
 
-        :param zid: einzelne zug-id.
-        :return: True (Erfolg) oder False (Fehler, Zug entfernt)
+        Args:
+            zid: einzelne zug-id.
+
+        Returns:
+            True (Erfolg) oder False (Fehler, Zug entfernt)
         """
 
         await self._send_request("zugdetails", zid=zid)
@@ -569,19 +567,19 @@ class PluginClient:
 
         return True
 
-    async def request_ereignis(self, art, zids: Iterable[int]):
+    async def request_ereignis(self, art: str, zids: Iterable[int]) -> None:
         """
-        ereignismeldung anfordern
+        Ereignismeldung anfordern
 
-        bemerkung: nach namenswechsel muss man ereignismeldungen neu anfordern.
-        ausser für "einfahrt" schicken wir daher anforderungen nur, wenn der zug sichtbar ist.
+        Nach Nummernwechsel muss man Ereignismeldungen neu anfordern.
+        Ausser für "Einfahrt" schicken wir daher Anforderungen nur, wenn der Zug sichtbar ist.
 
-        anforderungen werden in registrierte_ereignisse notiert,
+        Anforderungen werden in `registrierte_ereignisse` notiert,
         damit sie nicht wiederholt gesendet werden.
 
-        :param art: art des ereignisses, cf. model.Ereignis.arten
-        :param zids: menge oder sequenz von zug-id-nummern
-        :return: None
+        Args:
+            art: art des ereignisses, cf. model.Ereignis.arten
+            zids: menge oder sequenz von zug-id-nummern
         """
         zids = set(zids).difference(self.registrierte_ereignisse[art])
         for zid in zids:
@@ -589,19 +587,16 @@ class PluginClient:
                 await self._send_request("ereignis", art=art, zid=zid)
                 self.registrierte_ereignisse[art].add(zid)
 
-    async def request_zugfahrplan(self, zid: Optional[Union[int, Iterable[int]]] = None):
+    async def request_zugfahrplan(self, zid: int | Iterable[int] | None = None):
         """
         Fahrplan eines, mehrerer oder aller Züge anfragen.
 
         Das ZugDetails-Objekt muss in der Zugliste bereits existieren.
 
-        Bemerkungen
-        -----------
+        Abgefahrene Wegpunkte sind im Fahrplan nicht mehr vorhanden.
 
-        - Abgefahrene Wegpunkte sind im Fahrplan nicht mehr vorhanden.
-
-        :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
-        :return: None
+        Args:
+            zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
         """
 
         if zid is not None:
@@ -621,22 +616,24 @@ class PluginClient:
         Bei den folgenden Anfragen, wird nur die aktuelle Gleisänderung übernommen,
         die anderen Attribute bleiben unverändert (s. Bemerkung unten).
 
-        Die Methode aktualisiert auch den ziel_index des Zuges.
+        Die Methode aktualisiert auch den `ziel_index` des Zuges.
 
-        Bemerkungen
-        -----------
+        Abgefahrene Wegpunkte (ausser dem letzten) sind in der Antwort vom Simulator nicht mehr vorhanden.
+        Wir behalten jedoch den Fahrplan im ZugDetails bei, so wie er bei der ersten Aufruf zurückgegeben wurde.
+        Lediglich die Gleisänderung wird aktualisiert.
 
-        - Abgefahrene Wegpunkte (ausser dem letzten) sind in der Antwort vom Simulator nicht mehr vorhanden.
-          Wir behalten jedoch den Fahrplan im ZugDetails bei, so wie er bei der ersten Aufruf zurückgegeben wurde.
-          Lediglich die Gleisänderung wird aktualisiert.
-        - Der Fahrplan vom Simulator enthält den letzten Wegpunkt auch, nachdem er passiert wurde.
-          Der Eintrag kann dann aber fehlerhafte Werte enthalten (Dezember 2024).
-          Z.B. kann das Flags-Attribut Fall leer sein, wenn es vorher eine Durchfahrt angezeigt hat.
-        - Ersatzloks haben im XML keine Plangleis- und Gleisangabe.
-          Wir übernehmen beim ersten Auftreten den ersten Fahrplaneintrag.
+        Der Fahrplan vom Simulator enthält den letzten Wegpunkt auch, nachdem er passiert wurde.
+        Der Eintrag kann dann aber fehlerhafte Werte enthalten (Dezember 2024).
+        Z.B. kann das Flags-Attribut Fall leer sein, wenn es vorher eine Durchfahrt angezeigt hat.
 
-        :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
-        :return: True (Erfolg) oder False (Fehler)
+        Ersatzloks haben im XML keine Plangleis- und Gleisangabe.
+        Wir übernehmen beim ersten Auftreten den ersten Fahrplaneintrag.
+
+        Args:
+            zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
+
+        Returns:
+            True (Erfolg) oder False (Fehler)
         """
 
         zug = self.zugliste[zid]
@@ -693,19 +690,18 @@ class PluginClient:
 
         Die Zugliste wird angefragt und aktualisiert.
 
-        Bemerkungen
-        -----------
+        Die vom Simulator gelieferte Zugliste enthält nicht alle Folgezüge.
 
-        - Die vom Simulator gelieferte Zugliste enthält nicht alle Folgezüge.
-        - Ausgefahrene Züge werden von der Liste entfernt.
-          Für ersetzte Züge wird ein ersatz-Ereignis erzeugt.
-        - Die Zugobjekte sind nach dieser Abfrage schon ziemlich komplett.
-          Es fehlen die aktuelle Verspätung (request_zugdetails)
-          und Gleisänderungen im Fahrplan (request_zugfahrplan).
-        - Die Objektinstanzen werden bei Aktualisierung beibehalten.
-        - Ersatzloks haben eine negative ID.
+        Ausgefahrene Züge werden von der Liste entfernt.
+        Für ersetzte Züge wird ein ersatz-Ereignis erzeugt.
 
-        :return: None
+        Die Zugobjekte sind nach dieser Abfrage schon ziemlich komplett.
+        Es fehlen die aktuelle Verspätung (request_zugdetails)
+        und Gleisänderungen im Fahrplan (request_zugfahrplan).
+
+        Die Objektinstanzen werden bei Aktualisierung beibehalten.
+
+        Ersatzloks haben eine negative ID.
         """
 
         alte_zugliste = set(self.zugliste.keys())
@@ -749,14 +745,18 @@ class PluginClient:
             except KeyError:
                 pass
 
-    async def request_zug(self, zid: int) -> Optional[ZugDetails]:
+    async def request_zug(self, zid: int) -> ZugDetails | None:
         """
-        einzelnen zug und fahrplan anfragen.
+        Einzelnen Zug und Fahrplan anfragen.
 
-        der zug wird in die zugliste eingetragen bzw. aktualisiert und als ZugDetails-objekt zurückgegeben.
+        Der Zug wird in die Zugliste eingetragen bzw. aktualisiert und als `ZugDetails`-Objekt zurückgegeben.
 
-        :param zid: einzelne zug-id
-        :return: ZugDetails inkl. fahrplan
+        Args:
+            zid: einzelne zug-id
+
+        Returns:
+            `ZugDetails` inkl. Fahrplan.
+            None, wenn der Zug nicht verzeichnet ist.
         """
         zid = int(zid)
         if zid:
@@ -771,19 +771,20 @@ class PluginClient:
         except KeyError:
             return None
 
-    async def resolve_zugflags(self, zid: Optional[Union[int, Iterable[int]]] = None):
+    async def resolve_zugflags(self, zid: int | Iterable[int] | None = None) -> None:
         """
-        folgezüge aus den zugflags auflösen.
+        Folgezüge aus den Zugflags auflösen.
 
-        da request_zugliste die folgezüge (ersatz-, flügel- und kuppelzüge) nicht automatisch erhält,
-        lesen wir diese aus den zugflags aus und fragen ihre details und fahrpläne an.
-        die funktion arbeitet iterativ, bis alle folgezüge aufgelöst sind.
-        die züge werden in die zugliste eingetragen und im stammzug referenziert.
+        Da `request_zugliste` die Folgezüge (Ersatz-, Flügel- und Kuppelzüge) nicht automatisch erhält,
+        lesen wir diese aus den Zugflags aus und fragen ihre Details und Fahrpläne explizit an.
+        Die Funktion arbeitet iterativ, bis alle Folgezüge aufgelöst sind.
+        Die Züge werden in die Zugliste eingetragen und im Stammzug referenziert.
 
-        anmerkung: zids sind nicht chronologisch. ersatzzüge können eine tiefere zid als der stammzug haben.
+        Info:
+            zids sind nicht geordnet. Ersatzzüge können eine tiefere zid als der Stammzug haben.
 
-        :param zid: einzelne zug-id, iterable von zug-ids, oder None (alle in der liste).
-        :return: None
+        Args:
+            zid: Einzelne Zug-ID, Iterable von Zug-IDs, oder None (alle in der Liste).
         """
         if zid is not None:
             zids = [int(zid)]
@@ -841,8 +842,6 @@ class PluginClient:
         Im `zuege`-attribut der Bahnsteige werden die an den Bahnsteig disponierten Züge aufgelistet.
         `zuege` ist ein Dictionary und bildet zid auf ZugDetails ab.
         Die ZugDetails sind weak References.
-
-        :return: None
         """
 
         for bahnsteig in self.bahnsteigliste.values():
@@ -860,12 +859,10 @@ class PluginClient:
 
     def update_wege_zuege(self):
         """
-        züge in wegelisten eintragen.
+        Züge in Wegelisten eintragen.
 
-        im züge-attribut der wege und knoten (einfahrten, ausfahrten, haltepunkte)
-        werden die fahrplanmässig daran vorbei kommenden züge aufgelistet.
-
-        :return: None
+        Im Züge-Attribut der Wege und Knoten (Einfahrten, Ausfahrten, Haltepunkte)
+        werden die fahrplanmässig daran vorbei kommenden Züge aufgelistet.
         """
         for knoten in self.wege.values():
             knoten.zuege.clear()
@@ -896,15 +893,18 @@ class PluginClient:
 
 def zugsortierschluessel(gleis: str, attr: str, default: datetime.time) -> Callable:
     """
-    sortierschlüssel-funktion für züge an einem gleis erzeugen.
+    Sortierschlüssel-Funktion für Züge an einem Gleis erzeugen.
 
-    der sortierschlüssel ist die ankunfts- oder abfahrtszeit am angegebenen gleis im fahrplan
-    oder der default-wert, wenn die fahrplanzeile oder zeitangabe fehlt.
+    Der Sortierschlüssel ist die Ankunfts- oder Abfahrtszeit am angegebenen Gleis im Fahrplan
+    oder der default-Wert, wenn die Fahrplanzeile oder Zeitangabe fehlt.
 
-    :param gleis: name des gleises oder bahnsteigs.
-    :param attr: name des zeit-attributs, entweder 'an' oder 'ab'.
-    :param default: default-zeit, falls das attribut fehlt.
-    :return: sortierschlüssel-funktion für sorted().
+    Args:
+        gleis: Name des Gleises oder Bahnsteigs.
+        attr: Name des Zeitattributs, entweder `an` oder `ab`.
+        default: Defaultwert, falls das Attribut fehlt.
+
+    Returns:
+        sortierschlüssel-funktion für sorted().
     """
 
     def caller(zugdetails):
@@ -917,14 +917,17 @@ def zugsortierschluessel(gleis: str, attr: str, default: datetime.time) -> Calla
 
 def einfahrt_sortierschluessel(attr: str, default: datetime.time) -> Callable:
     """
-    sortierschlüssel-funktion für zugeinfahrten erzeugen.
+    Sortierschlüssel-Funktion für Zugeinfahrten erzeugen.
 
-    der sortierschlüssel ist die ankunfts- oder abfahrtszeit des ersten fahrplanziels
-    oder der default-wert, wenn der fahrplan leer ist oder die zeitangabe fehlt.
+    Der Sortierschlüssel ist die Ankunfts- oder Abfahrtszeit des ersten Fahrplanziels
+    oder der Defaultwert, wenn der Fahrplan leer ist oder die Zeitangabe fehlt.
 
-    :param attr: name des zeit-attributs, entweder 'an' oder 'ab'.
-    :param default: default-zeit, falls das attribut fehlt.
-    :return: sortierschlüssel-funktion für sorted().
+    Args:
+        attr: Name des Zeitattributs, entweder `an` oder `ab`.
+        default: Defaultwert, falls das Attribut fehlt.
+
+    Returns:
+        Sortierschlüssel-Funktion für sorted().
     """
 
     def caller(zugdetails):
@@ -942,9 +945,12 @@ def ausfahrt_sortierschluessel(attr: str, default: datetime.time) -> Callable:
     der sortierschlüssel ist die ankunfts- oder abfahrtszeit des letzten fahrplanziels
     oder der default-wert, wenn der fahrplan leer ist oder die zeitangabe fehlt.
 
-    :param attr: name des zeit-attributs, entweder 'an' oder 'ab'.
-    :param default: default-zeit, falls das attribut fehlt.
-    :return: sortierschlüssel-funktion für sorted().
+    Args:
+        attr: Name des Zeitattributs, entweder `an` oder `ab`.
+        default: Defaultwert, falls das Attribut fehlt.
+
+    Returns:
+        Sortierschlüssel-Funktion für sorted().
     """
 
     def caller(zugdetails):
@@ -958,27 +964,28 @@ def ausfahrt_sortierschluessel(attr: str, default: datetime.time) -> Callable:
 
 class TaskDone(Exception):
     """
-    task erfolgreich erledigt
+    Task erfolgreich erledigt
 
-    die exception signalisiert, dass die aufgaben erfolgreich abgearbeitet worden sind.
+    Die exception signalisiert, dass die Aufgaben erfolgreich abgearbeitet worden sind.
 
-    die exception kann vom hauptprogramm ausgelöst werden, um einen trio-nursery-kontext zu verlassen,
-    der ansonsten unbestimmt auf andere tasks warten würde.
-    die exception muss ausserhalb des kontexts abgefangen werden.
+    Die Exception kann vom Hauptprogramm ausgelöst werden, um einen trio-nursery-Kontext zu verlassen,
+    der ansonsten unbestimmt auf andere Tasks warten würde.
+    Die Exception muss ausserhalb des Kontexts abgefangen werden.
     """
     pass
 
 
-async def test() -> PluginClient:
+async def test(*args, **kwargs) -> PluginClient:
     """
-    testprogramm
+    Testprogramm
 
-    das testprogramm fragt alle daten einmalig vom simulator ab und gibt sie an stdout aus.
+    Das Testprogramm fragt alle Daten einmalig vom Simulator ab und gibt sie an stdout aus.
 
-    der PluginClient bleibt bestehen, damit weitere details aus den statischen attributen ausgelesen werden können.
-    die kommunikation mit dem simulator wird jedoch geschlossen.
+    Der PluginClient bleibt bestehen, damit weitere Details aus den statischen Attributen ausgelesen werden können.
+    Die Kommunikation mit dem Simulator wird jedoch geschlossen.
 
-    :return: PluginClient-instanz
+    Returns:
+        `PluginClient`-Instanz
     """
     client = PluginClient(name='test', autor='tester', version='0.0', text='testing the plugin client')
     await client.connect()

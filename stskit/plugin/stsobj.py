@@ -1,23 +1,25 @@
 """
-objektklassen für die stellwerksim plugin-schnittstelle
+Objektklassen für die Stellwerksim Pluginschnittstelle
 
-dieses modul deklariert das datenmodell des plugin-klienten (stsplugin-modul).
-die gliederung entspricht weitgehend der struktur der xml-daten von der schnittstelle.
-für jedes tag gibt es eine klasse mit den tag-attributen.
-die tag- und attributnamen sind ähnlich wie im xml-protokoll, es gibt aber abweichungen.
-die daten werden in python-typen übersetzt.
-einige der klassen haben noch zusätzliche attribute, die vom klienten ausgefüllt werden.
+Dieses Modul deklariert das Datenmodell des Pluginklienten (`stsplugin`-Modul).
+Die Gliederung entspricht weitgehend der Struktur der xml-Daten von der Schnittstelle.
+Für jedes Tag gibt es eine Klasse mit den Tag-Attributen.
+Die Tag- und Attributnamen sind ähnlich wie im xml-Protokoll, es gibt aber Abweichungen.
+Die Daten werden in Python-Typen übersetzt.
+Einige der Klassen haben noch zusätzliche Attribute, die vom Klienten ausgefüllt werden.
 
-alle objekte werden leer konstruiert und über die update-methode mit daten gefüllt.
-die update-methoden erwarten geparste xml-daten in untangle.Element objekten.
+Alle objekte werden leer konstruiert und über die update-Methode mit Daten gefüllt.
+Die update-Methoden erwarten geparste xml-Daten in einem untangle.Element-Objekt.
 """
 
+from __future__ import annotations
+from collections.abc import Iterable, Mapping
 import datetime
 import logging
 import networkx as nx
 import numpy as np
 import re
-from typing import Any, Dict, Iterable, List, Mapping, NamedTuple, Optional, Set, Tuple, Union
+from typing import NamedTuple
 import untangle
 import weakref
 
@@ -25,13 +27,18 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-def time_to_minutes(dt: Union[datetime.datetime, datetime.time, datetime.timedelta]) -> int:
+def time_to_minutes(dt: datetime.datetime | datetime.time | datetime.timedelta) -> int:
     """
-    uhrzeit in minuten seit mitternacht umrechnen.
+    Uhrzeit in Minuten seit Mitternacht umrechnen.
 
-    :param dt: datetime, time oder timedelta objekt. das datum wird ignoriert.
-    :return: minuten, ganzzahlig
-    :raise AttributeError wenn der typ nicht kompatibel oder None ist
+    Args:
+        dt: datetime, time oder timedelta. Das Datum wird ignoriert.
+
+    Returns:
+        Minuten, ganzzahlig
+
+    Raises:
+        AttributeError wenn der Typ nicht kompatibel oder None ist.
     """
     try:
         # datetime, time
@@ -41,13 +48,18 @@ def time_to_minutes(dt: Union[datetime.datetime, datetime.time, datetime.timedel
         return round(dt.seconds / 60)
 
 
-def time_to_seconds(dt: Union[datetime.datetime, datetime.time, datetime.timedelta]) -> int:
+def time_to_seconds(dt: datetime.datetime | datetime.time | datetime.timedelta) -> int:
     """
-    uhrzeit in sekunden seit mitternacht umrechnen.
+    Uhrzeit in Sekunden seit Mitternacht umrechnen.
 
-    :param dt: datetime, time oder timedelta objekt. das datum wird ignoriert.
-    :return: sekunden, ganzzahlig
-    :raise AttributeError wenn der typ nicht kompatibel oder None ist
+    Args:
+        dt: datetime, time oder timedelta. Das Datum wird ignoriert.
+
+    Returns:
+        Sekunden, ganzzahlig
+
+    Raises:
+        AttributeError wenn der Typ nicht kompatibel oder None ist.
     """
     try:
         # datetime, time
@@ -59,20 +71,26 @@ def time_to_seconds(dt: Union[datetime.datetime, datetime.time, datetime.timedel
 
 def minutes_to_time(minutes: float) -> datetime.time:
     """
-    minuten seit mitternacht in uhrzeit umrechnen.
+    Minuten seit Mitternacht in Uhrzeit umrechnen.
 
-    :param minutes: minuten seit mitternacht. dezimalstellen geben sekunden an.
-    :return datetime.time objekt. auf ganze sekunden gerundet.
+    Args:
+        minutes: Minuten seit Mitternacht. Dezimalstellen geben Sekunden an.
+
+    Returns:
+        datetime.time, auf ganze Sekunden gerundet.
     """
     return seconds_to_time(minutes * 60)
 
 
 def seconds_to_time(seconds: float) -> datetime.time:
     """
-    sekunden seit mitternacht in uhrzeit umrechnen.
+    Sekunden seit Mitternacht in Uhrzeit umrechnen.
 
-    :param seconds: sekunden seit mitternacht. dezimalstellen werden auf ganze sekunden gerundet.
-    :return datetime.time objekt.
+    Args:
+        seconds: Sekunden seit Mitternacht. Dezimalstellen werden auf ganze Sekunden gerundet.
+
+    Returns:
+        Zeit als `datetime.time`
     """
     s = round(seconds)
     m = s // 60
@@ -82,9 +100,12 @@ def seconds_to_time(seconds: float) -> datetime.time:
     return datetime.time(hour=h, minute=m, second=s)
 
 
-def format_verspaetung(verspaetung: Optional[Union[int, float]]) -> str:
+def format_verspaetung(verspaetung: int | float | None) -> str:
+    """
+    Verspaetung formatieren.
+    """
     if verspaetung is not None:
-        if verspaetung:
+        if abs(verspaetung) >= 0.5:
             return f"{int(verspaetung):+}"
         else:
             return "0"
@@ -92,11 +113,15 @@ def format_verspaetung(verspaetung: Optional[Union[int, float]]) -> str:
         return ""
 
 
-def format_minutes(minutes: Union[int, float]) -> str:
+def format_minutes(minutes: int | float) -> str:
     """
     Minuten in Stunden:Minuten formatieren.
 
-    :param minutes: Zeit in Minuten
+    Params:
+        minutes: Zeit in Minuten
+
+    Returns:
+        Formatierte Zeit
     """
     minutes = round(minutes)
     h = minutes // 60
@@ -106,9 +131,9 @@ def format_minutes(minutes: Union[int, float]) -> str:
 
 class AnlagenInfo:
     """
-    objektklasse für anlageninformationen.
+    Anlageninformationen.
 
-    diese klasse entspricht dem xml-tag "anlageninfo".
+    Diese Klasse entspricht dem xml-Tag "anlageninfo".
     """
 
     # xml-tagname
@@ -126,13 +151,15 @@ class AnlagenInfo:
         network = "online" if self.online else "offline"
         return f"{self.region} - {self.name} ({self.aid}, {self.build}, {network})"
 
-    def update(self, item: Mapping) -> 'AnlagenInfo':
+    def update(self, item: Mapping) -> AnlagenInfo:
         """
-        attributwerte vom xml-dokument übernehmen.
+        Attribute vom xml-Dokument übernehmen.
 
-        :param item: dictionary mit den attributen aus dem xml-tag.
+        Args:
+            item: Dictionary mit den Attributen aus dem xml-Tag.
 
-        :return: self
+        Returns:
+            AnlagenInfo-Objekt
         """
         self.aid = int(item['aid'])
         self.name = str(item['name']).strip()
@@ -144,17 +171,15 @@ class AnlagenInfo:
 
 class BahnsteigInfo:
     """
-    Objektklasse für Bahnsteiginformationen.
+    Bahnsteiginformationen.
 
     Diese Klasse entspricht dem xml-Tag "bahnsteiginfo" mit Ergänzungen.
 
-    Bemerkungen
-    -----------
+    Im Dictionary `zuege`, führt der PluginClient die Züge, die den Bahnsteig in ihrem Fahrplan haben
+    (disponiertes Gleis).
 
-    - Im Dictionary 'zuege', führt der PluginClient die Züge, die den Bahnsteig in ihrem Fahrplan haben
-      (disponiertes Gleis).
-    - Die Namen der Nachbarbahnsteige werden in `nachbar_namen` gespeichert.
-      Der PluglinClient löst die Namen in Objekte auf und speichert sie in `nachbarn`.
+    Die Namen der Nachbarbahnsteige werden in `nachbar_namen` gespeichert.
+    Der `PluglinClient` löst die Namen in Objekte auf und speichert sie in `nachbarn`.
     """
 
     # xml-tagname
@@ -164,9 +189,9 @@ class BahnsteigInfo:
         super().__init__()
         self.name: str = ""
         self.haltepunkt: bool = False
-        self.nachbarn_namen: List[str] = []
-        self.nachbarn: weakref.WeakValueDictionary[str, 'BahnsteigInfo'] = weakref.WeakValueDictionary()
-        self.zuege: weakref.WeakValueDictionary[int, 'ZugDetails'] = weakref.WeakValueDictionary()
+        self.nachbarn_namen: list[str] = []
+        self.nachbarn: weakref.WeakValueDictionary[str, BahnsteigInfo] = weakref.WeakValueDictionary()
+        self.zuege: weakref.WeakValueDictionary[int, ZugDetails] = weakref.WeakValueDictionary()
 
     def __str__(self) -> str:
         if self.haltepunkt:
@@ -177,16 +202,18 @@ class BahnsteigInfo:
     def __repr__(self):
         return f"BahnsteigInfo {self.name}: haltepunkt={self.haltepunkt}"
 
-    def update(self, item: untangle.Element) -> 'BahnsteigInfo':
+    def update(self, item: untangle.Element) -> BahnsteigInfo:
         """
-        Attribute vom xml-dokument übernehmen.
+        Attribute vom xml-Dokument übernehmen.
 
         Die Namen der Nachbarbahnsteige werden in `nachbarn_namen` gespeichert.
         Die `nachbarn` und `zuege` Attribute sind möglicherweise veraltet.
 
-        :param item: Dictionary mit den Attributen aus dem xml-Tag.
+        Args:
+            item: Dictionary mit den Attributen aus dem xml-Tag.
 
-        :return: self
+        Returns:
+            Self
         """
 
         self.name = str(item['name']).strip()
@@ -201,28 +228,28 @@ class BahnsteigInfo:
 
 class Knoten:
     """
-    Objektklasse für ein Gleisbildelement ("Knoten").
+    Gleisbildelement ("Knoten").
 
     Diese Klasse entspricht dem xml-Tag "shape".
     Verbindungen aus "connector"-Tags werden im Attribut `nachbarn` gespeichert.
 
-    Bemerkungen
-    -----------
+    Bahnsteige haben nur einen Namen.
+    Alle anderen Tags haben eine enr-Nummer und einen Namen.
+    Die enr ist fortlaufend über alle Elemente beginnend bei 1.
+    Die enr hat nichts mit Signal- oder Weichennummern gemeinsam.
+    Die enr wird, wo vorhanden, im connector-Tag verwendet.
+    Bei Bahnsteigen wird der Name angegeben.
+    Anschlüsse können den gleichen Namen wie ein Bahnsteig haben, da sie per enr identifiziert werden.
 
-    - Bahnsteige haben nur einen Namen.
-      Alle anderen Tags haben eine enr-Nummer und einen Namen.
-      Die enr ist fortlaufend über alle Elemente beginnend bei 1.
-      Die enr hat nichts mit Signal- oder Weichennummern gemeinsam.
-      Die enr wird, wo vorhanden, im connector-Tag verwendet.
-      Bei Bahnsteigen wird der Name angegeben.
-      Anschlüsse können den gleichen Namen wie ein Bahnsteig haben, da sie per enr identifiziert werden.
-    - Da wir alle Elemente im gleichen Dictionary speichern wollen,
-      deklariert diese klasse noch einen 'key', der den Knoten eindeutig identifiziert.
-      Der key ist, wo deklariert, gleich der enr-Nummer und sonst gleich dem Namen.
-    - Der Elementtyp wird numerisch gespeichert.
-      Er kann mittels der Dicts TYP_NAME und TYP_NUMMER übersetzt werden.
-    - In der Liste 'zuege', führt der Klient die Züge, die über das Gleiselement fahren
-      (nur bei Einfahrten, Ausfahrten und Bahnsteigen).
+    Da wir alle Elemente im gleichen Dictionary speichern wollen,
+    deklariert diese klasse noch einen 'key', der den Knoten eindeutig identifiziert.
+    Der key ist, wo deklariert, gleich der enr-Nummer und sonst gleich dem Namen.
+
+    Der Elementtyp wird numerisch gespeichert.
+    Er kann mittels der Dicts TYP_NAME und TYP_NUMMER übersetzt werden.
+
+    In der Liste 'zuege', führt der Klient die Züge, die über das Gleiselement fahren
+    (nur bei Einfahrten, Ausfahrten und Bahnsteigen).
     """
 
     # xml-tagname
@@ -246,18 +273,18 @@ class Knoten:
 
     def __init__(self):
         super().__init__()
-        self.key: Optional[Union[int, str]] = None
-        self.enr: Optional[int] = None
-        self.name: Optional[str] = None
+        self.key: int | str | None = None
+        self.enr: int | None = None
+        self.name: str | None = None
         self.typ: int = 0
-        self.nachbarn: weakref.WeakValueDictionary[Union[int, str], 'Knoten'] = weakref.WeakValueDictionary()
-        self.zuege: weakref.WeakValueDictionary[int, 'ZugDetails'] = weakref.WeakValueDictionary()
+        self.nachbarn: weakref.WeakValueDictionary[int | str, Knoten] = weakref.WeakValueDictionary()
+        self.zuege: weakref.WeakValueDictionary[int, ZugDetails] = weakref.WeakValueDictionary()
 
-    def __eq__(self, other: 'Knoten') -> bool:
-        return self.key.__eq__(other.key)
+    def __eq__(self, other: Knoten) -> bool:
+        return self.key == other.key
 
     def __hash__(self) -> int:
-        return self.key.__hash__()
+        return hash(self.key)
 
     def __str__(self) -> str:
         return f"Knoten {self.key}: {self.TYP_NAME[self.typ]} {self.name}"
@@ -265,13 +292,15 @@ class Knoten:
     def __repr__(self) -> str:
         return f"Knoten('{self.key}': enr={self.enr}, typ={self.typ}, name='{self.name}')"
 
-    def update(self, shape: Mapping) -> 'Knoten':
+    def update(self, shape: Mapping) -> Knoten:
         """
-        attributwerte vom xml-dokument übernehmen.
+        Attributwerte vom xml-Dokument übernehmen.
 
-        :param shape: dictionary mit den attributen aus dem xml-tag.
+        Args:
+            shape: Mapping mit den Attributen aus dem xml-Tag.
 
-        :return: self
+        Returns:
+            self
         """
 
         try:
@@ -299,9 +328,9 @@ class Knoten:
 
 class ZugDetails:
     """
-    objektklasse für zugdetails.
+    Zugdetails.
 
-    die attribute entsprechen dem zugdetails-tag der plugin-schnittstelle.
+    Die Attribute entsprechen dem zugdetails-Tag der Pluginschnittstelle.
     """
 
     # xml-tagname
@@ -321,25 +350,26 @@ class ZugDetails:
         self.hinweistext: str = ""
         self.usertext: str = ""
         self.usertextsender: str = ""
-        self.fahrplan: List['FahrplanZeile'] = []
+        self.fahrplan: list[FahrplanZeile] = []
         # index des aktuellen ziels. wird vom PluginClient aktualisiert
-        self.ziel_index: Optional[int] = None
+        self.ziel_index: int | None = None
         # zids aller zuege, in deren flags dieser zug vorkommt. wird vom PluginClient aktualisiert
-        self.stamm_zids: Set[int] = set([])
+        self.stamm_zids: set[int] = set()
 
-    def __eq__(self, other: 'ZugDetails') -> bool:
-        return self.zid.__eq__(other.zid)
+    def __eq__(self, other: ZugDetails) -> bool:
+        return self.zid == other.zid
 
     def __hash__(self) -> int:
-        return self.zid.__hash__()
+        return hash(self.zid)
 
     def __str__(self) -> str:
         """
-        einfach lesbare beschreibung
+        Einfach lesbare Beschreibung
 
-        zeigt den zugnamen, von/nach, das nächste gleis, die verspätung und unsichtbarkeit an.
+        Zeigt den Zugnamen, von/nach, das nächste Gleis, die Verspätung und Unsichtbarkeit an.
 
-        :return: (str)
+        Return:
+            Beschreibung als String.
         """
         if self.gleis:
             gleis = self.gleis
@@ -358,15 +388,17 @@ class ZugDetails:
         return f"ZugDetails({self.zid}, {self.name}, {self.von}, {self.nach}, {self.verspaetung:+}," \
                f"{self.sichtbar}, {self.gleis}/{self.plangleis}, {self.amgleis})"
 
-    def update(self, zugdetails: Mapping) -> 'ZugDetails':
+    def update(self, zugdetails: Mapping) -> ZugDetails:
         """
-        attributwerte vom xml-dokument übernehmen.
+        Attributwerte vom xml-Dokument übernehmen.
 
-        der fahrplan wird von dieser methode nicht berührt.
+        Der Fahrplan wird von dieser Methode nicht berührt.
 
-        :param zugdetails: dictionary mit den attributen aus dem xml-tag.
+        Args:
+            zugdetails: Mapping mit den Attributen aus dem xml-Tag.
 
-        :return: self
+        Returns:
+            self
         """
         self.zid = int(zugdetails['zid'])
         self.name = str(zugdetails['name']).strip()
@@ -386,15 +418,16 @@ class ZugDetails:
         return self
 
     @property
-    def gattung(self) -> Optional[str]:
+    def gattung(self) -> str | None:
         """
-        zuggattung aus dem zugnamen.
+        Zuggattung aus dem Zugnamen.
 
-        die zuggattung ist der alphabetische präfix aus dem zugnamen, z.b "ICE".
-        für eine spätere version ist geplant, die gattung anhand der region und zugnummer zu bestimmen,
+        Die Zuggattung ist der alphabetische Präfix aus dem Zugnamen, z.b "ICE".
+        Für eine spätere Version ist geplant, die Gattung anhand der Region und Zugnummer zu bestimmen,
         wo der präfix fehlt.
 
-        :return: (str) zuggattung. None, wenn keine gattung bestimmt werden kann.
+        Returns:
+            Zuggattung. None, wenn keine Gattung bestimmt werden kann.
         """
         try:
             l = self.name.split(" ")
@@ -408,18 +441,19 @@ class ZugDetails:
     @property
     def nummer(self) -> int:
         """
-        zugnummer aus dem zugnamen.
+        Zugnummer aus dem Zugnamen.
 
-        die nummer ist der hinterste rein numerische teil des zugnamens, z.b. 8376 in "S8 8376 RF"
-        diese hat nichts mit der zug-id zu tun.
+        Die Nummer ist der hinterste rein numerische Teil des Zugnamens, z.b. 8376 in "S8 8376 RF"
+        Diese hat nichts mit der Zug-ID zu tun.
 
-        beispiele von zugnummern:
-        - "536" -> 536
-        - "ICE 624" -> 624
-        - "S8 8376 RF" -> 8376
-        - "S 8449 S12" -> 8449
+        Beispiele von Zugnummern:
+        - "536": 536
+        - "ICE 624": 624
+        - "S8 8376 RF": 8376
+        - "S 8449 S12": 8449
 
-        :return: (int) zugnummer. 0 falls der name keine ziffer enthält.
+        Returns:
+            Zugnummer. 0, falls der Name keine Ziffer enthält.
         """
 
         nummern = [int(part) for part in self.name.split() if part.isnumeric()]
@@ -431,9 +465,12 @@ class ZugDetails:
     @property
     def ist_rangierfahrt(self) -> bool:
         """
-        zug ist eine rangierfahrt (Lok, Ersatzlok oder RF)
+        Rangierfahrt anzeigen.
 
-        :return:
+        Als Rangierfahrten gelten Züge, die den Zusatz Lok, Ersatzlok oder RF im Namen tragen.
+
+        Returns:
+            True, wenn der Zug eine Rangierfahrt darstellt.
         """
 
         return self.name.startswith('Lok') or self.name.startswith('Ersatzlok') or \
@@ -441,14 +478,17 @@ class ZugDetails:
 
     def route(self, plan: bool = False) -> Iterable[str]:
         """
-        route (reihe von stationen) des zuges als generator
+        Route (Reihe von Stationen) des Zuges als Generator
 
-        die route ist eine liste von stationen (gleisen, ein- und ausfahrt) in der reihenfolge des fahrplans.
-        ein- und ausfahrten können bei ersatzzügen o.ä. fehlen.
-        durchfahrtsgleise sind auch enthalten.
+        Die Route ist eine Liste von Stationen (Gleisen, inkl. Ein- und Ausfahrt) in der Reihenfolge des Fahrplans.
+        Ein- und Ausfahrten können bei Ersatzzügen o.ä. fehlen.
+        Durchfahrtsgleise sind auch enthalten.
 
-        :param plan: plangleise statt effektive gleise melden
-        :return: generator
+        Args:
+            plan: Plangleise statt effektive Gleise melden
+
+        Returns:
+            Generator von Gleisnamen.
         """
         if self.von:
             yield self.von.replace("Gleis ", "")
@@ -462,18 +502,19 @@ class ZugDetails:
 
     def graph(self) -> nx.DiGraph:
         """
-        fahrplan im networkx directed graph format
+        Fahrplan im networkx directed Graph Format
 
-        die knoten sind anschluss- oder gleisnamen und haben folgende attribute:
-        typ: 'anschluss' oder 'gleis'
-        an: ankunftszeit als datetime.time (kann fehlen)
-        ab: ankunftszeit als datetime.time (kann fehlen)
-        aufenthalt: aufenthaltszeit in sekunden (kann fehlen)
+        Die Knoten sind Anschluss- oder Gleisnamen und haben folgende Attribute:
+        - typ: 'anschluss' oder 'gleis'
+        - an: Ankunftszeit als datetime.time (kann fehlen)
+        - ab: Ankunftszeit als datetime.time (kann fehlen)
+        - aufenthalt: Aufenthaltszeit in sekunden (kann fehlen)
 
-        die kanten haben folgende attribute:
-        fahrzeit: planmässige fahrzeit in sekunden (kann fehlen)
+        Die Kanten haben folgende Attribute:
+        - fahrzeit: Planmässige Fahrzeit in sekunden (kann fehlen)
 
-        :return: nx.DiGraph
+        Returns:
+            networkx-Graph
         """
         graph = nx.DiGraph()
 
@@ -520,10 +561,13 @@ class ZugDetails:
 
         return graph
 
-    def find_fahrplanzeile(self, gleis: Optional[str] = None, plan: Optional[str] = None,
-                           zeit: Optional[datetime.time] = None) -> Optional['FahrplanZeile']:
+    def find_fahrplanzeile(self,
+                           gleis: str | None = None,
+                           plan: str | None = None,
+                           zeit: datetime.time | None = None,
+                           ) -> FahrplanZeile | None:
         """
-        Finde eine Fahrplanzeile nach Gleis und/oder Zeit.
+        Fahrplanzeile nach Gleis und/oder Zeit suchen.
 
         Alle angegebenen Kriterien müssen zutreffen.
         Die Zeit muss grösser oder gleich der Ankunftszeit (wenn bekannt)
@@ -532,20 +576,25 @@ class ZugDetails:
 
         Diese Methode ist ein Wrapper von find_fahrplan, der nur das Fahrplanobjekt zurückgibt.
 
-        :param gleis: (str) Gleis (Gross-/Kleinschreibung egal)
-        :param plan: (str) Plangleis (Gross-/Kleinschreibung egal)
-        :param zeit: (datetime.time) Zeit, >= Ankunft und <= Abfahrt
+        Args:
+            gleis: Gleiskriterium (Gross-/Kleinschreibung egal)
+            plan: Plangleiskriterium (Gross-/Kleinschreibung egal)
+            zeit: Zeitkriterium, wahr, wenn der Wert zwischen Ankunft und Abfahrt des Eintrags liegt
 
-        :return: FahrplanZeile-Objekt oder None.
+        Returns:
+            FahrplanZeile-Objekt oder None.
         """
 
         _, zeile = self.find_fahrplan(gleis=gleis, plan=plan, zeit=zeit)
         return zeile
 
-    def find_fahrplan_index(self, gleis: Optional[str] = None, plan: Optional[str] = None,
-                            zeit: Optional[datetime.time] = None) -> Optional[int]:
+    def find_fahrplan_index(self,
+                            gleis: str | None = None,
+                            plan: str | None = None,
+                            zeit: datetime.time | None = None,
+                            ) -> int | None:
         """
-        Finde eine Fahrplanzeile nach Gleis und/oder Zeit.
+        Fahrplanzeilenindex nach Gleis und/oder Zeit suchen
 
         Alle angegebenen Kriterien müssen zutreffen.
         Die Zeit muss grösser oder gleich der Ankunftszeit (wenn bekannt)
@@ -554,33 +603,40 @@ class ZugDetails:
 
         Diese Methode ist ein Wrapper von find_fahrplan, der nur den Index zurückgibt.
 
-        :param gleis: (str) Gleis (Gross-/Kleinschreibung egal)
-        :param plan: (str) Plangleis (Gross-/Kleinschreibung egal)
-        :param zeit: (datetime.time) Zeit, >= Ankunft und <= Abfahrt
+        Args:
+            gleis: Gleiskriterium (Gross-/Kleinschreibung egal)
+            plan: Plangleiskriterium (Gross-/Kleinschreibung egal)
+            zeit: Zeitkriterium, wahr, wenn der Wert zwischen Ankunft und Abfahrt des Eintrags liegt
 
-        :return: Listenindex in Fahrplan oder None.
-            Vorsicht: 0 ist ein gültiges Resultat.
+        Returns:
+            Listenindex in Fahrplan oder None.
+            Vorsicht, 0 ist ein gültiges Resultat!
         """
 
         index, _ = self.find_fahrplan(gleis=gleis, plan=plan, zeit=zeit)
         return index
 
-    def find_fahrplan(self, gleis: Optional[str] = None, plan: Optional[str] = None,
-                            zeit: Optional[datetime.time] = None) -> Tuple[Optional[int], Optional['FahrplanZeile']]:
+    def find_fahrplan(self,
+                      gleis: str | None = None,
+                      plan: str | None = None,
+                      zeit: datetime.time | None = None,
+                      ) -> tuple[int | None, FahrplanZeile | None]:
         """
-        Finde Index und Fahrplanzeile nach Gleis und/oder Zeit.
+        Index und Fahrplanzeile nach Gleis und/oder Zeit suchen
 
         Alle angegebenen Kriterien müssen zutreffen.
         Die Zeit muss grösser oder gleich der Ankunftszeit (wenn bekannt)
         und kleiner oder gleich der Abfahrtszeit (wenn bekannt) sein.
         Wenn eine der Zeiten nicht bekannt ist, wird das entsprechende Kriterium als erfüllt gewertet.
 
-        :param gleis: (str) Gleis (Gross-/Kleinschreibung egal)
-        :param plan: (str) Plangleis (Gross-/Kleinschreibung egal)
-        :param zeit: (datetime.time) Zeit, >= Ankunft und <= Abfahrt
+        Args:
+            gleis: Gleiskriterium (Gross-/Kleinschreibung egal)
+            plan: Plangleiskriterium (Gross-/Kleinschreibung egal)
+            zeit: Zeitkriterium, wahr, wenn der Wert zwischen Ankunft und Abfahrt des Eintrags liegt
 
-        :return: Listenindex im Fahrplan und FahrplanZeile-Objekt.
-                 Die Objekte sind None, wenn kein passender Eintrag gefunden wurde.
+        Returns:
+            Listenindex im Fahrplan und FahrplanZeile-Objekt.
+            Beide Resultate sind None, wenn kein passender Eintrag gefunden wurde.
         """
 
         gleis = gleis.casefold() if gleis else None
@@ -602,21 +658,21 @@ class ZugDetails:
 
 class Ereignis(ZugDetails):
     """
-    objektklasse für ereignisse.
+    Ereignis der Pluginschnittstelle
 
-    ein ereignis-tag von der plugin-schnittstelle sieht z.b. so aus:
+    Ein Ereignis-Tag von der Pluginschnittstelle sieht z.B. so aus:
 
     ~~~~~~{.xml}
     <ereignis zid='1' art='einfahrt' name='RE 10' verspaetung='+2' gleis='1' plangleis='1'
     von='A-Stadt' nach='B-Hausen' sichtbar='true' amgleis='true' />
     ~~~~~~
 
-    der tag enthält dieselben daten wie ein zugdetails-tag und zusätzlich die art des ereignisses.
-    die zeit wird vom PluginClient gesetzt.
+    Der Tag enthält dieselben Daten wie ein Zugdetails-Tag und zusätzlich die Art des Ereignisses.
+    Die Zeit wird vom PluginClient gesetzt.
 
-    zusätzlich zu den von der plugin-schnittstelle gemeldeten ereignissen (in Ereignis.arten),
-    erzeugt der PluginClient ein ereignis 'ersatz', wenn ein zug durch ersatz/nummernwechsel unsichtbar wird.
-    der zugdetails-inhalt entspricht in diesem fall dem letzten ankunftsereignis, wobei sichtbar = False.
+    Zusätzlich zu den von der Pluginschnittstelle gemeldeten Ereignissen (in Ereignis.arten),
+    erzeugt der PluginClient ein Ereignis 'ersatz', wenn ein Zug durch Ersatz (Nummernwechsel) unsichtbar wird.
+    Der Zugdetailsinhalt entspricht in diesem Fall dem letzten Ankunftsereignis, wobei sichtbar = False.
     """
 
     # xml-tagname
@@ -640,46 +696,40 @@ class Ereignis(ZugDetails):
         return f"Ereignis({self.zid}, {self.art}, {self.name}, {self.von}, {self.nach}, {self.verspaetung:+}," \
                f"{self.sichtbar}, {self.gleis}/{self.plangleis}, {self.amgleis})"
 
-    def __eq__(self, other: 'Ereignis') -> bool:
+    def __eq__(self, other: Ereignis) -> bool:
         """
-        sind zwei ereignisse gleich?
+        Gleichheit zweier Ereignisse
 
-        ereignisse werden als gleich erachtet, wenn art, zid und gleis gleich sind.
-        dies kann dazu benutzt werden, wiederholte ereignismeldungen zu filtern.
-        (die plugin-schnittstelle schickt gewisse ereignismeldungen wie rothalt und abfahrt wiederholt.)
-
-        :param other:
-        :return: bool
+        Ereignisse werden als gleich erachtet, wenn art, zid und gleis gleich sind.
+        Dies kann dazu benutzt werden, wiederholte Ereignismeldungen zu filtern.
+        (Die Pluginschnittstelle schickt gewisse ereignismeldungen wie rothalt und abfahrt wiederholt.)
         """
         return self.art == other.art and self.zid == other.zid and self.gleis == other.gleis
 
     def __hash__(self) -> int:
         """
-        hash-funktion basierend auf gleichheitsklasse.
+        hash-Funktion basierend auf Gleichheitsklasse.
 
-        ereignisse werden als gleich erachtet, wenn art, zid und gleis gleich sind.
-        für solchermassen "gleiche" ereignisse generiert diese funktion den gleichen hash-wert.
-        dies kann dazu benutzt werden, wiederholte ereignismeldungen zu filtern.
-        (die plugin-schnittstelle schickt gewisse ereignismeldungen wie rothalt und abfahrt wiederholt.)
-
-        :return: int
+        Ereignisse werden als gleich erachtet, wenn art, zid und gleis gleich sind.
+        Für solchermassen "gleiche" Ereignisse generiert diese Funktion den gleichen hash-Wert.
+        Dies kann dazu benutzt werden, wiederholte Ereignismeldungen zu filtern.
+        (Die Pluginschnittstelle schickt gewisse ereignismeldungen wie rothalt und abfahrt wiederholt.)
         """
-        return (self.art, self.zid, self.gleis).__hash__()
+        return hash((self.art, self.zid, self.gleis))
 
-    def update(self, ereignis: Mapping) -> 'Ereignis':
+    def update(self, ereignis: Mapping) -> Ereignis:
         """
-        attributwerte vom xml-dokument übernehmen.
+        Attributwerte vom xml-Dokument übernehmen.
 
-        :param ereignis: dictionary mit den attributen aus dem xml-tag.
-
-        :return: self
+        Args:
+            ereignis: Mapping mit den Attributen aus dem xml-Tag.
         """
         super().update(ereignis)
         self.art = str(ereignis['art'])
 
         return self
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         return {attr: getattr(self, attr) for attr in self.attribute}
 
 
@@ -714,22 +764,22 @@ class FahrplanZeile:
         self.zug: ZugDetails = zug
 
         # diese attribut wird beim ersten property-aufruf erzeugt
-        self._fid: Optional[FahrplanZeileID] = None
+        self._fid: FahrplanZeileID | None = None
 
         # die folgenden attribute werden von der plugin-schnittstelle geliefert
         self.gleis: str = ""
         self.plan: str = ""
-        self.an: Optional[datetime.time] = None
-        self.ab: Optional[datetime.time] = None
+        self.an: datetime.time | None = None
+        self.ab: datetime.time | None = None
         self.flags: str = ""
         self.hinweistext: str = ""
 
         # Die nächsten drei Attribute werden vom PluginClient anhand der Flags aufgelöst.
         # Lokal speichern wir Weak References.
         # Daher nur via die entsprechenden öffentlichen Properties zugreifen!
-        self._ersatzzug: Optional[weakref.ReferenceType[ZugDetails]] = None
-        self._fluegelzug: Optional[weakref.ReferenceType[ZugDetails]] = None
-        self._kuppelzug: Optional[weakref.ReferenceType[ZugDetails]] = None
+        self._ersatzzug: weakref.ReferenceType[ZugDetails] | None = None
+        self._fluegelzug: weakref.ReferenceType[ZugDetails] | None = None
+        self._kuppelzug: weakref.ReferenceType[ZugDetails] | None = None
 
     @property
     def fid(self) -> FahrplanZeileID:
@@ -744,7 +794,8 @@ class FahrplanZeile:
         an oder ab können None sein, das Gleis kann mehrmals angefahren werden.
         an kann sich beim Nummernwechsel ändern.
 
-        :return: Dreiertupel (zid, zeit, plan). zeit ist entweder die Ankunfts- oder Abfahrtszeit in Minuten.
+        Returns:
+            Dreiertupel (zid, zeit, plan). zeit ist entweder die Ankunfts- oder Abfahrtszeit in Minuten.
         """
 
         if self._fid is None:
@@ -767,7 +818,7 @@ class FahrplanZeile:
 
         return hash(self.fid)
 
-    def __eq__(self, other: 'FahrplanZeile') -> bool:
+    def __eq__(self, other: FahrplanZeile) -> bool:
         """
         gleichheit von zwei fahrplanzeilen feststellen.
 
@@ -788,18 +839,17 @@ class FahrplanZeile:
     def __repr__(self):
         return f"FahrplanZeile({self.gleis}, {self.plan}, {self.an}, {self.ab}, {self.flags})"
 
-    def update(self, item: Mapping) -> 'FahrplanZeile':
+    def update(self, item: Mapping) -> FahrplanZeile:
         """
         Daten von untangle-Element oder anderer FahrplanZeile übernehmen.
 
         Es werden nur die Attribute übernommen, die von der Pluginschnittstelle geliefert werden.
 
-        :param item: eines von folgenden Objekten:
-            - untangle.Element mit dem gleis-Tag von der Simulatorschnittstelle,
-            - ein anderes FahrplanZeile-Objekt,
-            - Dictionary mit Werten, die den Attributen dieser Klasse entsprechen.
-
-        :return: self
+        Args:
+            item: eines von folgenden Objekten:
+                - untangle.Element mit dem gleis-Tag von der Simulatorschnittstelle,
+                - ein anderes FahrplanZeile-Objekt,
+                - Dictionary mit Werten, die den Attributen dieser Klasse entsprechen.
         """
 
         if isinstance(item, self.__class__):
@@ -834,7 +884,7 @@ class FahrplanZeile:
         return self
 
     @property
-    def ersatzzug(self) -> Optional[ZugDetails]:
+    def ersatzzug(self) -> ZugDetails | None:
         if self._ersatzzug is not None:
             return self._ersatzzug()
         else:
@@ -848,7 +898,7 @@ class FahrplanZeile:
             self._ersatzzug = None
 
     @property
-    def fluegelzug(self) -> Optional[ZugDetails]:
+    def fluegelzug(self) -> ZugDetails | None:
         if self._fluegelzug is not None:
             return self._fluegelzug()
         else:
@@ -862,7 +912,7 @@ class FahrplanZeile:
             self._fluegelzug = None
 
     @property
-    def kuppelzug(self) -> Optional[ZugDetails]:
+    def kuppelzug(self) -> ZugDetails | None:
         if self._kuppelzug is not None:
             return self._kuppelzug()
         else:
@@ -877,17 +927,13 @@ class FahrplanZeile:
 
     def durchfahrt(self) -> bool:
         """
-        zeigt das durchfahrt-flag an.
-
-        :return: bool
+        Durchfahrt-Flag
         """
         return 'D' in self.flags
 
-    def ersatz_zid(self) -> Optional[int]:
+    def ersatz_zid(self) -> int | None:
         """
-        liest die zid aus dem ersatzzug-flag.
-
-        die zid kann vom plugin-client zum ersatzzug-attribut aufgelöst werden.
+        zid aus dem Ersatz-Flag
         """
         mo = re.search(r"E[0-9]?\(([0-9]+)\)", self.flags)
         if mo:
@@ -895,11 +941,9 @@ class FahrplanZeile:
         else:
             return None
 
-    def fluegel_zid(self) -> Optional[int]:
+    def fluegel_zid(self) -> int | None:
         """
-        liest die zid aus dem fluegel-flag.
-
-        die zid kann vom plugin-client zum fluegelzug-attribut aufgelöst werden.
+        zid aus dem Fluegeln-Flag
         """
         mo = re.search(r"F[0-9]?\(([0-9]+)\)", self.flags)
         if mo:
@@ -907,11 +951,9 @@ class FahrplanZeile:
         else:
             return None
 
-    def kuppel_zid(self) -> Optional[int]:
+    def kuppel_zid(self) -> int | None:
         """
-        liest die zid aus dem kuppel-flag.
-
-        die zid kann vom plugin-client zum kuppelzug-attribut aufgelöst werden.
+        zid aus dem Kuppel-Flag
         """
         mo = re.search(r"K[0-9]?\(([0-9]+)\)", self.flags)
         if mo:
@@ -921,17 +963,18 @@ class FahrplanZeile:
 
     def lokumlauf(self) -> bool:
         """
-        zeigt das lokumlauf-flag an.
-
-        :return: bool
+        Lokumlauf-Flag
         """
         return 'L' in self.flags
 
-    def lokwechsel(self) -> Optional[Tuple[int, int]]:
+    def lokwechsel(self) -> tuple[int, int] | None:
         """
-        zeigt das lokwechsel-flag an.
+        Lokwechsel-Flag
 
-        :return: zweier-tuple mit element-nummern der ein- und ausfahrten (beliebige reihenfolge) oder None.
+        Returns:
+            Elementnummern der Ein- und Ausfahrgleise oder None.
+            Die Gleise können in einer beliebigen Reihenfolge auftreten.
+            Einfahrt/Ausfahrt kann aus dem Elementtyp bestimmt werden.
         """
         mo = re.search(r"W\[([0-9]+)]\[([0-9]+)]", self.flags)
         if mo:
@@ -941,16 +984,12 @@ class FahrplanZeile:
 
     def richtungswechsel(self) -> bool:
         """
-        zeigt das richtungswechsel-flag an.
-
-        :return: bool
+        Richtungswechsel-Flag
         """
         return 'R' in self.flags
 
     def vorzeitige_abfahrt(self) -> bool:
         """
-        zeigt das vorzeitige-abfahrt-flag an.
-
-        :return: bool
+        Vorzeitige-Abfahrt-Flag
         """
         return 'A' in self.flags

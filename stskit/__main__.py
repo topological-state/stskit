@@ -129,7 +129,7 @@ class StsDispoRunner(QObject):
 
                 self.done = True
 
-    async def update_loop(self):
+    async def update_loop(self, *args, **kwargs):
         await self.zentrale.client.registered.wait()
         while self.enable_update:
             try:
@@ -152,12 +152,12 @@ class StsDispoRunner(QObject):
         self.status_update.trigger()
         self.status_update.notify()
 
-    async def ereignis_loop(self):
+    async def ereignis_loop(self, *args, **kwargs):
         await self.zentrale.client.registered.wait()
         async for ereignis in self.zentrale.client.ereignis_channel_out:
             await self.zentrale.ereignis(ereignis)
 
-    async def notify_loop(self):
+    async def notify_loop(self, *args, **kwargs):
         await self.zentrale.client.registered.wait()
         while self.enable_notify:
             await self.zentrale.notify()

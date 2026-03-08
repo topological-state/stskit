@@ -1,8 +1,5 @@
-import datetime
-
 import trio
 import logging
-from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, TypeVar, Union
 
 import networkx as nx
 
@@ -21,59 +18,47 @@ class GraphClient(PluginClient):
     """
     Erweiterter PluginClient mit Graphdarstellung der Basisdaten vom Simulator.
 
-    Die Klasse unterhält folgende Graphen:
+    Attrs:
+        signalgraph:
+            Der _Signalgraph_ enthält das Gleisbild aus der Wegeliste der Plugin-Schnittstelle mit sämtlichen Knoten und Kanten.
+            Das 'typ'-Attribut wird auf den sts-Knotentyp (int) gesetzt.
+            Kanten werden entsprechend der Nachbarrelationen aus der Wegeliste ('typ'-attribut 'gleis') gesetzt.
+            Der Graph ist gerichtet, da die nachbarbeziehung i.a. nicht reziprok ist.
+            Die Kante zeigt auf die Knoten, die als Nachbarn aufgeführt sind.
+            Meist werden von der Schnittstelle jedoch Kanten in beide Richtungen angegeben,
+            weshalb z.B. nicht herausgefunden werden kann, für welche Richtung ein Signal gilt.
 
-    Signalgraph
-    ===========
+            Der Graph sollte nicht verändert werden.
+            Es wird nicht erwartet, dass sich der Graph im Laufe eines Spiels ändert.
 
-    Der _Signalgraph_ enthält das Gleisbild aus der Wegeliste der Plugin-Schnittstelle mit sämtlichen Knoten und Kanten.
-    Das 'typ'-Attribut wird auf den sts-Knotentyp (int) gesetzt.
-    Kanten werden entsprechend der Nachbarrelationen aus der Wegeliste ('typ'-attribut 'gleis') gesetzt.
-    Der Graph ist gerichtet, da die nachbarbeziehung i.a. nicht reziprok ist.
-    Die Kante zeigt auf die Knoten, die als Nachbarn aufgeführt sind.
-    Meist werden von der Schnittstelle jedoch Kanten in beide Richtungen angegeben,
-    weshalb z.B. nicht herausgefunden werden kann, für welche Richtung ein Signal gilt.
+            Die Signaldistanz wird am Anfang auf 1 gesetzt.
 
-    Der Graph sollte nicht verändert werden.
-    Es wird nicht erwartet, dass sich der Graph im Laufe eines Spiels ändert.
+        bahnsteiggraph:
+            Der _Bahnsteiggraph_ enthält alle Bahnsteige aus der Bahnsteigliste der Plugin-Schnittstelle als Knoten.
+            Kanten werden entsprechend der Nachbarrelationen gesetzt.
+            Der Graph ist ungerichtet, da die Nachbarbeziehung als reziprok aufgefasst wird.
 
-    Die Signaldistanz wird am Anfang auf 1 gesetzt.
+            Der Graph sollte nicht verändert werden.
+            Es wird nicht erwartet, dass sich der Graph im Laufe eines Spiels ändert.
 
-    Bahnsteiggraph
-    ==============
+        zuggraph:
+            Der _Zuggraph_ enthält alle Züge aus der Zugliste der Plugin-Schnittstelle als Knoten.
+            Kanten werden aus den Ersatz-, Kuppeln- und Flügeln-Flags gebildet.
 
-    Der _Bahnsteiggraph_ enthält alle Bahnsteige aus der Bahnsteigliste der Plugin-Schnittstelle als Knoten.
-    Kanten werden entsprechend der Nachbarrelationen gesetzt.
-    Der Graph ist ungerichtet, da die Nachbarbeziehung als reziprok aufgefasst wird.
+            Der Zuggraph verändert sich im Laufe eines Spiels.
+            Neue Züge werden hinzugefügt.
+            Ausgefahrene und ersetzte Züge werden beibehalten und als "ausgefahren" markiert.
 
-    Der Graph sollte nicht verändert werden.
-    Es wird nicht erwartet, dass sich der Graph im Laufe eines Spiels ändert.
+        zielgraph:
+            Der Zielgraph enthält die Zielpunkte aller Züge.
+            Die Punkte sind gemäss Anordnung im Fahrplan
+            sowie planmässigen Abhängigkeiten (Ersatz, Kuppeln, Flügeln) verbunden.
 
-    Zuggraph
-    ========
+            Bei Ein- und Ausfahrten wird die Ankunfts- und Abfahrtszeit auf 1 Minute vor bzw. nach dem Halt geschätzt.
 
-    Der _Zuggraph_ enthält alle Züge aus der Zugliste der Plugin-Schnittstelle als Knoten.
-    Kanten werden aus den Ersatz-, Kuppeln- und Flügeln-Flags gebildet.
-
-    Der Zuggraph verändert sich im Laufe eines Spiels.
-    Neue Züge werden hinzugefügt.
-    Ausgefahrene und ersetzte Züge werden beibehalten und als "ausgefahren" markiert.
-
-    Zielgraph
-    =========
-
-    Der Zielgraph enthält die Zielpunkte aller Züge.
-    Die Punkte sind gemäss Anordnung im Fahrplan
-    sowie planmässigen Abhängigkeiten (Ersatz, Kuppeln, Flügeln) verbunden.
-
-    Bei Ein- und Ausfahrten wird die Ankunfts- und Abfahrtszeit auf 1 Minute vor bzw. nach dem Halt geschätzt.
-
-    Weitere Instanzattribute
-    ========================
-
-    bahnhofteile: Ordnet jedem Gleis einen Bahnhofteil zu.
-        Der Bahnhofteil entspricht dem alphabetisch ersten Gleis in der Nachbarschaft.
-        Der Dictionary wird durch _bahnhofteile_gruppieren gefüllt.
+        bahnhofteile: Ordnet jedem Gleis einen Bahnhofteil zu.
+            Der Bahnhofteil entspricht dem alphabetisch ersten Gleis in der Nachbarschaft.
+            Der Dictionary wird durch _bahnhofteile_gruppieren gefüllt.
     """
 
     def __init__(self, name: str, autor: str, version: str, text: str):
@@ -83,8 +68,8 @@ class GraphClient(PluginClient):
         self.bahnsteiggraph = BahnsteigGraph()
         self.zuggraph = ZugGraph()
         self.zielgraph = ZielGraph()
-        self.bahnhofteile: Dict[str, str] = {}
-        self.anschlussgruppen: Dict[int, str] = {}
+        self.bahnhofteile: dict[str, str] = {}
+        self.anschlussgruppen: dict[int, str] = {}
 
     async def request_bahnsteigliste(self):
         await super().request_bahnsteigliste()
@@ -118,8 +103,6 @@ class GraphClient(PluginClient):
         Signalgraph erstellen.
 
         Die Graphen werden in der Dokumentation der Klasse beschrieben.
-
-        :return: None
         """
 
         self.signalgraph.wege_importieren(self.wege.values())
@@ -129,8 +112,6 @@ class GraphClient(PluginClient):
         Bahnsteiggraph erstellen.
 
         Die Graphen werden in der Dokumentation der Klasse beschrieben.
-
-        :return: None
         """
 
         self.bahnsteiggraph.bahnsteige_importieren(self.bahnsteigliste.values())
@@ -166,8 +147,6 @@ class GraphClient(PluginClient):
         Um den Graphen neu aufzubauen, sollte clean=True übergeben werden.
 
         Diese Methode markiert auch ausgefahrene Züge.
-
-        :return: None
         """
 
         if clean:
@@ -194,8 +173,6 @@ class GraphClient(PluginClient):
         fügt diese Methode neue Knoten und ihre Kanten zum Graphen hinzu.
         Bestehende Knoten werden nicht verändert.
         Um den Graphen neu aufzubauen, sollte clean=True übergeben werden.
-
-        :return: None
         """
 
         if clean:
@@ -214,7 +191,7 @@ class GraphClient(PluginClient):
             self.zuggraph.zuege_verknuepfen(link[0], link[1], link[2])
 
 
-async def test() -> GraphClient:
+async def test(*args, **kwargs) -> GraphClient:
     """
     Testprogramm
 
@@ -222,8 +199,6 @@ async def test() -> GraphClient:
 
     Der GraphClient bleibt bestehen, damit weitere Details aus den statischen Attributen ausgelesen werden können.
     Die Kommunikation mit dem Simulator wird jedoch geschlossen.
-
-    :return: GraphClient-instanz
     """
 
     client = GraphClient(name='test', autor='tester', version='0.0', text='testing the graph client')
