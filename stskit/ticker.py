@@ -60,7 +60,7 @@ async def report(client: PluginClient, args: argparse.Namespace) -> None:
     :param args: parsed arguments
     :return: None
     """
-    async for ereignis in client._ereignis_channel_out:
+    async for ereignis in client.ereignis_channel_out:
         try:
             c1 = COLORCODES[ereignis.art]
             c2 = COLORCODES['default']
@@ -100,7 +100,7 @@ async def main(args: argparse.Namespace) -> None:
     await client.connect(host=args.host, port=args.port)
 
     try:
-        async with client._stream:
+        async with client.stream:
             async with trio.open_nursery() as nursery:
                 await nursery.start(client.receiver)
                 await client.register()

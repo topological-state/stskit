@@ -117,7 +117,7 @@ class StsDispoRunner(QObject):
     async def start(self):
         await self.client.connect(host=self.arguments.host, port=self.arguments.port)
 
-        async with self.client._stream:
+        async with self.client.stream:
             async with trio.open_nursery() as nursery:
                 await nursery.start(self.client.receiver)
                 await self.client.register()
@@ -154,7 +154,7 @@ class StsDispoRunner(QObject):
 
     async def ereignis_loop(self):
         await self.zentrale.client.registered.wait()
-        async for ereignis in self.zentrale.client._ereignis_channel_out:
+        async for ereignis in self.zentrale.client.ereignis_channel_out:
             await self.zentrale.ereignis(ereignis)
 
     async def notify_loop(self):

@@ -129,10 +129,10 @@ class PluginClient:
 
     def __init__(self, name: str, autor: str, version: str, text: str):
         self._stream: Optional[trio.abc.Stream] = None
-        self._antwort_channel_in: Optional[trio.MemorySendChannel] = None
-        self._antwort_channel_out: Optional[trio.MemoryReceiveChannel] = None
-        self._ereignis_channel_in: Optional[trio.MemorySendChannel] = None
-        self._ereignis_channel_out: Optional[trio.MemoryReceiveChannel] = None
+        self._antwort_channel_in: Optional[trio.MemorySendChannel[untangle.Element]] = None
+        self._antwort_channel_out: Optional[trio.MemoryReceiveChannel[untangle.Element]] = None
+        self._ereignis_channel_in: Optional[trio.MemorySendChannel[Ereignis]] = None
+        self._ereignis_channel_out: Optional[trio.MemoryReceiveChannel[Ereignis]] = None
 
         self.connected = trio.Event()
         self.registered = trio.Event()
@@ -161,12 +161,60 @@ class PluginClient:
         self.server_datetime: datetime.datetime = datetime.datetime.now()
         self.time_offset: datetime.timedelta = self.server_datetime - self.client_datetime
 
+    @property
+    def stream(self) -> trio.abc.Stream:
+        """
+        Asynchroner Kommunikationsstream zum Simulator
+        """
+        assert self._stream is not None
+        return self._stream
+
+    @property
+    def antwort_channel_in(self) -> trio.abc.SendChannel[untangle.Element]:
+        """
+        Eingang asynchrone Warteschlange für Antworten vom Simulator
+
+        Antworten vom Simulator werden während des Parsens als Element-Objekte an diese Warteschlange übergeben.
+        """
+        assert self._antwort_channel_in is not None
+        return self._antwort_channel_in
+
+    @property
+    def antwort_channel_out(self) -> trio.abc.ReceiveChannel[untangle.Element]:
+        """
+        Ausgang asynchrone Warteschlange für Antworten vom Simulator
+
+        Antworten vom Simulator können asynchron als Element-Objekte aus dieser Warteschlange entnommen und verarbeitet werden.
+        """
+        assert self._antwort_channel_out is not None
+        return self._antwort_channel_out
+
+    @property
+    def ereignis_channel_in(self) -> trio.abc.SendChannel[Ereignis]:
+        """
+        Eingang asynchrone Warteschlange für Ereignismeldungen vom Simulator
+
+        Ereignismeldungen vom Simulator werden während des Parsens als Ereignis-Objekte an diese Warteschlange übergeben.
+        """
+        assert self._ereignis_channel_in is not None
+        return self._ereignis_channel_in
+
+    @property
+    def ereignis_channel_out(self) -> trio.abc.ReceiveChannel[Ereignis]:
+        """
+        Ausgang asynchrone Warteschlange für Ereignismeldungen vom Simulator
+
+        Ereignismeldungen vom Simulator können asynchron als Ereignis-Objekte aus dieser Warteschlange entnommen und verarbeitet werden.
+        """
+        assert self._ereignis_channel_out is not None
+        return self._ereignis_channel_out
+
     async def connect(self, host=DEFAULT_HOST, port=DEFAULT_PORT):
         self._stream = await trio.open_tcp_stream(host, port)
         self.connected.set()
 
     async def close(self):
-        await self._stream.aclose()
+        await self.stream.aclose()
         self.connected = trio.Event()
         self.registered = trio.Event()
 
@@ -186,7 +234,7 @@ class PluginClient:
         logger.debug("senden: " + req)
         req += "\n"
         data = req.encode()
-        await self._stream.send_all(data)
+        await self.stream.send_all(data)
 
     async def receiver(self, *, task_status=trio.TASK_STATUS_IGNORED):
         """
@@ -216,9 +264,9 @@ class PluginClient:
         self._ereignis_channel_in, self._ereignis_channel_out = trio.open_memory_channel(0)
         task_status.started()
 
-        async with self._antwort_channel_in:
-            async with self._ereignis_channel_in:
-                async for bs in self._stream:
+        async with self.antwort_channel_in:
+            async with self.ereignis_channel_in:
+                async for bs in self.stream:
                     for s in bs.decode().split('\n'):
                         logger.debug("empfang: " + s)
                         if not s:
@@ -254,9 +302,9 @@ class PluginClient:
                                 if tag == "ereignis":
                                     ereignis = Ereignis().update(getattr(element, tag))
                                     ereignis.zeit = self.calc_simzeit()
-                                    await self._ereignis_channel_in.send(ereignis)
+                                    await self.ereignis_channel_in.send(ereignis)
                                 else:
-                                    await self._antwort_channel_in.send(element)
+                                    await self.antwort_channel_in.send(element)
 
     async def register(self) -> None:
         """
@@ -267,12 +315,12 @@ class PluginClient:
 
         :return: None
         """
-        status = await self._antwort_channel_out.receive()
+        status = await self.antwort_channel_out.receive()
         check_status(status)
 
         await self._send_request("register", name=self.name, autor=self.autor, version=self.version,
                                  protokoll='1', text=self.text)
-        status = await self._antwort_channel_out.receive()
+        status = await self.antwort_channel_out.receive()
         check_status(status)
         self.registered.set()
 
@@ -285,7 +333,7 @@ class PluginClient:
         :return: None
         """
         await self._send_request(AnlagenInfo.tag)
-        response = await self._antwort_channel_out.receive()
+        response = await self.antwort_channel_out.receive()
         self.anlageninfo = AnlagenInfo().update(response.anlageninfo)
 
     async def request_bahnsteigliste(self):
@@ -300,7 +348,7 @@ class PluginClient:
 
         self.bahnsteigliste = {}
         await self._send_request("bahnsteigliste")
-        response = await self._antwort_channel_out.receive()
+        response = await self.antwort_channel_out.receive()
         for bahnsteig in response.bahnsteigliste.bahnsteig:
             bi = BahnsteigInfo().update(bahnsteig)
             self.bahnsteigliste[bi.name] = bi
@@ -331,7 +379,7 @@ class PluginClient:
         """
         self.client_datetime = datetime.datetime.now()
         await self._send_request("simzeit", sender=0)
-        simzeit = await self._antwort_channel_out.receive()
+        simzeit = await self.antwort_channel_out.receive()
         secs, msecs = divmod(int(simzeit.simzeit['zeit']), 1000)
         mins, secs = divmod(secs, 60)
         hrs, mins = divmod(mins, 60)
@@ -387,7 +435,7 @@ class PluginClient:
         """
 
         await self._send_request("wege")
-        response = await self._antwort_channel_out.receive()
+        response = await self.antwort_channel_out.receive()
         self.wege = {}
         self.wege_nach_enr = {}
         self.wege_nach_namen = {}
@@ -476,9 +524,9 @@ class PluginClient:
         """
 
         if zid is not None:
-            try:
+            if isinstance(zid, Iterable):
                 zids = list(iter(zid))
-            except TypeError:
+            else:
                 zids = [int(zid)]
         else:
             zids = list(self.zugliste.keys())
@@ -500,7 +548,7 @@ class PluginClient:
         """
 
         await self._send_request("zugdetails", zid=zid)
-        response = await self._antwort_channel_out.receive()
+        response = await self.antwort_channel_out.receive()
 
         try:
             zug = self.zugliste[zid]
@@ -595,7 +643,7 @@ class PluginClient:
         akt_ziel_index = None
 
         await self._send_request("zugfahrplan", zid=zid)
-        response = await self._antwort_channel_out.receive()
+        response = await self.antwort_channel_out.receive()
 
         try:
             neuer_fahrplan = []
@@ -665,7 +713,7 @@ class PluginClient:
         zeit = self.calc_simzeit()
 
         await self._send_request("zugliste")
-        response = await self._antwort_channel_out.receive()
+        response = await self.antwort_channel_out.receive()
 
         try:
             for zug in response.zugliste.zug:
@@ -695,7 +743,7 @@ class PluginClient:
                     ereignis = Ereignis().update(attr)
                     ereignis.zeit = zeit
                     ereignis.sichtbar = False
-                    await self._ereignis_channel_in.send(ereignis)
+                    await self.ereignis_channel_in.send(ereignis)
             try:
                 del self.zugliste[zid]
             except KeyError:
@@ -936,7 +984,7 @@ async def test() -> PluginClient:
     await client.connect()
 
     try:
-        async with client._stream:
+        async with client.stream:
             async with trio.open_nursery() as nursery:
                 await nursery.start(client.receiver)
                 await client.register()

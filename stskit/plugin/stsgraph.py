@@ -230,7 +230,7 @@ async def test() -> GraphClient:
     await client.connect()
 
     try:
-        async with client._stream:
+        async with client.stream:
             async with trio.open_nursery() as nursery:
                 await nursery.start(client.receiver)
                 await client.register()
