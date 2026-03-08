@@ -97,9 +97,9 @@ class StsDispoRunner(QObject):
         self.arguments = arguments
         self.config_path = config_path
 
-        self.update_interval: int = 30  # seconds
+        self.update_interval: float = 30  # seconds
         self.enable_update: bool = True
-        self.notify_interval: int = 1
+        self.notify_interval: float = 0.1
         self.enable_notify: bool = True
         self.status: str = "Keine Verbindung"
         self.status_update = Observable(self)

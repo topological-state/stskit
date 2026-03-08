@@ -510,27 +510,27 @@ class Betrieb:
         journal.add_entry(egj)
 
     def abfahrt_zuruecksetzen(self,
-                              wartend: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode],
-                              abzuwarten: Optional[Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode]] = None):
+                              target: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode,
+                              ) -> None:
         """
         Abfahrtskorrektur zurücksetzen
 
-        subjekt: Wartende Abfahrt
-        objekt: Abzuwartendes Ereignis (Label oder zugeordnete node data).
-            Wenn None (default), werden alle eingehenden Abhängigkeiten des Abfahrtsereignisses gelöscht.
-            Im Moment nicht verwendet.
+        Es werden alle auf das angegebene Ereignis wirkenden Korrekturen zurückgenommen.
+
+        Args:
+            target: Abfahrtsereignis.
         """
 
-        wartend_label = self._ereignis_label_finden(wartend, {'Ab', 'An'})
-        if wartend_label is None:
-            raise ValueError(f"Fehlerhafte Referenz beim Korrektur Rücksetzen: {wartend}")
-        wartend_data = self.ereignisgraph.nodes[wartend_label]
-        zid = wartend.zid
-        bst = self.anlage.bahnhofgraph.find_superior(wartend_data.plan_bst, {'Bf', 'Anst'})
+        target_label = self._ereignis_label_finden(target, {'Ab', 'An'})
+        if target_label is None:
+            raise ValueError(f"Fehlerhafte Referenz beim Korrektur Rücksetzen: {target}")
+        target_data = self.ereignisgraph.nodes[target_label]
+        zid = target.zid
+        bst = self.anlage.bahnhofgraph.find_superior(target_data.plan_bst, {'Bf', 'Anst'})
 
-        loeschen = []
+        loeschen = set()
         for jid, j in self.journal.entries.items():
-            if jid.typ not in {"Ankunft", "Abfahrt", "Kreuzung"}:
+            if jid.typ not in {"Ankunft abwarten", "Abfahrt abwarten", "Vorzeitige Abfahrt", "Wartezeit", "Kreuzung"}:
                 continue
 
             for node in j.target_nodes():
@@ -542,11 +542,13 @@ class Betrieb:
                     continue
                 else:
                     if zid == node_zid and bst == node_bst:
-                        loeschen.append(jid)
+                        loeschen.add(jid)
 
         for jid in loeschen:
             self.journal.delete_entry(jid)
-            logger.debug("Korrektur gelöscht: {jid}")
+            logger.debug(f"Korrektur gelöscht: {jid}")
+        if len(loeschen) > 0:
+            self._internal_update()
 
     def _betriebshalt_statt_durchfahrt(self,
                                        journal: JournalEntryGroup,
@@ -824,7 +826,9 @@ class Betrieb:
 
         return journal
 
-    def betriebshalt_loeschen(self, betriebshalt: Union[EreignisLabelType, EreignisGraphNode, ZielLabelType, ZielGraphNode]):
+    def betriebshalt_loeschen(self,
+                              betriebshalt: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode,
+                              ) -> None:
         """
         Betriebshalt aus Ereignisgraph löschen
 
@@ -846,7 +850,8 @@ class Betrieb:
         bst = self.anlage.bahnhofgraph.find_superior(abfahrt_node.plan_bst, {'Bf', 'Anst'})
         jid = JournalIDType(typ="Betriebshalt", zid=abfahrt_label.zid, bst=bst)
         self.journal.delete_entry(jid)
-        logger.debug("Betriebshalt gelöscht: {jid}")
+        logger.debug(f"Betriebshalt gelöscht: {jid}")
+        self._internal_update()
 
     def bst_verbinden(self):
         pass
