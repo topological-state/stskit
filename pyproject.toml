@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "icecream>=2.1.4",
+    "iconipy>=0.5.1",
     "jsonschema>=4.23.0",
     "matplotlib>=3.10.1",
     "mock>=5.2.0",

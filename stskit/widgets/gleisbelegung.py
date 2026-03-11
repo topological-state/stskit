@@ -11,6 +11,7 @@ from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BAHNHOFELEMENT_TYPEN
 from stskit.plots.gleisbelegung import GleisbelegungPlot
 from stskit.qt.ui_gleisbelegung import Ui_GleisbelegungWindow
+from stskit.qt.icons import action_icons
 from stskit.widgets.gleisauswahl import GleisauswahlModell
 from stskit.zentrale import DatenZentrale
 
@@ -39,6 +40,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_GleisbelegungWindow()
         self.ui.setupUi(self)
+        self.set_action_icons()
         self.gleisauswahl = GleisauswahlModell(None)
         self.ui.gleisView.setModel(self.gleisauswahl)
 
@@ -74,6 +76,12 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.update_widgets()
         self.update_actions()
+
+    def set_action_icons(self):
+        for name in action_icons.actions:
+            action = getattr(self.ui, name, None)
+            if action is not None:
+                action.setIcon(action_icons.get_icon(name))
 
     def closeEvent(self, event, /):
         self.zentrale.anlage_update.unregister(self)

@@ -19,6 +19,7 @@ from stskit.model.ereignisgraph import EreignisGraphNode, EreignisGraphEdge, Ere
 from stskit.plugin.stsobj import time_to_minutes
 from stskit.plugin.stsplugin import PluginClient
 from stskit.plots.bildfahrplan import BildfahrplanPlot
+from stskit.qt.icons import action_icons
 from stskit.zentrale import DatenZentrale
 
 from stskit.qt.ui_bildfahrplan import Ui_BildfahrplanWindow
@@ -113,6 +114,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         self.ui = Ui_BildfahrplanWindow()
         self.ui.setupUi(self)
+        self.set_action_icons()
 
         self.setWindowTitle("Streckenfahrplan")
 
@@ -161,6 +163,12 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.anlage_update()
         self.plan_update()
         self.updating = False
+
+    def set_action_icons(self):
+        for name in action_icons.actions:
+            action = getattr(self.ui, name, None)
+            if action is not None:
+                action.setIcon(action_icons.get_icon(name))
 
     @property
     def anlage(self) -> Anlage:
