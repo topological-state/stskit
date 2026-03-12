@@ -37,11 +37,16 @@ class ActionIcons:
     def __init__(self):
         super().__init__()
 
-        self._icon_factory = IconFactory(icon_set='lucide',
-                                         icon_size=16,
-                                         font_size=16,
-                                         font_color='white',
-                                         background_color=(0x3f, 0x3f, 0x3f, 0xff), )
+        self._icon_factory_normal = IconFactory(icon_set='lucide',
+                                                icon_size=16,
+                                                font_size=16,
+                                                font_color='white',
+                                                background_color=(0x3f, 0x3f, 0x3f, 0xff), )
+        self._icon_factory_disabled = IconFactory(icon_set='lucide',
+                                                  icon_size=16,
+                                                  font_size=16,
+                                                  font_color='silver',
+                                                  background_color=(0x3f, 0x3f, 0x3f, 0xff), )
 
         self._icons: dict[str, QIcon] = {}
 
@@ -54,8 +59,10 @@ class ActionIcons:
         icon = self._icons.get(key)
         if icon is None:
             icon = QIcon()
-            pixmap = self._icon_factory.asQPixmap(key)
-            icon.addPixmap(pixmap, QIcon.Mode.Normal, QIcon.State.Off)
+            normal_pixmap = self._icon_factory_normal.asQPixmap(key)
+            icon.addPixmap(normal_pixmap, QIcon.Mode.Normal, QIcon.State.Off)
+            disabled_pixmap = self._icon_factory_disabled.asQPixmap(key)
+            icon.addPixmap(disabled_pixmap, QIcon.Mode.Disabled, QIcon.State.Off)
             self._icons[key] = icon
 
         return icon
