@@ -12,15 +12,15 @@ class ActionIcons:
         'actionMinusEins': 'clock-arrow-down',
         'actionFix': 'clock-alert',
         'actionVorzeitigeAbfahrt': 'wand',  # 'alarm-clock-off',  'circle-play',  # 'clock-fading',
-        'actionVerspaetungLoeschen': 'history',  # 'circle-off',  # off?
+        'actionVerspaetungLoeschen': 'undo',  # 'circle-off',  # off?
 
-        'actionAnkunftAbwarten': 'circle-chevron-left',  # 'git-merge',
-        'actionAbfahrtAbwarten': 'circle-chevron-right',  # 'git-branch',
-        'actionKreuzung': 'circle-x',  # 'git-compare',
-        'actionZugfolge': 'circle-slash',  # 'git-pull-request-draft',
-        'actionLoeschen': 'rotate-ccw',  # 'circle-off',
-        'actionBetriebshaltEinfuegen': 'circle-parking',
-        'actionActionBetriebshaltLoeschen': 'circle-parking-off',
+        'actionAnkunftAbwarten': 'git-pull-request',
+        'actionAbfahrtAbwarten': 'git-merge',
+        'actionKreuzung': 'git-compare',
+        'actionZugfolge': 'git-pull-request-draft',
+        'actionLoeschen': 'undo',
+        'actionBetriebshaltEinfuegen': 'git-commit-vertical',
+        'actionActionBetriebshaltLoeschen': 'undo',
 
         'actionAnschlussAbwarten': 'ticket-check',
         'actionAnschlussAufgeben': 'ticket-x',
