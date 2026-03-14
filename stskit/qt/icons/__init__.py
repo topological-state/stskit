@@ -1,25 +1,24 @@
-from PySide6 import QtGui
 from PySide6.QtGui import QIcon
 from iconipy import IconFactory
 
 class ActionIcons:
     actions: dict[str, str] = {
-        'actionSetup': 'settings',
-        'actionAnzeige': 'chart-network',
-        'actionBelegteGleise': 'train-track',
-        'actionEinfacheGleise': 'train-track',
+        'actionSetup': 'settings-2',  # sliders-vertical
+        'actionAnzeige': 'chart-gantt',  # 'chart-network',
+        'actionBelegteGleise': 'list-collapse',  # list-, square-, columns-, tally-
+        'actionEinfacheGleise': 'list-filter',  #
 
         'actionPlusEins': 'clock-arrow-up',
         'actionMinusEins': 'clock-arrow-down',
         'actionFix': 'clock-alert',
-        'actionVorzeitigeAbfahrt': 'clock-fading',
-        'actionVerspaetungLoeschen': 'circle-off',  # off?
+        'actionVorzeitigeAbfahrt': 'wand',  # 'alarm-clock-off',  'circle-play',  # 'clock-fading',
+        'actionVerspaetungLoeschen': 'history',  # 'circle-off',  # off?
 
         'actionAnkunftAbwarten': 'circle-chevron-left',  # 'git-merge',
         'actionAbfahrtAbwarten': 'circle-chevron-right',  # 'git-branch',
         'actionKreuzung': 'circle-x',  # 'git-compare',
         'actionZugfolge': 'circle-slash',  # 'git-pull-request-draft',
-        'actionLoeschen': 'circle-off',
+        'actionLoeschen': 'rotate-ccw',  # 'circle-off',
         'actionBetriebshaltEinfuegen': 'circle-parking',
         'actionActionBetriebshaltLoeschen': 'circle-parking-off',
 
