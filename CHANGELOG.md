@@ -1,5 +1,30 @@
 # Changelog
 
+## Master-Branch seit letztem Release
+
+### Features
+
+- Neue Dispo-Befehle
+  - Ankunft abwarten
+  - Kreuzung
+  - Überholung (Abfahrt abwarten)
+  - Betriebshalt einfügen
+  - Vorzeitige Abfahrt
+- Übersicht Dispo-Befehle im Zugfahrplan-Modul
+- Klarere Trassen- und Knotenauswahl im Bildfahrplan
+- Durchfahrt und Betriebshalte markieren im Bildfahrplan
+
+### Issues
+
+- Auswahl von automatischer Hauptstrecke in Konfiguration speichern
+
+### Beispielkonfigurationen
+
+- Ergänzung Zuggattungen Deutschland/Österreich (gem. Forumseintrag STS)
+- Explizite Zuggattungen Schweiz (grenzüberschreitende Züge)
+- Aktualisierung numerische Zuggattungen Schweiz/RhB
+
+
 ## 2.1.7
 
 ### Features
