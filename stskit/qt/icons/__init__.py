@@ -5,8 +5,8 @@ class ActionIcons:
     actions: dict[str, str] = {
         'actionSetup': 'settings-2',  # sliders-vertical
         'actionAnzeige': 'chart-gantt',  # 'chart-network',
-        'actionBelegteGleise': 'list-collapse',  # list-, square-, columns-, tally-
-        'actionEinfacheGleise': 'list-filter',  #
+        'actionBelegteGleise': 'panel-left-right-dashed',  # list-, square-, columns-, tally-
+        'actionEinfacheGleise': 'columns-2',  #
 
         'actionPlusEins': 'clock-arrow-up',
         'actionMinusEins': 'clock-arrow-down',
@@ -14,16 +14,16 @@ class ActionIcons:
         'actionVorzeitigeAbfahrt': 'wand',  # 'alarm-clock-off',  'circle-play',  # 'clock-fading',
         'actionVerspaetungLoeschen': 'undo',  # 'circle-off',  # off?
 
-        'actionAnkunftAbwarten': 'git-pull-request',
+        'actionAnkunftAbwarten': 'git-branch',
         'actionAbfahrtAbwarten': 'git-merge',
-        'actionKreuzung': 'git-compare',
+        'actionKreuzung': 'git-compare-arrows',
         'actionZugfolge': 'git-pull-request-draft',
         'actionLoeschen': 'undo',
         'actionBetriebshaltEinfuegen': 'git-commit-vertical',
         'actionActionBetriebshaltLoeschen': 'undo',
 
-        'actionAnschlussAbwarten': 'ticket-check',
-        'actionAnschlussAufgeben': 'ticket-x',
+        'actionAnschlussAbwarten': 'git-pull-request',  # 'git-branch-plus',
+        'actionAnschlussAufgeben': 'git-pull-request-closed',  # 'git-branch-minus',
 
         'actionWarnungSetzen': 'shield-alert',
         'actionWarnungIgnorieren': 'shield-check',
