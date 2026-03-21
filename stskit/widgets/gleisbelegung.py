@@ -50,7 +50,6 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.displayLayout.setObjectName("displayLayout")
         self.ui.displayLayout.addWidget(self.display_canvas)
 
-        self.ui.actionAnzeige.triggered.connect(self.display_button_clicked)
         self.ui.actionSetup.triggered.connect(self.settings_button_clicked)
         self.ui.actionBelegteGleise.triggered.connect(self.action_belegte_gleise)
         self.ui.actionWarnungSetzen.triggered.connect(self.action_warnung_setzen)
@@ -88,8 +87,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
     def update_actions(self):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
 
-        self.ui.actionSetup.setEnabled(display_mode)
-        self.ui.actionAnzeige.setEnabled(not display_mode)
+        self.ui.actionSetup.setChecked(not display_mode)
         self.ui.actionBelegteGleise.setEnabled(display_mode)
         self.ui.actionBelegteGleise.setChecked(self.plot.belegte_gleise_zeigen)
         self.ui.actionWarnungSetzen.setEnabled(display_mode and len(self.plot._slot_auswahl))
@@ -217,17 +215,16 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
     @Slot()
     def settings_button_clicked(self):
-        self.ui.stackedWidget.setCurrentIndex(0)
-        self.ui.gleisView.expandAll()
-        self.ui.gleisView.resizeColumnToContents(0)
-        self.gleisauswahl.set_auswahl(self.plot.belegung.gleise)
-        self.update_widgets()
-
-    @Slot()
-    def display_button_clicked(self):
-        self.ui.stackedWidget.setCurrentIndex(1)
-        self.plot.belegung.gleise_auswaehlen(self.gleisauswahl.get_auswahl())
-        self.plot.grafik_update()
+        if self.ui.stackedWidget.currentIndex() == 0:
+            self.ui.stackedWidget.setCurrentIndex(1)
+            self.plot.belegung.gleise_auswaehlen(self.gleisauswahl.get_auswahl())
+            self.plot.grafik_update()
+        else:
+            self.ui.stackedWidget.setCurrentIndex(0)
+            self.ui.gleisView.expandAll()
+            self.ui.gleisView.resizeColumnToContents(0)
+            self.gleisauswahl.set_auswahl(self.plot.belegung.gleise)
+            self.update_widgets()
 
     @Slot()
     def page_changed(self):

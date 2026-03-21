@@ -121,7 +121,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.displayLayout.setObjectName("displayLayout")
         self.ui.displayLayout.addWidget(self.display_canvas)
 
-        self.ui.actionAnzeige.triggered.connect(self.display_button_clicked)
         self.ui.actionSetup.triggered.connect(self.settings_button_clicked)
         self.ui.actionPlusEins.triggered.connect(self.action_plus_eins)
         self.ui.actionMinusEins.triggered.connect(self.action_minus_eins)
@@ -131,7 +130,6 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.actionKreuzung.triggered.connect(self.action_kreuzung_abwarten)
         self.ui.actionZugfolge.setEnabled(False)
         self.ui.actionBetriebshaltEinfuegen.triggered.connect(self.action_betriebshalt_einfuegen)
-        self.ui.actionActionBetriebshaltLoeschen.triggered.connect(self.action_betriebshalt_loeschen)
         self.ui.actionVorzeitigeAbfahrt.triggered.connect(self.action_vorzeitige_abfahrt)
 
         self.ui.stackedWidget.currentChanged.connect(self.page_changed)
@@ -264,10 +262,8 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         display_mode = self.ui.stackedWidget.currentIndex() == 1
         trasse_auswahl = len(self.plot.auswahl_kanten) >= 1
-        trasse_nachbar = None
 
-        self.ui.actionSetup.setEnabled(display_mode)
-        self.ui.actionAnzeige.setEnabled(not display_mode and len(self.plot.strecke) >= 2)
+        self.ui.actionSetup.setChecked(not display_mode)
         self.ui.actionFix.setEnabled(display_mode and False)  # not implemented
 
         auswahl_muster = self.auswahl_unterscheiden() if display_mode and trasse_auswahl else []
@@ -306,13 +302,10 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         if w:
             m1 = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab'}), None)
             m2 = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'S'}), None)
-            bh_aus = m1 is not None and m1.kante.typ == 'B'
             bh_ein = m2 is not None or m1 is not None and m1.kante.typ == 'D'
         else:
-            bh_aus = False
             bh_ein = False
         self.ui.actionBetriebshaltEinfuegen.setEnabled(bh_ein)
-        self.ui.actionActionBetriebshaltLoeschen.setEnabled(bh_aus)
 
         self.updating = False
 
@@ -358,14 +351,13 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
     @Slot()
     def settings_button_clicked(self):
-        self.ui.stackedWidget.setCurrentIndex(0)
-
-    @Slot()
-    def display_button_clicked(self):
-        self.ui.stackedWidget.setCurrentIndex(1)
-        if self.plot.strecke_von and self.plot.strecke_nach:
-            self.daten_update()
-            self.grafik_update()
+        if self.ui.stackedWidget.currentIndex() == 0:
+            self.ui.stackedWidget.setCurrentIndex(1)
+            if self.plot.strecke_von and self.plot.strecke_nach:
+                self.daten_update()
+                self.grafik_update()
+        else:
+            self.ui.stackedWidget.setCurrentIndex(0)
 
     @Slot()
     def page_changed(self):

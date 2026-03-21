@@ -55,7 +55,6 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.abfahrt_filter_modell = ZugschemaAuswahlModell(None, zugschema=self.zentrale.anlage.zugschema)
         self.ui.abfahrt_filter_view.setModel(self.abfahrt_filter_modell)
 
-        self.ui.actionAnzeige.triggered.connect(self.display_button_clicked)
         self.ui.actionSetup.triggered.connect(self.settings_button_clicked)
         self.ui.actionPlusEins.triggered.connect(self.action_plus_eins)
         self.ui.actionMinusEins.triggered.connect(self.action_minus_eins)
@@ -106,8 +105,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
                              bool((len(self.anschlussmatrix.abfahrten_ausblenden) or
                              len(self.anschlussmatrix.ankuenfte_ausblenden)))
 
-        self.ui.actionSetup.setEnabled(display_mode)
-        self.ui.actionAnzeige.setEnabled(not display_mode)
+        self.ui.actionSetup.setChecked(not display_mode)
         self.ui.actionWarnungSetzen.setEnabled(display_mode and False)  # not implemented
         self.ui.actionWarnungReset.setEnabled(display_mode and False)  # not implemented
         self.ui.actionWarnungIgnorieren.setEnabled(display_mode and False)  # not implemented
@@ -183,17 +181,16 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
     @Slot()
     def settings_button_clicked(self):
-        self.ui.stackedWidget.setCurrentIndex(0)
-        self.update_widgets()
-
-    @Slot()
-    def display_button_clicked(self):
-        self.ui.stackedWidget.setCurrentIndex(1)
-        self.anschlussmatrix.ankunft_filter_kategorien = self.ankunft_filter_modell.auswahl
-        self.anschlussmatrix.abfahrt_filter_kategorien = self.abfahrt_filter_modell.auswahl
-        if self.anschlussmatrix.bahnhof:
-            self.daten_update()
-            self.grafik_update()
+        if self.ui.stackedWidget.currentIndex() == 0:
+            self.ui.stackedWidget.setCurrentIndex(1)
+            self.anschlussmatrix.ankunft_filter_kategorien = self.ankunft_filter_modell.auswahl
+            self.anschlussmatrix.abfahrt_filter_kategorien = self.abfahrt_filter_modell.auswahl
+            if self.anschlussmatrix.bahnhof:
+                self.daten_update()
+                self.grafik_update()
+        else:
+            self.ui.stackedWidget.setCurrentIndex(0)
+            self.update_widgets()
 
     @Slot()
     def page_changed(self):
