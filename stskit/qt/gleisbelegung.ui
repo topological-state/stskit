@@ -237,10 +237,6 @@
    <addaction name="actionLoeschen"/>
   </widget>
   <action name="actionSetup">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/lucide/lucide/settings-2.png</normaloff>:/lucide/lucide/settings-2.png</iconset>
-   </property>
    <property name="text">
     <string>Setup</string>
    </property>
@@ -250,28 +246,14 @@
    <property name="shortcut">
     <string>S</string>
    </property>
-  </action>
-  <action name="actionAnzeige">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/slots.png</normaloff>
-     <disabledoff>:/slots-dis.png</disabledoff>:/slots.png</iconset>
+   <property name="checkable">
+    <bool>true</bool>
    </property>
-   <property name="text">
-    <string>Grafik</string>
-   </property>
-   <property name="toolTip">
-    <string>Grafik anzeigen (G)</string>
-   </property>
-   <property name="shortcut">
-    <string>G</string>
+   <property name="checked">
+    <bool>false</bool>
    </property>
   </action>
   <action name="actionPlusEins">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/lucide/lucide/clock-arrow-down.png</normaloff>:/lucide/lucide/clock-arrow-down.png</iconset>
-   </property>
    <property name="text">
     <string>+1</string>
    </property>
@@ -283,10 +265,6 @@
    </property>
   </action>
   <action name="actionMinusEins">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/lucide/lucide/clock-arrow-up.png</normaloff>:/lucide/lucide/clock-arrow-up.png</iconset>
-   </property>
    <property name="text">
     <string>-1</string>
    </property>
@@ -298,10 +276,6 @@
    </property>
   </action>
   <action name="actionFix">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/lucide/lucide/clock-alert.png</normaloff>:/lucide/lucide/clock-alert.png</iconset>
-   </property>
    <property name="text">
     <string>Fix</string>
    </property>
@@ -313,10 +287,6 @@
    </property>
   </action>
   <action name="actionLoeschen">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/lucide/lucide/undo-2.png</normaloff>:/lucide/lucide/undo-2.png</iconset>
-   </property>
    <property name="text">
     <string>Löschen</string>
    </property>
@@ -328,10 +298,6 @@
    </property>
   </action>
   <action name="actionAnkunftAbwarten">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/lucide/lucide/git-pull-request-arrow.png</normaloff>:/lucide/lucide/git-pull-request-arrow.png</iconset>
-   </property>
    <property name="text">
     <string>Ankunft abwarten</string>
    </property>
@@ -343,10 +309,6 @@
    </property>
   </action>
   <action name="actionAbfahrtAbwarten">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/lucide/lucide/git-pull-request-draft.png</normaloff>:/lucide/lucide/git-pull-request-draft.png</iconset>
-   </property>
    <property name="text">
     <string>Abfahrt</string>
    </property>
@@ -358,10 +320,6 @@
    </property>
   </action>
   <action name="actionWarnungSetzen">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/lucide/lucide/shield-plus.png</normaloff>:/lucide/lucide/shield-plus.png</iconset>
-   </property>
    <property name="text">
     <string>Warnung</string>
    </property>
@@ -373,10 +331,6 @@
    </property>
   </action>
   <action name="actionWarnungIgnorieren">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/lucide/lucide/shield-check.png</normaloff>:/lucide/lucide/shield-check.png</iconset>
-   </property>
    <property name="text">
     <string>Ignorieren</string>
    </property>
@@ -388,10 +342,6 @@
    </property>
   </action>
   <action name="actionWarnungReset">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/lucide/lucide/shield-ellipsis.png</normaloff>:/lucide/lucide/shield-ellipsis.png</iconset>
-   </property>
    <property name="text">
     <string>Reset</string>
    </property>
@@ -412,10 +362,6 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/lucide/lucide/columns-3.png</normaloff>:/lucide/lucide/columns-3.png</iconset>
-   </property>
    <property name="text">
     <string>Belegte Gleise</string>
    </property>
@@ -427,10 +373,6 @@
    </property>
   </action>
   <action name="actionKreuzung">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/lucide/lucide/git-compare-arrows.png</normaloff>:/lucide/lucide/git-compare-arrows.png</iconset>
-   </property>
    <property name="text">
     <string>Kreuzung</string>
    </property>
@@ -442,8 +384,5 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
  <connections/>
 </ui>

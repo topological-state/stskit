@@ -228,18 +228,6 @@ wheels = [
 ]
 
 [[package]]
-name = "iconipy"
-version = "0.5.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pillow" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/32/06/7bcfff70b958d83d8574da66380462e93da464d2747ce078595f08fca405/iconipy-0.5.1.tar.gz", hash = "sha256:b8cd857df65d693f54f30c13b8af271726f282f25d1eaa23bdfa748cf21ffc8c", size = 1601789, upload-time = "2025-09-22T21:13:47.8Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/5d/10/ef97e253781ad65567ef7e3826c98aa88ba05b42c508fde0e0f8b3e4b4f3/iconipy-0.5.1-py3-none-any.whl", hash = "sha256:6c2b92b675655c42ca2e4088deed5ff867fe0d682af245e00e30df395d94e5a0", size = 1595047, upload-time = "2025-09-22T21:13:45.137Z" },
-]
-
-[[package]]
 name = "idna"
 version = "3.10"
 source = { registry = "https://pypi.org/simple" }
@@ -1080,7 +1068,6 @@ version = "2.0.0"
 source = { virtual = "." }
 dependencies = [
     { name = "icecream" },
-    { name = "iconipy" },
     { name = "jsonschema" },
     { name = "matplotlib" },
     { name = "mock" },
@@ -1105,7 +1092,6 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "icecream", specifier = ">=2.1.4" },
-    { name = "iconipy", specifier = ">=0.5.1" },
     { name = "jsonschema", specifier = ">=4.23.0" },
     { name = "matplotlib", specifier = ">=3.10.1" },
     { name = "mock", specifier = ">=5.2.0" },

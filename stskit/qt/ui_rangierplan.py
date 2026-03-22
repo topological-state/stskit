@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLabel,
     QLineEdit, QPushButton, QSizePolicy, QSpacerItem,
     QSpinBox, QSplitter, QTabWidget, QTableView,
     QVBoxLayout, QWidget)
-import stskit.qt.resources_rc
 
 class Ui_RangierplanWidget(object):
     def setupUi(self, RangierplanWidget):

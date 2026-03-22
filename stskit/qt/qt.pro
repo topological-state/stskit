@@ -5,6 +5,3 @@ FORMS += \
     anschlussmatrix.ui \
     einstellungen.ui \
     gleisnetz.ui
-
-RESOURCES += \
-    resources.qrc
