@@ -4,7 +4,6 @@ datenstrukturen und fenster für anschlussmatrix
 
 """
 import logging
-from typing import Optional
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -19,7 +18,7 @@ from stskit.plots.anschlussmatrix import Anschlussmatrix, \
     ANSCHLUSS_OK, ANSCHLUSS_ABWARTEN, ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN
 from stskit.model.zugschema import ZugschemaAuswahlModell
 
-from stskit.qt.icons import action_icons
+from stskit.qt.icons import set_action_icons
 from stskit.qt.ui_anschlussmatrix import Ui_AnschlussmatrixWindow
 
 logger = logging.getLogger(__name__)
@@ -42,7 +41,7 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.in_update = True
         self.ui = Ui_AnschlussmatrixWindow()
         self.ui.setupUi(self)
-        self.set_action_icons()
+        set_action_icons(self.ui)
         self.setWindowTitle("Anschlussmatrix")
 
         self.display_canvas = FigureCanvas(Figure(figsize=(5, 3)))
@@ -80,13 +79,6 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
         self.update_widgets()
         self.update_actions()
         self.in_update = False
-
-    def set_action_icons(self):
-        for name in action_icons.actions:
-            action = getattr(self.ui, name, None)
-            if action is not None:
-                action.setIcon(action_icons.get_icon(name))
-
 
     def closeEvent(self, event, /):
         self.zentrale.anlage_update.unregister(self)
