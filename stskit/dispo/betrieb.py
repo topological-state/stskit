@@ -523,16 +523,13 @@ class Betrieb:
 
         target_label = self._ereignis_label_finden(target, {'Ab', 'An'})
         if target_label is None:
-            raise ValueError(f"Fehlerhafte Referenz beim Korrektur Rücksetzen: {target}")
+            raise ValueError(f"Ungültiger Zielknoten beim Reset: {target}")
         target_data = self.ereignisgraph.nodes[target_label]
         zid = target.zid
         bst = self.anlage.bahnhofgraph.find_superior(target_data.plan_bst, {'Bf', 'Anst'})
 
         loeschen = set()
         for jid, j in self.journal.entries.items():
-            if jid.typ not in {"Ankunft abwarten", "Abfahrt abwarten", "Vorzeitige Abfahrt", "Wartezeit", "Kreuzung"}:
-                continue
-
             for node in j.target_nodes():
                 try:
                     node_data = self.ereignisgraph.nodes[node]

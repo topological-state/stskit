@@ -299,28 +299,23 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionSetup"/>
-   <addaction name="actionAnzeige"/>
    <addaction name="separator"/>
+   <addaction name="actionVorzeitigeAbfahrt"/>
+   <addaction name="actionBetriebshaltEinfuegen"/>
    <addaction name="actionPlusEins"/>
    <addaction name="actionMinusEins"/>
    <addaction name="actionFix"/>
-   <addaction name="actionVorzeitigeAbfahrt"/>
-   <addaction name="actionVerspaetungLoeschen"/>
    <addaction name="separator"/>
    <addaction name="actionAnkunftAbwarten"/>
-   <addaction name="actionAbfahrtAbwarten"/>
    <addaction name="actionKreuzung"/>
-   <addaction name="actionZugfolge"/>
-   <addaction name="actionLoeschen"/>
+   <addaction name="actionAbfahrtAbwarten"/>
    <addaction name="separator"/>
-   <addaction name="actionBetriebshaltEinfuegen"/>
-   <addaction name="actionActionBetriebshaltLoeschen"/>
+   <addaction name="actionLoeschen"/>
   </widget>
   <action name="actionSetup">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/equalizer.png</normaloff>
-     <disabledoff>:/equalizer-dis.png</disabledoff>:/equalizer.png</iconset>
+     <normaloff>:/lucide/lucide/settings-2.png</normaloff>:/lucide/lucide/settings-2.png</iconset>
    </property>
    <property name="text">
     <string>Setup</string>
@@ -351,13 +346,13 @@
   <action name="actionPlusEins">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/clock--plus.png</normaloff>:/clock--plus.png</iconset>
+     <normaloff>:/lucide/lucide/clock-arrow-down.png</normaloff>:/lucide/lucide/clock-arrow-down.png</iconset>
    </property>
    <property name="text">
     <string>+1</string>
    </property>
    <property name="toolTip">
-    <string>Feste Verspätung +1 Minute auf ausgewähltem Segment (+)</string>
+    <string>Verspätung +1 Minute auf ausgewähltem Segment (+)</string>
    </property>
    <property name="shortcut">
     <string>+</string>
@@ -366,13 +361,13 @@
   <action name="actionMinusEins">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/clock--minus.png</normaloff>:/clock--minus.png</iconset>
+     <normaloff>:/lucide/lucide/clock-arrow-up.png</normaloff>:/lucide/lucide/clock-arrow-up.png</iconset>
    </property>
    <property name="text">
     <string>-1</string>
    </property>
    <property name="toolTip">
-    <string>Feste Verspätung -1 Minute auf ausgewähltem Segment (-)</string>
+    <string>Verspätung -1 Minute auf ausgewähltem Segment (-)</string>
    </property>
    <property name="shortcut">
     <string>-</string>
@@ -381,13 +376,13 @@
   <action name="actionFix">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/clock--pencil.png</normaloff>:/clock--pencil.png</iconset>
+     <normaloff>:/lucide/lucide/clock-alert.png</normaloff>:/lucide/lucide/clock-alert.png</iconset>
    </property>
    <property name="text">
     <string>Fix</string>
    </property>
    <property name="toolTip">
-    <string>Feste Verspätung auf ausgewähltem Segment festlegen (V)</string>
+    <string>Verspätung auf ausgewähltem Segment bearbeiten (V)</string>
    </property>
    <property name="shortcut">
     <string>V</string>
@@ -396,7 +391,7 @@
   <action name="actionLoeschen">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/chain--return.png</normaloff>:/chain--return.png</iconset>
+     <normaloff>:/lucide/lucide/undo-2.png</normaloff>:/lucide/lucide/undo-2.png</iconset>
    </property>
    <property name="text">
     <string>Löschen</string>
@@ -411,7 +406,7 @@
   <action name="actionAnkunftAbwarten">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/chain--arrow-in.png</normaloff>:/chain--arrow-in.png</iconset>
+     <normaloff>:/lucide/lucide/git-pull-request-arrow.png</normaloff>:/lucide/lucide/git-pull-request-arrow.png</iconset>
    </property>
    <property name="text">
     <string>Ankunft abwarten</string>
@@ -426,7 +421,7 @@
   <action name="actionAbfahrtAbwarten">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/chain--arrow.png</normaloff>:/chain--arrow.png</iconset>
+     <normaloff>:/lucide/lucide/git-pull-request-draft.png</normaloff>:/lucide/lucide/git-pull-request-draft.png</iconset>
    </property>
    <property name="text">
     <string>Abfahrt abwarten</string>
@@ -441,7 +436,7 @@
   <action name="actionBetriebshaltEinfuegen">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/node-insert.png</normaloff>:/node-insert.png</iconset>
+     <normaloff>:/lucide/lucide/git-commit-vertical.png</normaloff>:/lucide/lucide/git-commit-vertical.png</iconset>
    </property>
    <property name="text">
     <string>Betriebshalt</string>
@@ -456,7 +451,7 @@
   <action name="actionActionBetriebshaltLoeschen">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/node-delete.png</normaloff>:/node-delete.png</iconset>
+     <normaloff>:/lucide/lucide/undo-2.png</normaloff>:/lucide/lucide/undo-2.png</iconset>
    </property>
    <property name="text">
     <string>Betriebshalt löschen</string>
@@ -470,9 +465,8 @@
   </action>
   <action name="actionKreuzung">
    <property name="icon">
-    <iconset>
-     <normalon>:/chain--2in-1out.png</normalon>
-    </iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/lucide/lucide/git-compare-arrows.png</normaloff>:/lucide/lucide/git-compare-arrows.png</iconset>
    </property>
    <property name="text">
     <string>Kreuzung</string>
@@ -487,7 +481,7 @@
   <action name="actionZugfolge">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/chain--1in-1out.png</normaloff>:/chain--1in-1out.png</iconset>
+     <normaloff>:/lucide/lucide/git-pull-request-flip.png</normaloff>:/lucide/lucide/git-pull-request-flip.png</iconset>
    </property>
    <property name="text">
     <string>Zugfolge</string>
@@ -502,7 +496,7 @@
   <action name="actionVerspaetungLoeschen">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/clock--return.png</normaloff>:/clock--return.png</iconset>
+     <normaloff>:/lucide/lucide/undo-2.png</normaloff>:/lucide/lucide/undo-2.png</iconset>
    </property>
    <property name="text">
     <string>Verspätung zurücksetzen</string>
@@ -514,7 +508,7 @@
   <action name="actionVorzeitigeAbfahrt">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/clock--cross.png</normaloff>:/clock--cross.png</iconset>
+     <normaloff>:/lucide/lucide/wand.png</normaloff>:/lucide/lucide/wand.png</iconset>
    </property>
    <property name="text">
     <string>Vorzeitige Abfahrt</string>
