@@ -13,6 +13,7 @@
 - Übersicht Dispo-Befehle im Zugfahrplan-Modul
 - Klarere Trassen- und Knotenauswahl im Bildfahrplan
 - Durchfahrt und Betriebshalte markieren im Bildfahrplan
+- Deutlichere Icons
 
 ### Issues
 
