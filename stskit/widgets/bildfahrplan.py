@@ -262,7 +262,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
     def update_actions(self):
         self.updating = True
 
-        display_mode = self.ui.stackedWidget.currentIndex() == 1
+        display_mode = bool(self.ui.stackedWidget.currentIndex() == 1)
         trasse_auswahl = len(self.plot.auswahl_kanten) >= 1
 
         self.ui.actionSetup.setChecked(not display_mode)
@@ -278,9 +278,18 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         w = len(auswahl_indices) == 1 and bool(auswahl_typen.intersection({'A-Ab', 'A-An', 'H-Ab', 'P-An'}))
         self.ui.actionPlusEins.setEnabled(w)
         self.ui.actionMinusEins.setEnabled(w)
-        w = len(auswahl_indices) == 1 and bool(auswahl_typen.intersection({'A-Ab', 'A-An'}))
+
+        for jid in self.zentrale.betrieb.journal.entries.keys():
+            if jid.zid in auswahl_zid and jid.bst in auswahl_bst:
+                w = True
+                break
+        else:
+            w = False
         self.ui.actionLoeschen.setEnabled(w)
-        w = len(auswahl_indices) == 1 and bool(auswahl_typen.intersection({'H-Ab'}))
+
+        w = (len(auswahl_muster) == 1 and
+             auswahl_muster[0].typ == 'H-Ab' and
+             auswahl_muster[0].knoten.vorzeitig)
         self.ui.actionVorzeitigeAbfahrt.setEnabled(w)
 
         w1 = (len(auswahl_indices) == 2 and
@@ -384,7 +393,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.ui.zuginfoLabel.setText(text)
         self.update_actions()
 
-    def auswahl_unterscheiden(self) -> list[AuswahlMuster] | None:
+    def auswahl_unterscheiden(self) -> list[AuswahlMuster]:
         """
         Mustererkennung Trassenauswahl
 
