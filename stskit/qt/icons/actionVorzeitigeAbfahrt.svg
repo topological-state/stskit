@@ -8,9 +8,9 @@
    stroke-width="2"
    stroke-linecap="round"
    stroke-linejoin="round"
-   class="lucide lucide-wand-icon lucide-wand"
+   class="lucide lucide-git-pull-request-arrow-icon lucide-git-pull-request-arrow"
    version="1.1"
-   id="svg20"
+   id="svg156"
    sodipodi:docname="actionVorzeitigeAbfahrt.svg"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -18,9 +18,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs24" />
+     id="defs160" />
   <sodipodi:namedview
-     id="namedview22"
+     id="namedview158"
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
@@ -29,42 +29,27 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="29.94"
-     inkscape:cx="4.1249165"
-     inkscape:cy="9.502338"
-     inkscape:window-width="1273"
-     inkscape:window-height="1157"
-     inkscape:window-x="23"
-     inkscape:window-y="39"
+     inkscape:zoom="29.941029"
+     inkscape:cx="3.2397016"
+     inkscape:cy="8.8173322"
+     inkscape:window-width="980"
+     inkscape:window-height="1140"
+     inkscape:window-x="1244"
+     inkscape:window-y="149"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg20" />
-  <path
-     d="M15 4V2"
-     id="path2" />
-  <path
-     d="M15 16v-2"
-     id="path4" />
-  <path
-     d="M8 9h2"
-     id="path6" />
-  <path
-     d="M20 9h2"
-     id="path8" />
-  <path
-     d="M17.8 11.8 19 13"
-     id="path10" />
-  <path
-     d="M17.8 6.2 19 5"
-     id="path14" />
-  <path
-     d="m3 21 9-9"
-     id="path16" />
-  <path
-     d="M12.2 6.2 11 5"
-     id="path18" />
+     inkscape:current-layer="svg156" />
   <circle
-     cx="15.005"
-     cy="9"
+     cx="15.490985"
+     cy="6.420856"
      r="3"
-     id="circle180" />
+     id="circle146" />
+  <path
+     d="M5 9v12"
+     id="path148" />
+  <path
+     d="M 3.5037767,13.438946 12.791611,8.0766132"
+     id="path16-6"
+     inkscape:transform-center-x="-3.0893396"
+     inkscape:transform-center-y="-1.779607"
+     style="stroke-width:2" />
 </svg>
