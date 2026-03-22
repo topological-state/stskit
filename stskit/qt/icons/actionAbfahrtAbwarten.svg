@@ -29,13 +29,13 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="29.941029"
-     inkscape:cx="2.7053179"
-     inkscape:cy="8.266249"
-     inkscape:window-width="1452"
-     inkscape:window-height="1233"
-     inkscape:window-x="0"
-     inkscape:window-y="83"
+     inkscape:zoom="24.32"
+     inkscape:cx="7.3807566"
+     inkscape:cy="9.2722039"
+     inkscape:window-width="1127"
+     inkscape:window-height="817"
+     inkscape:window-x="495"
+     inkscape:window-y="272"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg156" />
   <circle
@@ -44,17 +44,19 @@
      r="3"
      id="circle146" />
   <path
-     d="M5 9v12"
-     id="path148" />
-  <path
      d="m 22,18.000041 -3,3 -3,-3"
      id="path152" />
-  <circle
-     cx="19"
-     cy="6"
-     r="3"
-     id="circle445" />
   <path
-     d="M 19,9 V 21"
-     id="path447" />
+     d="m 12,5.9999997 h 5 a 2,3.2637062 0 0 1 2,3.2637063 v 11.422972"
+     id="path154"
+     style="stroke-width:2" />
+  <path
+     d="m 5,20 v 1"
+     id="path277" />
+  <path
+     d="m 5,15 v 1"
+     id="path279" />
+  <path
+     d="m 5,10 v 1"
+     id="path342" />
 </svg>
