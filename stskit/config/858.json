@@ -6,16 +6,10 @@
   "_region": "Triveneto",
   "elemente": [
     {
-      "name": "Brennero",
-      "typ": "Bf",
-      "auto": false,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
       "name": "Campo",
       "typ": "Bf",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
@@ -23,6 +17,7 @@
       "name": "Colle",
       "typ": "Bf",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
@@ -30,6 +25,7 @@
       "name": "Einfahrt Bolzano",
       "typ": "Bf",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
@@ -37,6 +33,7 @@
       "name": "Fortezza",
       "typ": "Bf",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
@@ -44,110 +41,53 @@
       "name": "Vipiteno",
       "typ": "Bf",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "5",
-      "typ": "Bft",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Brennero"
-    },
-    {
-      "name": "3",
-      "typ": "Bft",
+      "name": "Brennero",
+      "typ": "Bf",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
-      "flags": "",
-      "stamm": "Brennero"
-    },
-    {
-      "name": "7",
-      "typ": "Bs",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "7",
-      "gleise": 1
-    },
-    {
-      "name": "10",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "10",
-      "gleise": 1
-    },
-    {
-      "name": "5",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "5",
-      "gleise": 1
-    },
-    {
-      "name": "12",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "12",
-      "gleise": 1
-    },
-    {
-      "name": "1",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "1",
-      "gleise": 1
-    },
-    {
-      "name": "3",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "N",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "N",
-      "gleise": 1
-    },
-    {
-      "name": "8",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "8",
-      "gleise": 1
+      "flags": ""
     },
     {
       "name": "2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "2",
       "gleise": 1
     },
     {
+      "name": "1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1",
+      "gleise": 1
+    },
+    {
+      "name": "8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "8",
+      "gleise": 1
+    },
+    {
       "name": "4",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "4",
@@ -156,7 +96,8 @@
     {
       "name": "7",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "7",
@@ -165,122 +106,127 @@
     {
       "name": "7A",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "7",
       "gleise": 1
     },
     {
+      "name": "5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "5",
+      "gleise": 1
+    },
+    {
       "name": "11",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "11",
       "gleise": 1
     },
     {
-      "name": "6",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "6",
-      "gleise": 1
-    },
-    {
-      "name": "9",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "9",
-      "gleise": 1
-    },
-    {
       "name": "16",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "16",
       "gleise": 1
     },
     {
-      "name": "17",
-      "typ": "Bs",
-      "auto": true,
+      "name": "9",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "7",
+      "stamm": "9",
+      "gleise": 1
+    },
+    {
+      "name": "3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "10",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "10",
+      "gleise": 1
+    },
+    {
+      "name": "12",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "12",
+      "gleise": 1
+    },
+    {
+      "name": "N",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "N",
+      "gleise": 1
+    },
+    {
+      "name": "6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "6",
       "gleise": 1
     },
     {
       "name": "17",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "17",
       "gleise": 1
     },
     {
-      "name": "Campo 2",
+      "name": "Campo",
       "typ": "Bft",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Campo"
     },
     {
-      "name": "Fortezza 2",
-      "typ": "Bft",
+      "name": "Campo 1",
+      "typ": "Gl",
       "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza"
-    },
-    {
-      "name": "Campo 2",
-      "typ": "Bs",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Campo 2",
-      "gleise": 1
-    },
-    {
-      "name": "Campo 1",
-      "typ": "Bs",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Campo 2",
-      "gleise": 1
-    },
-    {
-      "name": "Campo 2",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Campo 2",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza R",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza R",
-      "gleise": 1
-    },
-    {
-      "name": "Campo 1",
-      "typ": "Gl",
-      "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Campo 1",
@@ -289,16 +235,38 @@
     {
       "name": "Fortezza 23",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Fortezza 23",
       "gleise": 1
     },
     {
-      "name": "Colle 3",
+      "name": "Campo 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Campo 2",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza R",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza R",
+      "gleise": 1
+    },
+    {
+      "name": "Colle",
       "typ": "Bft",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Colle"
@@ -306,7 +274,8 @@
     {
       "name": "Colle 2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Colle 2",
@@ -315,7 +284,8 @@
     {
       "name": "Colle 3",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Colle 3",
@@ -324,7 +294,8 @@
     {
       "name": "Colle 1",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Colle 1",
@@ -334,6 +305,7 @@
       "name": "Einfahrt Bolzano",
       "typ": "Bft",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Einfahrt Bolzano"
@@ -342,6 +314,7 @@
       "name": "Einfahrt Bolzano",
       "typ": "Bs",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Einfahrt Bolzano",
@@ -351,130 +324,125 @@
       "name": "Einfahrt Bolzano",
       "typ": "Gl",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Einfahrt Bolzano",
       "gleise": 1
     },
     {
-      "name": "Fortezza 1",
-      "typ": "Bft",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza"
-    },
-    {
       "name": "Fortezza 15",
       "typ": "Bft",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Fortezza"
     },
     {
-      "name": "Fortezza 1",
-      "typ": "Bs",
-      "auto": true,
+      "name": "Fortezza",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza"
+    },
+    {
+      "name": "Fortezza 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 3",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 3G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 3",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 1G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Fortezza 1",
       "gleise": 1
     },
     {
-      "name": "Fortezza 6G",
+      "name": "Fortezza 1",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Fortezza 6",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 3G",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 3",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 3",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 3",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 4G",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 4",
+      "stamm": "Fortezza 1",
       "gleise": 1
     },
     {
       "name": "Fortezza 7G",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Fortezza 7",
       "gleise": 1
     },
     {
-      "name": "Fortezza 1",
+      "name": "Fortezza 4G",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Fortezza 1",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 1G",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 1",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 1T",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 1",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 2G",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 2",
+      "stamm": "Fortezza 4",
       "gleise": 1
     },
     {
       "name": "Fortezza 2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Fortezza 2",
       "gleise": 1
     },
     {
+      "name": "Fortezza 2G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 2",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 6G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 6",
+      "gleise": 1
+    },
+    {
       "name": "Fortezza 5G",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Fortezza 5",
@@ -484,6 +452,7 @@
       "name": "Fortezza 15",
       "typ": "Bs",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Fortezza 15",
@@ -493,6 +462,7 @@
       "name": "Fortezza 12",
       "typ": "Bs",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Fortezza 15",
@@ -502,6 +472,7 @@
       "name": "Fortezza 15",
       "typ": "Gl",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Fortezza 15",
@@ -511,23 +482,27 @@
       "name": "Fortezza 12",
       "typ": "Gl",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Fortezza 12",
       "gleise": 1
     },
     {
-      "name": "R2",
-      "typ": "Bft",
+      "name": "R4",
+      "typ": "Gl",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Brennero"
+      "stamm": "R4",
+      "gleise": 1
     },
     {
       "name": "R3",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "R3",
@@ -536,43 +511,18 @@
     {
       "name": "R2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "R2",
       "gleise": 1
     },
     {
-      "name": "R4",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "R4",
-      "gleise": 1
-    },
-    {
-      "name": "R5",
-      "typ": "Bs",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "R5",
-      "gleise": 1
-    },
-    {
-      "name": "R6",
-      "typ": "Bs",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "R5",
-      "gleise": 1
-    },
-    {
       "name": "R5",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "R5",
@@ -581,7 +531,8 @@
     {
       "name": "R6",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "R6",
@@ -589,26 +540,19 @@
     },
     {
       "name": "R7",
-      "typ": "Bs",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "R7",
-      "gleise": 1
-    },
-    {
-      "name": "R7",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "R7",
       "gleise": 1
     },
     {
-      "name": "Vipiteno 1",
+      "name": "Vipiteno",
       "typ": "Bft",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Vipiteno"
@@ -616,7 +560,8 @@
     {
       "name": "Vipiteno 2G",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Vipiteno 2",
@@ -625,43 +570,18 @@
     {
       "name": "Vipiteno 2",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Vipiteno 2",
       "gleise": 1
     },
     {
-      "name": "Vipiteno 3",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Vipiteno 3",
-      "gleise": 1
-    },
-    {
-      "name": "Vipiteno 3G",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Vipiteno 3",
-      "gleise": 1
-    },
-    {
-      "name": "Vipiteno 4G",
-      "typ": "Gl",
-      "auto": true,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Vipiteno 4",
-      "gleise": 1
-    },
-    {
       "name": "Vipiteno 1",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Vipiteno 1",
@@ -670,16 +590,48 @@
     {
       "name": "Vipiteno 1G",
       "typ": "Gl",
-      "auto": true,
+      "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Vipiteno 1",
       "gleise": 1
     },
     {
+      "name": "Vipiteno 3G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 3",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 3",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 4G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno 4",
+      "gleise": 1
+    },
+    {
       "name": "Matrei",
       "typ": "Anst",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
@@ -687,6 +639,7 @@
       "name": "BW",
       "typ": "Anst",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
@@ -694,6 +647,7 @@
       "name": "Bolzano",
       "typ": "Anst",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
@@ -701,6 +655,7 @@
       "name": "AR",
       "typ": "Anst",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
@@ -708,6 +663,7 @@
       "name": "San Candido",
       "typ": "Anst",
       "auto": true,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
@@ -715,6 +671,7 @@
       "name": "Matrei",
       "typ": "Agl",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Matrei",
@@ -724,6 +681,7 @@
       "name": "BW 1",
       "typ": "Agl",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "BW",
@@ -733,6 +691,7 @@
       "name": "BW 2",
       "typ": "Agl",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "BW",
@@ -742,6 +701,7 @@
       "name": "Bolzano",
       "typ": "Agl",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "Bolzano",
@@ -751,6 +711,7 @@
       "name": "AR2",
       "typ": "Agl",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "AR",
@@ -760,6 +721,7 @@
       "name": "AR6",
       "typ": "Agl",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "AR",
@@ -769,6 +731,7 @@
       "name": "AR7",
       "typ": "Agl",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "AR",
@@ -778,6 +741,7 @@
       "name": "AR4",
       "typ": "Agl",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "AR",
@@ -787,6 +751,7 @@
       "name": "AR1",
       "typ": "Agl",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "AR",
@@ -796,322 +761,478 @@
       "name": "San Candido",
       "typ": "Agl",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "San Candido",
       "gleise": 1
     },
     {
-      "name": "3",
-      "typ": "Bs",
+      "name": "Brennero",
+      "typ": "Bft",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "3",
+      "stamm": "Brennero"
+    },
+    {
+      "name": "Brennero 7",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero"
+    },
+    {
+      "name": "Brennero R2",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero"
+    },
+    {
+      "name": "Brennero R5",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero"
+    },
+    {
+      "name": "Brennero R7",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero"
+    },
+    {
+      "name": "Campo 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Campo",
       "gleise": 1
     },
     {
-      "name": "N",
+      "name": "Campo 2",
       "typ": "Bs",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "5",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "12",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "4",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "8",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "16",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "6",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "11",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "1",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "9",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "10",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "2",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "3",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 23",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 2",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza R",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 2",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 2",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 2",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 7",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 2",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 5",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 2",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 4",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 2",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 6",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 2",
-      "gleise": 1
-    },
-    {
-      "name": "Fortezza 3",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Fortezza 2",
-      "gleise": 1
-    },
-    {
-      "name": "Colle 3",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Colle 3",
-      "gleise": 1
-    },
-    {
-      "name": "Colle 1",
-      "typ": "Bs",
-      "auto": false,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Colle 3",
+      "stamm": "Campo",
       "gleise": 1
     },
     {
       "name": "Colle 2",
       "typ": "Bs",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Colle 3",
+      "stamm": "Colle",
       "gleise": 1
     },
     {
-      "name": "R2",
+      "name": "Colle 3",
       "typ": "Bs",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "R2",
+      "stamm": "Colle",
       "gleise": 1
     },
     {
-      "name": "R4",
+      "name": "Colle 1",
       "typ": "Bs",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "R2",
+      "stamm": "Colle",
       "gleise": 1
     },
     {
-      "name": "R3",
+      "name": "Fortezza 23",
       "typ": "Bs",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "R2",
+      "stamm": "Fortezza",
       "gleise": 1
     },
     {
-      "name": "Vipiteno 1",
+      "name": "Fortezza R",
       "typ": "Bs",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Vipiteno 1",
+      "stamm": "Fortezza",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 1T",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza",
       "gleise": 1
     },
     {
       "name": "Vipiteno 2",
       "typ": "Bs",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Vipiteno 1",
+      "stamm": "Vipiteno",
       "gleise": 1
     },
     {
-      "name": "Vipiteno 4",
+      "name": "Vipiteno 1",
       "typ": "Bs",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Vipiteno 1",
+      "stamm": "Vipiteno",
       "gleise": 1
     },
     {
       "name": "Vipiteno 3",
       "typ": "Bs",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Vipiteno 1",
+      "stamm": "Vipiteno",
+      "gleise": 1
+    },
+    {
+      "name": "Vipiteno 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Vipiteno",
+      "gleise": 1
+    },
+    {
+      "name": "2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 1
+    },
+    {
+      "name": "1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 1
+    },
+    {
+      "name": "8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 1
+    },
+    {
+      "name": "4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 1
+    },
+    {
+      "name": "5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 1
+    },
+    {
+      "name": "11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 1
+    },
+    {
+      "name": "16",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 1
+    },
+    {
+      "name": "9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 1
+    },
+    {
+      "name": "3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 1
+    },
+    {
+      "name": "10",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 1
+    },
+    {
+      "name": "12",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 1
+    },
+    {
+      "name": "N",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
+      "gleise": 1
+    },
+    {
+      "name": "6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero",
       "gleise": 1
     },
     {
       "name": "7",
-      "typ": "Bft",
+      "typ": "Bs",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Brennero"
+      "stamm": "Brennero 7",
+      "gleise": 1
     },
     {
-      "name": "R7",
-      "typ": "Bft",
+      "name": "17",
+      "typ": "Bs",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Brennero"
+      "stamm": "Brennero 7",
+      "gleise": 1
+    },
+    {
+      "name": "R4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero R2",
+      "gleise": 1
+    },
+    {
+      "name": "R3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero R2",
+      "gleise": 1
+    },
+    {
+      "name": "R2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero R2",
+      "gleise": 1
     },
     {
       "name": "R5",
-      "typ": "Bft",
+      "typ": "Bs",
       "auto": false,
+      "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Brennero"
+      "stamm": "Brennero R5",
+      "gleise": 1
+    },
+    {
+      "name": "R6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero R5",
+      "gleise": 1
+    },
+    {
+      "name": "R7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brennero R7",
+      "gleise": 1
+    },
+    {
+      "name": "Fortezza 1T",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fortezza 1T",
+      "gleise": 1
     }
   ],
   "strecken": [
     {
       "name": "Bolzano-Matrei",
-      "ordnung": 100,
-      "auto": true,
+      "haupt": false,
+      "ordnung": 1,
+      "auto": false,
       "stationen": [
         "Anst Bolzano",
+        "Bf Einfahrt Bolzano",
+        "Bf Fortezza",
         "Bf Campo",
         "Bf Vipiteno",
         "Bf Colle",
@@ -1120,31 +1241,36 @@
       ]
     },
     {
-      "name": "Bolzano-San Candido",
-      "ordnung": 101,
-      "auto": true,
-      "stationen": [
-        "Anst Bolzano",
-        "Bf Campo",
-        "Anst San Candido"
-      ]
-    },
-    {
       "name": "Matrei-Bolzano",
-      "ordnung": 102,
-      "auto": true,
+      "haupt": true,
+      "ordnung": 2,
+      "auto": false,
       "stationen": [
         "Anst Matrei",
         "Bf Brennero",
         "Bf Colle",
         "Bf Vipiteno",
         "Bf Campo",
+        "Bf Fortezza",
+        "Bf Einfahrt Bolzano",
         "Anst Bolzano"
       ]
     },
     {
+      "name": "Bolzano-San Candido",
+      "haupt": false,
+      "ordnung": 111,
+      "auto": true,
+      "stationen": [
+        "Anst Bolzano",
+        "Bf Fortezza",
+        "Anst San Candido"
+      ]
+    },
+    {
       "name": "Matrei-San Candido",
-      "ordnung": 103,
+      "haupt": false,
+      "ordnung": 115,
       "auto": true,
       "stationen": [
         "Anst Matrei",
@@ -1152,25 +1278,29 @@
         "Bf Colle",
         "Bf Vipiteno",
         "Bf Campo",
+        "Bf Fortezza",
         "Anst San Candido"
       ]
     },
     {
       "name": "San Candido-Bolzano",
-      "ordnung": 104,
+      "haupt": false,
+      "ordnung": 118,
       "auto": true,
       "stationen": [
         "Anst San Candido",
-        "Bf Campo",
+        "Bf Fortezza",
         "Anst Bolzano"
       ]
     },
     {
       "name": "San Candido-Matrei",
-      "ordnung": 105,
+      "haupt": false,
+      "ordnung": 119,
       "auto": true,
       "stationen": [
         "Anst San Candido",
+        "Bf Fortezza",
         "Bf Campo",
         "Bf Vipiteno",
         "Bf Colle",

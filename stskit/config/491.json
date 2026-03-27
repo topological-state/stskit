@@ -1,206 +1,1628 @@
 {
-    "_aid": 491,
-    "_build": 5840,
-    "_name": "Frick",
-    "_region": "Zentralschweiz",
-    "_version": 2,
-    "zugschema": "schweiz",
-    "anschlussgruppen": {
-        "BASF": {
-            "__class__": "Set",
-            "data": [
-                "BASF Kaisten"
-            ]
-        },
-        "Baustelle": {
-            "__class__": "Set",
-            "data": [
-                "Baustelle B\u00f6zbergtunnel"
-            ]
-        },
-        "Brauerei": {
-            "__class__": "Set",
-            "data": [
-                "Brauerei"
-            ]
-        },
-        "Chemiefabrik": {
-            "__class__": "Set",
-            "data": [
-                "Chemiefabrik"
-            ]
-        },
-        "Industrie": {
-            "__class__": "Set",
-            "data": [
-                "Industrie"
-            ]
-        },
-        "KAU": {
-            "__class__": "Set",
-            "data": [
-                "KAU 275",
-                "KAU 175"
-            ]
-        },
-        "KKW": {
-            "__class__": "Set",
-            "data": [
-                "KKW Leibstadt"
-            ]
-        },
-        "Koblenz": {
-            "__class__": "Set",
-            "data": [
-                "Koblenz"
-            ]
-        },
-        "Kraftwerk": {
-            "__class__": "Set",
-            "data": [
-                "Kraftwerk"
-            ]
-        },
-        "Milit\u00e4rmuseum": {
-            "__class__": "Set",
-            "data": [
-                "Milit\u00e4rmuseum"
-            ]
-        },
-        "SDO": {
-            "__class__": "Set",
-            "data": [
-                "SDO 241",
-                "SDO 141"
-            ]
-        }
+  "default": true,
+  "_aid": 491,
+  "_build": 5851,
+  "_name": "Frick",
+  "_region": "Zentralschweiz",
+  "elemente": [
+    {
+      "name": "EFG",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "EFG": {
-            "__class__": "Set",
-            "data": [
-                "EFG4",
-                "EFG2",
-                "EFG1",
-                "EFG3"
-            ]
-        },
-        "EK": {
-            "__class__": "Set",
-            "data": [
-                "EK"
-            ]
-        },
-        "FCK": {
-            "__class__": "Set",
-            "data": [
-                "FCK2",
-                "FCK1",
-                "FCK4",
-                "FCK3"
-            ]
-        },
-        "HNS": {
-            "__class__": "Set",
-            "data": [
-                "HNS3",
-                "HNS2",
-                "HNS1"
-            ]
-        },
-        "LFG": {
-            "__class__": "Set",
-            "data": [
-                "LFG4",
-                "LFG3",
-                "LFG W2",
-                "LFG1",
-                "LFG W1",
-                "LFG2"
-            ]
-        },
-        "MOE": {
-            "__class__": "Set",
-            "data": [
-                "MOE40",
-                "MOE2",
-                "MOE3",
-                "MOE4",
-                "MOE1"
-            ]
-        },
-        "MPF": {
-            "__class__": "Set",
-            "data": [
-                "MPF"
-            ]
-        },
-        "RF": {
-            "__class__": "Set",
-            "data": [
-                "RF40",
-                "RF3",
-                "RF5",
-                "RF1",
-                "RF51",
-                "RF2",
-                "RF4",
-                "RF41",
-                "RF11"
-            ]
-        },
-        "RFAU": {
-            "__class__": "Set",
-            "data": [
-                "RFAU"
-            ]
-        },
-        "SLN": {
-            "__class__": "Set",
-            "data": [
-                "SLN2",
-                "SLN1"
-            ]
-        },
-        "STS": {
-            "__class__": "Set",
-            "data": [
-                "STS5",
-                "STS2",
-                "STS51",
-                "STS3",
-                "STS4",
-                "STS6"
-            ]
-        }
+    {
+      "name": "EI",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "sektoren": {},
-    "hauptstrecke": "KAU-SDO",
-    "strecken": {
-        "KAU-Koblenz": [
-            "KAU",
-            "RFAU",
-            "RF",
-            "MOE",
-            "MPF",
-            "STS",
-            "SLN",
-            "LFG",
-            "Koblenz"
-        ],
-        "KAU-SDO": [
-            "KAU",
-            "RFAU",
-            "RF",
-            "MOE",
-            "MPF",
-            "STS",
-            "EK",
-            "FCK",
-            "HNS",
-            "EFG",
-            "SDO"
-        ]
+    {
+      "name": "FCK",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FE",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FU",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HNS",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KAU",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Koblenz",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LEI",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LFG",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MOE",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MPF",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "RF",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "RFAU",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SLN",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "STS",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EFG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EFG"
+    },
+    {
+      "name": "EFG3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EFG3",
+      "gleise": 1
+    },
+    {
+      "name": "EFG2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EFG2",
+      "gleise": 1
+    },
+    {
+      "name": "EFG4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EFG4",
+      "gleise": 1
+    },
+    {
+      "name": "EI",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EI"
+    },
+    {
+      "name": "EI",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EI",
+      "gleise": 1
+    },
+    {
+      "name": "EI",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EI",
+      "gleise": 1
+    },
+    {
+      "name": "FCK",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FCK"
+    },
+    {
+      "name": "FCK2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FCK2",
+      "gleise": 1
+    },
+    {
+      "name": "FCK42",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FCK2",
+      "gleise": 1
+    },
+    {
+      "name": "FCK4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FCK4",
+      "gleise": 1
+    },
+    {
+      "name": "FCK44",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FCK4",
+      "gleise": 1
+    },
+    {
+      "name": "FCK3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FCK3",
+      "gleise": 1
+    },
+    {
+      "name": "FCK43",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FCK3",
+      "gleise": 1
+    },
+    {
+      "name": "FCK1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FCK1",
+      "gleise": 1
+    },
+    {
+      "name": "FE",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FE"
+    },
+    {
+      "name": "FE",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FE",
+      "gleise": 1
+    },
+    {
+      "name": "FE",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FE",
+      "gleise": 1
+    },
+    {
+      "name": "FU",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FU"
+    },
+    {
+      "name": "FU",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FU",
+      "gleise": 1
+    },
+    {
+      "name": "FU",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FU",
+      "gleise": 1
+    },
+    {
+      "name": "HNS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNS"
+    },
+    {
+      "name": "HNS2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNS2",
+      "gleise": 1
+    },
+    {
+      "name": "HNS3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNS3",
+      "gleise": 1
+    },
+    {
+      "name": "KAU",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KAU"
+    },
+    {
+      "name": "KAU5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KAU5",
+      "gleise": 1
+    },
+    {
+      "name": "KAU4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KAU4",
+      "gleise": 1
+    },
+    {
+      "name": "KAU3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KAU3",
+      "gleise": 1
+    },
+    {
+      "name": "KAU3k",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KAU3",
+      "gleise": 1
+    },
+    {
+      "name": "KAU2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KAU2",
+      "gleise": 1
+    },
+    {
+      "name": "Koblenz",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Koblenz"
+    },
+    {
+      "name": "Koblenz",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Koblenz",
+      "gleise": 1
+    },
+    {
+      "name": "Koblenz",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Koblenz",
+      "gleise": 1
+    },
+    {
+      "name": "LEI",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LEI"
+    },
+    {
+      "name": "LEI",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LEI",
+      "gleise": 1
+    },
+    {
+      "name": "LEI",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LEI",
+      "gleise": 1
+    },
+    {
+      "name": "LFG13",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG"
+    },
+    {
+      "name": "LFG63",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG"
+    },
+    {
+      "name": "LFG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG"
+    },
+    {
+      "name": "LFG4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG4",
+      "gleise": 1
+    },
+    {
+      "name": "LFG2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG2",
+      "gleise": 1
+    },
+    {
+      "name": "LFG3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG3",
+      "gleise": 1
+    },
+    {
+      "name": "LFG1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG1",
+      "gleise": 1
+    },
+    {
+      "name": "LFG13",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG13",
+      "gleise": 1
+    },
+    {
+      "name": "LFG13",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG13",
+      "gleise": 1
+    },
+    {
+      "name": "LFG63",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG63",
+      "gleise": 1
+    },
+    {
+      "name": "LFG63",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG63",
+      "gleise": 1
+    },
+    {
+      "name": "MOE24",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE"
+    },
+    {
+      "name": "MOE84",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE"
+    },
+    {
+      "name": "MOE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE"
+    },
+    {
+      "name": "MOE3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE3",
+      "gleise": 1
+    },
+    {
+      "name": "MOE2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE2",
+      "gleise": 1
+    },
+    {
+      "name": "MOE4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE4",
+      "gleise": 1
+    },
+    {
+      "name": "MOE1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE1",
+      "gleise": 1
+    },
+    {
+      "name": "MOE6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE6",
+      "gleise": 1
+    },
+    {
+      "name": "MOE24",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE24",
+      "gleise": 1
+    },
+    {
+      "name": "MOE24",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE24",
+      "gleise": 1
+    },
+    {
+      "name": "MOE84",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE84",
+      "gleise": 1
+    },
+    {
+      "name": "MOE84",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE84",
+      "gleise": 1
+    },
+    {
+      "name": "MPF",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MPF"
+    },
+    {
+      "name": "MPF3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MPF3",
+      "gleise": 1
+    },
+    {
+      "name": "MPF2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MPF2",
+      "gleise": 1
+    },
+    {
+      "name": "RF",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF"
+    },
+    {
+      "name": "RF4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF4",
+      "gleise": 1
+    },
+    {
+      "name": "RF4G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF4",
+      "gleise": 1
+    },
+    {
+      "name": "RF5k",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF5",
+      "gleise": 1
+    },
+    {
+      "name": "RF5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF5",
+      "gleise": 1
+    },
+    {
+      "name": "RF15",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF5",
+      "gleise": 1
+    },
+    {
+      "name": "RF3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF3",
+      "gleise": 1
+    },
+    {
+      "name": "RF3G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF3",
+      "gleise": 1
+    },
+    {
+      "name": "RF2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF2",
+      "gleise": 1
+    },
+    {
+      "name": "RF32",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF2",
+      "gleise": 1
+    },
+    {
+      "name": "RFAU",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RFAU"
+    },
+    {
+      "name": "RFAU",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RFAU",
+      "gleise": 1
+    },
+    {
+      "name": "RFAU",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RFAU",
+      "gleise": 1
+    },
+    {
+      "name": "SLN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SLN"
+    },
+    {
+      "name": "SLN1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SLN1",
+      "gleise": 1
+    },
+    {
+      "name": "SLN2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SLN2",
+      "gleise": 1
+    },
+    {
+      "name": "STS16",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS"
+    },
+    {
+      "name": "STS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS"
+    },
+    {
+      "name": "STS4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS4",
+      "gleise": 1
+    },
+    {
+      "name": "STS3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS3",
+      "gleise": 1
+    },
+    {
+      "name": "STS2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS2",
+      "gleise": 1
+    },
+    {
+      "name": "STS6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS6",
+      "gleise": 1
+    },
+    {
+      "name": "STS5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS5",
+      "gleise": 1
+    },
+    {
+      "name": "STS16",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS16",
+      "gleise": 1
+    },
+    {
+      "name": "STS16",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS16",
+      "gleise": 1
+    },
+    {
+      "name": "Koblenz",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "PR",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Sisslerfeld",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "AnG Felsenau",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KAU Industrie",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Kraftwerk",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MOE Industrie",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Brauerei",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BASF Kaisten",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "AnG Full",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KKW Leibstadt",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SDO",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Koblenz",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Koblenz",
+      "gleise": 1
+    },
+    {
+      "name": "PR 278",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PR",
+      "gleise": 1
+    },
+    {
+      "name": "PR 178",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PR",
+      "gleise": 1
+    },
+    {
+      "name": "Sisslerfeld",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sisslerfeld",
+      "gleise": 1
+    },
+    {
+      "name": "AnG Felsenau",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AnG Felsenau",
+      "gleise": 1
+    },
+    {
+      "name": "KAU Industrie",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KAU Industrie",
+      "gleise": 1
+    },
+    {
+      "name": "Kraftwerk",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kraftwerk",
+      "gleise": 1
+    },
+    {
+      "name": "MOE Industrie",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE Industrie",
+      "gleise": 1
+    },
+    {
+      "name": "Brauerei",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Brauerei",
+      "gleise": 1
+    },
+    {
+      "name": "BASF Kaisten",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BASF Kaisten",
+      "gleise": 1
+    },
+    {
+      "name": "AnG Full",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AnG Full",
+      "gleise": 1
+    },
+    {
+      "name": "KKW Leibstadt",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KKW Leibstadt",
+      "gleise": 1
+    },
+    {
+      "name": "SDO 237",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SDO",
+      "gleise": 1
+    },
+    {
+      "name": "SDO 137",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SDO",
+      "gleise": 1
+    },
+    {
+      "name": "EFG3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EFG",
+      "gleise": 1
+    },
+    {
+      "name": "EFG2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EFG",
+      "gleise": 1
+    },
+    {
+      "name": "EFG4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EFG",
+      "gleise": 1
+    },
+    {
+      "name": "FCK2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FCK",
+      "gleise": 1
+    },
+    {
+      "name": "FCK4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FCK",
+      "gleise": 1
+    },
+    {
+      "name": "FCK3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FCK",
+      "gleise": 1
+    },
+    {
+      "name": "FCK1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FCK",
+      "gleise": 1
+    },
+    {
+      "name": "HNS2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNS",
+      "gleise": 1
+    },
+    {
+      "name": "HNS3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNS",
+      "gleise": 1
+    },
+    {
+      "name": "KAU5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KAU",
+      "gleise": 1
+    },
+    {
+      "name": "KAU4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KAU",
+      "gleise": 1
+    },
+    {
+      "name": "KAU3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KAU",
+      "gleise": 1
+    },
+    {
+      "name": "KAU2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KAU",
+      "gleise": 1
+    },
+    {
+      "name": "LFG4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG",
+      "gleise": 1
+    },
+    {
+      "name": "LFG2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG",
+      "gleise": 1
+    },
+    {
+      "name": "LFG3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG",
+      "gleise": 1
+    },
+    {
+      "name": "LFG1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LFG",
+      "gleise": 1
+    },
+    {
+      "name": "MOE3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE",
+      "gleise": 1
+    },
+    {
+      "name": "MOE2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE",
+      "gleise": 1
+    },
+    {
+      "name": "MOE4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE",
+      "gleise": 1
+    },
+    {
+      "name": "MOE1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE",
+      "gleise": 1
+    },
+    {
+      "name": "MOE6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MOE",
+      "gleise": 1
+    },
+    {
+      "name": "MPF3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MPF",
+      "gleise": 1
+    },
+    {
+      "name": "MPF2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MPF",
+      "gleise": 1
+    },
+    {
+      "name": "RF4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF",
+      "gleise": 1
+    },
+    {
+      "name": "RF5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF",
+      "gleise": 1
+    },
+    {
+      "name": "RF3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF",
+      "gleise": 1
+    },
+    {
+      "name": "RF2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RF",
+      "gleise": 1
+    },
+    {
+      "name": "SLN1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SLN",
+      "gleise": 1
+    },
+    {
+      "name": "SLN2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SLN",
+      "gleise": 1
+    },
+    {
+      "name": "STS4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS",
+      "gleise": 1
+    },
+    {
+      "name": "STS3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS",
+      "gleise": 1
+    },
+    {
+      "name": "STS2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS",
+      "gleise": 1
+    },
+    {
+      "name": "STS6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS",
+      "gleise": 1
+    },
+    {
+      "name": "STS5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STS",
+      "gleise": 1
     }
+  ],
+  "strecken": [
+    {
+      "name": "Pratteln-Koblenz",
+      "haupt": false,
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst PR",
+        "Bf KAU",
+        "Bf RFAU",
+        "Bf RF",
+        "Bf MOE",
+        "Bf MPF",
+        "Bf STS",
+        "Bf SLN",
+        "Bf LFG",
+        "Bf Koblenz",
+        "Anst Koblenz"
+      ]
+    },
+    {
+      "name": "Pratteln-Schinznach",
+      "haupt": true,
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst PR",
+        "Bf KAU",
+        "Bf RFAU",
+        "Bf RF",
+        "Bf MOE",
+        "Bf MPF",
+        "Bf STS",
+        "Bf EI",
+        "Bf FCK",
+        "Bf EFG",
+        "Anst SDO"
+      ]
+    },
+    {
+      "name": "Stein-Koblenz",
+      "haupt": false,
+      "ordnung": 3,
+      "auto": false,
+      "stationen": [
+        "Bf STS",
+        "Bf SLN",
+        "Bf LFG",
+        "Bf Koblenz",
+        "Anst Koblenz"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_version": 3
 }

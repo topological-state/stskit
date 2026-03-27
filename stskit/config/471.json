@@ -1,238 +1,1196 @@
 {
-    "_aid": 471,
-    "_build": 5851,
-    "_name": "Nienburg/Weser",
-    "_region": "Bremen-Niedersachsen",
-    "_version": 2,
-    "anschlussgruppen": {
-        "114-115": {
-            "__class__": "Set",
-            "data": [
-                "114-115"
-            ]
-        },
-        "BASF": {
-            "__class__": "Set",
-            "data": [
-                "BASF"
-            ]
-        },
-        "Fliegerhorst": {
-            "__class__": "Set",
-            "data": [
-                "Fliegerhorst"
-            ]
-        },
-        "Gleisbau": {
-            "__class__": "Set",
-            "data": [
-                "Gleisbau"
-            ]
-        },
-        "Hoya": {
-            "__class__": "Set",
-            "data": [
-                "Hoya"
-            ]
-        },
-        "Lagerhalle": {
-            "__class__": "Set",
-            "data": [
-                "Lagerhalle"
-            ]
-        },
-        "Leese-Stolzenau": {
-            "__class__": "Set",
-            "data": [
-                "Leese-Stolzenau",
-                "Leese Stolzenau"
-            ]
-        },
-        "Liebenau": {
-            "__class__": "Set",
-            "data": [
-                "Liebenau"
-            ]
-        },
-        "Verden (Aller)": {
-            "__class__": "Set",
-            "data": [
-                "Verden (Aller)"
-            ]
-        },
-        "Wunstorf": {
-            "__class__": "Set",
-            "data": [
-                "Wunstorf"
-            ]
-        }
+  "default": false,
+  "elemente": [
+    {
+      "name": "HEIV",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "HEIV": {
-            "__class__": "Set",
-            "data": [
-                "HEIV"
-            ]
-        },
-        "HETR": {
-            "__class__": "Set",
-            "data": [
-                "HETR 3",
-                "HETR 1",
-                "HETR 1 Gz",
-                "HETR 4III",
-                "HETR 3 Gz",
-                "HETR 2",
-                "HETR 4"
-            ]
-        },
-        "HHAG": {
-            "__class__": "Set",
-            "data": [
-                "HHAG 3",
-                "HHAG 2",
-                "HHAG 1"
-            ]
-        },
-        "HHGH": {
-            "__class__": "Set",
-            "data": [
-                "HHGH"
-            ]
-        },
-        "HLBU": {
-            "__class__": "Set",
-            "data": [
-                "HLBU 3",
-                "HLBU 2",
-                "HLBU 1"
-            ]
-        },
-        "HNBG": {
-            "__class__": "Set",
-            "data": [
-                "HNBG 2",
-                "HNBG 11",
-                "HNBG 6",
-                "HNBG 2 Gz",
-                "HNBG 5",
-                "HNBG 3 Gz",
-                "HNBG 1",
-                "HNBG 1 Gz",
-                "HNBG 9",
-                "HNBG Wende 3",
-                "HNBG 8",
-                "HNBG 7",
-                "HNBG Wende 4",
-                "HNBG 4",
-                "HNBG 10",
-                "HNBG 3",
-                "HNBG 12",
-                "HNBG 4 Gz",
-                "HNBG Wende 2"
-            ]
-        },
-        "HNRU": {
-            "__class__": "Set",
-            "data": [
-                "HNRU 3",
-                "HNRU 2",
-                "HNRU 1"
-            ]
-        },
-        "HPOG": {
-            "__class__": "Set",
-            "data": [
-                "HPOG 1 Gz",
-                "HPOG 1",
-                "HPOG 3",
-                "HPOG 2"
-            ]
-        },
-        "HROR": {
-            "__class__": "Set",
-            "data": [
-                "HROR 1",
-                "HROR 2",
-                "HROR 3",
-                "HROR 5"
-            ]
-        }
+    {
+      "name": "HETR",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "Verden (Aller)-Wunstorf",
-    "sektoren": {
-        "HETR 1": {
-            "__class__": "Set",
-            "data": [
-                "HETR 1 Gz",
-                "HETR 1"
-            ]
-        },
-        "HETR 3": {
-            "__class__": "Set",
-            "data": [
-                "HETR 3 Gz",
-                "HETR 3"
-            ]
-        },
-        "HETR 4": {
-            "__class__": "Set",
-            "data": [
-                "HETR 4III",
-                "HETR 4"
-            ]
-        },
-        "HNBG 1": {
-            "__class__": "Set",
-            "data": [
-                "HNBG 1 Gz",
-                "HNBG 1"
-            ]
-        },
-        "HNBG 2": {
-            "__class__": "Set",
-            "data": [
-                "HNBG 2",
-                "HNBG 2 Gz"
-            ]
-        },
-        "HNBG 3": {
-            "__class__": "Set",
-            "data": [
-                "HNBG 3",
-                "HNBG 3 Gz"
-            ]
-        },
-        "HNBG 4": {
-            "__class__": "Set",
-            "data": [
-                "HNBG 4 Gz",
-                "HNBG 4"
-            ]
-        },
-        "HPOG 1": {
-            "__class__": "Set",
-            "data": [
-                "HPOG 1 Gz",
-                "HPOG 1"
-            ]
-        }
+    {
+      "name": "HHAG",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "strecken": {
-        "Verden (Aller)-Wunstorf": [
-            "Verden (Aller)",
-            "HETR",
-            "HROR",
-            "HNBG",
-            "HLBU",
-            "HHAG",
-            "HHGH",
-            "HEIV",
-            "HNRU",
-            "HPOG",
-            "Wunstorf"
-        ]
+    {
+      "name": "HHGH",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": []
+    {
+      "name": "HLBU",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HNBG",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HNRU",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HPOG",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HROR",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HEIV",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HEIV"
+    },
+    {
+      "name": "HEIV",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HEIV",
+      "gleise": 1
+    },
+    {
+      "name": "HEIV",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HEIV",
+      "gleise": 1
+    },
+    {
+      "name": "HETR",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HETR"
+    },
+    {
+      "name": "HETR 1 Gz",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HETR 1",
+      "gleise": 1
+    },
+    {
+      "name": "HETR 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HETR 1",
+      "gleise": 1
+    },
+    {
+      "name": "HETR 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HETR 2",
+      "gleise": 1
+    },
+    {
+      "name": "HETR 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HETR 3",
+      "gleise": 1
+    },
+    {
+      "name": "HETR 3 Gz",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HETR 3",
+      "gleise": 1
+    },
+    {
+      "name": "HETR 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HETR 4",
+      "gleise": 1
+    },
+    {
+      "name": "HETR 4III",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HETR 4",
+      "gleise": 1
+    },
+    {
+      "name": "HHAG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHAG"
+    },
+    {
+      "name": "HHAG 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHAG 3",
+      "gleise": 1
+    },
+    {
+      "name": "HHAG 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHAG 2",
+      "gleise": 1
+    },
+    {
+      "name": "HHAG 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHAG 1",
+      "gleise": 1
+    },
+    {
+      "name": "HHGH",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHGH"
+    },
+    {
+      "name": "HHGH",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHGH",
+      "gleise": 1
+    },
+    {
+      "name": "HHGH",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHGH",
+      "gleise": 1
+    },
+    {
+      "name": "HLBU",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLBU"
+    },
+    {
+      "name": "HLBU 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLBU 1",
+      "gleise": 1
+    },
+    {
+      "name": "HLBU 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLBU 2",
+      "gleise": 1
+    },
+    {
+      "name": "HLBU 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLBU 3",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG"
+    },
+    {
+      "name": "HNBG 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 1",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 1 Gz",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 1",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 5",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 3",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 3 Gz",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 3",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 2",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 2 Gz",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 2",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 11",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 11",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 8",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 9",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 9",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 12",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 12",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 4",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 4 Gz",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 4",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 7",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 6",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 10",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG 10",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG Wende 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG Wende 2",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG Wende 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG Wende 3",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG Wende 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG Wende 4",
+      "gleise": 1
+    },
+    {
+      "name": "HNRU",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNRU"
+    },
+    {
+      "name": "HNRU 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNRU 1",
+      "gleise": 1
+    },
+    {
+      "name": "HNRU 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNRU 2",
+      "gleise": 1
+    },
+    {
+      "name": "HNRU 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNRU 3",
+      "gleise": 1
+    },
+    {
+      "name": "HPOG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HPOG"
+    },
+    {
+      "name": "HPOG 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HPOG 1",
+      "gleise": 1
+    },
+    {
+      "name": "HPOG 1 Gz",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HPOG 1",
+      "gleise": 1
+    },
+    {
+      "name": "HPOG 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HPOG 2",
+      "gleise": 1
+    },
+    {
+      "name": "HPOG 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HPOG 3",
+      "gleise": 1
+    },
+    {
+      "name": "HROR",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HROR"
+    },
+    {
+      "name": "HROR 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HROR 1",
+      "gleise": 1
+    },
+    {
+      "name": "HROR 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HROR 2",
+      "gleise": 1
+    },
+    {
+      "name": "HROR 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HROR 5",
+      "gleise": 1
+    },
+    {
+      "name": "HROR 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HROR 3",
+      "gleise": 1
+    },
+    {
+      "name": "Verden (Aller)",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Fliegerhorst",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Leese-Stolzenau",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hoya",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lagerhalle",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Liebenau",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "114-115",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BASF",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gleisbau",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wunstorf",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Verden (Aller)",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Verden (Aller)",
+      "gleise": 2
+    },
+    {
+      "name": "Fliegerhorst",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fliegerhorst",
+      "gleise": 1
+    },
+    {
+      "name": "Leese Stolzenau",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Leese-Stolzenau",
+      "gleise": 1
+    },
+    {
+      "name": "Leese-Stolzenau",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Leese-Stolzenau",
+      "gleise": 1
+    },
+    {
+      "name": "Hoya",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hoya",
+      "gleise": 1
+    },
+    {
+      "name": "Lagerhalle",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lagerhalle",
+      "gleise": 1
+    },
+    {
+      "name": "Liebenau",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Liebenau",
+      "gleise": 1
+    },
+    {
+      "name": "114-115",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "114-115",
+      "gleise": 1
+    },
+    {
+      "name": "BASF",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BASF",
+      "gleise": 1
+    },
+    {
+      "name": "Gleisbau",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gleisbau",
+      "gleise": 1
+    },
+    {
+      "name": "Wunstorf",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wunstorf",
+      "gleise": 2
+    },
+    {
+      "name": "HETR 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HETR",
+      "gleise": 1
+    },
+    {
+      "name": "HETR 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HETR",
+      "gleise": 1
+    },
+    {
+      "name": "HETR 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HETR",
+      "gleise": 1
+    },
+    {
+      "name": "HETR 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HETR",
+      "gleise": 1
+    },
+    {
+      "name": "HHAG 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHAG",
+      "gleise": 1
+    },
+    {
+      "name": "HHAG 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHAG",
+      "gleise": 1
+    },
+    {
+      "name": "HHAG 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHAG",
+      "gleise": 1
+    },
+    {
+      "name": "HLBU 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLBU",
+      "gleise": 1
+    },
+    {
+      "name": "HLBU 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLBU",
+      "gleise": 1
+    },
+    {
+      "name": "HLBU 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLBU",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 12",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG 10",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG Wende 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG Wende 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNBG Wende 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNBG",
+      "gleise": 1
+    },
+    {
+      "name": "HNRU 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNRU",
+      "gleise": 1
+    },
+    {
+      "name": "HNRU 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNRU",
+      "gleise": 1
+    },
+    {
+      "name": "HNRU 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNRU",
+      "gleise": 1
+    },
+    {
+      "name": "HPOG 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HPOG",
+      "gleise": 1
+    },
+    {
+      "name": "HPOG 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HPOG",
+      "gleise": 1
+    },
+    {
+      "name": "HPOG 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HPOG",
+      "gleise": 1
+    },
+    {
+      "name": "HROR 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HROR",
+      "gleise": 1
+    },
+    {
+      "name": "HROR 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HROR",
+      "gleise": 1
+    },
+    {
+      "name": "HROR 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HROR",
+      "gleise": 1
+    },
+    {
+      "name": "HROR 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HROR",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Verden (Aller)-Wunstorf",
+      "haupt": true,
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Verden (Aller)",
+        "Bf HETR",
+        "Bf HROR",
+        "Bf HNBG",
+        "Bf HLBU",
+        "Bf HHAG",
+        "Bf HHGH",
+        "Bf HEIV",
+        "Bf HNRU",
+        "Bf HPOG",
+        "Anst Wunstorf"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "deutschland",
+  "_aid": 471,
+  "_build": 5851,
+  "_name": "Nienburg/Weser",
+  "_region": "Bremen-Niedersachsen",
+  "_version": 3
 }

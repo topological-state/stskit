@@ -61,16 +61,7 @@
       "stamm": "BG"
     },
     {
-      "name": "BG1",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BG"
-    },
-    {
-      "name": "BGV2",
+      "name": "BG",
       "typ": "Bft",
       "auto": false,
       "ordnung": 0,
@@ -79,44 +70,13 @@
       "stamm": "BG"
     },
     {
-      "name": "BG7",
-      "typ": "Gl",
+      "name": "BGV",
+      "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BG7",
-      "gleise": 1
-    },
-    {
-      "name": "BG5",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BG5",
-      "gleise": 1
-    },
-    {
-      "name": "BG2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BG2",
-      "gleise": 1
-    },
-    {
-      "name": "BG6",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BG6",
-      "gleise": 1
+      "stamm": "BG"
     },
     {
       "name": "BG4",
@@ -146,6 +106,46 @@
       "sichtbar": true,
       "flags": "",
       "stamm": "BG3",
+      "gleise": 1
+    },
+    {
+      "name": "BG2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BG2",
+      "gleise": 1
+    },
+    {
+      "name": "BG7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BG7",
+      "gleise": 1
+    },
+    {
+      "name": "BG5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BG5",
+      "gleise": 1
+    },
+    {
+      "name": "BG6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BG6",
       "gleise": 1
     },
     {
@@ -287,9 +287,9 @@
       "stamm": "LUPF"
     },
     {
-      "name": "LUPF6",
+      "name": "LUPF",
       "typ": "Bft",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -316,16 +316,6 @@
       "gleise": 1
     },
     {
-      "name": "LUPF6",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LUPF6",
-      "gleise": 1
-    },
-    {
       "name": "LUPF5",
       "typ": "Gl",
       "auto": false,
@@ -333,6 +323,16 @@
       "sichtbar": true,
       "flags": "",
       "stamm": "LUPF5",
+      "gleise": 1
+    },
+    {
+      "name": "LUPF6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LUPF6",
       "gleise": 1
     },
     {
@@ -356,23 +356,13 @@
       "gleise": 1
     },
     {
-      "name": "SDO1",
+      "name": "SDO",
       "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SDO"
-    },
-    {
-      "name": "SDO2",
-      "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SDO2",
-      "gleise": 1
+      "stamm": "SDO"
     },
     {
       "name": "SDO1",
@@ -382,6 +372,16 @@
       "sichtbar": true,
       "flags": "",
       "stamm": "SDO1",
+      "gleise": 1
+    },
+    {
+      "name": "SDO2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SDO2",
       "gleise": 1
     },
     {
@@ -659,53 +659,13 @@
       "gleise": 1
     },
     {
-      "name": "BG7",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BG1",
-      "gleise": 1
-    },
-    {
-      "name": "BG5",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BG1",
-      "gleise": 1
-    },
-    {
-      "name": "BG2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BG1",
-      "gleise": 1
-    },
-    {
-      "name": "BG6",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BG1",
-      "gleise": 1
-    },
-    {
       "name": "BG4",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BG1",
+      "stamm": "BG",
       "gleise": 1
     },
     {
@@ -715,7 +675,7 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BG1",
+      "stamm": "BG",
       "gleise": 1
     },
     {
@@ -725,7 +685,47 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BG1",
+      "stamm": "BG",
+      "gleise": 1
+    },
+    {
+      "name": "BG2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BG",
+      "gleise": 1
+    },
+    {
+      "name": "BG7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BG",
+      "gleise": 1
+    },
+    {
+      "name": "BG5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BG",
+      "gleise": 1
+    },
+    {
+      "name": "BG6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BG",
       "gleise": 1
     },
     {
@@ -735,7 +735,7 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BGV2",
+      "stamm": "BGV",
       "gleise": 1
     },
     {
@@ -745,7 +745,7 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BGV2",
+      "stamm": "BGV",
       "gleise": 1
     },
     {
@@ -755,7 +755,7 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LUPF6",
+      "stamm": "LUPF",
       "gleise": 1
     },
     {
@@ -765,17 +765,7 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LUPF6",
-      "gleise": 1
-    },
-    {
-      "name": "LUPF6",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LUPF6",
+      "stamm": "LUPF",
       "gleise": 1
     },
     {
@@ -785,17 +775,17 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LUPF6",
+      "stamm": "LUPF",
       "gleise": 1
     },
     {
-      "name": "SDO2",
+      "name": "LUPF6",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SDO1",
+      "stamm": "LUPF",
       "gleise": 1
     },
     {
@@ -805,14 +795,25 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SDO1",
+      "stamm": "SDO",
+      "gleise": 1
+    },
+    {
+      "name": "SDO2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SDO",
       "gleise": 1
     }
   ],
   "strecken": [
     {
       "name": "EFG-OTH",
-      "ordnung": 100,
+      "haupt": false,
+      "ordnung": 101,
       "auto": true,
       "stationen": [
         "Anst EFG",
@@ -825,7 +826,8 @@
     },
     {
       "name": "EFG-TG",
-      "ordnung": 101,
+      "haupt": false,
+      "ordnung": 102,
       "auto": true,
       "stationen": [
         "Anst EFG",
@@ -836,7 +838,8 @@
     },
     {
       "name": "OTH-EFG",
-      "ordnung": 103,
+      "haupt": false,
+      "ordnung": 108,
       "auto": true,
       "stationen": [
         "Anst OTH",
@@ -849,7 +852,8 @@
     },
     {
       "name": "OTH-TG",
-      "ordnung": 104,
+      "haupt": false,
+      "ordnung": 110,
       "auto": true,
       "stationen": [
         "Anst OTH",
@@ -861,7 +865,8 @@
     },
     {
       "name": "TG-EFG",
-      "ordnung": 106,
+      "haupt": false,
+      "ordnung": 112,
       "auto": true,
       "stationen": [
         "Anst TG",
@@ -872,7 +877,8 @@
     },
     {
       "name": "TG-OTH",
-      "ordnung": 107,
+      "haupt": false,
+      "ordnung": 114,
       "auto": true,
       "stationen": [
         "Anst TG",
@@ -884,7 +890,8 @@
     },
     {
       "name": "TG-WI",
-      "ordnung": 108,
+      "haupt": false,
+      "ordnung": 115,
       "auto": true,
       "stationen": [
         "Anst TG",
@@ -894,7 +901,8 @@
     },
     {
       "name": "WI-TG",
-      "ordnung": 111,
+      "haupt": false,
+      "ordnung": 119,
       "auto": true,
       "stationen": [
         "Anst WI",

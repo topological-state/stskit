@@ -1,169 +1,919 @@
 {
-    "_aid": 547,
-    "_build": 5840,
-    "_name": "RhB / Sagliains",
-    "_region": "Ostschweiz",
-    "_version": 2,
-    "zugschema": "schweiz-rhb",
-    "anschlussgruppen": {
-        "Abstellung": {
-            "__class__": "Set",
-            "data": [
-                "Abstellung"
-            ]
-        },
-        "Depot": {
-            "__class__": "Set",
-            "data": [
-                "Depot"
-            ]
-        },
-        "Klosters Platz": {
-            "__class__": "Set",
-            "data": [
-                "Klosters Platz"
-            ]
-        },
-        "S-chanf": {
-            "__class__": "Set",
-            "data": [
-                "S-chanf"
-            ]
-        },
-        "Umlad": {
-            "__class__": "Set",
-            "data": [
-                "Umlad"
-            ]
-        }
+  "default": true,
+  "elemente": [
+    {
+      "name": "ADZ",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "ADZ": {
-            "__class__": "Set",
-            "data": [
-                "ADZ"
-            ]
-        },
-        "CARO": {
-            "__class__": "Set",
-            "data": [
-                "CARO"
-            ]
-        },
-        "CIN": {
-            "__class__": "Set",
-            "data": [
-                "CIN"
-            ]
-        },
-        "FTAN": {
-            "__class__": "Set",
-            "data": [
-                "FTAN"
-            ]
-        },
-        "GUA": {
-            "__class__": "Set",
-            "data": [
-                "GUA"
-            ]
-        },
-        "LAVI": {
-            "__class__": "Set",
-            "data": [
-                "LAVI 1",
-                "LAVI 2"
-            ]
-        },
-        "SAGL": {
-            "__class__": "Set",
-            "data": [
-                "SAGL 4",
-                "SAGL 3",
-                "SAGL 2",
-                "SAGL 1",
-                "SAGL 72"
-            ]
-        },
-        "SCTA": {
-            "__class__": "Set",
-            "data": [
-                "SCTA 3",
-                "SCTA 1",
-                "SCTA 4",
-                "SCTA 2"
-            ]
-        },
-        "SELF": {
-            "__class__": "Set",
-            "data": [
-                "SELF 33",
-                "SELF 1",
-                "SELF 2"
-            ]
-        },
-        "SUS": {
-            "__class__": "Set",
-            "data": [
-                "SUS"
-            ]
-        },
-        "ZEZ": {
-            "__class__": "Set",
-            "data": [
-                "ZEZ 1",
-                "ZEZ 2",
-                "ZEZ 3"
-            ]
-        }
+    {
+      "name": "CARO",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "Klosters-Scuol",
-    "strecken": {
-        "Klosters-S-chanf": [
-            "Klosters Platz",
-            "SELF",
-            "SUS",
-            "ZEZ",
-            "CARO",
-            "CIN",
-            "S-chanf"
-        ],
-        "Klosters-Scuol": [
-            "Klosters Platz",
-            "SELF",
-            "SAGL",
-            "LAVI",
-            "GUA",
-            "ADZ",
-            "FTAN",
-            "SCTA"
-        ],
-        "S-Chanf-Scuol": [
-            "S-chanf",
-            "CIN",
-            "CARO",
-            "ZEZ",
-            "SUS",
-            "SAGL",
-            "LAVI",
-            "GUA",
-            "ADZ",
-            "FTAN",
-            "SCTA"
-        ],
-        "Scuol-S-Chanf": [
-            "SCTA",
-            "FTAN",
-            "ADZ",
-            "GUA",
-            "LAVI",
-            "SAGL",
-            "SUS",
-            "ZEZ",
-            "CARO",
-            "CIN",
-            "S-chanf"
-        ]
+    {
+      "name": "CIN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FTAN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GUA",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LAVI",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SAGL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SCTA",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SELF",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SUS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZEZ",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ADZ",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ADZ"
+    },
+    {
+      "name": "ADZ 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ADZ 1",
+      "gleise": 1
+    },
+    {
+      "name": "ADZ 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ADZ 2",
+      "gleise": 1
+    },
+    {
+      "name": "CARO",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CARO"
+    },
+    {
+      "name": "CARO",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CARO",
+      "gleise": 1
+    },
+    {
+      "name": "CARO",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CARO",
+      "gleise": 1
+    },
+    {
+      "name": "CIN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CIN"
+    },
+    {
+      "name": "CIN 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CIN 2",
+      "gleise": 1
+    },
+    {
+      "name": "CIN 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CIN 1",
+      "gleise": 1
+    },
+    {
+      "name": "FTAN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FTAN"
+    },
+    {
+      "name": "FTAN",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FTAN",
+      "gleise": 1
+    },
+    {
+      "name": "FTAN",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FTAN",
+      "gleise": 1
+    },
+    {
+      "name": "GUA",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GUA"
+    },
+    {
+      "name": "GUA 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GUA 2",
+      "gleise": 1
+    },
+    {
+      "name": "GUA 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GUA 1",
+      "gleise": 1
+    },
+    {
+      "name": "LAVI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LAVI"
+    },
+    {
+      "name": "LAVI 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LAVI 2",
+      "gleise": 1
+    },
+    {
+      "name": "LAVI 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LAVI 1",
+      "gleise": 1
+    },
+    {
+      "name": "SAGL 73",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAGL"
+    },
+    {
+      "name": "SAGL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAGL"
+    },
+    {
+      "name": "SAGL 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAGL 2",
+      "gleise": 1
+    },
+    {
+      "name": "SAGL 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAGL 1",
+      "gleise": 1
+    },
+    {
+      "name": "SAGL 72",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAGL 72",
+      "gleise": 1
+    },
+    {
+      "name": "SAGL 73",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAGL 73",
+      "gleise": 1
+    },
+    {
+      "name": "SAGL 74",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAGL 73",
+      "gleise": 1
+    },
+    {
+      "name": "SAGL 73",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAGL 73",
+      "gleise": 1
+    },
+    {
+      "name": "SAGL 74",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAGL 74",
+      "gleise": 1
+    },
+    {
+      "name": "SCTA",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCTA"
+    },
+    {
+      "name": "SCTA 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCTA 1",
+      "gleise": 1
+    },
+    {
+      "name": "SCTA 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCTA 4",
+      "gleise": 1
+    },
+    {
+      "name": "SCTA 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCTA 3",
+      "gleise": 1
+    },
+    {
+      "name": "SCTA 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCTA 2",
+      "gleise": 1
+    },
+    {
+      "name": "SELF",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SELF"
+    },
+    {
+      "name": "SELF 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SELF 2",
+      "gleise": 1
+    },
+    {
+      "name": "SELF 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SELF 1",
+      "gleise": 1
+    },
+    {
+      "name": "SELF 33",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SELF 33",
+      "gleise": 1
+    },
+    {
+      "name": "SUS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SUS"
+    },
+    {
+      "name": "SUS 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SUS 1",
+      "gleise": 1
+    },
+    {
+      "name": "SUS 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SUS 2",
+      "gleise": 1
+    },
+    {
+      "name": "ZEZ",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZEZ"
+    },
+    {
+      "name": "ZEZ 63",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZEZ"
+    },
+    {
+      "name": "ZEZ 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZEZ 2",
+      "gleise": 1
+    },
+    {
+      "name": "ZEZ 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZEZ 1",
+      "gleise": 1
+    },
+    {
+      "name": "ZEZ 63",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZEZ 63",
+      "gleise": 1
+    },
+    {
+      "name": "Umlad",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Abstellung",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "S-chanf",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Klosters Platz",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Depot",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Umlad",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Umlad",
+      "gleise": 1
+    },
+    {
+      "name": "Abstellung",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Abstellung",
+      "gleise": 1
+    },
+    {
+      "name": "S-chanf",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "S-chanf",
+      "gleise": 1
+    },
+    {
+      "name": "Klosters Platz",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Klosters Platz",
+      "gleise": 1
+    },
+    {
+      "name": "Depot",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Depot",
+      "gleise": 1
+    },
+    {
+      "name": "LAVI 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LAVI",
+      "gleise": 1
+    },
+    {
+      "name": "LAVI 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LAVI",
+      "gleise": 1
+    },
+    {
+      "name": "SAGL 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAGL",
+      "gleise": 1
+    },
+    {
+      "name": "SAGL 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAGL",
+      "gleise": 1
+    },
+    {
+      "name": "SAGL 72",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAGL",
+      "gleise": 1
+    },
+    {
+      "name": "SCTA 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCTA",
+      "gleise": 1
+    },
+    {
+      "name": "SCTA 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCTA",
+      "gleise": 1
+    },
+    {
+      "name": "SCTA 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCTA",
+      "gleise": 1
+    },
+    {
+      "name": "SCTA 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCTA",
+      "gleise": 1
+    },
+    {
+      "name": "SELF 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SELF",
+      "gleise": 1
+    },
+    {
+      "name": "SELF 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SELF",
+      "gleise": 1
+    },
+    {
+      "name": "SELF 33",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SELF",
+      "gleise": 1
+    },
+    {
+      "name": "ZEZ 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZEZ",
+      "gleise": 1
+    },
+    {
+      "name": "ZEZ 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZEZ",
+      "gleise": 1
+    },
+    {
+      "name": "ADZ 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ADZ",
+      "gleise": 1
+    },
+    {
+      "name": "ADZ 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ADZ",
+      "gleise": 1
+    },
+    {
+      "name": "CIN 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CIN",
+      "gleise": 1
+    },
+    {
+      "name": "CIN 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "CIN",
+      "gleise": 1
+    },
+    {
+      "name": "GUA 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GUA",
+      "gleise": 1
+    },
+    {
+      "name": "GUA 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GUA",
+      "gleise": 1
+    },
+    {
+      "name": "SUS 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SUS",
+      "gleise": 1
+    },
+    {
+      "name": "SUS 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SUS",
+      "gleise": 1
+    },
+    {
+      "name": "ZEZ 63",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZEZ 63",
+      "gleise": 1
     }
+  ],
+  "strecken": [
+    {
+      "name": "Klosters-Scuol",
+      "haupt": true,
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst Klosters Platz",
+        "Bf SELF",
+        "Bf SUS",
+        "Bf SAGL",
+        "Bf LAVI",
+        "Bf GUA",
+        "Bf ADZ",
+        "Bf FTAN",
+        "Bf SCTA"
+      ]
+    },
+    {
+      "name": "Klosters-S-chanf",
+      "haupt": false,
+      "ordnung": 100,
+      "auto": true,
+      "stationen": [
+        "Anst Klosters Platz",
+        "Bf SELF",
+        "Bf SUS",
+        "Bf ZEZ",
+        "Bf CARO",
+        "Bf CIN",
+        "Anst S-chanf"
+      ]
+    },
+    {
+      "name": "S-Chanf-Scuol",
+      "haupt": false,
+      "ordnung": 102,
+      "auto": true,
+      "stationen": [
+        "Anst S-chanf",
+        "Bf CIN",
+        "Bf CARO",
+        "Bf ZEZ",
+        "Bf SUS",
+        "Bf SAGL",
+        "Bf LAVI",
+        "Bf GUA",
+        "Bf ADZ",
+        "Bf FTAN",
+        "Bf SCTA"
+      ]
+    },
+    {
+      "name": "Scuol-S-Chanf",
+      "haupt": false,
+      "ordnung": 103,
+      "auto": true,
+      "stationen": [
+        "Bf SCTA",
+        "Bf FTAN",
+        "Bf ADZ",
+        "Bf GUA",
+        "Bf LAVI",
+        "Bf SAGL",
+        "Bf SUS",
+        "Bf ZEZ",
+        "Bf CARO",
+        "Bf CIN",
+        "Anst S-chanf"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz-rhb",
+  "_aid": 547,
+  "_build": 5851,
+  "_name": "RhB / Sagliains",
+  "_region": "Ostschweiz",
+  "_version": 3
 }

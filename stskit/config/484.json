@@ -1,225 +1,1527 @@
 {
-    "_aid": 484,
-    "_build": 5847,
-    "_name": "Bern",
-    "_region": "Bern - L\u00f6tschberg",
-    "_version": 2,
-    "zugschema": "schweiz",
-    "anschlussgruppen": {
-        "BNWM": {
-            "__class__": "Set",
-            "data": [
-                "BNWM 868",
-                "BNWM 802",
-                "BNWM 968",
-                "BNWM 702"
-            ]
-        },
-        "Gl 51x": {
-            "__class__": "Set",
-            "data": [
-                "Gl 511-512",
-                "Gl 518-520",
-                "Gl 515-517"
-            ]
-        },
-        "Gl 75x": {
-            "__class__": "Set",
-            "data": [
-                "Gl 752-757"
-            ]
-        },
-        "HOL": {
-            "__class__": "Set",
-            "data": [
-                "HOL 101",
-                "HOL 201"
-            ]
-        },
-        "MATA": {
-            "__class__": "Set",
-            "data": [
-                "MATA 607",
-                "MATA 507"
-            ]
-        },
-        "OST": {
-            "__class__": "Set",
-            "data": [
-                "OST 305",
-                "OST 405",
-                "OST 805"
-            ]
-        },
-        "T-Gruppe": {
-            "__class__": "Set",
-            "data": [
-                "T-Gruppe"
-            ]
-        },
-        "ZOL": {
-            "__class__": "Set",
-            "data": [
-                "ZOL 708",
-                "ZOL 108",
-                "ZOL 208"
-            ]
-        }
+  "default": false,
+  "elemente": [
+    {
+      "name": "BN",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "BN": {
-            "__class__": "Set",
-            "data": [
-                "BN 4",
-                "BN 1",
-                "BN 6",
-                "BN 7",
-                "BN 9",
-                "BN 33",
-                "BN 10",
-                "BN 5",
-                "BN 22",
-                "BN 12",
-                "BN 21",
-                "BN 10 kurz",
-                "BN 11",
-                "BN 3",
-                "BN 32",
-                "BN 2",
-                "BN 34",
-                "BN 13",
-                "BN 31",
-                "BN 8",
-                "BN 49",
-                "BN 741",
-                "BN 724",
-                "BN 728",
-                "BN 740",
-                "BN 50",
-                "BN 760",
-                "BN 514",
-                "BN 513",
-                "BN 628",
-                "BN 841",
-                "BN 842",
-                "BN 925"
-            ]
-        },
-        "BN VL": {
-            "__class__": "Set",
-            "data": [
-                "BN VL 703",
-                "BN VL 803"
-            ]
-        },
-        "BNWD": {
-            "__class__": "Set",
-            "data": [
-                "BNWD 3",
-                "BNWD 2",
-                "BNWD 1",
-                "BNWD 7",
-                "BNWD 6",
-                "BNWD 5"
-            ]
-        }
+    {
+      "name": "BN VL",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "sektoren": {
-        "BN 1": {
-            "__class__": "Set",
-            "data": [
-                "BN 1",
-                "BN 21"
-            ]
-        },
-        "BN 2": {
-            "__class__": "Set",
-            "data": [
-                "BN 2",
-                "BN 22"
-            ]
-        },
-        "BN 9": {
-            "__class__": "Set",
-            "data": [
-                "BN 9",
-                "BN 49"
-            ]
-        },
-        "BN 10": {
-            "__class__": "Set",
-            "data": [
-                "BN 10 kurz",
-                "BN 10",
-                "BN 50"
-            ]
-        },
-        "BN 11": {
-            "__class__": "Set",
-            "data": [
-                "BN 11",
-                "BN 31"
-            ]
-        },
-        "BN 12": {
-            "__class__": "Set",
-            "data": [
-                "BN 12",
-                "BN 32"
-            ]
-        },
-        "BN 13": {
-            "__class__": "Set",
-            "data": [
-                "BN 13",
-                "BN 33"
-            ]
-        }
+    {
+      "name": "BNWD",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "BNWM-MATA",
-    "strecken": {
-        "BNWM-MATA": [
-            "BNWM",
-            "BN",
-            "BNWD",
-            "BN VL",
-            "MATA"
-        ],
-        "BNWM-OST": [
-            "BNWM",
-            "BN",
-            "BNWD",
-            "OST"
-        ],
-        "BNWM-ZOL": [
-            "BNWM",
-            "BN",
-            "BNWD",
-            "ZOL"
-        ],
-        "HOL-MATA": [
-            "HOL",
-            "BN",
-            "BNWD",
-            "MATA"
-        ],
-        "HOL-OST": [
-            "HOL",
-            "BN",
-            "BNWD",
-            "OST"
-        ],
-        "HOL-ZOL": [
-            "HOL",
-            "BN",
-            "BNWD",
-            "ZOL"
-        ],
-        "ZOL-OST": [
-            "ZOL",
-            "BN VL",
-            "OST"
-        ]
+    {
+      "name": "BNWF",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BN 50",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN"
+    },
+    {
+      "name": "BN 514",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN"
+    },
+    {
+      "name": "BN 628",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN"
+    },
+    {
+      "name": "BN 842",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN"
+    },
+    {
+      "name": "BN 925",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN"
+    },
+    {
+      "name": "BN 49",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN"
+    },
+    {
+      "name": "BN 9",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN"
+    },
+    {
+      "name": "BN 11",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 11",
+      "gleise": 1
+    },
+    {
+      "name": "BN 34",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 34",
+      "gleise": 1
+    },
+    {
+      "name": "BN 31",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 31",
+      "gleise": 1
+    },
+    {
+      "name": "BN 12",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 12",
+      "gleise": 1
+    },
+    {
+      "name": "BN 10 kurz",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 10",
+      "gleise": 1
+    },
+    {
+      "name": "BN 10",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 10",
+      "gleise": 1
+    },
+    {
+      "name": "BN 6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 6",
+      "gleise": 1
+    },
+    {
+      "name": "BN 13",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 13",
+      "gleise": 1
+    },
+    {
+      "name": "BN 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 4",
+      "gleise": 1
+    },
+    {
+      "name": "BN 22",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 22",
+      "gleise": 1
+    },
+    {
+      "name": "BN 8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 8",
+      "gleise": 1
+    },
+    {
+      "name": "BN 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 1",
+      "gleise": 1
+    },
+    {
+      "name": "BN 7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 7",
+      "gleise": 1
+    },
+    {
+      "name": "BN 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 2",
+      "gleise": 1
+    },
+    {
+      "name": "BN 21",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 21",
+      "gleise": 1
+    },
+    {
+      "name": "BN 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 5",
+      "gleise": 1
+    },
+    {
+      "name": "BN 32",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 32",
+      "gleise": 1
+    },
+    {
+      "name": "BN 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 3",
+      "gleise": 1
+    },
+    {
+      "name": "BN 33",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 33",
+      "gleise": 1
+    },
+    {
+      "name": "BN 9",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 50",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 50",
+      "gleise": 1
+    },
+    {
+      "name": "BN 740",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 50",
+      "gleise": 1
+    },
+    {
+      "name": "BN 49",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 50",
+      "gleise": 1
+    },
+    {
+      "name": "BN 728",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 50",
+      "gleise": 1
+    },
+    {
+      "name": "BN 741",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 50",
+      "gleise": 1
+    },
+    {
+      "name": "BN 724",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 50",
+      "gleise": 1
+    },
+    {
+      "name": "BN 50",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 50",
+      "gleise": 1
+    },
+    {
+      "name": "BN 740",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 740",
+      "gleise": 1
+    },
+    {
+      "name": "BN 49",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 49",
+      "gleise": 1
+    },
+    {
+      "name": "BN 760",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 760",
+      "gleise": 1
+    },
+    {
+      "name": "BN 728",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 728",
+      "gleise": 1
+    },
+    {
+      "name": "BN 741",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 741",
+      "gleise": 1
+    },
+    {
+      "name": "BN 724",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 724",
+      "gleise": 1
+    },
+    {
+      "name": "BN 514",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 514",
+      "gleise": 1
+    },
+    {
+      "name": "BN 513",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 514",
+      "gleise": 1
+    },
+    {
+      "name": "BN 514",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 514",
+      "gleise": 1
+    },
+    {
+      "name": "BN 513",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 513",
+      "gleise": 1
+    },
+    {
+      "name": "BN 628",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 628",
+      "gleise": 1
+    },
+    {
+      "name": "BN 628",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 628",
+      "gleise": 1
+    },
+    {
+      "name": "BN 842",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 842",
+      "gleise": 1
+    },
+    {
+      "name": "BN 841",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 842",
+      "gleise": 1
+    },
+    {
+      "name": "BN 842",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 842",
+      "gleise": 1
+    },
+    {
+      "name": "BN 841",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 841",
+      "gleise": 1
+    },
+    {
+      "name": "BN 925",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 925",
+      "gleise": 1
+    },
+    {
+      "name": "BN 925",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 925",
+      "gleise": 1
+    },
+    {
+      "name": "BN VL 703",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN VL"
+    },
+    {
+      "name": "BN VL 803",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN VL"
+    },
+    {
+      "name": "BN VL 803",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN VL 703",
+      "gleise": 1
+    },
+    {
+      "name": "BN VL 703",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN VL 703",
+      "gleise": 1
+    },
+    {
+      "name": "BN VL 803",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN VL 803",
+      "gleise": 1
+    },
+    {
+      "name": "BNWD 3",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD"
+    },
+    {
+      "name": "BNWD 5",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD"
+    },
+    {
+      "name": "BNWD 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD 2",
+      "gleise": 1
+    },
+    {
+      "name": "BNWD 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD 1",
+      "gleise": 1
+    },
+    {
+      "name": "BNWD 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD 3",
+      "gleise": 1
+    },
+    {
+      "name": "BNWD 7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD 7",
+      "gleise": 1
+    },
+    {
+      "name": "BNWD 6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD 6",
+      "gleise": 1
+    },
+    {
+      "name": "BNWD 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD 5",
+      "gleise": 1
+    },
+    {
+      "name": "BNWF",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWF"
+    },
+    {
+      "name": "BNWF 942",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWF"
+    },
+    {
+      "name": "BNWF",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWF",
+      "gleise": 1
+    },
+    {
+      "name": "BNWF",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWF",
+      "gleise": 1
+    },
+    {
+      "name": "BNWF 942",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWF 942",
+      "gleise": 1
+    },
+    {
+      "name": "BNWF 942",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWF 942",
+      "gleise": 1
+    },
+    {
+      "name": "BNWF West",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BNWF Ost",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BNWM",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gl",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HOL",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "T-Gruppe",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZOL",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MATA",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "OST",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BNWF West",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWF West",
+      "gleise": 1
+    },
+    {
+      "name": "BNWF Ost",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWF Ost",
+      "gleise": 1
+    },
+    {
+      "name": "BNWM 802",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWM",
+      "gleise": 1
+    },
+    {
+      "name": "BNWM 702",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWM",
+      "gleise": 1
+    },
+    {
+      "name": "BNWM 868",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWM",
+      "gleise": 1
+    },
+    {
+      "name": "BNWM 968",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWM",
+      "gleise": 1
+    },
+    {
+      "name": "Gl 752-757",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gl",
+      "gleise": 1
+    },
+    {
+      "name": "Gl 518-520",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gl",
+      "gleise": 1
+    },
+    {
+      "name": "Gl 515-517",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gl",
+      "gleise": 1
+    },
+    {
+      "name": "Gl 511-512",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gl",
+      "gleise": 1
+    },
+    {
+      "name": "HOL 101",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HOL",
+      "gleise": 1
+    },
+    {
+      "name": "HOL 201",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HOL",
+      "gleise": 1
+    },
+    {
+      "name": "T-Gruppe",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "T-Gruppe",
+      "gleise": 1
+    },
+    {
+      "name": "ZOL 208",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZOL",
+      "gleise": 1
+    },
+    {
+      "name": "ZOL 108",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZOL",
+      "gleise": 1
+    },
+    {
+      "name": "ZOL 708",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZOL",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 607",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 507",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA",
+      "gleise": 1
+    },
+    {
+      "name": "OST 805",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OST",
+      "gleise": 1
+    },
+    {
+      "name": "OST 305",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OST",
+      "gleise": 1
+    },
+    {
+      "name": "OST 405",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OST",
+      "gleise": 1
+    },
+    {
+      "name": "BN 760",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 49",
+      "gleise": 1
+    },
+    {
+      "name": "BN 11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 34",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 31",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 12",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 10",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 13",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 22",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 21",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 32",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 33",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN 9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN 9",
+      "gleise": 1
+    },
+    {
+      "name": "BN VL 703",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BN VL 803",
+      "gleise": 1
+    },
+    {
+      "name": "BNWD 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD 3",
+      "gleise": 1
+    },
+    {
+      "name": "BNWD 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD 3",
+      "gleise": 1
+    },
+    {
+      "name": "BNWD 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD 3",
+      "gleise": 1
+    },
+    {
+      "name": "BNWD 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD 5",
+      "gleise": 1
+    },
+    {
+      "name": "BNWD 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD 5",
+      "gleise": 1
+    },
+    {
+      "name": "BNWD 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNWD 5",
+      "gleise": 1
     }
+  ],
+  "strecken": [
+    {
+      "name": "BNWM-HOL",
+      "haupt": false,
+      "ordnung": 100,
+      "auto": true,
+      "stationen": [
+        "Anst BNWM",
+        "Bf BN",
+        "Anst HOL"
+      ]
+    },
+    {
+      "name": "BNWM-MATA",
+      "haupt": false,
+      "ordnung": 101,
+      "auto": true,
+      "stationen": [
+        "Anst BNWM",
+        "Bf BN",
+        "Bf BNWD",
+        "Anst MATA"
+      ]
+    },
+    {
+      "name": "BNWM-OST",
+      "haupt": false,
+      "ordnung": 102,
+      "auto": true,
+      "stationen": [
+        "Anst BNWM",
+        "Bf BN",
+        "Bf BNWD",
+        "Anst OST"
+      ]
+    },
+    {
+      "name": "BNWM-ZOL",
+      "haupt": false,
+      "ordnung": 103,
+      "auto": true,
+      "stationen": [
+        "Anst BNWM",
+        "Bf BN",
+        "Bf BNWD",
+        "Anst ZOL"
+      ]
+    },
+    {
+      "name": "HOL-BNWM",
+      "haupt": false,
+      "ordnung": 104,
+      "auto": true,
+      "stationen": [
+        "Anst HOL",
+        "Bf BN",
+        "Anst BNWM"
+      ]
+    },
+    {
+      "name": "HOL-MATA",
+      "haupt": false,
+      "ordnung": 105,
+      "auto": true,
+      "stationen": [
+        "Anst HOL",
+        "Bf BN",
+        "Bf BNWD",
+        "Anst MATA"
+      ]
+    },
+    {
+      "name": "HOL-OST",
+      "haupt": false,
+      "ordnung": 106,
+      "auto": true,
+      "stationen": [
+        "Anst HOL",
+        "Bf BN",
+        "Bf BNWD",
+        "Anst OST"
+      ]
+    },
+    {
+      "name": "HOL-ZOL",
+      "haupt": false,
+      "ordnung": 107,
+      "auto": true,
+      "stationen": [
+        "Anst HOL",
+        "Bf BN",
+        "Bf BNWD",
+        "Anst ZOL"
+      ]
+    },
+    {
+      "name": "MATA-BNWM",
+      "haupt": false,
+      "ordnung": 108,
+      "auto": true,
+      "stationen": [
+        "Anst MATA",
+        "Bf BNWD",
+        "Bf BN",
+        "Anst BNWM"
+      ]
+    },
+    {
+      "name": "MATA-HOL",
+      "haupt": false,
+      "ordnung": 109,
+      "auto": true,
+      "stationen": [
+        "Anst MATA",
+        "Bf BNWD",
+        "Bf BN",
+        "Anst HOL"
+      ]
+    },
+    {
+      "name": "MATA-OST",
+      "haupt": false,
+      "ordnung": 110,
+      "auto": true,
+      "stationen": [
+        "Anst MATA",
+        "Bf BNWD",
+        "Anst OST"
+      ]
+    },
+    {
+      "name": "MATA-ZOL",
+      "haupt": false,
+      "ordnung": 111,
+      "auto": true,
+      "stationen": [
+        "Anst MATA",
+        "Bf BNWD",
+        "Anst ZOL"
+      ]
+    },
+    {
+      "name": "OST-BNWM",
+      "haupt": false,
+      "ordnung": 112,
+      "auto": true,
+      "stationen": [
+        "Anst OST",
+        "Bf BNWD",
+        "Bf BN",
+        "Anst BNWM"
+      ]
+    },
+    {
+      "name": "OST-HOL",
+      "haupt": false,
+      "ordnung": 113,
+      "auto": true,
+      "stationen": [
+        "Anst OST",
+        "Bf BNWD",
+        "Bf BN",
+        "Anst HOL"
+      ]
+    },
+    {
+      "name": "OST-MATA",
+      "haupt": false,
+      "ordnung": 114,
+      "auto": true,
+      "stationen": [
+        "Anst OST",
+        "Bf BNWD",
+        "Anst MATA"
+      ]
+    },
+    {
+      "name": "OST-ZOL",
+      "haupt": false,
+      "ordnung": 115,
+      "auto": true,
+      "stationen": [
+        "Anst OST",
+        "Bf BN VL",
+        "Anst ZOL"
+      ]
+    },
+    {
+      "name": "ZOL-BNWM",
+      "haupt": false,
+      "ordnung": 116,
+      "auto": true,
+      "stationen": [
+        "Anst ZOL",
+        "Bf BNWD",
+        "Bf BN",
+        "Anst BNWM"
+      ]
+    },
+    {
+      "name": "ZOL-HOL",
+      "haupt": false,
+      "ordnung": 117,
+      "auto": true,
+      "stationen": [
+        "Anst ZOL",
+        "Bf BNWD",
+        "Bf BN",
+        "Anst HOL"
+      ]
+    },
+    {
+      "name": "ZOL-MATA",
+      "haupt": false,
+      "ordnung": 118,
+      "auto": true,
+      "stationen": [
+        "Anst ZOL",
+        "Bf BNWD",
+        "Anst MATA"
+      ]
+    },
+    {
+      "name": "ZOL-OST",
+      "haupt": false,
+      "ordnung": 119,
+      "auto": true,
+      "stationen": [
+        "Anst ZOL",
+        "Bf BN VL",
+        "Anst OST"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 484,
+  "_build": 5851,
+  "_name": "Bern",
+  "_region": "Bern - Lötschberg",
+  "_version": 3
 }

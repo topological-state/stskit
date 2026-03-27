@@ -1,121 +1,738 @@
 {
-    "_aid": 485,
-    "_build": 5847,
-    "_name": "Z\u00fcrich HB",
-    "_region": "Z\u00fcrich und Umgebung",
-    "_version": 2,
-    "zugschema": "schweiz",
-    "anschlussgruppen": {
-        "": {
-            "__class__": "Set",
-            "data": [
-                "151",
-                "791",
-                "201",
-                "691",
-                "101"
-            ]
-        },
-        "Depot F": {
-            "__class__": "Set",
-            "data": [
-                "Depot F"
-            ]
-        },
-        "F16": {
-            "__class__": "Set",
-            "data": [
-                "F16"
-            ]
-        },
-        "Feld M": {
-            "__class__": "Set",
-            "data": [
-                "Feld M"
-            ]
-        },
-        "Feld O": {
-            "__class__": "Set",
-            "data": [
-                "Feld O"
-            ]
-        },
-        "P": {
-            "__class__": "Set",
-            "data": [
-                "P11",
-                "P24"
-            ]
-        },
-        "ZHDB": {
-            "__class__": "Set",
-            "data": [
-                "ZHDB 600",
-                "ZHDB 700"
-            ]
-        },
-        "ZHDB L": {
-            "__class__": "Set",
-            "data": [
-                "ZHDB L11",
-                "ZHDB L12"
-            ]
-        },
-        "ZOER": {
-            "__class__": "Set",
-            "data": [
-                "ZOER 235",
-                "ZOER 135"
-            ]
-        },
-        "ZWIP": {
-            "__class__": "Set",
-            "data": [
-                "ZWIP 302",
-                "ZWIP 402"
-            ]
-        }
+  "default": true,
+  "elemente": [
+    {
+      "name": "ZUE",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "ZLOE": {
-            "__class__": "Set",
-            "data": [
-                "ZLOE31",
-                "ZLOE33",
-                "ZLOE34",
-                "ZLOE32"
-            ]
-        },
-        "ZUE": {
-            "__class__": "Set",
-            "data": [
-                "ZUE 5",
-                "ZUE 10",
-                "ZUE 7",
-                "ZUE 6",
-                "ZUE 14",
-                "ZUE 15",
-                "ZUE 3",
-                "ZUE 8",
-                "ZUE 9",
-                "ZUE 18",
-                "ZUE 4",
-                "ZUE 16",
-                "ZUE X",
-                "ZUE 11",
-                "ZUE 12",
-                "ZUE 13",
-                "ZUE 17"
-            ]
-        }
+    {
+      "name": "ZUE 6",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE"
     },
-    "sektoren": {},
-    "strecken": {
-        "ZOER-P": [
-            "ZOER",
-            "ZUE",
-            "P"
-        ]
+    {
+      "name": "ZUE 12",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 12",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 17",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 17",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 4",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE33",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZLOE33",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE31",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZLOE31",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 15",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 15",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE32",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZLOE32",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE34",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZLOE34",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 18",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 18",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 16",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 16",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 13",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 13",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 14",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 14",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 11",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 11",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 8",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 5",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 7",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 10",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 10",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 3",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 9",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 9",
+      "gleise": 1
+    },
+    {
+      "name": "F",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZWIP",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZAU",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "691",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "791",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Feld M",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZHDB",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZHDB L",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Depot F",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Feld O",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "P",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZOER",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "F16",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F",
+      "gleise": 1
+    },
+    {
+      "name": "ZWIP 302",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWIP",
+      "gleise": 1
+    },
+    {
+      "name": "ZWIP 402",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZWIP",
+      "gleise": 1
+    },
+    {
+      "name": "ZAU 101",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZAU",
+      "gleise": 1
+    },
+    {
+      "name": "ZAU 201",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZAU",
+      "gleise": 1
+    },
+    {
+      "name": "ZAU 151",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZAU",
+      "gleise": 1
+    },
+    {
+      "name": "ZAU 251",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZAU",
+      "gleise": 1
+    },
+    {
+      "name": "691",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "691",
+      "gleise": 1
+    },
+    {
+      "name": "791",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "791",
+      "gleise": 1
+    },
+    {
+      "name": "Feld M",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Feld M",
+      "gleise": 1
+    },
+    {
+      "name": "ZHDB 600",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZHDB",
+      "gleise": 1
+    },
+    {
+      "name": "ZHDB 700",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZHDB",
+      "gleise": 1
+    },
+    {
+      "name": "ZHDB L12",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZHDB L",
+      "gleise": 1
+    },
+    {
+      "name": "ZHDB L11",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZHDB L",
+      "gleise": 1
+    },
+    {
+      "name": "Depot F",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Depot F",
+      "gleise": 1
+    },
+    {
+      "name": "Feld O",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Feld O",
+      "gleise": 1
+    },
+    {
+      "name": "P24",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "P",
+      "gleise": 1
+    },
+    {
+      "name": "P11",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "P",
+      "gleise": 1
+    },
+    {
+      "name": "ZOER 231",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZOER",
+      "gleise": 1
+    },
+    {
+      "name": "ZOER 131",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZOER",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 12",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 17",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE33",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE31",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 15",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE32",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE34",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 18",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 16",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 13",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 14",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 10",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
     }
+  ],
+  "strecken": [
+    {
+      "name": "ZOER-P",
+      "haupt": false,
+      "ordnung": 196,
+      "auto": true,
+      "stationen": [
+        "Anst ZOER",
+        "Bf ZUE",
+        "Anst P"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 485,
+  "_build": 5851,
+  "_name": "Zürich HB",
+  "_region": "Zürich und Umgebung",
+  "_version": 3
 }

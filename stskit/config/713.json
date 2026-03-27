@@ -1,0 +1,2268 @@
+{
+  "default": true,
+  "elemente": [
+    {
+      "name": "Altenstadt",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "B",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "F",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FA",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gisingen",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hilti",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "L",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Moos",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Nendeln",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Nenzing",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Nüziders",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Schaanwald",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Schlins",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Tisis",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Tosters",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "V",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Altenstadt",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Altenstadt"
+    },
+    {
+      "name": "Altenstadt",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Altenstadt",
+      "gleise": 1
+    },
+    {
+      "name": "Altenstadt",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Altenstadt",
+      "gleise": 1
+    },
+    {
+      "name": "B9",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B"
+    },
+    {
+      "name": "B40",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B"
+    },
+    {
+      "name": "B90",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B"
+    },
+    {
+      "name": "Lok",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B"
+    },
+    {
+      "name": "B4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B9",
+      "gleise": 1
+    },
+    {
+      "name": "B9",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B9",
+      "gleise": 1
+    },
+    {
+      "name": "B2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B9",
+      "gleise": 1
+    },
+    {
+      "name": "B1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B9",
+      "gleise": 1
+    },
+    {
+      "name": "B15",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B9",
+      "gleise": 1
+    },
+    {
+      "name": "B11",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B9",
+      "gleise": 1
+    },
+    {
+      "name": "B6",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B9",
+      "gleise": 1
+    },
+    {
+      "name": "B7",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B9",
+      "gleise": 1
+    },
+    {
+      "name": "Gbf C",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B9",
+      "gleise": 1
+    },
+    {
+      "name": "B3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B9",
+      "gleise": 1
+    },
+    {
+      "name": "B13",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B9",
+      "gleise": 1
+    },
+    {
+      "name": "B4b",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B4",
+      "gleise": 1
+    },
+    {
+      "name": "B4a",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B4",
+      "gleise": 1
+    },
+    {
+      "name": "B9",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B9",
+      "gleise": 1
+    },
+    {
+      "name": "B2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B2",
+      "gleise": 1
+    },
+    {
+      "name": "B1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B1",
+      "gleise": 1
+    },
+    {
+      "name": "B15",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B15",
+      "gleise": 1
+    },
+    {
+      "name": "B11",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B11",
+      "gleise": 1
+    },
+    {
+      "name": "B6a",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B6",
+      "gleise": 1
+    },
+    {
+      "name": "B6b",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B6",
+      "gleise": 1
+    },
+    {
+      "name": "B7a",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B7",
+      "gleise": 1
+    },
+    {
+      "name": "B7",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B7",
+      "gleise": 1
+    },
+    {
+      "name": "Gbf C",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gbf C",
+      "gleise": 1
+    },
+    {
+      "name": "B3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B3",
+      "gleise": 1
+    },
+    {
+      "name": "B13",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B13",
+      "gleise": 1
+    },
+    {
+      "name": "B31",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B31",
+      "gleise": 1
+    },
+    {
+      "name": "B30",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B30",
+      "gleise": 1
+    },
+    {
+      "name": "Lok",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lok",
+      "gleise": 1
+    },
+    {
+      "name": "B40",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B40",
+      "gleise": 1
+    },
+    {
+      "name": "B40",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B40",
+      "gleise": 1
+    },
+    {
+      "name": "B90",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B90",
+      "gleise": 1
+    },
+    {
+      "name": "B92",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B90",
+      "gleise": 1
+    },
+    {
+      "name": "B90",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B90",
+      "gleise": 1
+    },
+    {
+      "name": "B92",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "B92",
+      "gleise": 1
+    },
+    {
+      "name": "F95",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F"
+    },
+    {
+      "name": "F200",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F"
+    },
+    {
+      "name": "F305",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F"
+    },
+    {
+      "name": "Gbf A",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F"
+    },
+    {
+      "name": "F1",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F"
+    },
+    {
+      "name": "F103",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F"
+    },
+    {
+      "name": "F3a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F3",
+      "gleise": 1
+    },
+    {
+      "name": "F3b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F3",
+      "gleise": 1
+    },
+    {
+      "name": "F2a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F2",
+      "gleise": 1
+    },
+    {
+      "name": "F2b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F2",
+      "gleise": 1
+    },
+    {
+      "name": "F1a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F1",
+      "gleise": 1
+    },
+    {
+      "name": "F1b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F1",
+      "gleise": 1
+    },
+    {
+      "name": "F4a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F4",
+      "gleise": 1
+    },
+    {
+      "name": "F4b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F4",
+      "gleise": 1
+    },
+    {
+      "name": "F5a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F5",
+      "gleise": 1
+    },
+    {
+      "name": "F5b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F5",
+      "gleise": 1
+    },
+    {
+      "name": "F95",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F95",
+      "gleise": 1
+    },
+    {
+      "name": "F95",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F95",
+      "gleise": 1
+    },
+    {
+      "name": "F104",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F104",
+      "gleise": 1
+    },
+    {
+      "name": "F102",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F102",
+      "gleise": 1
+    },
+    {
+      "name": "F105",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F105",
+      "gleise": 1
+    },
+    {
+      "name": "F103",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F103",
+      "gleise": 1
+    },
+    {
+      "name": "F101",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F101",
+      "gleise": 1
+    },
+    {
+      "name": "F200",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F200",
+      "gleise": 1
+    },
+    {
+      "name": "F200",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F200",
+      "gleise": 1
+    },
+    {
+      "name": "F305",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F305",
+      "gleise": 1
+    },
+    {
+      "name": "F305",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F305",
+      "gleise": 1
+    },
+    {
+      "name": "FA2",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FA"
+    },
+    {
+      "name": "FA3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FA3",
+      "gleise": 1
+    },
+    {
+      "name": "FA2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FA2",
+      "gleise": 1
+    },
+    {
+      "name": "FA1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FA1",
+      "gleise": 1
+    },
+    {
+      "name": "FA22",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FA22",
+      "gleise": 1
+    },
+    {
+      "name": "Gbf A",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gbf A",
+      "gleise": 1
+    },
+    {
+      "name": "Gbf A",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gbf A",
+      "gleise": 1
+    },
+    {
+      "name": "Gisingen",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gisingen"
+    },
+    {
+      "name": "Gisingen",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gisingen",
+      "gleise": 1
+    },
+    {
+      "name": "Gisingen",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gisingen",
+      "gleise": 1
+    },
+    {
+      "name": "Hilti",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hilti"
+    },
+    {
+      "name": "Hilti",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hilti",
+      "gleise": 1
+    },
+    {
+      "name": "Hilti",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hilti",
+      "gleise": 1
+    },
+    {
+      "name": "L4",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "L"
+    },
+    {
+      "name": "L3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "L3",
+      "gleise": 1
+    },
+    {
+      "name": "L2g",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "L2",
+      "gleise": 1
+    },
+    {
+      "name": "L2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "L2",
+      "gleise": 1
+    },
+    {
+      "name": "L4g",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "L4",
+      "gleise": 1
+    },
+    {
+      "name": "L4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "L4",
+      "gleise": 1
+    },
+    {
+      "name": "L1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "L1",
+      "gleise": 1
+    },
+    {
+      "name": "L1g",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "L1",
+      "gleise": 1
+    },
+    {
+      "name": "Moos",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Moos"
+    },
+    {
+      "name": "Moos",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Moos",
+      "gleise": 1
+    },
+    {
+      "name": "Moos",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Moos",
+      "gleise": 1
+    },
+    {
+      "name": "Nendeln",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nendeln"
+    },
+    {
+      "name": "Nendeln1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nendeln",
+      "gleise": 1
+    },
+    {
+      "name": "Nendeln",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nendeln",
+      "gleise": 1
+    },
+    {
+      "name": "Nendeln1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nendeln1",
+      "gleise": 1
+    },
+    {
+      "name": "Nendeln",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nendeln",
+      "gleise": 1
+    },
+    {
+      "name": "Nenzing",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nenzing"
+    },
+    {
+      "name": "Nenzing",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nenzing",
+      "gleise": 1
+    },
+    {
+      "name": "Nenzing",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nenzing",
+      "gleise": 1
+    },
+    {
+      "name": "Nüziders",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nüziders"
+    },
+    {
+      "name": "Nüziders",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nüziders",
+      "gleise": 1
+    },
+    {
+      "name": "Nüziders",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nüziders",
+      "gleise": 1
+    },
+    {
+      "name": "Schaanwald",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Schaanwald"
+    },
+    {
+      "name": "Schaanwald",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Schaanwald",
+      "gleise": 1
+    },
+    {
+      "name": "Schaanwald",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Schaanwald",
+      "gleise": 1
+    },
+    {
+      "name": "Schlins",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Schlins"
+    },
+    {
+      "name": "Schlins",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Schlins",
+      "gleise": 1
+    },
+    {
+      "name": "Schlins",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Schlins",
+      "gleise": 1
+    },
+    {
+      "name": "Tisis",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tisis"
+    },
+    {
+      "name": "Tisis",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tisis",
+      "gleise": 1
+    },
+    {
+      "name": "Tisis",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tisis",
+      "gleise": 1
+    },
+    {
+      "name": "Tosters",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tosters"
+    },
+    {
+      "name": "Tosters Ost",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tosters"
+    },
+    {
+      "name": "Tosters West",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tosters"
+    },
+    {
+      "name": "Tosters",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tosters",
+      "gleise": 1
+    },
+    {
+      "name": "Tosters",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tosters",
+      "gleise": 1
+    },
+    {
+      "name": "Tosters Ost",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tosters Ost",
+      "gleise": 1
+    },
+    {
+      "name": "Tosters Ost",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tosters Ost",
+      "gleise": 1
+    },
+    {
+      "name": "Tosters West",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tosters West",
+      "gleise": 1
+    },
+    {
+      "name": "Tosters West",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Tosters West",
+      "gleise": 1
+    },
+    {
+      "name": "V1",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "V"
+    },
+    {
+      "name": "V1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "V1",
+      "gleise": 1
+    },
+    {
+      "name": "V1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "V1",
+      "gleise": 1
+    },
+    {
+      "name": "Gbf A",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gbf C",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Schruns",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Langen am Arlberg",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Abstellung/Werk",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Industrie",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bw",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Dornbirn",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gbf B",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Buchs SG",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Spedition",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gbf A",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gbf A",
+      "gleise": 1
+    },
+    {
+      "name": "Gbf C",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gbf C",
+      "gleise": 1
+    },
+    {
+      "name": "Schruns",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Schruns",
+      "gleise": 1
+    },
+    {
+      "name": "Langen am Arlberg",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Langen am Arlberg",
+      "gleise": 1
+    },
+    {
+      "name": "Abstellung/Werk",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Abstellung/Werk",
+      "gleise": 1
+    },
+    {
+      "name": "Industrie",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Industrie",
+      "gleise": 1
+    },
+    {
+      "name": "Bw",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bw",
+      "gleise": 1
+    },
+    {
+      "name": "Dornbirn",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dornbirn",
+      "gleise": 2
+    },
+    {
+      "name": "Gbf B",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gbf B",
+      "gleise": 1
+    },
+    {
+      "name": "Buchs SG",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Buchs SG",
+      "gleise": 1
+    },
+    {
+      "name": "Spedition",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Spedition",
+      "gleise": 1
+    },
+    {
+      "name": "B31",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lok",
+      "gleise": 1
+    },
+    {
+      "name": "B30",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lok",
+      "gleise": 1
+    },
+    {
+      "name": "Lok",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lok",
+      "gleise": 1
+    },
+    {
+      "name": "F3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F1",
+      "gleise": 1
+    },
+    {
+      "name": "F2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F1",
+      "gleise": 1
+    },
+    {
+      "name": "F1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F1",
+      "gleise": 1
+    },
+    {
+      "name": "F4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F1",
+      "gleise": 1
+    },
+    {
+      "name": "F5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F1",
+      "gleise": 1
+    },
+    {
+      "name": "F104",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F103",
+      "gleise": 1
+    },
+    {
+      "name": "F102",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F103",
+      "gleise": 1
+    },
+    {
+      "name": "F105",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F103",
+      "gleise": 1
+    },
+    {
+      "name": "F103",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F103",
+      "gleise": 1
+    },
+    {
+      "name": "F101",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "F103",
+      "gleise": 1
+    },
+    {
+      "name": "FA3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FA2",
+      "gleise": 1
+    },
+    {
+      "name": "FA2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FA2",
+      "gleise": 1
+    },
+    {
+      "name": "FA1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FA2",
+      "gleise": 1
+    },
+    {
+      "name": "FA22",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FA2",
+      "gleise": 1
+    },
+    {
+      "name": "L3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "L4",
+      "gleise": 1
+    },
+    {
+      "name": "L2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "L4",
+      "gleise": 1
+    },
+    {
+      "name": "L4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "L4",
+      "gleise": 1
+    },
+    {
+      "name": "L1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "L4",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Buchs SG-Langen am Arlberg",
+      "haupt": false,
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Buchs SG",
+        "Bf V",
+        "Bf Hilti",
+        "Bf Nendeln",
+        "Bf Schaanwald",
+        "Bf Tisis",
+        "Bf Tosters",
+        "Bf Gisingen",
+        "Bf Altenstadt",
+        "Bf F",
+        "Bf FA",
+        "Bf Schlins",
+        "Bf Nenzing",
+        "Bf L",
+        "Bf Nüziders",
+        "Bf B",
+        "Anst Langen am Arlberg"
+      ]
+    },
+    {
+      "name": "Langen am Arlberg-Buchs SG",
+      "haupt": false,
+      "ordnung": 3,
+      "auto": false,
+      "stationen": [
+        "Anst Langen am Arlberg",
+        "Bf B",
+        "Bf Nüziders",
+        "Bf L",
+        "Bf Nenzing",
+        "Bf Schlins",
+        "Bf FA",
+        "Bf F",
+        "Bf Altenstadt",
+        "Bf Gisingen",
+        "Bf Tosters",
+        "Bf Tisis",
+        "Bf Schaanwald",
+        "Bf Nendeln",
+        "Bf Hilti",
+        "Bf V",
+        "Anst Buchs SG"
+      ]
+    },
+    {
+      "name": "Abstellung/Werk-Buchs SG",
+      "haupt": false,
+      "ordnung": 100,
+      "auto": true,
+      "stationen": [
+        "Anst Abstellung/Werk",
+        "Bf B",
+        "Bf Nüziders",
+        "Bf L",
+        "Bf Nenzing",
+        "Bf Schlins",
+        "Bf FA",
+        "Bf F",
+        "Bf Altenstadt",
+        "Bf Gisingen",
+        "Bf Tisis",
+        "Bf Schaanwald",
+        "Bf Nendeln",
+        "Anst Buchs SG"
+      ]
+    },
+    {
+      "name": "Abstellung/Werk-Dornbirn",
+      "haupt": false,
+      "ordnung": 102,
+      "auto": true,
+      "stationen": [
+        "Anst Abstellung/Werk",
+        "Bf B",
+        "Bf Nüziders",
+        "Bf L",
+        "Bf Nenzing",
+        "Bf Schlins",
+        "Bf FA",
+        "Bf F",
+        "Anst Dornbirn"
+      ]
+    },
+    {
+      "name": "Abstellung/Werk-Gbf A",
+      "haupt": false,
+      "ordnung": 103,
+      "auto": true,
+      "stationen": [
+        "Anst Abstellung/Werk",
+        "Bf B",
+        "Bf Nüziders",
+        "Bf L",
+        "Bf Nenzing",
+        "Bf Schlins",
+        "Bf FA",
+        "Bf F",
+        "Anst Gbf A"
+      ]
+    },
+    {
+      "name": "Abstellung/Werk-Langen am Arlberg",
+      "haupt": false,
+      "ordnung": 106,
+      "auto": true,
+      "stationen": [
+        "Anst Abstellung/Werk",
+        "Bf B",
+        "Anst Langen am Arlberg"
+      ]
+    },
+    {
+      "name": "Abstellung/Werk-Schruns",
+      "haupt": false,
+      "ordnung": 107,
+      "auto": true,
+      "stationen": [
+        "Anst Abstellung/Werk",
+        "Bf B",
+        "Bf Moos",
+        "Anst Schruns"
+      ]
+    },
+    {
+      "name": "Buchs SG-Abstellung/Werk",
+      "haupt": false,
+      "ordnung": 109,
+      "auto": true,
+      "stationen": [
+        "Anst Buchs SG",
+        "Bf Nendeln",
+        "Bf Schaanwald",
+        "Bf Tisis",
+        "Bf Gisingen",
+        "Bf Altenstadt",
+        "Bf F",
+        "Bf FA",
+        "Bf Schlins",
+        "Bf Nenzing",
+        "Bf L",
+        "Bf Nüziders",
+        "Bf B",
+        "Anst Abstellung/Werk"
+      ]
+    },
+    {
+      "name": "Buchs SG-Dornbirn",
+      "haupt": false,
+      "ordnung": 111,
+      "auto": true,
+      "stationen": [
+        "Anst Buchs SG",
+        "Bf Nendeln",
+        "Bf Schaanwald",
+        "Bf Tisis",
+        "Bf Gisingen",
+        "Bf Altenstadt",
+        "Bf F",
+        "Anst Dornbirn"
+      ]
+    },
+    {
+      "name": "Buchs SG-Gbf A",
+      "haupt": false,
+      "ordnung": 112,
+      "auto": true,
+      "stationen": [
+        "Anst Buchs SG",
+        "Bf Nendeln",
+        "Bf Schaanwald",
+        "Bf Tisis",
+        "Bf Gisingen",
+        "Bf Altenstadt",
+        "Bf F",
+        "Anst Gbf A"
+      ]
+    },
+    {
+      "name": "Buchs SG-Schruns",
+      "haupt": false,
+      "ordnung": 116,
+      "auto": true,
+      "stationen": [
+        "Anst Buchs SG",
+        "Bf Nendeln",
+        "Bf Schaanwald",
+        "Bf Tisis",
+        "Bf Gisingen",
+        "Bf Altenstadt",
+        "Bf F",
+        "Bf FA",
+        "Bf Schlins",
+        "Bf Nenzing",
+        "Bf L",
+        "Bf Nüziders",
+        "Bf B",
+        "Bf Moos",
+        "Anst Schruns"
+      ]
+    },
+    {
+      "name": "Dornbirn-Abstellung/Werk",
+      "haupt": false,
+      "ordnung": 127,
+      "auto": true,
+      "stationen": [
+        "Anst Dornbirn",
+        "Bf F",
+        "Bf FA",
+        "Bf Schlins",
+        "Bf Nenzing",
+        "Bf L",
+        "Bf Nüziders",
+        "Bf B",
+        "Anst Abstellung/Werk"
+      ]
+    },
+    {
+      "name": "Dornbirn-Buchs SG",
+      "haupt": false,
+      "ordnung": 128,
+      "auto": true,
+      "stationen": [
+        "Anst Dornbirn",
+        "Bf F",
+        "Bf Altenstadt",
+        "Bf Gisingen",
+        "Bf Tisis",
+        "Bf Schaanwald",
+        "Bf Nendeln",
+        "Anst Buchs SG"
+      ]
+    },
+    {
+      "name": "Dornbirn-Gbf A",
+      "haupt": false,
+      "ordnung": 130,
+      "auto": true,
+      "stationen": [
+        "Anst Dornbirn",
+        "Bf F",
+        "Anst Gbf A"
+      ]
+    },
+    {
+      "name": "Dornbirn-Langen am Arlberg",
+      "haupt": false,
+      "ordnung": 133,
+      "auto": true,
+      "stationen": [
+        "Anst Dornbirn",
+        "Bf F",
+        "Bf FA",
+        "Bf Schlins",
+        "Bf Nenzing",
+        "Bf L",
+        "Bf Nüziders",
+        "Bf B",
+        "Anst Langen am Arlberg"
+      ]
+    },
+    {
+      "name": "Dornbirn-Schruns",
+      "haupt": false,
+      "ordnung": 134,
+      "auto": true,
+      "stationen": [
+        "Anst Dornbirn",
+        "Bf F",
+        "Bf FA",
+        "Bf Schlins",
+        "Bf Nenzing",
+        "Bf L",
+        "Bf Nüziders",
+        "Bf B",
+        "Bf Moos",
+        "Anst Schruns"
+      ]
+    },
+    {
+      "name": "Gbf A-Abstellung/Werk",
+      "haupt": false,
+      "ordnung": 136,
+      "auto": true,
+      "stationen": [
+        "Anst Gbf A",
+        "Bf F",
+        "Bf FA",
+        "Bf Schlins",
+        "Bf Nenzing",
+        "Bf L",
+        "Bf Nüziders",
+        "Bf B",
+        "Anst Abstellung/Werk"
+      ]
+    },
+    {
+      "name": "Gbf A-Buchs SG",
+      "haupt": false,
+      "ordnung": 137,
+      "auto": true,
+      "stationen": [
+        "Anst Gbf A",
+        "Bf F",
+        "Bf Altenstadt",
+        "Bf Gisingen",
+        "Bf Tisis",
+        "Bf Schaanwald",
+        "Bf Nendeln",
+        "Anst Buchs SG"
+      ]
+    },
+    {
+      "name": "Gbf A-Dornbirn",
+      "haupt": false,
+      "ordnung": 139,
+      "auto": true,
+      "stationen": [
+        "Anst Gbf A",
+        "Bf F",
+        "Anst Dornbirn"
+      ]
+    },
+    {
+      "name": "Gbf A-Langen am Arlberg",
+      "haupt": false,
+      "ordnung": 142,
+      "auto": true,
+      "stationen": [
+        "Anst Gbf A",
+        "Bf F",
+        "Bf FA",
+        "Bf Schlins",
+        "Bf Nenzing",
+        "Bf L",
+        "Bf Nüziders",
+        "Bf B",
+        "Anst Langen am Arlberg"
+      ]
+    },
+    {
+      "name": "Gbf A-Schruns",
+      "haupt": false,
+      "ordnung": 143,
+      "auto": true,
+      "stationen": [
+        "Anst Gbf A",
+        "Bf F",
+        "Bf FA",
+        "Bf Schlins",
+        "Bf Nenzing",
+        "Bf L",
+        "Bf Nüziders",
+        "Bf B",
+        "Bf Moos",
+        "Anst Schruns"
+      ]
+    },
+    {
+      "name": "Langen am Arlberg-Abstellung/Werk",
+      "haupt": false,
+      "ordnung": 163,
+      "auto": true,
+      "stationen": [
+        "Anst Langen am Arlberg",
+        "Bf B",
+        "Anst Abstellung/Werk"
+      ]
+    },
+    {
+      "name": "Langen am Arlberg-Dornbirn",
+      "haupt": false,
+      "ordnung": 166,
+      "auto": true,
+      "stationen": [
+        "Anst Langen am Arlberg",
+        "Bf B",
+        "Bf Nüziders",
+        "Bf L",
+        "Bf Nenzing",
+        "Bf Schlins",
+        "Bf FA",
+        "Bf F",
+        "Anst Dornbirn"
+      ]
+    },
+    {
+      "name": "Langen am Arlberg-Gbf A",
+      "haupt": false,
+      "ordnung": 167,
+      "auto": true,
+      "stationen": [
+        "Anst Langen am Arlberg",
+        "Bf B",
+        "Bf Nüziders",
+        "Bf L",
+        "Bf Nenzing",
+        "Bf Schlins",
+        "Bf FA",
+        "Bf F",
+        "Anst Gbf A"
+      ]
+    },
+    {
+      "name": "Langen am Arlberg-Schruns",
+      "haupt": false,
+      "ordnung": 170,
+      "auto": true,
+      "stationen": [
+        "Anst Langen am Arlberg",
+        "Bf B",
+        "Bf Moos",
+        "Anst Schruns"
+      ]
+    },
+    {
+      "name": "Schruns-Abstellung/Werk",
+      "haupt": false,
+      "ordnung": 172,
+      "auto": true,
+      "stationen": [
+        "Anst Schruns",
+        "Bf Moos",
+        "Bf B",
+        "Anst Abstellung/Werk"
+      ]
+    },
+    {
+      "name": "Schruns-Buchs SG",
+      "haupt": false,
+      "ordnung": 173,
+      "auto": true,
+      "stationen": [
+        "Anst Schruns",
+        "Bf Moos",
+        "Bf B",
+        "Bf Nüziders",
+        "Bf L",
+        "Bf Nenzing",
+        "Bf Schlins",
+        "Bf FA",
+        "Bf F",
+        "Bf Altenstadt",
+        "Bf Gisingen",
+        "Bf Tisis",
+        "Bf Schaanwald",
+        "Bf Nendeln",
+        "Anst Buchs SG"
+      ]
+    },
+    {
+      "name": "Schruns-Dornbirn",
+      "haupt": false,
+      "ordnung": 175,
+      "auto": true,
+      "stationen": [
+        "Anst Schruns",
+        "Bf Moos",
+        "Bf B",
+        "Bf Nüziders",
+        "Bf L",
+        "Bf Nenzing",
+        "Bf Schlins",
+        "Bf FA",
+        "Bf F",
+        "Anst Dornbirn"
+      ]
+    },
+    {
+      "name": "Schruns-Gbf A",
+      "haupt": false,
+      "ordnung": 176,
+      "auto": true,
+      "stationen": [
+        "Anst Schruns",
+        "Bf Moos",
+        "Bf B",
+        "Bf Nüziders",
+        "Bf L",
+        "Bf Nenzing",
+        "Bf Schlins",
+        "Bf FA",
+        "Bf F",
+        "Anst Gbf A"
+      ]
+    },
+    {
+      "name": "Schruns-Langen am Arlberg",
+      "haupt": false,
+      "ordnung": 179,
+      "auto": true,
+      "stationen": [
+        "Anst Schruns",
+        "Bf Moos",
+        "Bf B",
+        "Anst Langen am Arlberg"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "deutschland",
+  "_aid": 713,
+  "_build": 5851,
+  "_name": "Bludenz-Feldkirch",
+  "_region": "Österreich West",
+  "_version": 3
+}

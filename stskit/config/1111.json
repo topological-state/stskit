@@ -1,8 +1,8 @@
 {
-  "default": false,
+  "default": true,
   "elemente": [
     {
-      "name": "BUC",
+      "name": "EA Ao",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -10,7 +10,7 @@
       "flags": ""
     },
     {
-      "name": "DIE",
+      "name": "Fch",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -18,7 +18,7 @@
       "flags": ""
     },
     {
-      "name": "FRE",
+      "name": "Im",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -26,7 +26,7 @@
       "flags": ""
     },
     {
-      "name": "GKD",
+      "name": "Im H1",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -34,7 +34,7 @@
       "flags": ""
     },
     {
-      "name": "IT",
+      "name": "Kieswerk",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -42,7 +42,7 @@
       "flags": ""
     },
     {
-      "name": "LF",
+      "name": "Le",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -50,7 +50,7 @@
       "flags": ""
     },
     {
-      "name": "LSN",
+      "name": "Pi",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -58,7 +58,7 @@
       "flags": ""
     },
     {
-      "name": "LST",
+      "name": "Rop",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -66,7 +66,7 @@
       "flags": ""
     },
     {
-      "name": "MU",
+      "name": "Sen",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -74,7 +74,7 @@
       "flags": ""
     },
     {
-      "name": "PR",
+      "name": "Ss",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -82,7 +82,7 @@
       "flags": ""
     },
     {
-      "name": "PRSR",
+      "name": "Ss 1",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -90,1056 +90,1869 @@
       "flags": ""
     },
     {
-      "name": "RLG",
-      "typ": "Bf",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "SIS",
-      "typ": "Bf",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "SOM",
-      "typ": "Bf",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "TK",
-      "typ": "Bf",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "TRI",
-      "typ": "Bf",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "BUC",
+      "name": "EA Ao",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BUC"
+      "stamm": "EA Ao"
     },
     {
-      "name": "BUC",
+      "name": "EA Ao",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BUC",
+      "stamm": "EA Ao",
       "gleise": 1
     },
     {
-      "name": "BUC",
+      "name": "EA Ao",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BUC",
+      "stamm": "EA Ao",
       "gleise": 1
     },
     {
-      "name": "DIE",
+      "name": "Fch 101",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "DIE"
+      "stamm": "Fch"
     },
     {
-      "name": "DIE",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "DIE",
-      "gleise": 1
-    },
-    {
-      "name": "DIE",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "DIE",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 33",
+      "name": "Fch 304",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "FRE"
+      "stamm": "Fch"
     },
     {
-      "name": "FRE",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE"
-    },
-    {
-      "name": "FRE 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE 1",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE 4",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE 2",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE 3",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 33",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE 33",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 33",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE 33",
-      "gleise": 1
-    },
-    {
-      "name": "GKD",
+      "name": "Fch 401",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD"
+      "stamm": "Fch"
     },
     {
-      "name": "GKD 4",
+      "name": "Fch 101",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD",
+      "stamm": "Fch 101",
       "gleise": 1
     },
     {
-      "name": "GKD 3",
+      "name": "Fch 101",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fch 101",
+      "gleise": 1
+    },
+    {
+      "name": "Fch 304",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD",
+      "stamm": "Fch 304",
       "gleise": 1
     },
     {
-      "name": "GKD",
+      "name": "Fch 202",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD",
+      "stamm": "Fch 304",
       "gleise": 1
     },
     {
-      "name": "GKD 2",
+      "name": "Fch 201",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD",
+      "stamm": "Fch 304",
       "gleise": 1
     },
     {
-      "name": "GKD 4",
+      "name": "Fch 302",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fch 304",
+      "gleise": 1
+    },
+    {
+      "name": "Fch 304",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD 4",
+      "stamm": "Fch 304",
       "gleise": 1
     },
     {
-      "name": "GKD 3",
+      "name": "Fch 202",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD 3",
+      "stamm": "Fch 202",
       "gleise": 1
     },
     {
-      "name": "GKD",
+      "name": "Fch 201",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD",
+      "stamm": "Fch 201",
       "gleise": 1
     },
     {
-      "name": "GKD 2",
+      "name": "Fch 302",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD 2",
+      "stamm": "Fch 302",
       "gleise": 1
     },
     {
-      "name": "GKD 2G",
+      "name": "Fch 401",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Fch 401",
+      "gleise": 1
+    },
+    {
+      "name": "Fch 401",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD 2",
+      "stamm": "Fch 401",
       "gleise": 1
     },
     {
-      "name": "IT",
+      "name": "Im 103",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IT"
+      "stamm": "Im"
     },
     {
-      "name": "IT",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "IT",
-      "gleise": 1
-    },
-    {
-      "name": "IT",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "IT",
-      "gleise": 1
-    },
-    {
-      "name": "LF",
+      "name": "Im 121",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LF"
+      "stamm": "Im"
     },
     {
-      "name": "LF 2",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF",
-      "gleise": 1
-    },
-    {
-      "name": "LF 1",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF",
-      "gleise": 1
-    },
-    {
-      "name": "LF",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF",
-      "gleise": 1
-    },
-    {
-      "name": "LF 2",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF 2",
-      "gleise": 1
-    },
-    {
-      "name": "LF 2G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF 2",
-      "gleise": 1
-    },
-    {
-      "name": "LF 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF 1",
-      "gleise": 1
-    },
-    {
-      "name": "LF 1G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF 1",
-      "gleise": 1
-    },
-    {
-      "name": "LF",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 36",
+      "name": "Im 211",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LSN"
+      "stamm": "Im"
     },
     {
-      "name": "LSN 63",
+      "name": "Im 103",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 103",
+      "gleise": 1
+    },
+    {
+      "name": "Im 101",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 103",
+      "gleise": 1
+    },
+    {
+      "name": "Im 102",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 103",
+      "gleise": 1
+    },
+    {
+      "name": "Im 201",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 103",
+      "gleise": 1
+    },
+    {
+      "name": "Im 105",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 103",
+      "gleise": 1
+    },
+    {
+      "name": "Im 103",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 103",
+      "gleise": 1
+    },
+    {
+      "name": "Im 103k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 103",
+      "gleise": 1
+    },
+    {
+      "name": "Im 103G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 103",
+      "gleise": 1
+    },
+    {
+      "name": "Im 101",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 101",
+      "gleise": 1
+    },
+    {
+      "name": "Im 101G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 101",
+      "gleise": 1
+    },
+    {
+      "name": "Im 101k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 101",
+      "gleise": 1
+    },
+    {
+      "name": "Im 102G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 102",
+      "gleise": 1
+    },
+    {
+      "name": "Im 102k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 102",
+      "gleise": 1
+    },
+    {
+      "name": "Im 102",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 102",
+      "gleise": 1
+    },
+    {
+      "name": "Im 201",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 201",
+      "gleise": 1
+    },
+    {
+      "name": "Im 105",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 105",
+      "gleise": 1
+    },
+    {
+      "name": "Im 121",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 121",
+      "gleise": 1
+    },
+    {
+      "name": "Im 121",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 121",
+      "gleise": 1
+    },
+    {
+      "name": "Im 211",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 211",
+      "gleise": 1
+    },
+    {
+      "name": "Im 211",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Im 211",
+      "gleise": 1
+    },
+    {
+      "name": "Im H1",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LSN"
+      "stamm": "Im H1"
     },
     {
-      "name": "LSN",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN"
-    },
-    {
-      "name": "LSN 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 2",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 3",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 1",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 36",
+      "name": "Im H1",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LSN 36",
+      "stamm": "Im H1",
       "gleise": 1
     },
     {
-      "name": "LSN 36",
+      "name": "Im H1",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LSN 36",
+      "stamm": "Im H1",
       "gleise": 1
     },
     {
-      "name": "LSN 63",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 63",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 62",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 63",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 61",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 63",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 56",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 63",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 63",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 63",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 62",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 62",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 61",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 61",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 56",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 56",
-      "gleise": 1
-    },
-    {
-      "name": "LST",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST"
-    },
-    {
-      "name": "LST 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST 2",
-      "gleise": 1
-    },
-    {
-      "name": "LST 4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST 4",
-      "gleise": 1
-    },
-    {
-      "name": "LST 3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST 3",
-      "gleise": 1
-    },
-    {
-      "name": "LST 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST 1",
-      "gleise": 1
-    },
-    {
-      "name": "LST 40",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST 40",
-      "gleise": 1
-    },
-    {
-      "name": "MU",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU"
-    },
-    {
-      "name": "MU 3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU 3",
-      "gleise": 1
-    },
-    {
-      "name": "MU 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU 2",
-      "gleise": 1
-    },
-    {
-      "name": "MU 4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU 4",
-      "gleise": 1
-    },
-    {
-      "name": "MU 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU 1",
-      "gleise": 1
-    },
-    {
-      "name": "PR 460",
+      "name": "Kieswerk",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR"
+      "stamm": "Kieswerk"
     },
     {
-      "name": "PR",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR"
-    },
-    {
-      "name": "PR 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR 1",
-      "gleise": 1
-    },
-    {
-      "name": "PR 7",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR 7",
-      "gleise": 1
-    },
-    {
-      "name": "PR 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR 2",
-      "gleise": 1
-    },
-    {
-      "name": "PR 5",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR 5",
-      "gleise": 1
-    },
-    {
-      "name": "PR 4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR 4",
-      "gleise": 1
-    },
-    {
-      "name": "PR 460",
+      "name": "Kieswerk",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR 460",
+      "stamm": "Kieswerk",
       "gleise": 1
     },
     {
-      "name": "PR 460",
+      "name": "Kieswerk",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR 460",
+      "stamm": "Kieswerk",
       "gleise": 1
     },
     {
-      "name": "PRSR",
+      "name": "Le 307",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PRSR"
+      "stamm": "Le"
     },
     {
-      "name": "PRSR",
+      "name": "Le 104",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le"
+    },
+    {
+      "name": "Le 502",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le"
+    },
+    {
+      "name": "Le 501",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le"
+    },
+    {
+      "name": "Le 509",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le"
+    },
+    {
+      "name": "Le 602",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le"
+    },
+    {
+      "name": "Le 307",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PRSR",
+      "stamm": "Le 307",
       "gleise": 1
     },
     {
-      "name": "PRSR",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PRSR",
-      "gleise": 1
-    },
-    {
-      "name": "RLG",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "RLG"
-    },
-    {
-      "name": "RLG",
+      "name": "Le 302",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "RLG",
+      "stamm": "Le 307",
       "gleise": 1
     },
     {
-      "name": "RLG",
+      "name": "Le 101",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 301",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 402",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 107",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 209",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 205",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 206",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 304",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 207",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 204",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 103",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 309",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 152",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 153",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 401",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 203",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 102",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 201",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 105",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 202",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 307",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "RLG",
+      "stamm": "Le 307",
       "gleise": 1
     },
     {
-      "name": "SIS 83",
+      "name": "Le 307G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 307",
+      "gleise": 1
+    },
+    {
+      "name": "Le 302",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 302",
+      "gleise": 1
+    },
+    {
+      "name": "Le 101",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 101",
+      "gleise": 1
+    },
+    {
+      "name": "Le 301",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 301",
+      "gleise": 1
+    },
+    {
+      "name": "Le 402",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 402",
+      "gleise": 1
+    },
+    {
+      "name": "Le 402k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 402",
+      "gleise": 1
+    },
+    {
+      "name": "Le 107",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 107",
+      "gleise": 1
+    },
+    {
+      "name": "Le 107k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 107",
+      "gleise": 1
+    },
+    {
+      "name": "Le 209",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 209",
+      "gleise": 1
+    },
+    {
+      "name": "Le 209k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 209",
+      "gleise": 1
+    },
+    {
+      "name": "Le 205G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 205",
+      "gleise": 1
+    },
+    {
+      "name": "Le 205",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 205",
+      "gleise": 1
+    },
+    {
+      "name": "Le 206k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 206",
+      "gleise": 1
+    },
+    {
+      "name": "Le 206",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 206",
+      "gleise": 1
+    },
+    {
+      "name": "Le 304",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 304",
+      "gleise": 1
+    },
+    {
+      "name": "Le 207",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 207",
+      "gleise": 1
+    },
+    {
+      "name": "Le 204",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 204",
+      "gleise": 1
+    },
+    {
+      "name": "Le 204k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 204",
+      "gleise": 1
+    },
+    {
+      "name": "Le 103",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 103",
+      "gleise": 1
+    },
+    {
+      "name": "Le 309",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 309",
+      "gleise": 1
+    },
+    {
+      "name": "Le 309k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 309",
+      "gleise": 1
+    },
+    {
+      "name": "Le 152",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 152",
+      "gleise": 1
+    },
+    {
+      "name": "Le 153",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 153",
+      "gleise": 1
+    },
+    {
+      "name": "Le 401",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 401",
+      "gleise": 1
+    },
+    {
+      "name": "Le 401k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 401",
+      "gleise": 1
+    },
+    {
+      "name": "Le 203",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 203",
+      "gleise": 1
+    },
+    {
+      "name": "Le 203G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 203",
+      "gleise": 1
+    },
+    {
+      "name": "Le 102",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 102",
+      "gleise": 1
+    },
+    {
+      "name": "Le 201",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 201",
+      "gleise": 1
+    },
+    {
+      "name": "Le 105k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 105",
+      "gleise": 1
+    },
+    {
+      "name": "Le 105",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 105",
+      "gleise": 1
+    },
+    {
+      "name": "Le 202",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 202",
+      "gleise": 1
+    },
+    {
+      "name": "Le 104",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 104",
+      "gleise": 1
+    },
+    {
+      "name": "Le 104",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 104",
+      "gleise": 1
+    },
+    {
+      "name": "Le 502",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 502",
+      "gleise": 1
+    },
+    {
+      "name": "Le 311",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 502",
+      "gleise": 1
+    },
+    {
+      "name": "Le 502",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 502",
+      "gleise": 1
+    },
+    {
+      "name": "Le 311",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 311",
+      "gleise": 1
+    },
+    {
+      "name": "Le 501",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 501",
+      "gleise": 1
+    },
+    {
+      "name": "Le 501",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 501",
+      "gleise": 1
+    },
+    {
+      "name": "Le 501k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 501",
+      "gleise": 1
+    },
+    {
+      "name": "Le 509",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 509",
+      "gleise": 1
+    },
+    {
+      "name": "Le 509",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 509",
+      "gleise": 1
+    },
+    {
+      "name": "Le 602",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 602",
+      "gleise": 1
+    },
+    {
+      "name": "Le 602",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le 602",
+      "gleise": 1
+    },
+    {
+      "name": "Pi 101",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SIS"
+      "stamm": "Pi"
     },
     {
-      "name": "SIS",
+      "name": "Pi 215",
       "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi"
+    },
+    {
+      "name": "Pi 301",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi"
+    },
+    {
+      "name": "Pi 101",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi 101",
+      "gleise": 1
+    },
+    {
+      "name": "Pi 101",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi 101",
+      "gleise": 1
+    },
+    {
+      "name": "Pi 215",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi 215",
+      "gleise": 1
+    },
+    {
+      "name": "Pi 203",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi 215",
+      "gleise": 1
+    },
+    {
+      "name": "Pi 211",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi 215",
+      "gleise": 1
+    },
+    {
+      "name": "Pi 213",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi 215",
+      "gleise": 1
+    },
+    {
+      "name": "Pi 215",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi 215",
+      "gleise": 1
+    },
+    {
+      "name": "Pi 203",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi 203",
+      "gleise": 1
+    },
+    {
+      "name": "Pi 211",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi 211",
+      "gleise": 1
+    },
+    {
+      "name": "Pi 213",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi 213",
+      "gleise": 1
+    },
+    {
+      "name": "Pi 301",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi 301",
+      "gleise": 1
+    },
+    {
+      "name": "Pi 301",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Pi 301",
+      "gleise": 1
+    },
+    {
+      "name": "Rop 101",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop"
+    },
+    {
+      "name": "Rop 203",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop"
+    },
+    {
+      "name": "Rop 301",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop"
+    },
+    {
+      "name": "Rop 101",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop 101",
+      "gleise": 1
+    },
+    {
+      "name": "Rop 101",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop 101",
+      "gleise": 1
+    },
+    {
+      "name": "Rop 203",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop 203",
+      "gleise": 1
+    },
+    {
+      "name": "Rop 201",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop 203",
+      "gleise": 1
+    },
+    {
+      "name": "Rop 203",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop 203",
+      "gleise": 1
+    },
+    {
+      "name": "Rop 203G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop 203",
+      "gleise": 1
+    },
+    {
+      "name": "Rop 201G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop 201",
+      "gleise": 1
+    },
+    {
+      "name": "Rop 201",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop 201",
+      "gleise": 1
+    },
+    {
+      "name": "Rop 301",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop 301",
+      "gleise": 1
+    },
+    {
+      "name": "Rop 301",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rop 301",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 101",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen"
+    },
+    {
+      "name": "Sen 201",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen"
+    },
+    {
+      "name": "Sen 204",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen"
+    },
+    {
+      "name": "Sen 301",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen"
+    },
+    {
+      "name": "Sen 101",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 101",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 101",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 101",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 201",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 201",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 152",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 201",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 212",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 201",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 201",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 201",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 152",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 152",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 212",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 212",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 204",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 204",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 202",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 204",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 204",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 204",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 202",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 202",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 301",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 301",
+      "gleise": 1
+    },
+    {
+      "name": "Sen 301",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Sen 301",
+      "gleise": 1
+    },
+    {
+      "name": "Ss 101",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss"
+    },
+    {
+      "name": "Ss 202",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss"
+    },
+    {
+      "name": "Ss 301",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss"
+    },
+    {
+      "name": "Ss 1",
+      "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SIS"
+      "stamm": "Ss 1",
+      "gleise": 1
     },
     {
-      "name": "SIS 2",
+      "name": "Ss 1",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SIS 2",
+      "stamm": "Ss 1",
       "gleise": 1
     },
     {
-      "name": "SIS 4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 4",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 1",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 3",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 83",
+      "name": "Ss 101",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SIS 83",
+      "stamm": "Ss 101",
       "gleise": 1
     },
     {
-      "name": "SIS 84",
+      "name": "Ss 101",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss 101",
+      "gleise": 1
+    },
+    {
+      "name": "Ss 202",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SIS 83",
+      "stamm": "Ss 202",
       "gleise": 1
     },
     {
-      "name": "SIS 83",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 83",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 84",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 84",
-      "gleise": 1
-    },
-    {
-      "name": "SOM",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SOM"
-    },
-    {
-      "name": "SOM",
+      "name": "Ss 203",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SOM",
+      "stamm": "Ss 202",
       "gleise": 1
     },
     {
-      "name": "SOM",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SOM",
-      "gleise": 1
-    },
-    {
-      "name": "TK",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TK"
-    },
-    {
-      "name": "TK",
+      "name": "Ss 204",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TK",
+      "stamm": "Ss 202",
       "gleise": 1
     },
     {
-      "name": "TK 2",
+      "name": "Ss 201",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TK",
+      "stamm": "Ss 202",
       "gleise": 1
     },
     {
-      "name": "TK 4",
+      "name": "Ss 202",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss 202",
+      "gleise": 1
+    },
+    {
+      "name": "Ss 202k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss 202",
+      "gleise": 1
+    },
+    {
+      "name": "Ss 202G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss 202",
+      "gleise": 1
+    },
+    {
+      "name": "Ss 203",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss 203",
+      "gleise": 1
+    },
+    {
+      "name": "Ss 204G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss 204",
+      "gleise": 1
+    },
+    {
+      "name": "Ss 204k",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss 204",
+      "gleise": 1
+    },
+    {
+      "name": "Ss 204",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss 204",
+      "gleise": 1
+    },
+    {
+      "name": "Ss 201G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss 201",
+      "gleise": 1
+    },
+    {
+      "name": "Ss 201",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ss 201",
+      "gleise": 1
+    },
+    {
+      "name": "Ss 301",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TK",
+      "stamm": "Ss 301",
       "gleise": 1
     },
     {
-      "name": "TK 3",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TK",
-      "gleise": 1
-    },
-    {
-      "name": "TK",
+      "name": "Ss 301",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TK",
+      "stamm": "Ss 301",
       "gleise": 1
     },
     {
-      "name": "TK 2",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TK 2",
-      "gleise": 1
-    },
-    {
-      "name": "TK 4",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TK 4",
-      "gleise": 1
-    },
-    {
-      "name": "TK 3",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TK 3",
-      "gleise": 1
-    },
-    {
-      "name": "TRI",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TRI"
-    },
-    {
-      "name": "TRI",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TRI",
-      "gleise": 1
-    },
-    {
-      "name": "TRI",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TRI",
-      "gleise": 1
-    },
-    {
-      "name": "BS",
+      "name": "St. Anton am Arlberg",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1147,7 +1960,7 @@
       "flags": ""
     },
     {
-      "name": "PR",
+      "name": "Ötztal",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1155,7 +1968,7 @@
       "flags": ""
     },
     {
-      "name": "Containerterminal",
+      "name": "Ss",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1163,7 +1976,7 @@
       "flags": ""
     },
     {
-      "name": "BSRB",
+      "name": "Im",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1171,7 +1984,7 @@
       "flags": ""
     },
     {
-      "name": "MU",
+      "name": "Kieswerk",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1179,7 +1992,7 @@
       "flags": ""
     },
     {
-      "name": "BSRB A",
+      "name": "ÖBB-Unterwerk",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1187,7 +2000,7 @@
       "flags": ""
     },
     {
-      "name": "Stahl",
+      "name": "311-323",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1195,7 +2008,7 @@
       "flags": ""
     },
     {
-      "name": "BSGB",
+      "name": "Donauchemie",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1203,571 +2016,142 @@
       "flags": ""
     },
     {
-      "name": "OL",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "KAU",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "IKEA",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Museum",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "OL 161",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "BS 201",
+      "name": "St. Anton am Arlberg",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BS",
+      "stamm": "St. Anton am Arlberg",
       "gleise": 1
     },
     {
-      "name": "BS 301",
+      "name": "Ötztal",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BS",
+      "stamm": "Ötztal",
       "gleise": 1
     },
     {
-      "name": "BS 101",
+      "name": "Ss 104",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BS",
+      "stamm": "Ss",
       "gleise": 1
     },
     {
-      "name": "PR 430",
+      "name": "Im 104",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR",
+      "stamm": "Im",
       "gleise": 1
     },
     {
-      "name": "PR 467",
+      "name": "Kieswerk",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR",
+      "stamm": "Kieswerk",
       "gleise": 1
     },
     {
-      "name": "Containerterminal",
+      "name": "ÖBB-Unterwerk",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Containerterminal",
+      "stamm": "ÖBB-Unterwerk",
       "gleise": 1
     },
     {
-      "name": "BSRB 366",
+      "name": "311-323",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BSRB",
+      "stamm": "311-323",
       "gleise": 1
     },
     {
-      "name": "BSRB 336",
+      "name": "Donauchemie",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BSRB",
+      "stamm": "Donauchemie",
       "gleise": 1
     },
     {
-      "name": "BSRB 316",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BSRB",
-      "gleise": 1
-    },
-    {
-      "name": "BSRB 356",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BSRB",
-      "gleise": 1
-    },
-    {
-      "name": "MU 16",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU",
-      "gleise": 1
-    },
-    {
-      "name": "MU 97",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU",
-      "gleise": 1
-    },
-    {
-      "name": "BSRB A15",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BSRB A",
-      "gleise": 1
-    },
-    {
-      "name": "Stahl",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Stahl",
-      "gleise": 1
-    },
-    {
-      "name": "BSGB 605",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BSGB",
-      "gleise": 1
-    },
-    {
-      "name": "OL 129",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL",
-      "gleise": 1
-    },
-    {
-      "name": "OL 229",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL",
-      "gleise": 1
-    },
-    {
-      "name": "KAU 278",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KAU",
-      "gleise": 1
-    },
-    {
-      "name": "KAU 178",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KAU",
-      "gleise": 1
-    },
-    {
-      "name": "IKEA",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "IKEA",
-      "gleise": 1
-    },
-    {
-      "name": "Museum",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Museum",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 1",
-      "typ": "Bs",
+      "name": "Ss 1",
+      "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "FRE",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN",
-      "gleise": 1
-    },
-    {
-      "name": "LST 2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST",
-      "gleise": 1
-    },
-    {
-      "name": "LST 4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST",
-      "gleise": 1
-    },
-    {
-      "name": "LST 3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST",
-      "gleise": 1
-    },
-    {
-      "name": "LST 1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST",
-      "gleise": 1
-    },
-    {
-      "name": "LST 40",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST",
-      "gleise": 1
-    },
-    {
-      "name": "MU 3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU",
-      "gleise": 1
-    },
-    {
-      "name": "MU 2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU",
-      "gleise": 1
-    },
-    {
-      "name": "MU 4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU",
-      "gleise": 1
-    },
-    {
-      "name": "MU 1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU",
-      "gleise": 1
-    },
-    {
-      "name": "PR 1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR",
-      "gleise": 1
-    },
-    {
-      "name": "PR 7",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR",
-      "gleise": 1
-    },
-    {
-      "name": "PR 2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR",
-      "gleise": 1
-    },
-    {
-      "name": "PR 5",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR",
-      "gleise": 1
-    },
-    {
-      "name": "PR 4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS",
-      "gleise": 1
-    },
-    {
-      "name": "OL 161",
-      "typ": "Agl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL 161",
-      "gleise": 1
+      "stamm": "Ss 1"
     }
   ],
   "strecken": [
     {
-      "name": "BS-KAU",
+      "name": "St. Anton am Arlberg-Ötztal",
       "haupt": false,
       "ordnung": 1,
       "auto": false,
       "stationen": [
-        "Anst BS",
-        "Bf MU",
-        "Bf PR",
-        "Bf PRSR",
-        "Anst KAU"
+        "Anst St. Anton am Arlberg",
+        "Bf EA Ao",
+        "Bf Fch",
+        "Bf Sen",
+        "Bf Pi",
+        "Bf Le",
+        "Bf Ss 1",
+        "Bf Ss",
+        "Bf Im H1",
+        "Bf Im",
+        "Bf Rop",
+        "Anst Ötztal"
       ]
     },
     {
-      "name": "BS-OL",
+      "name": "Ötztal-St. Anton am Arlberg",
       "haupt": true,
       "ordnung": 2,
       "auto": false,
       "stationen": [
-        "Anst BS",
-        "Bf MU",
-        "Bf PR",
-        "Bf FRE",
-        "Bf LST",
-        "Bf LSN",
-        "Bf IT",
-        "Bf SIS",
-        "Bf GKD",
-        "Bf TK",
-        "Anst OL"
-      ]
-    },
-    {
-      "name": "SIS-OL",
-      "haupt": false,
-      "ordnung": 3,
-      "auto": false,
-      "stationen": [
-        "Bf SIS",
-        "Bf DIE",
-        "Bf SOM",
-        "Bf RLG",
-        "Bf BUC",
-        "Bf LF",
-        "Bf TRI",
-        "Anst OL 161"
+        "Anst Ötztal",
+        "Bf Rop",
+        "Bf Im",
+        "Bf Im H1",
+        "Bf Ss",
+        "Bf Ss 1",
+        "Bf Le",
+        "Bf Pi",
+        "Bf Sen",
+        "Bf Fch",
+        "Bf EA Ao",
+        "Anst St. Anton am Arlberg"
       ]
     }
   ],
   "streckenmarkierung": [],
-  "zugschema": "schweiz",
-  "_aid": 765,
+  "zugschema": "deutschland",
+  "_aid": 1111,
   "_build": 5851,
-  "_name": "Hauenstein",
-  "_region": "Zentralschweiz",
+  "_name": "Landeck-Zams",
+  "_region": "Österreich West",
   "_version": 3
 }

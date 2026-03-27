@@ -1,192 +1,1143 @@
 {
-    "_aid": 126,
-    "_build": 5847,
-    "_name": "RBS / Worblaufen",
-    "_region": "Bern - L\u00f6tschberg",
-    "_version": 2,
-    "anschlussgruppen": {
-        "D": {
-            "__class__": "Set",
-            "data": [
-                "D2",
-                "D3"
-            ]
-        },
-        "Depot 1": {
-            "__class__": "Set",
-            "data": [
-                "Depot 1"
-            ]
-        },
-        "RBS Werkstatt": {
-            "__class__": "Set",
-            "data": [
-                "RBS Werkstatt"
-            ]
-        },
-        "Zollikofen": {
-            "__class__": "Set",
-            "data": [
-                "Zollikofen 200",
-                "Zollikofen 100"
-            ]
-        }
+  "default": false,
+  "elemente": [
+    {
+      "name": "A OBZO",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "A OBZO": {
-            "__class__": "Set",
-            "data": [
-                "A OBZO"
-            ]
-        },
-        "BNFE": {
-            "__class__": "Set",
-            "data": [
-                "BNFE2",
-                "BNFE1"
-            ]
-        },
-        "BNTI": {
-            "__class__": "Set",
-            "data": [
-                "BNTI2",
-                "BNTI1"
-            ]
-        },
-        "BOLI": {
-            "__class__": "Set",
-            "data": [
-                "BOLI2",
-                "BOLI1"
-            ]
-        },
-        "BOUT": {
-            "__class__": "Set",
-            "data": [
-                "BOUT1",
-                "BOUT2"
-            ]
-        },
-        "BRBS": {
-            "__class__": "Set",
-            "data": [
-                "BRBS21",
-                "BRBS22",
-                "BRBS24",
-                "BRBS23"
-            ]
-        },
-        "DEI": {
-            "__class__": "Set",
-            "data": [
-                "DEI",
-                "DEI32",
-                "DEI31"
-            ]
-        },
-        "E OBZO": {
-            "__class__": "Set",
-            "data": [
-                "E OBZO"
-            ]
-        },
-        "ITT": {
-            "__class__": "Set",
-            "data": [
-                "ITT2",
-                "ITT1"
-            ]
-        },
-        "PAPI": {
-            "__class__": "Set",
-            "data": [
-                "PAPI2",
-                "PAPI1"
-            ]
-        },
-        "STBA": {
-            "__class__": "Set",
-            "data": [
-                "STBA"
-            ]
-        },
-        "STTL": {
-            "__class__": "Set",
-            "data": [
-                "STTL2",
-                "STTL1"
-            ]
-        },
-        "UNZO": {
-            "__class__": "Set",
-            "data": [
-                "UNZO"
-            ]
-        },
-        "VECH": {
-            "__class__": "Set",
-            "data": [
-                "VECH"
-            ]
-        },
-        "WBDO": {
-            "__class__": "Set",
-            "data": [
-                "WBDO4",
-                "WBDO5"
-            ]
-        },
-        "WBL": {
-            "__class__": "Set",
-            "data": [
-                "WBL1",
-                "WBL2",
-                "WBL4",
-                "WBL3",
-                "WBL6",
-                "WBL5"
-            ]
-        },
-        "WOBO": {
-            "__class__": "Set",
-            "data": [
-                "WOBO"
-            ]
-        }
+    {
+      "name": "BNFE",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "sektoren": {},
-    "hauptstrecke": "BRBS-WBDO",
-    "strecken": {
-       "BRBS-UNZO": [
-            "BRBS",
-            "BNFE",
-            "BNTI",
-            "WBL",
-            "STBA",
-            "UNZO"
-        ],
-        "BRBS-Zollikofen": [
-            "BRBS",
-            "BNFE",
-            "BNTI",
-            "WBL",
-            "Zollikofen"
-        ],
-        "BRBS-WBDO": [
-            "BRBS",
-            "BNFE",
-            "BNTI",
-            "WBL",
-            "PAPI",
-            "ITT",
-            "BOLI",
-            "DEI",
-            "STTL",
-            "BOUT",
-            "VECH",
-            "WOBO",
-            "WBDO"
-        ]
+    {
+      "name": "BNTI",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BOLI",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BOUT",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BRBS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "DEI",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "E OBZO",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ITT",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "PAPI",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "STBA",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "STTL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "UNZO",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "VECH",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WBDO",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WBL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WOBO",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "A OBZO",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "A OBZO"
+    },
+    {
+      "name": "A OBZO",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "A OBZO",
+      "gleise": 1
+    },
+    {
+      "name": "A OBZO",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "A OBZO",
+      "gleise": 1
+    },
+    {
+      "name": "BNFE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNFE"
+    },
+    {
+      "name": "BNFE1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNFE1",
+      "gleise": 1
+    },
+    {
+      "name": "BNFE2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNFE2",
+      "gleise": 1
+    },
+    {
+      "name": "BNTI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNTI"
+    },
+    {
+      "name": "BNTI2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNTI2",
+      "gleise": 1
+    },
+    {
+      "name": "BNTI1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNTI1",
+      "gleise": 1
+    },
+    {
+      "name": "BOLI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOLI"
+    },
+    {
+      "name": "BOLI1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOLI1",
+      "gleise": 1
+    },
+    {
+      "name": "BOLI2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOLI2",
+      "gleise": 1
+    },
+    {
+      "name": "BOUT",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOUT"
+    },
+    {
+      "name": "BOUT1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOUT1",
+      "gleise": 1
+    },
+    {
+      "name": "BOUT2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOUT2",
+      "gleise": 1
+    },
+    {
+      "name": "BRBS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRBS"
+    },
+    {
+      "name": "BRBS22",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRBS22",
+      "gleise": 1
+    },
+    {
+      "name": "BRBS23",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRBS23",
+      "gleise": 1
+    },
+    {
+      "name": "BRBS24",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRBS24",
+      "gleise": 1
+    },
+    {
+      "name": "BRBS21",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRBS21",
+      "gleise": 1
+    },
+    {
+      "name": "DEI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DEI"
+    },
+    {
+      "name": "DEI",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DEI",
+      "gleise": 1
+    },
+    {
+      "name": "DEI32",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DEI",
+      "gleise": 1
+    },
+    {
+      "name": "DEI31",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DEI",
+      "gleise": 1
+    },
+    {
+      "name": "DEI",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DEI",
+      "gleise": 1
+    },
+    {
+      "name": "DEI32",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DEI32",
+      "gleise": 1
+    },
+    {
+      "name": "DEI31",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DEI31",
+      "gleise": 1
+    },
+    {
+      "name": "E OBZO",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E OBZO"
+    },
+    {
+      "name": "E OBZO",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E OBZO",
+      "gleise": 1
+    },
+    {
+      "name": "E OBZO",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E OBZO",
+      "gleise": 1
+    },
+    {
+      "name": "ITT",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ITT"
+    },
+    {
+      "name": "ITT2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ITT2",
+      "gleise": 1
+    },
+    {
+      "name": "ITT1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ITT1",
+      "gleise": 1
+    },
+    {
+      "name": "PAPI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAPI"
+    },
+    {
+      "name": "PAPI1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAPI1",
+      "gleise": 1
+    },
+    {
+      "name": "PAPI2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAPI2",
+      "gleise": 1
+    },
+    {
+      "name": "STBA",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STBA"
+    },
+    {
+      "name": "STBA",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STBA",
+      "gleise": 1
+    },
+    {
+      "name": "STBA",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STBA",
+      "gleise": 1
+    },
+    {
+      "name": "STTL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STTL"
+    },
+    {
+      "name": "STTL2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STTL2",
+      "gleise": 1
+    },
+    {
+      "name": "STTL1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STTL1",
+      "gleise": 1
+    },
+    {
+      "name": "UNZO",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UNZO"
+    },
+    {
+      "name": "UNZO",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UNZO",
+      "gleise": 1
+    },
+    {
+      "name": "UNZO",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UNZO",
+      "gleise": 1
+    },
+    {
+      "name": "VECH",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VECH"
+    },
+    {
+      "name": "VECH",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VECH",
+      "gleise": 1
+    },
+    {
+      "name": "VECH",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VECH",
+      "gleise": 1
+    },
+    {
+      "name": "WBDO",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBDO"
+    },
+    {
+      "name": "WBDO4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBDO4",
+      "gleise": 1
+    },
+    {
+      "name": "WBDO5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBDO5",
+      "gleise": 1
+    },
+    {
+      "name": "WBL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL"
+    },
+    {
+      "name": "WBL2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL2",
+      "gleise": 1
+    },
+    {
+      "name": "WBL1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL1",
+      "gleise": 1
+    },
+    {
+      "name": "WBL6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL6",
+      "gleise": 1
+    },
+    {
+      "name": "WBL5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL5",
+      "gleise": 1
+    },
+    {
+      "name": "WBL4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL4",
+      "gleise": 1
+    },
+    {
+      "name": "WBL3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL3",
+      "gleise": 1
+    },
+    {
+      "name": "WOBO",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WOBO"
+    },
+    {
+      "name": "WOBO",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WOBO",
+      "gleise": 1
+    },
+    {
+      "name": "WOBO",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WOBO",
+      "gleise": 1
+    },
+    {
+      "name": "Zollikofen",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Depot 1",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "D",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "RBS",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Zollikofen 200",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Zollikofen",
+      "gleise": 1
+    },
+    {
+      "name": "Zollikofen 100",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Zollikofen",
+      "gleise": 1
+    },
+    {
+      "name": "Depot 1",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Depot 1",
+      "gleise": 1
+    },
+    {
+      "name": "D3",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "D",
+      "gleise": 1
+    },
+    {
+      "name": "D2",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "D",
+      "gleise": 1
+    },
+    {
+      "name": "BNFE1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNFE",
+      "gleise": 1
+    },
+    {
+      "name": "BNFE2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNFE",
+      "gleise": 1
+    },
+    {
+      "name": "BNTI2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNTI",
+      "gleise": 1
+    },
+    {
+      "name": "BNTI1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BNTI",
+      "gleise": 1
+    },
+    {
+      "name": "BOLI1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOLI",
+      "gleise": 1
+    },
+    {
+      "name": "BOLI2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOLI",
+      "gleise": 1
+    },
+    {
+      "name": "BOUT1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOUT",
+      "gleise": 1
+    },
+    {
+      "name": "BOUT2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BOUT",
+      "gleise": 1
+    },
+    {
+      "name": "BRBS22",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRBS",
+      "gleise": 1
+    },
+    {
+      "name": "BRBS23",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRBS",
+      "gleise": 1
+    },
+    {
+      "name": "BRBS24",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRBS",
+      "gleise": 1
+    },
+    {
+      "name": "BRBS21",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BRBS",
+      "gleise": 1
+    },
+    {
+      "name": "ITT2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ITT",
+      "gleise": 1
+    },
+    {
+      "name": "ITT1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ITT",
+      "gleise": 1
+    },
+    {
+      "name": "PAPI1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAPI",
+      "gleise": 1
+    },
+    {
+      "name": "PAPI2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "PAPI",
+      "gleise": 1
+    },
+    {
+      "name": "STTL2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STTL",
+      "gleise": 1
+    },
+    {
+      "name": "STTL1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STTL",
+      "gleise": 1
+    },
+    {
+      "name": "WBDO4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBDO",
+      "gleise": 1
+    },
+    {
+      "name": "WBDO5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBDO",
+      "gleise": 1
+    },
+    {
+      "name": "WBL2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL",
+      "gleise": 1
+    },
+    {
+      "name": "WBL1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL",
+      "gleise": 1
+    },
+    {
+      "name": "WBL6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL",
+      "gleise": 1
+    },
+    {
+      "name": "WBL5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL",
+      "gleise": 1
+    },
+    {
+      "name": "WBL4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL",
+      "gleise": 1
+    },
+    {
+      "name": "WBL3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBL",
+      "gleise": 1
+    },
+    {
+      "name": "RBS Werkstatt",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RBS",
+      "gleise": 1
     }
+  ],
+  "strecken": [
+    {
+      "name": "BRBS-WBDO",
+      "haupt": false,
+      "ordnung": 1,
+      "auto": true,
+      "stationen": [
+        "Bf BRBS",
+        "Bf BNFE",
+        "Bf BNTI",
+        "Bf WBL",
+        "Bf PAPI",
+        "Bf ITT",
+        "Bf BOLI",
+        "Bf DEI",
+        "Bf STTL",
+        "Bf BOUT",
+        "Bf VECH",
+        "Bf WOBO",
+        "Bf WBDO"
+      ]
+    },
+    {
+      "name": "BRBS-UNZO",
+      "haupt": false,
+      "ordnung": 9,
+      "auto": true,
+      "stationen": [
+        "Bf BRBS",
+        "Bf BNFE",
+        "Bf BNTI",
+        "Bf WBL",
+        "Bf STBA",
+        "Bf UNZO"
+      ]
+    },
+    {
+      "name": "BRBS-Zollikofen",
+      "haupt": false,
+      "ordnung": 9,
+      "auto": true,
+      "stationen": [
+        "Bf BRBS",
+        "Bf BNFE",
+        "Bf BNTI",
+        "Bf WBL",
+        "Anst Zollikofen"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 126,
+  "_build": 5851,
+  "_name": "RBS / Worblaufen",
+  "_region": "Bern - Lötschberg",
+  "_version": 3
 }
