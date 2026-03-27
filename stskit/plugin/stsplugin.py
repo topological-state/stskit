@@ -88,7 +88,13 @@ class PluginClient:
 
         anlageninfo: AnlagenInfo vom Simulator. Wird durch request_anlageninfo abgefragt.
 
-        bahnsteigliste: Liste von BahnsteigInfo-Objekten. Wird durch request_bahnsteigliste abgefragt.
+        bahnsteigliste: Dict von BahnsteigInfo-Objekten nach Gleisnamen.
+            Wird durch request_bahnsteigliste abgefragt.
+
+        gleisabgleich: Dict zur Korrektur von falsch geschriebenen Gleisnamen.
+            Im Stellwerk Brennero wurden Züge mit gross geschriebenen Gleisnamen beobachtet,
+            obwohl die Gleisnamen im Stellwerk Gemischtschreibung verwenden.
+            In der aktuellen Version ordnet der Dict den kleingeschriebenen Gleisnamen die Originalnamen aus der Bahnsteigliste zu.
 
         zugliste: List von ZugDetails-Objekten mit den Informationen zu den Zügen.
             Wird durch request_zugliste und request_zugdetails abgefragt.
@@ -144,6 +150,7 @@ class PluginClient:
 
         self.anlageninfo: AnlagenInfo | None = None
         self.bahnsteigliste: dict[str, BahnsteigInfo] = {}
+        self.gleisabgleich: dict[str, str] = {}
         self.wege: dict[int | str, Knoten] = {}
         self.wege_nach_enr: dict[int, Knoten] = {}
         self.wege_nach_namen: dict[str, set[Knoten]] = {}
@@ -344,11 +351,14 @@ class PluginClient:
         """
 
         self.bahnsteigliste = {}
+        self.gleisabgleich = {}
+
         await self._send_request("bahnsteigliste")
         response = await self.antwort_channel_out.receive()
         for bahnsteig in response.bahnsteigliste.bahnsteig:
             bi = BahnsteigInfo().update(bahnsteig)
             self.bahnsteigliste[bi.name] = bi
+            self.gleisabgleich[bi.name.lower()] = bi.name
 
         for bahnsteig in self.bahnsteigliste.values():
             for name in bahnsteig.nachbarn_namen:
@@ -607,6 +617,25 @@ class PluginClient:
             if zid in self.zugliste:
                 await self.request_zugfahrplan_einzeln(zid)
 
+    def gleis_abgleichen(self, gleis_name: str) -> str:
+        """
+        Gleisnamen mit Bahnsteigliste abgleichen und ev. korrigieren
+
+        Die Methode versucht, Gleisnamen, die in der Bahnsteigliste nicht enthalten sind,
+        mittels des gleisabgleich-Dict aufzulösen,
+        um Gross/Kleinschreibung und ggf. andere Schreibfehler im Zugfahrplan zu korrigieren.
+
+        Args:
+            gleis_name: Original-Gleisname
+
+        Returns:
+            abgeglichener Name
+        """
+        if gleis_name in self.bahnsteigliste:
+            return gleis_name
+        else:
+            return self.gleisabgleich.get(gleis_name.lower(), gleis_name)
+
     async def request_zugfahrplan_einzeln(self, zid: int) -> bool:
         """
         Fahrplan eines Zuges anfragen.
@@ -646,6 +675,8 @@ class PluginClient:
             neuer_fahrplan = []
             for gleis in response.zugfahrplan.gleis:
                 zeile = FahrplanZeile(zug).update(gleis)
+                zeile.plan = self.gleis_abgleichen(zeile.plan)
+                zeile.gleis = self.gleis_abgleichen(zeile.gleis)
                 neuer_fahrplan.append(zeile)
                 if zug.plangleis == zeile.plan:
                     akt_ziel_index = len(neuer_fahrplan) - 1
