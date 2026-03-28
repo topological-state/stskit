@@ -676,7 +676,7 @@ class GleisbelegungPlot:
         self.anlage = zentrale.anlage
 
         self.gleis_axis = "top"
-        self.belegte_gleise_zeigen = False
+        self.unbelegte_gleise_zeigen = False
 
         self._balken = None
         self._labels = []
@@ -720,7 +720,7 @@ class GleisbelegungPlot:
         kwargs['alpha'] = 0.5
         kwargs['width'] = 1.0
 
-        if self.belegte_gleise_zeigen:
+        if not self.unbelegte_gleise_zeigen:
             gleise = [gleis for gleis in self.belegung.gleise if gleis in self.belegung.belegte_gleise]
         else:
             gleise = self.belegung.gleise

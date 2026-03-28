@@ -53,7 +53,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.displayLayout.addWidget(self.display_canvas)
 
         self.ui.actionSetup.triggered.connect(self.settings_button_clicked)
-        self.ui.actionBelegteGleise.triggered.connect(self.action_belegte_gleise)
+        self.ui.actionUnbelegteGleise.triggered.connect(self.action_unbelegte_gleise)
         self.ui.actionWarnungSetzen.triggered.connect(self.action_warnung_setzen)
         self.ui.actionWarnungIgnorieren.triggered.connect(self.action_warnung_ignorieren)
         self.ui.actionWarnungReset.triggered.connect(self.action_warnung_reset)
@@ -90,8 +90,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         display_mode = self.ui.stackedWidget.currentIndex() == 1
 
         self.ui.actionSetup.setChecked(not display_mode)
-        self.ui.actionBelegteGleise.setEnabled(display_mode)
-        self.ui.actionBelegteGleise.setChecked(self.plot.belegte_gleise_zeigen)
+        self.ui.actionUnbelegteGleise.setEnabled(display_mode)
+        self.ui.actionUnbelegteGleise.setChecked(self.plot.unbelegte_gleise_zeigen)
         self.ui.actionWarnungSetzen.setEnabled(display_mode and len(self.plot._slot_auswahl))
         self.ui.actionWarnungReset.setEnabled(display_mode and len(self.plot._warnung_auswahl))
         self.ui.actionWarnungIgnorieren.setEnabled(display_mode and len(self.plot._warnung_auswahl))
@@ -233,8 +233,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.update_actions()
 
     @Slot()
-    def action_belegte_gleise(self):
-        self.plot.belegte_gleise_zeigen = not self.plot.belegte_gleise_zeigen
+    def action_unbelegte_gleise(self):
+        self.plot.unbelegte_gleise_zeigen = not self.plot.unbelegte_gleise_zeigen
         self.plot.grafik_update()
         self.update_actions()
 

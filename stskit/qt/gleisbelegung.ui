@@ -220,7 +220,8 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionSetup"/>
-   <addaction name="actionBelegteGleise"/>
+   <addaction name="separator"/>
+   <addaction name="actionUnbelegteGleise"/>
    <addaction name="separator"/>
    <addaction name="actionWarnungSetzen"/>
    <addaction name="actionWarnungIgnorieren"/>
@@ -352,7 +353,7 @@
     <string>R</string>
    </property>
   </action>
-  <action name="actionBelegteGleise">
+  <action name="actionUnbelegteGleise">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -363,10 +364,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Belegte Gleise</string>
+    <string>Unbelegte Gleise</string>
    </property>
    <property name="toolTip">
-    <string>Nur belegte Gleise anzeigen (B)</string>
+    <string>Unbelegte Gleise anzeigen (B)</string>
    </property>
    <property name="shortcut">
     <string>B</string>
