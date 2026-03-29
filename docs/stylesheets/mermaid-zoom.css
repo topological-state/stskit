@@ -1,0 +1,150 @@
+/* Mermaid Zoom Plugin styles */
+/* https://github.com/FedeArre/zensical-mermaid-zoom */
+
+/* Container for positioning the zoom button */
+.mermaid-zoom-wrapper {
+  position: relative;
+}
+
+/* Zoom button on bottom-right of each Mermaid chart */
+.mermaid-zoom-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: var(--md-primary-fg-color, #4051b5);
+  color: var(--md-primary-bg-color, #fff);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.mermaid-zoom-wrapper:hover .mermaid-zoom-btn {
+  opacity: 0.85;
+}
+
+.mermaid-zoom-btn:hover {
+  opacity: 1 !important;
+  background: var(--md-primary-fg-color--dark, #303fa1);
+}
+
+.mermaid-zoom-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Modal overlay */
+.mermaid-zoom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  backdrop-filter: blur(2px);
+}
+
+.mermaid-zoom-overlay.active {
+  opacity: 1;
+}
+
+/* Modal container */
+.mermaid-zoom-modal {
+  position: relative;
+  width: 92vw;
+  height: 88vh;
+  background: var(--md-default-bg-color, #fff);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Modal toolbar */
+.mermaid-zoom-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--md-default-bg-color, #fff);
+  border-bottom: 1px solid var(--md-default-fg-color--lightest, #e0e0e0);
+  flex-shrink: 0;
+}
+
+.mermaid-zoom-toolbar button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--md-default-fg-color--lightest, #ddd);
+  border-radius: 6px;
+  background: var(--md-default-bg-color, #fff);
+  color: var(--md-default-fg-color, #333);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.mermaid-zoom-toolbar button:hover {
+  background: var(--md-default-fg-color--lightest, #f0f0f0);
+}
+
+.mermaid-zoom-toolbar button svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mermaid-zoom-toolbar .mermaid-zoom-level {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light, #666);
+  min-width: 48px;
+  text-align: center;
+  user-select: none;
+}
+
+/* Viewport where the chart is rendered and panned/zoomed */
+.mermaid-zoom-viewport {
+  flex: 1;
+  overflow: hidden;
+  cursor: grab;
+  position: relative;
+}
+
+.mermaid-zoom-viewport:active {
+  cursor: grabbing;
+}
+
+.mermaid-zoom-viewport .mermaid-zoom-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+}
+
+.mermaid-zoom-viewport .mermaid-zoom-content svg {
+  max-width: none !important;
+  max-height: none !important;
+}

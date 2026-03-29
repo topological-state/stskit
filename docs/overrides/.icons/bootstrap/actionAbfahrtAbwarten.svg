@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 24 24"
+   fill="none"
+   stroke="currentColor"
+   stroke-width="2"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   class="lucide lucide-git-pull-request-arrow-icon lucide-git-pull-request-arrow"
+   version="1.1"
+   id="svg156"
+   sodipodi:docname="actionAbfahrtAbwarten.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs160" />
+  <sodipodi:namedview
+     id="namedview158"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="24.32"
+     inkscape:cx="7.3807566"
+     inkscape:cy="9.2722039"
+     inkscape:window-width="1127"
+     inkscape:window-height="817"
+     inkscape:window-x="495"
+     inkscape:window-y="272"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg156" />
+  <circle
+     cx="5"
+     cy="6"
+     r="3"
+     id="circle146" />
+  <path
+     d="m 22,18.000041 -3,3 -3,-3"
+     id="path152" />
+  <path
+     d="m 12,5.9999997 h 5 a 2,3.2637062 0 0 1 2,3.2637063 v 11.422972"
+     id="path154"
+     style="stroke-width:2" />
+  <path
+     d="m 5,20 v 1"
+     id="path277" />
+  <path
+     d="m 5,15 v 1"
+     id="path279" />
+  <path
+     d="m 5,10 v 1"
+     id="path342" />
+</svg>
