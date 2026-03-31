@@ -8,7 +8,7 @@ Die Tag- und Attributnamen sind ähnlich wie im xml-Protokoll, es gibt aber Abwe
 Die Daten werden in Python-Typen übersetzt.
 Einige der Klassen haben noch zusätzliche Attribute, die vom Klienten ausgefüllt werden.
 
-Alle objekte werden leer konstruiert und über die update-Methode mit Daten gefüllt.
+Alle Objekte werden leer konstruiert und über die update-Methode mit Daten gefüllt.
 Die update-Methoden erwarten geparste xml-Daten in einem untangle.Element-Objekt.
 """
 
@@ -32,13 +32,13 @@ def time_to_minutes(dt: datetime.datetime | datetime.time | datetime.timedelta) 
     Uhrzeit in Minuten seit Mitternacht umrechnen.
 
     Args:
-        dt: datetime, time oder timedelta. Das Datum wird ignoriert.
+        dt: Das Datum wird ignoriert.
 
     Returns:
         Minuten, ganzzahlig
 
     Raises:
-        AttributeError wenn der Typ nicht kompatibel oder None ist.
+        AttributeError: Typ nicht kompatibel oder None.
     """
     try:
         # datetime, time
@@ -53,13 +53,13 @@ def time_to_seconds(dt: datetime.datetime | datetime.time | datetime.timedelta) 
     Uhrzeit in Sekunden seit Mitternacht umrechnen.
 
     Args:
-        dt: datetime, time oder timedelta. Das Datum wird ignoriert.
+        dt: Das Datum wird ignoriert.
 
     Returns:
         Sekunden, ganzzahlig
 
     Raises:
-        AttributeError wenn der Typ nicht kompatibel oder None ist.
+        AttributeError: Typ nicht kompatibel oder None.
     """
     try:
         # datetime, time
@@ -77,7 +77,7 @@ def minutes_to_time(minutes: float) -> datetime.time:
         minutes: Minuten seit Mitternacht. Dezimalstellen geben Sekunden an.
 
     Returns:
-        datetime.time, auf ganze Sekunden gerundet.
+        Zeit als `datetime.time` auf ganze Sekunden gerundet.
     """
     return seconds_to_time(minutes * 60)
 
@@ -90,7 +90,7 @@ def seconds_to_time(seconds: float) -> datetime.time:
         seconds: Sekunden seit Mitternacht. Dezimalstellen werden auf ganze Sekunden gerundet.
 
     Returns:
-        Zeit als `datetime.time`
+        Zeit als `datetime.time` auf ganze Sekunden gerundet.
     """
     s = round(seconds)
     m = s // 60
@@ -102,7 +102,7 @@ def seconds_to_time(seconds: float) -> datetime.time:
 
 def format_verspaetung(verspaetung: int | float | None) -> str:
     """
-    Verspaetung formatieren.
+    Verspätung formatieren.
     """
     if verspaetung is not None:
         if abs(verspaetung) >= 0.5:
@@ -368,7 +368,7 @@ class ZugDetails:
 
         Zeigt den Zugnamen, von/nach, das nächste Gleis, die Verspätung und Unsichtbarkeit an.
 
-        Return:
+        Returns:
             Beschreibung als String.
         """
         if self.gleis:
@@ -662,7 +662,7 @@ class Ereignis(ZugDetails):
 
     Ein Ereignis-Tag von der Pluginschnittstelle sieht z.B. so aus:
 
-    ~~~~~~{.xml}
+    ~~~~~~ xml
     <ereignis zid='1' art='einfahrt' name='RE 10' verspaetung='+2' gleis='1' plangleis='1'
     von='A-Stadt' nach='B-Hausen' sichtbar='true' amgleis='true' />
     ~~~~~~
@@ -813,20 +813,24 @@ class FahrplanZeile:
 
         Der Hash basiert auf der fid.
 
-        :return: Hash-Wert
+        Returns:
+            Hash-Wert
         """
 
         return hash(self.fid)
 
     def __eq__(self, other: FahrplanZeile) -> bool:
         """
-        gleichheit von zwei fahrplanzeilen feststellen.
+        Gleichheit von zwei Fahrplanzeilen feststellen.
 
-        gleichheit bedeutet: gleicher zug und gleiches plangleis.
-        jedes plangleis kommt im sts-fahrplan nur einmal vor.
+        Gleichheit bedeutet: gleicher Zug und gleiches Plangleis.
+        Jedes plangleis kommt im sts-Fahrplan nur einmal vor.
 
-        :param other: zu vergleichendes FahrplanZeile-objekt
-        :return: True, wenn zug und plangleis übereinstimmen, sonst False
+        Args:
+            other: zu vergleichendes FahrplanZeile-Objekt
+
+        Returns:
+            True, wenn Zug und Plangleis übereinstimmen, sonst False
         """
         return self.zug.zid == other.zug.zid and self.plan == other.plan
 
@@ -847,6 +851,7 @@ class FahrplanZeile:
 
         Args:
             item: eines von folgenden Objekten:
+
                 - untangle.Element mit dem gleis-Tag von der Simulatorschnittstelle,
                 - ein anderes FahrplanZeile-Objekt,
                 - Dictionary mit Werten, die den Attributen dieser Klasse entsprechen.

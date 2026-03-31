@@ -18,7 +18,7 @@ class GraphClient(PluginClient):
     """
     Erweiterter PluginClient mit Graphdarstellung der Basisdaten vom Simulator.
 
-    Attrs:
+    Attributes:
         signalgraph:
             Der _Signalgraph_ enthält das Gleisbild aus der Wegeliste der Plugin-Schnittstelle mit sämtlichen Knoten und Kanten.
             Das 'typ'-Attribut wird auf den sts-Knotentyp (int) gesetzt.

@@ -6,7 +6,7 @@ Der Client speichert auch alle Anlagen- und Fahrplandaten zwischen und verarbeit
 Der PluginClient übersetzt Anfragen in xml und sendet sie an den Simulator.
 Die xml-Antworten übersetzt er in Python-Objekte.
 
-Asynchrone Kommunikation:
+## Asynchrone Kommunikation
 
 Die Kommunikation verläuft asynchron und ist nach der trio-Bibliothek modelliert.
 Es gibt einen Socket-Stream für die xml-Kommunikation mit dem Simulator.
@@ -19,15 +19,15 @@ Für Ereignisse kann das Hauptprogramm einen separaten Task starten und die Queu
 Vorsicht ist bei der Verwendung von parallelen Tasks geboten,
 damit sich zwei Serveranfragen nicht überschneiden können.
 Am besten werden alle Anfragen im gleichen trio-Task gestellt.
-In einem separaten Task wird die Ereignis-Queue abgefragt.
+In einem separaten Tawenn der sk wird die Ereignis-Queue abgefragt.
 
 Beispiele für die Implementation zeigen das Testprogramm unten, oder weitere im Paket enthaltene Programme.
 
-Logging:
+## Logging
 
 stsplugin nutzt einen eigenen Logger mit dem namen "stsplugin" aus dem logging-Modul der Standardbibliothek.
 
-tip:
+Tip:
     Auf Stufe DEBUG wird die gesamte Kommunikation mit dem Simulator ausgegeben!
     Wenn dies nicht gewünscht wird, der Rest des Programms aber auf DEBUG bleiben soll,
     kann die Stufe dieses Moduls individuell angepasst werden durch
@@ -79,8 +79,7 @@ class PluginClient:
     """
     PluginClient - der Kern der Plugin-Schnittstelle
 
-    Attrs:
-
+    Attributes:
         name: Name des Plugins. Wird beim Start im Sim angezeigt.
         autor: Autor des Plugins. Wird beim Start im Sim angezeigt.
         version: Version des Plugins. Wird beim Start im Sim angezeigt.
@@ -129,7 +128,7 @@ class PluginClient:
             Der entsprechende Endpunkt ist in `fehlende_wege_knoten` eingetragen.
             Die nicht aufgelösten Kanten sind trotzdem in `wege_verbindungen` enthalten.
 
-    Usage:
+    Example:
         Siehe Beispielcode am Ende des Moduls (test-Funktion).
     """
 
@@ -336,7 +335,7 @@ class PluginClient:
         """
         Anlageninfo anfordern.
 
-        Die antwort wird im anlageninfo-Attribut gespeichert.
+        Die Antwort wird im anlageninfo-Attribut gespeichert.
         """
         await self._send_request(AnlagenInfo.tag)
         response = await self.antwort_channel_out.receive()
@@ -371,10 +370,10 @@ class PluginClient:
         """
         Simulatorzeit anfragen.
 
-        Die funktion fragt die aktuelle Simulatorzeit an und liefert sie in einem `datetime.time`-Objekt.
+        Die Funktion fragt die aktuelle Simulatorzeit an und liefert sie in einem `datetime.time`-Objekt.
 
-        Basierend auf der antwort setzt sie ausserdem `client_datetime`, `server_datetime` und `time_offset`.
-        Diese attribute können benutzt werden, um die Simulatorzeit zu berechnen (`calc_simzeit`-Funktion),
+        Basierend auf der Antwort setzt sie ausserdem `client_datetime`, `server_datetime` und `time_offset`.
+        Diese Attribute können benutzt werden, um die Simulatorzeit zu berechnen (`calc_simzeit`-Funktion),
         ohne dass eine erneute Anfrage geschickt werden muss.
 
         Info:

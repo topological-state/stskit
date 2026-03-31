@@ -389,6 +389,8 @@ inventories = ["https://docs.python.org/3/objects.inv"]
 # paths = ["."]
 
 [project.plugins.mkdocstrings.handlers.python.options]
+# https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
+# https://mkdocstrings.github.io/griffe/reference/docstrings/#google-style
 docstring_style = "google"
 
 # Tables are generally too large, lists will fix this.
