@@ -456,7 +456,7 @@ class Betrieb:
     def wartezeit_aendern(self,
                           target: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode,
                           kante: Tuple[EreignisLabelType, EreignisLabelType] | None,
-                          wartezeit: int,
+                          wartezeit: float,
                           relativ: bool = False):
         """
         Wartezeit ändern
@@ -464,6 +464,19 @@ class Betrieb:
         Die Wartezeit kann geändert werden für:
         - Eingehende Abhängigkeit
         - Halt, Durchfahrt, Betriebshalt
+
+        Args:
+            target: Ereignis oder Fahrziel, dessen Abfahrtszeit beeinflusst werden soll.
+                Das Ereignis wird auch zum Target (Schlüssel) des Journaleintrags.
+                Wenn als Fahrziel angegeben, wird das zuerst das zugehörige Abfahrtsereignis gesucht.
+            kante: Ereigniskante, deren Dauer geändert werden soll.
+                Falls None, wird die Haltekante des Zuges, die zum Target führt, genommen.
+                Wenn eine Anschlusskante geändert werden soll, muss diese explizit angegeben werden.
+            wartezeit: Wartezeit in Minuten.
+            relativ: Falls True, ist die Wartezeit relativ zu der bisherigen Zeit.
+
+        Raises:
+            ValueError: Wenn das Target-Ereignis nicht gefunden wird.
         """
 
         journal = JournalEntryGroup()
@@ -491,21 +504,32 @@ class Betrieb:
                            journal: JournalEntryGroup,
                            target: EreignisLabelType,
                            kante: Tuple[EreignisLabelType, EreignisLabelType],
-                           wartezeit: int,
+                           wartezeit: float,
                            relativ: bool = False):
+        """
+        Wartezeit auf Kante ändern
 
+        Setzt das `dt_fdl`-Attribut auf der gegebenen Kante entweder absolut oder relativ zum bisherigen Wert.
+        Wenn kein bisheriger Wert gesetzt ist, geht die Aenderung von `dt_min` aus,
+        damit eine Aenderung bemerkbar wird.
+
+        Args:
+            journal: Journal-Gruppe, in dem die Aenderung protokolliert werden soll.
+            target: Target-Ereignis für das Journal.
+            kante: Ereigniskante auf der die Wartezeit geändert werden soll.
+            wartezeit: Wartezeit in Minuten.
+            relativ: Falls True, ist die Wartezeit relativ zu der bisherigen Zeit.
+        """
         eg = self.ereignisgraph
         egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=target)
-        edge_data = eg.edges[kante]
+        edge_data: EreignisGraphEdge = eg.edges[kante]
 
         if relativ:
-            try:
-                startwert = edge_data.dt_fdl
-            except (AttributeError, KeyError):
-                startwert = 0
+            startwert = edge_data.get('dt_fdl', edge_data.get('dt_min', 0))
             dt = startwert + wartezeit
         else:
             dt = wartezeit
+
         egj.change_edge(*kante, dt_fdl=dt)
         journal.add_entry(egj)
 

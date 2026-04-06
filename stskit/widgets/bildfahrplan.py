@@ -210,7 +210,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         bg = self.anlage.bahnhofgraph
         bst_liste = sorted(bg.list_children(bg.root(), {'Bf', 'Anst'}))
         bst_liste = ["", *map(str, bst_liste)]
-        strecken_liste = sorted(self.anlage.strecken.strecken.keys(), key=self.anlage.strecken.ordnung.get)
+        strecken_liste = sorted(self.anlage.strecken.strecken.keys(), key=self.anlage.strecken.ordnung.get)  # ty:ignore[no-matching-overload]
 
         self.von_model.setStringList(bst_liste)
         self.via_model.setStringList(bst_liste)
@@ -461,9 +461,12 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             Das fdl-Attribut der Fahrtkante wird um eine Minute erhöht.
         """
 
+        typen = ["A-Ab", "A-An", "H-Ab", "P-An"]
         auswahl_muster = self.auswahl_unterscheiden()
+        gefiltert = [muster for muster in auswahl_muster if muster.index == 0 and muster.typ in typen]
+        sortiert = sorted(gefiltert, key=lambda muster: typen.index(muster.typ))
         try:
-            muster = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab', 'P-An', 'A-An', 'A-Ab'}))
+            muster = sortiert[0]
         except StopIteration:
             self.ui.zuginfoLabel.setText("Ungültige Auswahl")
             return
