@@ -130,7 +130,8 @@ class EreignisGraphNode(dict):
 
         Dies ist entweder die gemessene, prognostizierte oder geplante Zeit - je nachdem welches Attribut definiert ist.
 
-        @raise AttributeError wenn keines der Attribute gesetzt ist.
+        Raises:
+            AttributeError wenn keines der Attribute gesetzt ist.
         """
         result = self.get("t_mess") or self.get("t_prog") or self.get("t_plan")
         if result is not None:
@@ -193,21 +194,16 @@ class EreignisGraph(nx.DiGraph):
 
     Der EreignisGraph ist gerichtet.
 
-    Attribute
-    ---------
-
-    zuege: Verzeichnis (Set) der ID-Nummern der Züge, die im Graph vorkommen.
-        Der Pfad eines Zuges (geordnete Abfolge von Knoten mit derselben Zug-ID)
-        wird vom Generator zugpfad angegeben.
-
-    zugpositionen: Letztes passiertes Ereignis der sichtbaren Züge.
-        Wird von der Ereignisauswertung in sim_ereignis_uebernehmen verwaltet und gebraucht.
-
-    zugplangleise: Letzte vom Sim gemeldeten Plangleise der sichtbaren Züge.
-        Wird von der Ereignisauswertung in sim_ereignis_uebernehmen verwaltet und gebraucht.
-
-    zugplanereignisse: Nächste erwartete Ereignisse der sichtbaren Züge.
-        Wird von der Ereignisauswertung in sim_ereignis_uebernehmen verwaltet und gebraucht.
+    Attributes:
+        zuege: Verzeichnis (Set) der ID-Nummern der Züge, die im Graph vorkommen.
+            Der Pfad eines Zuges (geordnete Abfolge von Knoten mit derselben Zug-ID)
+            wird vom Generator zugpfad angegeben.
+        zugpositionen: Letztes passiertes Ereignis der sichtbaren Züge.
+            Wird von der Ereignisauswertung in sim_ereignis_uebernehmen verwaltet und gebraucht.
+        zugplangleise: Letzte vom Sim gemeldeten Plangleise der sichtbaren Züge.
+            Wird von der Ereignisauswertung in sim_ereignis_uebernehmen verwaltet und gebraucht.
+        zugplanereignisse: Nächste erwartete Ereignisse der sichtbaren Züge.
+            Wird von der Ereignisauswertung in sim_ereignis_uebernehmen verwaltet und gebraucht.
     """
 
     node_attr_dict_factory = EreignisGraphNode
@@ -293,7 +289,7 @@ class EreignisGraph(nx.DiGraph):
                 ) -> Generator[EreignisLabelType, None, None]:
         """
         Generator für die fortlaufenden Ereignisse eines Zuges
-        
+
         Beginnend mit dem Startknoten liefert der Generator die Ereignis-IDs eines Zuges
         in der Reihenfolge ihres Auftretens.
 
@@ -434,9 +430,12 @@ class EreignisGraph(nx.DiGraph):
 
         Vorsicht: Diese Methode sucht nicht nach einem bestimmten Ereignis!
 
-        :param label: Label des Ereignisnodes
-        :param typ: Ereignistyp (EreignisGraphNode.typ)
-        :return Label des gefundenen Ereignisses oder None
+        Args:
+            label: Label des Ereignisnodes.
+            typ: Ereignistyp (EreignisGraphNode.typ).
+
+        Returns:
+            Label des gefundenen Ereignisses oder None.
         """
 
         for n in self.predecessors(label):
@@ -455,9 +454,12 @@ class EreignisGraph(nx.DiGraph):
 
         Vorsicht: Diese Methode sucht nicht nach einem bestimmten Ereignis!
 
-        :param label: Label des Ereignisnodes
-        :param typ: Ereignistyp (EreignisGraphNode.typ)
-        :return Label des gefundenen Ereignisses oder None
+        Args:
+            label: Label des Ereignisnodes.
+            typ: Ereignistyp (EreignisGraphNode.typ).
+
+        Returns:
+            Label des gefundenen Ereignisses oder None.
         """
 
         try:
@@ -521,6 +523,7 @@ class EreignisGraph(nx.DiGraph):
 
         Die gestaffelte Übersetzung von Knoten und Kanten in Builders bietet die notwendige Flexibilität
         in den folgenden Situationen:
+        
         - Es gibt keine eindeutige Zuordnung von Zielknoten zu Ereignisknoten,
           jedoch im Verlauf dieser Methode eine Zuordnung von Zielknoten zu ZielEreignisNodeBuilder.
         - Die Labels von Ereignisknoten können nicht aus Zielknoten abgeleitet werden.
@@ -532,10 +535,11 @@ class EreignisGraph(nx.DiGraph):
           Knoten dürfen aber nur einmal in den Graphen eingesetzt werden,
           weil es keine eindeutige Zuordnung von Zielknoten zu Ereignisknoten gibt.
 
-        :param zg: Zielgraph enthält die Ursprungsdaten
-        :param clean: Ereignisgraph vollständig neu aufbauen (True)
-            oder nur neue Züge hinzufügen (False, default).
-            Bei True gehen Änderungen an den Attributen verloren, bei False werden sie beibehalten.
+        Args:
+            zg: Zielgraph enthält die Ursprungsdaten
+            clean: Ereignisgraph vollständig neu aufbauen (True)
+                oder nur neue Züge hinzufügen (False, default).
+                Bei True gehen Änderungen an den Attributen verloren, bei False werden sie beibehalten.
         """
 
         if clean:
@@ -583,6 +587,7 @@ class EreignisGraph(nx.DiGraph):
         Mögliche Probleme beim Import beheben.
 
         Wir prüfen auf folgende Fälle:
+        
         - Hängende H-Kante neben K-Kante
         """
 
@@ -623,6 +628,7 @@ class EreignisGraph(nx.DiGraph):
         Die resultierende Zeit ist in jedem Fall grösser oder gleich der Minimalzeit.
 
         Mit diesem Algorithmus können folgende Fälle abgebildet werden:
+        
         1. Normaler Halt:
            dt_min ist die minimale Aufenthaltszeit für den Fahrgastwechsel oder andere Betriebsvorgänge.
            dt_max wird nicht definiert.
@@ -730,7 +736,8 @@ class EreignisGraph(nx.DiGraph):
 
         Die Verspätungen werden aus der Differenz zwischen den t_eff- und t_plan-Feldern der An- und Ab-Knoten berechnet.
 
-        :param zg: Zielgraph
+        Args:
+            zg: Zielgraph
         """
 
         for ereignis_node, ereignis_data in self.nodes(data=True):
@@ -761,19 +768,21 @@ class EreignisGraph(nx.DiGraph):
         Aktualisiert die Verspätung und Status-Flags anhand eines Ereignisses im Simulator.
 
         Aktualisiert werden die folgenden Attribute:
+        
         - zugpositionen
         - zugplangleise
         - zugplanereignisse
         - t_mess der Ereignisknoten
 
         Phantomzüge:
+        
         Nach gewissen Nummernwechseln (mit Richtungsänderung?) schickt der Sim weiterhin Ereignisse
         unter der Nummer des nun unsichtbaren Zuges.
         Das sichtbar-Attribut des Ereignisarguments ist dabei False.
         Ausser bei den Ereignisarten 'Ausfahrt', 'Ersatz' sollten solche Ereignisse nicht beachtet werden.
 
-        :param ereignis: Ereignis-objekt vom PluginClient
-        :return:
+        Args:
+            ereignis: Ereignis-objekt vom PluginClient
         """
 
         # keine Rangierfahrten
@@ -799,11 +808,11 @@ class EreignisGraph(nx.DiGraph):
 
         Untermethode der sim_ereignis-Methoden.
 
-        :param label: Label des Ereignisknotens.
-        :param ereignis: Ereignisobjekt vom PluginClient.
-            Benötigt werden die Attribute `zid` und `zeit`.
+        Args:
+            label: Label des Ereignisknotens.
+            ereignis: Ereignisobjekt vom PluginClient.
+                Benötigt werden die Attribute `zid` und `zeit`.
         """
-
         if label is None:
             return
 
@@ -821,9 +830,9 @@ class EreignisGraph(nx.DiGraph):
         logger.debug(f"Messzeit {label}, {ereignis.plangleis}, {data.t_mess}")
 
     def _sim_ereignis_update_planereignis(self, ereignis: Ereignis,
-                                          prev_label: EreignisLabelType,
-                                          cur_label: EreignisLabelType,
-                                          next_typ: str = 'An'):
+                                         prev_label: EreignisLabelType,
+                                         cur_label: EreignisLabelType,
+                                         next_typ: str = 'An'):
         """
         Plangleis und Planereignis aus Sim-Ereignis aktualisieren.
 
@@ -844,11 +853,16 @@ class EreignisGraph(nx.DiGraph):
 
         Untermethode der sim_ereignis-Methoden.
 
-        :param ereignis: Ereignisobjekt vom PluginClient
-            Benötigt werden die Attribute `zid` und `plangleis`.
-        :param prev_label: vorheriges passiertes Ereignislabel
-        :param cur_label: gerade passiertes Ereignis entsprechend dem Sim-Ereignis.
-        :param next_typ: Typ des nächsten erwarteten Ereignisses, 'An' oder 'Ab'.
+        Args:
+            ereignis (Ereignis): Ereignisobjekt vom PluginClient.
+                Benötigt werden die Attribute `zid` und `plangleis`.
+            prev_label (EreignisLabelType): vorheriges passiertes Ereignislabel.
+            cur_label (EreignisLabelType): gerade passiertes Ereignis entsprechend dem Sim-Ereignis.
+            next_typ (str, optional): Typ des nächsten erwarteten Ereignisses, 'An' oder 'Ab'.
+                Standard ist 'An'.
+
+        Returns:
+            EreignisLabelType: Das gefundene nächste Planereignis oder None.
         """
 
         self.zugplangleise[ereignis.zid] = ereignis.plangleis
@@ -1197,20 +1211,23 @@ class EreignisGraph(nx.DiGraph):
         läuft über durch E/F/K-Ereignisse verbundene Folgezüge
         und endet am Knoten, der keine Nachfolger hat.
 
-        :param zid: Gesuchte Zug-ID (optional).
-            Das gesuchte Ereignis muss diese Zug-ID haben.
-            zid kann sich von start.zid unterscheiden,
-            muss dann aber ein Folgezug von start.zid bezeichnen.
-            Mindestens eines der Argumente zid und start muss angegeben werden.
-        :param start: Startnode (optional).
-            Die Suche startet an diesem Knoten (inklusiv).
-            Wenn kein Start angegeben ist, beginnt die Suche am Zuganfang.
-            Mindestens eines der Argumente zid und start muss angegeben werden.
-        :param kwargs: Gesuchte Attributwerte.
-            Die Keys müssen Attributnamen von EreignisGraphNode entsprechen.
-            Bei float-Attributen gilt eine Toleranz von 0.0001.
-        :raise KeyError: Zug wird nicht gefunden.
-        :raise ValueError: Attributwerte werden nicht gefunden.
+        Args:
+            zid (int, optional): Gesuchte Zug-ID.
+                Das gesuchte Ereignis muss diese Zug-ID haben.
+                zid kann sich von start.zid unterscheiden,
+                muss dann aber ein Folgezug von start.zid bezeichnen.
+                Mindestens eines der Argumente zid und start muss angegeben werden.
+            start (EreignisLabelType, optional): Startnode.
+                Die Suche startet an diesem Knoten (inklusiv).
+                Wenn kein Start angegeben ist, beginnt die Suche am Zuganfang.
+                Mindestens eines der Argumente zid und start muss angegeben werden.
+            **kwargs: Gesuchte Attributwerte.
+                Die Keys müssen Attributnamen von EreignisGraphNode entsprechen.
+                Bei float-Attributen gilt eine Toleranz von 0.0001.
+
+        Raises:
+            KeyError: Zug wird nicht gefunden.
+            ValueError: Attributwerte werden nicht gefunden.
         """
 
         if start is None:
@@ -1319,17 +1336,22 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
     Zu diesem Zeitpunkt werden auch die nodes- und edges-Listen mit einem einfachen Ankunft-Abfahrt-Muster initialisiert.
     Bei komplexen Betriebsvorgängen werden die nodes und edges von den EreignisEdgeBuildern verändert,
     bevor die Struktur mittels add_to_graph in den EreignisGraph geschrieben wird.
+
+    Attributes:
+        zid: Zug-ID (für Diagnostik).
+        fid: Label des ursprünglichen Eintrags im ZielGraph (für Diagnostik).
+        node_template: Speichert den ersten importierten Node, um Kopien herzustellen (new_node).
+        edge_template: Speichert die importierte Kante, um Kopien herzustellen (new_edge).
+        nodes: Liste von Ereignisknoten in Bearbeitung.
+        edges: Liste von Ereigniskanten in Bearbeitung.
+        kupplungen: Liste von Kupplungsereignissen. S. kuppeln-Methode.
     """
 
     def __init__(self, graph: EreignisGraph):
         super().__init__(graph)
-        # Diagnostik
         self.zid: Optional[int] = None
-        # Diagnostik
         self.fid: Optional[ZielLabelType] = None
-        # Speichert den ersten importierten Node, um Kopien herzustellen (new_node)
         self.node_template: Optional[EreignisGraphNode] = None
-        # Speichert die importierte Kante, um Kopien herzustellen (new_edge)
         self.edge_template: Optional[EreignisGraphEdge] = None
         self.nodes: List[EreignisGraphNode] = []
         self.edges: List[EreignisGraphEdge] = []
@@ -1463,8 +1485,9 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         Der Knoten wird an Position 1 der nodes-Liste eingefügt, die Kante an Position 0.
         Aus der ursprünglichen Abfolge A -a-> B wird A -h-> H -a-> B.
 
-        :param node: einzufügender Knoten
-        :param edge: einzufügende Kanten zwischen Hilfs- und Abfahrtsknoten
+        Args:
+            node: einzufügender Knoten
+            edge: einzufügende Kanten zwischen Hilfs- und Abfahrtsknoten
         """
         self.nodes.insert(1, node)
         self.edges.insert(0, edge)
@@ -1506,7 +1529,8 @@ class ZielEreignisNodeBuilder(EreignisNodeBuilder):
         Ein Zug kann das Ziel mehrerer Kupplungsvorgänge sein.
         Die Kupplungsknoten werden gesammelt und erst in der add_to_graph-Methode aufgelöst.
 
-        :param node: Kupplungsknoten (EreignisGraphNode mit Typ "K")
+        Args:
+            node: Kupplungsknoten (EreignisGraphNode mit Typ "K")
         """
         self.kupplungen.append(node)
 
