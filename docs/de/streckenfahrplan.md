@@ -22,14 +22,14 @@ Die Auswahl wird durch Klicken auf den Hintergrund gelöscht.
 Auf die gewählten Trassen können folgende Aktionen aus der Werkzeugleiste angewendet werden.
 
 - Disposition erfassen
-  - :bootstrap-actionAnkunftAbwarten: Ankunft abwarten (Anschluss)
-  - :bootstrap-actionAbfahrtAbwarten: Abfahrt abwarten (Überholung)
-  - :bootstrap-actionKreuzung: Gegenseitige Ankunft abwarten (Kreuzung)
+    - :bootstrap-actionAnkunftAbwarten: [Ankunft abwarten (Anschluss abwarten)](dispo.md#ankunft-abwarten-anschluss-abwarten)
+    - :bootstrap-actionAbfahrtAbwarten: [Abfahrt abwarten (Überholung)](dispo.md#abfahrt-abwarten-uberholung)
+    - :bootstrap-actionKreuzung: [Gegenseitige Ankunft abwarten (Kreuzung)](dispo.md#zugkreuzung)
 - Abfahrt einstellen
-  - :bootstrap-actionBetriebshaltEinfuegen: Betriebshalt einfügen
-  - :bootstrap-actionVorzeitigeAbfahrt: Vorzeitige Abfahrt
-  - :bootstrap-actionPlusEins:/:bootstrap-actionMinusEins: Wartezeit +/- 1 Minute
-- :bootstrap-actionLoeschen: Befehl zurücknehmen
+    - :bootstrap-actionBetriebshaltEinfuegen: [Betriebshalt einfügen](dispo.md#betriebshalt-einfugen)
+    - :bootstrap-actionVorzeitigeAbfahrt: [Vorzeitige Abfahrt](dispo.md#vorzeitige-abfahrt)
+    - :bootstrap-actionPlusEins:/:bootstrap-actionMinusEins: [Wartezeit verlängern/verkürzen](dispo.md#wartezeit-verlangernverkurzen)
+- :bootstrap-actionLoeschen: [Befehl zurücknehmen](dispo.md#befehl-zurucknehmen)
 
 Um eine Abhängigkeit zu setzen, müssen zwei Trassen ausgewählt werden.
 Die erste (Auswahl, gelb) markiert den wartenden Zug, die zweite (Referenz, hellblau) den abzuwartenden Zug.
