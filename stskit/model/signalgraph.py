@@ -1,5 +1,5 @@
+from collections.abc import Iterable, Sequence
 import logging
-from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple, TypeVar, Union
 
 import networkx as nx
 
@@ -216,7 +216,9 @@ def graph_zwischensignale_entfernen(g: nx.Graph) -> nx.Graph:
     return g
 
 
-def graph_gleise_zuordnen(g: nx.Graph, gleiszuordnung: Dict[str, str]) -> nx.Graph:
+def graph_gleise_zuordnen(g: nx.Graph,
+                          gleiszuordnung: dict[str, str],
+                          ) -> nx.Graph:
     """
     gleise in graph zu gruppen zusammenfassen
 
@@ -257,7 +259,9 @@ def graph_schleifen_aufloesen(g: nx.Graph) -> nx.Graph:
     return g
 
 
-def graph_mehrdeutige_strecken(g: nx.Graph, max_knoten: int = 3) -> List[Set[str]]:
+def graph_mehrdeutige_strecken(g: nx.Graph,
+                               max_knoten: int = 3,
+                               ) -> list[set[str]]:
     """
     findet mehrdeutige streckenabschnitte
 
@@ -274,7 +278,10 @@ def graph_mehrdeutige_strecken(g: nx.Graph, max_knoten: int = 3) -> List[Set[str
     return cycles
 
 
-def graph_mehrdeutige_strecke_abgleichen(g: nx.Graph, strecke: Iterable[str], routen: Iterable[Iterable[str]]):
+def graph_mehrdeutige_strecke_abgleichen(g: nx.Graph,
+                                         strecke: Sequence[str],
+                                         routen: Sequence[Sequence[str]],
+                                         ) -> nx.Graph:
     """
     mehrdeutige strecke mit zugrouten abgleichen
 
