@@ -13,7 +13,7 @@ Die update-Methoden erwarten geparste xml-Daten in einem untangle.Element-Objekt
 """
 
 from __future__ import annotations
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable, Mapping, Generator
 import datetime
 import logging
 import networkx as nx
@@ -134,6 +134,13 @@ class AnlagenInfo:
     Anlageninformationen.
 
     Diese Klasse entspricht dem xml-Tag "anlageninfo".
+
+    Attributes:
+        aid: Nummer des Stellwerks.
+        name: Name des Stellwerks.
+        build: Build-Nummer von Stellwerksim.
+        region: Name der Region.
+        online: Online-Spiel (True) oder Sandbox (False).
     """
 
     # xml-tagname
@@ -173,17 +180,24 @@ class BahnsteigInfo:
     """
     Bahnsteiginformationen.
 
-    Diese Klasse entspricht dem xml-Tag "bahnsteiginfo" mit Ergänzungen.
+    Diese Klasse entspricht dem xml-Tag "bahnsteig" mit den Ergänzungen `nachbarn` und `zuege`.
 
-    Im Dictionary `zuege`, führt der PluginClient die Züge, die den Bahnsteig in ihrem Fahrplan haben
-    (disponiertes Gleis).
-
-    Die Namen der Nachbarbahnsteige werden in `nachbar_namen` gespeichert.
-    Der `PluglinClient` löst die Namen in Objekte auf und speichert sie in `nachbarn`.
+    Attributes:
+        name: Name des Bahnsteigs.
+        haltepunkt: Haltepunkt (True) oder Bahnhofgleis (False).
+            Bestimmt, ob eine Fahrstrasse beim Halt aufgelöst wird (False) oder nicht (True).
+            Hat in STSdispo keine bedeutung.
+        nachbarn_namen: Namen von Nachbarbahnsteigen.
+            Alle miteinander verbundenen Nachbarbahnsteige bilden in STSdispo einen _Bahnhofteil_.
+        nachbarn: Dictionary von BahnsteigInfo-Objekten nach Namen.
+        zuege: Liste von Zügen, die den Bahnsteig in ihrem Fahrplan haben (disponiertes Gleis).
+            Diese Liste wird nicht automatisch gefüllt.
+            Um sie zu nutzen, muss sie durch Aufruf von [stskit.plugin.stsplugin.PluginClient.update_bahnsteig_zuege]
+            explizit gefüllt werden.
     """
 
     # xml-tagname
-    tag = 'bahnsteiginfo'
+    tag = 'bahnsteig'
 
     def __init__(self):
         super().__init__()
@@ -230,26 +244,37 @@ class Knoten:
     """
     Gleisbildelement ("Knoten").
 
-    Diese Klasse entspricht dem xml-Tag "shape".
-    Verbindungen aus "connector"-Tags werden im Attribut `nachbarn` gespeichert.
+    Diese Klasse entspricht dem xml-Tag `shape` aus dem `wege`-Tag.
+    Verbindungen aus `connector`-Tags werden im Attribut `nachbarn` gespeichert.
 
     Bahnsteige haben nur einen Namen.
-    Alle anderen Tags haben eine enr-Nummer und einen Namen.
-    Die enr ist fortlaufend über alle Elemente beginnend bei 1.
-    Die enr hat nichts mit Signal- oder Weichennummern gemeinsam.
-    Die enr wird, wo vorhanden, im connector-Tag verwendet.
+    Alle anderen Tags haben eine `enr`-Nummer und einen Namen.
+    Die `enr` ist fortlaufend über alle Elemente beginnend bei 1.
+    Die `enr` hat nichts mit Signal- oder Weichennummern gemeinsam.
+    Die `enr` wird, wo vorhanden, im `connector`-Tag verwendet.
     Bei Bahnsteigen wird der Name angegeben.
-    Anschlüsse können den gleichen Namen wie ein Bahnsteig haben, da sie per enr identifiziert werden.
+    Anschlüsse können den gleichen Namen wie ein Bahnsteig haben, da sie per `enr` identifiziert werden.
 
     Da wir alle Elemente im gleichen Dictionary speichern wollen,
-    deklariert diese klasse noch einen 'key', der den Knoten eindeutig identifiziert.
-    Der key ist, wo deklariert, gleich der enr-Nummer und sonst gleich dem Namen.
+    deklariert diese klasse noch einen `key`, der den Knoten eindeutig identifiziert.
+    Der `key` ist, wo deklariert, gleich der `enr`-Nummer und sonst gleich dem Namen.
 
-    Der Elementtyp wird numerisch gespeichert.
-    Er kann mittels der Dicts TYP_NAME und TYP_NUMMER übersetzt werden.
-
-    In der Liste 'zuege', führt der Klient die Züge, die über das Gleiselement fahren
-    (nur bei Einfahrten, Ausfahrten und Bahnsteigen).
+    Attributes:
+        key: Entspricht `enr` falls definiert, sonst `name`.
+            Bahnsteige und Haltepunkte haben nur einen Namen,
+            die anderen Elemente haben sowohl eine Nummer und einen Namen.
+            Dieses Attribut für jedes Element definiert und eindeutig.
+        enr: `enr`-Nummer vom Simulator, falls deklariert, sonst None.
+            Bahnsteige und Haltepunkte haben keine `enr`.
+        name: `name` vom Simulator, falls deklariert, sonst None.
+            Es kann mehrere Elemente mit dem gleichen Namen geben (z.B. Anschluss und Bahnsteig).
+        typ: Typnummer, s. `TYP_NAME` oder `TYP_NUMMER`.
+        nachbarn: Nachbarelemente aus den `connector`-Tags.
+        zuege: Züge, die über das Gleiselement fahren
+            (nur bei Einfahrten, Ausfahrten, Bahnsteigen und Haltepunkten).
+            Diese Liste wird nicht automatisch gefüllt.
+            Um sie zu nutzen, muss sie durch Aufruf von [stskit.plugin.stsplugin.PluginClient.update_wege_zuege]
+            explizit gefüllt werden.
     """
 
     # xml-tagname
@@ -330,7 +355,31 @@ class ZugDetails:
     """
     Zugdetails.
 
-    Die Attribute entsprechen dem zugdetails-Tag der Pluginschnittstelle.
+    Die Attribute entsprechen dem `zugdetails`-Tag der Pluginschnittstelle
+    mit den Ergänzungen `ziel_index` und `stamm_zids`.
+
+    Attributes:
+        zid: Identifikationsnummer.
+            Die zid ist für den Anwender verborgen.
+            Die zid kann negativ sein (z.B. Ersatzloks).
+        name: Zugname (Gattung + Nummer + ev. andere Zusätze)
+        von: Herkunft (Name des Gleises)
+        nach: Endziel (Name des Gleises)
+        verspaetung: Verspätung (oder Verfrühung, wenn negativ) in Minuten
+        sichtbar: Zug ist im Stellwerk.
+        gleis: Nächstes, disponiertes Zielgleis.
+            Umgeleitete und ausfahrende Züge haben kein Zielgleis.
+        plangleis: Nächstes Zielgleis nach Fahrplan.
+            Umgeleitete und ausfahrende Züge haben kein Plangleis.
+        amgleis: Zug steht am Gleis `gleis`.
+        hinweistext:
+        usertext:
+        usertextsender:
+        fahrplan: Fahrplaneinträge.
+        ziel_index: Fahrplanindex des aktuellen Ziels.
+            Wird vom PluginClient aktualisiert.
+        stamm_zids: Menge von `zid` aller Züge, in deren Flags dieser Zug vorkommt.
+            Wird vom PluginClient aktualisiert.
     """
 
     # xml-tagname
@@ -351,9 +400,7 @@ class ZugDetails:
         self.usertext: str = ""
         self.usertextsender: str = ""
         self.fahrplan: list[FahrplanZeile] = []
-        # index des aktuellen ziels. wird vom PluginClient aktualisiert
         self.ziel_index: int | None = None
-        # zids aller zuege, in deren flags dieser zug vorkommt. wird vom PluginClient aktualisiert
         self.stamm_zids: set[int] = set()
 
     def __eq__(self, other: ZugDetails) -> bool:
@@ -406,6 +453,7 @@ class ZugDetails:
             self.verspaetung = int(zugdetails['verspaetung'])
         except TypeError:
             pass
+        # todo: ausfahrende Züge haben kein gleis und plangleis. umgeleitete auch nicht.
         self.gleis = str(zugdetails['gleis']).strip() or self.gleis
         self.plangleis = str(zugdetails['plangleis']).strip() or self.plangleis
         self.von = str(zugdetails['von']).strip()
@@ -422,9 +470,8 @@ class ZugDetails:
         """
         Zuggattung aus dem Zugnamen.
 
-        Die Zuggattung ist der alphabetische Präfix aus dem Zugnamen, z.b "ICE".
-        Für eine spätere Version ist geplant, die Gattung anhand der Region und Zugnummer zu bestimmen,
-        wo der präfix fehlt.
+        Die Zuggattung ist das alphabetische Präfix aus dem Zugnamen, z.B. "ICE".
+        In gewissen Regionen wie z.B. der Schweiz oder Grossbritannien fehlt dieses Präfix.
 
         Returns:
             Zuggattung. None, wenn keine Gattung bestimmt werden kann.
@@ -444,7 +491,7 @@ class ZugDetails:
         Zugnummer aus dem Zugnamen.
 
         Die Nummer ist der hinterste rein numerische Teil des Zugnamens, z.b. 8376 in "S8 8376 RF"
-        Diese hat nichts mit der Zug-ID zu tun.
+        Diese hat nichts mit der `zid` zu tun.
 
         Beispiele von Zugnummern:
         - "536": 536
@@ -476,13 +523,15 @@ class ZugDetails:
         return self.name.startswith('Lok') or self.name.startswith('Ersatzlok') or \
                self.name.startswith('RF') or self.name.endswith('RF')
 
-    def route(self, plan: bool = False) -> Iterable[str]:
+    def route(self, plan: bool = False) -> Generator[str, None, None]:
         """
         Route (Reihe von Stationen) des Zuges als Generator
 
         Die Route ist eine Liste von Stationen (Gleisen, inkl. Ein- und Ausfahrt) in der Reihenfolge des Fahrplans.
         Ein- und Ausfahrten können bei Ersatzzügen o.ä. fehlen.
         Durchfahrtsgleise sind auch enthalten.
+
+        Ein etwaiges Präfix 'Gleis' bei Nummernwechsel wird entfernt.
 
         Args:
             plan: Plangleise statt effektive Gleise melden
@@ -505,12 +554,14 @@ class ZugDetails:
         Fahrplan im networkx directed Graph Format
 
         Die Knoten sind Anschluss- oder Gleisnamen und haben folgende Attribute:
+
         - typ: 'anschluss' oder 'gleis'
         - an: Ankunftszeit als datetime.time (kann fehlen)
         - ab: Ankunftszeit als datetime.time (kann fehlen)
         - aufenthalt: Aufenthaltszeit in sekunden (kann fehlen)
 
         Die Kanten haben folgende Attribute:
+
         - fahrzeit: Planmässige Fahrzeit in sekunden (kann fehlen)
 
         Returns:
@@ -743,6 +794,17 @@ class FahrplanZeile:
     """
     Fahrplanzeile
 
+    Attributes:
+        zug: Zugehöriges Zug-Objekt.
+        gleis: Disponiertes Gleis.
+        plan: Plangleis.
+        an: Ankunftszeit.
+            Nicht alle Fahrplanzeilen haben eine Ankunftszeit.
+        ab: Abfahrtszeit.
+            Nicht alle Fahrplanzeilen haben eine Abfahrtszeit.
+        flags: Siehe unten.
+        hinweistext:
+
     Flags:
       - `A`: Vorzeitige Abfahrt möglich
       - `Bn`: Themenflag
@@ -755,6 +817,7 @@ class FahrplanZeile:
       - `R`: Richtungsänderung
       - `W[enr][enr]`: Lokwechsel
     """
+
     tag = 'gleis'
 
     def __init__(self, zug: ZugDetails):
@@ -786,16 +849,20 @@ class FahrplanZeile:
         """
         Fahrplanziel-Identifikation
 
-        Die Identifikation besteht aus den eindeutigen Attributen Zug-ID, Zeit in Minuten und Plangleis.
+        Die `fid` bildet den eindeutigen Fahrzielschlüssel für den Zielgraph.
+
+        Die Identifikation besteht aus den eindeutigen Attributen `zid`, Zeit in Minuten und Plangleis.
         Die ID wird beim ersten Gebrauch aus den genannten Attributen generiert und bleibt danach konstant.
         Das Property sollte daher nicht verwendet werden, bevor die Attribute ausgefüllt sind.
 
-        Die Attribute an, ab und plan alleine sind (auch für einen Zug) nicht eindeutig:
-        an oder ab können None sein, das Gleis kann mehrmals angefahren werden.
-        an kann sich beim Nummernwechsel ändern.
+        Die Attribute `an`, `ab` und `plan` alleine sind (auch für einen Zug) nicht eindeutig:
+        `an` oder `ab` können `None` sein, das Gleis kann mehrmals angefahren werden.
+        `an` kann sich beim Nummernwechsel ändern.
 
         Returns:
-            Dreiertupel (zid, zeit, plan). zeit ist entweder die Ankunfts- oder Abfahrtszeit in Minuten.
+            Dreiertupel (`zid`, `zeit`, `plan`).
+            `zeit` ist entweder die Ankunfts- oder Abfahrtszeit in Minuten.
+            `plan` ist das Plangleis.
         """
 
         if self._fid is None:
@@ -811,7 +878,7 @@ class FahrplanZeile:
         """
         Zugziel-Hash
 
-        Der Hash basiert auf der fid.
+        Der Hash basiert auf der `fid`.
 
         Returns:
             Hash-Wert
