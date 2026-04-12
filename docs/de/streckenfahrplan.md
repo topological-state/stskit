@@ -21,14 +21,15 @@ Es können bis zu zwei Trassen ausgewählt sein.
 Die Auswahl wird durch Klicken auf den Hintergrund gelöscht.
 Auf die gewählten Trassen können folgende Aktionen aus der Werkzeugleiste angewendet werden.
 
-- Abfahrtsverspätung einstellen
-  - +/- 1 Minute
-  - bei Abhängigkeit: zusätzliche Wartezeit
-- Abhängigkeit bearbeiten
-  - Ankunft abwarten (Anschluss)
-  - Abfahrt abwarten (Überholung)
-  - Gegenseitige Ankunft abwarten (Kreuzung)
-  - zurücksetzen
+- Disposition erfassen
+  - :bootstrap-actionAnkunftAbwarten: Ankunft abwarten (Anschluss)
+  - :bootstrap-actionAbfahrtAbwarten: Abfahrt abwarten (Überholung)
+  - :bootstrap-actionKreuzung: Gegenseitige Ankunft abwarten (Kreuzung)
+- Abfahrt einstellen
+  - :bootstrap-actionBetriebshaltEinfuegen: Betriebshalt einfügen
+  - :bootstrap-actionVorzeitigeAbfahrt: Vorzeitige Abfahrt
+  - :bootstrap-actionPlusEins:/:bootstrap-actionMinusEins: Wartezeit +/- 1 Minute
+- :bootstrap-actionLoeschen: Befehl zurücknehmen
 
 Um eine Abhängigkeit zu setzen, müssen zwei Trassen ausgewählt werden.
 Die erste (Auswahl, gelb) markiert den wartenden Zug, die zweite (Referenz, hellblau) den abzuwartenden Zug.
