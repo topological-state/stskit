@@ -1,21 +1,25 @@
 # Streckenfahrplan
 
-Der Streckenfahrplan oder Bildfahrplan zeigt die Zugläufe unter Berücksichtigung der Verspätungslage in einem Weg-Zeit-Diagramm an.
+Der Streckenfahrplan oder Bildfahrplan zeigt die Zugläufe in einem Weg-Zeit-Diagramm an.
 
-![stskit-screen-bildfahrplan](https://user-images.githubusercontent.com/51272421/210151679-8072be36-dbc6-4d4b-b388-a4ec940e5cf9.png)
+![stskit-screen-bildfahrplan](../img/bildfahrplan-1.png)
 
 ## Markierungen
 
-- Ausgezogene Linie: Fahrten zwischen Bahnhöfen
+- Ausgezogene Linie: Fahrten zwischen Bahnhöfen (_Trasse_)
 - Gestrichelte Linie: Wartezeiten und Rangierfahrten innerhalb eines Bahnhofs
-- Kreis: Fahrplanmässiger Halt
-- Quadrat: vom Fdl korrigierte Verspätung
+- Kreis: Planmässiger Halt
+- Senkrechter Strich: Planmässige Durchfahrt
+- Stern: Manöver (Flügeln/Kuppeln/Nummernwechsel)
+- Kreuz: Betriebshalt
+- Dreieck nach unten: Abhängigkeit aus Disposition
 
 ## Werkzeuge
 
-Eines oder zwei Liniensegmente werden durch Anklicken ausgewählt.
+Durch Anklicken wird eine Trasse und der nächste Bahnhof ausgewählt.
+Es können bis zu zwei Trassen ausgewählt sein.
 Die Auswahl wird durch Klicken auf den Hintergrund gelöscht.
-Auf die gewählten Liniensegmente können folgende Aktionen aus der Werkzeugleiste angewendet werden.
+Auf die gewählten Trassen können folgende Aktionen aus der Werkzeugleiste angewendet werden.
 
 - Abfahrtsverspätung einstellen
   - +/- 1 Minute
@@ -26,11 +30,11 @@ Auf die gewählten Liniensegmente können folgende Aktionen aus der Werkzeugleis
   - Gegenseitige Ankunft abwarten (Kreuzung)
   - zurücksetzen
 
-Um eine Abhängigkeit zu setzen, müssen zwei Segmente ausgewählt werden.
-Das erste (Auswahl, gelb) markiert den wartenden Zug, das zweite (Referenz, hellblau) den abzuwartenden Zug.
+Um eine Abhängigkeit zu setzen, müssen zwei Trassen ausgewählt werden.
+Die erste (Auswahl, gelb) markiert den wartenden Zug, die zweite (Referenz, hellblau) den abzuwartenden Zug.
 
 
-## Einstellungen
+## :bootstrap-actionSetup: Einstellungen
 
 Die dargestellte Strecke wird auf der Einstellungsseite ausgewählt.
 Es gibt zwei Arten, die Strecke auszuwählen:
@@ -40,7 +44,7 @@ Es gibt zwei Arten, die Strecke auszuwählen:
 Strecken können in Modul Einstellungen manuell definiert und mit einem beliebigen Namen versehen werden.
 Die Namen werden in der Auswahlbox aufgeführt.
 
-Beim ersten Start eines Stellwerks, werden automatisch alle Strecken zwischen den verschiedenen Ein- und Ausfahrten hinzugefügt.
+Beim ersten Start eines Stellwerks werden automatisch alle Strecken zwischen den verschiedenen Ein- und Ausfahrten hinzugefügt.
 Diese entsprechen der automatischen Streckenwahl (s.u.) und sind möglicherweise nicht sinnvoll.
 In diesen Fällen muss die Konfiguration manuell bearbeitet werden.
 
