@@ -511,21 +511,24 @@ class Gleisbelegung:
 
     def warnungen_aktualisieren(self):
         """
-        erstellt warnungen basierend auf den gleisbelegungsdaten
+        Warnungen basierend auf den Gleisbelegungsdaten erzeugen
 
-        warnungen betreffen gleiskonflikte, konflikte auf zufahrten, betriebliche vorgänge.
-        die warnungen stehen nachher in self.warnungen.
+        Warnungen betreffen Gleiskonflikte, Konflikte auf Zufahrten und Manöver.
+        Die warnungen stehen nachher in `warnungen`.
 
-        bereits vorhandene warnungen (identifiziert anhand ihres SlotWarnung.key) werden aktualisiert,
-        neue warnungen hinzugefügt, veraltete entfernt.
-
-        :return: None
+        Bereits vorhandene warnungen (identifiziert anhand ihres SlotWarnung.key) werden aktualisiert,
+        Neue warnungen hinzugefügt, veraltete ohne korrespondierende Slots entfernt.
         """
 
         keys_bisherige = set(self.warnungen.keys())
         for w in self.warnungen.values():
-            if w.status.startswith("fdl"):
-                keys_bisherige.discard(w.key)
+            if w.status == "fdl-markiert":
+                # behalten, solange slots existieren
+                for s in w.slots:
+                    if s.key not in self.slots:
+                        break
+                else:
+                    keys_bisherige.discard(w.key)
 
         for w_neu in self._warnungen():
             key = w_neu.key
