@@ -5,6 +5,7 @@ Unit tests for the gleisbelegung module.
 from mock import Mock, patch
 from unittest import TestCase, main
 
+from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.plots.gleisbelegung import Gleisbelegung, Slot, SlotWarnung
 
 
@@ -16,10 +17,12 @@ class GleisbelegungTest(TestCase):
     def setup_zugfolgewarnung(self, s1_zeit, s1_dauer, s2_zeit, s2_dauer, verbindung):
         zentrale = Mock()
         s1 = Mock(Slot)
+        s1.gleis = BahnhofElement('Gl', '1')
         s1.zeit = s1_zeit
         s1.dauer = s1_dauer
         s1.abfahrt = s1_zeit + s1_dauer
         s2 = Mock(Slot)
+        s2.gleis = BahnhofElement('Gl', '1')
         s2.zeit = s2_zeit
         s2.dauer = s2_dauer
         s2.abfahrt = s2_zeit + s2_dauer
