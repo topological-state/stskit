@@ -64,10 +64,10 @@ class Slot:
 
     zid: int
     fid: ZielLabelType
+    gleis: BahnhofElement
     zugname: str
     zugstamm: set[int] = field(default_factory=set)
     zieltyp: str = ""
-    gleis: BahnhofElement = ("", "")
     durchfahrt: bool = False
     zeit: int | float = 0
     dauer: int | float = 0
@@ -939,15 +939,18 @@ class GleisbelegungPlot:
 
         if self._pick_event:
             self.grafik_update()
+            self._pick_event = False
+            self.selection_changed.notify()
         else:
-            if self._slot_auswahl:
-                self._slot_auswahl = []
-                self._warnung_auswahl = []
-                self.selection_text = []
-                self.grafik_update()
+            self.auswahl_loeschen()
 
-        self._pick_event = False
-        self.selection_changed.notify()
+    def auswahl_loeschen(self):
+        if self._slot_auswahl:
+            self._slot_auswahl = []
+            self._warnung_auswahl = []
+            self.selection_text = []
+            self.grafik_update()
+            self.selection_changed.notify()
 
     def on_button_release(self, event: Event, ) -> None:
         """

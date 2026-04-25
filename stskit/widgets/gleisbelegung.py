@@ -1,15 +1,14 @@
 import logging
-from typing import AbstractSet, Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple, Type, Union
 
 from PySide6 import QtWidgets, QtCore
-from PySide6.QtCore import Slot, QModelIndex
+from PySide6.QtCore import Slot as QSlot, QModelIndex
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from stskit.dispo.anlage import Anlage
-from stskit.model.bahnhofgraph import BAHNHOFELEMENT_TYPEN
-from stskit.plots.gleisbelegung import GleisbelegungPlot
+from stskit.model.bahnhofgraph import BAHNHOFELEMENT_TYPEN, BahnhofElement
+from stskit.plots.gleisbelegung import GleisbelegungPlot, Slot, SlotWarnung
 from stskit.qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 from stskit.qt.icons import set_action_icons
 from stskit.widgets.gleisauswahl import GleisauswahlModell
@@ -107,7 +106,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.vorlaufzeit_spin.setValue(self.plot.vorlaufzeit)
         self.ui.nachlaufzeit_spin.setValue(self.plot.nachlaufzeit)
 
-    def save_expanded_state(self, level: int = 0, index: Optional[QModelIndex] = None):
+    def save_expanded_state(self,
+                            level: int = 0,
+                            index: QModelIndex | None = None,
+                            ) -> None:
         """
         Save expansion state of all tree view items.
 
@@ -133,7 +135,10 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         for row in range(model.rowCount(index)):
             self.save_expanded_state(level + 1, model.index(row, 0, index))
 
-    def restore_expanded_state(self, level: int = 0, index: Optional[QModelIndex] = None):
+    def restore_expanded_state(self,
+                               level: int = 0,
+                               index: QModelIndex | None = None,
+                               ) -> None:
         """
         Restore expansion state of all tree view items.
 
@@ -164,14 +169,14 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         if updates:
             view.setUpdatesEnabled(True)
 
-    @Slot()
+    @QSlot()
     def vorlaufzeit_changed(self):
         try:
             self.plot.vorlaufzeit = self.ui.vorlaufzeit_spin.value()
         except ValueError:
             pass
 
-    @Slot()
+    @QSlot()
     def nachlaufzeit_changed(self):
         try:
             self.plot.nachlaufzeit = self.ui.nachlaufzeit_spin.value()
@@ -215,7 +220,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.zuginfoLabel.setText(text)
         self.update_actions()
 
-    @Slot()
+    @QSlot()
     def settings_button_clicked(self):
         if self.ui.stackedWidget.currentIndex() == 0:
             self.ui.stackedWidget.setCurrentIndex(1)
@@ -228,17 +233,17 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             self.gleisauswahl.set_auswahl(self.plot.belegung.gleise)
             self.update_widgets()
 
-    @Slot()
+    @QSlot()
     def page_changed(self):
         self.update_actions()
 
-    @Slot()
+    @QSlot()
     def action_unbelegte_gleise(self):
         self.plot.unbelegte_gleise_zeigen = not self.plot.unbelegte_gleise_zeigen
         self.plot.grafik_update()
         self.update_actions()
 
-    @Slot()
+    @QSlot()
     def action_plus_eins(self):
         try:
             ziel = self.plot._slot_auswahl[0].fid
@@ -249,7 +254,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
-    @Slot()
+    @QSlot()
     def action_minus_eins(self):
         try:
             ziel = self.plot._slot_auswahl[0].fid
@@ -260,7 +265,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
-    @Slot()
+    @QSlot()
     def action_loeschen(self):
         try:
             ziel = self.plot._slot_auswahl[0].fid
@@ -271,7 +276,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
-    @Slot()
+    @QSlot()
     def action_abfahrt_abwarten(self):
         try:
             ziel = self.plot._slot_auswahl[0].fid
@@ -283,7 +288,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
-    @Slot()
+    @QSlot()
     def action_ankunft_abwarten(self):
         try:
             ziel = self.plot._slot_auswahl[0].fid
@@ -295,7 +300,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
-    @Slot()
+    @QSlot()
     def action_kreuzung(self):
         try:
             ziel = self.plot._slot_auswahl[0].fid
@@ -307,14 +312,29 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         except (KeyError, ValueError) as e:
             self.ui.zuginfoLabel.setText(str(e))
 
-    @Slot()
+    @QSlot()
     def action_warnung_ignorieren(self):
-        pass
+        for w in self.plot._warnung_auswahl:
+            w.status = 'fdl-ignoriert'
+        self.plot.grafik_update()
 
-    @Slot()
+    @QSlot()
     def action_warnung_setzen(self):
-        pass
+        slots: set[Slot] = set(self.plot._slot_auswahl)
+        if not slots:
+            return
+        gleise: set[BahnhofElement] = {slot.gleis for slot in slots}
+        zeit = min((slot.zeit for slot in slots))
+        dauer = max((slot.zeit + slot.dauer for slot in slots)) - zeit
+        dauer = max(dauer, 1)
+        warnung = SlotWarnung(gleise=gleise, zeit=zeit, dauer=dauer, status="fdl-markiert")
+        warnung.slots = slots
+        self.plot.belegung.warnung_setzen(warnung)
+        self.plot.grafik_update()
 
-    @Slot()
+    @QSlot()
     def action_warnung_reset(self):
-        pass
+        for w in self.plot._warnung_auswahl:
+            self.plot.belegung.warnung_loeschen(w.key)
+        self.plot.auswahl_loeschen()
+        self.plot.grafik_update()
