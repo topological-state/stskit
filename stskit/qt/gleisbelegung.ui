@@ -223,8 +223,8 @@
    <addaction name="separator"/>
    <addaction name="actionUnbelegteGleise"/>
    <addaction name="separator"/>
-   <addaction name="actionWarnungSetzen"/>
    <addaction name="actionWarnungIgnorieren"/>
+   <addaction name="actionWarnungSetzen"/>
    <addaction name="actionWarnungReset"/>
    <addaction name="separator"/>
    <addaction name="actionPlusEins"/>
