@@ -12,22 +12,24 @@ Die Grafik enthält folgende Elemente:
 
 """
 
+from __future__ import annotations
+from collections.abc import Generator, Iterable, Sequence
 from dataclasses import dataclass, field
 import functools
 import itertools
 import logging
-import re
-from typing import Any, Dict, Iterable, List, Set, Tuple, Union
+from typing import Any
 
 import matplotlib as mpl
-from matplotlib.backend_bases import FigureCanvasBase
+from matplotlib.backend_bases import FigureCanvasBase, Event, PickEvent
 import numpy as np
 import networkx as nx
+from matplotlib.patches import Rectangle, FancyArrowPatch
+from matplotlib.ticker import MultipleLocator
 
 from stskit.utils.observer import Observable
 from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.zielgraph import ZielGraphNode, ZielLabelType
-from stskit.plugin.stsobj import time_to_minutes, format_minutes, format_verspaetung
 from stskit.plots.plotbasics import hour_minutes_formatter
 from stskit.model.zugschema import Zugbeschriftung
 from stskit.zentrale import DatenZentrale
@@ -47,34 +49,31 @@ class Slot:
 
     Properties berechnen gewisse statische Darstellungsmerkmale wie Farbe.
 
-    Attribute
-    ---------
-
-    zugstamm : Set von zid-Nummern von allen Zügen, die miteinander verknüpft sind.
-        Bei zügen aus demselben Stamm werden keine Gleiskonflikte angezeigt.
-
-    zeit: Anfangszeit des Slots in Minuten nach Mitternacht.
-        In der Regel entspricht dieser Wert der voraussichtlichen Ankunftszeit (inklusive Verspätung).
-        Bei Slotverbindungen kann der Wert abweichen.
-    dauer: Länge des Slots in Minuten. Der Slot endet bei `zeit + dauer`.
-    abfahrt: Voraussichtliche Abfahrtszeit (inklusive Verspätung) in Minuten.
-        Das Ende des Slots kann bei Slotverbindungen von dieser Zeit abweichen.
-    verspaetung_an: Voraussichtliche Ankunftsverspätung in Minuten.
-    verspaetung_ab: Voraussichtliche Abfahrtsverspätung in Minuten.
+    Attributes:
+        zugstamm : zid von allen Zügen, die miteinander verknüpft sind.
+            Bei Zügen aus demselben Stamm werden keine Gleiskonflikte angezeigt.
+        zeit: Anfangszeit des Slots in Minuten nach Mitternacht.
+            In der Regel entspricht dieser Wert der voraussichtlichen Ankunftszeit (inklusive Verspätung).
+            Bei Slotverbindungen kann der Wert abweichen.
+        dauer: Länge des Slots in Minuten. Der Slot endet bei `zeit + dauer`.
+        abfahrt: Voraussichtliche Abfahrtszeit (inklusive Verspätung) in Minuten.
+            Das Ende des Slots kann bei Slotverbindungen von dieser Zeit abweichen.
+        verspaetung_an: Voraussichtliche Ankunftsverspätung in Minuten.
+        verspaetung_ab: Voraussichtliche Abfahrtsverspätung in Minuten.
     """
 
     zid: int
     fid: ZielLabelType
     zugname: str
-    zugstamm: Set[int] = field(default_factory=set)
+    zugstamm: set[int] = field(default_factory=set)
     zieltyp: str = ""
     gleis: BahnhofElement = ("", "")
     durchfahrt: bool = False
-    zeit: Union[int, float] = 0
-    dauer: Union[int, float] = 0
-    abfahrt: Union[int, float] = 0
-    verspaetung_an: Union[int, float] = 0
-    verspaetung_ab: Union[int, float] = 0
+    zeit: int | float = 0
+    dauer: int | float = 0
+    abfahrt: int | float = 0
+    verspaetung_an: int | float = 0
+    verspaetung_ab: int | float = 0
     titel: str = ""
     info: str = ""
     farbe: str = "gray"
@@ -97,123 +96,180 @@ class Slot:
         self.info = ""
 
     @property
-    def key(self) -> Tuple[BahnhofElement, int, int]:
+    def key(self) -> tuple[BahnhofElement, int, int]:
         """
-        identifikationsschlüssel des slots
+        Identifikationsschlüssel des Slots
 
-        definiert die unterscheidungsmerkmale von slots.
+        Der Schlüssel wird benutzt, um den Slot in einem Dictionary zu speichern.
+        Der Schlüssel enthält alle Unterscheidungsmerkmale eines Slots.
 
-        :return: tupel aus gleisname, zugname und zielnummer
+        Returns:
+            Tupel aus Bahnhofelement, ZID und Zeit
         """
 
         return self.gleis, self.fid[0], self.fid[1]
 
     @staticmethod
-    def build_key(gleis: BahnhofElement, fid: ZielLabelType):
+    def build_key(gleis: BahnhofElement, fid: ZielLabelType) -> tuple[BahnhofElement, int, int]:
         """
-        identifikationsschlüssel wie key-property aufbauen
+        Identifikationsschlüssel wie `key`-Property aufbauen
 
-        diese methode kann benutzt werden, wenn man den schlüssel eines fahrplanziels wissen will,
-        ohne ein Slot-objekt aufzubauen.
+        Diese methode kann benutzt werden, wenn man den Schlüssel eines Fahrplanziels wissen will,
+        ohne ein `Slot`-Objekt aufzubauen.
 
-        :return: Tupel aus Gleisname, Zug-ID und Ankunftszeit
+        Args:
+            gleis: Gleiselement aus dem Bahnhofgraph
+            fid: Ziellabel aus dem Zielgraph
+
+        Returns:
+            Tupel aus Bahnhofelement, ZID und Zeit
         """
 
         return gleis, fid[0], fid[1]
 
-    def __eq__(self, other: 'Slot') -> bool:
+    def __eq__(self, other: Slot) -> bool:
         """
-        gleichheit von slots
+        Gleichheit von Slots
 
-        die gleichheit von slots wird anhand ihrer key-properties bestimmt.
+        Die Gleichheit von Slots wird anhand ihrer `key`-Properties bestimmt.
 
-        :param other: anderes Slot-objekt
-        :return: bool
+        Args:
+            other: zu vergleichendes `Slot`-Objekt
+
+        Returns:
+            True, wenn beide Objekte denselben Slot bezeichnen.
         """
         return self.key == other.key
 
-    def __lt__(self, other: 'Slot') -> bool:
+    def __lt__(self, other: Slot) -> bool:
         """
-        kleiner als operator
+        Kleiner-als Operator
 
-        der operator wird zum sortieren gebraucht.
-        slots werden nach self.key sortiert.
+        Der Operator wird zum Sortieren gebraucht.
+        Slots werden nach `key` sortiert.
 
-        :param other: Slot
-        :return: bool
+        Args:
+            other: zu vergleichendes `Slot`-Objekt
+
+        Returns:
+            True, wenn `Self` kleiner ist als der andere.
         """
         return self.key < other.key
 
     def __hash__(self) -> int:
         """
-        hash-wert
+        Hash-Wert
 
-        der hash wird aus dem self.key berechnet.
+        Dies ist der Hash-Wert des `key`.
 
-        :return: int
+        Returns:
+            Hash-Wert
         """
         return hash(self.key)
 
     def __str__(self) -> str:
+        """
+        Infotext
+
+        Returns:
+            Inhalt des `info`-Attributs.
+        """
         return self.info
 
 
-WARNUNG_STATUS = ['undefiniert', 'gleis', 'bahnsteig', 'ersatz', 'kuppeln', 'kuppeln-reihenfolge', 'flügeln', 'fdl-markiert', 'fdl-ignoriert']
-WARNUNG_VERBINDUNG = {'E': 'ersatz', 'K': 'kuppeln', 'F': 'flügeln'}
-WARNUNG_FARBE = {'undefiniert': 'gray',
-                 'gleis': 'red',
-                 'bahnsteig': 'orange',
-                 'ersatz': 'darkblue',
-                 'kuppeln': 'darkmagenta',
-                 'kuppeln-reihenfolge': 'magenta',
-                 'flügeln': 'darkgreen',
-                 'fdl-markiert': 'red',
-                 'fdl-ignoriert': 'gray'}
-WARNUNG_BREITE = {'undefiniert': 1,
-                  'gleis': 2,
-                  'bahnsteig': 2,
-                  'ersatz': 1,
-                  'kuppeln': 2,
-                  'kuppeln-reihenfolge': 2,
-                  'flügeln': 2,
-                  'fdl-markiert': 2,
-                  'fdl-ignoriert': 1}
+WARNUNG_STATUS: list[str] = [
+    'undefiniert',
+    'gleis',
+    'bahnsteig',
+    'ersatz',
+    'kuppeln',
+    'kuppeln-reihenfolge',
+    'flügeln',
+    'fdl-markiert',
+    'fdl-ignoriert',
+]
+"Typ und Status der Warnung"
+
+WARNUNG_VERBINDUNG: dict[str, str] = {
+    'E': 'ersatz',
+    'K': 'kuppeln',
+    'F': 'flügeln',
+}
+"Verbindungsart zweier Slots nach Flag"
+
+WARNUNG_FARBE: dict[str, str] = {
+    'undefiniert': 'gray',
+    'gleis': 'red',
+    'bahnsteig': 'orange',
+    'ersatz': 'darkblue',
+    'kuppeln': 'darkmagenta',
+    'kuppeln-reihenfolge': 'magenta',
+    'flügeln': 'darkgreen',
+    'fdl-markiert': 'red',
+    'fdl-ignoriert': 'gray',
+}
+"""
+Linienfarben nach Warnung
+
+Farbnamen für Matplotlib.
+"""
+
+WARNUNG_BREITE: dict[str, int] = {
+    'undefiniert': 1,
+    'gleis': 2,
+    'bahnsteig': 2,
+    'ersatz': 1,
+    'kuppeln': 2,
+    'kuppeln-reihenfolge': 2,
+    'flügeln': 2,
+    'fdl-markiert': 2,
+    'fdl-ignoriert': 1,
+}
+"Linienbreiten nach Warnung"
 
 
 @functools.total_ordering
 @dataclass
 class SlotWarnung:
     """
-    repräsentation eines gleiskonflikts im belegungsplan.
+    Repräsentation einer Warnung im Belegungsplan.
 
-    dieses objekt enthält alle daten für die darstellung in der slotgrafik.
-    die daten sind fertig verarbeitet.
+    Dieses Objekt enthält alle Daten für die Darstellung in der Grafik.
+    Die Daten sind fertig verarbeitet.
 
-    properties berechnen gewisse statische darstellungsmerkmale wie farben.
+    Properties berechnen gewisse statische Darstellungsmerkmale wie Farben.
+
+    Attributes:
+        gleise: Betroffene Gleise
+        zeit: Anfangszeit in Minuten
+        dauer: Dauer in Minuten
+        status: Warnungsart und Status nach [WARNUNG_STATUS]
+        slots: Betroffene Slots
     """
 
-    gleise: Set[BahnhofElement] = field(default_factory=set)
-    zeit: Union[int, float] = 0
-    dauer: Union[int, float] = 0
+    gleise: set[BahnhofElement] = field(default_factory=set)
+    zeit: int | float = 0
+    dauer: int | float = 0
     status: str = "undefiniert"
-    slots: Set[Slot] = field(default_factory=set)
+    slots: set[Slot] = field(default_factory=set)
 
     @property
-    def key(self) -> frozenset:
+    def key(self) -> frozenset[tuple[BahnhofElement, int, int]]:
         """
-        identifikationsschlüssel der warnung
+        Identifikationsschlüssel der Warnung
 
-        warnung werden anhand der betroffenen slots identifiziert.
+        Warnungen werden anhand der betroffenen Slots identifiziert.
 
-        :return: frozenset von Slot.key von alle self.slots
+        Returns:
+            Nicht-mutierbare Menge von `Slot.key` aus `slots`
         """
 
         return frozenset((s.key for s in self.slots))
 
-    def __eq__(self, other: 'SlotWarnung') -> bool:
+    def __eq__(self, other: SlotWarnung) -> bool:
         return self.key == other.key
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         return self.key < other.key
 
     def __hash__(self) -> int:
@@ -225,9 +281,10 @@ class SlotWarnung:
     @property
     def randfarbe(self) -> str:
         """
-        randfarbe markiert konflikte und kuppelvorgänge
+        Farbe der Warnung
 
-        :return: farbbezeichnung für matplotlib
+        Returns:
+             Farbbezeichnung für matplotlib
         """
 
         return WARNUNG_FARBE[self.status]
@@ -257,74 +314,67 @@ class Gleisbelegung:
     """
     Gleisbelegungsmodell
 
-    Diese klasse stellt die Gleisbelegung für eine Auswahl von Gleisen dar.
+    Diese Klasse stellt die Gleisbelegung für eine Auswahl von Gleisen dar.
     Ausserdem wertet sie die Gleisbelegung aus und erstellt Warnungen bei Konflikten oder betrieblichen Vorgängen.
 
     In einer Model-View-Controller-Architektur implementiert diese Klasse das Modell.
-    Der View wird im GleisbelegungPlot und der Controller im GleisbelegungWidget implementiert.
+    Der View wird im `GleisbelegungPlot` und der Controller im `GleisbelegungWidget` implementiert.
 
-    Verwendung
-    ----------
+    Verwendung:
 
-    1. Zu beobachtende Gleise auswählen (gleise_auswaehlen methode).
-    2. (Wiederholt) Daten von Zuggraph und Zielgraph übernehmen (update-Methode).
+    1. Zu beobachtende Gleise auswählen ([gleise_auswaehlen]).
+    2. (Wiederholt) Daten von Zuggraph und Zielgraph übernehmen ([update]).
     3. Daten aus den relevanten Attributen auslesen.
        Die Daten sollten nicht verändert werden, da sie bis auf ein paar Ausnahmen beim Update überschrieben werden.
-       Die ausnahmen sind: Status-Attribut von Warnungen.
+       Die Ausnahmen sind: Status-Attribut von Warnungen.
     4. Schritte 2-3 nach Bedarf wiederholen.
 
-    Attribute
-    ---------
+    Attributes:
 
-    anlage: Link zum Anlagenobjekt. Wird für die Gleiszuordnung benötigt.
-
-    gleise: Liste von verwalteten Gleisen. Sortiert nach gleisname_sortkey.
-
-    slots: Dict von slots. keys sind Slot.key.
-
-    gleis_slots: slots aufgeschlüsselt nach gleis.
-        werte sind dict von slots mit Slot.key als schlüssel.
-
-    hauptgleis_slots: slots aufgeschlüsselt nach hauptgleis (union von sektorgleisen).
-        werte sind dict von slots mit Slot.key als schlüssel.
-
-    belegte_gleise: Namen der Gleise, die im Beobachtungszeitfenster von einem Zug belegt sind.
-
-    warnungen: Dict von Warnungen. keys sind SlotWarnung.key.
+        anlage: Link zum Anlagenobjekt. Wird für die Gleiszuordnung benötigt.
+        gleise: Liste von verwalteten Gleisen. Sortiert nach `gleisname_sortkey`.
+        slots: Dict von Slots. Keys sind Slot.key.
+        gleis_slots: Slots aufgeschlüsselt nach gleis.
+            Werte sind Dict von Slots mit `Slot.key` als Schlüssel.
+        hauptgleis_slots: Slots aufgeschlüsselt nach Hauptgleis (Union von Sektorgleisen).
+            Werte sind Dict von Slots mit Slot.key als Schlüssel.
+        belegte_gleise: Namen der Gleise, die im Beobachtungszeitfenster von einem Zug belegt sind.
+        warnungen: Dict von Warnungen. Keys sind SlotWarnung.key.
     """
 
     def __init__(self, zentrale: DatenZentrale):
         self.zentrale: DatenZentrale = zentrale
         self.anlage = zentrale.anlage
         self.betrieb = zentrale.betrieb
-        self.gleise: List[BahnhofElement] = []
-        self.slots: Dict[Any, Slot] = {}
-        self.gleis_slots: Dict[BahnhofElement, Dict[Any, Slot]] = {}
-        self.hauptgleis_slots: Dict[BahnhofElement, Dict[Any, Slot]] = {}
-        self.belegte_gleise: Set[BahnhofElement] = set()
-        self.warnungen: Dict[Any, SlotWarnung] = {}
+        self.gleise: list[BahnhofElement] = []
+        self.slots: dict[Any, Slot] = {}
+        self.gleis_slots: dict[BahnhofElement, dict[Any, Slot]] = {}
+        self.hauptgleis_slots: dict[BahnhofElement, dict[Any, Slot]] = {}
+        self.belegte_gleise: set[BahnhofElement] = set()
+        self.warnungen: dict[Any, SlotWarnung] = {}
         self.zugbeschriftung = Zugbeschriftung(self.zentrale.anlage)
 
-    def slot_warnungen(self, slot: Slot) -> Iterable[SlotWarnung]:
+    def slot_warnungen(self, slot: Slot) -> Generator[SlotWarnung, None, None]:
         """
-        warnungen zu einem bestimmten slot auflisten.
+        Warnungen zu einem bestimmten Slot auflisten.
 
-        :param slot: zu suchender slot
-        :return: generator von zugehörigen SlotWarnung objekten aus self.warnungen
+        Args:
+            slot: Betroffener Slot.
+        
+        Returns:
+            Zugehörige [SlotWarnung]-Objekten aus [warnungen].
         """
 
         for w in self.warnungen.values():
             if slot in w.slots:
                 yield w
 
-    def update(self):
+    def update(self) -> None:
         """
         Daten einlesen und Slotliste aufbauen.
 
         Diese Methode liest die Zugdaten ein und baut die Attribute neu auf.
         In einem zweiten Schritt werden pro Gleis mögliche Konflikte identifiziert.
-
-        :return: None
         """
 
         if len(self.gleise) == 0:
@@ -333,22 +383,20 @@ class Gleisbelegung:
         self.slots_formatieren()
         self.warnungen_aktualisieren()
 
-    def gleise_auswaehlen(self, gleise: Iterable[BahnhofElement]):
+    def gleise_auswaehlen(self, gleise: Iterable[BahnhofElement]) -> None:
         """
         Darzustellende Gleise wählen.
 
-        :param gleise: Darzustellende Gleise (vom Typ 'Gl' oder 'Agl').
-        :return: None
+        Params:
+            gleise: Darzustellende Gleise (vom Typ 'Gl' oder 'Agl').
         """
 
         sortierung = self.anlage.bahnhofgraph.hierarchical_index(gleise)
-        self.gleise = sorted(gleise, key=sortierung.get)
+        self.gleise = sorted(gleise, key=sortierung.get)  # ty:ignore[no-matching-overload]
 
-    def slots_erstellen(self):
+    def slots_erstellen(self) -> None:
         """
         Slotliste aus Zugdaten erstellen/aktualisieren.
-
-        :return: None
         """
 
         keys_bisherige = set(self.slots.keys())
@@ -444,8 +492,10 @@ class Gleisbelegung:
         die Randfarbe anhand der Flags.
 
         Format des Info-Strings:
+        ```
         IC 2662 (WI → TG): Gleis 5, an 15:03+6, ab 15:04+5
         {name} ({von} → {nach}): {gleis}/{plan}, an {an}+{v_an}, ab {ab}+{v_ab}
+        ```
         """
 
         for slot in self.slots.values():
@@ -559,7 +609,9 @@ class Gleisbelegung:
                 k.slots = {s1, s2}
                 yield k
 
-    def _zufahrtwarnungen(self, slots: Iterable[Slot]) -> Iterable[SlotWarnung]:
+    def _zufahrtwarnungen(self, 
+                          slots: Iterable[Slot],
+                          ) -> Generator[SlotWarnung, None, None]:
         """
         warnungen von überlappenden zufahrten generieren.
 
@@ -570,11 +622,12 @@ class Gleisbelegung:
         :param slots: alles slots müssen zum gleichen gleis gehären
         :return: generator von SlotWarnung
         """
-        slots = sorted(slots, key=lambda s: s.zeit)
+
+        slots: list[Slot] = sorted(slots, key=lambda s: s.zeit)
         try:
             letzter = slots[0]
         except IndexError:
-            return None
+            return
 
         frei = letzter.zeit + letzter.dauer
         konflikt = None
@@ -601,7 +654,11 @@ class Gleisbelegung:
         if konflikt is not None:
             yield konflikt
 
-    def _zugfolgewarnung(self, s1: Slot, s2: Slot, verbindungsart: str) -> Iterable[SlotWarnung]:
+    def _zugfolgewarnung(self, 
+                         s1: Slot, 
+                         s2: Slot, 
+                         verbindungsart: str,
+                         ) -> Generator[SlotWarnung]:
         """
         Verbindet zwei Slots und erstellt eine Warnung
 
@@ -618,10 +675,13 @@ class Gleisbelegung:
         Kupplung: Die Slots überlappen sich planmässig.
             Wenn der erste Slot vor dem zweiten liegt, wird er gedehnt und eine Reihenfolge-Warnung gesetzt.
 
-        :param s1: erster Slot
-        :param s2: zweiter Slot (später als s1)
-        :param verbindungsart: 'E', 'F' oder 'K'
-        :return: Generator von SlotWarnung. Liefert ein oder kein Objekt.
+        Args:
+            s1: erster Slot
+            s2: zweiter Slot (später als s1)
+            verbindungsart: 'E', 'F' oder 'K'
+        
+        Returns:
+            Generiert eine oder keine Slotwarnungen.
         """
 
         try:
@@ -671,6 +731,11 @@ class Gleisbelegung:
 
 
 class GleisbelegungPlot:
+    """
+    Grafische Darstellung der Gleisbelegung als Balkendiagramm in Matplotlib
+    
+    Die Klasse registriert auch Mausklick- und Resize-Events.
+    """
     def __init__(self, zentrale: DatenZentrale, canvas: FigureCanvasBase) -> None:
         self.zentrale = zentrale
         self.anlage = zentrale.anlage
@@ -680,8 +745,8 @@ class GleisbelegungPlot:
 
         self._balken = None
         self._labels = []
-        self._slot_auswahl: List[Slot] = []
-        self._warnung_auswahl: List[SlotWarnung] = []
+        self._slot_auswahl: list[Slot] = []
+        self._warnung_auswahl: list[SlotWarnung] = []
 
         self.belegung = Gleisbelegung(self.zentrale)
 
@@ -691,7 +756,7 @@ class GleisbelegungPlot:
         self.nachlaufzeit = 5
 
         self.selection_changed = Observable(self)
-        self.selection_text: List[str] = []
+        self.selection_text: list[str] = []
 
         self._canvas = canvas
         self._axes = self._canvas.figure.subplots()
@@ -705,12 +770,10 @@ class GleisbelegungPlot:
 
     def grafik_update(self):
         """
-        erstellt das balkendiagramm basierend auf slot-daten
+        Erstellt das balkendiagramm basierend auf slot-daten
 
-        diese methode beinhaltet nur grafikcode.
-        alle interpretation von zugdaten soll in daten_update, slots_erstellen, etc. gemacht werden.
-
-        :return: None
+        Diese Methode beinhaltet nur Grafikcode.
+        Alle Interpretation von Zugdaten muss vorher in `gleisbelegung` gemacht werden.
         """
 
         self._axes.clear()
@@ -749,8 +812,8 @@ class GleisbelegungPlot:
             self._axes.set_xticks(x_labels_pos, x_labels, rotation=45, horizontalalignment='right')
             self._axes.tick_params(top=False, bottom=True, labeltop=False, labelbottom=True)
         self._axes.yaxis.set_major_formatter(hour_minutes_formatter)
-        self._axes.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(1))
-        self._axes.yaxis.set_major_locator(mpl.ticker.MultipleLocator(5))
+        self._axes.yaxis.set_minor_locator(MultipleLocator(1))
+        self._axes.yaxis.set_major_locator(MultipleLocator(5))
         self._axes.yaxis.grid(True, which='major')
         self._axes.xaxis.grid(True)
 
@@ -782,14 +845,18 @@ class GleisbelegungPlot:
         self._axes.figure.tight_layout()
         self._axes.figure.canvas.draw()
 
-    def _plot_sperrungen(self, x_labels, x_labels_pos, kwargs):
+    def _plot_sperrungen(self, 
+                         x_labels: Sequence[str], 
+                         x_labels_pos: Sequence[float], 
+                         kwargs: dict[str, Any],
+                         ) -> None:
         """
-        gleissperrungen mit einer schraffur markieren
+        Gesperrte Gleise schraffieren
 
-        :param x_labels: liste von gleisnamen
-        :param x_labels_pos: liste von x-koordinaten der gleise
-        :param kwargs: kwargs-dict, der für die axes.bar-methode vorgesehen ist.
-        :return: None
+        Args:
+            x_labels: liste von gleisnamen
+            x_labels_pos: liste von x-koordinaten der gleise
+            kwargs: `kwargs`-Dict für `axes.bar` von matplotlib.
         """
 
         try:
@@ -805,10 +872,14 @@ class GleisbelegungPlot:
             except ValueError:
                 continue
             h = max(ylim) - min(ylim)
-            r = mpl.patches.Rectangle(xy, w, h, fill=False, hatch='/', color='r', linewidth=None)
+            r = Rectangle(xy, w, h, fill=False, hatch='/', color='r', linewidth=None)
             self._axes.add_patch(r)
 
-    def _plot_verspaetungen(self, slots, x_pos, colors):
+    def _plot_verspaetungen(self, 
+                            slots: Sequence[Slot], 
+                            x_pos: Sequence[float], 
+                            colors: Sequence[str],
+                            ) -> None:
         for x, c, slot in zip(x_pos, colors, slots):
             if slot.verbunden:
                 continue
@@ -822,10 +893,20 @@ class GleisbelegungPlot:
             pos_y = [slot.zeit - v, slot.zeit]
             self._axes.plot(pos_x, pos_y, color=c, ls=ls, lw=2, marker=None, alpha=0.5)
 
-    def _plot_abhaengigkeiten(self, slots, x_pos, x_labels, x_labels_pos, colors):
+    def _plot_abhaengigkeiten(self,
+                              slots: Sequence[Slot],
+                              x_pos: Sequence[float],
+                              x_labels: Sequence[str],
+                              x_labels_pos: Sequence[float],
+                              colors: Sequence[str],
+                              ) -> None:
         pass
 
-    def _plot_warnungen(self, x_labels, x_labels_pos, kwargs):
+    def _plot_warnungen(self,
+                        x_labels: Sequence[str],
+                        x_labels_pos: Sequence[float],
+                        kwargs: dict[str, Any],
+                        ) -> None:
         for warnung in self.belegung.warnungen.values():
             warnung_gleise = [gleis for gleis in warnung.gleise if gleis in self.belegung.gleise]
             try:
@@ -839,10 +920,23 @@ class GleisbelegungPlot:
                                       edgecolor=warnung.randfarbe, picker=True)
             self._axes.add_patch(r)
 
-    def on_resize(self, event):
+    def on_resize(self, event: Event, ) -> None:
+        """
+        Resize-Event
+
+        Die Grösse der Grafik hat sich geändert.
+        Wir zeichnen sie neu.
+        """
         self.grafik_update()
 
-    def on_button_press(self, event):
+    def on_button_press(self, event: Event, ) -> None:
+        """
+        Button-Press-Event
+
+        Wenn der Benutzer ein Grafikelement ausgewählt hat (`_pick_event`-Attribut), aktualisieren wir die Grafik.
+        Wenn nicht, löschen wir die Auswahl und aktualisieren die Grafik.
+        """
+
         if self._pick_event:
             self.grafik_update()
         else:
@@ -855,41 +949,57 @@ class GleisbelegungPlot:
         self._pick_event = False
         self.selection_changed.notify()
 
-    def on_button_release(self, event):
+    def on_button_release(self, event: Event, ) -> None:
+        """
+        Nichts zu tun.
+        """
         pass
 
-    def on_pick(self, event):
-        if event.mouseevent.inaxes == self._axes:
-            # gleis = self.belegung.gleise[round(event.mouseevent.xdata)]
-            # zeit = event.mouseevent.ydata
-            auswahl = list(self._slot_auswahl)
-            self._pick_event = True
+    def on_pick(self, event: Event, ) -> None:
+        """
+        Matplotlib Pick-Event
 
-            if isinstance(event.artist, mpl.patches.Rectangle):
+        Der Benutzer hat auf eines unserer Grafikelemente geklickt.
+        Wir fügen es der Auswahl hinzu.
+
+        Die Grafik wird erst später im `on_button_press`-Event aktualisiert.
+        """
+
+        if not isinstance(event, PickEvent):
+            return
+        if event.mouseevent.inaxes != self._axes:
+            return
+
+        # gleis = self.belegung.gleise[round(event.mouseevent.xdata)]
+        # zeit = event.mouseevent.ydata
+        auswahl = list(self._slot_auswahl)
+        self._pick_event = True
+
+        if isinstance(event.artist, Rectangle):
+            try:
+                slot = event.artist.slot
+            except AttributeError:
+                pass
+            else:
                 try:
-                    slot = event.artist.slot
-                except AttributeError:
-                    pass
-                else:
-                    try:
-                        auswahl.remove(slot)
-                    except ValueError:
-                        auswahl.append(slot)
-            elif isinstance(event.artist, mpl.patches.FancyArrowPatch):
-                try:
-                    auswahl = [event.artist.ziel_slot, event.artist.ref_slot]
-                except AttributeError:
-                    pass
+                    auswahl.remove(slot)
+                except ValueError:
+                    auswahl.append(slot)
+        elif isinstance(event.artist, FancyArrowPatch):
+            try:
+                auswahl = [event.artist.ziel_slot, event.artist.ref_slot]
+            except AttributeError:
+                pass
 
-            warnungen = set([])
-            for slot in auswahl:
-                warnungen = warnungen | set(self.belegung.slot_warnungen(slot))
-            self._warnung_auswahl = list(warnungen)
+        warnungen = set([])
+        for slot in auswahl:
+            warnungen = warnungen | set(self.belegung.slot_warnungen(slot))
+        self._warnung_auswahl = list(warnungen)
 
-            slots = set(auswahl)
-            for warnung in warnungen:
-                slots = slots | warnung.slots
+        slots = set(auswahl)
+        for warnung in warnungen:
+            slots = slots | warnung.slots
 
-            self.selection_text = [str(slot) for slot in sorted(slots, key=lambda s: s.zeit)]
+        self.selection_text = [str(slot) for slot in sorted(slots, key=lambda s: s.zeit)]
 
-            self._slot_auswahl = auswahl
+        self._slot_auswahl = auswahl
