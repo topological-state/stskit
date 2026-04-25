@@ -908,6 +908,8 @@ class GleisbelegungPlot:
                         kwargs: dict[str, Any],
                         ) -> None:
         for warnung in self.belegung.warnungen.values():
+            if warnung.status == "fdl-ignoriert":
+                continue
             warnung_gleise = [gleis for gleis in warnung.gleise if gleis in self.belegung.gleise]
             try:
                 x = [x_labels_pos[x_labels.index(gleis.name)] for gleis in warnung_gleise]
