@@ -544,13 +544,14 @@ class Gleisbelegung:
         for key in keys_bisherige:
             del self.warnungen[key]
 
-    def _warnungen(self) -> Iterable[SlotWarnung]:
+    def _warnungen(self) -> Generator[SlotWarnung, None, None]:
         """
-        warnungen generieren.
+        Warnungen generieren.
 
-        private untermethode von warnungen_aktualisieren.
+        Private Untermethode von `warnungen_aktualisieren`.
 
-        :return: generator von SlotWarnung
+        Returns:
+            Generator von `SlotWarnung`
         """
 
         for gleis, slot_dict in self.gleis_slots.items():
@@ -564,14 +565,19 @@ class Gleisbelegung:
             slots = slot_dict.values()
             yield from self._hauptgleiswarnungen(slots)
 
-    def _gleiswarnungen(self, slots: Iterable[Slot]) -> Iterable[SlotWarnung]:
+    def _gleiswarnungen(self,
+                        slots: Iterable[Slot],
+                        ) -> Generator[SlotWarnung, None, None]:
         """
-        warnungen von gleiskonflikten generieren.
+        Warnungen zu Gleiskonflikten generieren.
 
-        private untermethode von warnungen_aktualisieren.
+        Private Untermethode von `warnungen_aktualisieren`.
 
-        :param slots: alles slots müssen zum gleichen gleis gehären
-        :return: generator von SlotWarnung
+        Params:
+            slots: Alle Slots müssen zum gleichen Gleis gehören.
+
+        Returns:
+            Generator von `SlotWarnung`
         """
 
         for s1, s2 in itertools.permutations(slots, 2):
@@ -590,14 +596,19 @@ class Gleisbelegung:
                 k.slots = {s1, s2}
                 yield k
 
-    def _hauptgleiswarnungen(self, slots: Iterable[Slot]) -> Iterable[SlotWarnung]:
+    def _hauptgleiswarnungen(self,
+                             slots: Iterable[Slot],
+                             ) -> Generator[SlotWarnung, None, None]:
         """
         warnungen von sektorkonflikten generieren.
 
-        private untermethode von warnungen_aktualisieren.
+        Private Untermethode von `warnungen_aktualisieren`.
 
-        :param slots: alles slots müssen zum gleichen gleis gehären
-        :return: generator von SlotWarnung
+        Params:
+            slots: Alle Slots müssen zum gleichen Gleis gehören.
+
+        Returns:
+            Generator von `SlotWarnung`
         """
 
         for s1, s2 in itertools.permutations(slots, 2):
@@ -616,14 +627,17 @@ class Gleisbelegung:
                           slots: Iterable[Slot],
                           ) -> Generator[SlotWarnung, None, None]:
         """
-        warnungen von überlappenden zufahrten generieren.
+        Warnungen von überlappenden Zufahrten generieren.
 
-        zufahrt = einfahrt oder ausfahrt.
+        Zufahrt = Einfahrt oder Ausfahrt.
 
-        private untermethode von warnungen_aktualisieren.
+        Private Untermethode von `warnungen_aktualisieren`.
 
-        :param slots: alles slots müssen zum gleichen gleis gehären
-        :return: generator von SlotWarnung
+        Params:
+            slots: Alle Slots müssen zum gleichen Gleis gehören.
+
+        Returns:
+            Generator von `SlotWarnung`
         """
 
         slots: list[Slot] = sorted(slots, key=lambda s: s.zeit)
@@ -661,7 +675,7 @@ class Gleisbelegung:
                          s1: Slot, 
                          s2: Slot, 
                          verbindungsart: str,
-                         ) -> Generator[SlotWarnung]:
+                         ) -> Generator[SlotWarnung, None, None]:
         """
         Verbindet zwei Slots und erstellt eine Warnung
 
