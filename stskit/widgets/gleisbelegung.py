@@ -1,3 +1,4 @@
+from stskit.model.zielgraph import ZielGraphNode
 import logging
 
 from PySide6 import QtWidgets, QtCore
@@ -56,6 +57,8 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.actionWarnungSetzen.triggered.connect(self.action_warnung_setzen)
         self.ui.actionWarnungIgnorieren.triggered.connect(self.action_warnung_ignorieren)
         self.ui.actionWarnungReset.triggered.connect(self.action_warnung_reset)
+        self.ui.actionBetriebshaltEinfuegen.triggered.connect(self.action_betriebshalt_einfuegen)
+        self.ui.actionVorzeitigeAbfahrt.triggered.connect(self.action_vorzeitige_abfahrt)
         self.ui.actionPlusEins.triggered.connect(self.action_plus_eins)
         self.ui.actionMinusEins.triggered.connect(self.action_minus_eins)
         self.ui.actionLoeschen.triggered.connect(self.action_loeschen)
@@ -86,21 +89,32 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         return self.zentrale.anlage
 
     def update_actions(self):
-        display_mode = self.ui.stackedWidget.currentIndex() == 1
+        display_mode: bool = self.ui.stackedWidget.currentIndex() == 1
+
+        if display_mode:
+            n_slots = len(self.plot._slot_auswahl)
+            n_warnungen = len(self.plot._warnung_auswahl)
+            slot: Slot | None = self.plot._slot_auswahl[0] if n_slots == 1 else None
+            ziel: ZielGraphNode | None = self.zentrale.betrieb.zielgraph.nodes[slot.fid] if slot else None
+        else:
+            n_slots = n_warnungen = 0
+            ziel = None
 
         self.ui.actionSetup.setChecked(not display_mode)
         self.ui.actionUnbelegteGleise.setEnabled(display_mode)
         self.ui.actionUnbelegteGleise.setChecked(self.plot.unbelegte_gleise_zeigen)
-        self.ui.actionWarnungSetzen.setEnabled(display_mode and len(self.plot._slot_auswahl))
-        self.ui.actionWarnungReset.setEnabled(display_mode and len(self.plot._warnung_auswahl))
-        self.ui.actionWarnungIgnorieren.setEnabled(display_mode and len(self.plot._warnung_auswahl))
-        self.ui.actionFix.setEnabled(display_mode and False)  # not implemented
-        self.ui.actionLoeschen.setEnabled(display_mode and len(self.plot._slot_auswahl))
-        self.ui.actionPlusEins.setEnabled(display_mode and len(self.plot._slot_auswahl))
-        self.ui.actionMinusEins.setEnabled(display_mode and len(self.plot._slot_auswahl))
-        self.ui.actionAbfahrtAbwarten.setEnabled(display_mode and len(self.plot._slot_auswahl) == 2)
-        self.ui.actionAnkunftAbwarten.setEnabled(display_mode and len(self.plot._slot_auswahl) == 2)
-        self.ui.actionKreuzung.setEnabled(display_mode and len(self.plot._slot_auswahl) == 2)
+
+        self.ui.actionBetriebshaltEinfuegen.setEnabled(ziel is not None and ziel.typ == 'D')
+        self.ui.actionVorzeitigeAbfahrt.setEnabled(ziel is not None and 'A' in ziel.flags)
+        self.ui.actionWarnungSetzen.setEnabled(n_slots >= 1)
+        self.ui.actionWarnungReset.setEnabled(n_warnungen >= 1)
+        self.ui.actionWarnungIgnorieren.setEnabled(n_warnungen >= 1)
+        self.ui.actionLoeschen.setEnabled(n_slots >= 1)
+        self.ui.actionPlusEins.setEnabled(n_slots == 1)
+        self.ui.actionMinusEins.setEnabled(n_slots == 1)
+        self.ui.actionAbfahrtAbwarten.setEnabled(n_slots == 2)
+        self.ui.actionAnkunftAbwarten.setEnabled(n_slots == 2)
+        self.ui.actionKreuzung.setEnabled(n_slots == 2)
 
     def update_widgets(self):
         self.ui.vorlaufzeit_spin.setValue(self.plot.vorlaufzeit)
@@ -338,3 +352,44 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             self.plot.belegung.warnung_loeschen(w.key)
         self.plot.auswahl_loeschen()
         self.plot.grafik_update()
+
+    @QSlot()
+    def action_betriebshalt_einfuegen(self):
+        """
+        Betriebshalt einfügen
+
+        Ein Betriebshalt kann an einem Fahrplanziel mit Durchfahrt eingefügt werden.
+        """
+
+        try:
+            ziel = self.plot._slot_auswahl[0].fid
+            ziel_data: ZielGraphNode = self.zentrale.betrieb.zielgraph.node[ziel]
+        except (IndexError, KeyError):
+            return
+        
+        if ziel_data.typ != "D":
+            self.ui.zuginfoLabel.setText("Neuer Betriebshalt nicht möglich.")
+            return
+
+        try:
+            self.zentrale.betrieb.betriebshalt_einfuegen(ziel, None, None, None, wartezeit=1)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))
+
+    @QSlot()
+    def action_vorzeitige_abfahrt(self):
+        """
+        Vorzeitige Abfahrt
+
+        Die Wartezeit wird auf das Minimum reduziert.
+        """
+
+        try:
+            ziel = self.plot._slot_auswahl[0].fid
+        except (IndexError, KeyError):
+            return
+
+        try:
+            self.zentrale.betrieb.vorzeitige_abfahrt(ziel)
+        except (KeyError, ValueError) as e:
+            self.ui.zuginfoLabel.setText(str(e))

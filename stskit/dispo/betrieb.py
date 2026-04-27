@@ -777,7 +777,7 @@ class Betrieb:
         return ab2_label
 
     def betriebshalt_einfuegen(self,
-                               neuer_halt: EreignisLabelType | EreignisGraphNode,
+                               neuer_halt: EreignisLabelType | EreignisGraphNode | ZielLabelType | ZielGraphNode,
                                kante: tuple[EreignisLabelType, EreignisLabelType],
                                gleis: BahnhofElement,
                                ankunftszeit: float | int,
@@ -802,9 +802,13 @@ class Betrieb:
                 Der Betriebshalt wird als neues Fahrziel eingefügt.
 
         Args:
-            vorheriges_ziel: Ereignis oder Fahrziel, das zum Betriebshalt wird oder dem Betriebshalt vorangeht.
+            neuer_halt: Ereignis oder Fahrziel, das zum Betriebshalt wird oder dem Betriebshalt vorangeht.
+            kante: Fahrplanabschnitt (Abfahrt, Ankunft) im Ereignisgraph, in dem der Betriebshalt eingefügt wird.
+                Nicht nötig, wenn `neuer_halt` eine bestehende Durchfahrt bezeichnet.
             gleis: Gleis für Betriebshalt in Betriebsstellen-Notation. Muss vom Typ 'Gl' sein.
+                Nicht nötig, wenn `neuer_halt` eine bestehende Durchfahrt bezeichnet.
             ankunftszeit: Ankunftszeit in Minuten.
+                Nicht nötig, wenn `neuer_halt` eine bestehende Durchfahrt bezeichnet.
             wartezeit: Wartezeit in Minuten
             journal: Bestehende JournalEntryGroup zu der die Aenderungen hinzugefügt werden.
                 Per default erstellt die Funktion eine neue Gruppe.

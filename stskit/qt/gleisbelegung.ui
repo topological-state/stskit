@@ -227,6 +227,9 @@
    <addaction name="actionWarnungSetzen"/>
    <addaction name="actionWarnungReset"/>
    <addaction name="separator"/>
+   <addaction name="actionVorzeitigeAbfahrt"/>
+   <addaction name="actionBetriebshaltEinfuegen"/>
+   <addaction name="separator"/>
    <addaction name="actionPlusEins"/>
    <addaction name="actionMinusEins"/>
    <addaction name="actionFix"/>
@@ -320,6 +323,28 @@
     <string>B</string>
    </property>
   </action>
+  <action name="actionBetriebshaltEinfuegen">
+   <property name="text">
+    <string>Betriebshalt</string>
+   </property>
+   <property name="toolTip">
+    <string>Betriebshalt einfügen (H)</string>
+   </property>
+   <property name="shortcut">
+    <string>H</string>
+   </property>
+  </action>
+  <action name="actionVorzeitigeAbfahrt">
+   <property name="text">
+    <string>Vorzeitige Abfahrt</string>
+   </property>
+   <property name="toolTip">
+    <string>Vorzeitige Abfahrt vermerken (A)</string>
+   </property>
+   <property name="shortcut">
+    <string>A</string>
+   </property>
+  </action>
   <action name="actionWarnungSetzen">
    <property name="text">
     <string>Warnung</string>
@@ -367,10 +392,10 @@
     <string>Unbelegte Gleise</string>
    </property>
    <property name="toolTip">
-    <string>Unbelegte Gleise anzeigen (B)</string>
+    <string>Unbelegte Gleise anzeigen (U)</string>
    </property>
    <property name="shortcut">
-    <string>B</string>
+    <string>U</string>
    </property>
   </action>
   <action name="actionKreuzung">
