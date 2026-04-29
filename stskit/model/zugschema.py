@@ -907,7 +907,7 @@ class ZugFormatter:
             return f"{g}/{p}"
 
     @property
-    def zeit_v_an(self):
+    def zeit_v_an(self) -> str:
         """
         Geplante Ankunftszeit und Verspätung
 
@@ -924,7 +924,7 @@ class ZugFormatter:
         return " ".join(l)
 
     @property
-    def zeit_v_ab(self):
+    def zeit_v_ab(self) -> str:
         """
         Geplante Abfahrtszeit und Verspätung
 
@@ -1131,11 +1131,11 @@ class Zugbeschriftung:
         """
 
         fmt = ZugFormatter(self._anlage, zug, ziel, ankunft, abfahrt, null_zeigen=False)
-        zug = fmt.zug
+        zug_info = fmt.zug
         ankunft = " ".join([fmt.gleis_plan_an, fmt.zeit_v_an])
         abfahrt = fmt.zeit_v_ab
 
-        l = [zug]
+        l = [zug_info]
         if ankunft:
             l.append(ankunft)
         if abfahrt:
@@ -1189,11 +1189,11 @@ class Zugbeschriftung:
         """
 
         fmt = ZugFormatter(self._anlage, zug, ziel, ankunft, abfahrt, null_zeigen=False)
-        zug = fmt.zug
+        zug_info = fmt.zug
         ankunft = " ".join([fmt.gleis_plan_an, fmt.zeit_v_an])
         abfahrt = " ".join([fmt.gleis_plan_ab, fmt.zeit_v_ab])
 
-        l = [zug]
+        l = [zug_info]
         if abfahrt:
             l.append(abfahrt)
         if ankunft:
@@ -1278,11 +1278,11 @@ class Zugbeschriftung:
         """
 
         fmt = ZugFormatter(self._anlage, zug, ziel, ankunft, abfahrt, null_zeigen=False)
-        zug = fmt.zug
+        zug_info = fmt.zug
         ankunft = " ".join([fmt.gleis_plan_an, fmt.zeit_v_an])
         abfahrt = fmt.zeit_v_ab
 
-        l = [zug]
+        l = [zug_info]
         if ankunft:
             l.append(ankunft)
         if abfahrt:
