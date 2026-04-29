@@ -287,9 +287,11 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
             w = False
         self.ui.actionLoeschen.setEnabled(w)
 
-        w = (len(auswahl_muster) == 1 and
-             auswahl_muster[0].typ == 'H-Ab' and
-             auswahl_muster[0].knoten.vorzeitig)
+        w = (
+            len(auswahl_muster) == 1
+            and auswahl_muster[0].typ in {"H-Ab", "A-Ab"}
+            and auswahl_muster[0].knoten.vorzeitig
+        )
         self.ui.actionVorzeitigeAbfahrt.setEnabled(w)
 
         w1 = (len(auswahl_indices) == 2 and
@@ -499,12 +501,12 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
 
         auswahl_muster = self.auswahl_unterscheiden()
         try:
-            muster = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab'}))
+            muster = next(auswahl_muster_filtern(auswahl_muster, index=0, typen={'H-Ab', 'A-Ab'}))
         except StopIteration:
             self.ui.zuginfoLabel.setText("Ungültige Auswahl")
             return
 
-        if muster.typ in {'H-Ab'}:
+        if muster.typ in {'H-Ab', 'A-Ab'}:
             target = muster.ziel
         else:
             return
