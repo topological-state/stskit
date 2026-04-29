@@ -61,6 +61,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         self.ui.actionVorzeitigeAbfahrt.triggered.connect(self.action_vorzeitige_abfahrt)
         self.ui.actionPlusEins.triggered.connect(self.action_plus_eins)
         self.ui.actionMinusEins.triggered.connect(self.action_minus_eins)
+        self.ui.actionFix.setEnabled(False)
         self.ui.actionLoeschen.triggered.connect(self.action_loeschen)
         self.ui.actionAnkunftAbwarten.triggered.connect(self.action_ankunft_abwarten)
         self.ui.actionAbfahrtAbwarten.triggered.connect(self.action_abfahrt_abwarten)
