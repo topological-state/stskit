@@ -956,7 +956,11 @@ class ZugFormatter:
             except (AttributeError, KeyError):
                 return ""
 
-        result = f"{int(zeit) // 60:02}:{int(zeit) % 60:02}"
+        try:
+            result = f"{int(zeit) // 60:02}:{int(zeit) % 60:02}"
+        except (ValueError, TypeError):
+            return ""
+
         return result
 
     @property
@@ -971,11 +975,15 @@ class ZugFormatter:
             zeit = self._abfahrt.t_plan
         except (AttributeError, KeyError):
             try:
-                zeit = self._ziel.p_ab  # todo
+                zeit = self._ziel.p_ab
             except (AttributeError, KeyError):
                 return ""
 
-        result = f"{int(zeit) // 60:02}:{int(zeit) % 60:02}"
+        try:
+            result = f"{int(zeit) // 60:02}:{int(zeit) % 60:02}"
+        except (ValueError, TypeError):
+            return ""
+        
         return result
 
     @property
