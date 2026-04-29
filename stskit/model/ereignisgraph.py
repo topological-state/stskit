@@ -94,9 +94,10 @@ class EreignisGraphNode(dict):
                             kann aber auch davon abweichen, damit die ID eindeutig ist.
                             Der Wert muss vom Ersteller gesetzt werden.
                             """)
-    t_plan = dict_property("t_plan", Optional[float], "Geplante Uhrzeit in Minuten")
-    t_prog = dict_property("t_prog", Optional[float], "Geschätzte Uhrzeit in Minuten")
-    t_mess = dict_property("t_mess", Optional[float], "Gemessene Uhrzeit in Minuten")
+    t_plan = dict_property("t_plan", float | None, "Geplante Uhrzeit in Minuten")
+    t_fdl = dict_property("t_fdl", float | None, "Vom Fdl korrigierte Uhrzeit in Minuten")
+    t_prog = dict_property("t_prog", float | None, "Geschätzte Uhrzeit in Minuten")
+    t_mess = dict_property("t_mess", float | None, "Gemessene Uhrzeit in Minuten")
     vorzeitig = dict_property("vorzeitig", bool, "Vorzeitige Abfahrt möglich")
     s = dict_property("s", float, "Ort in Minuten")
 
@@ -128,12 +129,14 @@ class EreignisGraphNode(dict):
         """
         Effektive Uhrzeit des Ereignisses.
 
-        Dies ist entweder die gemessene, prognostizierte oder geplante Zeit - je nachdem welches Attribut definiert ist.
+        Returns:
+            Das erste, gesetzte Attribut der Folge `t_mess`, `t_fdl`, `t_prog`, `t_plan`.
 
         Raises:
-            AttributeError wenn keines der Attribute gesetzt ist.
+            AttributeError: Keines der Attribute ist gesetzt.
         """
-        result = self.get("t_mess") or self.get("t_prog") or self.get("t_plan")
+
+        result = self.get("t_mess") or self.get("t_fdl") or self.get("t_prog") or self.get("t_plan")
         if result is not None:
             return result
         else:
@@ -664,9 +667,9 @@ class EreignisGraph(nx.DiGraph):
             if ziel_data.typ in {'Ab'}:
                 if zielnode.zeit == MIN_MINUTES:
                     # einfahrt
-                    ziel_zeit = ziel_data.get("t_mess") or ziel_data.get("t_prog") or ziel_data.get("t_plan") or ziel_zeit
+                    ziel_zeit = ziel_data.get("t_mess") or ziel_data.get("t_fdl") or ziel_data.get("t_prog") or ziel_data.get("t_plan") or ziel_zeit
                 else:
-                    ziel_zeit = ziel_data.get("t_plan") or ziel_zeit
+                    ziel_zeit = ziel_data.get("t_fdl") or ziel_data.get("t_plan") or ziel_zeit
 
             zeit_min = -math.inf
             zeit_max = math.inf
@@ -678,7 +681,7 @@ class EreignisGraph(nx.DiGraph):
                 dt_max = edge_data.get("dt_max", 0)
                 dt_fdl = edge_data.get("dt_fdl", 0)
 
-                start_zeit = start_data.get("t_mess") or start_data.get("t_prog") or start_data.get("t_plan")
+                start_zeit = start_data.get("t_mess") or start_data.get("t_fdl") or start_data.get("t_prog") or start_data.get("t_plan")
                 if start_zeit is None:
                     continue
                 if edge_data.get("typ", "P") == "D":

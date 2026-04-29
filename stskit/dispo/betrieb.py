@@ -443,8 +443,14 @@ class Betrieb:
         if not abfahrt_data.vorzeitig:
             raise ValueError("Vorzeitige Abfahrt nicht erlaubt.")
 
+        try:
+            ankunft_data = self.ereignisgraph.nodes[pfad[0]]
+            ankunftszeit = ankunft_data.t_eff
+        except (AttributeError, IndexError, KeyError):
+            raise ValueError("Fehlende Ankunftszeit. Vorzeitige Abfahrt nicht erlaubt.")
+
         egj = JournalEntry[str, EreignisLabelType, EreignisGraphNode](target_graph='ereignisgraph', target_node=abfahrt)
-        egj.change_node(abfahrt, t_plan=None)
+        egj.change_node(abfahrt, t_fdl=ankunftszeit)
         journal.add_entry(egj)
         journal.valid = True
 
