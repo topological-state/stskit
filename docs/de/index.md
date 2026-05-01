@@ -1,13 +1,17 @@
 
-# STSkit / STSdispo
+# STSdispo
 
-[Stellwerksim](https://www.stellwerksim.de) ist ein kollaboratives, Online-Stellwerksimulatorspiel.
-Das _STSkit_-Paket enthält verschiedene Plugins zu [Stellwerksim](https://www.stellwerksim.de), die dich beim Spiel unterstützen.
-Das Hauptprogramm _STSdispo_ bietet eine Reihe von grafischen Werkzeugen wie Bildfahrplan, Gleisbelegung und Anschlussmatrix.
-Es liest die Live-Daten des laufenden Spiels aus, stellt sie grafisch dar, und unterstützt dich bei der Disposition.
+_STSdispo_ ist ein Plugin zu [Stellwerksim].
+Es bietet eine Reihe von grafischen Werkzeugen wie Bildfahrplan, Gleisbelegung und Anschlussmatrix, 
+die dich beim Spiel unterstützen.
+Es liest die Live-Daten des laufenden Spiels aus, stellt sie grafisch dar, und unterstützt dich bei der Disposition der Züge.
+[Stellwerksim] ist ein kollaboratives, Online-Stellwerksimulatorspiel.
 
-_STSkit_ enthält eine Implementierung der Stellwerksim Plugin-Schnittstelle in Python, die du auch in eigenen Projekten verwenden kannst.
+_STSkit_ enthält eine Implementierung der Stellwerksim Plugin-Schnittstelle in Python, die du auch für eigene Plugins verwenden kannst.
 
+[Stellwerksim]: https://www.stellwerksim.de
+
+![Abstract](../img/github-social-abstract.png)
 
 ## Hauptmerkmale
 

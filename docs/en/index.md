@@ -1,11 +1,16 @@
 
-# STSkit / STSdispo
+# STSdispo
 
-_STSkit_ provides graphical data analysis tools such as graphical timetable, track allocation and connection matrix
-that help you to play [Stellwerksim](https://www.stellwerksim.de) more efficiently.
-[Stellwerksim](https://www.stellwerksim.de) is a collaborative online railroad traffic controller simulation game.
+_STSdispo_ is plugin to [Stellwerksim].
+It provides graphical data analysis tools such as graphical timetable, track allocation and connection matrix
+that help you to play [Stellwerksim] more efficiently.
+[Stellwerksim] is a collaborative online railroad traffic controller simulation game.
 
-_STSkit_ also implements a plugin client interface in Python that you can use in your own plugin development.
+_STSkit_ also contains a Python interface to [Stellwerskim] that you can use in your own plugin development.
+
+[Stellwerksim]: https://www.stellwerksim.de
+
+![Abstract](../img/github-social-abstract.png)
 
 ### Main features
 
