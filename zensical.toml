@@ -61,6 +61,7 @@ nav = [
             "de/anschlussmatrix.md",
             "de/ein-ausfahrten.md",
             "de/gleisbelegung.md",
+            "de/rangierplan.md",
             "de/streckenfahrplan.md",
             "de/zugfahrplan.md",
         ]},

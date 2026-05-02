@@ -15,16 +15,18 @@ _STSkit_ enthält eine Implementierung der Stellwerksim Plugin-Schnittstelle in 
 
 ## Hauptmerkmale
 
-- Grafische und tabellarische Fahrpläne
+- Auswertung und Nachführung der aktuellen Betriebslage
     - Automatische Verspätungsprognose entlang der Zugketten mit Berücksichtigung der verschiedenen Betriebsvorgänge.
-    - Korrekturmöglichkeiten und Erfassung von Abhängigkeiten (Anschlüsse, Kreuzungen, Überholungen)
-- Gleisbelegungsplan
+    - [Dispositionsjournal](dispo.md) mit Erfassung von Abhängigkeiten (Anschlüsse, Kreuzungen, Überholungen)
+- [Grafischer Streckenfahrplan](streckenfahrplan.md)
+- [Detaillierter Zugfahrplan](zugfahrplan.md)
+- [Gleisbelegungsplan](gleisbelegung.md)
     - Warnung vor Gleis- und Sektorkonflikten
-    - Hervorhebung von Kupplungsvorgängen
-- Einfahrts- und Ausfahrtstabellen
+    - Hervorhebung von Manövern
+- [Einfahrts- und Ausfahrtstabellen](ein-ausfahrten.md)
     - Abschätzung der effektiven Ein- und Ausfahrtszeiten
-- Anschlussmatrix
-- Rangierplan
+- [Anschlussmatrix](anschlussmatrix.md)
+- [Rangierplan](rangierplan.md)
 - Ereignisticker
 - Asynchrone, objektorientierte Python-Schnittstelle für Stellwerksim-Plugins
 
