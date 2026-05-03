@@ -1,29 +1,29 @@
 # Gleisbelegung
 
-![Balkendiagramm Gleisbelegung (Stw Klosters)](../img/gleisbelegung.png)
+![Balkendiagramm Gleisbelegung (Stw Brennero)](../img/gleisbelegung.png)
 
 ## Markierungen
 
 - Gleisbelegung in Balkendarstellung.
     Der Balken erstreckt sich von Ankunfts- zu Abfahrtszeit (berücksichtigt also die Einfahrt und Ausfahrt nicht).
-    Eine Linie zeigt die Ankunftsverspätung (max. 15 Minuten).
+    Eine Linie zeigt die Ankunftsverspätung (max. 15 Minuten, gestrichelt wenn länger).
 - Manöver:
     - Nummernwechsel (dunkelblauer, gestrichelter Rahmen)
     - Flügelung (dunkelgrüner, gestrichelter Rahmen)
-    - Kupplung (gestrichelter Rahmen in Magenta):
+    - Kupplung (magentafarbener, gestrichelter Rahmen):
         Bei planmässiger Ankunftsreihenfolge ist die Markierung dunkelmagenta.
-        Wenn die Züge nicht planmässig ankommen (magenta), muss der Fdl dafür sorgen, dass sie in der richtigen Reihenfolge zum Kuppeln eintreffen.
-    - Lokwechsel, Lokumlauf (dünner ausgezogener Rahmen in Magenta)
+        Wenn die Züge nicht planmässig ankommen (hell-magenta), muss der Fdl dafür sorgen, dass sie in der richtigen Reihenfolge gekuppelt werden.
+    - Lokwechsel, Lokumlauf (dünner, dunkelmagentafarbener Rahmen)
 - Konflikte:
-    - Gleiskonflikte (roter Rahmen): Der Sim meldet eine mögliche Doppelbelegung.
+    - Gleiskonflikte (dicker, roter Rahmen): Der Sim meldet eine mögliche Doppelbelegung.
         Ein Gleiswechsel ist nötig, oder ein Zug muss aufgehalten werden.
         Bei Haltestellen mit gleichnamigen Gleisen ist die Warnung möglicherweise unbegründet.
         Der Fdl kann die Warnung nach einer Prüfung löschen.
-    - Sektorkonflikte (oranger Rahmen): Züge, die in verschiedenen Sektoren einfahren, müssen entweder aus verschiedenen Richtungen, oder in der geplanten Reihenfolge einfahren.
-        stsDispo kann nicht feststellen, ob dies zutrifft und zeigt in jedem Fall eine Warnung an.
+    - Sektorkonflikte (dicker, oranger Rahmen): Züge, die in verschiedene Sektoren einfahren, müssen entweder aus verschiedenen Richtungen, oder in der geplanten Reihenfolge einfahren.
+        _STSdispo_ kann nicht feststellen, ob dies zutrifft und zeigt in jedem Fall eine Warnung an.
         Der Fdl kann die Warnung nach einer Prüfung löschen.
 - Gleissperrung (rote Schraffur):
-    Gleissperrungen können im Hauptmenü _Einstellungen_ erfasst werden.
+    Gleissperrungen können im Hauptmenü [Einstellungen](einstellungen.md) eingerichtet werden.
 - Zuginfo: Für Zuginfo, Zug anklicken. Alle zur gleichen Markierung gehörenden Züge werden aufgelistet.
 
 
