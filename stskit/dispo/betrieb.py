@@ -416,6 +416,8 @@ class Betrieb:
                     data = self.ereignisgraph.nodes[node]
                     if data.get("t_mess") is None:
                         break
+                else:
+                    break
             else:
                 entfernen.append(jid)
                 logger.debug(f"journal_bereinigen: {jid} (ereignis passiert)")
