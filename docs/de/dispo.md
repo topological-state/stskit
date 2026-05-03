@@ -96,11 +96,10 @@ STSdispo kann dies nicht überprüfen.
 STSdispo trägt eine minimale Aufenthaltsdauer ein.
 Wird eine besondere Abfahrtszeit gewünscht, muss ein zusätzlicher Befehl wie 
 [Ankunft](#ankunft-abwarten-anschluss-abwarten), 
-[Abfahrt](#abfahrt-abwarten-uberholung) abwarten,
-[Wartezeit](#wartezeit-verlangern) oder
-[Abfahrtszeit](#fixe-abfahrtszeit-eintragen) erteilt werden.
+[Abfahrt](#abfahrt-abwarten-uberholung) abwarten oder
+[Wartezeit](#wartezeit-verlangernverkurzen) erteilt werden.
 
-Verfügbar in: [Streckenfahrplan]
+Verfügbar in: [Streckenfahrplan], [Gleisbelegung]
 
 ## :bootstrap-actionVorzeitigeAbfahrt: Vorzeitige Abfahrt
 
@@ -110,11 +109,10 @@ STSdispo setzt die Abfahrtszeit auf die frühestmögliche Zeit.
 
 Wird eine besondere Abfahrtszeit gewünscht, muss ein zusätzlicher Befehl wie 
 [Ankunft](#ankunft-abwarten-anschluss-abwarten), 
-[Abfahrt](#abfahrt-abwarten-uberholung) abwarten,
-[Wartezeit](#wartezeit-verlängern) oder
-[Abfahrtszeit](#fixe-abfahrtszeit-eintragen) erteilt werden.
+[Abfahrt](#abfahrt-abwarten-uberholung) abwarten oder
+[Wartezeit](#wartezeit-verlangernverkurzen) erteilt werden.
 
-Verfügbar in: [Streckenfahrplan]
+Verfügbar in: [Streckenfahrplan], [Gleisbelegung]
 
 ## :bootstrap-actionPlusEins:/:bootstrap-actionMinusEins: Wartezeit verlängern/verkürzen
 
