@@ -36,7 +36,7 @@ fi
 
 echo -e "${YELLOW}Building documentation...${NC}"
 
-if ! uv run zensical build --clean; then
+if ! uv run zensical build --clean --strict; then
     echo -e "Building documentation failed."
     PASS=false
 fi

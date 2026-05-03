@@ -59,7 +59,7 @@ pillow==11.2.1
     # via matplotlib
 pycparser==2.22 ; implementation_name != 'pypy' and os_name == 'nt'
     # via cffi
-pygments==2.19.1
+pygments==2.20.0
     # via icecream
 pyparsing==3.2.3
     # via
