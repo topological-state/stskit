@@ -1,63 +1,94 @@
 # Zugfahrplan
 
-Im Zugfahrplan können die Details der Züge eingesehen werden.
+Im Zugfahrplan können die Fahrplandetails und die aktuelle Betriebslage der Züge eingesehen werden.
 
-Das Fenster zeigt auch die von stskit verwalteten Verspätungsparameter an,
-was unter anderem für die Problemlösung bei Fehlfunktionen hilfreich sein kann.
+![Screenshot Zugfahrplan, Tabellenansicht](../img/zugfahrplan-tabelle.png)
 
-![stskit-screen-tabellenfahrplan](https://user-images.githubusercontent.com/51272421/210151709-b9c46270-db98-4583-86d0-612a24fe2009.png)
+Auf der linken Seite werden alle bekannten Züge aufgelistet.
+Das Zeitfenster kann durch die Einstellungen _Vorlaufzeit_ und _Nachlaufzeit_ angepasst werden.
+Durch Klicken auf einen Spaltentitel wird die Liste sortiert.
+Durch die Eingabe einer Zugnummer im Suchfeld wird die Liste gefiltert.
 
-Auf der linken Seite werden alle (dem Plugin bekannten) Züge aufgelistet.
-Die Zugliste kann durch Klicken auf einen Spaltentitel sortiert werden.
 Durch Klicken auf einen Zug wird sein Fahrplan auf der rechten Seite eingeblendet.
 Falls vorhanden, wird zudem der Fahrplan des Folgezugs eingeblendet.
+Die Darstellung des Zugfahrplans kann tabellarisch (Screenshot oben) oder grafisch (Screenshot unten) erfolgen.
 
 ## Zugliste
 
-- zid: Die Zeilennummer ist die Zugsnummer, die vom Simulator intern verwendet wird und für den Benutzer normalerweise nicht sichtbar ist.
-- Status
-  - E: noch nicht eingefahren
-  - S: im Stellwerk sichtbar
-  - A: ausgefahren
-- Einfahrt: von stskit prognostizierte Einfahrtszeit (s. [Modul Ein-/Ausfahrten](howto/ein-ausfahrten.md))
-- Zug, Von, Nach, Gleis, Verspätung: entsprechen den Informationen im Simulator
+Die Zugliste auf der linken Seite zeigt folgende Informationen:
+
+| Spalte     | Funktion                                | Details                                                                                                                  |
+|------------|-----------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| zid        | Sim-interne Zugsnummer                  | Für den Benutzer normalerweise nicht sichtbar                                                                            |                                                      
+| Zug        | Gattung und Nummer wie im Simulator     |                                                                                                                          |
+| Status     | Sichtbarkeitsstatus                     | :lucide-square: E: noch nicht eingefahren <br> :lucide-square-check: S: im Stellwerk <br> :lucide-square: A: ausgefahren |
+| Von        | Herkunft (Einfahrtsgleis)               |                                                                                                                          |
+| Nach       | Endziel (Ausfahrtsgleis)                |                                                                                                                          |
+| Einfahrt   | Erwartete oder gemessene Einfahrtszeit  | (s. [Modul Ein-/Ausfahrten](ein-ausfahrten.md))                                                                          |
+| Ausfahrt   | Erwartete oder gemessene Ausfahrtszeit  | (s. [Modul Ein-/Ausfahrten](ein-ausfahrten.md))                                                                          |
+| Gleis      | Aktuelles Fahrziel (disponiertes Gleis) | :lucide-square-check:: Zug ist am Gleis                                                                                  |
+| Verspätung | Aktuelle Verspätung                     |                                                                                                                          |
 
 
-## Zugfahrplan
+## Zugfahrplan, Tabellenansicht
 
-- Gleis, An, Ab: entsprechen den Information im Simulator
-- VAn, VAb: von stskit geschätzte Ankunfts- und Abfahrtsverspätung
-- Flags: vom Simulator übermittelte Flagzeile (s. Erbauerhandbuch)
-- Folgezug: Zugnummer des Folgezugs bei Ersatz, Kupplung oder Flügelung
-- Abhängigkeiten: s.u.
+Ein Hauptunterschied zum Zugfahrplan im Simulator ist, 
+dass Einfahrt und Ausfahrt eine eigene Zeile mit der von STSdispo berechneten Einfahrts- bzw. Ausfahrtszeit haben
 
-Bei sichtbaren Zügen wird das aktuelle Fahrplanziel hellblau hervorgehoben.
+Bei sichtbaren Zügen wird das aktuelle Fahrplanziel cyan hervorgehoben.
+Erledigte Fahrplaneinträge erscheinen dunkelcyan.
+Angeordnete Betriebshalte werden orange markiert.[^1]
+
+[^1]: Das Feature Betriebshalte ist noch in Entwicklung. 
+    Betriebshalte werden im Fahrplan angezeigt.
+    Das Erreichen der Betriebshalte wird jedoch noch nicht erkannt.
+
+Der Zugfahrplan zeigt neben den geläufigen Informationen auch interne Informationen vom Simulator, 
+die eher für fortgeschrittene Anwender gedacht sind.
+
+| Spalte   | Funktion                                  | Details                                                                                                                                  |
+|----------|-------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| Gleis    | Disponiertes Gleis                        | Bei Gleisänderung erscheint das Plangleis zwischen Schrägstrichen                                                                        |
+| An       | Geplante Ankunftszeit                     |                                                                                                                                          |
+| Ab       | Geplante Abfahrtszeit                     |                                                                                                                                          |
+| VAn      | Geschätzte Ankunftsverspätung             | Bei erledigten Zielen die effektive Verspätung                                                                                           |
+| VAb      | Geschätzte Abfahrtsverspätung             | Bei erledigten Zielen die effektive Verspätung                                                                                           |
+| Flags    | Vom Erbauer definierte Betriebsvorgänge   | Uebersicht: s. Tabelle unten; Details: s. [Erbauerhandbuch](https://doku.stellwerksim.de/doku.php?id=stellwerksim:erbauer:zugbau:flags)) |
+| Vermerke | Ersatz, Kupplung, Flügelung, Betriebshalt | Mit Nummer des Gegenzugs                                                                                                                 |
+
+### Flags
+
+| Flag | Funktion                                         |
+|------|--------------------------------------------------|
+| A    | Vorzeitige Abfahrt möglich                       |
+| D    | Durchfahrt                                       |
+| E    | Ersatz/Nummernwechsel                            |
+| F    | Flügeln                                          |
+| K    | Kuppeln                                          |
+| L    | Lokumlauf                                        |
+| P    | Startaufstellung (keine Bedeutung in STSdispo)   |
+| R    | Richtungsänderung (keine Bedeutung in STSdispo)  |
+| W    | Lokwechsel                                       |
 
 
-## Abhängigkeiten
+## Zugfahrplan, Graphansicht
 
-Diese Spalte zeigt, nach welchen Abhängigkeiten die Verspätung berechnet wird.
-Jedem Fahrplanziel ist eine automatische Abhängigkeit zugeordnet, die von stskit intern verwaltet wird.
-Ausserdem kann der Fdl weitere Abhängigkeiten anfügen.
+![Screenshot Zugfahrplan, Graphansicht](../img/zugfahrplan-graph.png)
 
-### Automatische Abhängigkeiten
+In der Graphansicht wird jedes Fahrplanziel als Kasten mit dem disponierten Gleis und der planmässigen Aufenthaltszeit dargestellt.
+Der oberste Kasten enthält zudem die Zugnummer.
 
-- Einfahrt: Verfolgt die Verspätung noch nicht eingefahrener Züge
-- Plan: Fahrplanmässiger Halt, wenn möglich Verspätung aufholen
-- Signal: übernimmt die Verspätung bei einem ausserordentlichen Halt
-- Ersatz: Verspätungsberechnung bei Ersatz/Nummernwechsel
-- Kupplung: Verspätungsberechnung bei Kupplung
-- Flügelung: Verspätungsberechnung bei Flügelung
-- Flag: Verspätung wird durch Flag (Ersatz/Kupplung/Flügelung) bestimmt
+Die Kasten sind vertikal zeitlich geordnet und in der Reihenfolge des Fahrplans durch Pfeile verbunden.
+Ein Buchstabe bezeichnet den Typ der Relation:
 
-### Vom Fdl verwaltete Abhängigkeiten
+| Kantentyp | Funktion                   |
+|-----------|----------------------------|
+| P         | Planmässige Fahrt          |
+| E         | Ersatz/Nummernwechsel      |
+| F         | Flügeln                    |
+| K         | Kuppeln                    |
 
-- Abfahrt: Abfahrt eines anderen Zuges abwarten
-- Ankunft: Ankunft eines anderen Zuges abwarten
-- Fest: Der Fdl hat eine feste Verspätung angegeben
-- Nicht warten: Anderen Zug nicht abwarten
+!!! Example "Beispiel"
 
-## Werkzeuge
-
-In diesem Fenster sind keine Werkzeuge verfügbar.
-Abhängigkeiten werden in den anderen Modulen bearbeitet.
+    Der Beispiel-Screenshot zeigt grafisch, dass Zug 1228 als erster in KLO 2A einfährt.
+    Im Bahnhof Klosters kuppeln die Züge bei umgekehrter Reihenfolge nicht.
