@@ -1,41 +1,42 @@
 # Ein-/Ausfahrten
 
-Das Einfahrts- und Ausfahrtsdiagramm zeigt die Belegung der Ein- und Ausfahrtsgleise.
+Das Einfahrts- und Ausfahrtsdiagramm zeigt die Belegung der Ein- und Ausfahrtsgleise
+ähnlich wie das [Gleisbelegungsdiagramm](gleisbelegung.md) der Bahnhofgleise.
 
 Die Fahrpläne im Stellwerksim haben keine definierten Einfahrts- und Ausfahrtszeiten.
-Stattdessen zeigen die Fahrpläne die Ankunft/Abfahrt des nächsten Fahrplanpunkts.
-stskit extrapoliert die Einfahrts- und Ausfahrtszeit anhand gemesser Fahrzeiten.
+Die Fahrpläne enhalten lediglich die Ankunfts-/Abfahrtszeit am nächsten Fahrplanpunkt.
+STSdispo schätzt die Einfahrts- und Ausfahrtszeit anhand gemessener Fahrzeiten.
+Die Schätzung wird daher im Lauf des Spiels besser.
 
-![stskit-screen-einausfahrten](https://user-images.githubusercontent.com/51272421/210151702-598b9268-4cd7-4703-9769-4e136fd240f3.png)
+![Screenshot Einfahrten/Ausfahrten](../img/ein-aus-fahrten.png)
+
 
 ## Markierungen
 
-- Gleisbelegung (nur Ein- und Ausfahrten) in Balkendarstellung
-  - Pfeil links zeigt Einfahrt, rechts Ausfahrt
-  - Linie zeigt Verspätung (max. 15 Minuten)
-  - Farbschema ist noch fest eingestellt, wird später einstellbar gemacht werden
-- Konflikte: gestrichelter Rahmen
-  - gleichzeitig ein-/ausfahrende Züge (rot)
-  - Löschung durch Fdl (grau)
-- Zuginfo
+- Belegung der Ein- und Ausfahrgleise in Balkendarstellung.
+    - Pfeil links zeigt Einfahrt, Pfeil rechts Ausfahrt
+    - Linie zeigt die Verspätung (max. 15 Minuten, gestrichelt wenn länger) an.
+    - Die Belegungsdauer ist standardmässig 1 Minute lang.
+    - Ueberlappende Belegungen werden in willkürlicher Reihenfolge gestaffelt.
+- Konflikte:
+    - Gleiskonflikte (dicker, roter Rahmen): Der Sim meldet eine mögliche Doppelbelegung.
+        Bei Ein-/Ausfahrgleisen mit gleichem Namen ist die Warnung möglicherweise unbegründet.
+        Der Fdl kann die Warnung nach einer Prüfung löschen.
+- Gleissperrung (rote Schraffur):
+    Gleissperrungen können im Hauptmenü [Einstellungen](einstellungen.md) eingerichtet werden.
+
 
 ## Werkzeuge
 
-- Einstellungsseite
-  - Gleisauswahl
-- Filter: nur benutzte Gleise anzeigen
-- Markierung
-  - Konflikt
-  - löschen
-  - zurücksetzen
+- :bootstrap-actionUnbelegteGleise: Unbelegte Gleise anzeigen.
+    Standardmässig werden nur Gleise angezeigt, die im gewählten Zeitfenster effektiv belegt sind.
+- Markierungen
+    - :bootstrap-actionWarnungSetzen: Konfliktmarkierung auf ausgewählte Balken setzen
+    - :bootstrap-actionWarnungIgnorieren: ausgewählte Konfliktmarkierung löschen
+    - :bootstrap-actionWarnungReset: Konfliktmarkierung auf ausgewählten Balken wiederherstellen 
+- Die Dispositionsbefehle sind nicht in diesem Fenster nicht aktiv.
 
 Für Zuginfo, Zug anklicken.
 Alle in einem Konflikt stehende Züge werden aufgelistet
 Es können mehr als zwei Slots ausgewählt sein!
 Auf den Hintergrund klicken, um die Auswahl aufzuheben.
-
-## Bemerkungen
-
-Ein- und Ausfahrten werden intern wie Gleise gehandhabt.
-Wenn in einem Stellwerk wie im Beispiel oben eine Einfahrt den gleichen Namen wie ein Gleis hat, 
-werden beide dargestellt und mit einer Warnung versehen.
