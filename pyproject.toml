@@ -20,7 +20,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "mkdocstrings[python]>=1.0.0",
-    "nuitka>=2.7.7",
+    "nuitka>=4.0",
     "pynose>=1.5.5",
     "ruff>=0.14.10",
     "ty>=0.0.15",
