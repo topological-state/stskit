@@ -1,6 +1,6 @@
 # Changelog
 
-## Master-Branch seit letztem Release
+## 2.2.0
 
 ### Features
 
@@ -12,10 +12,12 @@
   - Vorzeitige Abfahrt
 - Übersicht Dispo-Befehle im Zugfahrplan-Modul
 - Klarere Trassen- und Knotenauswahl im Bildfahrplan
-- Durchfahrt und Betriebshalte markieren im Bildfahrplan
+- Darstellung von Durchfahrten und Betriebshalten im Bildfahrplan
+- Befehle zum Warnungen Löschen/Setzen im Gleisbelegungsfenster reaktiviert
 - Deutlichere Icons
+- Aktualisierte Dokumentation auf [GitHub](https://topological-state.github.io/stskit/)
 
-### Issues
+### Behobene Fehler
 
 - Auswahl von automatischer Hauptstrecke in Konfiguration speichern
 
@@ -24,6 +26,13 @@
 - Ergänzung Zuggattungen Deutschland/Österreich (gem. Forumseintrag STS)
 - Explizite Zuggattungen Schweiz (grenzüberschreitende Züge)
 - Aktualisierung numerische Zuggattungen Schweiz/RhB
+
+
+- Deutschland: Bergstrasse, Hamburg Hbf, Maschen Rbf, München Hbf, Nienburg/Weser, 
+- Frankreich: Melun
+- Italien: Brennero
+- Oesterreich: Drau-Mölltal, Landeck-Zams, St. Anton, Wolfurt
+- Schweiz: Arth-Goldau, Bern, Brugg, Frick, Hauenstein, Klosters, Luzern, Olten, Rechtes Seeufer, Rheintal, Sagliains, Sempachersee, Unterland, Thunersee, Winterthur, Worblaufen, Zimmerberg, Zürich HB
 
 
 ## 2.1.7
