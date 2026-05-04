@@ -19,58 +19,98 @@
       "stamm": "ZUE"
     },
     {
-      "name": "ZUE 12",
-      "typ": "Gl",
+      "name": "ZLOE32",
+      "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "ZUE 12",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 17",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 17",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 4",
-      "gleise": 1
-    },
-    {
-      "name": "ZLOE33",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZLOE33",
-      "gleise": 1
-    },
-    {
-      "name": "ZLOE31",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZLOE31",
+      "stamm": "ZUE 6",
       "gleise": 1
     },
     {
       "name": "ZUE 6",
-      "typ": "Gl",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 17",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE33",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 18",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE34",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE31",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 12",
+      "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
@@ -80,12 +120,102 @@
     },
     {
       "name": "ZUE 15",
-      "typ": "Gl",
+      "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "ZUE 15",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 13",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 14",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 10",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 16",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 6",
       "gleise": 1
     },
     {
@@ -99,13 +229,33 @@
       "gleise": 1
     },
     {
-      "name": "ZLOE34",
+      "name": "ZUE 6",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "ZLOE34",
+      "stamm": "ZUE 6",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 17",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 17",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE33",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZLOE33",
       "gleise": 1
     },
     {
@@ -119,13 +269,63 @@
       "gleise": 1
     },
     {
-      "name": "ZUE 16",
+      "name": "ZUE 4",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "ZUE 16",
+      "stamm": "ZUE 4",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE34",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZLOE34",
+      "gleise": 1
+    },
+    {
+      "name": "ZLOE31",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZLOE31",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 9",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 9",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 12",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 12",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 15",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 15",
       "gleise": 1
     },
     {
@@ -139,36 +339,6 @@
       "gleise": 1
     },
     {
-      "name": "ZUE 14",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 14",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 11",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 11",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 8",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 8",
-      "gleise": 1
-    },
-    {
       "name": "ZUE 5",
       "typ": "Gl",
       "auto": false,
@@ -179,13 +349,13 @@
       "gleise": 1
     },
     {
-      "name": "ZUE 7",
+      "name": "ZUE 14",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "ZUE 7",
+      "stamm": "ZUE 14",
       "gleise": 1
     },
     {
@@ -199,6 +369,36 @@
       "gleise": 1
     },
     {
+      "name": "ZUE 16",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 16",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 11",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 11",
+      "gleise": 1
+    },
+    {
+      "name": "ZUE 7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZUE 7",
+      "gleise": 1
+    },
+    {
       "name": "ZUE 3",
       "typ": "Gl",
       "auto": false,
@@ -209,13 +409,13 @@
       "gleise": 1
     },
     {
-      "name": "ZUE 9",
+      "name": "ZUE 8",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "ZUE 9",
+      "stamm": "ZUE 8",
       "gleise": 1
     },
     {
@@ -513,213 +713,13 @@
       "flags": "",
       "stamm": "ZOER",
       "gleise": 1
-    },
-    {
-      "name": "ZUE 12",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 17",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZLOE33",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZLOE31",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 6",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 15",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZLOE32",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZLOE34",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 18",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 16",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 13",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 14",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 11",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 8",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 5",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 7",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 10",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
-    },
-    {
-      "name": "ZUE 9",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "ZUE 6",
-      "gleise": 1
     }
   ],
   "strecken": [
     {
       "name": "ZOER-P",
       "haupt": false,
-      "ordnung": 196,
+      "ordnung": 216,
       "auto": true,
       "stationen": [
         "Anst ZOER",

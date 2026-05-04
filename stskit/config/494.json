@@ -74,22 +74,22 @@
       "flags": ""
     },
     {
-      "name": "DU3",
+      "name": "DU",
       "typ": "Bft",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "DU"
     },
     {
-      "name": "DU2",
+      "name": "DU4",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "DU2",
+      "stamm": "DU4",
       "gleise": 1
     },
     {
@@ -103,6 +103,16 @@
       "gleise": 1
     },
     {
+      "name": "DU2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DU2",
+      "gleise": 1
+    },
+    {
       "name": "DU1",
       "typ": "Gl",
       "auto": false,
@@ -113,33 +123,13 @@
       "gleise": 1
     },
     {
-      "name": "DU4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "DU4",
-      "gleise": 1
-    },
-    {
-      "name": "HAE2",
+      "name": "HAE",
       "typ": "Bft",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "HAE"
-    },
-    {
-      "name": "HAE4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "HAE4",
-      "gleise": 1
     },
     {
       "name": "HAE2",
@@ -159,6 +149,16 @@
       "sichtbar": true,
       "flags": "",
       "stamm": "HAE3",
+      "gleise": 1
+    },
+    {
+      "name": "HAE4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HAE4",
       "gleise": 1
     },
     {
@@ -191,42 +191,22 @@
       "gleise": 1
     },
     {
-      "name": "HRK44",
+      "name": "HRK",
       "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "HRK"
-    },
-    {
-      "name": "HRK42",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "HRK"
-    },
-    {
-      "name": "HRK43",
-      "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HRK43",
-      "gleise": 1
+      "stamm": "HRK"
     },
     {
       "name": "HRK45",
-      "typ": "Gl",
+      "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HRK45",
-      "gleise": 1
+      "stamm": "HRK"
     },
     {
       "name": "HRK42",
@@ -249,6 +229,16 @@
       "gleise": 1
     },
     {
+      "name": "HRK45",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HRK45",
+      "gleise": 1
+    },
+    {
       "name": "HRK41",
       "typ": "Gl",
       "auto": false,
@@ -256,6 +246,16 @@
       "sichtbar": true,
       "flags": "",
       "stamm": "HRK41",
+      "gleise": 1
+    },
+    {
+      "name": "HRK43",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HRK43",
       "gleise": 1
     },
     {
@@ -269,9 +269,9 @@
       "gleise": 1
     },
     {
-      "name": "OL7",
+      "name": "OL",
       "typ": "Bft",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -298,13 +298,13 @@
       "gleise": 1
     },
     {
-      "name": "OL8",
+      "name": "OL12",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OL8",
+      "stamm": "OL12",
       "gleise": 1
     },
     {
@@ -328,7 +328,7 @@
       "gleise": 1
     },
     {
-      "name": "OL4CD",
+      "name": "OL4AB",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
@@ -338,7 +338,7 @@
       "gleise": 1
     },
     {
-      "name": "OL4AB",
+      "name": "OL4CD",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
@@ -358,16 +358,6 @@
       "gleise": 1
     },
     {
-      "name": "OL11",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL11",
-      "gleise": 1
-    },
-    {
       "name": "OL10",
       "typ": "Gl",
       "auto": false,
@@ -378,33 +368,13 @@
       "gleise": 1
     },
     {
-      "name": "OL3CD",
+      "name": "OL11",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OL3",
-      "gleise": 1
-    },
-    {
-      "name": "OL3AB",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL3",
-      "gleise": 1
-    },
-    {
-      "name": "OL12",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL12",
+      "stamm": "OL11",
       "gleise": 1
     },
     {
@@ -418,9 +388,39 @@
       "gleise": 1
     },
     {
-      "name": "OLH4",
+      "name": "OL3AB",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OL3",
+      "gleise": 1
+    },
+    {
+      "name": "OL3CD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OL3",
+      "gleise": 1
+    },
+    {
+      "name": "OL8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OL8",
+      "gleise": 1
+    },
+    {
+      "name": "OLH",
       "typ": "Bft",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
@@ -437,16 +437,6 @@
       "gleise": 1
     },
     {
-      "name": "OLH4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OLH4",
-      "gleise": 1
-    },
-    {
       "name": "OLH3",
       "typ": "Gl",
       "auto": false,
@@ -457,81 +447,81 @@
       "gleise": 1
     },
     {
-      "name": "OLRB330",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OLRB"
-    },
-    {
-      "name": "OLRB569",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OLRB"
-    },
-    {
-      "name": "OLRB330",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OLRB330",
-      "gleise": 1
-    },
-    {
-      "name": "OLRB330",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OLRB330",
-      "gleise": 1
-    },
-    {
-      "name": "OLRB569",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OLRB569",
-      "gleise": 1
-    },
-    {
-      "name": "OLRB569",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OLRB569",
-      "gleise": 1
-    },
-    {
-      "name": "OLVL286",
-      "typ": "Bft",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OLVL"
-    },
-    {
-      "name": "OLVL285",
+      "name": "OLH4",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OLVL285",
+      "stamm": "OLH4",
       "gleise": 1
+    },
+    {
+      "name": "OLRB330",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OLRB"
+    },
+    {
+      "name": "OLRB569",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OLRB"
+    },
+    {
+      "name": "OLRB330",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OLRB330",
+      "gleise": 1
+    },
+    {
+      "name": "OLRB330",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OLRB330",
+      "gleise": 1
+    },
+    {
+      "name": "OLRB569",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OLRB569",
+      "gleise": 1
+    },
+    {
+      "name": "OLRB569",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OLRB569",
+      "gleise": 1
+    },
+    {
+      "name": "OLVL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OLVL"
     },
     {
       "name": "OLVL286",
@@ -544,42 +534,32 @@
       "gleise": 1
     },
     {
-      "name": "WBOL4",
+      "name": "OLVL285",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OLVL285",
+      "gleise": 1
+    },
+    {
+      "name": "WBOL",
       "typ": "Bft",
-      "auto": true,
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
       "stamm": "WBOL"
     },
     {
-      "name": "WBOL4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WBOL4",
-      "gleise": 1
-    },
-    {
-      "name": "WBOL2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WBOL4",
-      "gleise": 1
-    },
-    {
       "name": "WBOL3",
-      "typ": "Bs",
+      "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "WBOL4",
+      "stamm": "WBOL3",
       "gleise": 1
     },
     {
@@ -600,16 +580,6 @@
       "sichtbar": true,
       "flags": "",
       "stamm": "WBOL2",
-      "gleise": 1
-    },
-    {
-      "name": "WBOL3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "WBOL3",
       "gleise": 1
     },
     {
@@ -901,13 +871,13 @@
       "gleise": 1
     },
     {
-      "name": "DU2",
+      "name": "DU4",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "DU3",
+      "stamm": "DU",
       "gleise": 1
     },
     {
@@ -917,7 +887,17 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "DU3",
+      "stamm": "DU",
+      "gleise": 1
+    },
+    {
+      "name": "DU2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DU",
       "gleise": 1
     },
     {
@@ -927,27 +907,7 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "DU3",
-      "gleise": 1
-    },
-    {
-      "name": "DU4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "DU3",
-      "gleise": 1
-    },
-    {
-      "name": "HAE4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "HAE2",
+      "stamm": "DU",
       "gleise": 1
     },
     {
@@ -957,7 +917,7 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HAE2",
+      "stamm": "HAE",
       "gleise": 1
     },
     {
@@ -967,37 +927,17 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HAE2",
+      "stamm": "HAE",
       "gleise": 1
     },
     {
-      "name": "HRK45",
+      "name": "HAE4",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HRK44",
-      "gleise": 1
-    },
-    {
-      "name": "HRK70",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "HRK44",
-      "gleise": 1
-    },
-    {
-      "name": "HRK43",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "HRK42",
+      "stamm": "HAE",
       "gleise": 1
     },
     {
@@ -1007,7 +947,7 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HRK42",
+      "stamm": "HRK",
       "gleise": 1
     },
     {
@@ -1017,7 +957,7 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HRK42",
+      "stamm": "HRK",
       "gleise": 1
     },
     {
@@ -1027,7 +967,37 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "HRK42",
+      "stamm": "HRK",
+      "gleise": 1
+    },
+    {
+      "name": "HRK43",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HRK",
+      "gleise": 1
+    },
+    {
+      "name": "HRK45",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HRK45",
+      "gleise": 1
+    },
+    {
+      "name": "HRK70",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HRK45",
       "gleise": 1
     },
     {
@@ -1037,77 +1007,7 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OL7",
-      "gleise": 1
-    },
-    {
-      "name": "OL8",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL7",
-      "gleise": 1
-    },
-    {
-      "name": "OL1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL7",
-      "gleise": 1
-    },
-    {
-      "name": "OL4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL7",
-      "gleise": 1
-    },
-    {
-      "name": "OL9",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL7",
-      "gleise": 1
-    },
-    {
-      "name": "OL11",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL7",
-      "gleise": 1
-    },
-    {
-      "name": "OL10",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL7",
-      "gleise": 1
-    },
-    {
-      "name": "OL3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OL7",
+      "stamm": "OL",
       "gleise": 1
     },
     {
@@ -1117,7 +1017,57 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OL7",
+      "stamm": "OL",
+      "gleise": 1
+    },
+    {
+      "name": "OL1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OL",
+      "gleise": 1
+    },
+    {
+      "name": "OL4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OL",
+      "gleise": 1
+    },
+    {
+      "name": "OL9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OL",
+      "gleise": 1
+    },
+    {
+      "name": "OL10",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OL",
+      "gleise": 1
+    },
+    {
+      "name": "OL11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OL",
       "gleise": 1
     },
     {
@@ -1127,7 +1077,27 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OL7",
+      "stamm": "OL",
+      "gleise": 1
+    },
+    {
+      "name": "OL3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OL",
+      "gleise": 1
+    },
+    {
+      "name": "OL8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OL",
       "gleise": 1
     },
     {
@@ -1137,17 +1107,7 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OLH4",
-      "gleise": 1
-    },
-    {
-      "name": "OLH4",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "OLH4",
+      "stamm": "OLH",
       "gleise": 1
     },
     {
@@ -1157,17 +1117,17 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OLH4",
+      "stamm": "OLH",
       "gleise": 1
     },
     {
-      "name": "OLVL285",
+      "name": "OLH4",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OLVL286",
+      "stamm": "OLH",
       "gleise": 1
     },
     {
@@ -1177,14 +1137,54 @@
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OLVL286",
+      "stamm": "OLVL",
+      "gleise": 1
+    },
+    {
+      "name": "OLVL285",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OLVL",
+      "gleise": 1
+    },
+    {
+      "name": "WBOL3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBOL",
+      "gleise": 1
+    },
+    {
+      "name": "WBOL4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBOL",
+      "gleise": 1
+    },
+    {
+      "name": "WBOL2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBOL",
       "gleise": 1
     }
   ],
   "strecken": [
     {
       "name": "EG-TK",
-      "haupt": false,
+      "haupt": true,
       "ordnung": 1,
       "auto": false,
       "stationen": [
@@ -1202,113 +1202,36 @@
     {
       "name": "ABO-DK",
       "haupt": false,
-      "ordnung": 101,
-      "auto": true,
+      "ordnung": 2,
+      "auto": false,
       "stationen": [
         "Anst ABO",
         "Bf OL",
+        "Bf OLRB",
         "Bf DU",
         "Anst DK"
-      ]
-    },
-    {
-      "name": "ABO-RTR",
-      "haupt": false,
-      "ordnung": 104,
-      "auto": true,
-      "stationen": [
-        "Anst ABO",
-        "Bf OL",
-        "Anst RTR"
       ]
     },
     {
       "name": "ABO-TK",
       "haupt": false,
-      "ordnung": 105,
-      "auto": true,
+      "ordnung": 3,
+      "auto": false,
       "stationen": [
         "Anst ABO",
         "Bf OL",
+        "Bf OLRB",
         "Bf DU",
         "Bf OLVL",
         "Bf HBTN",
         "Anst TK"
-      ]
-    },
-    {
-      "name": "DK-ABO",
-      "haupt": false,
-      "ordnung": 112,
-      "auto": true,
-      "stationen": [
-        "Anst DK",
-        "Bf DU",
-        "Bf OL",
-        "Anst ABO"
-      ]
-    },
-    {
-      "name": "DK-EG",
-      "haupt": false,
-      "ordnung": 114,
-      "auto": true,
-      "stationen": [
-        "Anst DK",
-        "Bf DU",
-        "Bf OL",
-        "Bf OLH",
-        "Bf WBOL",
-        "Bf HAE",
-        "Bf HRK",
-        "Anst EG"
-      ]
-    },
-    {
-      "name": "DK-RTR",
-      "haupt": false,
-      "ordnung": 116,
-      "auto": true,
-      "stationen": [
-        "Anst DK",
-        "Bf DU",
-        "Bf OL",
-        "Anst RTR"
-      ]
-    },
-    {
-      "name": "DK-TK",
-      "haupt": false,
-      "ordnung": 117,
-      "auto": true,
-      "stationen": [
-        "Anst DK",
-        "Bf DU",
-        "Bf OLVL",
-        "Bf HBTN",
-        "Anst TK"
-      ]
-    },
-    {
-      "name": "EG-ABO",
-      "haupt": false,
-      "ordnung": 118,
-      "auto": true,
-      "stationen": [
-        "Anst EG",
-        "Bf HRK",
-        "Bf HAE",
-        "Bf WBOL",
-        "Bf OLH",
-        "Bf OL",
-        "Anst ABO"
       ]
     },
     {
       "name": "EG-DK",
       "haupt": false,
-      "ordnung": 120,
-      "auto": true,
+      "ordnung": 4,
+      "auto": false,
       "stationen": [
         "Anst EG",
         "Bf HRK",
@@ -1316,259 +1239,39 @@
         "Bf WBOL",
         "Bf OLH",
         "Bf OL",
+        "Bf OLRB",
         "Bf DU",
         "Anst DK"
-      ]
-    },
-    {
-      "name": "EG-Läufelfingen",
-      "haupt": false,
-      "ordnung": 121,
-      "auto": true,
-      "stationen": [
-        "Anst EG",
-        "Bf HRK",
-        "Bf HAE",
-        "Bf WBOL",
-        "Bf OLH",
-        "Bf OL",
-        "Anst Läufelfingen"
-      ]
-    },
-    {
-      "name": "EG-RTR",
-      "haupt": false,
-      "ordnung": 122,
-      "auto": true,
-      "stationen": [
-        "Anst EG",
-        "Bf HRK",
-        "Bf HAE",
-        "Bf WBOL",
-        "Bf OLH",
-        "Bf OL",
-        "Anst RTR"
-      ]
-    },
-    {
-      "name": "Läufelfingen-ABO",
-      "haupt": false,
-      "ordnung": 124,
-      "auto": true,
-      "stationen": [
-        "Anst Läufelfingen",
-        "Bf OL",
-        "Anst ABO"
-      ]
-    },
-    {
-      "name": "Läufelfingen-Abstellung",
-      "haupt": false,
-      "ordnung": 125,
-      "auto": true,
-      "stationen": [
-        "Anst Läufelfingen",
-        "Bf OL",
-        "Anst Abstellung"
-      ]
-    },
-    {
-      "name": "Läufelfingen-DK",
-      "haupt": false,
-      "ordnung": 126,
-      "auto": true,
-      "stationen": [
-        "Anst Läufelfingen",
-        "Bf OL",
-        "Bf DU",
-        "Anst DK"
-      ]
-    },
-    {
-      "name": "Läufelfingen-EG",
-      "haupt": false,
-      "ordnung": 127,
-      "auto": true,
-      "stationen": [
-        "Anst Läufelfingen",
-        "Bf OL",
-        "Bf OLH",
-        "Bf WBOL",
-        "Bf HAE",
-        "Bf HRK",
-        "Anst EG"
-      ]
-    },
-    {
-      "name": "Läufelfingen-RTR",
-      "haupt": false,
-      "ordnung": 128,
-      "auto": true,
-      "stationen": [
-        "Anst Läufelfingen",
-        "Bf OL",
-        "Anst RTR"
-      ]
-    },
-    {
-      "name": "Läufelfingen-TK",
-      "haupt": false,
-      "ordnung": 129,
-      "auto": true,
-      "stationen": [
-        "Anst Läufelfingen",
-        "Bf OL",
-        "Bf DU",
-        "Bf OLVL",
-        "Bf HBTN",
-        "Anst TK"
-      ]
-    },
-    {
-      "name": "RTR-ABO",
-      "haupt": false,
-      "ordnung": 130,
-      "auto": true,
-      "stationen": [
-        "Anst RTR",
-        "Bf OL",
-        "Anst ABO"
-      ]
-    },
-    {
-      "name": "RTR-Abstellung",
-      "haupt": false,
-      "ordnung": 131,
-      "auto": true,
-      "stationen": [
-        "Anst RTR",
-        "Bf OL",
-        "Anst Abstellung"
       ]
     },
     {
       "name": "RTR-DK",
       "haupt": false,
-      "ordnung": 132,
-      "auto": true,
+      "ordnung": 5,
+      "auto": false,
       "stationen": [
         "Anst RTR",
         "Bf OL",
+        "Bf OLRB",
+        "Anst Läufelfingen",
         "Bf DU",
         "Anst DK"
-      ]
-    },
-    {
-      "name": "RTR-EG",
-      "haupt": false,
-      "ordnung": 133,
-      "auto": true,
-      "stationen": [
-        "Anst RTR",
-        "Bf OL",
-        "Bf OLH",
-        "Bf WBOL",
-        "Bf HAE",
-        "Bf HRK",
-        "Anst EG"
-      ]
-    },
-    {
-      "name": "RTR-Läufelfingen",
-      "haupt": false,
-      "ordnung": 134,
-      "auto": true,
-      "stationen": [
-        "Anst RTR",
-        "Bf OL",
-        "Anst Läufelfingen"
       ]
     },
     {
       "name": "RTR-TK",
       "haupt": false,
-      "ordnung": 135,
-      "auto": true,
+      "ordnung": 6,
+      "auto": false,
       "stationen": [
         "Anst RTR",
         "Bf OL",
-        "Bf DU",
+        "Bf OLRB",
+        "Anst Läufelfingen",
         "Bf OLVL",
+        "Bf DU",
         "Bf HBTN",
         "Anst TK"
-      ]
-    },
-    {
-      "name": "TK-ABO",
-      "haupt": false,
-      "ordnung": 136,
-      "auto": true,
-      "stationen": [
-        "Anst TK",
-        "Bf HBTN",
-        "Bf OLVL",
-        "Bf DU",
-        "Bf OL",
-        "Anst ABO"
-      ]
-    },
-    {
-      "name": "TK-DK",
-      "haupt": false,
-      "ordnung": 138,
-      "auto": true,
-      "stationen": [
-        "Anst TK",
-        "Bf HBTN",
-        "Bf OLVL",
-        "Bf DU",
-        "Anst DK"
-      ]
-    },
-    {
-      "name": "TK-EG",
-      "haupt": false,
-      "ordnung": 139,
-      "auto": true,
-      "stationen": [
-        "Anst TK",
-        "Bf HBTN",
-        "Bf OLVL",
-        "Bf DU",
-        "Bf OL",
-        "Bf OLH",
-        "Bf WBOL",
-        "Bf HAE",
-        "Bf HRK",
-        "Anst EG"
-      ]
-    },
-    {
-      "name": "TK-Läufelfingen",
-      "haupt": false,
-      "ordnung": 140,
-      "auto": true,
-      "stationen": [
-        "Anst TK",
-        "Bf HBTN",
-        "Bf OLVL",
-        "Bf DU",
-        "Bf OL",
-        "Anst Läufelfingen"
-      ]
-    },
-    {
-      "name": "TK-RTR",
-      "haupt": false,
-      "ordnung": 141,
-      "auto": true,
-      "stationen": [
-        "Anst TK",
-        "Bf HBTN",
-        "Bf OLVL",
-        "Bf DU",
-        "Bf OL",
-        "Anst RTR"
       ]
     }
   ],

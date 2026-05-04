@@ -1,8 +1,8 @@
 {
-  "default": false,
+  "default": true,
   "elemente": [
     {
-      "name": "BUC",
+      "name": "Bois le Roi",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -10,7 +10,7 @@
       "flags": ""
     },
     {
-      "name": "DIE",
+      "name": "Boissise-le-Roi",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -18,7 +18,7 @@
       "flags": ""
     },
     {
-      "name": "FRE",
+      "name": "Boussy-st-Antoine",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -26,7 +26,7 @@
       "flags": ""
     },
     {
-      "name": "GKD",
+      "name": "Brunoy",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -34,7 +34,7 @@
       "flags": ""
     },
     {
-      "name": "IT",
+      "name": "Cesson",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -42,7 +42,7 @@
       "flags": ""
     },
     {
-      "name": "LF",
+      "name": "Coudray-Montceaux",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -50,7 +50,7 @@
       "flags": ""
     },
     {
-      "name": "LSN",
+      "name": "DHL Nord",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -58,7 +58,7 @@
       "flags": ""
     },
     {
-      "name": "LST",
+      "name": "DHL Sud",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -66,7 +66,7 @@
       "flags": ""
     },
     {
-      "name": "MU",
+      "name": "Fontainebleau-Forêt",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -74,7 +74,7 @@
       "flags": ""
     },
     {
-      "name": "PR",
+      "name": "Garage CBV",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -82,7 +82,7 @@
       "flags": ""
     },
     {
-      "name": "PRSR",
+      "name": "Héricy",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -90,7 +90,7 @@
       "flags": ""
     },
     {
-      "name": "RLG",
+      "name": "Le Mée",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -98,7 +98,7 @@
       "flags": ""
     },
     {
-      "name": "SIS",
+      "name": "Le Plessis-Chenet",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -106,7 +106,7 @@
       "flags": ""
     },
     {
-      "name": "SOM",
+      "name": "LGV",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -114,7 +114,7 @@
       "flags": ""
     },
     {
-      "name": "TK",
+      "name": "Lieusaint-Moissy",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -122,7 +122,7 @@
       "flags": ""
     },
     {
-      "name": "TRI",
+      "name": "Moret",
       "typ": "Bf",
       "auto": true,
       "ordnung": 0,
@@ -130,1016 +130,832 @@
       "flags": ""
     },
     {
-      "name": "BUC",
+      "name": "Ponthierry-Pringy",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Savigny-le-Temple",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "St-Fargeau",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Voves",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Garage Melun",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Melun",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "CBV",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "A",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "A",
+      "gleise": 1
+    },
+    {
+      "name": "1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1",
+      "gleise": 1
+    },
+    {
+      "name": "2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2",
+      "gleise": 1
+    },
+    {
+      "name": "9",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "9",
+      "gleise": 1
+    },
+    {
+      "name": "3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "3",
+      "gleise": 1
+    },
+    {
+      "name": "4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "4",
+      "gleise": 1
+    },
+    {
+      "name": "5",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "5",
+      "gleise": 1
+    },
+    {
+      "name": "7",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "7",
+      "gleise": 1
+    },
+    {
+      "name": "6",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "6",
+      "gleise": 1
+    },
+    {
+      "name": "8",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "8",
+      "gleise": 1
+    },
+    {
+      "name": "12-16",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "12",
+      "gleise": 1
+    },
+    {
+      "name": "Bois le Roi",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BUC"
+      "stamm": "Bois le Roi"
     },
     {
-      "name": "BUC",
+      "name": "Bois le Roi",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BUC",
+      "stamm": "Bois le Roi",
       "gleise": 1
     },
     {
-      "name": "BUC",
+      "name": "Bois le Roi",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BUC",
+      "stamm": "Bois le Roi",
       "gleise": 1
     },
     {
-      "name": "DIE",
+      "name": "Boissise-le-Roi",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "DIE"
+      "stamm": "Boissise-le-Roi"
     },
     {
-      "name": "DIE",
+      "name": "Boissise-le-Roi",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "DIE",
+      "stamm": "Boissise-le-Roi",
       "gleise": 1
     },
     {
-      "name": "DIE",
+      "name": "Boissise-le-Roi",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "DIE",
+      "stamm": "Boissise-le-Roi",
       "gleise": 1
     },
     {
-      "name": "FRE 33",
+      "name": "Boussy-st-Antoine",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "FRE"
+      "stamm": "Boussy-st-Antoine"
     },
     {
-      "name": "FRE",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE"
-    },
-    {
-      "name": "FRE 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE 2",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE 3",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE 1",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "FRE 4",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 33",
+      "name": "Boussy-st-Antoine",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "FRE 33",
+      "stamm": "Boussy-st-Antoine",
       "gleise": 1
     },
     {
-      "name": "FRE 33",
+      "name": "Boussy-st-Antoine",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "FRE 33",
+      "stamm": "Boussy-st-Antoine",
       "gleise": 1
     },
     {
-      "name": "GKD",
+      "name": "Brunoy",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD"
+      "stamm": "Brunoy"
     },
     {
-      "name": "GKD 2",
+      "name": "Brunoy",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD",
+      "stamm": "Brunoy",
       "gleise": 1
     },
     {
-      "name": "GKD 3",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GKD",
-      "gleise": 1
-    },
-    {
-      "name": "GKD",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GKD",
-      "gleise": 1
-    },
-    {
-      "name": "GKD 4",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GKD",
-      "gleise": 1
-    },
-    {
-      "name": "GKD 2G",
+      "name": "Brunoy",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD 2",
+      "stamm": "Brunoy",
       "gleise": 1
     },
     {
-      "name": "GKD 2",
+      "name": "CBV A",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD 2",
+      "stamm": "CBV A",
       "gleise": 1
     },
     {
-      "name": "GKD 3",
+      "name": "CBV 2",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD 3",
+      "stamm": "CBV 2",
       "gleise": 1
     },
     {
-      "name": "GKD",
+      "name": "CBV 1",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "GKD",
+      "stamm": "CBV 1",
       "gleise": 1
     },
     {
-      "name": "GKD 4",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "GKD 4",
-      "gleise": 1
-    },
-    {
-      "name": "IT",
+      "name": "Cesson",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IT"
+      "stamm": "Cesson"
     },
     {
-      "name": "IT",
+      "name": "Cesson",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IT",
+      "stamm": "Cesson",
       "gleise": 1
     },
     {
-      "name": "IT",
+      "name": "Cesson",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IT",
+      "stamm": "Cesson",
       "gleise": 1
     },
     {
-      "name": "LF",
+      "name": "Coudray-Montceaux",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LF"
+      "stamm": "Coudray-Montceaux"
     },
     {
-      "name": "LF",
+      "name": "Coudray-Montceaux",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LF",
+      "stamm": "Coudray-Montceaux",
       "gleise": 1
     },
     {
-      "name": "LF 1",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF",
-      "gleise": 1
-    },
-    {
-      "name": "LF 2",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF",
-      "gleise": 1
-    },
-    {
-      "name": "LF",
+      "name": "Coudray-Montceaux",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LF",
+      "stamm": "Coudray-Montceaux",
       "gleise": 1
     },
     {
-      "name": "LF 1",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF 1",
-      "gleise": 1
-    },
-    {
-      "name": "LF 1G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF 1",
-      "gleise": 1
-    },
-    {
-      "name": "LF 2",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF 2",
-      "gleise": 1
-    },
-    {
-      "name": "LF 2G",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LF 2",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 36",
+      "name": "DHL Nord",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LSN"
+      "stamm": "DHL Nord"
     },
     {
-      "name": "LSN 56",
+      "name": "DHL Nord",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DHL Nord",
+      "gleise": 1
+    },
+    {
+      "name": "DHL Nord",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DHL Nord",
+      "gleise": 1
+    },
+    {
+      "name": "DHL Sud",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LSN"
+      "stamm": "DHL Sud"
     },
     {
-      "name": "LSN",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN"
-    },
-    {
-      "name": "LSN 3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 3",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 2",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 1",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 36",
+      "name": "DHL Sud",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LSN 36",
+      "stamm": "DHL Sud",
       "gleise": 1
     },
     {
-      "name": "LSN 36",
+      "name": "DHL Sud",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LSN 36",
+      "stamm": "DHL Sud",
       "gleise": 1
     },
     {
-      "name": "LSN 56",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 56",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 61",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 56",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 63",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 56",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 62",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 56",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 56",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 56",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 61",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 61",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 63",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 63",
-      "gleise": 1
-    },
-    {
-      "name": "LSN 62",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LSN 62",
-      "gleise": 1
-    },
-    {
-      "name": "LST",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST"
-    },
-    {
-      "name": "LST 4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST 4",
-      "gleise": 1
-    },
-    {
-      "name": "LST 3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST 3",
-      "gleise": 1
-    },
-    {
-      "name": "LST 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST 2",
-      "gleise": 1
-    },
-    {
-      "name": "LST 40",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST 40",
-      "gleise": 1
-    },
-    {
-      "name": "LST 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "LST 1",
-      "gleise": 1
-    },
-    {
-      "name": "MU",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU"
-    },
-    {
-      "name": "MU 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU 1",
-      "gleise": 1
-    },
-    {
-      "name": "MU 4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU 4",
-      "gleise": 1
-    },
-    {
-      "name": "MU 3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU 3",
-      "gleise": 1
-    },
-    {
-      "name": "MU 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "MU 2",
-      "gleise": 1
-    },
-    {
-      "name": "PR 460",
+      "name": "Fontainebleau-Forêt",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR"
+      "stamm": "Fontainebleau-Forêt"
     },
     {
-      "name": "PR",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR"
-    },
-    {
-      "name": "PR 7",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR 7",
-      "gleise": 1
-    },
-    {
-      "name": "PR 5",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR 5",
-      "gleise": 1
-    },
-    {
-      "name": "PR 4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR 4",
-      "gleise": 1
-    },
-    {
-      "name": "PR 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR 2",
-      "gleise": 1
-    },
-    {
-      "name": "PR 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "PR 1",
-      "gleise": 1
-    },
-    {
-      "name": "PR 460",
+      "name": "Fontainebleau-Forêt",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR 460",
+      "stamm": "Fontainebleau-Forêt",
       "gleise": 1
     },
     {
-      "name": "PR 460",
+      "name": "Fontainebleau-Forêt",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR 460",
+      "stamm": "Fontainebleau-Forêt",
       "gleise": 1
     },
     {
-      "name": "PRSR",
+      "name": "Garage CBV",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PRSR"
+      "stamm": "Garage CBV"
     },
     {
-      "name": "PRSR",
+      "name": "Garage CBV",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PRSR",
+      "stamm": "Garage CBV",
       "gleise": 1
     },
     {
-      "name": "PRSR",
+      "name": "Garage CBV",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PRSR",
+      "stamm": "Garage CBV",
       "gleise": 1
     },
     {
-      "name": "RLG",
+      "name": "Héricy",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "RLG"
+      "stamm": "Héricy"
     },
     {
-      "name": "RLG",
+      "name": "Héricy",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "RLG",
+      "stamm": "Héricy",
       "gleise": 1
     },
     {
-      "name": "RLG",
+      "name": "Héricy",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "RLG",
+      "stamm": "Héricy",
       "gleise": 1
     },
     {
-      "name": "SIS 84",
+      "name": "Le Mée 1",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SIS"
+      "stamm": "Le Mée"
     },
     {
-      "name": "SIS",
-      "typ": "Bft",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS"
-    },
-    {
-      "name": "SIS 3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 3",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 4",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 1",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 2",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 84",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 84",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 83",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 84",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 84",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 84",
-      "gleise": 1
-    },
-    {
-      "name": "SIS 83",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "SIS 83",
-      "gleise": 1
-    },
-    {
-      "name": "SOM",
+      "name": "Le Mée 2",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SOM"
+      "stamm": "Le Mée"
     },
     {
-      "name": "SOM",
+      "name": "Le Mée 1",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SOM",
+      "stamm": "Le Mée 1",
       "gleise": 1
     },
     {
-      "name": "SOM",
+      "name": "Le Mée 1Bis",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le Mée 1",
+      "gleise": 1
+    },
+    {
+      "name": "Le Mée 1",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SOM",
+      "stamm": "Le Mée 1",
       "gleise": 1
     },
     {
-      "name": "TK",
+      "name": "Le Mée 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le Mée 2",
+      "gleise": 1
+    },
+    {
+      "name": "Le Mée 2Bis",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le Mée 2",
+      "gleise": 1
+    },
+    {
+      "name": "Le Mée 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Le Mée 2",
+      "gleise": 1
+    },
+    {
+      "name": "Le Plessis-Chenet",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TK"
+      "stamm": "Le Plessis-Chenet"
     },
     {
-      "name": "TK",
+      "name": "Le Plessis-Chenet",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TK",
+      "stamm": "Le Plessis-Chenet",
       "gleise": 1
     },
     {
-      "name": "TK 4",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TK",
-      "gleise": 1
-    },
-    {
-      "name": "TK 2",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TK",
-      "gleise": 1
-    },
-    {
-      "name": "TK 3",
-      "typ": "Bs",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TK",
-      "gleise": 1
-    },
-    {
-      "name": "TK",
+      "name": "Le Plessis-Chenet",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TK",
+      "stamm": "Le Plessis-Chenet",
       "gleise": 1
     },
     {
-      "name": "TK 4",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TK 4",
-      "gleise": 1
-    },
-    {
-      "name": "TK 2",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TK 2",
-      "gleise": 1
-    },
-    {
-      "name": "TK 3",
-      "typ": "Gl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "TK 3",
-      "gleise": 1
-    },
-    {
-      "name": "TRI",
+      "name": "LGV",
       "typ": "Bft",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TRI"
+      "stamm": "LGV"
     },
     {
-      "name": "TRI",
+      "name": "LGV",
       "typ": "Bs",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TRI",
+      "stamm": "LGV",
       "gleise": 1
     },
     {
-      "name": "TRI",
+      "name": "LGV",
       "typ": "Gl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "TRI",
+      "stamm": "LGV",
       "gleise": 1
     },
     {
-      "name": "BS",
+      "name": "Lieusaint-Moissy",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lieusaint-Moissy"
+    },
+    {
+      "name": "Lieusaint-Moissy",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lieusaint-Moissy",
+      "gleise": 1
+    },
+    {
+      "name": "Lieusaint-Moissy",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lieusaint-Moissy",
+      "gleise": 1
+    },
+    {
+      "name": "Moret",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Moret"
+    },
+    {
+      "name": "Moret",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Moret",
+      "gleise": 1
+    },
+    {
+      "name": "Moret",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Moret",
+      "gleise": 1
+    },
+    {
+      "name": "Ponthierry-Pringy",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ponthierry-Pringy"
+    },
+    {
+      "name": "Ponthierry-Pringy",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ponthierry-Pringy",
+      "gleise": 1
+    },
+    {
+      "name": "Ponthierry-Pringy",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ponthierry-Pringy",
+      "gleise": 1
+    },
+    {
+      "name": "Savigny-le-Temple",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Savigny-le-Temple"
+    },
+    {
+      "name": "Savigny-le-Temple",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Savigny-le-Temple",
+      "gleise": 1
+    },
+    {
+      "name": "Savigny-le-Temple",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Savigny-le-Temple",
+      "gleise": 1
+    },
+    {
+      "name": "St-Fargeau",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "St-Fargeau"
+    },
+    {
+      "name": "St-Fargeau",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "St-Fargeau",
+      "gleise": 1
+    },
+    {
+      "name": "St-Fargeau",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "St-Fargeau",
+      "gleise": 1
+    },
+    {
+      "name": "Voves",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Voves"
+    },
+    {
+      "name": "Voves",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Voves",
+      "gleise": 1
+    },
+    {
+      "name": "Voves",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Voves",
+      "gleise": 1
+    },
+    {
+      "name": "Garage CBV",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1147,7 +963,7 @@
       "flags": ""
     },
     {
-      "name": "PR",
+      "name": "LGV Sud-Est",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1155,7 +971,7 @@
       "flags": ""
     },
     {
-      "name": "Containerterminal",
+      "name": "Garage",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1163,7 +979,7 @@
       "flags": ""
     },
     {
-      "name": "BSRB",
+      "name": "Moret",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1171,7 +987,7 @@
       "flags": ""
     },
     {
-      "name": "MU",
+      "name": "VSG",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1179,7 +995,7 @@
       "flags": ""
     },
     {
-      "name": "BSRB A",
+      "name": "DHL Sud",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1187,7 +1003,7 @@
       "flags": ""
     },
     {
-      "name": "Stahl",
+      "name": "DHL Nord",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1195,7 +1011,7 @@
       "flags": ""
     },
     {
-      "name": "BSGB",
+      "name": "Corbeil Essonnes",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1203,7 +1019,7 @@
       "flags": ""
     },
     {
-      "name": "OL",
+      "name": "Héricy",
       "typ": "Anst",
       "auto": true,
       "ordnung": 0,
@@ -1211,563 +1027,566 @@
       "flags": ""
     },
     {
-      "name": "KAU",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "IKEA",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Museum",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "OL 161",
-      "typ": "Anst",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "BS 201",
+      "name": "Garage CBV",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BS",
+      "stamm": "Garage CBV",
       "gleise": 1
     },
     {
-      "name": "BS 301",
+      "name": "LGV Sud-Est 1",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BS",
+      "stamm": "LGV Sud-Est",
       "gleise": 1
     },
     {
-      "name": "BS 101",
+      "name": "LGV Sud-Est 2",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BS",
+      "stamm": "LGV Sud-Est",
       "gleise": 1
     },
     {
-      "name": "PR 430",
+      "name": "Garage 12-16",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR",
+      "stamm": "Garage",
       "gleise": 1
     },
     {
-      "name": "PR 467",
+      "name": "Moret 1",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR",
+      "stamm": "Moret",
       "gleise": 1
     },
     {
-      "name": "Containerterminal",
+      "name": "Moret 2",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Containerterminal",
+      "stamm": "Moret",
       "gleise": 1
     },
     {
-      "name": "BSRB 366",
+      "name": "VSG 1Bis",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BSRB",
+      "stamm": "VSG",
       "gleise": 1
     },
     {
-      "name": "BSRB 336",
+      "name": "VSG 1",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BSRB",
+      "stamm": "VSG",
       "gleise": 1
     },
     {
-      "name": "BSRB 316",
+      "name": "VSG 2",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BSRB",
+      "stamm": "VSG",
       "gleise": 1
     },
     {
-      "name": "BSRB 356",
+      "name": "VSG 2Bis",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BSRB",
+      "stamm": "VSG",
       "gleise": 1
     },
     {
-      "name": "MU 16",
+      "name": "DHL Sud",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "MU",
+      "stamm": "DHL Sud",
       "gleise": 1
     },
     {
-      "name": "MU 97",
+      "name": "DHL Nord",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "MU",
+      "stamm": "DHL Nord",
       "gleise": 1
     },
     {
-      "name": "BSRB A15",
+      "name": "Corbeil Essonnes",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BSRB A",
+      "stamm": "Corbeil Essonnes",
       "gleise": 1
     },
     {
-      "name": "Stahl",
+      "name": "Héricy",
       "typ": "Agl",
       "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Stahl",
+      "stamm": "Héricy",
       "gleise": 1
     },
     {
-      "name": "BSGB 605",
-      "typ": "Agl",
-      "auto": true,
+      "name": "Garage Melun",
+      "typ": "Bft",
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BSGB",
-      "gleise": 1
+      "stamm": "Garage Melun"
     },
     {
-      "name": "OL 129",
-      "typ": "Agl",
-      "auto": true,
+      "name": "Garage 12",
+      "typ": "Bft",
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OL",
-      "gleise": 1
+      "stamm": "Garage Melun"
     },
     {
-      "name": "OL 229",
-      "typ": "Agl",
-      "auto": true,
+      "name": "Melun",
+      "typ": "Bft",
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OL",
-      "gleise": 1
+      "stamm": "Melun"
     },
     {
-      "name": "KAU 278",
-      "typ": "Agl",
-      "auto": true,
+      "name": "CBV",
+      "typ": "Bft",
+      "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "KAU",
-      "gleise": 1
+      "stamm": "CBV"
     },
     {
-      "name": "KAU 178",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "KAU",
-      "gleise": 1
-    },
-    {
-      "name": "IKEA",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "IKEA",
-      "gleise": 1
-    },
-    {
-      "name": "Museum",
-      "typ": "Agl",
-      "auto": true,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Museum",
-      "gleise": 1
-    },
-    {
-      "name": "FRE 2",
+      "name": "CBV A",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "FRE",
+      "stamm": "CBV",
       "gleise": 1
     },
     {
-      "name": "FRE 3",
+      "name": "CBV 2",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "FRE",
+      "stamm": "CBV",
       "gleise": 1
     },
     {
-      "name": "FRE 1",
+      "name": "CBV 1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "FRE",
+      "stamm": "CBV",
       "gleise": 1
     },
     {
-      "name": "FRE 4",
+      "name": "CBV 1bis",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "FRE",
+      "stamm": "CBV",
       "gleise": 1
     },
     {
-      "name": "LSN 3",
+      "name": "CBV 2bis",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LSN",
+      "stamm": "CBV",
       "gleise": 1
     },
     {
-      "name": "LSN 2",
+      "name": "A",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LSN",
+      "stamm": "Melun",
       "gleise": 1
     },
     {
-      "name": "LSN 1",
+      "name": "1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LSN",
+      "stamm": "Melun",
       "gleise": 1
     },
     {
-      "name": "LST 4",
+      "name": "2",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LST",
+      "stamm": "Melun",
       "gleise": 1
     },
     {
-      "name": "LST 3",
+      "name": "1C",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LST",
+      "stamm": "Melun",
       "gleise": 1
     },
     {
-      "name": "LST 2",
+      "name": "1bis",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LST",
+      "stamm": "Melun",
       "gleise": 1
     },
     {
-      "name": "LST 40",
+      "name": "2C",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LST",
+      "stamm": "Melun",
       "gleise": 1
     },
     {
-      "name": "LST 1",
+      "name": "2bis",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "LST",
+      "stamm": "Melun",
       "gleise": 1
     },
     {
-      "name": "MU 1",
+      "name": "9",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "MU",
+      "stamm": "Garage Melun",
       "gleise": 1
     },
     {
-      "name": "MU 4",
+      "name": "3",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "MU",
+      "stamm": "Garage Melun",
       "gleise": 1
     },
     {
-      "name": "MU 3",
+      "name": "4",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "MU",
+      "stamm": "Garage Melun",
       "gleise": 1
     },
     {
-      "name": "MU 2",
+      "name": "5",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "MU",
+      "stamm": "Garage Melun",
       "gleise": 1
     },
     {
-      "name": "PR 7",
+      "name": "7",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR",
+      "stamm": "Garage Melun",
       "gleise": 1
     },
     {
-      "name": "PR 5",
+      "name": "6",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR",
+      "stamm": "Garage Melun",
       "gleise": 1
     },
     {
-      "name": "PR 4",
+      "name": "8",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR",
+      "stamm": "Garage Melun",
       "gleise": 1
     },
     {
-      "name": "PR 2",
+      "name": "3 Garage",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR",
+      "stamm": "Garage Melun",
       "gleise": 1
     },
     {
-      "name": "PR 1",
+      "name": "12",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "PR",
+      "stamm": "Garage 12",
       "gleise": 1
     },
     {
-      "name": "SIS 3",
-      "typ": "Bs",
+      "name": "CBV 1bis",
+      "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SIS",
+      "stamm": "CBV 1bis",
       "gleise": 1
     },
     {
-      "name": "SIS 4",
-      "typ": "Bs",
+      "name": "CBV 2bis",
+      "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SIS",
+      "stamm": "CBV 2bis",
       "gleise": 1
     },
     {
-      "name": "SIS 1",
-      "typ": "Bs",
+      "name": "3 Garage",
+      "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SIS",
+      "stamm": "3 Garage",
       "gleise": 1
     },
     {
-      "name": "SIS 2",
-      "typ": "Bs",
+      "name": "Le Mée 1Bis",
+      "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "SIS",
+      "stamm": "Le Mée 1Bis",
       "gleise": 1
     },
     {
-      "name": "OL 161",
-      "typ": "Agl",
+      "name": "Le Mée 2Bis",
+      "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "OL 161",
+      "stamm": "Le Mée 2Bis",
+      "gleise": 1
+    },
+    {
+      "name": "1C",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1C",
+      "gleise": 1
+    },
+    {
+      "name": "1bis",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1bis",
+      "gleise": 1
+    },
+    {
+      "name": "2C",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2C",
+      "gleise": 1
+    },
+    {
+      "name": "2bis",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2bis",
       "gleise": 1
     }
   ],
   "strecken": [
     {
-      "name": "BS-KAU",
+      "name": "Corbeil Essonnes-Héricy",
       "haupt": false,
       "ordnung": 1,
       "auto": false,
       "stationen": [
-        "Anst BS",
-        "Bf MU",
-        "Bf PR",
-        "Bf PRSR",
-        "Anst KAU"
+        "Anst Corbeil Essonnes",
+        "Bf Le Plessis-Chenet",
+        "Bf Coudray-Montceaux",
+        "Bf St-Fargeau",
+        "Bf Ponthierry-Pringy",
+        "Bf Boissise-le-Roi",
+        "Bf Voves",
+        "Bf Melun",
+        "Anst Héricy"
       ]
     },
     {
-      "name": "BS-OL",
-      "haupt": true,
+      "name": "Corbeil Essonnes-Moret",
+      "haupt": false,
       "ordnung": 2,
       "auto": false,
       "stationen": [
-        "Anst BS",
-        "Bf MU",
-        "Bf PR",
-        "Bf FRE",
-        "Bf LST",
-        "Bf LSN",
-        "Bf IT",
-        "Bf SIS",
-        "Bf GKD",
-        "Bf TK",
-        "Anst OL"
+        "Anst Corbeil Essonnes",
+        "Bf Le Plessis-Chenet",
+        "Bf Coudray-Montceaux",
+        "Bf St-Fargeau",
+        "Bf Ponthierry-Pringy",
+        "Bf Boissise-le-Roi",
+        "Bf Voves",
+        "Bf Melun",
+        "Bf Bois le Roi",
+        "Bf Fontainebleau-Forêt",
+        "Bf Moret",
+        "Anst Moret"
       ]
     },
     {
-      "name": "SIS-OL",
+      "name": "VSG-Héricy",
       "haupt": false,
       "ordnung": 3,
       "auto": false,
       "stationen": [
-        "Bf SIS",
-        "Bf DIE",
-        "Bf SOM",
-        "Bf RLG",
-        "Bf BUC",
-        "Bf LF",
-        "Bf TRI",
-        "Anst OL 161"
+        "Anst VSG",
+        "Bf Brunoy",
+        "Bf Boussy-st-Antoine",
+        "Bf CBV",
+        "Bf Lieusaint-Moissy",
+        "Bf Savigny-le-Temple",
+        "Bf Cesson",
+        "Bf Le Mée",
+        "Bf Melun",
+        "Bf Héricy",
+        "Anst Héricy"
+      ]
+    },
+    {
+      "name": "VSG-Moret",
+      "haupt": true,
+      "ordnung": 4,
+      "auto": false,
+      "stationen": [
+        "Anst VSG",
+        "Bf Brunoy",
+        "Bf Boussy-st-Antoine",
+        "Bf CBV",
+        "Bf Lieusaint-Moissy",
+        "Bf Savigny-le-Temple",
+        "Bf Cesson",
+        "Bf Le Mée",
+        "Bf Melun",
+        "Bf Bois le Roi",
+        "Bf Fontainebleau-Forêt",
+        "Bf Moret",
+        "Anst Moret"
       ]
     }
   ],
   "streckenmarkierung": [],
-  "zugschema": "schweiz",
-  "_aid": 765,
+  "zugschema": "frankreich",
+  "_aid": 1661,
   "_build": 5851,
-  "_name": "Hauenstein",
-  "_region": "Zentralschweiz",
+  "_name": "Melun",
+  "_region": "Île-de-France",
   "_version": 3
 }

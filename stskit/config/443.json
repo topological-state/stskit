@@ -1,259 +1,1551 @@
 {
-    "_aid": 443,
-    "_build": 5851,
-    "_name": "Unterland",
-    "_region": "Z\u00fcrich und Umgebung",
-    "_version": 2,
-    "anschlussgruppen": {
-        "BUD Industrie": {
-            "__class__": "Set",
-            "data": [
-                "BUD Industrie"
-            ]
-        },
-        "BUE": {
-            "__class__": "Set",
-            "data": [
-                "BUE 910",
-                "BUE 810"
-            ]
-        },
-        "GLB Tanklager": {
-            "__class__": "Set",
-            "data": [
-                "GLB Tanklager"
-            ]
-        },
-        "Killwangen": {
-            "__class__": "Set",
-            "data": [
-                "Killwangen"
-            ]
-        },
-        "NG Tanklager": {
-            "__class__": "Set",
-            "data": [
-                "NG Tanklager"
-            ]
-        },
-        "Opfikon": {
-            "__class__": "Set",
-            "data": [
-                "Opfikon"
-            ]
-        },
-        "REG Industrie": {
-            "__class__": "Set",
-            "data": [
-                "REG Industrie"
-            ]
-        },
-        "Wettingen": {
-            "__class__": "Set",
-            "data": [
-                "Wettingen"
-            ]
-        },
-        "ZOER": {
-            "__class__": "Set",
-            "data": [
-                "ZOER 806",
-                "ZOER 856",
-                "ZOER 906"
-            ]
-        }
+  "default": false,
+  "elemente": [
+    {
+      "name": "BUD",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "BUD": {
-            "__class__": "Set",
-            "data": [
-                "BUD2",
-                "BUD1",
-                "BUD42",
-                "BUD43",
-                "BUD41",
-                "BUD51",
-                "BUD52"
-            ]
-        },
-        "DI": {
-            "__class__": "Set",
-            "data": [
-                "DI3",
-                "DI2"
-            ]
-        },
-        "GLB": {
-            "__class__": "Set",
-            "data": [
-                "GLB4",
-                "GLB3",
-                "GLB2",
-                "GLB57",
-                "GLB54",
-                "GLB85",
-                "GLB86"
-            ]
-        },
-        "NG": {
-            "__class__": "Set",
-            "data": [
-                "NG4",
-                "NG2",
-                "NG3",
-                "NG5",
-                "NG6"
-            ]
-        },
-        "NIE": {
-            "__class__": "Set",
-            "data": [
-                "NIE"
-            ]
-        },
-        "NW": {
-            "__class__": "Set",
-            "data": [
-                "NW1",
-                "NW2"
-            ]
-        },
-        "NWD": {
-            "__class__": "Set",
-            "data": [
-                "NWD"
-            ]
-        },
-        "OF": {
-            "__class__": "Set",
-            "data": [
-                "OF1",
-                "OF2",
-                "OF21",
-                "OF22"
-            ]
-        },
-        "OFR": {
-            "__class__": "Set",
-            "data": [
-                "OFR"
-            ]
-        },
-        "OGL": {
-            "__class__": "Set",
-            "data": [
-                "OGL1",
-                "OGL3",
-                "OGL2"
-            ]
-        },
-        "REG": {
-            "__class__": "Set",
-            "data": [
-                "REG2",
-                "REG3",
-                "REG5",
-                "REG4"
-            ]
-        },
-        "RUEM": {
-            "__class__": "Set",
-            "data": [
-                "RUEM2",
-                "RUEM4",
-                "RUEM3"
-            ]
-        },
-        "SCHO": {
-            "__class__": "Set",
-            "data": [
-                "SCHO"
-            ]
-        },
-        "STMR": {
-            "__class__": "Set",
-            "data": [
-                "STMR"
-            ]
-        },
-        "WUER": {
-            "__class__": "Set",
-            "data": [
-                "WUER2",
-                "WUER3"
-            ]
-        },
-        "ZAF": {
-            "__class__": "Set",
-            "data": [
-                "ZAF"
-            ]
-        },
-        "ZSEB": {
-            "__class__": "Set",
-            "data": [
-                "ZSEB4",
-                "ZSEB3",
-                "ZSEB2",
-                "ZSEB1"
-            ]
-        }
+    {
+      "name": "DI",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "BUE-Wettingen",
-    "sektoren": {},
-    "strecken": {
-        "BUE-Killwangen": [
-            "BUE",
-            "NG",
-            "OGL",
-            "RUEM",
-            "GLB",
-            "ZOER",
-            "ZSEB",
-            "ZAF",
-            "REG",
-            "BUD",
-            "OF",
-            "WUER",
-            "Killwangen"
-        ],
-        "BUE-Wettingen": [
-            "BUE",
-            "NG",
-            "OGL",
-            "RUEM",
-            "GLB",
-            "ZOER",
-            "ZSEB",
-            "ZAF",
-            "REG",
-            "BUD",
-            "OF",
-            "WUER",
-            "Wettingen"
-        ],
-        "BUE-ZOER": [
-            "BUE",
-            "NG",
-            "OGL",
-            "RUEM",
-            "GLB",
-            "ZOER"
-        ],
-        "NW-ZOER": [
-            "NW",
-            "NWD",
-            "SCHO",
-            "STMR",
-            "DI",
-            "NIE",
-            "OGL",
-            "RUEM",
-            "GLB",
-            "ZOER"
-        ]
+    {
+      "name": "GLB",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": [],
-    "zugschema": "schweiz"
+    {
+      "name": "NG",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "NIE",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "NW",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "NWD",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "OF",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "OFR",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "OGL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "REG",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "RUEM",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SCHO",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "STMR",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WUER",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZAF",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZSEB",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BUD",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD"
+    },
+    {
+      "name": "BUD1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD1",
+      "gleise": 1
+    },
+    {
+      "name": "BUD2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD2",
+      "gleise": 1
+    },
+    {
+      "name": "BUD42",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD42",
+      "gleise": 1
+    },
+    {
+      "name": "BUD41",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD41",
+      "gleise": 1
+    },
+    {
+      "name": "BUD43",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD43",
+      "gleise": 1
+    },
+    {
+      "name": "BUD52",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD52",
+      "gleise": 1
+    },
+    {
+      "name": "BUD51",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD51",
+      "gleise": 1
+    },
+    {
+      "name": "DI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DI"
+    },
+    {
+      "name": "DI2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DI2",
+      "gleise": 1
+    },
+    {
+      "name": "DI3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DI3",
+      "gleise": 1
+    },
+    {
+      "name": "GLB",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB"
+    },
+    {
+      "name": "GLB2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB2",
+      "gleise": 1
+    },
+    {
+      "name": "GLB3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB3",
+      "gleise": 1
+    },
+    {
+      "name": "GLB4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB4",
+      "gleise": 1
+    },
+    {
+      "name": "GLB54",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB54",
+      "gleise": 1
+    },
+    {
+      "name": "GLB57",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB57",
+      "gleise": 1
+    },
+    {
+      "name": "GLB86",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB86",
+      "gleise": 1
+    },
+    {
+      "name": "GLB85",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB85",
+      "gleise": 1
+    },
+    {
+      "name": "NG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NG"
+    },
+    {
+      "name": "NG6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NG6",
+      "gleise": 1
+    },
+    {
+      "name": "NG2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NG2",
+      "gleise": 1
+    },
+    {
+      "name": "NG4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NG4",
+      "gleise": 1
+    },
+    {
+      "name": "NG3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NG3",
+      "gleise": 1
+    },
+    {
+      "name": "NG5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NG5",
+      "gleise": 1
+    },
+    {
+      "name": "NIE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NIE"
+    },
+    {
+      "name": "NIE",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NIE",
+      "gleise": 1
+    },
+    {
+      "name": "NIE",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NIE",
+      "gleise": 1
+    },
+    {
+      "name": "NW",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NW"
+    },
+    {
+      "name": "NW1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NW1",
+      "gleise": 1
+    },
+    {
+      "name": "NW2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NW2",
+      "gleise": 1
+    },
+    {
+      "name": "NWD",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NWD"
+    },
+    {
+      "name": "NWD",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NWD",
+      "gleise": 1
+    },
+    {
+      "name": "NWD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NWD",
+      "gleise": 1
+    },
+    {
+      "name": "OF",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OF"
+    },
+    {
+      "name": "OF2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OF2",
+      "gleise": 1
+    },
+    {
+      "name": "OF1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OF1",
+      "gleise": 1
+    },
+    {
+      "name": "OF22",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OF22",
+      "gleise": 1
+    },
+    {
+      "name": "OF21",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OF21",
+      "gleise": 1
+    },
+    {
+      "name": "OFR",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OFR"
+    },
+    {
+      "name": "OFR",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OFR",
+      "gleise": 1
+    },
+    {
+      "name": "OFR",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OFR",
+      "gleise": 1
+    },
+    {
+      "name": "OGL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OGL"
+    },
+    {
+      "name": "OGL3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OGL3",
+      "gleise": 1
+    },
+    {
+      "name": "OGL1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OGL1",
+      "gleise": 1
+    },
+    {
+      "name": "OGL2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OGL2",
+      "gleise": 1
+    },
+    {
+      "name": "REG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REG"
+    },
+    {
+      "name": "REG5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REG5",
+      "gleise": 1
+    },
+    {
+      "name": "REG2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REG2",
+      "gleise": 1
+    },
+    {
+      "name": "REG4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REG4",
+      "gleise": 1
+    },
+    {
+      "name": "REG3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REG3",
+      "gleise": 1
+    },
+    {
+      "name": "RUEM",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RUEM"
+    },
+    {
+      "name": "RUEM3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RUEM3",
+      "gleise": 1
+    },
+    {
+      "name": "RUEM2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RUEM2",
+      "gleise": 1
+    },
+    {
+      "name": "RUEM4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RUEM4",
+      "gleise": 1
+    },
+    {
+      "name": "SCHO",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCHO"
+    },
+    {
+      "name": "SCHO",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCHO",
+      "gleise": 1
+    },
+    {
+      "name": "SCHO",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCHO",
+      "gleise": 1
+    },
+    {
+      "name": "STMR",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STMR"
+    },
+    {
+      "name": "STMR",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STMR",
+      "gleise": 1
+    },
+    {
+      "name": "STMR",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "STMR",
+      "gleise": 1
+    },
+    {
+      "name": "WUER",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WUER"
+    },
+    {
+      "name": "WUER3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WUER3",
+      "gleise": 1
+    },
+    {
+      "name": "WUER2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WUER2",
+      "gleise": 1
+    },
+    {
+      "name": "ZAF",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZAF"
+    },
+    {
+      "name": "ZAF",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZAF",
+      "gleise": 1
+    },
+    {
+      "name": "ZAF",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZAF",
+      "gleise": 1
+    },
+    {
+      "name": "ZSEB",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZSEB"
+    },
+    {
+      "name": "ZSEB1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZSEB1",
+      "gleise": 1
+    },
+    {
+      "name": "ZSEB2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZSEB2",
+      "gleise": 1
+    },
+    {
+      "name": "ZSEB4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZSEB4",
+      "gleise": 1
+    },
+    {
+      "name": "ZSEB3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZSEB3",
+      "gleise": 1
+    },
+    {
+      "name": "ZOER",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BUE",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GLB Tanklager",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Opfikon",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "NG Tanklager",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BUD Industrie",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "REG Industrie",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wettingen",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Killwangen",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ZOER 806",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZOER",
+      "gleise": 1
+    },
+    {
+      "name": "ZOER 906",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZOER",
+      "gleise": 1
+    },
+    {
+      "name": "ZOER 856",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZOER",
+      "gleise": 1
+    },
+    {
+      "name": "BUE 910",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUE",
+      "gleise": 1
+    },
+    {
+      "name": "BUE 810",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUE",
+      "gleise": 1
+    },
+    {
+      "name": "GLB Tanklager",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB Tanklager",
+      "gleise": 1
+    },
+    {
+      "name": "Opfikon",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Opfikon",
+      "gleise": 1
+    },
+    {
+      "name": "NG Tanklager",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NG Tanklager",
+      "gleise": 1
+    },
+    {
+      "name": "BUD Industrie",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD Industrie",
+      "gleise": 1
+    },
+    {
+      "name": "REG Industrie",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REG Industrie",
+      "gleise": 1
+    },
+    {
+      "name": "Wettingen",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wettingen",
+      "gleise": 1
+    },
+    {
+      "name": "Killwangen",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Killwangen",
+      "gleise": 1
+    },
+    {
+      "name": "BUD1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD",
+      "gleise": 1
+    },
+    {
+      "name": "BUD2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD",
+      "gleise": 1
+    },
+    {
+      "name": "BUD42",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD",
+      "gleise": 1
+    },
+    {
+      "name": "BUD41",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD",
+      "gleise": 1
+    },
+    {
+      "name": "BUD43",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD",
+      "gleise": 1
+    },
+    {
+      "name": "BUD52",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD",
+      "gleise": 1
+    },
+    {
+      "name": "BUD51",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BUD",
+      "gleise": 1
+    },
+    {
+      "name": "DI2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DI",
+      "gleise": 1
+    },
+    {
+      "name": "DI3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "DI",
+      "gleise": 1
+    },
+    {
+      "name": "GLB2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB",
+      "gleise": 1
+    },
+    {
+      "name": "GLB3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB",
+      "gleise": 1
+    },
+    {
+      "name": "GLB4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB",
+      "gleise": 1
+    },
+    {
+      "name": "GLB54",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB",
+      "gleise": 1
+    },
+    {
+      "name": "GLB57",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB",
+      "gleise": 1
+    },
+    {
+      "name": "GLB86",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB",
+      "gleise": 1
+    },
+    {
+      "name": "GLB85",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLB",
+      "gleise": 1
+    },
+    {
+      "name": "NG6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NG",
+      "gleise": 1
+    },
+    {
+      "name": "NG2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NG",
+      "gleise": 1
+    },
+    {
+      "name": "NG4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NG",
+      "gleise": 1
+    },
+    {
+      "name": "NG3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NG",
+      "gleise": 1
+    },
+    {
+      "name": "NG5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NG",
+      "gleise": 1
+    },
+    {
+      "name": "NW1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NW",
+      "gleise": 1
+    },
+    {
+      "name": "NW2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NW",
+      "gleise": 1
+    },
+    {
+      "name": "OF2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OF",
+      "gleise": 1
+    },
+    {
+      "name": "OF1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OF",
+      "gleise": 1
+    },
+    {
+      "name": "OF22",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OF",
+      "gleise": 1
+    },
+    {
+      "name": "OF21",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OF",
+      "gleise": 1
+    },
+    {
+      "name": "OGL3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OGL",
+      "gleise": 1
+    },
+    {
+      "name": "OGL1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OGL",
+      "gleise": 1
+    },
+    {
+      "name": "OGL2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OGL",
+      "gleise": 1
+    },
+    {
+      "name": "REG5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REG",
+      "gleise": 1
+    },
+    {
+      "name": "REG2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REG",
+      "gleise": 1
+    },
+    {
+      "name": "REG4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REG",
+      "gleise": 1
+    },
+    {
+      "name": "REG3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REG",
+      "gleise": 1
+    },
+    {
+      "name": "RUEM3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RUEM",
+      "gleise": 1
+    },
+    {
+      "name": "RUEM2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RUEM",
+      "gleise": 1
+    },
+    {
+      "name": "RUEM4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RUEM",
+      "gleise": 1
+    },
+    {
+      "name": "WUER3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WUER",
+      "gleise": 1
+    },
+    {
+      "name": "WUER2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WUER",
+      "gleise": 1
+    },
+    {
+      "name": "ZSEB1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZSEB",
+      "gleise": 1
+    },
+    {
+      "name": "ZSEB2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZSEB",
+      "gleise": 1
+    },
+    {
+      "name": "ZSEB4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZSEB",
+      "gleise": 1
+    },
+    {
+      "name": "ZSEB3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ZSEB",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "NW-ZOER",
+      "haupt": false,
+      "ordnung": 9,
+      "auto": true,
+      "stationen": [
+        "Bf NW",
+        "Bf NWD",
+        "Bf SCHO",
+        "Bf STMR",
+        "Bf DI",
+        "Bf NIE",
+        "Bf OGL",
+        "Bf RUEM",
+        "Bf GLB",
+        "Anst ZOER"
+      ]
+    },
+    {
+      "name": "BUE-Killwangen",
+      "haupt": false,
+      "ordnung": 101,
+      "auto": true,
+      "stationen": [
+        "Anst BUE",
+        "Bf NG",
+        "Bf OGL",
+        "Bf RUEM",
+        "Bf GLB",
+        "Anst ZOER",
+        "Bf ZSEB",
+        "Bf ZAF",
+        "Bf REG",
+        "Bf BUD",
+        "Bf OFR",
+        "Bf OF",
+        "Bf WUER",
+        "Anst Killwangen"
+      ]
+    },
+    {
+      "name": "BUE-Wettingen",
+      "haupt": false,
+      "ordnung": 104,
+      "auto": true,
+      "stationen": [
+        "Anst BUE",
+        "Bf NG",
+        "Bf OGL",
+        "Bf RUEM",
+        "Bf GLB",
+        "Anst ZOER",
+        "Bf ZSEB",
+        "Bf ZAF",
+        "Bf REG",
+        "Bf BUD",
+        "Bf OFR",
+        "Bf OF",
+        "Bf WUER",
+        "Anst Wettingen"
+      ]
+    },
+    {
+      "name": "BUE-ZOER",
+      "haupt": false,
+      "ordnung": 105,
+      "auto": true,
+      "stationen": [
+        "Anst BUE",
+        "Bf NG",
+        "Bf OGL",
+        "Bf RUEM",
+        "Bf GLB",
+        "Anst ZOER"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 443,
+  "_build": 5851,
+  "_name": "Unterland",
+  "_region": "Zürich und Umgebung",
+  "_version": 3
 }

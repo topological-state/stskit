@@ -1,136 +1,1089 @@
 {
-    "_aid": 495,
-    "_build": 5845,
-    "_name": "Luzern",
-    "_region": "Zentralschweiz",
-    "_version": 2,
-    "zugschema": "schweiz",
-    "anschlussgruppen": {
-        "321": {
-            "__class__": "Set",
-            "data": [
-                "321"
-            ]
-        },
-        "Abstellgleis": {
-            "__class__": "Set",
-            "data": [
-                "Abstellgleis"
-            ]
-        },
-        "Abstellung zb": {
-            "__class__": "Set",
-            "data": [
-                "Abstellung zb"
-            ]
-        },
-        "Depot": {
-            "__class__": "Set",
-            "data": [
-                "Depot"
-            ]
-        },
-        "Ebikon": {
-            "__class__": "Set",
-            "data": [
-                "Ebikon 363"
-            ]
-        },
-        "Emmenbr\u00fccke": {
-            "__class__": "Set",
-            "data": [
-                "Emmenbr\u00fccke 191",
-                "Emmenbr\u00fccke 291"
-            ]
-        },
-        "GB SBB": {
-            "__class__": "Set",
-            "data": [
-                "GB SBB"
-            ]
-        },
-        "Horw": {
-            "__class__": "Set",
-            "data": [
-                "Horw 802",
-                "Horw 702"
-            ]
-        },
-        "Littau": {
-            "__class__": "Set",
-            "data": [
-                "Littau"
-            ]
-        },
-        "Verkehrshaus": {
-            "__class__": "Set",
-            "data": [
-                "Verkehrshaus 504"
-            ]
-        }
+  "default": false,
+  "elemente": [
+    {
+      "name": "ALD",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "ALD": {
-            "__class__": "Set",
-            "data": [
-                "ALD"
-            ]
-        },
-        "GB": {
-            "__class__": "Set",
-            "data": [
-                "GB SBB"
-            ]
-        },
-        "LZ": {
-            "__class__": "Set",
-            "data": [
-                "LZ 815",
-                "LZ 7",
-                "LZ 813",
-                "LZ 812",
-                "LZ 8",
-                "LZ 11",
-                "LZ 10",
-                "LZ 3",
-                "LZ 2",
-                "LZ 814",
-                "LZ 9",
-                "LZ 4",
-                "LZ 302",
-                "LZ 5",
-                "LZ 6",
-                "LZ 834"
-            ]
-        }
+    {
+      "name": "GB SBB",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "sektoren": {},
-    "hauptstrecke": "Emmenbrücke-Luzern",
-    "strecken": {
-        "Ebikon-Luzern": [
-            "Ebikon",
-            "GTS",
-            "LZ"
-        ],
-        "Emmenbr\u00fccke-Depot": [
-            "Emmenbr\u00fccke",
-            "GTS",
-            "LZ"
-        ],
-        "Verkehrshaus-Luzern": [
-            "Verkehrshaus",
-            "LZ"
-        ],
-        "Littau-Luzern": [
-            "Littau",
-            "GTS",
-            "LZ"
-        ],
-        "Horw-LZ": [
-            "Horw",
-            "ALD",
-            "LZ"
-        ]
+    {
+      "name": "GTS",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LZ",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Verkehrshaus",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LZ 302",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ALD",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALD"
+    },
+    {
+      "name": "ALD",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALD",
+      "gleise": 1
+    },
+    {
+      "name": "ALD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ALD",
+      "gleise": 1
+    },
+    {
+      "name": "GB SBB",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GB SBB"
+    },
+    {
+      "name": "GB SBB",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GB SBB",
+      "gleise": 1
+    },
+    {
+      "name": "GB SBB",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GB SBB",
+      "gleise": 1
+    },
+    {
+      "name": "GTS",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GTS"
+    },
+    {
+      "name": "GTS",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GTS",
+      "gleise": 1
+    },
+    {
+      "name": "GTS",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GTS",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 31",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ"
+    },
+    {
+      "name": "LZ 812",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ"
+    },
+    {
+      "name": "LZ",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ"
+    },
+    {
+      "name": "LZ 1",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ"
+    },
+    {
+      "name": "LZ 9",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 9",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 6",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 7",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 2",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 1",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 3",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 5",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 10",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 10",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 8",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 4",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 11",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 11",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 31",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 31",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 31",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 31",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 302",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 302",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 834",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 302",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 302",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 302",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 812",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 812",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 814",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 812",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 815",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 812",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 813",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 812",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 812",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 812",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 814",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 814",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 815",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 815",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 813",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 813",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 834",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 834",
+      "gleise": 1
+    },
+    {
+      "name": "Verkehrshaus",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Verkehrshaus"
+    },
+    {
+      "name": "Verkehrshaus",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Verkehrshaus",
+      "gleise": 1
+    },
+    {
+      "name": "Verkehrshaus",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Verkehrshaus",
+      "gleise": 1
+    },
+    {
+      "name": "HW",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Depot",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Abstellfeld",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GB zb",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Verkehrshaus",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Ebikon",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EBR",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Littau",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "GB",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HW 803",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HW",
+      "gleise": 1
+    },
+    {
+      "name": "HW 703",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HW",
+      "gleise": 1
+    },
+    {
+      "name": "Depot",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Depot",
+      "gleise": 1
+    },
+    {
+      "name": "Abstellfeld",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Abstellfeld",
+      "gleise": 1
+    },
+    {
+      "name": "GB zb",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GB zb",
+      "gleise": 1
+    },
+    {
+      "name": "Verkehrshaus",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Verkehrshaus",
+      "gleise": 1
+    },
+    {
+      "name": "Ebikon",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ebikon",
+      "gleise": 1
+    },
+    {
+      "name": "EBR 191",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBR",
+      "gleise": 1
+    },
+    {
+      "name": "EBR 291",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBR",
+      "gleise": 1
+    },
+    {
+      "name": "Littau",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Littau",
+      "gleise": 1
+    },
+    {
+      "name": "GB SBB",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GB",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 10",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 1",
+      "gleise": 1
+    },
+    {
+      "name": "LZ 302",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LZ 302"
     }
+  ],
+  "strecken": [
+    {
+      "name": "Depot-Ebikon",
+      "haupt": false,
+      "ordnung": 100,
+      "auto": true,
+      "stationen": [
+        "Anst Depot",
+        "Anst Ebikon"
+      ]
+    },
+    {
+      "name": "Depot-GB",
+      "haupt": false,
+      "ordnung": 101,
+      "auto": true,
+      "stationen": [
+        "Anst Depot",
+        "Anst GB"
+      ]
+    },
+    {
+      "name": "Depot-Horw",
+      "haupt": false,
+      "ordnung": 102,
+      "auto": true,
+      "stationen": [
+        "Anst Depot",
+        "Bf ALD"
+      ]
+    },
+    {
+      "name": "Depot-Littau",
+      "haupt": false,
+      "ordnung": 103,
+      "auto": true,
+      "stationen": [
+        "Anst Depot",
+        "Anst Littau"
+      ]
+    },
+    {
+      "name": "Depot-Verkehrshaus",
+      "haupt": false,
+      "ordnung": 104,
+      "auto": true,
+      "stationen": [
+        "Anst Depot",
+        "Anst Verkehrshaus"
+      ]
+    },
+    {
+      "name": "Ebikon-Depot",
+      "haupt": false,
+      "ordnung": 105,
+      "auto": true,
+      "stationen": [
+        "Anst Ebikon",
+        "Anst Depot"
+      ]
+    },
+    {
+      "name": "Ebikon-GB",
+      "haupt": false,
+      "ordnung": 105,
+      "auto": true,
+      "stationen": [
+        "Anst Ebikon",
+        "Bf GTS",
+        "Bf GB SBB",
+        "Anst GB"
+      ]
+    },
+    {
+      "name": "Ebikon-Horw",
+      "haupt": false,
+      "ordnung": 106,
+      "auto": true,
+      "stationen": [
+        "Anst Ebikon",
+        "Bf ALD"
+      ]
+    },
+    {
+      "name": "Ebikon-Littau",
+      "haupt": false,
+      "ordnung": 106,
+      "auto": true,
+      "stationen": [
+        "Anst Ebikon",
+        "Bf GTS",
+        "Anst Littau"
+      ]
+    },
+    {
+      "name": "GB-Depot",
+      "haupt": false,
+      "ordnung": 107,
+      "auto": true,
+      "stationen": [
+        "Anst GB",
+        "Anst Depot"
+      ]
+    },
+    {
+      "name": "Ebikon-Verkehrshaus",
+      "haupt": false,
+      "ordnung": 107,
+      "auto": true,
+      "stationen": [
+        "Anst Ebikon",
+        "Bf GTS",
+        "Bf LZ 10",
+        "Anst Verkehrshaus"
+      ]
+    },
+    {
+      "name": "GB-Horw",
+      "haupt": false,
+      "ordnung": 108,
+      "auto": true,
+      "stationen": [
+        "Anst GB",
+        "Bf ALD"
+      ]
+    },
+    {
+      "name": "Horw-Depot",
+      "haupt": false,
+      "ordnung": 109,
+      "auto": true,
+      "stationen": [
+        "Bf ALD",
+        "Anst Depot"
+      ]
+    },
+    {
+      "name": "Horw-Ebikon",
+      "haupt": false,
+      "ordnung": 110,
+      "auto": true,
+      "stationen": [
+        "Bf ALD",
+        "Anst Ebikon"
+      ]
+    },
+    {
+      "name": "GB-Ebikon",
+      "haupt": false,
+      "ordnung": 110,
+      "auto": true,
+      "stationen": [
+        "Anst GB",
+        "Bf GB SBB",
+        "Bf GTS",
+        "Anst Ebikon"
+      ]
+    },
+    {
+      "name": "Horw-GB",
+      "haupt": false,
+      "ordnung": 111,
+      "auto": true,
+      "stationen": [
+        "Bf ALD",
+        "Anst GB"
+      ]
+    },
+    {
+      "name": "GB-Littau",
+      "haupt": false,
+      "ordnung": 111,
+      "auto": true,
+      "stationen": [
+        "Anst GB",
+        "Bf GB SBB",
+        "Bf GTS",
+        "Anst Littau"
+      ]
+    },
+    {
+      "name": "Horw-Littau",
+      "haupt": false,
+      "ordnung": 112,
+      "auto": true,
+      "stationen": [
+        "Bf ALD",
+        "Anst Littau"
+      ]
+    },
+    {
+      "name": "GB-Verkehrshaus",
+      "haupt": false,
+      "ordnung": 112,
+      "auto": true,
+      "stationen": [
+        "Anst GB",
+        "Bf GB SBB",
+        "Bf GTS",
+        "Bf LZ 10",
+        "Anst Verkehrshaus"
+      ]
+    },
+    {
+      "name": "Horw-Verkehrshaus",
+      "haupt": false,
+      "ordnung": 113,
+      "auto": true,
+      "stationen": [
+        "Bf ALD",
+        "Anst Verkehrshaus"
+      ]
+    },
+    {
+      "name": "Littau-Depot",
+      "haupt": false,
+      "ordnung": 114,
+      "auto": true,
+      "stationen": [
+        "Anst Littau",
+        "Anst Depot"
+      ]
+    },
+    {
+      "name": "Littau-Horw",
+      "haupt": false,
+      "ordnung": 115,
+      "auto": true,
+      "stationen": [
+        "Anst Littau",
+        "Bf ALD"
+      ]
+    },
+    {
+      "name": "Littau-Ebikon",
+      "haupt": false,
+      "ordnung": 115,
+      "auto": true,
+      "stationen": [
+        "Anst Littau",
+        "Bf GTS",
+        "Anst Ebikon"
+      ]
+    },
+    {
+      "name": "Verkehrshaus-Depot",
+      "haupt": false,
+      "ordnung": 116,
+      "auto": true,
+      "stationen": [
+        "Anst Verkehrshaus",
+        "Anst Depot"
+      ]
+    },
+    {
+      "name": "Littau-GB",
+      "haupt": false,
+      "ordnung": 116,
+      "auto": true,
+      "stationen": [
+        "Anst Littau",
+        "Bf GTS",
+        "Bf GB SBB",
+        "Anst GB"
+      ]
+    },
+    {
+      "name": "Verkehrshaus-Horw",
+      "haupt": false,
+      "ordnung": 117,
+      "auto": true,
+      "stationen": [
+        "Anst Verkehrshaus",
+        "Bf ALD"
+      ]
+    },
+    {
+      "name": "Littau-Verkehrshaus",
+      "haupt": false,
+      "ordnung": 117,
+      "auto": true,
+      "stationen": [
+        "Anst Littau",
+        "Bf GTS",
+        "Bf LZ 10",
+        "Anst Verkehrshaus"
+      ]
+    },
+    {
+      "name": "Verkehrshaus-Ebikon",
+      "haupt": false,
+      "ordnung": 119,
+      "auto": true,
+      "stationen": [
+        "Anst Verkehrshaus",
+        "Bf LZ 10",
+        "Bf GTS",
+        "Anst Ebikon"
+      ]
+    },
+    {
+      "name": "Verkehrshaus-GB",
+      "haupt": false,
+      "ordnung": 120,
+      "auto": true,
+      "stationen": [
+        "Anst Verkehrshaus",
+        "Bf LZ 10",
+        "Bf GTS",
+        "Bf GB SBB",
+        "Anst GB"
+      ]
+    },
+    {
+      "name": "Verkehrshaus-Littau",
+      "haupt": false,
+      "ordnung": 121,
+      "auto": true,
+      "stationen": [
+        "Anst Verkehrshaus",
+        "Bf LZ 10",
+        "Bf GTS",
+        "Anst Littau"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 495,
+  "_build": 5851,
+  "_name": "Luzern",
+  "_region": "Zentralschweiz",
+  "_version": 3
 }

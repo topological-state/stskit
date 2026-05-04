@@ -1,266 +1,1734 @@
 {
-    "_aid": 21,
-    "_build": 5851,
-    "_name": "Maschen Rbf",
-    "_region": "Bremen-Niedersachsen",
-    "_version": 2,
-    "anschlussgruppen": {
-        "1311-1316": {
-            "__class__": "Set",
-            "data": [
-                "1311-1316"
-            ]
-        },
-        "1337-1354": {
-            "__class__": "Set",
-            "data": [
-                "1337-1354"
-            ]
-        },
-        "1355-1368": {
-            "__class__": "Set",
-            "data": [
-                "1355-1368"
-            ]
-        },
-        "2411-2448": {
-            "__class__": "Set",
-            "data": [
-                "2411-2448"
-            ]
-        },
-        "2451-2486": {
-            "__class__": "Set",
-            "data": [
-                "2451-2486"
-            ]
-        },
-        "2487-2488": {
-            "__class__": "Set",
-            "data": [
-                "2487-2488"
-            ]
-        },
-        "2571-2584": {
-            "__class__": "Set",
-            "data": [
-                "2571-2584"
-            ]
-        },
-        "Berg": {
-            "__class__": "Set",
-            "data": [
-                "Berg SW",
-                "Berg NO"
-            ]
-        },
-        "Buchholz": {
-            "__class__": "Set",
-            "data": [
-                "Buchholz"
-            ]
-        },
-        "Harburg Fern": {
-            "__class__": "Set",
-            "data": [
-                "Harburg Fern"
-            ]
-        },
-        "Harburg G\u00fcter": {
-            "__class__": "Set",
-            "data": [
-                "Harburg G\u00fcter"
-            ]
-        },
-        "Harburg Hafen": {
-            "__class__": "Set",
-            "data": [
-                "Harburg Hafen"
-            ]
-        },
-        "Lok Ost": {
-            "__class__": "Set",
-            "data": [
-                "Lok Ost"
-            ]
-        },
-        "Lok West": {
-            "__class__": "Set",
-            "data": [
-                "Lok West"
-            ]
-        },
-        "L\u00fcneburg": {
-            "__class__": "Set",
-            "data": [
-                "L\u00fcneburg"
-            ]
-        },
-        "Schienenlager": {
-            "__class__": "Set",
-            "data": [
-                "Schienenlager"
-            ]
-        },
-        "Wagen Ost": {
-            "__class__": "Set",
-            "data": [
-                "Wagen Ost"
-            ]
-        },
-        "Wagen West": {
-            "__class__": "Set",
-            "data": [
-                "Wagen West"
-            ]
-        }
+  "default": false,
+  "elemente": [
+    {
+      "name": "Meckelfeld",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "Abzw Meckelfeld": {
-            "__class__": "Set",
-            "data": [
-                "Abzw Meckelfeld"
-            ]
-        },
-        "Ashausen": {
-            "__class__": "Set",
-            "data": [
-                "Ashausen"
-            ]
-        },
-        "Jesteburg": {
-            "__class__": "Set",
-            "data": [
-                "Jesteburg"
-            ]
-        },
-        "Meckelfeld": {
-            "__class__": "Set",
-            "data": [
-                "Meckelfeld"
-            ]
-        },
-        "Maschen Pbf": {
-            "__class__": "Set",
-            "data": [
-                "AMA4",
-                "AMA1",
-                "AMA3",
-                "AMA2"
-            ]
-        },
-        "Rbf Mitte": {
-            "__class__": "Set",
-            "data": [
-                "1253",
-                "2086",
-                "2088",
-                "1202",
-                "1244",
-                "1242",
-                "1243",
-                "1006",
-                "1204",
-                "2087",
-                "1254",
-                "1203",
-                "2010",
-                "1252"
-            ]
-        },
-        "Rbf Nord": {
-            "__class__": "Set",
-            "data": [
-                "2951",
-                "1112",
-                "1017",
-                "2953",
-                "2555",
-                "2490",
-                "1113",
-                "1115",
-                "2950",
-                "2990",
-                "2980",
-                "2952",
-                "1110",
-                "1111",
-                "2981",
-                "2948",
-                "1114"
-            ]
-        },
-        "Rbf S\u00fcd": {
-            "__class__": "Set",
-            "data": [
-                "1733",
-                "2044",
-                "1762",
-                "2042",
-                "2041",
-                "2043",
-                "1764",
-                "2040",
-                "1744",
-                "1732",
-                "2021k",
-                "2021",
-                "1765",
-                "1731",
-                "1738",
-                "1734",
-                "1763",
-                "1736",
-                "2045",
-                "1765k"
-            ]
-        },
-        "Stelle": {
-            "__class__": "Set",
-            "data": [
-                "Stelle"
-            ]
-        }
+    {
+      "name": "Ashausen",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "Harburg-L\u00fcneburg",
-    "sektoren": {
-        "1765": {
-            "__class__": "Set",
-            "data": [
-                "1765",
-                "1765k"
-            ]
-        },
-        "2021": {
-            "__class__": "Set",
-            "data": [
-                "2021k",
-                "2021"
-            ]
-        }
+    {
+      "name": "Jesteburg",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "strecken": {
-        "Harburg-Buchholz": [
-            "Harburg G\u00fcter",
-            "Abzw Meckelfeld",
-            "Rbf Nord",
-            "Rbf Mitte",
-            "Rbf S\u00fcd",
-            "Jesteburg",
-            "Buchholz"
-        ],
-        "Harburg-L\u00fcneburg": [
-            "Harburg Fern",
-            "Meckelfeld",
-            "Rbf Nord",
-            "Rbf Mitte",
-            "Pbf",
-            "Rbf S\u00fcd",
-            "Stelle",
-            "Ashausen",
-            "L\u00fcneburg"
-        ]
+    {
+      "name": "Stelle",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": []
+    {
+      "name": "Abzw Meckelfeld",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Maschen Pbf",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Rbf Mitte",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Rbf Nord",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Rbf Süd",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "1006",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1006",
+      "gleise": 1
+    },
+    {
+      "name": "AMA3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AMA3",
+      "gleise": 1
+    },
+    {
+      "name": "1243",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1243",
+      "gleise": 1
+    },
+    {
+      "name": "2088",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2088",
+      "gleise": 1
+    },
+    {
+      "name": "AMA4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AMA4",
+      "gleise": 1
+    },
+    {
+      "name": "1253",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1253",
+      "gleise": 1
+    },
+    {
+      "name": "2086",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2086",
+      "gleise": 1
+    },
+    {
+      "name": "AMA1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AMA1",
+      "gleise": 1
+    },
+    {
+      "name": "1202",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1202",
+      "gleise": 1
+    },
+    {
+      "name": "AMA2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AMA2",
+      "gleise": 1
+    },
+    {
+      "name": "1204",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1204",
+      "gleise": 1
+    },
+    {
+      "name": "1203",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1203",
+      "gleise": 1
+    },
+    {
+      "name": "2010",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2010",
+      "gleise": 1
+    },
+    {
+      "name": "2087",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2087",
+      "gleise": 1
+    },
+    {
+      "name": "1017",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1017",
+      "gleise": 1
+    },
+    {
+      "name": "2952",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2952",
+      "gleise": 1
+    },
+    {
+      "name": "1112",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1112",
+      "gleise": 1
+    },
+    {
+      "name": "2948",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2948",
+      "gleise": 1
+    },
+    {
+      "name": "2951",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2951",
+      "gleise": 1
+    },
+    {
+      "name": "2953",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2953",
+      "gleise": 1
+    },
+    {
+      "name": "1115",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1115",
+      "gleise": 1
+    },
+    {
+      "name": "2950",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2950",
+      "gleise": 1
+    },
+    {
+      "name": "1113",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1113",
+      "gleise": 1
+    },
+    {
+      "name": "1111",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1111",
+      "gleise": 1
+    },
+    {
+      "name": "2555",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2555",
+      "gleise": 1
+    },
+    {
+      "name": "2490",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2490",
+      "gleise": 1
+    },
+    {
+      "name": "1114",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1114",
+      "gleise": 1
+    },
+    {
+      "name": "1110",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1110",
+      "gleise": 1
+    },
+    {
+      "name": "1252",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1252",
+      "gleise": 1
+    },
+    {
+      "name": "1242",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1242",
+      "gleise": 1
+    },
+    {
+      "name": "1254",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1254",
+      "gleise": 1
+    },
+    {
+      "name": "1244",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1244",
+      "gleise": 1
+    },
+    {
+      "name": "1733",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1733",
+      "gleise": 1
+    },
+    {
+      "name": "2043",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2043",
+      "gleise": 1
+    },
+    {
+      "name": "1731",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1731",
+      "gleise": 1
+    },
+    {
+      "name": "2044",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2044",
+      "gleise": 1
+    },
+    {
+      "name": "1732",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1732",
+      "gleise": 1
+    },
+    {
+      "name": "2045",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2045",
+      "gleise": 1
+    },
+    {
+      "name": "1736",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1736",
+      "gleise": 1
+    },
+    {
+      "name": "1738",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1738",
+      "gleise": 1
+    },
+    {
+      "name": "2040",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2040",
+      "gleise": 1
+    },
+    {
+      "name": "2042",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2042",
+      "gleise": 1
+    },
+    {
+      "name": "2041",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2041",
+      "gleise": 1
+    },
+    {
+      "name": "1744",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1744",
+      "gleise": 1
+    },
+    {
+      "name": "1734",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1734",
+      "gleise": 1
+    },
+    {
+      "name": "1762",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1762",
+      "gleise": 1
+    },
+    {
+      "name": "1764",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1764",
+      "gleise": 1
+    },
+    {
+      "name": "1765k",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1765",
+      "gleise": 1
+    },
+    {
+      "name": "1765",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1765",
+      "gleise": 1
+    },
+    {
+      "name": "1763",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1763",
+      "gleise": 1
+    },
+    {
+      "name": "2021k",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2021",
+      "gleise": 1
+    },
+    {
+      "name": "2021",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2021",
+      "gleise": 1
+    },
+    {
+      "name": "2981",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2981",
+      "gleise": 1
+    },
+    {
+      "name": "2990",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2990",
+      "gleise": 1
+    },
+    {
+      "name": "2980",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2980",
+      "gleise": 1
+    },
+    {
+      "name": "Meckelfeld",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Meckelfeld"
+    },
+    {
+      "name": "Meckelfeld",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Meckelfeld",
+      "gleise": 1
+    },
+    {
+      "name": "Abzw Meckelfeld",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Abzw Meckelfeld",
+      "gleise": 1
+    },
+    {
+      "name": "Meckelfeld",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Meckelfeld",
+      "gleise": 1
+    },
+    {
+      "name": "Ashausen",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ashausen"
+    },
+    {
+      "name": "Ashausen",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ashausen",
+      "gleise": 1
+    },
+    {
+      "name": "Ashausen",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ashausen",
+      "gleise": 1
+    },
+    {
+      "name": "Jesteburg",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jesteburg"
+    },
+    {
+      "name": "Jesteburg",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jesteburg",
+      "gleise": 1
+    },
+    {
+      "name": "Jesteburg",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jesteburg",
+      "gleise": 1
+    },
+    {
+      "name": "Stelle",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Stelle"
+    },
+    {
+      "name": "Stelle",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Stelle",
+      "gleise": 1
+    },
+    {
+      "name": "Stelle",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Stelle",
+      "gleise": 1
+    },
+    {
+      "name": "Harburg Fern",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Harburg Hafen",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Harburg Güter",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Schienenlager",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "2571-2584",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "2411-2448",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "2451-2486",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Berg SW",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Berg NO",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "1337-1354",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "1355-1368",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lok West",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wagen West",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lok Ost",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wagen Ost",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lüneburg",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Buchholz",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "2487-2488",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "1311-1316",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Harburg Fern",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Harburg Fern",
+      "gleise": 2
+    },
+    {
+      "name": "Harburg Hafen",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Harburg Hafen",
+      "gleise": 2
+    },
+    {
+      "name": "Harburg Güter",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Harburg Güter",
+      "gleise": 2
+    },
+    {
+      "name": "Schienenlager",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Schienenlager",
+      "gleise": 1
+    },
+    {
+      "name": "2571-2584",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2571-2584",
+      "gleise": 1
+    },
+    {
+      "name": "2411-2448",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2411-2448",
+      "gleise": 1
+    },
+    {
+      "name": "2451-2486",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2451-2486",
+      "gleise": 1
+    },
+    {
+      "name": "Berg SW",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Berg SW",
+      "gleise": 1
+    },
+    {
+      "name": "Berg NO",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Berg NO",
+      "gleise": 1
+    },
+    {
+      "name": "1337-1354",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1337-1354",
+      "gleise": 1
+    },
+    {
+      "name": "1355-1368",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1355-1368",
+      "gleise": 1
+    },
+    {
+      "name": "Lok West",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lok West",
+      "gleise": 1
+    },
+    {
+      "name": "Wagen West",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wagen West",
+      "gleise": 1
+    },
+    {
+      "name": "Lok Ost",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lok Ost",
+      "gleise": 1
+    },
+    {
+      "name": "Wagen Ost",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wagen Ost",
+      "gleise": 1
+    },
+    {
+      "name": "Lüneburg",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lüneburg",
+      "gleise": 2
+    },
+    {
+      "name": "Buchholz",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Buchholz",
+      "gleise": 2
+    },
+    {
+      "name": "2487-2488",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "2487-2488",
+      "gleise": 1
+    },
+    {
+      "name": "1311-1316",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "1311-1316",
+      "gleise": 1
+    },
+    {
+      "name": "Abzw Meckelfeld",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Abzw Meckelfeld"
+    },
+    {
+      "name": "Maschen Pbf",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Maschen Pbf"
+    },
+    {
+      "name": "Rbf Mitte",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte"
+    },
+    {
+      "name": "Rbf Nord",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord"
+    },
+    {
+      "name": "Rbf Süd",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd"
+    },
+    {
+      "name": "Abzw Meckelfeld",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Abzw Meckelfeld",
+      "gleise": 1
+    },
+    {
+      "name": "AMA3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Maschen Pbf",
+      "gleise": 1
+    },
+    {
+      "name": "AMA4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Maschen Pbf",
+      "gleise": 1
+    },
+    {
+      "name": "AMA1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Maschen Pbf",
+      "gleise": 1
+    },
+    {
+      "name": "AMA2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Maschen Pbf",
+      "gleise": 1
+    },
+    {
+      "name": "1006",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "1243",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "2088",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "1253",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "2086",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "1202",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "1204",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "1203",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "2010",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "2087",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "1252",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "1242",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "1254",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "1244",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Mitte",
+      "gleise": 1
+    },
+    {
+      "name": "1017",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "2952",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "1112",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "2948",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "2951",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "2953",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "1115",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "2950",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "1113",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "1111",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "2555",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "2490",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "1114",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "1110",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "2981",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "2990",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "2980",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Nord",
+      "gleise": 1
+    },
+    {
+      "name": "1733",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "2043",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "1731",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "2044",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "1732",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "2045",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "1736",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "1738",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "2040",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "2042",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "2041",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "1744",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "1734",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "1762",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "1764",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "1765",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "1763",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    },
+    {
+      "name": "2021",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rbf Süd",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Harburg-Rbf-Lüneburg",
+      "haupt": false,
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Harburg Fern",
+        "Bf Meckelfeld",
+        "Bf Rbf Nord",
+        "Bf Rbf Mitte",
+        "Bf Rbf Süd",
+        "Bf Stelle",
+        "Bf Ashausen",
+        "Anst Lüneburg"
+      ]
+    },
+    {
+      "name": "Harburg-Rbf-Buchholz",
+      "haupt": false,
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst Harburg Güter",
+        "Bf Abzw Meckelfeld",
+        "Bf Rbf Nord",
+        "Bf Rbf Mitte",
+        "Bf Rbf Süd",
+        "Bf Jesteburg",
+        "Anst Buchholz"
+      ]
+    },
+    {
+      "name": "Harburg-Pbf-Lüneburg",
+      "haupt": true,
+      "ordnung": 3,
+      "auto": false,
+      "stationen": [
+        "Anst Harburg Fern",
+        "Bf Meckelfeld",
+        "Bf Maschen Pbf",
+        "Bf Stelle",
+        "Bf Ashausen",
+        "Anst Lüneburg"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "deutschland",
+  "_aid": 21,
+  "_build": 5851,
+  "_name": "Maschen Rbf",
+  "_region": "Bremen-Niedersachsen",
+  "_version": 3
 }

@@ -1,204 +1,983 @@
 {
-    "_aid": 492,
-    "_build": 5845,
-    "_name": "Winterthur",
-    "_region": "Z\u00fcrich und Umgebung",
-    "_version": 2,
-    "zugschema": "schweiz",
-    "anschlussgruppen": {
-        "EF": {
-            "__class__": "Set",
-            "data": [
-                "EF 118",
-                "EF 218"
-            ]
-        },
-        "Gr\u00fcze": {
-            "__class__": "Set",
-            "data": [
-                "Gr\u00fcze 436",
-                "Gr\u00fcze 336"
-            ]
-        },
-        "Hettlingen+": {
-            "__class__": "Set",
-            "data": []
-        },
-        "Industrie": {
-            "__class__": "Set",
-            "data": [
-                "Industrie"
-            ]
-        },
-        "OWT": {
-            "__class__": "Set",
-            "data": [
-                "OWT 130",
-                "OWT 230"
-            ]
-        },
-        "WWUE": {
-            "__class__": "Set",
-            "data": [
-                "WWUE 603"
-            ]
-        }
+  "default": true,
+  "elemente": [
+    {
+      "name": "Hettlingen",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "Hettlingen": {
-            "__class__": "Set",
-            "data": [
-                "Hettlingen"
-            ]
-        },
-        "KE": {
-            "__class__": "Set",
-            "data": [
-                "KE2",
-                "KE3"
-            ]
-        },
-        "W": {
-            "__class__": "Set",
-            "data": [
-                "W2",
-                "W5L",
-                "W9L",
-                "W7R",
-                "W5R",
-                "W3",
-                "W1",
-                "W4",
-                "W8L",
-                "W9R",
-                "W7L",
-                "W6R",
-                "W4R",
-                "W9",
-                "W6L",
-                "W7",
-                "W5",
-                "W8R",
-                "W3L",
-                "W3R",
-                "W6",
-                "W4L",
-                "W8"
-            ]
-        },
-        "W100": {
-            "__class__": "Set",
-            "data": [
-                "W104",
-                "W42",
-                "W105",
-                "W106",
-                "W103"
-            ]
-        },
-        "W500": {
-            "__class__": "Set",
-            "data": [
-                "W546",
-                "W514",
-                "W543",
-                "W539",
-                "W538"
-            ]
-        },
-        "W57": {
-            "__class__": "Set",
-            "data": [
-                "W57"
-            ]
-        },
-        "WTOE": {
-            "__class__": "Set",
-            "data": [
-                "WTOE2",
-                "WTOE3",
-                "WTOE4"
-            ]
-        }
+    {
+      "name": "KE",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "sektoren": {
-        "W3": {
-            "__class__": "Set",
-            "data": [
-                "W3",
-                "W3R",
-                "W3L"
-            ]
-        },
-        "W4": {
-            "__class__": "Set",
-            "data": [
-                "W4R",
-                "W4L",
-                "W4"
-            ]
-        },
-        "W5": {
-            "__class__": "Set",
-            "data": [
-                "W5R",
-                "W5",
-                "W5L"
-            ]
-        },
-        "W6": {
-            "__class__": "Set",
-            "data": [
-                "W6",
-                "W6R",
-                "W6L"
-            ]
-        },
-        "W7": {
-            "__class__": "Set",
-            "data": [
-                "W7R",
-                "W7L",
-                "W7"
-            ]
-        },
-        "W8": {
-            "__class__": "Set",
-            "data": [
-                "W8R",
-                "W8L",
-                "W8"
-            ]
-        },
-        "W9": {
-            "__class__": "Set",
-            "data": [
-                "W9R",
-                "W9",
-                "W9L"
-            ]
-        }
+    {
+      "name": "W",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "EF-Grüze",
-    "strecken": {
-        "EF-Gr\u00fcze": [
-            "EF",
-            "KE",
-            "W",
-            "Gr\u00fcze"
-        ],
-        "EF-OWT": [
-            "EF",
-            "KE",
-            "W",
-            "OWT"
-        ],
-        "WWUE-Hettlingen": [
-            "WWUE",
-            "WTOE",
-            "W",
-            "Hettlingen"
-        ]
+    {
+      "name": "WTOE",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "W100",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "W500",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "W57",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hettlingen",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hettlingen"
+    },
+    {
+      "name": "Hettlingen",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hettlingen",
+      "gleise": 1
+    },
+    {
+      "name": "Hettlingen",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hettlingen",
+      "gleise": 1
+    },
+    {
+      "name": "KE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KE"
+    },
+    {
+      "name": "KE2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KE2",
+      "gleise": 1
+    },
+    {
+      "name": "KE3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KE3",
+      "gleise": 1
+    },
+    {
+      "name": "W",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W"
+    },
+    {
+      "name": "W7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W7",
+      "gleise": 1
+    },
+    {
+      "name": "W7L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W7",
+      "gleise": 1
+    },
+    {
+      "name": "W7R",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W7",
+      "gleise": 1
+    },
+    {
+      "name": "W5L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W5",
+      "gleise": 1
+    },
+    {
+      "name": "W5R",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W5",
+      "gleise": 1
+    },
+    {
+      "name": "W5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W5",
+      "gleise": 1
+    },
+    {
+      "name": "W3R",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W3",
+      "gleise": 1
+    },
+    {
+      "name": "W3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W3",
+      "gleise": 1
+    },
+    {
+      "name": "W3L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W3",
+      "gleise": 1
+    },
+    {
+      "name": "W9L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W9",
+      "gleise": 1
+    },
+    {
+      "name": "W9",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W9",
+      "gleise": 1
+    },
+    {
+      "name": "W9R",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W9",
+      "gleise": 1
+    },
+    {
+      "name": "W2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W2",
+      "gleise": 1
+    },
+    {
+      "name": "W8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W8",
+      "gleise": 1
+    },
+    {
+      "name": "W8L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W8",
+      "gleise": 1
+    },
+    {
+      "name": "W8R",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W8",
+      "gleise": 1
+    },
+    {
+      "name": "W1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W1",
+      "gleise": 1
+    },
+    {
+      "name": "W6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W6",
+      "gleise": 1
+    },
+    {
+      "name": "W6L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W6",
+      "gleise": 1
+    },
+    {
+      "name": "W6R",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W6",
+      "gleise": 1
+    },
+    {
+      "name": "W4L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W4",
+      "gleise": 1
+    },
+    {
+      "name": "W4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W4",
+      "gleise": 1
+    },
+    {
+      "name": "W4R",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W4",
+      "gleise": 1
+    },
+    {
+      "name": "W42",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W42",
+      "gleise": 1
+    },
+    {
+      "name": "W106",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W106",
+      "gleise": 1
+    },
+    {
+      "name": "W104",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W104",
+      "gleise": 1
+    },
+    {
+      "name": "W105",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W105",
+      "gleise": 1
+    },
+    {
+      "name": "W103",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W103",
+      "gleise": 1
+    },
+    {
+      "name": "W57",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W57",
+      "gleise": 1
+    },
+    {
+      "name": "W57",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W57",
+      "gleise": 1
+    },
+    {
+      "name": "W538",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W538",
+      "gleise": 1
+    },
+    {
+      "name": "W546",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W546",
+      "gleise": 1
+    },
+    {
+      "name": "W514",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W514",
+      "gleise": 1
+    },
+    {
+      "name": "WTOE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WTOE"
+    },
+    {
+      "name": "WTOE2G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WTOE2",
+      "gleise": 1
+    },
+    {
+      "name": "WTOE2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WTOE2",
+      "gleise": 1
+    },
+    {
+      "name": "WTOE3G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WTOE3",
+      "gleise": 1
+    },
+    {
+      "name": "WTOE3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WTOE3",
+      "gleise": 1
+    },
+    {
+      "name": "WTOE4G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WTOE4",
+      "gleise": 1
+    },
+    {
+      "name": "WTOE4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WTOE4",
+      "gleise": 1
+    },
+    {
+      "name": "EF",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wülflingen",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hettlingen",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "OWT",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WGR",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Industrie",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "W",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EF 118",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EF",
+      "gleise": 1
+    },
+    {
+      "name": "EF 218",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EF",
+      "gleise": 1
+    },
+    {
+      "name": "Wülflingen",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wülflingen",
+      "gleise": 1
+    },
+    {
+      "name": "Hettlingen",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hettlingen",
+      "gleise": 1
+    },
+    {
+      "name": "OWT 130",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OWT",
+      "gleise": 1
+    },
+    {
+      "name": "OWT 230",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "OWT",
+      "gleise": 1
+    },
+    {
+      "name": "WGR 436",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGR",
+      "gleise": 1
+    },
+    {
+      "name": "WGR 336",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGR",
+      "gleise": 1
+    },
+    {
+      "name": "Industrie",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Industrie",
+      "gleise": 1
+    },
+    {
+      "name": "W513",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W",
+      "gleise": 1
+    },
+    {
+      "name": "W545",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W",
+      "gleise": 1
+    },
+    {
+      "name": "W100",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W100"
+    },
+    {
+      "name": "W500",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W500"
+    },
+    {
+      "name": "W57",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W57"
+    },
+    {
+      "name": "KE2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KE",
+      "gleise": 1
+    },
+    {
+      "name": "KE3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KE",
+      "gleise": 1
+    },
+    {
+      "name": "W7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W",
+      "gleise": 1
+    },
+    {
+      "name": "W5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W",
+      "gleise": 1
+    },
+    {
+      "name": "W3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W",
+      "gleise": 1
+    },
+    {
+      "name": "W9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W",
+      "gleise": 1
+    },
+    {
+      "name": "W2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W",
+      "gleise": 1
+    },
+    {
+      "name": "W8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W",
+      "gleise": 1
+    },
+    {
+      "name": "W1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W",
+      "gleise": 1
+    },
+    {
+      "name": "W6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W",
+      "gleise": 1
+    },
+    {
+      "name": "W4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W",
+      "gleise": 1
+    },
+    {
+      "name": "WTOE2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WTOE",
+      "gleise": 1
+    },
+    {
+      "name": "WTOE3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WTOE",
+      "gleise": 1
+    },
+    {
+      "name": "WTOE4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WTOE",
+      "gleise": 1
+    },
+    {
+      "name": "W42",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W100",
+      "gleise": 1
+    },
+    {
+      "name": "W106",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W100",
+      "gleise": 1
+    },
+    {
+      "name": "W104",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W100",
+      "gleise": 1
+    },
+    {
+      "name": "W105",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W100",
+      "gleise": 1
+    },
+    {
+      "name": "W103",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W100",
+      "gleise": 1
+    },
+    {
+      "name": "W538",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W500",
+      "gleise": 1
+    },
+    {
+      "name": "W546",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W500",
+      "gleise": 1
+    },
+    {
+      "name": "W514",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "W500",
+      "gleise": 1
     }
+  ],
+  "strecken": [
+    {
+      "name": "EF-Grüze",
+      "haupt": false,
+      "ordnung": 1,
+      "auto": true,
+      "stationen": [
+        "Anst EF",
+        "Bf KE",
+        "Bf W"
+      ]
+    },
+    {
+      "name": "WWUE-Hettlingen",
+      "haupt": false,
+      "ordnung": 9,
+      "auto": true,
+      "stationen": [
+        "Bf WTOE",
+        "Bf W",
+        "Bf Hettlingen"
+      ]
+    },
+    {
+      "name": "EF-OWT",
+      "haupt": false,
+      "ordnung": 101,
+      "auto": true,
+      "stationen": [
+        "Anst EF",
+        "Bf KE",
+        "Bf W",
+        "Anst OWT"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "schweiz",
+  "_aid": 492,
+  "_build": 5851,
+  "_name": "Winterthur",
+  "_region": "Zürich und Umgebung",
+  "_version": 3
 }

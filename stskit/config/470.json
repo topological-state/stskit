@@ -1,195 +1,875 @@
 {
-    "_aid": 470,
-    "_build": 5840,
-    "_name": "Hamburg Hbf",
-    "_region": "Hamburg - Schleswig-Holstein",
-    "_version": 2,
-    "anschlussgruppen": {
-        "Abst": {
-            "__class__": "Set",
-            "data": [
-                "Abst 1",
-                "Abst 2",
-                "Abst 3"
-            ]
-        },
-        "Altona": {
-            "__class__": "Set",
-            "data": [
-                "Altona"
-            ]
-        },
-        "Bad Oldesloe": {
-            "__class__": "Set",
-            "data": [
-                "Bad Oldesloe"
-            ]
-        },
-        "Harburg": {
-            "__class__": "Set",
-            "data": [
-                "Harburg Fern",
-                "Harburg G\u00fcter",
-                "Harburg Tunnel"
-            ]
-        },
-        "Hbf S": {
-            "__class__": "Set",
-            "data": [
-                "Hbf S Nord",
-                "Hbf S S\u00fcd"
-            ]
-        },
-        "Rothenburgsort": {
-            "__class__": "Set",
-            "data": [
-                "Rothenburgsort"
-            ]
-        },
-        "Rothenburgsort Ericus": {
-            "__class__": "Set",
-            "data": [
-                "Rothenburgsort Ericus"
-            ]
-        }
+  "default": true,
+  "elemente": [
+    {
+      "name": "Hamburg Hbf",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "Hbf": {
-            "__class__": "Set",
-            "data": [
-                "5a",
-                "5b",
-                "6a",
-                "6b",
-                "7a",
-                "7b",
-                "8a",
-                "8b",
-                "10 lang",
-                "11a",
-                "11b",
-                "11b lang",
-                "12a",
-                "12b",
-                "13a",
-                "13b",
-                "14a",
-                "14b",
-                "35",
-                "36"
-            ]
-        },
-        "Anckelmannsplatz": {
-            "__class__": "Set",
-            "data": [
-                "Anckelmannsplatz"
-            ]
-        },
-        "Berliner Tor": {
-            "__class__": "Set",
-            "data": [
-                "Berliner Tor"
-            ]
-        },
-        "Dammtor": {
-            "__class__": "Set",
-            "data": [
-                "Dammtor"
-            ]
-        },
-        "Ericus": {
-            "__class__": "Set",
-            "data": [
-                "Ericus"
-            ]
-        },
-        "Hasselbrook": {
-            "__class__": "Set",
-            "data": [
-                "Hasselbrook"
-            ]
-        }
+    {
+      "name": "Ericus",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "sektoren": {
-        "11": {
-            "__class__": "Set",
-            "data": [
-                "11a",
-                "11b",
-                "11b lang"
-            ]
-        },
-        "12": {
-            "__class__": "Set",
-            "data": [
-                "12b",
-                "12a"
-            ]
-        },
-        "13": {
-            "__class__": "Set",
-            "data": [
-                "13b",
-                "13a"
-            ]
-        },
-        "14": {
-            "__class__": "Set",
-            "data": [
-                "14a",
-                "14b"
-            ]
-        },
-        "5": {
-            "__class__": "Set",
-            "data": [
-                "5b",
-                "5a"
-            ]
-        },
-        "6": {
-            "__class__": "Set",
-            "data": [
-                "6a",
-                "6b"
-            ]
-        },
-        "7": {
-            "__class__": "Set",
-            "data": [
-                "7b",
-                "7a"
-            ]
-        },
-        "8": {
-            "__class__": "Set",
-            "data": [
-                "8a",
-                "8b"
-            ]
-        }
+    {
+      "name": "Berliner Tor",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "Altona-Bad Oldesloe",
-    "strecken": {
-        "Altona-Bad Oldesloe": [
-            "Altona",
-            "Dammtor",
-            "Hbf",
-            "Hasselbrook",
-            "Bad Oldesloe"
-        ],
-        "Altona-Rothenburgsort": [
-            "Altona",
-            "Dammtor",
-            "Hbf",
-            "Rothenburgsort"
-        ],
-        "Altona-Harburg": [
-            "Altona",
-            "Dammtor",
-            "Hbf",
-            "Harburg"
-        ]
+    {
+      "name": "Dammtor",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hasselbrook",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hbf",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Anckelmannsplatz",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "9",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hamburg Hbf"
+    },
+    {
+      "name": "27",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hamburg Hbf"
+    },
+    {
+      "name": "33",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hamburg Hbf"
+    },
+    {
+      "name": "10",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "9",
+      "gleise": 1
+    },
+    {
+      "name": "9",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "9",
+      "gleise": 1
+    },
+    {
+      "name": "13a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "13",
+      "gleise": 1
+    },
+    {
+      "name": "13b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "13",
+      "gleise": 1
+    },
+    {
+      "name": "5b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "5",
+      "gleise": 1
+    },
+    {
+      "name": "5a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "5",
+      "gleise": 1
+    },
+    {
+      "name": "8b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "8",
+      "gleise": 1
+    },
+    {
+      "name": "8a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "8",
+      "gleise": 1
+    },
+    {
+      "name": "11b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "11",
+      "gleise": 1
+    },
+    {
+      "name": "11a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "11",
+      "gleise": 1
+    },
+    {
+      "name": "11b lang",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "11",
+      "gleise": 1
+    },
+    {
+      "name": "10",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "10",
+      "gleise": 1
+    },
+    {
+      "name": "12b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "12",
+      "gleise": 1
+    },
+    {
+      "name": "12a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "12",
+      "gleise": 1
+    },
+    {
+      "name": "6a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "6",
+      "gleise": 1
+    },
+    {
+      "name": "6b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "6",
+      "gleise": 1
+    },
+    {
+      "name": "14a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "14",
+      "gleise": 1
+    },
+    {
+      "name": "14b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "14",
+      "gleise": 1
+    },
+    {
+      "name": "7a",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "7",
+      "gleise": 1
+    },
+    {
+      "name": "7b",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "7",
+      "gleise": 1
+    },
+    {
+      "name": "9",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "9",
+      "gleise": 1
+    },
+    {
+      "name": "27",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "27",
+      "gleise": 1
+    },
+    {
+      "name": "27",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "27",
+      "gleise": 1
+    },
+    {
+      "name": "33",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "33",
+      "gleise": 1
+    },
+    {
+      "name": "34",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "33",
+      "gleise": 1
+    },
+    {
+      "name": "33",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "33",
+      "gleise": 1
+    },
+    {
+      "name": "34",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "34",
+      "gleise": 1
+    },
+    {
+      "name": "36",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "36",
+      "gleise": 1
+    },
+    {
+      "name": "35",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "35",
+      "gleise": 1
+    },
+    {
+      "name": "Ericus",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ericus"
+    },
+    {
+      "name": "Ericus",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ericus",
+      "gleise": 1
+    },
+    {
+      "name": "Anckelmannsplatz",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Anckelmannsplatz",
+      "gleise": 1
+    },
+    {
+      "name": "Ericus",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ericus",
+      "gleise": 1
+    },
+    {
+      "name": "Berliner Tor",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Berliner Tor"
+    },
+    {
+      "name": "Berliner Tor",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Berliner Tor",
+      "gleise": 1
+    },
+    {
+      "name": "Berliner Tor",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Berliner Tor",
+      "gleise": 1
+    },
+    {
+      "name": "Dammtor",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dammtor"
+    },
+    {
+      "name": "Dammtor",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dammtor",
+      "gleise": 1
+    },
+    {
+      "name": "Dammtor",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dammtor",
+      "gleise": 1
+    },
+    {
+      "name": "Hasselbrook",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hasselbrook"
+    },
+    {
+      "name": "Hasselbrook",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hasselbrook",
+      "gleise": 1
+    },
+    {
+      "name": "Hasselbrook",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hasselbrook",
+      "gleise": 1
+    },
+    {
+      "name": "Bad Oldesloe",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Rothenburgsort",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Abst",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Altona",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Rothenburgsort Ericus",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Harburg",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hbf S",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bad Oldesloe",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bad Oldesloe",
+      "gleise": 2
+    },
+    {
+      "name": "Rothenburgsort",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rothenburgsort",
+      "gleise": 1
+    },
+    {
+      "name": "Abst 3",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Abst",
+      "gleise": 1
+    },
+    {
+      "name": "Abst 2",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Abst",
+      "gleise": 1
+    },
+    {
+      "name": "Abst 1",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Abst",
+      "gleise": 1
+    },
+    {
+      "name": "Altona",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Altona",
+      "gleise": 2
+    },
+    {
+      "name": "Rothenburgsort Ericus",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rothenburgsort Ericus",
+      "gleise": 1
+    },
+    {
+      "name": "Hbf",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf"
+    },
+    {
+      "name": "Anckelmannsplatz",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Anckelmannsplatz"
+    },
+    {
+      "name": "Harburg Güter",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Harburg",
+      "gleise": 2
+    },
+    {
+      "name": "Harburg Fern",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Harburg",
+      "gleise": 2
+    },
+    {
+      "name": "Harburg Tunnel",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Harburg",
+      "gleise": 1
+    },
+    {
+      "name": "Hbf S Nord",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf S",
+      "gleise": 1
+    },
+    {
+      "name": "Hbf S Süd",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf S",
+      "gleise": 1
+    },
+    {
+      "name": "13",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "12",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "14",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "36",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "35",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "10 lang",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hbf",
+      "gleise": 1
+    },
+    {
+      "name": "Anckelmannsplatz",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Anckelmannsplatz",
+      "gleise": 1
+    },
+    {
+      "name": "10 lang",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "10 lang",
+      "gleise": 1
     }
+  ],
+  "strecken": [
+    {
+      "name": "Altona-Bad Oldesloe",
+      "haupt": false,
+      "ordnung": 100,
+      "auto": true,
+      "stationen": [
+        "Anst Altona",
+        "Bf Dammtor",
+        "Bf Hbf",
+        "Bf Berliner Tor",
+        "Bf Hasselbrook",
+        "Anst Bad Oldesloe"
+      ]
+    },
+    {
+      "name": "Altona-Harburg",
+      "haupt": false,
+      "ordnung": 101,
+      "auto": true,
+      "stationen": [
+        "Anst Altona",
+        "Bf Dammtor",
+        "Bf Hbf",
+        "Anst Harburg"
+      ]
+    },
+    {
+      "name": "Altona-Rothenburgsort",
+      "haupt": false,
+      "ordnung": 102,
+      "auto": true,
+      "stationen": [
+        "Anst Altona",
+        "Bf Dammtor",
+        "Bf Hbf",
+        "Anst Rothenburgsort"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "deutschland",
+  "_aid": 470,
+  "_build": 5851,
+  "_name": "Hamburg Hbf",
+  "_region": "Hamburg - Schleswig-Holstein",
+  "_version": 3
 }
