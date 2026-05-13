@@ -1,3 +1,6 @@
+from attr import s
+from dataclasses import dataclass
+from stskit.model.liniengraph import LinienGraphEdge
 import bisect
 import logging
 import pickle
@@ -5,7 +8,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, 
 
 import networkx as nx
 from PySide6 import QtCore, QtWidgets
-from PySide6.QtCore import (Slot, Signal, QAbstractListModel, QModelIndex, QItemSelectionModel,
+from PySide6.QtCore import (Slot, Signal, QAbstractListModel, QAbstractTableModel, QModelIndex, QItemSelectionModel,
                             QStringListModel, QObject, QMimeData, QByteArray)
 from PySide6.QtWidgets import QWidget, QAbstractItemView, QStyledItemDelegate
 from PySide6.QtGui import QFont, QTextCharFormat, QColor
@@ -213,38 +216,91 @@ class StreckenListModel(QAbstractListModel):
             self.endResetModel()
 
 
-class StreckenEditorModel(QAbstractListModel):
+@dataclass
+class StreckenSegment:
+    """
+    Streckensegment (Zeile) im Streckeneditor
+    """
+
+    station1: BahnhofElement
+    station2: BahnhofElement | None = None
+    markierung: str | None = None
+    markierung_edited: bool = False
+    fahrzeit: int | float | None = None
+    fahrzeit_manuell: bool = False
+    fahrzeit_edited: bool = False
+    
+    def reset(self):
+        self.station2 = None
+        self.markierung = None
+        self.markierung_edited = False
+        self.fahrzeit = None
+        self.fahrzeit_manuell = False
+        self.fahrzeit_edited = False
+
+
+class StreckenEditorModel(QAbstractTableModel):
     """
     ListModel für den Streckeneditor
 
-    Attribute
-    =========
-
-    - anlage : Anlage
-      The Anlage object containing the BahnhofElements.
-    - rows : list of BahnhofElement
-      List of BahnhofElements sorted by some criterion (not specified in the code).
+    Attributes:
+        - anlage : Anlage-Objekt mit Streckendaten und Liniengraph
+        - columns : Liste von Spaltenüberschriften
+        - rows : Liste von Streckensegmenten.
     """
 
     drop_completed = Signal(str)
 
-    def __init__(self, anlage: Anlage, parent=None):
+    def __init__(self, anlage: Anlage, mit_liniendaten: bool, parent=None):
         super().__init__(parent)
         self.anlage: Anlage = anlage
-        self.columns: List[str] = ["Stationen"]
-        self.rows: List[BahnhofElement] = []
-        self.sorted = False
+        self.mit_liniendaten = mit_liniendaten
+        if self.mit_liniendaten:
+            self.columns: List[str] = ["Station", "Markierung", "Fahrzeit"]
+        else:
+            self.columns: List[str] = ["Station"]
+        self.rows: List[StreckenSegment] = []
         self._drag_data = {}
 
     def update(self, strecke: Sequence[BahnhofElement]) -> None:
         self.beginResetModel()
-        if self.sorted:
-            strecke = sorted(strecke)
-        self.rows = list(strecke)
+        self.rows = [StreckenSegment(station1=station1) for station1 in strecke]
+        self._update()
         self.endResetModel()
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def _update(self):
+        if not self.mit_liniendaten:
+            return
+        
+        for segment1, segment2 in zip(self.rows, self.rows[1:]):
+            if segment1.station2 != segment2.station1:
+                segment1.reset()
+                segment1.station2 = segment2.station1
+
+            try:
+                liniendata: LinienGraphEdge = self.anlage.liniengraph.edges[segment1.station1, segment1.station2]
+            except KeyError:
+                continue
+            if not segment1.markierung_edited:
+                segment1.markierung = liniendata.get('markierung')
+            if not segment1.fahrzeit_edited:
+                fahrzeit_manuell = liniendata.get('fahrzeit_manuell')
+                segment1.fahrzeit = fahrzeit_manuell or liniendata.get('fahrzeit_schnitt')
+                segment1.fahrzeit_manuell = bool(fahrzeit_manuell)
+
+        # letzte zeile ist nur endpunkt
+        try:
+            segment = self.rows[-1]
+        except IndexError:
+            pass
+        else:
+            segment.reset()
+        
+    def rowCount(self, parent=QtCore.QModelIndex()) -> int:
         return len(self.rows)
+
+    def columnCount(self, parent=QtCore.QModelIndex()) -> int:
+        return len(self.columns)
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
         if role == QtCore.Qt.DisplayRole:
@@ -259,40 +315,62 @@ class StreckenEditorModel(QAbstractListModel):
         if not index.isValid():
             return None
         row = index.row()
-        key = self.rows[row]
+        segment = self.rows[row]
+        key = segment.station1
+        col = index.column()
+        col_key = self.columns[col]
 
         if role == QtCore.Qt.UserRole:
-            try:
-                return key
-            except KeyError:
-                return None
+            match col_key:
+                case 'Station':
+                    return key
+                case 'Markierung':
+                    return segment.markierung
+                case 'Fahrzeit':
+                    return segment.fahrzeit
 
         elif role == QtCore.Qt.DisplayRole:
-            try:
-                return str(key)
-            except KeyError:
-                return '???'
+            match col_key:
+                case 'Station':
+                    return str(key)
+                case 'Markierung':
+                    return segment.markierung
+                case 'Fahrzeit':
+                    if segment.station2 is not None and segment.fahrzeit is not None:
+                        return f"{segment.fahrzeit:.1f}"
 
         elif role == QtCore.Qt.ToolTipRole:
-            try:
-                return f"{BAHNHOFELEMENT_BESCHREIBUNG[key.typ]} {key.name}"
-            except KeyError:
-                return '???'
+            match col_key:
+                case 'Station':
+                    return f"{BAHNHOFELEMENT_BESCHREIBUNG[key.typ]} {key.name}"
 
         elif role == QtCore.Qt.WhatsThisRole:
-            try:
-                return f"{BAHNHOFELEMENT_BESCHREIBUNG[key.typ]} {key.name}"
-            except KeyError:
-                return '???'
+            match col_key:
+                case 'Station':
+                    return f"{BAHNHOFELEMENT_BESCHREIBUNG[key.typ]} {key.name}"
 
         elif role == QtCore.Qt.EditRole:
-            try:
-                return str(key)
-            except KeyError:
-                return '???'
+            match col_key:
+                case 'Station':
+                    return str(key)
+                case 'Markierung':
+                    if segment.station2 is not None:
+                        return segment.markierung
+                case 'Fahrzeit':
+                    if segment.station2 is not None and segment.fahrzeit is not None:
+                        return f"{segment.fahrzeit:.1f}"
+
+        elif role == ROLE_ITALIC:
+            match col_key:
+                case 'Fahrzeit':
+                    if segment.station2 is not None:
+                        return not segment.fahrzeit_manuell
 
         elif role == QtCore.Qt.TextAlignmentRole:
-            return QtCore.Qt.AlignLeft + QtCore.Qt.AlignVCenter
+            if col_key in {'Markierung', 'Fahrzeit'}:
+                return QtCore.Qt.AlignHCenter + QtCore.Qt.AlignVCenter
+            else:
+                return QtCore.Qt.AlignLeft + QtCore.Qt.AlignVCenter
 
         return None
 
@@ -300,26 +378,56 @@ class StreckenEditorModel(QAbstractListModel):
         if not index.isValid():
             return QtCore.Qt.NoItemFlags
 
+        row = index.row()
+        segment = self.rows[row]
+        col = index.column()
+        col_key = self.columns[col]
+
         result = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
+        if segment.station2 is not None and col_key in {'Markierung', 'Fahrzeit'}:
+            result |= QtCore.Qt.ItemIsEditable
 
         return result
 
     def setData(self, index, value, role=QtCore.Qt.EditRole):
-        # for editable models
-        return False
+        if not index.isValid():
+            return None
+
+        row = index.row()
+        segment = self.rows[row]
+        col = index.column()
+        col_key = self.columns[col]
+
+        if role == QtCore.Qt.EditRole and segment.station2 is not None:
+            match col_key:
+                case 'Markierung':
+                    value = str(value)
+                    if value in {'E'}:
+                        segment.markierung = value
+                        segment.markierung_edited = True
+                        self.dataChanged.emit(index, index)
+                        return True
+                case 'Fahrzeit':
+                    try:
+                        segment.fahrzeit = float(value)
+                    except ValueError:
+                        return False
+                    segment.fahrzeit_edited = True
+                    segment.fahrzeit_manuell = True
+                    self.dataChanged.emit(index, index)
+                    return True
 
     def insert(self, row: int, bst: BahnhofElement):
         """
         Station einfügen
 
-        :param row: Zielindex
-            Wenn die Liste sortiert ist, hat row keinen Einfluss.
-        :param bst: Einzufügendes BahnhofElement.
-        :return: True bei Erfolg, False bei Indexfehler.
+        Args:
+            row: Zielindex.
+            bst: Einzufügendes BahnhofElement.
+            
+        Returns:
+            True bei Erfolg, False bei falschem Index.
         """
-
-        if self.sorted:
-            row = bisect.bisect_left(self.rows, bst)
 
         self.beginInsertRows(QModelIndex(), row, row)
         try:
@@ -327,6 +435,9 @@ class StreckenEditorModel(QAbstractListModel):
             result = True
         except IndexError:
             result = False
+        else:
+            self._update()
+            
         self.endInsertRows()
         return result
 
@@ -334,8 +445,11 @@ class StreckenEditorModel(QAbstractListModel):
         """
         Station entfernen
 
-        :param bst: Zu entfernendes BahnhofElement.
-        :return: True bei Erfolg, False bei Indexfehler.
+        Args:
+            bst: Zu entfernendes BahnhofElement.
+
+        Returns:
+            True bei Erfolg, False bei falschem Index.
         """
 
         try:
@@ -349,6 +463,9 @@ class StreckenEditorModel(QAbstractListModel):
             result = True
         except IndexError:
             result = False
+        else:
+            self._update()
+
         self.endRemoveRows()
         return result
 
@@ -356,11 +473,14 @@ class StreckenEditorModel(QAbstractListModel):
         """
         Station verschieben
 
-        :param row: Zielindex.
-            Bezieht sich auf die ursprüngliche Liste!
-            Ist also ev. grösser als der Index in der Ergebnisliste.
-        :param bst: Zu verschiebendes BahnhofElement.
-        :return: True bei Erfolg, False bei Indexfehler.
+        Args:
+            row: Zielindex.
+                Bezieht sich auf die ursprüngliche Liste!
+                Ist also ev. grösser als der Index in der Ergebnisliste.
+            bst: Zu verschiebendes BahnhofElement.
+
+        Returns:
+            True bei Erfolg, False bei falschem Index.
         """
 
         try:
@@ -377,6 +497,8 @@ class StreckenEditorModel(QAbstractListModel):
             result = True
         except IndexError:
             result = False
+        else:
+            self._update()
 
         self.endMoveRows()
         return result
@@ -484,11 +606,16 @@ class StreckenEditor(QObject):
         self.strecken_name: str = ""
         self.hauptstrecken_name: Optional[str] = None
         
-        self.auswahl_model = StreckenEditorModel(anlage, parent)
+        self.auswahl_model = StreckenEditorModel(anlage, True, parent)
         self.ui.strecken_auswahl_list.setModel(self.auswahl_model)
+        # self.ui.strecken_auswahl_list.setItemDelegate(StyledTextDelegate(parent=self.ui.strecken_auswahl_list))
         self.ui.strecken_auswahl_list.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.ui.strecken_auswahl_list.setSelectionBehavior(QAbstractItemView.SelectRows)
+        #self.ui.strecken_auswahl_list.selectionModel().selectionChanged.connect(
+        #    self.zugliste_selection_changed)
         self.ui.strecken_auswahl_list.setAcceptDrops(True)
-        self.abwahl_model = StreckenEditorModel(anlage, parent)
+
+        self.abwahl_model = StreckenEditorModel(anlage, False, parent)
         self.abwahl_model.sorted = True
         self.ui.strecken_abwahl_list.setModel(self.abwahl_model)
         self.ui.strecken_abwahl_list.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -572,6 +699,7 @@ class StreckenEditor(QObject):
         if changed:
             self.alle_strecken = neue_strecken
             self._strecke_changed()
+            self.adjust_geometry()
 
     def update_widget_states(self):
         en = len(self.ui.strecken_abwahl_list.selectedIndexes()) >= 1
@@ -592,6 +720,16 @@ class StreckenEditor(QObject):
         en = bool(self.strecken_name) and len(self.auswahl_model.rows) >= 2
         self.ui.strecken_interpolieren_button.setEnabled(en)
         self.ui.strecken_ordnen_button.setEnabled(en)
+
+    def adjust_geometry(self):
+        """
+        Adjust the geometry of the widgets based on their current content.
+        """
+
+        self.ui.strecken_auswahl_list.resizeColumnsToContents()
+        self.ui.strecken_auswahl_list.resizeRowsToContents()
+        self.ui.strecken_abwahl_list.resizeColumnsToContents()
+        self.ui.strecken_abwahl_list.resizeRowsToContents()
 
     def init_from_anlage(self):
         """
@@ -694,6 +832,7 @@ class StreckenEditor(QObject):
         uebrige = [bst for bst in self.anlage_bst if bst not in stationen]
         self.abwahl_model.update(uebrige)
         self.in_update = False
+        self.adjust_geometry()
         self.update_widget_states()
 
     def _strecke_edited(self):
@@ -710,6 +849,7 @@ class StreckenEditor(QObject):
         self.auto_strecken.discard(self.strecken_name)
         self.deleted_strecken.discard(self.strecken_name)
         self.strecken_model.set_edited(self.strecken_name, True)
+        self.adjust_geometry()
         self.update_widget_states()
 
     @Slot()

@@ -449,7 +449,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QListView" name="strecken_auswahl_list">
+                  <widget class="QTableView" name="strecken_auswahl_list">
                    <property name="toolTip">
                     <string>Stationsliste der aktuellen Strecke</string>
                    </property>
@@ -575,7 +575,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QListView" name="strecken_abwahl_list">
+                  <widget class="QTableView" name="strecken_abwahl_list">
                    <property name="toolTip">
                     <string>übrige Stationen</string>
                    </property>

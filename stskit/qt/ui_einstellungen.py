@@ -303,7 +303,7 @@ class Ui_EinstellungenWindow(object):
 
         self.verticalLayout_13.addWidget(self.strecken_auswahl_label)
 
-        self.strecken_auswahl_list = QListView(self.layoutWidget1)
+        self.strecken_auswahl_list = QTableView(self.layoutWidget1)
         self.strecken_auswahl_list.setObjectName(u"strecken_auswahl_list")
         self.strecken_auswahl_list.setDragEnabled(True)
         self.strecken_auswahl_list.setDragDropMode(QAbstractItemView.DragDrop)
@@ -366,7 +366,7 @@ class Ui_EinstellungenWindow(object):
 
         self.verticalLayout_16.addWidget(self.strecken_abwahl_label)
 
-        self.strecken_abwahl_list = QListView(self.layoutWidget1)
+        self.strecken_abwahl_list = QTableView(self.layoutWidget1)
         self.strecken_abwahl_list.setObjectName(u"strecken_abwahl_list")
         self.strecken_abwahl_list.setDragEnabled(True)
         self.strecken_abwahl_list.setDragDropMode(QAbstractItemView.DragDrop)
