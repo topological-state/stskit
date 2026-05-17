@@ -11,7 +11,7 @@ import networkx as nx
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import (Slot, Signal, QAbstractListModel, QAbstractTableModel, QModelIndex, QItemSelectionModel,
                             QStringListModel, QObject, QMimeData, QByteArray)
-from PySide6.QtWidgets import QWidget, QAbstractItemView, QStyledItemDelegate
+from PySide6.QtWidgets import QWidget, QAbstractItemView, QStyledItemDelegate, QComboBox
 from PySide6.QtGui import QFont, QTextCharFormat, QColor
 
 from stskit.dispo.anlage import Anlage
@@ -229,6 +229,64 @@ class StreckenSegment:
         self.fahrzeit_manuell = False
 
 
+class StreckenItemDelegate(StyledTextDelegate):
+    def __init__(self, /, parent=...):
+        super().__init__(parent)
+
+    def createEditor(self, parent, option, index, /):
+        model = self.parent().model()
+        col = index.column()
+        col_key = model.headerData(col, QtCore.Qt.Horizontal)
+
+        match col_key:
+            case 'Markierung':
+                editor = QComboBox(parent)
+                editor.setFrame(False)
+                editor.addItems(list(model.MARKIERUNGEN.values()))
+            case 'Fahrzeit':
+                editor = super().createEditor(parent, option, index)
+            case _:
+                editor = None
+
+        return editor
+
+    def setEditorData(self, editor, index, /):
+        model = self.parent().model()
+        col = index.column()
+        col_key = model.headerData(col, QtCore.Qt.Horizontal)
+
+        match col_key:
+            case 'Markierung':
+                value = model.data(QtCore.Qt.EditRole)
+                if isinstance(editor, QComboBox):
+                    editor.setCurrentText(value)
+            case _:
+                super().setEditorData(editor, index)
+
+    def setModelData(self, editor, model, index, /):
+        col = index.column()
+        col_key = model.headerData(col, QtCore.Qt.Horizontal)
+
+        match col_key:
+            case 'Markierung':
+                if isinstance(editor, QComboBox):
+                    value = editor.currentText()
+                    model.setData(index, value, QtCore.Qt.EditRole)
+            case _:
+                super().setModelData(editor, model, index)
+
+    def updateEditorGeometry(self, editor, option, index, /):
+        model = self.parent().model()
+        col = index.column()
+        col_key = model.headerData(col, QtCore.Qt.Horizontal)
+
+        match col_key:
+            case 'Markierung':
+                editor.setGeometry(option.rect)
+            case _:
+                super().updateEditorGeometry(editor, option, index)
+
+
 class StreckenEditorModel(QAbstractTableModel):
     """
     ListModel für den Streckeneditor
@@ -254,6 +312,9 @@ class StreckenEditorModel(QAbstractTableModel):
         journal: Liste von Aenderungen am Liniengraph.
             Die Aenderungen betreffen die Kantenattribute markierung und fahrzeit_manuell.
     """
+
+    MARKIERUNGEN = {"": "", "H": "Gefahrgut", "G": "Gleis", "O": "Profil", "E": "Traktion"}
+    FLAGS = {"": "", "Gefahrgut": "H", "Gleis": "G", "Profil": "O", "Traktion": "E"}
 
     drop_completed = Signal(str)
 
@@ -357,7 +418,7 @@ class StreckenEditorModel(QAbstractTableModel):
                 case 'Station':
                     return str(station)
                 case 'Markierung':
-                    return segment.markierung
+                    return self.MARKIERUNGEN[segment.markierung]
                 case 'Fahrzeit':
                     if segment.station2 is not None and segment.fahrzeit is not None:
                         return f"{segment.fahrzeit:.1f}"
@@ -378,7 +439,7 @@ class StreckenEditorModel(QAbstractTableModel):
                     return str(station)
                 case 'Markierung':
                     if segment.station2 is not None:
-                        return segment.markierung
+                        return self.MARKIERUNGEN[segment.markierung]
                 case 'Fahrzeit':
                     if segment.station2 is not None and segment.fahrzeit is not None:
                         return f"{segment.fahrzeit:.1f}"
@@ -424,6 +485,10 @@ class StreckenEditorModel(QAbstractTableModel):
         if role == QtCore.Qt.EditRole and segment.station2 is not None:
             match col_key:
                 case 'Markierung':
+                    try:
+                        value = self.FLAGS[value]
+                    except KeyError:
+                        value = ""
                     if self.set_markierung(segment, value):
                         self.dataChanged.emit(index, index)
                         return True
@@ -687,7 +752,7 @@ class StreckenEditor(QObject):
         
         self.auswahl_model = StreckenEditorModel(anlage, True, False, parent)
         self.ui.strecken_auswahl_list.setModel(self.auswahl_model)
-        # self.ui.strecken_auswahl_list.setItemDelegate(StyledTextDelegate(parent=self.ui.strecken_auswahl_list))
+        self.ui.strecken_auswahl_list.setItemDelegate(StreckenItemDelegate(parent=self.ui.strecken_auswahl_list))
         self.ui.strecken_auswahl_list.setSelectionMode(QAbstractItemView.SingleSelection)
         self.ui.strecken_auswahl_list.setSelectionBehavior(QAbstractItemView.SelectRows)
         #self.ui.strecken_auswahl_list.selectionModel().selectionChanged.connect(
