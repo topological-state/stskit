@@ -52,6 +52,7 @@ class LinienGraph(nx.Graph):
     """
     node_attr_dict_factory = LinienGraphNode
     edge_attr_dict_factory = LinienGraphEdge
+    MAX_FAHRZEIT = 24 * 60
 
     def __init__(self, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
@@ -76,8 +77,6 @@ class LinienGraph(nx.Graph):
 
         Sollte nicht mehr als einmal pro Zug aufgerufen werden, da sonst die Statistik verfälscht werden kann.
         """
-
-        MAX_FAHRZEIT = 24 * 60
 
         try:
             fahrzeit = ziel2.p_an - ziel1.p_ab
@@ -105,7 +104,7 @@ class LinienGraph(nx.Graph):
         try:
             liniendaten = self[bft1][bft2]
         except KeyError:
-            liniendaten = LinienGraphEdge(fahrzeit_min=MAX_FAHRZEIT, fahrzeit_max=0,
+            liniendaten = LinienGraphEdge(fahrzeit_min=self.MAX_FAHRZEIT, fahrzeit_max=0,
                                           fahrten=0, fahrzeit_summe=0., fahrzeit_schnitt=0.)
 
         liniendaten.fahrzeit_min = min(liniendaten.fahrzeit_min, fahrzeit)

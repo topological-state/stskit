@@ -1,7 +1,7 @@
 import copy
 
 from dataclasses import dataclass
-from stskit.model.liniengraph import LinienGraphEdge, LinienGraph, LinienGraphNode, LinienLabelType
+from stskit.model.liniengraph import LinienGraphEdge, LinienGraph, LinienGraphNode
 import bisect
 import logging
 import pickle
@@ -451,20 +451,33 @@ class StreckenEditorModel(QAbstractTableModel):
     def _set_segment_property(self, segment: StreckenSegment, name: str, value: Any) -> bool:
         if segment.station2 is None:
             return False
-        if not self.liniengraph.has_node(segment.station1):
-            return False
-        if not self.liniengraph.has_node(segment.station2):
-            return False
 
         entry = JournalEntry("liniengraph", segment.station1)
         data = {name: value}
-        if self.liniengraph.has_edge(segment.station1, segment.station2):
-            entry.change_edge(segment.station1, segment.station2, **data)
-        else:
-            entry.add_edge(segment.station1, segment.station2, **data)
-        self.journal.add_entry((name, segment.station1), entry)
 
+        if not self.liniengraph.has_node(segment.station1):
+            node_data = LinienGraphNode(typ=segment.station1.typ, name=segment.station1.name, fahrten=0)
+            entry.add_node(segment.station1, **node_data)
+
+        if not self.liniengraph.has_node(segment.station2):
+            node_data = LinienGraphNode(typ=segment.station2.typ, name=segment.station2.name, fahrten=0)
+            entry.add_node(segment.station1, **node_data)
+
+        if not self.liniengraph.has_edge(segment.station1, segment.station2):
+            edge_data = LinienGraphEdge(
+                fahrzeit_min=LinienGraph.MAX_FAHRZEIT,
+                fahrzeit_max=0,
+                fahrten=0,
+                fahrzeit_summe=0.0,
+                fahrzeit_schnitt=0.0,
+            )
+            entry.add_edge(segment.station1, segment.station2, **edge_data)
+
+        entry.change_edge(segment.station1, segment.station2, **data)
+
+        self.journal.add_entry((name, segment.station1), entry)
         self._apply_journal()
+        self._update()
 
         return True
 
@@ -742,6 +755,7 @@ class StreckenEditor(QObject):
             self.strecken_name = self._default_strecke()
         self._streckenliste_changed()
         self._strecke_changed()
+        self.auswahl_model.journal.clear()
 
     def update_widgets(self):
         """
@@ -812,7 +826,6 @@ class StreckenEditor(QObject):
         self.hauptstrecken_name = self.anlage.strecken.hauptstrecke
         self.edited_strecken = set()
         self.deleted_strecken = set()
-        self.auswahl_model.journal.clear()
 
     def _default_strecke(self) -> Optional[str]:
         if self.hauptstrecken_name in self.alle_strecken:
