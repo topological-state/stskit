@@ -151,7 +151,7 @@
                         "description": "Station: Anschlussstelle, Bahnhof oder Bahnhofteil, im Format 'Typ Name'"
                     },
                     "fahrzeit": {
-                        "type": "integer",
+                        "type": "number",
                         "minimum": 0,
                         "maximum": 60,
                         "description": "Durchschnittliche Fahrzeit in Minuten. Bestimmt die Länge des Abschnitts im Bildfahrplan. Falls Null, wird die automatisch berechnete Fahrzeit verwendet."
@@ -161,7 +161,7 @@
                         "description": "Streckenmarkierung: E = nicht elektrifiziert, G = eingleisige Strecke, H = Einschränkungen für Gefahrgüter, O = Einschränkungen für Sonderzugskategorien."
                     }
                 },
-                "required": ["station1", "station2", "flags"]
+                "required": ["station1", "station2"]
             },
             "uniqueItems": true
         },

@@ -38,8 +38,8 @@ class BildfahrplanPlot:
         self.zugbeschriftung = Zugbeschriftung(self.anlage)
 
         self.markierungs_farben = {
-            "E": "tab:yellow",  # nicht elektrifizierte strecke
-            "G": "tab:gray",  # eingleisige strecke
+            "E": "tab:blue",  # nicht elektrifizierte strecke
+            "G": "white",     # eingleisige strecke
             "H": "tab:red",   # einschränkungen für gefahrgüter
             "O": "tab:pink",  # einschränkungen für sonderzüge
         }
@@ -514,7 +514,7 @@ class BildfahrplanPlot:
             except ValueError:
                 continue
 
-            color = self.markierungs_farben.get('art', mpl.rcParams['grid.color'])
+            color = self.markierungs_farben.get(art, mpl.rcParams['grid.color'])
             r = mpl.patches.Rectangle(xy, w, h, color=color, alpha=0.1, linewidth=None)
             self._axes.add_patch(r)
 
