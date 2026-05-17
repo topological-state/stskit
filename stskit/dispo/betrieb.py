@@ -47,8 +47,8 @@ class Betrieb:
         self._internal_update()
 
     def _internal_update(self):
-        self.zielgraph = self.anlage.zielgraph.copy(as_view=False)
-        self.ereignisgraph = self.anlage.ereignisgraph.copy(as_view=False)
+        self.zielgraph = copy.deepcopy(self.anlage.zielgraph)
+        self.ereignisgraph = copy.deepcopy(self.anlage.ereignisgraph)
 
         self.journal_bereinigen()
         self.journal.replay(graph_map={'ereignisgraph': self.ereignisgraph,
