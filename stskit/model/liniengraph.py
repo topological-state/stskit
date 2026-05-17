@@ -299,9 +299,15 @@ class LinienGraph(nx.Graph):
             fahrzeit = markierung_kfg.get('fahrzeit', 0)
             markierung = markierung_kfg.get('flags', '')
             if station1 in bahnhofgraph and station2 in bahnhofgraph:
-                self.edges[station1, station2]['markierung'] = markierung
-                self.edges[station1, station2]['fahrzeit_manuell'] = fahrzeit
-
+                if station1 not in self:
+                    self.add_node(station1, typ=station1.typ, name=station1.name, fahrten=0)
+                if station2 not in self:
+                    self.add_node(station2, typ=station2.typ, name=station2.name, fahrten=0)
+                self.add_edge(station1, station2)
+                if markierung:
+                    self.edges[station1, station2]['markierung'] = markierung
+                if fahrzeit > 0:
+                    self.edges[station1, station2]['fahrzeit_manuell'] = fahrzeit
 
     def export_konfiguration(self) -> Sequence[Dict[str, Union[str, int, float, bool]]]:
         """
