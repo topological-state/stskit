@@ -29,6 +29,9 @@ ROLE_STRIKETHROUGH = QtCore.Qt.UserRole + 2
 
 
 class StyledTextDelegate(QStyledItemDelegate):
+    def __init__(self, /, parent=...):
+        super().__init__(parent)
+
     def initStyleOption(self, option, index):
         super().initStyleOption(option, index)
         if self.parent().model().data(index, ROLE_ITALIC):
@@ -229,9 +232,14 @@ class StreckenSegment:
         self.fahrzeit_manuell = False
 
 
-class StreckenItemDelegate(StyledTextDelegate):
+class StreckenItemDelegate(QStyledItemDelegate):
     def __init__(self, /, parent=...):
         super().__init__(parent)
+
+    def initStyleOption(self, option, index):
+        super().initStyleOption(option, index)
+        if self.parent().model().data(index, ROLE_ITALIC):
+            option.font.setItalic(True)
 
     def createEditor(self, parent, option, index, /):
         model = self.parent().model()
@@ -257,7 +265,7 @@ class StreckenItemDelegate(StyledTextDelegate):
 
         match col_key:
             case 'Markierung':
-                value = model.data(QtCore.Qt.EditRole)
+                value = model.data(index, QtCore.Qt.EditRole)
                 if isinstance(editor, QComboBox):
                     editor.setCurrentText(value)
             case _:
@@ -313,8 +321,8 @@ class StreckenEditorModel(QAbstractTableModel):
             Die Aenderungen betreffen die Kantenattribute markierung und fahrzeit_manuell.
     """
 
-    MARKIERUNGEN = {"": "", "H": "Gefahrgut", "G": "Gleis", "O": "Profil", "E": "Traktion"}
-    FLAGS = {"": "", "Gefahrgut": "H", "Gleis": "G", "Profil": "O", "Traktion": "E"}
+    MARKIERUNGEN = {None: "", "H": "Gefahrgut", "G": "Gleis", "O": "Profil", "E": "Traktion"}
+    FLAGS = {"": None, "Gefahrgut": "H", "Gleis": "G", "Profil": "O", "Traktion": "E"}
 
     drop_completed = Signal(str)
 
@@ -418,7 +426,7 @@ class StreckenEditorModel(QAbstractTableModel):
                 case 'Station':
                     return str(station)
                 case 'Markierung':
-                    return self.MARKIERUNGEN[segment.markierung]
+                    return self.MARKIERUNGEN.get(segment.markierung, "")
                 case 'Fahrzeit':
                     if segment.station2 is not None and segment.fahrzeit is not None:
                         return f"{segment.fahrzeit:.1f}"
@@ -439,7 +447,7 @@ class StreckenEditorModel(QAbstractTableModel):
                     return str(station)
                 case 'Markierung':
                     if segment.station2 is not None:
-                        return self.MARKIERUNGEN[segment.markierung]
+                        return self.MARKIERUNGEN.get(segment.markierung, "")
                 case 'Fahrzeit':
                     if segment.station2 is not None and segment.fahrzeit is not None:
                         return f"{segment.fahrzeit:.1f}"
