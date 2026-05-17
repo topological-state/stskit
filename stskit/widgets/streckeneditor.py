@@ -1,6 +1,7 @@
-from attr import s
+import copy
+
 from dataclasses import dataclass
-from stskit.model.liniengraph import LinienGraphEdge
+from stskit.model.liniengraph import LinienGraphEdge, LinienGraph, LinienGraphNode, LinienLabelType
 import bisect
 import logging
 import pickle
@@ -15,7 +16,7 @@ from PySide6.QtGui import QFont, QTextCharFormat, QColor
 
 from stskit.dispo.anlage import Anlage
 from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement, BAHNHOFELEMENT_BESCHREIBUNG
-from stskit.model.journal import JournalEntry
+from stskit.model.journal import JournalEntry, Journal, JournalEntryGroup
 from stskit.qt.ui_einstellungen import Ui_EinstellungenWindow
 
 
@@ -225,18 +226,14 @@ class StreckenSegment:
     station1: BahnhofElement
     station2: BahnhofElement | None = None
     markierung: str | None = None
-    markierung_edited: bool = False
     fahrzeit: int | float | None = None
     fahrzeit_manuell: bool = False
-    fahrzeit_edited: bool = False
-    
+
     def reset(self):
         self.station2 = None
         self.markierung = None
-        self.markierung_edited = False
         self.fahrzeit = None
         self.fahrzeit_manuell = False
-        self.fahrzeit_edited = False
 
 
 class StreckenEditorModel(QAbstractTableModel):
@@ -254,6 +251,8 @@ class StreckenEditorModel(QAbstractTableModel):
     def __init__(self, anlage: Anlage, mit_liniendaten: bool, parent=None):
         super().__init__(parent)
         self.anlage: Anlage = anlage
+        self.liniengraph: LinienGraph = anlage.liniengraph.copy(as_view=True)
+        self.journal: Journal = Journal()
         self.mit_liniendaten = mit_liniendaten
         if self.mit_liniendaten:
             self.columns: List[str] = ["Station", "Markierung", "Fahrzeit"]
@@ -278,15 +277,14 @@ class StreckenEditorModel(QAbstractTableModel):
                 segment1.station2 = segment2.station1
 
             try:
-                liniendata: LinienGraphEdge = self.anlage.liniengraph.edges[segment1.station1, segment1.station2]
+                liniendata: LinienGraphEdge = self.liniengraph.edges[segment1.station1, segment1.station2]
             except KeyError:
                 continue
-            if not segment1.markierung_edited:
-                segment1.markierung = liniendata.get('markierung')
-            if not segment1.fahrzeit_edited:
-                fahrzeit_manuell = liniendata.get('fahrzeit_manuell')
-                segment1.fahrzeit = fahrzeit_manuell or liniendata.get('fahrzeit_schnitt')
-                segment1.fahrzeit_manuell = bool(fahrzeit_manuell)
+
+            segment1.markierung = liniendata.get('markierung')
+            fahrzeit_manuell = liniendata.get('fahrzeit_manuell')
+            segment1.fahrzeit = fahrzeit_manuell or liniendata.get('fahrzeit_schnitt')
+            segment1.fahrzeit_manuell = bool(fahrzeit_manuell)
 
         # letzte zeile ist nur endpunkt
         try:
@@ -401,21 +399,53 @@ class StreckenEditorModel(QAbstractTableModel):
         if role == QtCore.Qt.EditRole and segment.station2 is not None:
             match col_key:
                 case 'Markierung':
-                    value = str(value)
-                    if value in {'E'}:
-                        segment.markierung = value
-                        segment.markierung_edited = True
+                    if self.set_markierung(segment, value):
                         self.dataChanged.emit(index, index)
                         return True
                 case 'Fahrzeit':
-                    try:
-                        segment.fahrzeit = float(value)
-                    except ValueError:
-                        return False
-                    segment.fahrzeit_edited = True
-                    segment.fahrzeit_manuell = True
-                    self.dataChanged.emit(index, index)
-                    return True
+                    if self.set_fahrzeit(segment, value):
+                        self.dataChanged.emit(index, index)
+                        return True
+
+    def set_markierung(self, segment: StreckenSegment, value: str) -> bool:
+        try:
+            value = str(value)
+        except ValueError:
+            return False
+
+        return self._set_segment_property(segment, 'markierung', value)
+    
+    def set_fahrzeit(self, segment: StreckenSegment, value: float) -> bool:
+        try:
+            value = float(value)
+        except ValueError:
+            return False
+
+        return self._set_segment_property(segment, 'fahrzeit_manuell', value)
+
+    def _set_segment_property(self, segment: StreckenSegment, name: str, value: Any) -> bool:
+        if segment.station2 is None:
+            return False
+        if not self.liniengraph.has_node(segment.station1):
+            return False
+        if not self.liniengraph.has_node(segment.station2):
+            return False
+
+        entry = JournalEntry("liniengraph", segment.station1)
+        data = {name: value}
+        if self.liniengraph.has_edge(segment.station1, segment.station2):
+            entry.change_edge(segment.station1, segment.station2, **data)
+        else:
+            entry.add_edge(segment.station1, segment.station2, **data)
+        self.journal.add_entry((name, segment.station1), entry)
+
+        self._apply_journal()
+
+        return True
+
+    def _apply_journal(self):
+        self.liniengraph = copy.deepcopy(self.anlage.liniengraph)
+        self.journal.replay({"liniengraph": self.liniengraph})
 
     def insert(self, row: int, bst: BahnhofElement):
         """
@@ -747,6 +777,7 @@ class StreckenEditor(QObject):
         self.hauptstrecken_name = self.anlage.strecken.hauptstrecke
         self.edited_strecken = set()
         self.deleted_strecken = set()
+        self.auswahl_model.journal.clear()
 
     def _default_strecke(self) -> Optional[str]:
         if self.hauptstrecken_name in self.alle_strecken:
@@ -772,6 +803,9 @@ class StreckenEditor(QObject):
 
         self.edited_strecken = set()
         self.deleted_strecken = set()
+
+        self.auswahl_model.journal.replay({"liniengraph": self.anlage.liniengraph})
+        self.auswahl_model.journal.clear()
 
     def _streckenliste_changed(self):
         """
