@@ -44,13 +44,6 @@ class StreckenListModel(QAbstractListModel):
     """
     ListModel für die Streckenliste
 
-    Attribute
-    =========
-
-    - anlage : Anlage
-      The Anlage object containing the BahnhofElements.
-    - rows : list of
-
     """
 
     CHECK_STATE = {False: QtCore.Qt.Unchecked, True: QtCore.Qt.Checked}
@@ -241,9 +234,22 @@ class StreckenEditorModel(QAbstractTableModel):
     ListModel für den Streckeneditor
 
     Attributes:
-        - anlage : Anlage-Objekt mit Streckendaten und Liniengraph
-        - columns : Liste von Spaltenüberschriften
-        - rows : Liste von Streckensegmenten.
+        mit_liniendaten: Gibt an, ob Liniendaten angezeigt und bearbeitet werden können.
+        columns: Liste von Spaltenüberschriften.
+            Hängt davon ab, ob Liniendaten angezeigt werden.
+        rows: Liste von Bahnhöfen
+        segments: Liste von Streckensegmenten (Kantendaten) zu den Bahnhöfen in rows.
+            Rows und segments müssen immer synchron sein,
+            d.h. `rows[i] == segments[i].station1` für alle i.
+            Zu jeder Aenderung an rows muss das entsprechende Element von segments erstellt werden.
+            Es reicht jedoch, station1 zu setzen, den Rest erledigt die _update-Methode.
+            Wenn keine Liniendaten bearbeitet werden, werden die Einträge nicht unterhalten.
+        anlage: Anlage-Objekt mit Streckendaten und Liniengraph.
+        liniengraph: Liniengraph-Objekt enthält eine bearbeitete Version des Liniengraphen.
+            Ohne Aenderungen ist es ein View von anlage.liniengraph.
+            Mit Aenderungen ist es eine tiefe Kopie von anlage.liniengraph mit angewendetem Journal.
+        journal: Liste von Aenderungen am Liniengraph.
+            Die Aenderungen betreffen die Kantenattribute markierung und fahrzeit_manuell.
     """
 
     drop_completed = Signal(str)
@@ -258,20 +264,32 @@ class StreckenEditorModel(QAbstractTableModel):
             self.columns: List[str] = ["Station", "Markierung", "Fahrzeit"]
         else:
             self.columns: List[str] = ["Station"]
-        self.rows: List[StreckenSegment] = []
+        self.rows: List[BahnhofElement] = []
+        self.segments: List[StreckenSegment] = []
         self._drag_data = {}
 
     def update(self, strecke: Sequence[BahnhofElement]) -> None:
         self.beginResetModel()
-        self.rows = [StreckenSegment(station1=station1) for station1 in strecke]
+        self.rows = list(strecke)
+        self.segments = [StreckenSegment(station1=station1) for station1 in self.rows]
         self._update()
         self.endResetModel()
 
     def _update(self):
+        """
+        segments-Attribut aktualisieren
+
+        Führt die Attribute der Streckensegmente (segments) nach.
+        Die Segmente müssen bereits existieren und station1 muss korrekt gesetzt sein.
+        Die Segmentdaten werden self.liniengraph entnommen.
+
+        Wenn keine Liniendaten bearbeitet werden, macht die Methode nichts.
+        """
+
         if not self.mit_liniendaten:
             return
         
-        for segment1, segment2 in zip(self.rows, self.rows[1:]):
+        for segment1, segment2 in zip(self.segments, self.segments[1:]):
             if segment1.station2 != segment2.station1:
                 segment1.reset()
                 segment1.station2 = segment2.station1
@@ -288,7 +306,7 @@ class StreckenEditorModel(QAbstractTableModel):
 
         # letzte zeile ist nur endpunkt
         try:
-            segment = self.rows[-1]
+            segment = self.segments[-1]
         except IndexError:
             pass
         else:
@@ -313,15 +331,15 @@ class StreckenEditorModel(QAbstractTableModel):
         if not index.isValid():
             return None
         row = index.row()
-        segment = self.rows[row]
-        key = segment.station1
+        station = self.rows[row]
+        segment = self.segments[row]
         col = index.column()
         col_key = self.columns[col]
 
         if role == QtCore.Qt.UserRole:
             match col_key:
                 case 'Station':
-                    return key
+                    return station
                 case 'Markierung':
                     return segment.markierung
                 case 'Fahrzeit':
@@ -330,7 +348,7 @@ class StreckenEditorModel(QAbstractTableModel):
         elif role == QtCore.Qt.DisplayRole:
             match col_key:
                 case 'Station':
-                    return str(key)
+                    return str(station)
                 case 'Markierung':
                     return segment.markierung
                 case 'Fahrzeit':
@@ -340,17 +358,17 @@ class StreckenEditorModel(QAbstractTableModel):
         elif role == QtCore.Qt.ToolTipRole:
             match col_key:
                 case 'Station':
-                    return f"{BAHNHOFELEMENT_BESCHREIBUNG[key.typ]} {key.name}"
+                    return f"{BAHNHOFELEMENT_BESCHREIBUNG[station.typ]} {station.name}"
 
         elif role == QtCore.Qt.WhatsThisRole:
             match col_key:
                 case 'Station':
-                    return f"{BAHNHOFELEMENT_BESCHREIBUNG[key.typ]} {key.name}"
+                    return f"{BAHNHOFELEMENT_BESCHREIBUNG[station.typ]} {station.name}"
 
         elif role == QtCore.Qt.EditRole:
             match col_key:
                 case 'Station':
-                    return str(key)
+                    return str(station)
                 case 'Markierung':
                     if segment.station2 is not None:
                         return segment.markierung
@@ -377,7 +395,7 @@ class StreckenEditorModel(QAbstractTableModel):
             return QtCore.Qt.NoItemFlags
 
         row = index.row()
-        segment = self.rows[row]
+        segment = self.segments[row]
         col = index.column()
         col_key = self.columns[col]
 
@@ -392,7 +410,7 @@ class StreckenEditorModel(QAbstractTableModel):
             return None
 
         row = index.row()
-        segment = self.rows[row]
+        segment = self.segments[row]
         col = index.column()
         col_key = self.columns[col]
 
@@ -444,6 +462,12 @@ class StreckenEditorModel(QAbstractTableModel):
         return True
 
     def _apply_journal(self):
+        """
+        Journal auf Liniengraph anwenden.
+
+        Kopiert den Liniengraph von der Anlage und spielt das Journal darauf ab.
+        """
+
         self.liniengraph = copy.deepcopy(self.anlage.liniengraph)
         self.journal.replay({"liniengraph": self.liniengraph})
 
@@ -462,6 +486,7 @@ class StreckenEditorModel(QAbstractTableModel):
         self.beginInsertRows(QModelIndex(), row, row)
         try:
             self.rows.insert(row, bst)
+            self.segments.insert(row, StreckenSegment(bst))
             result = True
         except IndexError:
             result = False
@@ -490,6 +515,7 @@ class StreckenEditorModel(QAbstractTableModel):
         self.beginRemoveRows(QModelIndex(), row, row)
         try:
             del self.rows[row]
+            del self.segments[row]
             result = True
         except IndexError:
             result = False
@@ -521,9 +547,11 @@ class StreckenEditorModel(QAbstractTableModel):
         self.beginMoveRows(QModelIndex(), old_row, old_row, QModelIndex(), row)
         try:
             del self.rows[old_row]
+            del self.segments[old_row]
             if old_row <= row:
                 row -= 1
             self.rows.insert(row, bst)
+            self.segments.insert(row, StreckenSegment(bst))
             result = True
         except IndexError:
             result = False
@@ -556,15 +584,15 @@ class StreckenEditorModel(QAbstractTableModel):
         """
         Verarbeitet einen Drop von Bst
 
-        Parameters:
-        data (QDropEvent): The event containing the dropped data.
-        action (int): The action to be performed with the dropped data, e.g., Qt.MoveAction or Qt.CopyAction.
-        row (int): The row where the data should be inserted.
-        column (int): The column where the data should be inserted.
-        parent (QModelIndex): The parent index of the item being dropped.
+        Args:
+            data (QDropEvent): The event containing the dropped data.
+            action (int): The action to be performed with the dropped data, e.g., Qt.MoveAction or Qt.CopyAction.
+            row (int): The row where the data should be inserted.
+            column (int): The column where the data should be inserted.
+            parent (QModelIndex): The parent index of the item being dropped.
 
         Returns:
-        bool: True if the data was successfully dropped, False otherwise.
+            True if the data was successfully dropped, False otherwise.
 
         """
 
@@ -593,14 +621,11 @@ class StreckenEditorModel(QAbstractTableModel):
         """
         Schliesst einen Drag-Event ab.
 
-        Summary
-        -------
         This method processes a completed drop event by parsing the provided data,
         creating `BahnhofElement` instances, and removing them from the current context.
 
-        Parameters
-        ----------
-        dada (Dict) : The data received from the drop event.
+        Args:
+            drag_id: key of the drop envent to look up in self._drag_data.
         """
 
         drag_id = int(drag_id)
@@ -835,9 +860,11 @@ class StreckenEditor(QObject):
         Die Modelle der Stationslisten werden aus alle_strecken aktualisiert (überschrieben!).
         Die Stationslisten werden in jedem Fall neu aufgebaut, auch wenn der Name der Strecke sich nicht ändert.
 
-        :param name: Name der Strecke. Muss existieren, sonst schlägt die Methode fehl.
+        Args:
+            name: Name der Strecke. Muss existieren, sonst schlägt die Methode fehl.
 
-        :return True, wenn der Vorgang erfolgreich war.
+        Returns:
+            True, wenn der Vorgang erfolgreich war.
         """
 
         if name not in self.alle_strecken:
