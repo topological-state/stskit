@@ -237,6 +237,9 @@ class StreckenEditorModel(QAbstractTableModel):
         mit_liniendaten: Gibt an, ob Liniendaten angezeigt und bearbeitet werden können.
         columns: Liste von Spaltenüberschriften.
             Hängt davon ab, ob Liniendaten angezeigt werden.
+        sorted: Alphanumerische Sortierung der Einträge.
+            Nur für die Abwahlliste sinnvoll.
+            Schliesst Liniendaten aus.
         rows: Liste von Bahnhöfen
         segments: Liste von Streckensegmenten (Kantendaten) zu den Bahnhöfen in rows.
             Rows und segments müssen immer synchron sein,
@@ -254,12 +257,13 @@ class StreckenEditorModel(QAbstractTableModel):
 
     drop_completed = Signal(str)
 
-    def __init__(self, anlage: Anlage, mit_liniendaten: bool, parent=None):
+    def __init__(self, anlage: Anlage, mit_liniendaten: bool, sortierung: bool, parent=None):
         super().__init__(parent)
         self.anlage: Anlage = anlage
         self.liniengraph: LinienGraph = anlage.liniengraph.copy(as_view=True)
         self.journal: Journal = Journal()
         self.mit_liniendaten = mit_liniendaten
+        self.sorted = sortierung and not mit_liniendaten
         if self.mit_liniendaten:
             self.columns: List[str] = ["Station", "Markierung", "Fahrzeit"]
         else:
@@ -270,7 +274,10 @@ class StreckenEditorModel(QAbstractTableModel):
 
     def update(self, strecke: Sequence[BahnhofElement]) -> None:
         self.beginResetModel()
-        self.rows = list(strecke)
+        if self.sorted:
+            self.rows = sorted(strecke)
+        else:
+            self.rows = list(strecke)
         self.segments = [StreckenSegment(station1=station1) for station1 in self.rows]
         self._update()
         self.endResetModel()
@@ -477,11 +484,15 @@ class StreckenEditorModel(QAbstractTableModel):
 
         Args:
             row: Zielindex.
+                Hat keinen Einfluss, wenn die Liste sortiert ist.
             bst: Einzufügendes BahnhofElement.
             
         Returns:
             True bei Erfolg, False bei falschem Index.
         """
+
+        if self.sorted:
+            row = bisect.bisect_left(self.rows, bst)
 
         self.beginInsertRows(QModelIndex(), row, row)
         try:
@@ -661,7 +672,7 @@ class StreckenEditor(QObject):
         self.strecken_name: str = ""
         self.hauptstrecken_name: Optional[str] = None
         
-        self.auswahl_model = StreckenEditorModel(anlage, True, parent)
+        self.auswahl_model = StreckenEditorModel(anlage, True, False, parent)
         self.ui.strecken_auswahl_list.setModel(self.auswahl_model)
         # self.ui.strecken_auswahl_list.setItemDelegate(StyledTextDelegate(parent=self.ui.strecken_auswahl_list))
         self.ui.strecken_auswahl_list.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -670,8 +681,7 @@ class StreckenEditor(QObject):
         #    self.zugliste_selection_changed)
         self.ui.strecken_auswahl_list.setAcceptDrops(True)
 
-        self.abwahl_model = StreckenEditorModel(anlage, False, parent)
-        self.abwahl_model.sorted = True
+        self.abwahl_model = StreckenEditorModel(anlage, False, True, parent)
         self.ui.strecken_abwahl_list.setModel(self.abwahl_model)
         self.ui.strecken_abwahl_list.setSelectionMode(QAbstractItemView.SingleSelection)
         self.ui.strecken_abwahl_list.setAcceptDrops(True)
