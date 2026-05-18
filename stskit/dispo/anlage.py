@@ -142,18 +142,14 @@ class Anlage:
 
     def _init_anlage(self, debug_path):
         # abhängigkeiten
-        if self.bahnhofgraph:
-            aenderungen = self.aenderungen.copy()
-        else:
-            aenderungen = {'config'}
+        aenderungen = self.aenderungen.copy()
+
         if 'config' in aenderungen:
             aenderungen.add('anlageninfo')
         if 'anlageninfo' in aenderungen:
             aenderungen.add('bahnsteiggraph')
         if 'bahnsteiggraph' in aenderungen:
             aenderungen.add('signalgraph')
-        if 'signalgraph' in aenderungen:
-            aenderungen.add('config')
         if 'gleisschema' in aenderungen:
             aenderungen.add('bahnsteiggraph')
             aenderungen.add('signalgraph')
@@ -193,12 +189,7 @@ class Anlage:
         """
 
         # abhängigkeiten
-        if self.liniengraph:
-            aenderungen = self.aenderungen.copy()
-        elif self.bahnhofgraph and self.zielgraph:
-            aenderungen = {'bahnhofgraph', 'zielgraph'}
-        else:
-            aenderungen = set()
+        aenderungen = self.aenderungen.copy()
 
         if 'config' in aenderungen:
             aenderungen.add('bahnhofgraph')
@@ -206,10 +197,6 @@ class Anlage:
             aenderungen.add('bahnhofgraph')
         if 'bahnhofgraph' in aenderungen:
             aenderungen.add('signalgraph')
-        if 'signalgraph' in aenderungen:
-            aenderungen.add('config')
-        if 'streckenmarkierung' in aenderungen:
-            aenderungen.add('config')
 
         if 'bahnhofgraph' in aenderungen:
             try:
@@ -246,12 +233,7 @@ class Anlage:
         """
 
         # abhängigkeiten
-        if self.strecken.strecken:
-            aenderungen = self.aenderungen.copy()
-        elif self.liniengraph:
-            aenderungen = {'bahnhofgraph', 'config'}
-        else:
-            aenderungen = set()
+        aenderungen = self.aenderungen.copy()
 
         if 'config' in aenderungen:
             aenderungen.add('bahnhofgraph')
