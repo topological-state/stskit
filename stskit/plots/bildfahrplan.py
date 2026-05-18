@@ -514,9 +514,10 @@ class BildfahrplanPlot:
             except ValueError:
                 continue
 
-            color = self.markierungs_farben.get(art, mpl.rcParams['grid.color'])
-            r = mpl.patches.Rectangle(xy, w, h, color=color, alpha=0.1, linewidth=None)
-            self._axes.add_patch(r)
+            color = self.markierungs_farben.get(art)
+            if color:
+                r = mpl.patches.Rectangle(xy, w, h, color=color, alpha=0.1, linewidth=None)
+                self._axes.add_patch(r)
 
     def on_resize(self, event):
         """
