@@ -256,14 +256,8 @@ class LinienGraph(nx.Graph):
         """
 
         kanten = zip(strecke[:-1], strecke[1:])
-        integrierte_distanz = 0.
-        result = [integrierte_distanz]
-        for kante in kanten:
-            u, v = kante
-            integrierte_distanz += self.distanz(u, v, metrik)
-            result.append(integrierte_distanz)
-
-        return result
+        distanzen = [self.distanz(u, v, metrik) for u, v in kanten]
+        return list(itertools.accumulate(distanzen, initial=0))
 
     def distanz(self, u: BahnhofElement, v: BahnhofElement, metrik: str) -> Any:
         """
