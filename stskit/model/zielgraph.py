@@ -1,16 +1,29 @@
+"""
+Modul Zielgraph
+
+Ein Zielgraph stellt die Fahrpläne von Zügen in einem NetworkX-Graph dar.
+Die Knoten des Graphen sind die Fahrziele (Fahrplaneinträge) aller Züge.
+Zu einem Zug gehörende Knoten werden in der Fahrplanreihenfolge durch Kanten verbunden.
+Ausserdem können durch Flags entstehende Züge mit dem Stammzug verbunden werden.
+"""
+
 from __future__ import annotations
+from collections.abc import Generator
 from dataclasses import dataclass
 import datetime
 import logging
-from typing import Any, Callable, Dict, Iterable, NamedTuple, Optional, Set, Tuple, TypeVar, Union
+from typing import Any, NamedTuple, TYPE_CHECKING
 
 import networkx as nx
 
 from stskit.model.graphbasics import dict_property
 from stskit.model.bahnhofgraph import BahnhofElement, BahnhofGraph
-from stskit.model.liniengraph import LinienGraph, LinienGraphEdge
 from stskit.plugin.stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
 from stskit.plugin.stsobj import Knoten, FahrplanZeile, ZugDetails, FahrplanZeileID
+
+if TYPE_CHECKING:
+    from stskit.model.liniengraph import LinienGraph, LinienGraphEdge
+
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -38,14 +51,15 @@ class ZielLabelType(NamedTuple):
     Ziellabelklasse
 
     Das Ziellabel ist ähnlich wie die FahrplanZeileID aufgebaut.
-    Für Ein- und Ausfahrten wird jedoch die Elementnummer statt des Anschlussnamens verwendet.
+    Für Ein- und Ausfahrten wird jedoch die Elementnummer statt des Anschlussnamens verwendet,
+    weil Anschlussnamen mit Gleisnamen kollidieren können oder nicht explizit definiert sind.
     """
     zid: int
     zeit: int
-    ort: Union[int, str]
+    ort: int | str
 
     @classmethod
-    def from_fahrplanzeile(cls, fid: FahrplanZeileID) -> 'ZielLabelType':
+    def from_fahrplanzeile(cls, fid: FahrplanZeileID) -> ZielLabelType:
         """
         Konstruktor aus einer Fahrplanzeilen-ID.
 
@@ -55,6 +69,9 @@ class ZielLabelType(NamedTuple):
 
 
 class ZielGraphNode(dict):
+    """
+    Attribute eines ZielGraph-Knotens.
+    """
     obj = dict_property("obj", Any,
                         docstring="""
                             stsobj.FahrplanZeile-Objekt (fehlt bei Ein- und Ausfahrten).
@@ -85,18 +102,18 @@ class ZielGraphNode(dict):
                          docstring="""
                             Gleis- oder Anschlussname nach aktueller Disposition.
                             """)
-    p_an = dict_property("p_an", Union[int, float],
+    p_an = dict_property("p_an", int | float,
                        docstring="""
                             Planmässige Ankunftszeit in Minuten.
                             Bei Ein- und Ausfahrten wird die Ankunfts- und Abfahrtszeit geschätzt.
                             """)
-    p_ab = dict_property("p_ab", Union[int, float],
+    p_ab = dict_property("p_ab", int | float,
                        docstring="""
                             Planmässige Abfahrtszeit in Minuten.
                             Bei Ein- und Ausfahrten wird die Ankunfts- und Abfahrtszeit geschätzt.
                             """)
     flags = dict_property("flags", str, docstring="Originalflags")
-    lokwechsel = dict_property("lokwechsel", Optional[Tuple[int, int]],
+    lokwechsel = dict_property("lokwechsel", tuple[int, int] | None,
                                docstring="""
                                Lokwechselflag mit Nummern der Ein- und Ausfahrtsgleisen der Ersatzlok/Abstelllok.
                                """)
@@ -106,7 +123,7 @@ class ZielGraphNode(dict):
                               """)
 
     # Die folgenden Properties werden nicht vom Simulator geliefert
-    mindestaufenthalt = dict_property("mindestaufenthalt", Union[int, float],
+    mindestaufenthalt = dict_property("mindestaufenthalt", int | float,
                                       docstring="""
                                           Minimale Aufenthaltsdauer in Minuten.
                                           Schätzung, wie lange sich der Zug mindestens an diesem Ziel aufhält,
@@ -122,11 +139,11 @@ class ZielGraphNode(dict):
                             'an': angekommen,
                             'ab': abgefahren.
                             """)
-    v_an = dict_property("v_an", Union[int, float], docstring="Ankunftsverspätung in Minuten")
-    v_ab = dict_property("v_ab", Union[int, float], docstring="Abfahrtsverspätung in Minuten")
+    v_an = dict_property("v_an", int | float, docstring="Ankunftsverspätung in Minuten")
+    v_ab = dict_property("v_ab", int | float, docstring="Abfahrtsverspätung in Minuten")
 
     @property
-    def e_an(self) -> Union[int, float]:
+    def e_an(self) -> int | float:
         """
         Erwartete Ankunftszeit in Minuten
 
@@ -136,7 +153,7 @@ class ZielGraphNode(dict):
         return self.p_an + self.get('v_an', 0)
 
     @property
-    def e_ab(self) -> Union[int, float]:
+    def e_ab(self) -> int | float:
         """
         Erwartete Abfahrtszeit in Minuten
 
@@ -146,7 +163,7 @@ class ZielGraphNode(dict):
         return self.p_ab + self.get('v_ab', 0)
 
     @property
-    def enr(self) -> Optional[int]:
+    def enr(self) -> int | None:
         """
         Elementnummer des Anschlussgleises bei Ein- oder Ausfahrt.
 
@@ -178,7 +195,7 @@ class ZielGraphNode(dict):
             return BahnhofElement('Gl', self.gleis)
 
     @classmethod
-    def from_fahrplanzeile(cls, fahrplanzeile: FahrplanZeile):
+    def from_fahrplanzeile(cls: type, fahrplanzeile: FahrplanZeile) -> ZielGraphNode:
         """
         Daten aus Fahrplanzeile übernehmen.
 
@@ -187,7 +204,8 @@ class ZielGraphNode(dict):
         mindestaufenthalt wird auf 0 gesetzt.
         Alle anderen müssen separat gesetzt werden.
 
-        :param fahrplanzeile: Fahrplanzeile-Objekt von der Simulatorschnittstelle.
+        Args:
+            fahrplanzeile: Fahrplanzeile-Objekt von der Simulatorschnittstelle.
         """
 
         d = cls(
@@ -211,7 +229,7 @@ class ZielGraphNode(dict):
 
         return d
 
-    def mindestaufenthalt_setzen(self, params: Optional[PlanungParams] = None):
+    def mindestaufenthalt_setzen(self, params: PlanungParams | None = None):
         """
         Mindestaufenthalt-Property auf Vorgabewert setzen.
 
@@ -219,8 +237,9 @@ class ZielGraphNode(dict):
         Er setzt sich zusammen aus einer Basiskomponente nach Planhalt, Ersatz, Kupplung oder Flügelung,
         und einer additiven Komponente bei Richtungswechsel, Lokwechsel oder Lokumlauf.
 
-        :param params: Aufenthaltsparameter aus Konfiguration.
-            Wenn das Argument fehlt, werden die Defaultwerte der PlanungParams-Klasse verwendet.
+        Args:
+            params: Aufenthaltsparameter aus Konfiguration.
+                Wenn das Argument fehlt, werden die Defaultwerte der PlanungParams-Klasse verwendet.
         """
 
         if params is None:
@@ -248,6 +267,9 @@ class ZielGraphNode(dict):
 
 
 class ZielGraphEdge(dict):
+    """
+    Attribute einer ZielGraph-Kante
+    """
     typ = dict_property("typ", str,
                         docstring="""
                             Verbindungstyp:
@@ -259,7 +281,7 @@ class ZielGraphEdge(dict):
                                 'A': vom Fdl angeordnete Abhängigkeit,
                                 'O': Hilfskante für Sortierordnung.
                             """)
-    v = dict_property("v", Union[int, float],
+    v = dict_property("v", int | float,
                       docstring="""
                             Verspätung auf dieser Verbindung in Minuten. 
                             Wird in der Prognose verwendet, ist daher nicht persistent.
@@ -282,17 +304,17 @@ class ZielGraph(nx.DiGraph):
 
     def __init__(self, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
-        self.zuganfaenge: Dict[int, ZielLabelType] = {}
-        self.zugenden: Dict[int, ZielLabelType] = {}
-        self._pendente_verbindungen: Set[Tuple[ZielLabelType, int, str]] = set()
+        self.zuganfaenge: dict[int, ZielLabelType] = {}
+        self.zugenden: dict[int, ZielLabelType] = {}
+        self._pendente_verbindungen: set[tuple[ZielLabelType, int, str]] = set()
 
-    def to_undirected_class(self):
+    def to_undirected_class(self) -> type[ZielGraphUngerichtet]:
         return ZielGraphUngerichtet
 
-    def to_directed_class(self):
+    def to_directed_class(self) -> type[ZielGraph]:
         return self.__class__
 
-    def copy(self, as_view=False):
+    def copy(self, as_view=False) -> ZielGraph:
         obj = super().copy(as_view)
 
         if as_view:
@@ -304,7 +326,7 @@ class ZielGraph(nx.DiGraph):
 
         return obj
 
-    def zugpfad(self, zid: int) -> Iterable[ZielLabelType]:
+    def zugpfad(self, zid: int) -> Generator[ZielLabelType, None, None]:
         """
         Generator für die Knoten eines Zuges
 
@@ -327,9 +349,12 @@ class ZielGraph(nx.DiGraph):
         """
         Nächster Zielknoten eines Zuges
 
-        :param node: Label des Ursprungknotens
-        :param ersatz_erlaubt: Neuen Zug nach Ersatz- oder Kuppelflags verfolgen.
-        :raise: ValueError, wenn es keinen nächsten Knoten gibt.
+        Args:
+            node: Label des Ursprungknotens
+            ersatz_erlaubt: Neuen Zug nach Ersatz- oder Kuppelflags verfolgen.
+
+        Raisesé
+            ValueError: Keinen passenden Knoten gefunden.
         """
 
         zid = node.zid
@@ -346,9 +371,12 @@ class ZielGraph(nx.DiGraph):
         """
         Vorheriger Zielknoten eines Zuges
 
-        :param node: Label des Ursprungknotens
-        :param ersatz_erlaubt: Stammzug vor Ersatz- oder Flügelflags verfolgen.
-        :raise: ValueError, wenn es keinen nächsten Knoten gibt.
+        Args:
+            node: Label des Ursprungknotens
+            ersatz_erlaubt: Stammzug vor Ersatz- oder Flügelflags verfolgen.
+
+        Raises:
+            ValueError: Keinen passenden Knoten gefunden.
         """
 
         zid = node.zid
@@ -361,10 +389,12 @@ class ZielGraph(nx.DiGraph):
 
         raise ValueError(f"Kein vorheriger Node zu {node}")
 
-    def zug_details_importieren(self, zug: ZugDetails,
-                                einfahrt: Optional[Knoten],
-                                ausfahrt: Optional[Knoten],
-                                params: Optional[PlanungParams]) -> Set[Tuple[str, int, int]]:
+    def zug_details_importieren(self,
+                                zug: ZugDetails,
+                                einfahrt: Knoten | None = None,
+                                ausfahrt: Knoten | None = None,
+                                params: PlanungParams | None = None,
+                                ) -> set[tuple[str, int, int]]:
         """
         Ziel- und Zuggraphen nach Fahrplan eines Zuges aktualisieren.
 
@@ -373,37 +403,35 @@ class ZielGraph(nx.DiGraph):
         Diese Methode fügt neue Knoten und ihre Kanten zum Graphen hinzu oder aktualisiert bestehende.
         Es werden keine Knoten und Kanten gelöscht.
 
-        Bemerkungen
-        -----------
+        Notes:
+            - Der vom Simulator gemeldete Fahrplan enthält nur anzufahrende Ziele.
+                Im Zielgraphen werden die abgefahrenen Ziele jedoch beibehalten.
+            - Die Methode fügt auch Knoten und Kanten für Einfahrten und Ausfahrten ein,
+                wenn diese in den von- und nach-Feldern angegeben sind.
+                Einfahrten werden nur eingefügt, wenn der Zug noch nicht eingefahren ist.
 
-        - Der vom Simulator gemeldete Fahrplan enthält nur anzufahrende Ziele.
-          Im Zielgraphen werden die abgefahrenen Ziele jedoch beibehalten.
-        - Die Methode fügt auch Knoten und Kanten für Einfahrten und Ausfahrten ein,
-          wenn diese in den von- und nach-Feldern angegeben sind.
-          Einfahrten werden nur eingefügt, wenn der Zug noch nicht eingefahren ist.
+        Args:
+            zug: ZugDetails-Objekt vom Simulator.
+            einfahrt: Einfahrtsknoten, falls im von-Feld angegeben.
+            ausfahrt: Ausfahrtssknoten, falls im nach-Feld angegeben.
+            params: Parametrisierung der Mindestaufenthaltsdauer nach Zieltyp.
+                Wenn None, werden die Defaultwerte der PlanungParams-Klasse verwendet.
 
-        :param zug: ZugDetails-Objekt vom Simulator.
-        :param einfahrt: Einfahrtsknoten, falls im von-Feld angegeben.
-        :param ausfahrt: Ausfahrtssknoten, falls im nach-Feld angegeben.
-        :param zugliste: Referenz auf die Zugliste des PluginClient oder GraphClient.
-            Wird benötigt, um Verknüpfungen mit anderen Zügen aufzulösen.
-        :param params: Parametrisierung der Mindestaufenthaltsdauer nach Zieltyp.
-            Wenn None, werden die Defaultwerte der PlanungParams-Klasse verwendet.
-
-        :return: Abgehende Verknüpfungen des Zuges mit anderen Zügen.
+        Returns:
+            Abgehende Verknüpfungen des Zuges mit anderen Zügen.
             Tupel von Typ ('E', 'K', 'F'), zid des Stammzuges, zid des Folgezuges.
         """
 
         if params is None:
-            params = PlanungParams
+            params = PlanungParams()
 
-        ziel1 = None
-        fid1 = None
-        anfang = None
-        ende = None
-        zug2 = zug
-        zid2 = zug2.zid
-        links = set()
+        ziel1: FahrplanZeile | None = None
+        fid1: ZielLabelType | None = None
+        anfang: ZielLabelType | None = None
+        ende: ZielLabelType | None = None
+        zug2: ZugDetails = zug
+        zid2: int = zug2.zid
+        links: set[tuple[str, int, int]] = set()
 
         for ziel2 in zug2.fahrplan:
             fid2 = ZielLabelType.from_fahrplanzeile(ziel2.fid)
@@ -499,8 +527,10 @@ class ZielGraph(nx.DiGraph):
                     self.add_edge(fid2, fid1, typ='P')
 
         if zid2 not in self.zuganfaenge:
-            self.zuganfaenge[zid2] = anfang
-            self.zugenden[zid2] = ende
+            if anfang is not None:
+                self.zuganfaenge[zid2] = anfang
+            if ende is not None:
+                self.zugenden[zid2] = ende
         self.ziel_status_von_zug(zug2)
         self.verspaetung_von_zug(zug2)
         self._verbindungen_herstellen(zid2)
@@ -519,22 +549,24 @@ class ZielGraph(nx.DiGraph):
         Die Verbindung wird dann zu den _pendente_verbindungen hinzugefügt und
         kann später mittels _verbindungen_herstellen hergestellt werden.
 
-        :param fid1: Label des Ursprungsziels.
-        :param zid2: ID des Folgezuges.
-        :param typ: Verbindungstyp (Typ-Attribut der Verbindungskante)
+        Args:
+            fid1: Label des Ursprungsziels.
+            zid2: ID des Folgezuges.
+            typ: Verbindungstyp (Typ-Attribut der Verbindungskante)
         """
 
         _, fid2 = self._verbindung_herstellen(fid1, zid2, typ)
         if fid2 is None:
             self._pendente_verbindungen.add((fid1, zid2, typ))
 
-    def _verbindungen_herstellen(self, zid2: Optional[int] = None):
+    def _verbindungen_herstellen(self, zid2: int | None = None):
         """
         Pendente Zielverbindungen herstellen.
 
         S. _ziele_verbinden
 
-        :param zid2: Nur Verbindungen, die zu diesen Zug führen, herstellen.
+        Args:
+            zid2: Nur Verbindungen, die zu diesen Zug führen, herstellen.
         """
 
         erledigt = set()
@@ -546,23 +578,30 @@ class ZielGraph(nx.DiGraph):
 
         self._pendente_verbindungen.difference_update(erledigt)
 
-    def _verbindung_herstellen(self, fid1: ZielLabelType, zid2: int, typ: str) -> Tuple[ZielLabelType, ZielLabelType]:
+    def _verbindung_herstellen(self,
+                               fid1: ZielLabelType,
+                               zid2: int,
+                               typ: str,
+                               ) -> tuple[ZielLabelType, ZielLabelType | None]:
         """
         Einzelne Zielverbindung herstellen.
 
         Unterfunktion von _ziele_verbinden und _verbindungen_herstellen.
 
-        :param fid1: Label des Ursprungsziels.
-        :param zid2: ID des Folgezugs.
-        :param typ: Verbindungstyp
 
-        :return: Labels der Verbindungskante.
+        Args:
+            fid1: Label des Ursprungsziels.
+            zid2: ID des Folgezugs.
+            typ: Verbindungstyp
+
+        Returns:
+            Labels der Verbindungskante.
             Das erste Label entspricht immer fid1, das zweite ist das Folgeziel.
             Das Folgeziel ist None, wenn es nicht gefunden wurde.
         """
 
-        ziel1 = self.nodes[fid1]
-        plan1 = ziel1.plan.casefold()
+        ziel1: ZielGraphNode = self.nodes[fid1]
+        plan1: str = ziel1.plan.casefold()
         zeit1 = ziel1.p_an
 
         try:
@@ -573,7 +612,7 @@ class ZielGraph(nx.DiGraph):
 
         if fid2 is not None and typ == 'K':
             for fid in self.zugpfad(zid2):
-                ziel = self.nodes[fid]
+                ziel: ZielGraphNode = self.nodes[fid]
                 try:
                     if plan1 != ziel.plan.casefold():
                         continue
@@ -680,8 +719,8 @@ class ZielGraph(nx.DiGraph):
         """
 
         for fid1, fid2 in self.edges(data=False):
-            ziel1_data = self.nodes[fid1]
-            ziel2_data = self.nodes[fid2]
+            ziel1_data: ZielGraphNode = self.nodes[fid1]
+            ziel2_data: ZielGraphNode = self.nodes[fid2]
             if ziel1_data.typ == 'E' or ziel2_data.typ == 'A':
                 try:
                     bst1 = bg.find_superior(ziel1_data.plan_bst, {'Anst', 'Bf'})
@@ -693,7 +732,8 @@ class ZielGraph(nx.DiGraph):
                     bst2 = None
 
                 try:
-                    data = lg.edges[bst1][bst2]
+                    data: LinienGraphEdge = lg.edges[bst1][bst2]
+                    assert isinstance(data, LinienGraphEdge)
                     fahrzeit = max(1, data.get("fahrzeit_manuell", 0) or data.get(metrik, 0))
                 except KeyError:
                     logger.warning(f"Verbindung {bst1}-{bst2} nicht im Liniengraph.")
@@ -731,8 +771,8 @@ class ZielGraphUngerichtet(nx.Graph):
     node_attr_dict_factory = ZielGraphNode
     edge_attr_dict_factory = ZielGraphEdge
 
-    def to_undirected_class(self):
+    def to_undirected_class(self) -> type[ZielGraphUngerichtet]:
         return self.__class__
 
-    def to_directed_class(self):
+    def to_directed_class(self) -> type[ZielGraph]:
         return ZielGraph

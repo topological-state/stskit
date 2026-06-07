@@ -1,12 +1,16 @@
+from __future__ import annotations
 import itertools
 import logging
 from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set, Tuple, TypeVar, Union
+from typing import TYPE_CHECKING
 
 import networkx as nx
 
 from stskit.model.graphbasics import dict_property
 from stskit.model.bahnhofgraph import BahnhofElement, BahnhofGraph, BahnsteigGraphNode, BahnhofLabelType
-from stskit.model.zielgraph import ZielGraphNode
+
+if TYPE_CHECKING:
+    from stskit.model.zielgraph import ZielGraphNode
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
