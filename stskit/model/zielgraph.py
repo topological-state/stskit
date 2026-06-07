@@ -1,3 +1,4 @@
+from __future__ import annotations
 from dataclasses import dataclass
 import datetime
 import logging
@@ -7,6 +8,7 @@ import networkx as nx
 
 from stskit.model.graphbasics import dict_property
 from stskit.model.bahnhofgraph import BahnhofElement, BahnhofGraph
+from stskit.model.liniengraph import LinienGraph, LinienGraphEdge
 from stskit.plugin.stsobj import time_to_minutes, time_to_seconds, minutes_to_time, seconds_to_time
 from stskit.plugin.stsobj import Knoten, FahrplanZeile, ZugDetails, FahrplanZeileID
 
@@ -435,7 +437,7 @@ class ZielGraph(nx.DiGraph):
         if not zug2.sichtbar and einfahrt is not None:
             fz2 = zug2.fahrplan[0]
             fid2 = ZielLabelType.from_fahrplanzeile(fz2.fid)
-            einfahrtszeit = time_to_minutes(fz2.an or fz2.ab) - 1
+            einfahrtszeit = time_to_minutes(fz2.an or fz2.ab)
 
             try:
                 fid1 = ZielLabelType(zid2, MIN_MINUTES, einfahrt.enr)
@@ -467,7 +469,7 @@ class ZielGraph(nx.DiGraph):
         if zug2.nach and ausfahrt is not None:
             fz2 = zug2.fahrplan[-1]
             fid2 = ZielLabelType.from_fahrplanzeile(fz2.fid)
-            ausfahrtszeit = time_to_minutes(fz2.ab or fz2.an) + 1
+            ausfahrtszeit = time_to_minutes(fz2.ab or fz2.an)
 
             try:
                 fid1 = ZielLabelType(zid2, MAX_MINUTES, ausfahrt.enr)
@@ -649,15 +651,32 @@ class ZielGraph(nx.DiGraph):
             elif data.status == 'an':
                 data.v_ab = zug.verspaetung
 
-    def einfahrtszeiten_korrigieren(self, lg: 'LinienGraph', bg: BahnhofGraph):
+    def einfahrtszeiten_korrigieren(self,
+                                    lg: LinienGraph,
+                                    bg: BahnhofGraph,
+                                    metrik: str = "fahrzeit_schnitt",
+                                    ) -> None:
         """
         Ein- und Ausfahrtszeiten korrigieren.
 
+        Korrigiert die Ein- und Ausfahrzeiten aller im Zielgraph verzeichneten Züge.
         Da der Simulator keine Ein- und Ausfahrtszeiten angibt,
-        bietet diese Methode an, sie aus dem nächsten Ziel und der gemessenen Fahrzeit im Liniengraph abzuschätzen.
+        werden die Ein- und Ausfahrzeiten anhand der Fahrzeitangaben im Liniengraph korrigiert.
 
-        :param lg: Der Liniengraph enthält die Fahrzeiten zwischen den Bahnhofteilen.
-        :param bg: Der Bahnhofgraph enthält die Zuordnung von Gleisen zu Bahnhofteilen.
+        Die Fahrzeit wird für jede Ein- und Ausfahrt nach dem ersten vorandenen Wert in folgender Liste bestimmt:
+
+        1. `fahrzeit_manuell`-Attribut im Liniengraph
+        2. Von metrik benanntes Attribut im Liniengraph.
+        3. Defaultwert 1 Minute, auch bei Lookup-Fehlern.
+
+        Da die Fahrzeiten im Liniengraph zur Laufzeit eines Spiels gemessen werden, können sie am Anfang fehlen.
+
+        Args:
+            lg: Der Liniengraph enthält die Fahrzeiten zwischen den Bahnhofteilen.
+                Wird die Verbindung nicht gefunden, wird die Fahrzeit auf 1 Minute geschätzt.
+            bg: Der Bahnhofgraph enthält die Zuordnung von Gleisen zu Bahnhofteilen.
+            metrik: Name des LinienGraph-Attributs, das die Fahrzeit angibt
+                (normalerweise eines von: `fahrzeit_schnitt`, `fahrzeit_min`, `fahrzeit_max`).
         """
 
         for fid1, fid2 in self.edges(data=False):
@@ -666,20 +685,23 @@ class ZielGraph(nx.DiGraph):
             if ziel1_data.typ == 'E' or ziel2_data.typ == 'A':
                 try:
                     bst1 = bg.find_superior(ziel1_data.plan_bst, {'Anst', 'Bf'})
+                except KeyError:
+                    bst1 = None
+                try:
                     bst2 = bg.find_superior(ziel2_data.plan_bst, {'Anst', 'Bf'})
                 except KeyError:
-                    continue
+                    bst2 = None
 
                 try:
-                    fahrzeit = lg.edges[bst1][bst2]['fahrzeit_schnitt']
-                    if fahrzeit < 1:
-                        continue
+                    data = lg.edges[bst1][bst2]
+                    fahrzeit = max(1, data.get("fahrzeit_manuell", 0) or data.get(metrik, 0))
                 except KeyError:
-                    continue
+                    logger.warning(f"Verbindung {bst1}-{bst2} nicht im Liniengraph.")
+                    fahrzeit = 1
 
                 if ziel1_data.typ == 'E':
                     try:
-                        dt = datetime.datetime.combine(datetime.datetime.today(), ziel2_data.p_an)
+                        dt = datetime.datetime.combine(datetime.datetime.today(), minutes_to_time(ziel2_data.p_an))
                     except AttributeError:
                         continue
                     else:
@@ -690,7 +712,7 @@ class ZielGraph(nx.DiGraph):
 
                 elif ziel2_data.typ == 'A':
                     try:
-                        dt = datetime.datetime.combine(datetime.datetime.today(), ziel1_data.p_ab)
+                        dt = datetime.datetime.combine(datetime.datetime.today(), minutes_to_time(ziel1_data.p_ab))
                     except AttributeError:
                         continue
                     else:
