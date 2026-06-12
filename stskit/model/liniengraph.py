@@ -294,8 +294,13 @@ class LinienGraph(nx.Graph):
             fahrzeit = markierung_kfg.get('fahrzeit', 0)
             markierung = markierung_kfg.get('flags', '')
             if station1 in bahnhofgraph and station2 in bahnhofgraph:
+                if not self.has_edge(station1, station2):
+                    self.add_edge(station1, station2, fahrzeit_min=60*24, fahrzeit_max=0,
+                                          fahrten=0, fahrzeit_summe=0., fahrzeit_schnitt=0.)
                 self.edges[station1, station2]['markierung'] = markierung
                 self.edges[station1, station2]['fahrzeit_manuell'] = fahrzeit
+            else:
+                logger.warning(f"Streckenmarkierungszwischen {station1} und {station2} konnte nicht zugeordnet werden.")
 
 
     def export_konfiguration(self) -> Sequence[Dict[str, Union[str, int, float, bool]]]:
