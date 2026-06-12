@@ -1,0 +1,2131 @@
+{
+  "default": true,
+  "elemente": [
+    {
+      "name": "EBRO",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EEMS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EKAN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EKV",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ELEN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ERIG",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ESDM",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HHRN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HHSB",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HWLL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EHLN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HHIL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HKOE",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HNAH",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HOES",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EPLE",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HSUN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EWBH",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EWBV",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EBHS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HDBR",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "EBRO3",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBRO"
+    },
+    {
+      "name": "EBRO",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBRO"
+    },
+    {
+      "name": "EBRO3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBRO3",
+      "gleise": 1
+    },
+    {
+      "name": "EBRO2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBRO3",
+      "gleise": 1
+    },
+    {
+      "name": "EBRO4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBRO3",
+      "gleise": 1
+    },
+    {
+      "name": "EBRO1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBRO3",
+      "gleise": 1
+    },
+    {
+      "name": "EBRO3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBRO3",
+      "gleise": 1
+    },
+    {
+      "name": "EBRO2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBRO2",
+      "gleise": 1
+    },
+    {
+      "name": "EBRO4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBRO4",
+      "gleise": 1
+    },
+    {
+      "name": "EBRO1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBRO1",
+      "gleise": 1
+    },
+    {
+      "name": "EEMS2",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EEMS"
+    },
+    {
+      "name": "EEMS2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EEMS2",
+      "gleise": 1
+    },
+    {
+      "name": "EEMS4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EEMS2",
+      "gleise": 1
+    },
+    {
+      "name": "EEMS3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EEMS2",
+      "gleise": 1
+    },
+    {
+      "name": "EEMS2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EEMS2",
+      "gleise": 1
+    },
+    {
+      "name": "EEMS4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EEMS4",
+      "gleise": 1
+    },
+    {
+      "name": "EEMS3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EEMS3",
+      "gleise": 1
+    },
+    {
+      "name": "EKAN591",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKAN"
+    },
+    {
+      "name": "EKAN591",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKAN591",
+      "gleise": 1
+    },
+    {
+      "name": "EKAN590",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKAN591",
+      "gleise": 1
+    },
+    {
+      "name": "EKAN592",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKAN591",
+      "gleise": 1
+    },
+    {
+      "name": "EKAN591",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKAN591",
+      "gleise": 1
+    },
+    {
+      "name": "EKAN590",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKAN590",
+      "gleise": 1
+    },
+    {
+      "name": "EKAN592",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKAN592",
+      "gleise": 1
+    },
+    {
+      "name": "EKV2",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKV"
+    },
+    {
+      "name": "EKV2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKV2",
+      "gleise": 1
+    },
+    {
+      "name": "EKV3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKV2",
+      "gleise": 1
+    },
+    {
+      "name": "EKV1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKV2",
+      "gleise": 1
+    },
+    {
+      "name": "EKV2L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKV2",
+      "gleise": 1
+    },
+    {
+      "name": "EKV2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKV2",
+      "gleise": 1
+    },
+    {
+      "name": "EKV3L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKV3",
+      "gleise": 1
+    },
+    {
+      "name": "EKV3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKV3",
+      "gleise": 1
+    },
+    {
+      "name": "EKV1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKV1",
+      "gleise": 1
+    },
+    {
+      "name": "EKV1L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EKV1",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN3",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN"
+    },
+    {
+      "name": "ELEN28",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN"
+    },
+    {
+      "name": "ELEN3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN3",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN3",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN3",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN3",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN3",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN3",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN3",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN3L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN3",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN1L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN1",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN1",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN2",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN2L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN2",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN5",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN4",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN6",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN28",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN28",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN28",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN28",
+      "gleise": 1
+    },
+    {
+      "name": "ERIG3",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERIG"
+    },
+    {
+      "name": "ERIG3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERIG3",
+      "gleise": 1
+    },
+    {
+      "name": "ERIG2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERIG3",
+      "gleise": 1
+    },
+    {
+      "name": "ERIG4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERIG3",
+      "gleise": 1
+    },
+    {
+      "name": "ERIG1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERIG3",
+      "gleise": 1
+    },
+    {
+      "name": "ERIG3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERIG3",
+      "gleise": 1
+    },
+    {
+      "name": "ERIG2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERIG2",
+      "gleise": 1
+    },
+    {
+      "name": "ERIG4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERIG4",
+      "gleise": 1
+    },
+    {
+      "name": "ERIG1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ERIG1",
+      "gleise": 1
+    },
+    {
+      "name": "ESDM4",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESDM"
+    },
+    {
+      "name": "ESDM4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESDM4",
+      "gleise": 1
+    },
+    {
+      "name": "ESDM5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESDM4",
+      "gleise": 1
+    },
+    {
+      "name": "ESDM3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESDM4",
+      "gleise": 1
+    },
+    {
+      "name": "ESDM1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESDM4",
+      "gleise": 1
+    },
+    {
+      "name": "ESDM2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESDM4",
+      "gleise": 1
+    },
+    {
+      "name": "ESDM4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESDM4",
+      "gleise": 1
+    },
+    {
+      "name": "ESDM5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESDM5",
+      "gleise": 1
+    },
+    {
+      "name": "ESDM3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESDM3",
+      "gleise": 1
+    },
+    {
+      "name": "ESDM1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESDM1",
+      "gleise": 1
+    },
+    {
+      "name": "ESDM2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ESDM2",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN2",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN"
+    },
+    {
+      "name": "HHRN2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN2",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN2",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN2",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN2",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN2",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN2",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN2",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN2",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN7",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN4",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN8",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN3",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN5",
+      "gleise": 1
+    },
+    {
+      "name": "HHRN6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHRN6",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB4",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB"
+    },
+    {
+      "name": "HHSB2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB4",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB4",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB4",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB14",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB4",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB4",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB4",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB2L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB2",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB2",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB4",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB4L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB4",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB5",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB14",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB14",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB1L",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB1",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB1",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB6",
+      "gleise": 1
+    },
+    {
+      "name": "HWLL1",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWLL"
+    },
+    {
+      "name": "HWLL1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWLL1",
+      "gleise": 1
+    },
+    {
+      "name": "HWLL2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWLL1",
+      "gleise": 1
+    },
+    {
+      "name": "HWLL1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWLL1",
+      "gleise": 1
+    },
+    {
+      "name": "HWLL2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWLL2",
+      "gleise": 1
+    },
+    {
+      "name": "Bielefeld",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HHSB GMH",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Osnabrück G",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Osnabrück",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ELEN Zementwerk",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "ELEN TWE",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Münster",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lechtenberg",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Mecklenbeck",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bielefeld",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bielefeld",
+      "gleise": 1
+    },
+    {
+      "name": "HHSB GMH",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHSB GMH",
+      "gleise": 1
+    },
+    {
+      "name": "Osnabrück G",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Osnabrück G",
+      "gleise": 1
+    },
+    {
+      "name": "Osnabrück",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Osnabrück",
+      "gleise": 2
+    },
+    {
+      "name": "ELEN Zementwerk",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN Zementwerk",
+      "gleise": 1
+    },
+    {
+      "name": "ELEN TWE",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "ELEN TWE",
+      "gleise": 1
+    },
+    {
+      "name": "Münster",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Münster",
+      "gleise": 2
+    },
+    {
+      "name": "Lechtenberg",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lechtenberg",
+      "gleise": 2
+    },
+    {
+      "name": "Mecklenbeck",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Mecklenbeck",
+      "gleise": 1
+    },
+    {
+      "name": "EHLN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EHLN"
+    },
+    {
+      "name": "HHIL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHIL"
+    },
+    {
+      "name": "HKOE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKOE"
+    },
+    {
+      "name": "HNAH",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNAH"
+    },
+    {
+      "name": "HOES",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HOES"
+    },
+    {
+      "name": "EPLE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EPLE"
+    },
+    {
+      "name": "HSUN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSUN"
+    },
+    {
+      "name": "EWBH",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EWBH"
+    },
+    {
+      "name": "EWBV",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EWBV"
+    },
+    {
+      "name": "EBHS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBHS"
+    },
+    {
+      "name": "HDBR",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HDBR"
+    },
+    {
+      "name": "EBHS",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBHS",
+      "gleise": 1
+    },
+    {
+      "name": "Borgholzhausen",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBHS",
+      "gleise": 1
+    },
+    {
+      "name": "Ostbevern",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBRO",
+      "gleise": 1
+    },
+    {
+      "name": "EBRO",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EBRO",
+      "gleise": 1
+    },
+    {
+      "name": "EHLN",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EHLN",
+      "gleise": 1
+    },
+    {
+      "name": "Hesseln",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EHLN",
+      "gleise": 1
+    },
+    {
+      "name": "EWBH",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EWBH",
+      "gleise": 1
+    },
+    {
+      "name": "Westbarthausen",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EWBH",
+      "gleise": 1
+    },
+    {
+      "name": "EWBV",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EWBV",
+      "gleise": 1
+    },
+    {
+      "name": "Westbevern",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EWBV",
+      "gleise": 1
+    },
+    {
+      "name": "HDBR",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HDBR",
+      "gleise": 1
+    },
+    {
+      "name": "Dissen-Bad Rothenfelde",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HDBR",
+      "gleise": 1
+    },
+    {
+      "name": "EPLE",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EPLE",
+      "gleise": 1
+    },
+    {
+      "name": "Pleister",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EPLE",
+      "gleise": 1
+    },
+    {
+      "name": "HHIL",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHIL",
+      "gleise": 1
+    },
+    {
+      "name": "Hilter",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHIL",
+      "gleise": 1
+    },
+    {
+      "name": "HKOE",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKOE",
+      "gleise": 1
+    },
+    {
+      "name": "Kloster Oesede",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKOE",
+      "gleise": 1
+    },
+    {
+      "name": "HNAH",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNAH",
+      "gleise": 1
+    },
+    {
+      "name": "Natrup-Hagen",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HNAH",
+      "gleise": 1
+    },
+    {
+      "name": "HOES",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HOES",
+      "gleise": 1
+    },
+    {
+      "name": "Oesede",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HOES",
+      "gleise": 1
+    },
+    {
+      "name": "HSUN",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSUN",
+      "gleise": 1
+    },
+    {
+      "name": "Sutthausen",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSUN",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Lechtenberg-Osnabrück",
+      "haupt": true,
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Lechtenberg",
+        "Bf EKAN",
+        "Bf EPLE",
+        "Bf ESDM",
+        "Bf EEMS",
+        "Bf EWBV",
+        "Bf EBRO",
+        "Bf EKV",
+        "Bf ERIG",
+        "Bf ELEN",
+        "Bf HNAH",
+        "Bf HHSB",
+        "Bf HHRN",
+        "Anst Osnabrück"
+      ]
+    },
+    {
+      "name": "Osnabrück-Lechtenberg",
+      "haupt": false,
+      "ordnung": 11,
+      "auto": false,
+      "stationen": [
+        "Anst Osnabrück",
+        "Bf HHRN",
+        "Bf HHSB",
+        "Bf HNAH",
+        "Bf ELEN",
+        "Bf ERIG",
+        "Bf EKV",
+        "Bf EBRO",
+        "Bf EWBV",
+        "Bf EEMS",
+        "Bf ESDM",
+        "Bf EPLE",
+        "Bf EKAN",
+        "Anst Lechtenberg"
+      ]
+    },
+    {
+      "name": "Bielefeld-Lechtenberg",
+      "haupt": false,
+      "ordnung": 41,
+      "auto": false,
+      "stationen": [
+        "Anst Bielefeld",
+        "Bf EHLN",
+        "Bf EBHS",
+        "Bf EWBH",
+        "Bf HDBR",
+        "Bf HHIL",
+        "Bf HWLL",
+        "Bf HKOE",
+        "Bf HOES",
+        "Bf HSUN",
+        "Bf HHRN",
+        "Bf HHSB",
+        "Bf HNAH",
+        "Bf ELEN",
+        "Bf ERIG",
+        "Bf EKV",
+        "Bf EBRO",
+        "Bf EWBV",
+        "Bf EEMS",
+        "Bf ESDM",
+        "Bf EPLE",
+        "Bf EKAN",
+        "Anst Lechtenberg"
+      ]
+    },
+    {
+      "name": "Bielefeld-Mecklenbeck",
+      "haupt": false,
+      "ordnung": 42,
+      "auto": false,
+      "stationen": [
+        "Anst Bielefeld",
+        "Bf EHLN",
+        "Bf EBHS",
+        "Bf EWBH",
+        "Bf HDBR",
+        "Bf HHIL",
+        "Bf HWLL",
+        "Bf HKOE",
+        "Bf HOES",
+        "Bf HSUN",
+        "Bf HHRN",
+        "Bf HHSB",
+        "Bf HNAH",
+        "Bf ELEN",
+        "Bf ERIG",
+        "Bf EKV",
+        "Bf EBRO",
+        "Bf EWBV",
+        "Bf EEMS",
+        "Bf ESDM",
+        "Bf EPLE",
+        "Bf EKAN",
+        "Anst Mecklenbeck"
+      ]
+    },
+    {
+      "name": "Bielefeld-Münster",
+      "haupt": false,
+      "ordnung": 43,
+      "auto": false,
+      "stationen": [
+        "Anst Bielefeld",
+        "Bf EHLN",
+        "Bf EBHS",
+        "Bf EWBH",
+        "Bf HDBR",
+        "Bf HHIL",
+        "Bf HWLL",
+        "Bf HKOE",
+        "Bf HOES",
+        "Bf HSUN",
+        "Bf HHRN",
+        "Bf HHSB",
+        "Bf HNAH",
+        "Bf ELEN",
+        "Bf ERIG",
+        "Bf EKV",
+        "Bf EBRO",
+        "Bf EWBV",
+        "Bf EEMS",
+        "Bf ESDM",
+        "Anst Münster"
+      ]
+    },
+    {
+      "name": "Bielefeld-Osnabrück G",
+      "haupt": false,
+      "ordnung": 5,
+      "auto": false,
+      "stationen": [
+        "Anst Bielefeld",
+        "Bf EHLN",
+        "Bf EBHS",
+        "Bf EWBH",
+        "Bf HDBR",
+        "Bf HHIL",
+        "Bf HWLL",
+        "Bf HKOE",
+        "Bf HOES",
+        "Bf HSUN",
+        "Bf HHRN",
+        "Anst Osnabrück G"
+      ]
+    },
+    {
+      "name": "Lechtenberg-Bielefeld",
+      "haupt": false,
+      "ordnung": 31,
+      "auto": false,
+      "stationen": [
+        "Anst Lechtenberg",
+        "Bf EKAN",
+        "Bf EPLE",
+        "Bf ESDM",
+        "Bf EEMS",
+        "Bf EWBV",
+        "Bf EBRO",
+        "Bf EKV",
+        "Bf ERIG",
+        "Bf ELEN",
+        "Bf HNAH",
+        "Bf HHSB",
+        "Bf HHRN",
+        "Bf HSUN",
+        "Bf HOES",
+        "Bf HKOE",
+        "Bf HWLL",
+        "Bf HHIL",
+        "Bf HDBR",
+        "Bf EWBH",
+        "Bf EBHS",
+        "Bf EHLN",
+        "Anst Bielefeld"
+      ]
+    },
+    {
+      "name": "Mecklenbeck-Bielefeld",
+      "haupt": false,
+      "ordnung": 32,
+      "auto": false,
+      "stationen": [
+        "Anst Mecklenbeck",
+        "Bf EKAN",
+        "Bf EPLE",
+        "Bf ESDM",
+        "Bf EEMS",
+        "Bf EWBV",
+        "Bf EBRO",
+        "Bf EKV",
+        "Bf ERIG",
+        "Bf ELEN",
+        "Bf HNAH",
+        "Bf HHSB",
+        "Bf HHRN",
+        "Bf HSUN",
+        "Bf HOES",
+        "Bf HKOE",
+        "Bf HWLL",
+        "Bf HHIL",
+        "Bf HDBR",
+        "Bf EWBH",
+        "Bf EBHS",
+        "Bf EHLN",
+        "Anst Bielefeld"
+      ]
+    },
+    {
+      "name": "Mecklenbeck-Osnabrück",
+      "haupt": false,
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst Mecklenbeck",
+        "Bf EKAN",
+        "Bf EPLE",
+        "Bf ESDM",
+        "Bf EEMS",
+        "Bf EWBV",
+        "Bf EBRO",
+        "Bf EKV",
+        "Bf ERIG",
+        "Bf ELEN",
+        "Bf HNAH",
+        "Bf HHSB",
+        "Bf HHRN",
+        "Anst Osnabrück"
+      ]
+    },
+    {
+      "name": "Münster-Bielefeld",
+      "haupt": false,
+      "ordnung": 33,
+      "auto": false,
+      "stationen": [
+        "Anst Münster",
+        "Bf ESDM",
+        "Bf EEMS",
+        "Bf EWBV",
+        "Bf EBRO",
+        "Bf EKV",
+        "Bf ERIG",
+        "Bf ELEN",
+        "Bf HNAH",
+        "Bf HHSB",
+        "Bf HHRN",
+        "Bf HSUN",
+        "Bf HOES",
+        "Bf HKOE",
+        "Bf HWLL",
+        "Bf HHIL",
+        "Bf HDBR",
+        "Bf EWBH",
+        "Bf EBHS",
+        "Bf EHLN",
+        "Anst Bielefeld"
+      ]
+    },
+    {
+      "name": "Münster-Osnabrück",
+      "haupt": false,
+      "ordnung": 3,
+      "auto": false,
+      "stationen": [
+        "Anst Münster",
+        "Bf ESDM",
+        "Bf EEMS",
+        "Bf EWBV",
+        "Bf EBRO",
+        "Bf EKV",
+        "Bf ERIG",
+        "Bf ELEN",
+        "Bf HNAH",
+        "Bf HHSB",
+        "Bf HHRN",
+        "Anst Osnabrück"
+      ]
+    },
+    {
+      "name": "Osnabrück G-Bielefeld",
+      "haupt": false,
+      "ordnung": 15,
+      "auto": false,
+      "stationen": [
+        "Anst Osnabrück G",
+        "Bf HHRN",
+        "Bf HSUN",
+        "Bf HOES",
+        "Bf HKOE",
+        "Bf HWLL",
+        "Bf HHIL",
+        "Bf HDBR",
+        "Bf EWBH",
+        "Bf EBHS",
+        "Bf EHLN",
+        "Anst Bielefeld"
+      ]
+    },
+    {
+      "name": "Osnabrück-Mecklenbeck",
+      "haupt": false,
+      "ordnung": 12,
+      "auto": false,
+      "stationen": [
+        "Anst Osnabrück",
+        "Bf HHRN",
+        "Bf HHSB",
+        "Bf HNAH",
+        "Bf ELEN",
+        "Bf ERIG",
+        "Bf EKV",
+        "Bf EBRO",
+        "Bf EWBV",
+        "Bf EEMS",
+        "Bf ESDM",
+        "Bf EPLE",
+        "Bf EKAN",
+        "Anst Mecklenbeck"
+      ]
+    },
+    {
+      "name": "Osnabrück-Münster",
+      "haupt": false,
+      "ordnung": 13,
+      "auto": false,
+      "stationen": [
+        "Anst Osnabrück",
+        "Bf HHRN",
+        "Bf HHSB",
+        "Bf HNAH",
+        "Bf ELEN",
+        "Bf ERIG",
+        "Bf EKV",
+        "Bf EBRO",
+        "Bf EWBV",
+        "Bf EEMS",
+        "Bf ESDM",
+        "Anst Münster"
+      ]
+    }
+  ],
+    "streckenmarkierung": [
+      {"station1": "Anst Bielefeld", "station2": "Bf EHLN", "flags": "E"},
+      {"station1": "Bf EHLN", "station2": "Bf EBHS", "flags": "E"},
+      {"station1": "Bf EWBH", "station2": "Bf EBHS", "flags": "E"},
+      {"station1": "Bf EWBH", "station2": "Bf HDBR", "flags": "E"},
+      {"station1": "Bf HHIL", "station2": "Bf HDBR", "flags": "E"},
+      {"station1": "Bf HHIL", "station2": "Bf HWLL", "flags": "E"},
+      {"station1": "Bf HKOE", "station2": "Bf HWLL", "flags": "E"},
+      {"station1": "Bf HKOE", "station2": "Bf HOES", "flags": "E"},
+      {"station1": "Bf HSUN", "station2": "Bf HOES", "flags": "E"},
+      {"station1": "Bf HSUN", "station2": "Bf HHRN", "flags": "E"},
+      {"station1": "Anst Osnabrück G", "station2": "Bf HHRN", "flags": "E"},
+      {"station1": "Anst Mecklenbeck", "station2": "Bf EKAN", "flags": "E"},
+      {"station1": "Bf EKAN", "station2": "Bf EPLE", "fahrzeit": 2.5, "flags": "E"},
+      {"station1": "Bf EPLE", "station2": "Bf ESDM", "fahrzeit": 2.5, "flags": ""},
+      {"station1": "Bf ESDM", "station2": "Bf EEMS", "fahrzeit": 2, "flags": ""},
+      {"station1": "Bf EEMS", "station2": "Bf EWBV", "fahrzeit": 2, "flags": ""},
+      {"station1": "Bf EKV", "station2": "Bf ERIG", "fahrzeit": 1.7, "flags": ""},
+      {"station1": "Bf ERIG", "station2": "Bf ELEN", "fahrzeit": 2.8, "flags": ""},
+      {"station1": "Bf ELEN", "station2": "Bf HNAH", "fahrzeit": 2.6, "flags": ""}
+    ],
+  "zugschema": "deutschland",
+  "_aid": 648,
+  "_build": 5851,
+  "_name": "Lengerich",
+  "_region": "Münsterland",
+  "_version": 3
+}
