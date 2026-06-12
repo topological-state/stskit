@@ -732,8 +732,9 @@ class ZielGraph(nx.DiGraph):
                     bst2 = None
 
                 try:
-                    data: LinienGraphEdge = lg.edges[bst1][bst2]
-                    assert isinstance(data, LinienGraphEdge)
+                    data: LinienGraphEdge = lg.edges[(bst1, bst2)]
+                    if TYPE_CHECKING:
+                        assert isinstance(data, LinienGraphEdge)
                     fahrzeit = max(1, data.get("fahrzeit_manuell", 0) or data.get(metrik, 0))
                 except KeyError:
                     logger.warning(f"Verbindung {bst1}-{bst2} nicht im Liniengraph.")
