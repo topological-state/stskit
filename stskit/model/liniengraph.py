@@ -1,8 +1,9 @@
 from __future__ import annotations
+import functools
+from collections.abc import Iterable, Sequence, Callable
 import itertools
 import logging
-from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set, Tuple, TypeVar, Union
-from typing import TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 
 import networkx as nx
 
@@ -26,17 +27,17 @@ class LinienGraphNode(dict):
 
 
 class LinienGraphEdge(dict):
-    fahrzeit_min = dict_property("fahrzeit_min", Union[int, float],
+    fahrzeit_min = dict_property("fahrzeit_min", int | float,
                                  docstring="Minimale Fahrzeit in Minuten")
-    fahrzeit_max = dict_property("fahrzeit_max", Union[int, float],
+    fahrzeit_max = dict_property("fahrzeit_max", int | float,
                                  docstring="Maximale Fahrzeit in Minuten")
     fahrten = dict_property("fahrten", int,
                             docstring="Anzahl der ausgewerteten Fahrten")
-    fahrzeit_summe = dict_property("fahrzeit_summe", Union[int, float],
+    fahrzeit_summe = dict_property("fahrzeit_summe", int | float,
                                    docstring="Summe aller ausgewerteten Fahrzeiten in Minuten")
     fahrzeit_schnitt = dict_property("fahrzeit_schnitt", float,
                                      docstring="Mittelwert aller ausgewerteten Fahrzeiten in Minuten")
-    fahrzeit_manuell = dict_property("fahrzeit_manuell", Union[int, float],
+    fahrzeit_manuell = dict_property("fahrzeit_manuell", int | float,
                                   docstring="Vom Benutzer eingestellte Fahrzeit. Ersetzt die berechnete Fahrzeit, sofern gesetzt und grösser Null.")
     markierung = dict_property("markierung", str,
                                docstring="Markierungsflags: E = Eingleisig")
@@ -61,7 +62,7 @@ class LinienGraph(nx.Graph):
     def __init__(self, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
 
-        self._strecken_cache: Dict[Tuple[LinienLabelType, LinienLabelType], List[LinienLabelType]] = {}
+        self._strecken_cache: dict[tuple[LinienLabelType, LinienLabelType], list[LinienLabelType]] = {}
 
     def to_undirected_class(self):
         return self.__class__
@@ -95,10 +96,12 @@ class LinienGraph(nx.Graph):
 
         try:
             knoten1_daten = self.nodes[bft1]
+            assert isinstance(knoten1_daten, LinienGraphNode)
         except KeyError:
             knoten1_daten = LinienGraphNode(typ=bahnhof1.typ, name=bahnhof1.name, fahrten=0)
         try:
             knoten2_daten = self.nodes[bft2]
+            assert isinstance(knoten2_daten, LinienGraphNode)
         except KeyError:
             knoten2_daten = LinienGraphNode(typ=bahnhof2.typ, name=bahnhof2.name, fahrten=0)
 
@@ -107,6 +110,7 @@ class LinienGraph(nx.Graph):
 
         try:
             liniendaten = self[bft1][bft2]
+            assert isinstance(liniendaten, LinienGraphEdge)
         except KeyError:
             liniendaten = LinienGraphEdge(fahrzeit_min=self.MAX_FAHRZEIT, fahrzeit_max=0,
                                           fahrten=0, fahrzeit_summe=0., fahrzeit_schnitt=0.)
@@ -170,7 +174,7 @@ class LinienGraph(nx.Graph):
             except nx.NetworkXError:
                 pass
 
-    def strecke(self, start: LinienLabelType, ziel: LinienLabelType) -> List[LinienLabelType]:
+    def strecke(self, start: LinienLabelType, ziel: LinienLabelType) -> list[LinienLabelType]:
         """
         Kürzeste Verbindung zwischen zwei Punkten bestimmen
 
@@ -192,14 +196,14 @@ class LinienGraph(nx.Graph):
             pass
 
         try:
-            strecke = nx.shortest_path(self, start, ziel)
+            strecke: list[LinienLabelType] = nx.shortest_path(self, start, ziel)
         except nx.NetworkXException:
-            strecke = []
+            strecke: list[LinienLabelType] = []
 
         self._strecken_cache[(start, ziel)] = strecke
         return strecke
 
-    def strecken_vorschlagen(self, min_fahrten: int = 0, min_laenge: int = 2) -> List[List[LinienLabelType]]:
+    def strecken_vorschlagen(self, min_fahrten: int = 0, min_laenge: int = 2) -> list[list[LinienLabelType]]:
         """
         Strecken aus Liniengraph vorschlagen
 
@@ -225,7 +229,7 @@ class LinienGraph(nx.Graph):
 
         for ein, aus in itertools.permutations(anschluesse, 2):
             try:
-                fahrten = min(self.nodes[ein]['fahrten'], self.nodes[aus]['fahrten'])
+                fahrten: int = min(self.nodes[ein]['fahrten'], self.nodes[aus]['fahrten'])
             except KeyError:
                 fahrten = -1
 
@@ -236,7 +240,10 @@ class LinienGraph(nx.Graph):
 
         return strecken
 
-    def strecken_zeitachse(self, strecke: List[BahnhofElement], metrik: str = 'fahrzeit_min') -> List[Union[int, float]]:
+    def strecken_zeitachse(self, 
+                           strecke: Sequence[BahnhofElement], 
+                           metrik: str = 'fahrzeit_min',
+                           ) -> Sequence[int | float]:
         """
         Distanzen entlang einer Strecke berechnen
 
@@ -291,7 +298,7 @@ class LinienGraph(nx.Graph):
         return max(1, zeit)
 
     def import_konfiguration(self,
-                             streckenmarkierung_konfig: Iterable[Dict[str, Any]],
+                             streckenmarkierung_konfig: Iterable[dict[str, Any]],
                              bahnhofgraph: BahnhofGraph):
         """
         Streckenmarkierungen aus der Konfiguration übernehmen
@@ -313,7 +320,7 @@ class LinienGraph(nx.Graph):
                 if fahrzeit > 0:
                     self.edges[station1, station2]['fahrzeit_manuell'] = fahrzeit
 
-    def export_konfiguration(self) -> Sequence[Dict[str, Union[str, int, float, bool]]]:
+    def export_konfiguration(self) -> Sequence[dict[str, str | int | float | bool]]:
         """
         Streckenmarkierung in Konfigurationsformat exportieren
         """
@@ -335,6 +342,9 @@ class LinienGraph(nx.Graph):
         return result
 
 
+DEFAULT_SORT_KEY = 99
+
+
 class Strecken:
     """
     Strecken
@@ -352,11 +362,11 @@ class Strecken:
 
     def __init__(self):
         super().__init__()
-        self.liniengraph:Optional[LinienGraph] = None
-        self.strecken: Dict[str, List[BahnhofElement]] = {}
-        self.ordnung: Dict[str, int] = {}
-        self.auto: Dict[str, bool] = {}
-        self._hauptstrecke: Optional[str] = None
+        self.liniengraph: LinienGraph | None = None
+        self.strecken: dict[str, Sequence[BahnhofElement]] = {}
+        self.ordnung: dict[str, int] = {}
+        self.auto: dict[str, bool] = {}
+        self._hauptstrecke: str | None = None
 
     @property
     def hauptstrecke(self) -> str | None:
@@ -385,12 +395,15 @@ class Strecken:
         def fe(node1: BahnhofElement, node2: BahnhofElement) -> bool:
             return node1 in self.strecken[strecke] and node2 in self.strecken[strecke]
 
-        return nx.subgraph_view(self.liniengraph, filter_node=fn, filter_edge=fe)
+        assert self.liniengraph is not None
+        result = nx.subgraph_view(self.liniengraph, filter_node=fn, filter_edge=fe)
+        assert isinstance(result, LinienGraph)
+        return result
 
     def add_strecke(self,
                     name: str,
                     stationen: Iterable[BahnhofElement],
-                    ordnung: int = 99,
+                    ordnung: int = DEFAULT_SORT_KEY,
                     auto: bool = True,
                     ) -> None:
         """
@@ -458,31 +471,33 @@ class Strecken:
                 self.remove_strecke(name)
 
     def import_konfiguration(self,
-                             strecken_konfig: Iterable[Dict[str, Any]],
+                             strecken_konfig: Iterable[dict[str, Any]],
                              bahnhofgraph: BahnhofGraph):
         """
         Streckendefinition aus der Konfiguration übernehmen
         """
 
-        strecken = {}
-        haupt = {}
-        ordnung = {}
-        auto = {}
+        strecken: dict[str, Sequence[BahnhofElement]] = {}
+        haupt: dict[str, bool] = {}
+        ordnung: dict[str, int] = {}
+        auto: dict[str, bool] = {}
+        
         for strecke_kfg in strecken_konfig:
-            strecke = []
+            strecke: list[BahnhofElement] = []
             for station in strecke_kfg['stationen']:
                 if bahnhofgraph.has_node(node := BahnhofElement.from_string(station)):
                     strecke.append(node)
             if len(strecke) < 2:
                 continue
 
-            key = strecke_kfg.get('name')
-            if not key:
-                key = "-".join((str(strecke[0]), str(strecke[-1])))
+            try:
+                key: str = strecke_kfg['name']
+            except KeyError:
+                key: str = "-".join((str(strecke[0]), str(strecke[-1])))
 
             strecken[key] = strecke
             haupt[key] = strecke_kfg.get('haupt', False)
-            ordnung[key] = strecke_kfg.get('ordnung', 99)
+            ordnung[key] = strecke_kfg.get('ordnung', DEFAULT_SORT_KEY)
             auto[key] = strecke_kfg.get('auto', True)
 
         for key in ordnung:
@@ -490,21 +505,23 @@ class Strecken:
             self.ordnung[key] = ordnung[key]
             self.auto[key] = auto[key]
 
-        hauptstrecken = [k for k, v in haupt.items() if v]
+        hauptstrecken: list[str] = [k for k, v in haupt.items() if v]
         if hauptstrecken:
-            self.hauptstrecke = min(hauptstrecken, key=ordnung.get)
+            sort_key: Callable[[str], int] = functools.partial(self.ordnung.get, default=DEFAULT_SORT_KEY)
+            self.hauptstrecke = min(hauptstrecken, key=sort_key)
         else:
             self.hauptstrecke = None
 
-    def export_konfiguration(self) -> Sequence[Dict[str, Any]]:
+    def export_konfiguration(self) -> list[dict[str, Any]]:
         """
         Streckendeklaration in Konfigurationsformat exportieren
         """
 
-        konfig = []
+        konfig: list[dict[str, Any]] = []
 
-        for key in sorted(self.ordnung.keys(), key=self.ordnung.get):
-            stationen = [str(station) for station in self.strecken[key]]
+        sort_key: Callable[[str], int] = functools.partial(self.ordnung.get, default=DEFAULT_SORT_KEY)
+        for key in sorted(self.ordnung.keys(), key=sort_key):
+            stationen: list[str] = [str(station) for station in self.strecken[key]]
             konfig.append({'name': key,
                            'haupt': key == self.hauptstrecke,
                            'ordnung': self.ordnung[key],
