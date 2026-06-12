@@ -470,6 +470,12 @@ class Strecken:
             else:
                 self.remove_strecke(name)
 
+    def _sort_key(self, x: str) -> int:
+        """
+        Sortierung der Streckenliste
+        """
+        return self.ordnung.get(x) or DEFAULT_SORT_KEY
+
     def import_konfiguration(self,
                              strecken_konfig: Iterable[dict[str, Any]],
                              bahnhofgraph: BahnhofGraph):
@@ -507,8 +513,7 @@ class Strecken:
 
         hauptstrecken: list[str] = [k for k, v in haupt.items() if v]
         if hauptstrecken:
-            sort_key: Callable[[str], int] = functools.partial(self.ordnung.get, default=DEFAULT_SORT_KEY)
-            self.hauptstrecke = min(hauptstrecken, key=sort_key)
+            self.hauptstrecke = min(hauptstrecken, key=self._sort_key)
         else:
             self.hauptstrecke = None
 
@@ -519,8 +524,7 @@ class Strecken:
 
         konfig: list[dict[str, Any]] = []
 
-        sort_key: Callable[[str], int] = functools.partial(self.ordnung.get, default=DEFAULT_SORT_KEY)
-        for key in sorted(self.ordnung.keys(), key=sort_key):
+        for key in sorted(self.ordnung.keys(), key=self._sort_key):
             stationen: list[str] = [str(station) for station in self.strecken[key]]
             konfig.append({'name': key,
                            'haupt': key == self.hauptstrecke,
