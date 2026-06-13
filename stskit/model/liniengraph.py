@@ -141,6 +141,10 @@ class LinienGraph(nx.Graph):
         weil der durchfahrende Zug die Zeit zum Anhalten und Beschleunigen einspart.
         Die Funktion versucht, solche Fälle aufzulösen,
         indem sie Verbindungen zwischen Knoten mit Grad > 2 künstlich verlängert.
+
+        Note:
+            Diese Methode entfernt Elemente aus dem Liniengraph, was die Darstellung des Streckenfahrplans behindern kann.
+            Bei Anwendungen, die keine Schleifen erlauben, sollte die Methode auf eine private Kopie angewendet werden!
         """
 
         entfernen = set()
