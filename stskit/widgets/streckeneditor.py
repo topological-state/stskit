@@ -481,9 +481,9 @@ class StreckenEditorModel(QAbstractTableModel):
 
         return result
 
-    def setData(self, index, value, role=QtCore.Qt.EditRole):
+    def setData(self, index, value, role=QtCore.Qt.EditRole) -> bool:
         if not index.isValid():
-            return None
+            return False
 
         row = index.row()
         segment = self.segments[row]
@@ -504,6 +504,8 @@ class StreckenEditorModel(QAbstractTableModel):
                     if self.set_fahrzeit(segment, value):
                         self.dataChanged.emit(index, index)
                         return True
+
+        return False
 
     def set_markierung(self, segment: StreckenSegment, value: str) -> bool:
         try:
