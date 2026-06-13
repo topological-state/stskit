@@ -1,148 +1,858 @@
 {
-    "_aid": 814,
-    "_build": 5847,
-    "_name": "L\u00f6tschberg S\u00fcd",
-    "_region": "Bern - L\u00f6tschberg",
-    "_version": 2,
-    "zugschema": "schweiz",
-    "anschlussgruppen": {
-        "BR x70": {
-            "__class__": "Set",
-            "data": [
-                "BR 170",
-                "BR 270"
-            ]
-        },
-        "BR x92": {
-            "__class__": "Set",
-            "data": [
-                "BR 292",
-                "BR 192"
-            ]
-        },
-        "FR": {
-            "__class__": "Set",
-            "data": [
-                "FR 842",
-                "FR 742"
-            ]
-        },
-        "KA": {
-            "__class__": "Set",
-            "data": [
-                "KA 238",
-                "KA 138"
-            ]
-        },
-        "Lonza": {
-            "__class__": "Set",
-            "data": [
-                "Lonza"
-            ]
-        },
-        "RAR": {
-            "__class__": "Set",
-            "data": [
-                "RAR 289",
-                "RAR 189"
-            ]
-        }
+  "default": true,
+  "elemente": [
+    {
+      "name": "AB",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "AB": {
-            "__class__": "Set",
-            "data": [
-                "AB 3",
-                "AB 2",
-                "AB 1"
-            ]
-        },
-        "EB": {
-            "__class__": "Set",
-            "data": [
-                "EB"
-            ]
-        },
-        "GO": {
-            "__class__": "Set",
-            "data": [
-                "GO 2",
-                "GO 1",
-                "GO 3",
-                "GO 93",
-                "GO 85",
-                "GO 84"
-            ]
-        },
-        "LBT": {
-            "__class__": "Set",
-            "data": [
-                "845",
-                "745"
-            ]
-        },
-        "HT": {
-            "__class__": "Set",
-            "data": [
-                "HT 1",
-                "HT 3",
-                "HT 2"
-            ]
-        },
-        "LL": {
-            "__class__": "Set",
-            "data": [
-                "LL 2",
-                "LL 1",
-                "LL 3"
-            ]
-        },
-        "LOET": {
-            "__class__": "Set",
-            "data": [
-                "LOET"
-            ]
-        },
-        "VI": {
-            "__class__": "Set",
-            "data": [
-                "VI 7",
-                "VI 8",
-                "VI 6",
-                "VI 5",
-                "VI 9",
-                "VI 4"
-            ]
-        }
+    {
+      "name": "EB",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "KA-BR",
-    "sektoren": {},
-    "strecken": {
-        "KA-BR": [
-            "KA",
-            "GO",
-            "HT",
-            "AB",
-            "EB",
-            "LL",
-            "BR x70"
-        ],
-        "FR-BR": [
-            "FR",
-            "LBT",
-            "LOET",
-            "VI",
-            "BR x92"
-        ],
-        "RAR-BR": [
-            "RAR",
-            "VI",
-            "BR x92"
-        ]
+    {
+      "name": "GO",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": [
-    	["KA", "GO", "E"],
-    	["HT", "AB", "E"]
-    ]
+    {
+      "name": "HT",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LOET",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "VI",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LBT",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "745",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "745",
+      "gleise": 1
+    },
+    {
+      "name": "845",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "845",
+      "gleise": 1
+    },
+    {
+      "name": "AB",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AB"
+    },
+    {
+      "name": "AB 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AB 1",
+      "gleise": 1
+    },
+    {
+      "name": "AB 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AB 2",
+      "gleise": 1
+    },
+    {
+      "name": "AB 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AB 3",
+      "gleise": 1
+    },
+    {
+      "name": "EB",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EB"
+    },
+    {
+      "name": "EB",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EB",
+      "gleise": 1
+    },
+    {
+      "name": "EB",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "EB",
+      "gleise": 1
+    },
+    {
+      "name": "GO",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO"
+    },
+    {
+      "name": "GO 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO 2",
+      "gleise": 1
+    },
+    {
+      "name": "GO 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO 3",
+      "gleise": 1
+    },
+    {
+      "name": "GO 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO 1",
+      "gleise": 1
+    },
+    {
+      "name": "GO 84",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO 84",
+      "gleise": 1
+    },
+    {
+      "name": "GO 85",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO 85",
+      "gleise": 1
+    },
+    {
+      "name": "GO 93",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO 93",
+      "gleise": 1
+    },
+    {
+      "name": "HT",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HT"
+    },
+    {
+      "name": "HT 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HT 3",
+      "gleise": 1
+    },
+    {
+      "name": "HT 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HT 1",
+      "gleise": 1
+    },
+    {
+      "name": "HT 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HT 2",
+      "gleise": 1
+    },
+    {
+      "name": "LL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LL"
+    },
+    {
+      "name": "LL 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LL 3",
+      "gleise": 1
+    },
+    {
+      "name": "LL 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LL 1",
+      "gleise": 1
+    },
+    {
+      "name": "LL 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LL 2",
+      "gleise": 1
+    },
+    {
+      "name": "LOET",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LOET"
+    },
+    {
+      "name": "LOET",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LOET",
+      "gleise": 1
+    },
+    {
+      "name": "LOET",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LOET",
+      "gleise": 1
+    },
+    {
+      "name": "VI",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI"
+    },
+    {
+      "name": "VI 7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI 7",
+      "gleise": 1
+    },
+    {
+      "name": "VI 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI 4",
+      "gleise": 1
+    },
+    {
+      "name": "VI 8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI 8",
+      "gleise": 1
+    },
+    {
+      "name": "VI 9",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI 9",
+      "gleise": 1
+    },
+    {
+      "name": "VI 6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI 6",
+      "gleise": 1
+    },
+    {
+      "name": "VI 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI 5",
+      "gleise": 1
+    },
+    {
+      "name": "KA",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FR",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lonza",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "RAR",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BR x70",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BR x92",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KA 138",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA",
+      "gleise": 1
+    },
+    {
+      "name": "KA 238",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA",
+      "gleise": 1
+    },
+    {
+      "name": "FR 742",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR",
+      "gleise": 1
+    },
+    {
+      "name": "FR 842",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR",
+      "gleise": 1
+    },
+    {
+      "name": "Lonza",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lonza",
+      "gleise": 1
+    },
+    {
+      "name": "RAR 189",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RAR",
+      "gleise": 1
+    },
+    {
+      "name": "RAR 289",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RAR",
+      "gleise": 1
+    },
+    {
+      "name": "AB 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AB",
+      "gleise": 1
+    },
+    {
+      "name": "AB 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AB",
+      "gleise": 1
+    },
+    {
+      "name": "AB 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AB",
+      "gleise": 1
+    },
+    {
+      "name": "GO 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO",
+      "gleise": 1
+    },
+    {
+      "name": "GO 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO",
+      "gleise": 1
+    },
+    {
+      "name": "GO 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO",
+      "gleise": 1
+    },
+    {
+      "name": "GO 84",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO",
+      "gleise": 1
+    },
+    {
+      "name": "GO 85",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO",
+      "gleise": 1
+    },
+    {
+      "name": "GO 93",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GO",
+      "gleise": 1
+    },
+    {
+      "name": "LBT",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LBT"
+    },
+    {
+      "name": "745",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LBT",
+      "gleise": 1
+    },
+    {
+      "name": "845",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LBT",
+      "gleise": 1
+    },
+    {
+      "name": "HT 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HT",
+      "gleise": 1
+    },
+    {
+      "name": "HT 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HT",
+      "gleise": 1
+    },
+    {
+      "name": "HT 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HT",
+      "gleise": 1
+    },
+    {
+      "name": "LL 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LL",
+      "gleise": 1
+    },
+    {
+      "name": "LL 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LL",
+      "gleise": 1
+    },
+    {
+      "name": "LL 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LL",
+      "gleise": 1
+    },
+    {
+      "name": "VI 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI",
+      "gleise": 1
+    },
+    {
+      "name": "VI 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI",
+      "gleise": 1
+    },
+    {
+      "name": "VI 8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI",
+      "gleise": 1
+    },
+    {
+      "name": "VI 9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI",
+      "gleise": 1
+    },
+    {
+      "name": "VI 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI",
+      "gleise": 1
+    },
+    {
+      "name": "VI 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "VI",
+      "gleise": 1
+    },
+    {
+      "name": "BR 170",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BR x70",
+      "gleise": 1
+    },
+    {
+      "name": "BR 270",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BR x70",
+      "gleise": 1
+    },
+    {
+      "name": "BR 192",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BR x92",
+      "gleise": 1
+    },
+    {
+      "name": "BR 292",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BR x92",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "KA-BR",
+      "haupt": false,
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst KA",
+        "Bf GO",
+        "Bf HT",
+        "Bf AB",
+        "Bf EB",
+        "Bf LL",
+        "Anst BR x70"
+      ]
+    },
+    {
+      "name": "FR-BR",
+      "haupt": false,
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst FR",
+        "Bf LBT",
+        "Bf LOET",
+        "Bf VI",
+        "Anst BR x92"
+      ]
+    },
+    {
+      "name": "RAR-BR",
+      "haupt": false,
+      "ordnung": 102,
+      "auto": true,
+      "stationen": [
+        "Anst RAR",
+        "Bf VI",
+        "Anst BR x92"
+      ]
+    }
+  ],
+  "streckenmarkierung": [
+    {
+      "flags": "O",
+      "station1": "Anst KA",
+      "station2": "Bf GO"
+    },
+    {
+      "flags": "O",
+      "station1": "Bf AB",
+      "station2": "Bf HT"
+    }
+  ],
+  "zugschema": "schweiz",
+  "_aid": 814,
+  "_build": 5851,
+  "_name": "Lötschberg Süd",
+  "_region": "Bern - Lötschberg",
+  "_version": 3
 }

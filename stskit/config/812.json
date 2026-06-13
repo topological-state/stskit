@@ -1,166 +1,1072 @@
 {
-    "_aid": 812,
-    "_build": 5847,
-    "_name": "L\u00f6tschberg Nord",
-    "_region": "Bern - L\u00f6tschberg",
-    "_version": 2,
-    "zugschema": "schweiz",
-    "anschlussgruppen": {
-        "AlpTransit": {
-            "__class__": "Set",
-            "data": [
-                "AlpTransit"
-            ]
-        },
-        "FEB ": {
-            "__class__": "Set",
-            "data": [
-                "FEB 503"
-            ]
-        },
-        "Goppenstein": {
-            "__class__": "Set",
-            "data": [
-                "Goppenstein 138",
-                "Goppenstein 238"
-            ]
-        },
-        "HOND": {
-            "__class__": "Set",
-            "data": [
-                "HOND"
-            ]
-        },
-        "KA 13-27": {
-            "__class__": "Set",
-            "data": [
-                "KA 13-15",
-                "KA 25-27"
-            ]
-        },
-        "Spiez": {
-            "__class__": "Set",
-            "data": [
-                "Spiez 202",
-                "Spiez 102"
-            ]
-        },
-        "Visp": {
-            "__class__": "Set",
-            "data": [
-                "Visp 742",
-                "Visp 842"
-            ]
-        }
+  "default": false,
+  "elemente": [
+    {
+      "name": "BL",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "BL": {
-            "__class__": "Set",
-            "data": [
-                "BL 1",
-                "BL 3",
-                "BL 2"
-            ]
-        },
-        "FEB": {
-            "__class__": "Set",
-            "data": [
-                "FEB 502",
-                "FEB 501"
-            ]
-        },
-        "FERD": {
-            "__class__": "Set",
-            "data": [
-                "FERD"
-            ]
-        },
-        "FR": {
-            "__class__": "Set",
-            "data": [
-                "FR 8",
-                "FR 2",
-                "FR 3",
-                "FR 7",
-                "FR 5",
-                "FR 1",
-                "FR 6",
-                "FR 4"
-            ]
-        },
-        "KA": {
-            "__class__": "Set",
-            "data": [
-                "KA 55",
-                "KA 56",
-                "KA 7",
-                "KA 4",
-                "KA 5",
-                "KA 57",
-                "KA 2",
-                "KA 6",
-                "KA 1",
-                "KA 3"
-            ]
-        },
-        "KG": {
-            "__class__": "Set",
-            "data": [
-                "KG 1",
-                "KG 2"
-            ]
-        },
-        "MUE": {
-            "__class__": "Set",
-            "data": [
-                "MUE 2",
-                "MUE 1"
-            ]
-        },
-        "REIK": {
-            "__class__": "Set",
-            "data": [
-                "REIK 2",
-                "REIK 1"
-            ]
-        },
-        "WENE": {
-            "__class__": "Set",
-            "data": [
-                "WENE"
-            ]
-        }
+    {
+      "name": "FEB",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "Spiez-Goppenstein",
-    "sektoren": {},
-    "strecken": {
-        "Spiez-Goppenstein": [
-            "Spiez",
-            "MUE",
-            "REIK",
-            "WENE",
-            "FR",
-            "KG",
-            "BL",
-            "FEB",
-            "KA",
-            "Goppenstein"
-        ],
-        "Spiez-Visp": [
-            "Spiez",
-            "MUE",
-            "REIK",
-            "WENE",
-            "FR",
-            "FERD",
-            "Visp"
-        ]
+    {
+      "name": "FERD",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": [
-    	["KG", "BL", "E"],
-    	["BL", "FEB", "E"],
-    	["KA", "Goppenstein", "E"],
-    	["FR", "FERD", "E"]
-    ]
+    {
+      "name": "FR",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KA",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KG",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MUE",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "REIK",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WENE",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BL"
+    },
+    {
+      "name": "BL 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BL 3",
+      "gleise": 1
+    },
+    {
+      "name": "BL 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BL 1",
+      "gleise": 1
+    },
+    {
+      "name": "BL 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BL 2",
+      "gleise": 1
+    },
+    {
+      "name": "FEB 501",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FEB"
+    },
+    {
+      "name": "FEB 502",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FEB"
+    },
+    {
+      "name": "FEB 501",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FEB 501",
+      "gleise": 1
+    },
+    {
+      "name": "FEB 501",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FEB 501",
+      "gleise": 1
+    },
+    {
+      "name": "FEB 502",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FEB 502",
+      "gleise": 1
+    },
+    {
+      "name": "FEB 502",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FEB 502",
+      "gleise": 1
+    },
+    {
+      "name": "FERD",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FERD"
+    },
+    {
+      "name": "FERD",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FERD",
+      "gleise": 1
+    },
+    {
+      "name": "FERD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FERD",
+      "gleise": 1
+    },
+    {
+      "name": "FR 7",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR"
+    },
+    {
+      "name": "FR",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR"
+    },
+    {
+      "name": "FR 8",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR 8",
+      "gleise": 1
+    },
+    {
+      "name": "FR 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR 1",
+      "gleise": 1
+    },
+    {
+      "name": "FR 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR 3",
+      "gleise": 1
+    },
+    {
+      "name": "FR 7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR 7",
+      "gleise": 1
+    },
+    {
+      "name": "FR 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR 2",
+      "gleise": 1
+    },
+    {
+      "name": "FR 6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR 6",
+      "gleise": 1
+    },
+    {
+      "name": "FR 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR 5",
+      "gleise": 1
+    },
+    {
+      "name": "FR 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR 4",
+      "gleise": 1
+    },
+    {
+      "name": "KA 55",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA"
+    },
+    {
+      "name": "KA 57",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA"
+    },
+    {
+      "name": "KA 1",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA"
+    },
+    {
+      "name": "KA",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA"
+    },
+    {
+      "name": "KA 6",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 6",
+      "gleise": 1
+    },
+    {
+      "name": "KA 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 4",
+      "gleise": 1
+    },
+    {
+      "name": "KA 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 3",
+      "gleise": 1
+    },
+    {
+      "name": "KA 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 1",
+      "gleise": 1
+    },
+    {
+      "name": "KA 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 2",
+      "gleise": 1
+    },
+    {
+      "name": "KA 5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 5",
+      "gleise": 1
+    },
+    {
+      "name": "KA 7",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 7",
+      "gleise": 1
+    },
+    {
+      "name": "KA 55",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 55",
+      "gleise": 1
+    },
+    {
+      "name": "KA 55",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 55",
+      "gleise": 1
+    },
+    {
+      "name": "KA 57",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 57",
+      "gleise": 1
+    },
+    {
+      "name": "KA 56",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 57",
+      "gleise": 1
+    },
+    {
+      "name": "KA 57",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 57",
+      "gleise": 1
+    },
+    {
+      "name": "KA 56",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 56",
+      "gleise": 1
+    },
+    {
+      "name": "KG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KG"
+    },
+    {
+      "name": "KG 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KG 1",
+      "gleise": 1
+    },
+    {
+      "name": "KG 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KG 2",
+      "gleise": 1
+    },
+    {
+      "name": "MUE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MUE"
+    },
+    {
+      "name": "MUE 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MUE 1",
+      "gleise": 1
+    },
+    {
+      "name": "MUE 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MUE 2",
+      "gleise": 1
+    },
+    {
+      "name": "REIK 1",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REIK"
+    },
+    {
+      "name": "REIK 2",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REIK"
+    },
+    {
+      "name": "REIK 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REIK 1",
+      "gleise": 1
+    },
+    {
+      "name": "REIK 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REIK 1",
+      "gleise": 1
+    },
+    {
+      "name": "REIK 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REIK 2",
+      "gleise": 1
+    },
+    {
+      "name": "WENE",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WENE"
+    },
+    {
+      "name": "WENE",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WENE",
+      "gleise": 1
+    },
+    {
+      "name": "WENE",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WENE",
+      "gleise": 1
+    },
+    {
+      "name": "Spiez",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HOND",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Goppenstein",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KA",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Visp",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "AlpTransit",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "FEB",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Spiez 102",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Spiez",
+      "gleise": 1
+    },
+    {
+      "name": "Spiez 202",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Spiez",
+      "gleise": 1
+    },
+    {
+      "name": "HOND",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HOND",
+      "gleise": 1
+    },
+    {
+      "name": "Goppenstein 138",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Goppenstein",
+      "gleise": 1
+    },
+    {
+      "name": "Goppenstein 238",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Goppenstein",
+      "gleise": 1
+    },
+    {
+      "name": "KA 13-15",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA",
+      "gleise": 1
+    },
+    {
+      "name": "KA 25-27",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA",
+      "gleise": 1
+    },
+    {
+      "name": "Visp 742",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Visp",
+      "gleise": 1
+    },
+    {
+      "name": "Visp 842",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Visp",
+      "gleise": 1
+    },
+    {
+      "name": "AlpTransit",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AlpTransit",
+      "gleise": 1
+    },
+    {
+      "name": "FEB 503",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FEB",
+      "gleise": 1
+    },
+    {
+      "name": "BL 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BL",
+      "gleise": 1
+    },
+    {
+      "name": "BL 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BL",
+      "gleise": 1
+    },
+    {
+      "name": "BL 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BL",
+      "gleise": 1
+    },
+    {
+      "name": "FR 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR 7",
+      "gleise": 1
+    },
+    {
+      "name": "FR 8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR",
+      "gleise": 1
+    },
+    {
+      "name": "FR 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR",
+      "gleise": 1
+    },
+    {
+      "name": "FR 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR",
+      "gleise": 1
+    },
+    {
+      "name": "FR 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR",
+      "gleise": 1
+    },
+    {
+      "name": "FR 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR",
+      "gleise": 1
+    },
+    {
+      "name": "FR 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR",
+      "gleise": 1
+    },
+    {
+      "name": "FR 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "FR",
+      "gleise": 1
+    },
+    {
+      "name": "KA 6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA 1",
+      "gleise": 1
+    },
+    {
+      "name": "KA 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA",
+      "gleise": 1
+    },
+    {
+      "name": "KA 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA",
+      "gleise": 1
+    },
+    {
+      "name": "KA 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA",
+      "gleise": 1
+    },
+    {
+      "name": "KA 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA",
+      "gleise": 1
+    },
+    {
+      "name": "KA 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA",
+      "gleise": 1
+    },
+    {
+      "name": "KA 7",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KA",
+      "gleise": 1
+    },
+    {
+      "name": "KG 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KG",
+      "gleise": 1
+    },
+    {
+      "name": "KG 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KG",
+      "gleise": 1
+    },
+    {
+      "name": "MUE 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MUE",
+      "gleise": 1
+    },
+    {
+      "name": "MUE 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MUE",
+      "gleise": 1
+    },
+    {
+      "name": "REIK 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "REIK 2",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Spiez-Goppenstein",
+      "haupt": true,
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Spiez",
+        "Bf MUE",
+        "Bf REIK",
+        "Bf WENE",
+        "Bf FR",
+        "Bf KG",
+        "Bf BL",
+        "Bf FEB",
+        "Bf KA",
+        "Anst Goppenstein"
+      ]
+    },
+    {
+      "name": "Spiez-Visp",
+      "haupt": false,
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst Spiez",
+        "Bf MUE",
+        "Bf REIK",
+        "Bf WENE",
+        "Bf FR",
+        "Bf FERD",
+        "Anst Visp"
+      ]
+    }
+  ],
+  "streckenmarkierung": [
+    {
+      "fahrzeit": 5.0,
+      "station1": "Bf MUE",
+      "station2": "Anst Spiez"
+    },
+    {
+      "fahrzeit": 2.5,
+      "station1": "Bf FR",
+      "station2": "Bf WENE"
+    },
+    {
+      "flags": "O",
+      "fahrzeit": 6.0,
+      "station1": "Bf KA",
+      "station2": "Anst Goppenstein"
+    },
+    {
+      "flags": "O",
+      "station1": "Bf BL",
+      "station2": "Bf KG"
+    },
+    {
+      "flags": "O",
+      "station1": "Bf BL",
+      "station2": "Bf FEB"
+    },
+    {
+      "fahrzeit": 2.0,
+      "station1": "Bf REIK",
+      "station2": "Bf WENE"
+    }
+  ],
+  "zugschema": "schweiz",
+  "_aid": 812,
+  "_build": 5851,
+  "_name": "Lötschberg Nord",
+  "_region": "Bern - Lötschberg",
+  "_version": 3
 }

@@ -1,801 +1,961 @@
 {
-  "default": false,
+  "default": true,
   "elemente": [
     {
-      "name": "BR",
+      "name": "Hjulby",
       "typ": "Bf",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "IS",
+      "name": "Knudshoved",
       "typ": "Bf",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "Preglia",
+      "name": "Kø",
       "typ": "Bf",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "VAR",
+      "name": "Langeskov",
       "typ": "Bf",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "BR",
+      "name": "Mv",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Ng",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Spr",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Uv",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Event1",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Event5",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Event4",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Event3",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Event2",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Event1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event1",
+      "gleise": 1
+    },
+    {
+      "name": "Event1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event1",
+      "gleise": 1
+    },
+    {
+      "name": "Event2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event2",
+      "gleise": 1
+    },
+    {
+      "name": "Event2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event2",
+      "gleise": 1
+    },
+    {
+      "name": "Event3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event3",
+      "gleise": 1
+    },
+    {
+      "name": "Event3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event3",
+      "gleise": 1
+    },
+    {
+      "name": "Event4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event4",
+      "gleise": 1
+    },
+    {
+      "name": "Event4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event4",
+      "gleise": 1
+    },
+    {
+      "name": "Event5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event5",
+      "gleise": 1
+    },
+    {
+      "name": "Event5",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event5",
+      "gleise": 1
+    },
+    {
+      "name": "Hjulby",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hjulby"
+    },
+    {
+      "name": "Hjulby",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hjulby",
+      "gleise": 1
+    },
+    {
+      "name": "Hjulby",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hjulby",
+      "gleise": 1
+    },
+    {
+      "name": "Knudshoved",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Knudshoved"
+    },
+    {
+      "name": "Knudshoved",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Knudshoved",
+      "gleise": 1
+    },
+    {
+      "name": "Knudshoved",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Knudshoved",
+      "gleise": 1
+    },
+    {
+      "name": "Kø",
       "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR"
+      "stamm": "Kø"
     },
     {
-      "name": "H",
+      "name": "Kø 4G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kø 4",
+      "gleise": 1
+    },
+    {
+      "name": "Kø 4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kø 4",
+      "gleise": 1
+    },
+    {
+      "name": "Kø 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kø 2",
+      "gleise": 1
+    },
+    {
+      "name": "Kø 2G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kø 2",
+      "gleise": 1
+    },
+    {
+      "name": "Kø 11",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kø 11",
+      "gleise": 1
+    },
+    {
+      "name": "Kø 3G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kø 3",
+      "gleise": 1
+    },
+    {
+      "name": "Kø 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kø 3",
+      "gleise": 1
+    },
+    {
+      "name": "Kø 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kø 1",
+      "gleise": 1
+    },
+    {
+      "name": "Kø 1G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kø 1",
+      "gleise": 1
+    },
+    {
+      "name": "Langeskov",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Langeskov"
+    },
+    {
+      "name": "Langeskov",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Langeskov",
+      "gleise": 1
+    },
+    {
+      "name": "Langeskov",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Langeskov",
+      "gleise": 1
+    },
+    {
+      "name": "Mv",
       "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR"
+      "stamm": "Mv"
     },
     {
-      "name": "BR 8",
+      "name": "Mv 3",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR 8",
+      "stamm": "Mv 3",
       "gleise": 1
     },
     {
-      "name": "BR 3",
+      "name": "Mv 2",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR 3",
+      "stamm": "Mv 2",
       "gleise": 1
     },
     {
-      "name": "BR 4",
+      "name": "Mv 1",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR 4",
+      "stamm": "Mv 1",
       "gleise": 1
     },
     {
-      "name": "BR 9",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BR 9",
-      "gleise": 1
-    },
-    {
-      "name": "BR 6",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BR 6",
-      "gleise": 1
-    },
-    {
-      "name": "BR 5",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BR 5",
-      "gleise": 1
-    },
-    {
-      "name": "BR 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BR 1",
-      "gleise": 1
-    },
-    {
-      "name": "BR 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BR 2",
-      "gleise": 1
-    },
-    {
-      "name": "BR 7",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BR 7",
-      "gleise": 1
-    },
-    {
-      "name": "H 12",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "H 12",
-      "gleise": 1
-    },
-    {
-      "name": "H 4",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "H 4",
-      "gleise": 1
-    },
-    {
-      "name": "H 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "H 1",
-      "gleise": 1
-    },
-    {
-      "name": "H 5",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "H 5",
-      "gleise": 1
-    },
-    {
-      "name": "H 2",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "H 2",
-      "gleise": 1
-    },
-    {
-      "name": "H 3",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "H 3",
-      "gleise": 1
-    },
-    {
-      "name": "IS",
+      "name": "Ng",
       "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IS"
+      "stamm": "Ng"
     },
     {
-      "name": "IS 2",
+      "name": "Ng 4",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IS 2",
+      "stamm": "Ng 4",
       "gleise": 1
     },
     {
-      "name": "IS 5",
+      "name": "Ng 4G",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IS 5",
+      "stamm": "Ng 4",
       "gleise": 1
     },
     {
-      "name": "IS 3",
+      "name": "Ng 3",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IS 3",
+      "stamm": "Ng 3",
       "gleise": 1
     },
     {
-      "name": "IS 1",
+      "name": "Ng 3G",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IS 1",
+      "stamm": "Ng 3",
       "gleise": 1
     },
     {
-      "name": "Preglia",
+      "name": "Ng 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ng 2",
+      "gleise": 1
+    },
+    {
+      "name": "Ng 2G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ng 2",
+      "gleise": 1
+    },
+    {
+      "name": "Ng 1G",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ng 1",
+      "gleise": 1
+    },
+    {
+      "name": "Ng 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ng 1",
+      "gleise": 1
+    },
+    {
+      "name": "Spr",
       "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Preglia"
+      "stamm": "Spr"
     },
     {
-      "name": "Preglia",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "Preglia",
-      "gleise": 1
-    },
-    {
-      "name": "Preglia",
+      "name": "Spr 1",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Preglia",
+      "stamm": "Spr 1",
       "gleise": 1
     },
     {
-      "name": "VAR",
+      "name": "Spr 0",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Spr 0",
+      "gleise": 1
+    },
+    {
+      "name": "Spr 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Spr 2",
+      "gleise": 1
+    },
+    {
+      "name": "Uv",
       "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "VAR"
+      "stamm": "Uv"
     },
     {
-      "name": "VAR 12",
+      "name": "Uv 3",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "VAR 12",
+      "stamm": "Uv 3",
       "gleise": 1
     },
     {
-      "name": "VAR 2",
+      "name": "Uv 2",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "VAR 2",
+      "stamm": "Uv 2",
       "gleise": 1
     },
     {
-      "name": "VAR 3",
+      "name": "Uv 1",
       "typ": "Gl",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "VAR 3",
+      "stamm": "Uv 1",
       "gleise": 1
     },
     {
-      "name": "VAR 11",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "VAR 11",
-      "gleise": 1
-    },
-    {
-      "name": "VAR 1",
-      "typ": "Gl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "VAR 1",
-      "gleise": 1
-    },
-    {
-      "name": "Goppenstein",
+      "name": "Odense",
       "typ": "Anst",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "Visp",
+      "name": "Slagelse",
       "typ": "Anst",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "Depot",
+      "name": "Materielgård",
       "typ": "Anst",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "Cardinal",
+      "name": "Industri",
       "typ": "Anst",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": ""
     },
     {
-      "name": "Domodossola",
-      "typ": "Anst",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "BR H",
-      "typ": "Anst",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "BR E",
-      "typ": "Anst",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": ""
-    },
-    {
-      "name": "Goppenstein 170",
+      "name": "Odense",
       "typ": "Agl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Goppenstein",
-      "gleise": 1
+      "stamm": "Odense",
+      "gleise": 2
     },
     {
-      "name": "Goppenstein 270",
+      "name": "Slagelse",
       "typ": "Agl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Goppenstein",
-      "gleise": 1
+      "stamm": "Slagelse",
+      "gleise": 2
     },
     {
-      "name": "Visp 192",
+      "name": "Materielgård",
       "typ": "Agl",
-      "auto": false,
+      "auto": true,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Visp",
+      "stamm": "Materielgård",
       "gleise": 1
     },
     {
-      "name": "Visp 292",
+      "name": "Industri",
       "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Industri",
+      "gleise": 1
+    },
+    {
+      "name": "Event1",
+      "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Visp",
-      "gleise": 1
+      "stamm": "Event1"
     },
     {
-      "name": "Depot",
-      "typ": "Agl",
+      "name": "Event5",
+      "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Depot",
-      "gleise": 1
+      "stamm": "Event5"
     },
     {
-      "name": "Cardinal",
-      "typ": "Agl",
+      "name": "Event4",
+      "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Cardinal",
-      "gleise": 1
+      "stamm": "Event4"
     },
     {
-      "name": "Domodossola 101",
-      "typ": "Agl",
+      "name": "Event3",
+      "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Domodossola",
-      "gleise": 1
+      "stamm": "Event3"
     },
     {
-      "name": "Domodossola 201",
-      "typ": "Agl",
+      "name": "Event2",
+      "typ": "Bft",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "Domodossola",
-      "gleise": 1
+      "stamm": "Event2"
     },
     {
-      "name": "BR 8",
+      "name": "Kø 4",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR",
+      "stamm": "Kø",
       "gleise": 1
     },
     {
-      "name": "BR 3",
+      "name": "Kø 2",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR",
+      "stamm": "Kø",
       "gleise": 1
     },
     {
-      "name": "BR 4",
+      "name": "Kø 11",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR",
+      "stamm": "Kø",
       "gleise": 1
     },
     {
-      "name": "BR 9",
+      "name": "Kø 3",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR",
+      "stamm": "Kø",
       "gleise": 1
     },
     {
-      "name": "BR 6",
+      "name": "Kø 1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR",
+      "stamm": "Kø",
       "gleise": 1
     },
     {
-      "name": "BR 5",
+      "name": "Mv 3",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR",
+      "stamm": "Mv",
       "gleise": 1
     },
     {
-      "name": "BR 1",
+      "name": "Mv 2",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR",
+      "stamm": "Mv",
       "gleise": 1
     },
     {
-      "name": "BR 2",
+      "name": "Mv 1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR",
+      "stamm": "Mv",
       "gleise": 1
     },
     {
-      "name": "BR 7",
+      "name": "Ng 4",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "BR",
+      "stamm": "Ng",
       "gleise": 1
     },
     {
-      "name": "H 12",
+      "name": "Ng 3",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "H",
+      "stamm": "Ng",
       "gleise": 1
     },
     {
-      "name": "H 4",
+      "name": "Ng 2",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "H",
+      "stamm": "Ng",
       "gleise": 1
     },
     {
-      "name": "H 1",
+      "name": "Ng 1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "H",
+      "stamm": "Ng",
       "gleise": 1
     },
     {
-      "name": "H 5",
+      "name": "Spr 1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "H",
+      "stamm": "Spr",
       "gleise": 1
     },
     {
-      "name": "H 2",
+      "name": "Spr 0",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "H",
+      "stamm": "Spr",
       "gleise": 1
     },
     {
-      "name": "H 3",
+      "name": "Spr 2",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "H",
+      "stamm": "Spr",
       "gleise": 1
     },
     {
-      "name": "IS 2",
+      "name": "Uv 3",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IS",
+      "stamm": "Uv",
       "gleise": 1
     },
     {
-      "name": "IS 5",
+      "name": "Uv 2",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IS",
+      "stamm": "Uv",
       "gleise": 1
     },
     {
-      "name": "IS 3",
+      "name": "Uv 1",
       "typ": "Bs",
       "auto": false,
       "ordnung": 0,
       "sichtbar": true,
       "flags": "",
-      "stamm": "IS",
-      "gleise": 1
-    },
-    {
-      "name": "IS 1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "IS",
-      "gleise": 1
-    },
-    {
-      "name": "VAR 12",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "VAR",
-      "gleise": 1
-    },
-    {
-      "name": "VAR 2",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "VAR",
-      "gleise": 1
-    },
-    {
-      "name": "VAR 3",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "VAR",
-      "gleise": 1
-    },
-    {
-      "name": "VAR 11",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "VAR",
-      "gleise": 1
-    },
-    {
-      "name": "VAR 1",
-      "typ": "Bs",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "VAR",
-      "gleise": 1
-    },
-    {
-      "name": "BR H West",
-      "typ": "Agl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BR H",
-      "gleise": 1
-    },
-    {
-      "name": "BR H Ost",
-      "typ": "Agl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BR H",
-      "gleise": 1
-    },
-    {
-      "name": "BR E West",
-      "typ": "Agl",
-      "auto": false,
-      "ordnung": 0,
-      "sichtbar": true,
-      "flags": "",
-      "stamm": "BR E",
+      "stamm": "Uv",
       "gleise": 1
     }
   ],
   "strecken": [
     {
-      "name": "Goppenstein-Domodossola",
-      "haupt": false,
+      "name": "Odense-Slagelse",
+      "haupt": true,
       "ordnung": 1,
       "auto": false,
       "stationen": [
-        "Anst Goppenstein",
-        "Bf BR",
-        "Bf IS",
-        "Bf VAR",
-        "Bf Preglia",
-        "Anst Domodossola"
-      ]
-    },
-    {
-      "name": "Visp-Domodossola",
-      "haupt": true,
-      "ordnung": 2,
-      "auto": false,
-      "stationen": [
-        "Anst Visp",
-        "Bf BR",
-        "Bf IS",
-        "Bf VAR",
-        "Bf Preglia",
-        "Anst Domodossola"
+        "Anst Odense",
+        "Bf Mv",
+        "Bf Langeskov",
+        "Bf Uv",
+        "Bf Hjulby",
+        "Bf Ng",
+        "Bf Knudshoved",
+        "Bf Spr",
+        "Bf Kø",
+        "Anst Slagelse"
       ]
     }
   ],
   "streckenmarkierung": [
     {
-      "fahrzeit": 5.0,
-      "station1": "Bf BR",
-      "station2": "Anst Visp"
+      "fahrzeit": 2.0,
+      "station1": "Bf Kø",
+      "station2": "Anst Slagelse"
     },
     {
-      "flags": "O",
-      "station1": "Bf IS",
-      "station2": "Bf VAR"
+      "flags": "H",
+      "station1": "Bf Kø",
+      "station2": "Bf Spr"
     },
     {
-      "flags": "O",
-      "station1": "Bf VAR",
-      "station2": "Bf Preglia"
+      "fahrzeit": 2.5,
+      "station1": "Bf Ng",
+      "station2": "Bf Hjulby"
+    },
+    {
+      "fahrzeit": 2.5,
+      "station1": "Bf Ng",
+      "station2": "Bf Knudshoved"
+    },
+    {
+      "fahrzeit": 2.5,
+      "station1": "Bf Spr",
+      "station2": "Bf Knudshoved"
+    },
+    {
+      "fahrzeit": 3.0,
+      "station1": "Bf Mv",
+      "station2": "Anst Odense"
+    },
+    {
+      "fahrzeit": 2.5,
+      "station1": "Bf Uv",
+      "station2": "Bf Hjulby"
     }
   ],
-  "zugschema": "schweiz",
-  "_aid": 410,
+  "zugschema": "schweden",
+  "_aid": 774,
   "_build": 5851,
-  "_name": "Brig",
-  "_region": "Bern - Lötschberg",
+  "_name": "Storebælt",
+  "_region": "Danmark West",
   "_version": 3
 }

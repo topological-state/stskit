@@ -1,346 +1,2095 @@
 {
-    "_aid": 153,
-    "_build": 5847,
-    "_name": "Schwarzach-St.Veit",
-    "_region": "\u00d6sterreich Mitte",
-    "_version": 2,
-    "anschlussgruppen": {
-        "7a": {
-            "__class__": "Set",
-            "data": [
-                "7a"
-            ]
-        },
-        "451": {
-            "__class__": "Set",
-            "data": [
-                "451"
-            ]
-        },
-        "121": {
-            "__class__": "Set",
-            "data": [
-                "121"
-            ]
-        },
-        "608": {
-            "__class__": "Set",
-            "data": [
-                "608"
-            ]
-        },
-        "7": {
-            "__class__": "Set",
-            "data": [
-                "7"
-            ]
-        },
-        "333": {
-            "__class__": "Set",
-            "data": [
-                "333"
-            ]
-        },
-        "335": {
-            "__class__": "Set",
-            "data": [
-                "335"
-            ]
-        },
-        "Bischofshofen": {
-            "__class__": "Set",
-            "data": [
-                "Bischofshofen"
-            ]
-        },
-        "Bruck-Fusch": {
-            "__class__": "Set",
-            "data": [
-                "Bruck-Fusch"
-            ]
-        },
-        "B\u00f6ckstein": {
-            "__class__": "Set",
-            "data": [
-                "B\u00f6ckstein"
-            ]
-        },
-        "SAG": {
-            "__class__": "Set",
-            "data": [
-                "SAG"
-            ]
-        }
+  "default": true,
+  "elemente": [
+    {
+      "name": "Bag",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "Bag": {
-            "__class__": "Set",
-            "data": [
-                "Bag 204",
-                "Bag 203",
-                "Bag 202",
-                "Bag 201"
-            ]
-        },
-        "Bo H1": {
-            "__class__": "Set",
-            "data": [
-                "Bo H1"
-            ]
-        },
-        "Bo U2": {
-            "__class__": "Set",
-            "data": [
-                "Bo U2"
-            ]
-        },
-        "Dg": {
-            "__class__": "Set",
-            "data": [
-                "Dg 201",
-                "Dg 203",
-                "Dg 202",
-                "Dg 204"
-            ]
-        },
-        "Hg": {
-            "__class__": "Set",
-            "data": [
-                "Hg 102",
-                "Hg 101",
-                "Hg 203",
-                "Hg 202",
-                "Hg 201"
-            ]
-        },
-        "Hg Z1": {
-            "__class__": "Set",
-            "data": [
-                "Hg Z1"
-            ]
-        },
-        "Hg Z2": {
-            "__class__": "Set",
-            "data": [
-                "Hg Z2"
-            ]
-        },
-        "Hg Z4": {
-            "__class__": "Set",
-            "data": [
-                "Hg Z4"
-            ]
-        },
-        "Jp": {
-            "__class__": "Set",
-            "data": [
-                "Jp 205",
-                "Jp 204",
-                "Jp 201",
-                "Jp 203",
-                "Jp 202",
-                "Jp Wende"
-            ]
-        },
-        "Ld": {
-            "__class__": "Set",
-            "data": [
-                "Ld 302",
-                "Ld 304",
-                "Ld 301"
-            ]
-        },
-        "Ld H1": {
-            "__class__": "Set",
-            "data": [
-                "Ld H1"
-            ]
-        },
-        "Lfs": {
-            "__class__": "Set",
-            "data": [
-                "Lfs"
-            ]
-        },
-        "Lof": {
-            "__class__": "Set",
-            "data": [
-                "Lof 203",
-                "Lof 202",
-                "Lof 201"
-            ]
-        },
-        "Lof Z1": {
-            "__class__": "Set",
-            "data": [
-                "Lof Z1"
-            ]
-        },
-        "Swa": {
-            "__class__": "Set",
-            "data": [
-                "Swa 402",
-                "Swa 404",
-                "Swa 502",
-                "Swa 405",
-                "Swa 409",
-                "Swa 121",
-                "Swa 503",
-                "Swa 408",
-                "Swa 401",
-                "Swa 411",
-                "Swa 406",
-                "Swa 403",
-                "Swa 419",
-                "Swa 415",
-                "Swa 315",
-                "Swa 504",
-                "Swa 410",
-                "Swa 501",
-                "Swa 407",
-                "Swa 413",
-                "Swa 505",
-                "Swa 593",
-                "Swa 132",
-                "Swa 417",
-                "Swa 101",
-                "Swa 129",
-                "Swa 123",
-                "Swa 125",
-                "Swa 127",
-                "Swa 451",
-                "Swa 749",
-                "Swa 781",
-                "Swa 783",
-                "Swa 782",
-                "Swa 785",
-                "Swa 784",
-                "Swa 789"
-            ]
-        },
-        "Ta": {
-            "__class__": "Set",
-            "data": [
-                "Ta 701",
-                "Ta 702",
-                "Ta 703"
-            ]
-        },
-        "Ta H1": {
-            "__class__": "Set",
-            "data": [
-                "Ta H1"
-            ]
-        }
+    {
+      "name": "Bo H1",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "Bischofshofen-B\u00f6ckstein",
-    "sektoren": {
-        "Swa 401": {
-            "__class__": "Set",
-            "data": [
-                "Swa 401",
-                "Swa 501"
-            ]
-        },
-        "Swa 402": {
-            "__class__": "Set",
-            "data": [
-                "Swa 402",
-                "Swa 502"
-            ]
-        },
-        "Swa 403": {
-            "__class__": "Set",
-            "data": [
-                "Swa 403",
-                "Swa 503"
-            ]
-        },
-        "Swa 404": {
-            "__class__": "Set",
-            "data": [
-                "Swa 404",
-                "Swa 504",
-                "Swa 604"
-            ]
-        },
-        "Swa 405": {
-            "__class__": "Set",
-            "data": [
-                "Swa 405",
-                "Swa 505",
-                "Swa 605"
-            ]
-        },
-        "Swa 415": {
-            "__class__": "Set",
-            "data": [
-                "Swa 315",
-                "Swa 415",
-                "Swa 615"
-            ]
-        }
+    {
+      "name": "Bo U2",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "strecken": {
-        "Bischofshofen-Bruck-Fusch": [
-            "Bischofshofen",
-            "Bo H1",
-            "Jp",
-            "Swa",
-            "Ld",
-            "Ld H1",
-            "Ta",
-            "Ta H1",
-            "Bruck-Fusch"
-        ],
-        "Bischofshofen-B\u00f6ckstein": [
-            "Bischofshofen",
-            "Bo H1",
-            "Jp",
-            "Swa",
-            "Lof",
-            "Lfs",
-            "Lof Z1",
-            "Dg",
-            "Hg",
-            "Hg Z1",
-            "Hg Z2",
-            "Hg Z4",
-            "Bag",
-            "B\u00f6ckstein"
-        ],
-        "Bruck-Fusch-Bischofshofen": [
-            "Bruck-Fusch",
-            "Ta H1",
-            "Ta",
-            "Ld H1",
-            "Ld",
-            "Swa",
-            "Jp",
-            "Bo H1",
-            "Bischofshofen"
-        ],
-        "B\u00f6ckstein-Bischofshofen": [
-            "B\u00f6ckstein",
-            "Bag",
-            "Hg Z4",
-            "Hg Z2",
-            "Hg Z1",
-            "Hg",
-            "Dg",
-            "Lof Z1",
-            "Lfs",
-            "Lof",
-            "Swa",
-            "Jp",
-            "Bo H1",
-            "Bischofshofen"
-        ]
+    {
+      "name": "Dg",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": [
-        ["Lfs", "Lof Z1", "E"],
-        ["Hg Z1", "Hg Z2", "E"],
-        ["Hg Z4", "Bag", "E"]
-    ]
+    {
+      "name": "Hg",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Jp",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Ld",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Ld H1",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lfs",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lof",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Swa",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Ta",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Ta H1",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hg Z1",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hg Z2",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Hg Z4",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lof Z1",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bag",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bag"
+    },
+    {
+      "name": "Bag 202",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bag 202",
+      "gleise": 1
+    },
+    {
+      "name": "Bag 203",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bag 203",
+      "gleise": 1
+    },
+    {
+      "name": "Bag 204",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bag 204",
+      "gleise": 1
+    },
+    {
+      "name": "Bag 201",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bag 201",
+      "gleise": 1
+    },
+    {
+      "name": "Bo H1",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bo H1"
+    },
+    {
+      "name": "Bo H1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bo H1",
+      "gleise": 1
+    },
+    {
+      "name": "Bo H1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bo H1",
+      "gleise": 1
+    },
+    {
+      "name": "Bo U2",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bo U2"
+    },
+    {
+      "name": "Bo U2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bo U2",
+      "gleise": 1
+    },
+    {
+      "name": "Bo U2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bo U2",
+      "gleise": 1
+    },
+    {
+      "name": "Dg",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dg"
+    },
+    {
+      "name": "Dg 204",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dg 204",
+      "gleise": 1
+    },
+    {
+      "name": "Dg 201",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dg 201",
+      "gleise": 1
+    },
+    {
+      "name": "Dg 202",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dg 202",
+      "gleise": 1
+    },
+    {
+      "name": "Dg 203",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dg 203",
+      "gleise": 1
+    },
+    {
+      "name": "Hg 102",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg"
+    },
+    {
+      "name": "Hg 202",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg"
+    },
+    {
+      "name": "Hg 102",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg 102",
+      "gleise": 1
+    },
+    {
+      "name": "Hg 101",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg 102",
+      "gleise": 1
+    },
+    {
+      "name": "Hg 102",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg 102",
+      "gleise": 1
+    },
+    {
+      "name": "Hg 101",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg 101",
+      "gleise": 1
+    },
+    {
+      "name": "Hg 203",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg 203",
+      "gleise": 1
+    },
+    {
+      "name": "Hg 202",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg 202",
+      "gleise": 1
+    },
+    {
+      "name": "Hg 201",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg 201",
+      "gleise": 1
+    },
+    {
+      "name": "Hg Z1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg Z1",
+      "gleise": 1
+    },
+    {
+      "name": "Hg Z1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg Z1",
+      "gleise": 1
+    },
+    {
+      "name": "Hg Z2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg Z2",
+      "gleise": 1
+    },
+    {
+      "name": "Hg Z2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg Z2",
+      "gleise": 1
+    },
+    {
+      "name": "Hg Z4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg Z4",
+      "gleise": 1
+    },
+    {
+      "name": "Hg Z4",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg Z4",
+      "gleise": 1
+    },
+    {
+      "name": "Jp Wende",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp"
+    },
+    {
+      "name": "Jp",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp"
+    },
+    {
+      "name": "Jp 203",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp 203",
+      "gleise": 1
+    },
+    {
+      "name": "Jp 204",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp 204",
+      "gleise": 1
+    },
+    {
+      "name": "Jp 202",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp 202",
+      "gleise": 1
+    },
+    {
+      "name": "Jp 201",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp 201",
+      "gleise": 1
+    },
+    {
+      "name": "Jp 205",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp 205",
+      "gleise": 1
+    },
+    {
+      "name": "Jp Wende",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp Wende",
+      "gleise": 1
+    },
+    {
+      "name": "Jp Wende",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp Wende",
+      "gleise": 1
+    },
+    {
+      "name": "Ld",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ld"
+    },
+    {
+      "name": "Ld 301",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ld 301",
+      "gleise": 1
+    },
+    {
+      "name": "Ld 302",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ld 302",
+      "gleise": 1
+    },
+    {
+      "name": "Ld 304",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ld 304",
+      "gleise": 1
+    },
+    {
+      "name": "Ld H1",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ld H1"
+    },
+    {
+      "name": "Ld H1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ld H1",
+      "gleise": 1
+    },
+    {
+      "name": "Ld H1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ld H1",
+      "gleise": 1
+    },
+    {
+      "name": "Lfs",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lfs"
+    },
+    {
+      "name": "Lfs",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lfs",
+      "gleise": 1
+    },
+    {
+      "name": "Lfs",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lfs",
+      "gleise": 1
+    },
+    {
+      "name": "Lof",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lof"
+    },
+    {
+      "name": "Lof 203",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lof 203",
+      "gleise": 1
+    },
+    {
+      "name": "Lof 201",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lof 201",
+      "gleise": 1
+    },
+    {
+      "name": "Lof 202",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lof 202",
+      "gleise": 1
+    },
+    {
+      "name": "Lof Z1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lof Z1",
+      "gleise": 1
+    },
+    {
+      "name": "Lof Z1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lof Z1",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 413",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa"
+    },
+    {
+      "name": "Swa 123",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa"
+    },
+    {
+      "name": "Swa 451",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa"
+    },
+    {
+      "name": "Swa 785",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa"
+    },
+    {
+      "name": "Swa 405",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa"
+    },
+    {
+      "name": "Swa 413",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 121",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 403",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 419",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 410",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 101",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 406",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 408",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 411",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 415",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 409",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 417",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 132",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 407",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 405",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 401",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 404",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 402",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 315",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 413",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 413",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 121",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 121",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 593",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 593",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 403",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 403",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 503",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 403",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 419",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 419",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 410",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 410",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 101",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 101",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 406",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 406",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 408",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 408",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 411",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 411",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 415",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 415",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 409",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 409",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 417",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 417",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 132",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 132",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 407",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 407",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 505",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 405",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 405",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 405",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 501",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 401",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 401",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 401",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 404",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 404",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 504",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 404",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 502",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 402",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 402",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 402",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 315",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 315",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 123",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 123",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 125",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 123",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 127",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 123",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 129",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 123",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 123",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 123",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 125",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 125",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 127",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 127",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 129",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 129",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 451",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 451",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 451",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 451",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 785",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 785",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 782",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 785",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 781",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 785",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 789",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 785",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 783",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 785",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 749",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 785",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 784",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 785",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 785",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 785",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 782",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 782",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 781",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 781",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 789",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 789",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 783",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 783",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 749",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 749",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 784",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 784",
+      "gleise": 1
+    },
+    {
+      "name": "Ta",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ta"
+    },
+    {
+      "name": "Ta 703",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ta 703",
+      "gleise": 1
+    },
+    {
+      "name": "Ta 702",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ta 702",
+      "gleise": 1
+    },
+    {
+      "name": "Ta 701",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ta 701",
+      "gleise": 1
+    },
+    {
+      "name": "Ta H1",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ta H1"
+    },
+    {
+      "name": "Ta H1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ta H1",
+      "gleise": 1
+    },
+    {
+      "name": "Ta H1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ta H1",
+      "gleise": 1
+    },
+    {
+      "name": "Bischofshofen",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Böckstein",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "7a",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "7",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bruck-Fusch",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SAG",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "335",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "451",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "333",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "121",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "608",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Bischofshofen",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bischofshofen",
+      "gleise": 2
+    },
+    {
+      "name": "Böckstein",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Böckstein",
+      "gleise": 1
+    },
+    {
+      "name": "7a",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "7a",
+      "gleise": 1
+    },
+    {
+      "name": "7",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "7",
+      "gleise": 1
+    },
+    {
+      "name": "Bruck-Fusch",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bruck-Fusch",
+      "gleise": 2
+    },
+    {
+      "name": "SAG",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SAG",
+      "gleise": 1
+    },
+    {
+      "name": "335",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "335",
+      "gleise": 1
+    },
+    {
+      "name": "451",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "451",
+      "gleise": 1
+    },
+    {
+      "name": "333",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "333",
+      "gleise": 1
+    },
+    {
+      "name": "121",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "121",
+      "gleise": 1
+    },
+    {
+      "name": "608",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "608",
+      "gleise": 1
+    },
+    {
+      "name": "Hg Z1",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg Z1"
+    },
+    {
+      "name": "Hg Z2",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg Z2"
+    },
+    {
+      "name": "Hg Z4",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg Z4"
+    },
+    {
+      "name": "Lof Z1",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lof Z1"
+    },
+    {
+      "name": "Bag 202",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bag",
+      "gleise": 1
+    },
+    {
+      "name": "Bag 203",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bag",
+      "gleise": 1
+    },
+    {
+      "name": "Bag 204",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bag",
+      "gleise": 1
+    },
+    {
+      "name": "Bag 201",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Bag",
+      "gleise": 1
+    },
+    {
+      "name": "Dg 204",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dg",
+      "gleise": 1
+    },
+    {
+      "name": "Dg 201",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dg",
+      "gleise": 1
+    },
+    {
+      "name": "Dg 202",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dg",
+      "gleise": 1
+    },
+    {
+      "name": "Dg 203",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Dg",
+      "gleise": 1
+    },
+    {
+      "name": "Hg 203",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg 202",
+      "gleise": 1
+    },
+    {
+      "name": "Hg 202",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg 202",
+      "gleise": 1
+    },
+    {
+      "name": "Hg 201",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Hg 202",
+      "gleise": 1
+    },
+    {
+      "name": "Jp 203",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp",
+      "gleise": 1
+    },
+    {
+      "name": "Jp 204",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp",
+      "gleise": 1
+    },
+    {
+      "name": "Jp 202",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp",
+      "gleise": 1
+    },
+    {
+      "name": "Jp 201",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp",
+      "gleise": 1
+    },
+    {
+      "name": "Jp 205",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Jp",
+      "gleise": 1
+    },
+    {
+      "name": "Ld 301",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ld",
+      "gleise": 1
+    },
+    {
+      "name": "Ld 302",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ld",
+      "gleise": 1
+    },
+    {
+      "name": "Ld 304",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ld",
+      "gleise": 1
+    },
+    {
+      "name": "Lof 203",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lof",
+      "gleise": 1
+    },
+    {
+      "name": "Lof 201",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lof",
+      "gleise": 1
+    },
+    {
+      "name": "Lof 202",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lof",
+      "gleise": 1
+    },
+    {
+      "name": "Swa 593",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Swa 405",
+      "gleise": 1
+    },
+    {
+      "name": "Ta 703",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ta",
+      "gleise": 1
+    },
+    {
+      "name": "Ta 702",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ta",
+      "gleise": 1
+    },
+    {
+      "name": "Ta 701",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ta",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Bischofshofen-Bruck-Fusch",
+      "haupt": false,
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Bischofshofen",
+        "Bf Bo H1",
+        "Bf Bo U2",
+        "Bf Jp",
+        "Bf Swa",
+        "Bf Ld",
+        "Bf Ld H1",
+        "Bf Ta",
+        "Bf Ta H1",
+        "Anst Bruck-Fusch"
+      ]
+    },
+    {
+      "name": "Bischofshofen-Böckstein",
+      "haupt": true,
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst Bischofshofen",
+        "Bf Bo H1",
+        "Bf Bo U2",
+        "Bf Jp",
+        "Bf Swa",
+        "Bf Lof",
+        "Bf Lfs",
+        "Bf Lof Z1",
+        "Bf Dg",
+        "Bf Hg",
+        "Bf Hg Z1",
+        "Bf Hg Z2",
+        "Bf Hg Z4",
+        "Bf Bag",
+        "Anst Böckstein"
+      ]
+    },
+    {
+      "name": "Bruck-Fusch-Böckstein",
+      "haupt": false,
+      "ordnung": 108,
+      "auto": true,
+      "stationen": [
+        "Anst Bruck-Fusch",
+        "Bf Ta H1",
+        "Bf Ta",
+        "Bf Ld H1",
+        "Bf Ld",
+        "Bf Swa",
+        "Bf Lof",
+        "Bf Lfs",
+        "Bf Lof Z1",
+        "Bf Dg",
+        "Bf Hg",
+        "Bf Hg Z1",
+        "Bf Hg Z2",
+        "Bf Hg Z4",
+        "Bf Bag",
+        "Anst Böckstein"
+      ]
+    },
+    {
+      "name": "Böckstein-Bruck-Fusch",
+      "haupt": false,
+      "ordnung": 111,
+      "auto": true,
+      "stationen": [
+        "Anst Böckstein",
+        "Bf Bag",
+        "Bf Hg Z4",
+        "Bf Hg Z2",
+        "Bf Hg Z1",
+        "Bf Hg",
+        "Bf Dg",
+        "Bf Lof Z1",
+        "Bf Lfs",
+        "Bf Lof",
+        "Bf Swa",
+        "Bf Ld",
+        "Bf Ld H1",
+        "Bf Ta",
+        "Bf Ta H1",
+        "Anst Bruck-Fusch"
+      ]
+    }
+  ],
+  "streckenmarkierung": [
+    {
+      "flags": "G",
+      "station1": "Bf Bag",
+      "station2": "Bf Hg Z4"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Bag",
+      "station2": "Anst Böckstein"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Hg Z2",
+      "station2": "Bf Hg Z1"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Lof Z1",
+      "station2": "Bf Lfs"
+    }
+  ],
+  "zugschema": "deutschland",
+  "_aid": 153,
+  "_build": 5851,
+  "_name": "Schwarzach-St.Veit",
+  "_region": "Österreich Mitte",
+  "_version": 3
 }
