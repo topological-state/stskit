@@ -1,314 +1,1301 @@
 {
-    "_aid": 303,
-    "_build": 5851,
-    "_name": "Burgdorf",
-    "_region": "Bern - L\u00f6tschberg",
-    "_version": 2,
-    "anschlussgruppen": {
-        "Abstellgl": {
-            "__class__": "Set",
-            "data": [
-                "Abstellgl."
-            ]
-        },
-        "BDFS": {
-            "__class__": "Set",
-            "data": [
-                "BDFS 122",
-                "BDFS 222"
-            ]
-        },
-        "KEBAG": {
-            "__class__": "Set",
-            "data": [
-                "KEBAG"
-            ]
-        },
-        "LGUT": {
-            "__class__": "Set",
-            "data": [
-                "LGUT 607",
-                "LGUT 507"
-            ]
-        },
-        "RTW": {
-            "__class__": "Set",
-            "data": [
-                "RTW 475",
-                "RTW 375"
-            ]
-        },
-        "SCHB": {
-            "__class__": "Set",
-            "data": [
-                "SCHB 394",
-                "SCHB 494"
-            ]
-        },
-        "Solothurn": {
-            "__class__": "Set",
-            "data": [
-                "Solothurn"
-            ]
-        },
-        "Stahl Gerlafingen": {
-            "__class__": "Set",
-            "data": [
-                "Stahl Gerlafingen"
-            ]
-        },
-        "WANZ": {
-            "__class__": "Set",
-            "data": [
-                "WANZ 630",
-                "WANZ 530"
-            ]
-        }
+  "default": true,
+  "elemente": [
+    {
+      "name": "AEF",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "anschlusslage": {},
-    "bahnsteiggruppen": {
-        "AEF": {
-            "__class__": "Set",
-            "data": [
-                "AEF 1",
-                "AEF 2"
-            ]
-        },
-        "BDF": {
-            "__class__": "Set",
-            "data": [
-                "BDF 5CD",
-                "BDF 3CD",
-                "BDF 2CD",
-                "BDF 2AB",
-                "BDF 5AB",
-                "BDF 1AB",
-                "BDF 4CD",
-                "BDF 4AB",
-                "BDF 1CD",
-                "BDF 11",
-                "BDF 3AB"
-            ]
-        },
-        "BDFB": {
-            "__class__": "Set",
-            "data": [
-                "BDFB"
-            ]
-        },
-        "BIST": {
-            "__class__": "Set",
-            "data": [
-                "BIST 52",
-                "BIST 51",
-                "BIST 1",
-                "BIST 2"
-            ]
-        },
-        "GLF": {
-            "__class__": "Set",
-            "data": [
-                "GLF 1"
-            ]
-        },
-        "HBK": {
-            "__class__": "Set",
-            "data": [
-                "HBK 1",
-                "HBK 2",
-                "HBK 3"
-            ]
-        },
-        "HERS": {
-            "__class__": "Set",
-            "data": [
-                "HERS"
-            ]
-        },
-        "KIAL": {
-            "__class__": "Set",
-            "data": [
-                "KIAL 1",
-                "KIAL 2"
-            ]
-        },
-        "LYS": {
-            "__class__": "Set",
-            "data": [
-                "LYS"
-            ]
-        },
-        "MATA": {
-            "__class__": "Set",
-            "data": [
-                "MATA 392",
-                "MATA 513",
-                "MATA 713",
-                "MATA 492",
-                "MATA 813",
-                "MATA 613"
-            ]
-        },
-        "UT": {
-            "__class__": "Set",
-            "data": [
-                "UT 1",
-                "UT 2"
-            ]
-        },
-        "WR": {
-            "__class__": "Set",
-            "data": [
-                "WR 3",
-                "WR 2"
-            ]
-        },
-        "WRN": {
-            "__class__": "Set",
-            "data": [
-                "WRN 422",
-                "WRN 423"
-            ]
-        },
-        "WY": {
-            "__class__": "Set",
-            "data": [
-                "WY"
-            ]
-        }
+    {
+      "name": "BDF",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "hauptstrecke": "LGUT-RTW",
-    "sektoren": {
-        "BDF 1": {
-            "__class__": "Set",
-            "data": [
-                "BDF 1AB",
-                "BDF 1CD"
-            ]
-        },
-        "BDF 2": {
-            "__class__": "Set",
-            "data": [
-                "BDF 2CD",
-                "BDF 2AB"
-            ]
-        },
-        "BDF 3": {
-            "__class__": "Set",
-            "data": [
-                "BDF 3CD",
-                "BDF 3AB"
-            ]
-        },
-        "BDF 4": {
-            "__class__": "Set",
-            "data": [
-                "BDF 4CD",
-                "BDF 4AB"
-            ]
-        },
-        "BDF 5": {
-            "__class__": "Set",
-            "data": [
-                "BDF 5AB",
-                "BDF 5CD"
-            ]
-        }
+    {
+      "name": "BDFB",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "strecken": {
-        "BDFS-RTW": [
-            "BDFS",
-            "BDF",
-            "WY",
-            "RTW"
-        ],
-        "LGUT-RTW": [
-            "LGUT",
-            "MATA",
-            "HBK",
-            "LYS",
-            "BDF",
-            "WY",
-            "RTW"
-        ],
-        "LGUT-WANZ": [
-            "LGUT",
-            "MATA",
-            "HERS",
-            "WANZ"
-        ],
-        "SCHB-RTW": [
-            "SCHB",
-            "MATA",
-            "HBK",
-            "LYS",
-            "BDF",
-            "WY",
-            "RTW"
-        ],
-        "Solothurn-BDF": [
-            "Solothurn",
-            "BIST",
-            "GLF",
-            "WRN",
-            "WR",
-            "UT",
-            "AEF",
-            "KIAL",
-            "BDFB",
-            "BDF"
-        ],
-        "Solothurn-RTW": [
-            "Solothurn",
-            "BIST",
-            "GLF",
-            "WRN",
-            "WR",
-            "UT",
-            "AEF",
-            "KIAL",
-            "BDFB",
-            "BDF",
-            "WY",
-            "RTW"
-        ]
+    {
+      "name": "BIST",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
     },
-    "streckenmarkierung": [
-        [
-            "Solothurn",
-            "BIST",
-            "E"
-        ],
-        [
-            "GLF",
-            "WRN",
-            "E"
-        ],
-        [
-            "WR",
-            "UT",
-            "E"
-        ],
-        [
-            "UT",
-            "AEF",
-            "E"
-        ],
-        [
-            "AEF",
-            "KIAL",
-            "E"
-        ],
-        [
-            "KIAL",
-            "BDFB",
-            "E"
-        ],
-        [
-            "BDFB",
-            "BDF",
-            "E"
-        ]
-    ],
-    "zugschema": "schweiz"
+    {
+      "name": "GLF",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HBK",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HERS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KIAL",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LYS",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "MATA",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "UT",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WR",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WRN",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WY",
+      "typ": "Bf",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "AEF",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AEF"
+    },
+    {
+      "name": "AEF 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AEF 2",
+      "gleise": 1
+    },
+    {
+      "name": "AEF 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AEF 1",
+      "gleise": 1
+    },
+    {
+      "name": "BDF",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF"
+    },
+    {
+      "name": "BDF 2AB",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF 2",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 2CD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF 2",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 3AB",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF 3",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 3CD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF 3",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 1CD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF 1",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 1AB",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF 1",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 4CD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF 4",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 4AB",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF 4",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 5CD",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF 5",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 5AB",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF 5",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 11",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF 11",
+      "gleise": 1
+    },
+    {
+      "name": "BDFB",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDFB"
+    },
+    {
+      "name": "BDFB",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDFB",
+      "gleise": 1
+    },
+    {
+      "name": "BDFB",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDFB",
+      "gleise": 1
+    },
+    {
+      "name": "BIST",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIST"
+    },
+    {
+      "name": "BIST 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIST 2",
+      "gleise": 1
+    },
+    {
+      "name": "BIST 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIST 1",
+      "gleise": 1
+    },
+    {
+      "name": "BIST 51",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIST 51",
+      "gleise": 1
+    },
+    {
+      "name": "BIST 52",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIST 52",
+      "gleise": 1
+    },
+    {
+      "name": "GLF",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLF"
+    },
+    {
+      "name": "GLF 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLF 1",
+      "gleise": 1
+    },
+    {
+      "name": "HBK",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBK"
+    },
+    {
+      "name": "HBK 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBK 1",
+      "gleise": 1
+    },
+    {
+      "name": "HBK 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBK 3",
+      "gleise": 1
+    },
+    {
+      "name": "HBK 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBK 2",
+      "gleise": 1
+    },
+    {
+      "name": "HERS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HERS"
+    },
+    {
+      "name": "HERS",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HERS",
+      "gleise": 1
+    },
+    {
+      "name": "HERS",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HERS",
+      "gleise": 1
+    },
+    {
+      "name": "KIAL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KIAL"
+    },
+    {
+      "name": "KIAL 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KIAL 2",
+      "gleise": 1
+    },
+    {
+      "name": "KIAL 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KIAL 1",
+      "gleise": 1
+    },
+    {
+      "name": "LYS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LYS"
+    },
+    {
+      "name": "LYS",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LYS",
+      "gleise": 1
+    },
+    {
+      "name": "LYS",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LYS",
+      "gleise": 1
+    },
+    {
+      "name": "MATA",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA"
+    },
+    {
+      "name": "MATA 392",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA 392",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 713",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA 713",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 513",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA 513",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 492",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA 492",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 613",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA 613",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 813",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA 813",
+      "gleise": 1
+    },
+    {
+      "name": "UT",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UT"
+    },
+    {
+      "name": "UT 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UT 2",
+      "gleise": 1
+    },
+    {
+      "name": "UT 1",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UT 1",
+      "gleise": 1
+    },
+    {
+      "name": "WR",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WR"
+    },
+    {
+      "name": "WR 3",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WR 3",
+      "gleise": 1
+    },
+    {
+      "name": "WR 2",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WR 2",
+      "gleise": 1
+    },
+    {
+      "name": "WRN",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRN"
+    },
+    {
+      "name": "WRN 423",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRN 423",
+      "gleise": 1
+    },
+    {
+      "name": "WRN 422",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRN 422",
+      "gleise": 1
+    },
+    {
+      "name": "WY",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WY"
+    },
+    {
+      "name": "WY",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WY",
+      "gleise": 1
+    },
+    {
+      "name": "WY",
+      "typ": "Gl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WY",
+      "gleise": 1
+    },
+    {
+      "name": "WANZ",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "RTW",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "SCHB",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "LGUT",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Solothurn",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "BDFS",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "KEBAG",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Stahl Gerlafingen",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Abstellgl",
+      "typ": "Anst",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WANZ 530",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WANZ",
+      "gleise": 1
+    },
+    {
+      "name": "WANZ 630",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WANZ",
+      "gleise": 1
+    },
+    {
+      "name": "RTW 475",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RTW",
+      "gleise": 1
+    },
+    {
+      "name": "RTW 375",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RTW",
+      "gleise": 1
+    },
+    {
+      "name": "SCHB 494",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCHB",
+      "gleise": 1
+    },
+    {
+      "name": "SCHB 394",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "SCHB",
+      "gleise": 1
+    },
+    {
+      "name": "LGUT 507",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LGUT",
+      "gleise": 1
+    },
+    {
+      "name": "LGUT 607",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "LGUT",
+      "gleise": 1
+    },
+    {
+      "name": "Solothurn",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Solothurn",
+      "gleise": 1
+    },
+    {
+      "name": "BDFS 222",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDFS",
+      "gleise": 1
+    },
+    {
+      "name": "BDFS 122",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDFS",
+      "gleise": 1
+    },
+    {
+      "name": "KEBAG",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KEBAG",
+      "gleise": 1
+    },
+    {
+      "name": "Stahl Gerlafingen",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Stahl Gerlafingen",
+      "gleise": 1
+    },
+    {
+      "name": "AEF 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AEF",
+      "gleise": 1
+    },
+    {
+      "name": "AEF 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "AEF",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF",
+      "gleise": 1
+    },
+    {
+      "name": "BDF 11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BDF",
+      "gleise": 1
+    },
+    {
+      "name": "BIST 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIST",
+      "gleise": 1
+    },
+    {
+      "name": "BIST 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIST",
+      "gleise": 1
+    },
+    {
+      "name": "BIST 51",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIST",
+      "gleise": 1
+    },
+    {
+      "name": "BIST 52",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "BIST",
+      "gleise": 1
+    },
+    {
+      "name": "GLF 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "GLF",
+      "gleise": 1
+    },
+    {
+      "name": "HBK 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBK",
+      "gleise": 1
+    },
+    {
+      "name": "HBK 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBK",
+      "gleise": 1
+    },
+    {
+      "name": "HBK 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBK",
+      "gleise": 1
+    },
+    {
+      "name": "KIAL 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KIAL",
+      "gleise": 1
+    },
+    {
+      "name": "KIAL 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "KIAL",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 392",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 713",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 513",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 492",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 613",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA",
+      "gleise": 1
+    },
+    {
+      "name": "MATA 813",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "MATA",
+      "gleise": 1
+    },
+    {
+      "name": "UT 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UT",
+      "gleise": 1
+    },
+    {
+      "name": "UT 1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "UT",
+      "gleise": 1
+    },
+    {
+      "name": "WR 3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WR",
+      "gleise": 1
+    },
+    {
+      "name": "WR 2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WR",
+      "gleise": 1
+    },
+    {
+      "name": "WRN 423",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRN",
+      "gleise": 1
+    },
+    {
+      "name": "WRN 422",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRN",
+      "gleise": 1
+    },
+    {
+      "name": "Abstellgl.",
+      "typ": "Agl",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Abstellgl",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "LGUT-RTW",
+      "haupt": true,
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst LGUT",
+        "Bf MATA",
+        "Bf HBK",
+        "Bf LYS",
+        "Bf BDF",
+        "Bf WY",
+        "Anst RTW"
+      ]
+    },
+    {
+      "name": "SCHB-RTW",
+      "haupt": false,
+      "ordnung": 4,
+      "auto": false,
+      "stationen": [
+        "Anst SCHB",
+        "Bf MATA",
+        "Bf HBK",
+        "Bf LYS",
+        "Bf BDF",
+        "Bf WY",
+        "Anst RTW"
+      ]
+    },
+    {
+      "name": "Solothurn-BDF",
+      "haupt": false,
+      "ordnung": 5,
+      "auto": false,
+      "stationen": [
+        "Anst Solothurn",
+        "Bf BIST",
+        "Bf GLF",
+        "Bf WR",
+        "Bf UT",
+        "Bf AEF",
+        "Bf KIAL",
+        "Bf BDFB",
+        "Bf BDF"
+      ]
+    },
+    {
+      "name": "BDFS-RTW",
+      "haupt": false,
+      "ordnung": 101,
+      "auto": true,
+      "stationen": [
+        "Anst BDFS",
+        "Bf BDF",
+        "Bf WY",
+        "Anst RTW"
+      ]
+    },
+    {
+      "name": "LGUT-WANZ",
+      "haupt": false,
+      "ordnung": 109,
+      "auto": true,
+      "stationen": [
+        "Anst LGUT",
+        "Bf MATA",
+        "Bf HERS",
+        "Anst WANZ"
+      ]
+    }
+  ],
+  "streckenmarkierung": [
+    {
+      "flags": "G",
+      "station1": "Bf BDF",
+      "station2": "Bf BDFB"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf BIST",
+      "station2": "Anst Solothurn"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf GLF",
+      "station2": "Bf WRN"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf WR",
+      "station2": "Bf UT"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf UT",
+      "station2": "Bf AEF"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf AEF",
+      "station2": "Bf KIAL"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf KIAL",
+      "station2": "Bf BDFB"
+    }
+  ],
+  "zugschema": "schweiz",
+  "_aid": 303,
+  "_build": 5851,
+  "_name": "Burgdorf",
+  "_region": "Bern - Lötschberg",
+  "_version": 3
 }

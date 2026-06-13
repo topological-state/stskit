@@ -252,7 +252,7 @@
         ]
     },
     "streckenmarkierung": [
-        ["RRW", "RBEL", "E"],
-        ["RBEL", "RSG", "E"]
+        ["RRW", "RBEL", "G"],
+        ["RBEL", "RSG", "G"]
     ]
 }

@@ -318,16 +318,16 @@
         ]
     },
     "streckenmarkierung": [
-        ["QUA", "MAG", "E"],
-        ["MAG", "SN", "E"],
-        ["SN", "GER", "E"],
-        ["GER", "RZO", "E"],
-        ["RZO", "PINC", "E"],
-        ["PINC", "PINT", "E"],
-        ["PINT", "Luino (I)", "E"],
-        ["GDA", "TEN", "E"],
-        ["TEN", "MINU", "E"],
-        ["MINU", "LO", "E"]
+        ["QUA", "MAG", "G"],
+        ["MAG", "SN", "G"],
+        ["SN", "GER", "G"],
+        ["GER", "RZO", "G"],
+        ["RZO", "PINC", "G"],
+        ["PINC", "PINT", "G"],
+        ["PINT", "Luino (I)", "G"],
+        ["GDA", "TEN", "G"],
+        ["TEN", "MINU", "G"],
+        ["MINU", "LO", "G"]
     ],
     "zugschema": "schweiz"
 }

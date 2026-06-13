@@ -217,10 +217,10 @@
         ]
     },
     "streckenmarkierung": [
-        ["HGO", "SBG", "E"],
-        ["SBG", "BAA", "E"],
-        ["ZG", "ZGO", "E"],
-        ["ZGO", "Walchwil", "E"]
+        ["HGO", "SBG", "G"],
+        ["SBG", "BAA", "G"],
+        ["ZG", "ZGO", "G"],
+        ["ZGO", "Walchwil", "G"]
     ]
 
 }

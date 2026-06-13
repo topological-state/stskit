@@ -1181,12 +1181,12 @@
   ],
   "streckenmarkierung": [
     {
-      "flags": "E",
+      "flags": "G",
       "station1": "Bf LEN",
       "station2": "Anst Grenchen Nord"
     },
     {
-      "flags": "E",
+      "flags": "G",
       "station1": "Bf LIG",
       "station2": "Bf TWN"
     }

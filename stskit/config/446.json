@@ -417,18 +417,18 @@
         ]
     },
     "streckenmarkierung": [
-    	["Mantova", "Bonferraro", "E"],
-    	["Bonferraro", "Nogara", "E"],
-    	["Nogara", "Sanguinetto", "E"],
-    	["Sanguinetto", "Cerea", "E"],
-    	["Legnago", "Villa Bartolomea", "E"],
-    	["Villa Bartolomea", "Castagnaro", "E"],
-    	["Castagnaro", "Rovigo", "E"],
-    	["Legnago", "Boschi S.Anna", "E"],
-    	["Boschi S.Anna", "Bevilacqua", "E"],
-    	["Bevilacqua", "Monselice", "E"],
-    	["Isola della Scala", "Bovolone", "E"],
-    	["Bovolone", "Cerea", "E"]
+    	["Mantova", "Bonferraro", "G"],
+    	["Bonferraro", "Nogara", "G"],
+    	["Nogara", "Sanguinetto", "G"],
+    	["Sanguinetto", "Cerea", "G"],
+    	["Legnago", "Villa Bartolomea", "G"],
+    	["Villa Bartolomea", "Castagnaro", "G"],
+    	["Castagnaro", "Rovigo", "G"],
+    	["Legnago", "Boschi S.Anna", "G"],
+    	["Boschi S.Anna", "Bevilacqua", "G"],
+    	["Bevilacqua", "Monselice", "G"],
+    	["Isola della Scala", "Bovolone", "G"],
+    	["Bovolone", "Cerea", "G"]
     ],
     "zugschema": "italien"
 }

@@ -865,12 +865,12 @@
     }
   ],
   "streckenmarkierung": [
-    {"station1": "Bf HERL", "station2": "Bf ML", "flags": "E"},
-    {"station1": "Bf UET", "station2": "Bf MAEN", "flags": "E"},
-    {"station1": "Bf MAEN", "station2": "Bf STAE", "flags": "E"},
-    {"station1": "Bf UER", "station2": "Bf FB", "flags": "E"},
-    {"station1": "Bf FB", "station2": "Bf KPT", "flags": "E"},
-    {"station1": "Bf KPT", "station2": "Anst Rapperswil", "flags": "E"}
+    {"station1": "Bf HERL", "station2": "Bf ML", "flags": "G"},
+    {"station1": "Bf UET", "station2": "Bf MAEN", "flags": "G"},
+    {"station1": "Bf MAEN", "station2": "Bf STAE", "flags": "G"},
+    {"station1": "Bf UER", "station2": "Bf FB", "flags": "G"},
+    {"station1": "Bf FB", "station2": "Bf KPT", "flags": "G"},
+    {"station1": "Bf KPT", "station2": "Anst Rapperswil", "flags": "G"}
   ],
   "zugschema": "schweiz",
   "_aid": 448,

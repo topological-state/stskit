@@ -1603,32 +1603,32 @@
   ],
   "streckenmarkierung": [
     {
-      "flags": "E",
+      "flags": "G",
       "station1": "Bf KRB",
       "station2": "Bf LENG"
     },
     {
-      "flags": "E",
+      "flags": "G",
       "station1": "Bf LENG",
       "station2": "Bf SHAU"
     },
     {
-      "flags": "E",
+      "flags": "G",
       "station1": "Bf GUET",
       "station2": "Bf KWL"
     },
     {
-      "flags": "E",
+      "flags": "G",
       "station1": "Bf UTW",
       "station2": "Bf KWL"
     },
     {
-      "flags": "E",
+      "flags": "G",
       "station1": "Bf UTW",
       "station2": "Bf A UTW"
     },
     {
-      "flags": "E",
+      "flags": "G",
       "station1": "Anst Romanshorn",
       "station2": "Bf A UTW"
     }

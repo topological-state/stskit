@@ -315,10 +315,10 @@
         ]
     },
     "streckenmarkierung": [
-        ["Suzzara", "Schivenoglia", "E"],
-        ["Schivenoglia", "Poggio", "E"],
-        ["Poggio", "Magnacavallo", "E"],
-        ["Magnacavallo", "Ferrara", "E"]
+        ["Suzzara", "Schivenoglia", "G"],
+        ["Schivenoglia", "Poggio", "G"],
+        ["Poggio", "Magnacavallo", "G"],
+        ["Magnacavallo", "Ferrara", "G"]
     ],
     "zugschema": "italien"
 }
