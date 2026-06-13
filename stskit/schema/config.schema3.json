@@ -158,7 +158,7 @@
                     },
                     "flags": {
                         "type": "string",
-                        "description": "Streckenmarkierung: E = nicht elektrifiziert, G = eingleisige Strecke, H = Einschränkungen für Gefahrgüter, O = Einschränkungen für Sonderzugskategorien."
+                        "description": "Beschränkung: E = Elektrifizierung, G = Gleiszahl, H = Gefahrgüter, O = Sonderprofil. Max. ein Flag erlaubt."
                     }
                 },
                 "required": ["station1", "station2"]
