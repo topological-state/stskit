@@ -300,7 +300,7 @@ class LinienGraph(nx.Graph):
                 self.edges[station1, station2]['markierung'] = markierung
                 self.edges[station1, station2]['fahrzeit_manuell'] = fahrzeit
             else:
-                logger.warning(f"Streckenmarkierungszwischen {station1} und {station2} konnte nicht zugeordnet werden.")
+                logger.warning(f"Streckenmarkierung zwischen {station1} und {station2} konnte nicht zugeordnet werden.")
 
 
     def export_konfiguration(self) -> Sequence[Dict[str, Union[str, int, float, bool]]]:
