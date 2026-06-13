@@ -320,6 +320,7 @@ class LinienGraph(nx.Graph):
             if d:
                 d['station1'] = str(e1)
                 d['station2'] = str(e2)
+                d['flags'] = m
                 result.append(d)
 
         return result
