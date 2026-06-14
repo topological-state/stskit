@@ -68,6 +68,8 @@ nav = [
         {"Anleitungen" = [
             "de/dispo.md",
             "de/einstellungen.md",
+            "de/bahnhofdefinition.md",
+            "de/streckendefinition.md",
         ]},
         "de/faq.md",
         "de/glossar.md",
