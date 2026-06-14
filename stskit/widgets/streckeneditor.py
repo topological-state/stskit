@@ -1070,7 +1070,7 @@ class StreckenEditor(QObject):
     def strecken_hoch_button_clicked(self):
         try:
             src_indexes = self.ui.strecken_auswahl_list.selectedIndexes()
-            src_rows = sorted((index.row() for index in src_indexes))
+            src_rows = sorted({index.row() for index in src_indexes})
             move_items = [self.auswahl_model.rows[row] for row in src_rows]
             dst_row = min(src_rows) - 1
             if dst_row < 0:
@@ -1085,7 +1085,7 @@ class StreckenEditor(QObject):
     def strecken_runter_button_clicked(self):
         try:
             src_indexes = self.ui.strecken_auswahl_list.selectedIndexes()
-            src_rows = sorted((index.row() for index in src_indexes), reverse=True)
+            src_rows = sorted({index.row() for index in src_indexes}, reverse=True)
             move_items = [self.auswahl_model.rows[row] for row in src_rows]
             dst_row = max(src_rows) + 2
             if dst_row > self.auswahl_model.rowCount():
