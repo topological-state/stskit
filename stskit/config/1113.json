@@ -1436,7 +1436,50 @@
       ]
     }
   ],
-  "streckenmarkierung": [],
+  "streckenmarkierung": [
+    {
+      "flags": "G",
+      "fahrzeit": 2.0,
+      "station1": "Bf Fch Z1",
+      "station2": "Anst Landeck-Zams"
+    },
+    {
+      "flags": "None",
+      "station1": "Bf Fch U2",
+      "station2": "Bf Ao"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Lan Z1",
+      "station2": "Bf Waa"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Waa",
+      "station2": "Bf Da"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Da",
+      "station2": "Bf Hin"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Hin",
+      "station2": "Bf Bz"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Bz",
+      "station2": "Bf EA B"
+    },
+    {
+      "flags": "G",
+      "fahrzeit": 1.0,
+      "station1": "Bf EA B",
+      "station2": "Anst Bludenz/Feldkirch"
+    }
+  ],
   "zugschema": "deutschland",
   "_version": 3
 }

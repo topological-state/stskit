@@ -2147,7 +2147,53 @@
       ]
     }
   ],
-  "streckenmarkierung": [],
+  "streckenmarkierung": [
+    {
+      "flags": "G",
+      "station1": "Bf EA Ao",
+      "station2": "Bf Fch"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf EA Ao",
+      "station2": "Anst St. Anton am Arlberg"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Fch",
+      "station2": "Bf Sen"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Sen",
+      "station2": "Bf Pi"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Pi",
+      "station2": "Bf Le"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Ss",
+      "station2": "Bf Im H1"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Im H1",
+      "station2": "Bf Im"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Im",
+      "station2": "Bf Rop"
+    },
+    {
+      "flags": "G",
+      "station1": "Bf Rop",
+      "station2": "Anst Ötztal"
+    }
+  ],
   "zugschema": "deutschland",
   "_aid": 1111,
   "_build": 5851,

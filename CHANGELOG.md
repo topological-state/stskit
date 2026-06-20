@@ -1,5 +1,38 @@
 # Changelog
 
+## 2.3.0
+
+### Features
+
+- Streckenmarkierung bearbeiten (im Einstellungsfenster) 
+- Streckenfahrzeiten bearbeiten (im Einstellungsfenster)
+
+### Behobene Fehler
+
+- Manuelle Aenderungen and Fahrzeiten und Streckenmarkierungen in Konfigurationsdateien wurden vom Programm nicht beachtet und u.U. überschrieben.
+- Fahrzeiten in Dezimalnotation in Konfigurationsdateien sind nun erlaubt.
+- "Verbindung X-Y nicht im Liniengraph" (aus Logfile)
+
+### Kompatibilität
+
+- Aenderungen am Konfigurationsschema:
+  - Streckenmarkierungen haben neue Flags in den Konfigurationsdatein.
+    Bisherige Markierungen werden mit der falschen Farbe dargestellt.
+
+### Ungelöste Probleme
+
+- Die automatische Erstellung von Strecken wird durch dieses Update weniger zuverlässig.
+    Bis zur Lösung des Problems müssen die Strecken manuell bearbeitet werden.
+
+### Beispielkonfigurationen
+
+- Skandinavien: Kastrup, Storebaelt
+- Oesterreich: St. Anton am Arlberg
+- Schweiz: Lötschberg-Simplon, Klosters
+
+- Ergänzung Zuggattungen Deutschland/Österreich: VBG, DNR
+
+
 ## 2.2.0
 
 ### Features
