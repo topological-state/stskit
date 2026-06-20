@@ -4,12 +4,19 @@
 
 Matthias Muntwiler (topological-state)
 
-## Configuration Files
+## Contributors
+
+### Program Code
+
+- Tobias B aka TheMinefighter
+
+### Configuration Files
 
 - Eisenbahnfan2015
 - JanMalte
 - Pianorailways
 - SyselMitY
+- Tobias B aka TheMinefighter
 - wittjoker
 
 

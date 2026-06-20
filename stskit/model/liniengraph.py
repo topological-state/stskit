@@ -244,8 +244,8 @@ class LinienGraph(nx.Graph):
 
         return strecken
 
-    def strecken_zeitachse(self, 
-                           strecke: Sequence[BahnhofElement], 
+    def strecken_zeitachse(self,
+                           strecke: Sequence[BahnhofElement],
                            metrik: str = 'fahrzeit_min',
                            ) -> Sequence[int | float]:
         """
@@ -270,14 +270,8 @@ class LinienGraph(nx.Graph):
         """
 
         kanten = zip(strecke[:-1], strecke[1:])
-        integrierte_distanz = 0.
-        result = [integrierte_distanz]
-        for kante in kanten:
-            u, v = kante
-            integrierte_distanz += self.distanz(u, v, metrik)
-            result.append(integrierte_distanz)
-
-        return result
+        distanzen = [self.distanz(u, v, metrik) for u, v in kanten]
+        return list(itertools.accumulate(distanzen, initial=0))
 
     def distanz(self, u: BahnhofElement, v: BahnhofElement, metrik: str) -> Any:
         """
@@ -323,6 +317,8 @@ class LinienGraph(nx.Graph):
                     self.edges[station1, station2]['markierung'] = markierung
                 if fahrzeit > 0:
                     self.edges[station1, station2]['fahrzeit_manuell'] = fahrzeit
+            else:
+                logger.warning(f"Streckenmarkierung zwischen {station1} und {station2} konnte nicht zugeordnet werden.")
 
     def export_konfiguration(self) -> Sequence[dict[str, str | int | float | bool]]:
         """
@@ -491,7 +487,7 @@ class Strecken:
         haupt: dict[str, bool] = {}
         ordnung: dict[str, int] = {}
         auto: dict[str, bool] = {}
-        
+
         for strecke_kfg in strecken_konfig:
             strecke: list[BahnhofElement] = []
             for station in strecke_kfg['stationen']:
