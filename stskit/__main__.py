@@ -33,7 +33,7 @@ from stskit.widgets.anschlussmatrix import AnschlussmatrixWindow
 from stskit.widgets.einstellungen import EinstellungenWindow
 from stskit.widgets.gleisbelegung import GleisbelegungWindow
 from stskit.widgets.gleisnetz import GleisnetzWindow
-from stskit.widgets.qticker import TickerWindow
+from stskit.widgets.ticker import TickerWindow
 from stskit.widgets.fahrplan import FahrplanWindow
 from stskit.widgets.rangierplan import RangierplanWindow
 from stskit.widgets.bildfahrplan import BildFahrplanWindow

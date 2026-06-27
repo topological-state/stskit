@@ -1,5 +1,11 @@
 # Changelog
 
+## Nächstes Release
+
+### Features
+
+- Sortieren und Filtern im Ereignisticker
+
 ## 2.3.0
 
 ### Features
