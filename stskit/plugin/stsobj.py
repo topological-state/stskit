@@ -368,9 +368,9 @@ class ZugDetails:
         verspaetung: Verspätung (oder Verfrühung, wenn negativ) in Minuten
         sichtbar: Zug ist im Stellwerk.
         gleis: Nächstes, disponiertes Zielgleis.
-            Umgeleitete und ausfahrende Züge haben kein Zielgleis.
+            Leerstring bei umgeleiteten und ausfahrenden Zügen.
         plangleis: Nächstes Zielgleis nach Fahrplan.
-            Umgeleitete und ausfahrende Züge haben kein Plangleis.
+            Leerstring bei umgeleiteten und ausfahrenden Zügen.
         amgleis: Zug steht am Gleis `gleis`.
         hinweistext:
         usertext:
@@ -447,15 +447,15 @@ class ZugDetails:
         Returns:
             self
         """
+
         self.zid = int(zugdetails['zid'])
         self.name = str(zugdetails['name']).strip()
         try:
             self.verspaetung = int(zugdetails['verspaetung'])
         except TypeError:
             pass
-        # todo: ausfahrende Züge haben kein gleis und plangleis. umgeleitete auch nicht.
-        self.gleis = str(zugdetails['gleis']).strip() or self.gleis
-        self.plangleis = str(zugdetails['plangleis']).strip() or self.plangleis
+        self.gleis = str(zugdetails['gleis'] or "").strip() or self.gleis
+        self.plangleis = str(zugdetails['plangleis'] or "").strip() or self.plangleis
         self.von = str(zugdetails['von']).strip()
         self.nach = str(zugdetails['nach']).strip()
         self.sichtbar = str(zugdetails['sichtbar']).lower() == 'true'
