@@ -15,6 +15,7 @@ Die update-Methoden erwarten geparste xml-Daten in einem untangle.Element-Objekt
 from __future__ import annotations
 from collections.abc import Iterable, Mapping, Generator
 import datetime
+from enum import IntEnum
 import logging
 import networkx as nx
 import numpy as np
@@ -280,28 +281,44 @@ class Knoten:
     # xml-tagname
     tag = 'shape'
 
-    TYP_NAME = {2: "Signal",
-                3: "Weiche unten",
-                4: "Weiche oben",
-                5: "Bahnsteig",
-                6: "Einfahrt",
-                7: "Ausfahrt",
-                12: "Haltepunkt"}
+    class Typ(IntEnum):
+        UNDEFINIERT = 0
+        SIGNAL = 2
+        WEICHE_UNTEN = 3
+        WEICHE_OBEN = 4
+        BAHNSTEIG = 5
+        EINFAHRT = 6
+        AUSFAHRT = 7
+        HALTEPUNKT = 12
 
-    TYP_NUMMER = {"Signal": 2,
-                  "Weiche unten": 3,
-                  "Weiche oben": 4,
-                  "Bahnsteig": 5,
-                  "Einfahrt": 6,
-                  "Ausfahrt": 7,
-                  "Haltepunkt": 12}
+    TYP_NAME: dict[Typ, str] = {
+        Typ.UNDEFINIERT: "Undefiniert",
+        Typ.SIGNAL: "Signal",
+        Typ.WEICHE_UNTEN: "Weiche unten",
+        Typ.WEICHE_OBEN: "Weiche oben",
+        Typ.BAHNSTEIG: "Bahnsteig",
+        Typ.EINFAHRT: "Einfahrt",
+        Typ.AUSFAHRT: "Ausfahrt",
+        Typ.HALTEPUNKT: "Haltepunkt",
+    }
+
+    TYP_NUMMER: dict[str, Typ] = {
+        "Undefiniert": Typ.UNDEFINIERT,
+        "Signal": Typ.SIGNAL,
+        "Weiche unten": Typ.WEICHE_UNTEN,
+        "Weiche oben": Typ.WEICHE_OBEN,
+        "Bahnsteig": Typ.BAHNSTEIG,
+        "Einfahrt": Typ.EINFAHRT,
+        "Ausfahrt": Typ.AUSFAHRT,
+        "Haltepunkt": Typ.HALTEPUNKT,
+    }
 
     def __init__(self):
         super().__init__()
         self.key: int | str | None = None
         self.enr: int | None = None
         self.name: str | None = None
-        self.typ: int = 0
+        self.typ: Knoten.Typ = Knoten.Typ.UNDEFINIERT
         self.nachbarn: weakref.WeakValueDictionary[int | str, Knoten] = weakref.WeakValueDictionary()
         self.zuege: weakref.WeakValueDictionary[int, ZugDetails] = weakref.WeakValueDictionary()
 
@@ -337,9 +354,9 @@ class Knoten:
         except TypeError:
             self.name = None
         try:
-            self.typ = int(shape['type'])
-        except TypeError:
-            self.typ = 0
+            self.typ = Knoten.Typ(int(shape['type']))
+        except (TypeError, ValueError):
+            self.typ = Knoten.Typ.UNDEFINIERT
         if self.enr is not None:
             self.key = self.enr
         else:

@@ -667,7 +667,7 @@ class BahnhofGraph(nx.DiGraph):
 
         agl_gleise = {}
         for anschluss, data in signalgraph.nodes(data=True):
-            if data.typ in {Knoten.TYP_NUMMER['Einfahrt'], Knoten.TYP_NUMMER['Ausfahrt']}:
+            if data.typ in {Knoten.Typ.EINFAHRT, Knoten.Typ.AUSFAHRT}:
                 agl = data.name
                 agl_label = BahnhofLabelType('Agl', agl)
                 try:
@@ -676,12 +676,12 @@ class BahnhofGraph(nx.DiGraph):
                     agl_data = BahnsteigGraphNode(name=agl, typ='Agl', enr=data.enr, gleise=0, auto=True)
                     agl_gleise[agl_label] = 0.
 
-                if data['typ'] == Knoten.TYP_NUMMER['Einfahrt']:
-                    agl_data['einfahrt'] = True
+                if data.typ == Knoten.Typ.EINFAHRT:
+                    agl_data.einfahrt = True
                     if agl_label in agl_gleise:
                         agl_gleise[agl_label] += 0.5
-                if data['typ'] == Knoten.TYP_NUMMER['Ausfahrt']:
-                    agl_data['ausfahrt'] = True
+                if data.typ == Knoten.Typ.AUSFAHRT:
+                    agl_data.ausfahrt = True
                     if agl_label in agl_gleise:
                         agl_gleise[agl_label] += 0.5
 

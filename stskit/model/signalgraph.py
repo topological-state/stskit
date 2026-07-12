@@ -13,7 +13,7 @@ logger.addHandler(logging.NullHandler())
 class SignalGraphNode(dict):
     enr = dict_property("enr", int, docstring="Elementnummer")
     name = dict_property("name", str, docstring="Elementname")
-    typ = dict_property("typ", int, docstring="Elementtyp, s. stsobj.Knoten.TYP_NUMMER")
+    typ = dict_property("typ", Knoten.Typ, docstring="Elementtyp")
 
 
 class SignalGraphEdge(dict):
@@ -69,8 +69,8 @@ class SignalGraph(nx.DiGraph):
                     self.add_edge(knoten1.key, knoten2.key, typ='verbindung', distanz=1)
 
         entfernen = set()
-        for knoten1, typ in self.nodes(data='typ', default='kein'):
-            if typ == 'kein':
+        for knoten1, data1 in self.nodes(data=True):
+            if data1.typ == Knoten.Typ.UNDEFINIERT:
                 logger.error(f"_signalgraph_erstellen: Knoten {knoten1} hat keinen Typ.")
                 entfernen.add(knoten1)
         for knoten1 in entfernen:
@@ -109,7 +109,7 @@ def graph_weichen_ersetzen(g: nx.Graph) -> nx.Graph:
     :return: graph g mit ersetzten weichen
     """
     weichen = {n for n, _d in g.nodes.items()
-               if _d.get('typ', None) in {Knoten.TYP_NUMMER['Weiche unten'], Knoten.TYP_NUMMER['Weiche oben']}}
+               if _d.get('typ', None) in {Knoten.Typ.WEICHE_OBEN, Knoten.Typ.WEICHE_UNTEN}}
     for w in weichen:
         for v in g[w]:
             # w wird entfernt
@@ -131,13 +131,13 @@ def graph_anschluesse_pruefen(g: nx.Graph) -> nx.Graph:
     :return: graph g mit geänderten anschlüssen
     """
     anschl = {n for n, _d in g.nodes.items()
-              if _d.get('typ', None) in {Knoten.TYP_NUMMER['Einfahrt'], Knoten.TYP_NUMMER['Ausfahrt']}}
+              if _d.get('typ', None) in {Knoten.Typ.EINFAHRT, Knoten.Typ.AUSFAHRT}}
     for a in anschl:
         edges_to_remove = []
         signal_gefunden = False
         nbr = [n for n in g[a]]
         for n in nbr:
-            if g.nodes[n]['typ'] == Knoten.TYP_NUMMER['Signal']:
+            if g.nodes[n]['typ'] == Knoten.Typ.SIGNAL:
                 signal_gefunden = True
             else:
                 edges_to_remove.append((a, n))
@@ -160,11 +160,11 @@ def graph_bahnsteigsignale_ersetzen(g: nx.Graph) -> nx.Graph:
     :return: graph g mit ersetzten weichen
     """
     bahnsteige = {n for n, _d in g.nodes.items() if _d.get('typ', None)
-                  in {Knoten.TYP_NUMMER['Bahnsteig'], Knoten.TYP_NUMMER['Haltepunkt']}}
+                  in {Knoten.Typ.BAHNSTEIG, Knoten.Typ.HALTEPUNKT}}
     for b in bahnsteige:
         nbr = [n for n in g[b]]
         for v in nbr:
-            if g.nodes[v]['typ'] == Knoten.TYP_NUMMER['Signal']:
+            if g.nodes[v]['typ'] == Knoten.Typ.SIGNAL:
                 g = nx.contracted_nodes(g, b, v, self_loops=False, copy=False)
 
     return g
@@ -181,10 +181,10 @@ def graph_signalpaare_ersetzen(g: nx.Graph) -> nx.Graph:
     """
     while True:
         signale = {n for n, _d in g.nodes.items()
-                   if _d.get('typ', None) == Knoten.TYP_NUMMER['Signal']}
+                   if _d.get('typ', None) == Knoten.Typ.SIGNAL}
         for s1 in signale:
             for s2 in g[s1]:
-                if g.nodes[s2]['typ'] == Knoten.TYP_NUMMER['Signal']:
+                if g.nodes[s2]['typ'] == Knoten.Typ.SIGNAL:
                     g = nx.contracted_nodes(g, s1, s2, self_loops=False, copy=False)
                     signale.remove(s2)
                     break
@@ -205,11 +205,11 @@ def graph_zwischensignale_entfernen(g: nx.Graph) -> nx.Graph:
     :return: graph g mit entfernten signalen
     """
     signale = {n for n, _d in g.nodes.items()
-               if _d.get('typ', None) == Knoten.TYP_NUMMER['Signal']}
+               if _d.get('typ', None) == Knoten.Typ.SIGNAL}
     while signale:
         s1 = signale.pop()
         for s2 in g[s1]:
-            if g.nodes[s2]['typ'] in {Knoten.TYP_NUMMER['Bahnsteig'], Knoten.TYP_NUMMER['Haltepunkt']}:
+            if g.nodes[s2]['typ'] in {Knoten.Typ.BAHNSTEIG, Knoten.Typ.HALTEPUNKT}:
                 g = nx.contracted_nodes(g, s2, s1, self_loops=False, copy=False)
                 break
 
@@ -240,7 +240,7 @@ def graph_schleifen_aufloesen(g: nx.Graph) -> nx.Graph:
         dmin = len(c)
         nmin = None
         for n in c:
-            if g.nodes[n]['typ'] in {Knoten.TYP_NUMMER['Einfahrt'], Knoten.TYP_NUMMER['Ausfahrt']}:
+            if g.nodes[n]['typ'] in {Knoten.Typ.EINFAHRT, Knoten.Typ.AUSFAHRT}:
                 d = len(c)
             else:
                 d = degrees[n]

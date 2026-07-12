@@ -153,8 +153,8 @@ class PluginClient:
         self.wege: dict[int | str, Knoten] = {}
         self.wege_nach_enr: dict[int, Knoten] = {}
         self.wege_nach_namen: dict[str, set[Knoten]] = {}
-        self.wege_nach_typ: dict[int, set[Knoten]] = {}
-        self.wege_nach_typ_namen: dict[int, dict[str, Knoten]] = {}
+        self.wege_nach_typ: dict[Knoten.Typ, set[Knoten]] = {}
+        self.wege_nach_typ_namen: dict[Knoten.Typ, dict[str, Knoten]] = {}
         self.wege_verbindungen: set[tuple[int | str, int | str]] = set()
         self.fehlende_wege_knoten: set[int | str] = set()
         self.fehlende_wege_kanten: set[tuple[int | str, int | str]] = set()
@@ -443,8 +443,8 @@ class PluginClient:
         self.wege = {}
         self.wege_nach_enr = {}
         self.wege_nach_namen = {}
-        self.wege_nach_typ = {typ: set([]) for typ in Knoten.TYP_NAME}
-        self.wege_nach_typ_namen = {typ: {} for typ in Knoten.TYP_NAME}
+        self.wege_nach_typ = {typ: set([]) for typ in Knoten.Typ}
+        self.wege_nach_typ_namen = {typ: {} for typ in Knoten.Typ}
         self.fehlende_wege_knoten = set()
         self.fehlende_wege_kanten = set()
 
@@ -465,7 +465,8 @@ class PluginClient:
                 except KeyError:
                     self.wege_nach_typ[knoten.typ] = {knoten}
                 try:
-                    self.wege_nach_typ_namen[knoten.typ][knoten.name] = knoten
+                    if knoten.name:
+                        self.wege_nach_typ_namen[knoten.typ][knoten.name] = knoten
                 except KeyError:
                     pass
 

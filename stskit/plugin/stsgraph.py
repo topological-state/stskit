@@ -132,7 +132,7 @@ class GraphClient(PluginClient):
 
     def _anschluesse_gruppieren(self):
         for anschluss, data in self.signalgraph.nodes(data=True):
-            if data['typ'] in {Knoten.TYP_NUMMER['Einfahrt'], Knoten.TYP_NUMMER['Ausfahrt']}:
+            if data['typ'] in {Knoten.Typ.EINFAHRT, Knoten.Typ.AUSFAHRT}:
                 self.anschlussgruppen[anschluss] = data['name']
 
     def _zuggraph_erstellen(self, clean=False):
@@ -182,10 +182,10 @@ class GraphClient(PluginClient):
             self._zielgraph_update_zug(zug)
 
     def _zielgraph_update_zug(self, zug):
-        einfahrt = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Einfahrt']].get(zug.von, None) or \
-                   self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Ausfahrt']].get(zug.von, None)
-        ausfahrt = self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Ausfahrt']].get(zug.nach, None) or \
-                   self.wege_nach_typ_namen[Knoten.TYP_NUMMER['Einfahrt']].get(zug.nach, None)
+        einfahrt = self.wege_nach_typ_namen[Knoten.Typ.EINFAHRT].get(zug.von, None) or \
+                   self.wege_nach_typ_namen[Knoten.Typ.AUSFAHRT].get(zug.von, None)
+        ausfahrt = self.wege_nach_typ_namen[Knoten.Typ.AUSFAHRT].get(zug.nach, None) or \
+                   self.wege_nach_typ_namen[Knoten.Typ.EINFAHRT].get(zug.nach, None)
         links = self.zielgraph.zug_details_importieren(zug, einfahrt, ausfahrt, None)
         for link in links:
             self.zuggraph.zuege_verknuepfen(link[0], link[1], link[2])
