@@ -149,8 +149,6 @@ class EreignisTabelleModell(QAbstractTableModel):
         if role == QtCore.Qt.ItemDataRole.DisplayRole:
             if orientation == QtCore.Qt.Orientation.Horizontal:
                 return str(self._column_titles[self._columns[section]])
-            if orientation == QtCore.Qt.Orientation.Vertical:
-                return section
 
         return None
 
