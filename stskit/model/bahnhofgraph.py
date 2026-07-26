@@ -1,3 +1,4 @@
+from enum import StrEnum
 import logging
 import sys
 from typing import Any, Callable, Dict, Generator, Iterable, List, NamedTuple, Optional, Sequence, Set, Tuple, TypeVar, Union
@@ -12,10 +13,6 @@ from stskit.model.signalgraph import SignalGraph
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
-
-# todo : consider refactoring to StrEnum
-BAHNHOFELEMENT_TYPEN = {'Gl', 'Bs', 'Bft', 'Bf', 'Agl', 'Anst', 'Bst', 'Stw'}
-BAHNHOFELEMENT_HIERARCHIE = {'Gl': 'Bs', 'Bs': 'Bft', 'Bft': 'Bf', 'Bf': 'Bst', 'Agl': 'Anst', 'Anst': 'Bst', 'Bst': 'Stw'}
 
 BAHNHOFELEMENT_BESCHREIBUNG = {'Gl': 'Gleis',
                                'Bs': 'Bahnsteig',
@@ -42,9 +39,41 @@ class BahnhofElement(NamedTuple):
         typ: Bahnhofelementtyp. Stringliteral aus `BAHNHOFELEMENT_TYPEN`.
         name: Bahnhofelementname. Name des Elements gemäss Simulator.
     """
-    typ: str
+    
+    class Typ(StrEnum):
+        GL = "Gl" 
+        BS = "Bs" 
+        BFT = "Bft" 
+        BF = "Bf"
+        AGL = "Agl" 
+        ANST = "Anst" 
+        BST = "Bst"
+        STW = "Stw"
+
+    typ: Typ
     name: str
 
+    hierarchie: dict[Typ, Typ] = {
+        Typ.GL: Typ.BS, 
+        Typ.BS: Typ.BFT, 
+        Typ.BFT: Typ.BF, 
+        Typ.BF: Typ.BST,
+        Typ.AGL: Typ.ANST, 
+        Typ.ANST: Typ.BST, 
+        Typ.BST: Typ.STW,
+    }
+
+    beschreibung: dict[Typ, str] = {
+        Typ.GL: "Gleis",
+        Typ.BS: "Bahnsteig",
+        Typ.BFT: "Bahnhofteil",
+        Typ.BF: "Bahnhof",
+        Typ.AGL: "Anschlussgleis",
+        Typ.ANST: "Anschlussstelle",
+        Typ.BST: "Betriebsstelle",
+        Typ.STW: "Stellwerk",
+    }
+    
     def __str__(self):
         """
         Benutzerfreundliche Bezeichnung, wird im UI verwendet.
@@ -62,11 +91,13 @@ class BahnhofElement(NamedTuple):
         """
 
         typ, name = s.split(" ", 1)
-        if typ not in BAHNHOFELEMENT_TYPEN:
+        try:
+            typ_enum = cls.Typ(typ)
+        except ValueError:
             raise ValueError(f"Unbekannter Bahnhofelementtyp {typ} in {s}")
         if not name:
             raise ValueError(f"Undefinierter Bahnhofelementname {name} in {s}")
-        return BahnhofElement(typ, name)
+        return BahnhofElement(typ_enum, name)
 
 
 class BahnsteigGraphNode(dict):
@@ -231,7 +262,10 @@ class BahnhofGraph(nx.DiGraph):
         else:
             raise KeyError('Bahnhofgraph enthält kein Anlagenelement.')
 
-    def find_superior(self, label: BahnhofLabelType, typen: Set[str]) -> BahnhofLabelType:
+    def find_superior(self,
+                      label: BahnhofElement,
+                      typen: Set[BahnhofElement.Typ],
+                      ) -> BahnhofElement:
         """
         Übergeordnetes Element suchen.
 
@@ -323,7 +357,9 @@ class BahnhofGraph(nx.DiGraph):
             logger.exception(e)
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
-    def list_siblings(self, label: BahnhofLabelType) -> Generator[BahnhofLabelType, None, None]:
+    def list_siblings(self,
+                      label: BahnhofElement,
+                      ) -> Generator[BahnhofElement, None, None]:
         """
         Listet die Geschwisterelemente eines Bahnhofelements auf.
 
