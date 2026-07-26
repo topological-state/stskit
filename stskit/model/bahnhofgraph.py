@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
+# todo : consider refactoring to StrEnum
 BAHNHOFELEMENT_TYPEN = {'Gl', 'Bs', 'Bft', 'Bf', 'Agl', 'Anst', 'Bst', 'Stw'}
 BAHNHOFELEMENT_HIERARCHIE = {'Gl': 'Bs', 'Bs': 'Bft', 'Bft': 'Bf', 'Bf': 'Bst', 'Agl': 'Anst', 'Anst': 'Bst', 'Bst': 'Stw'}
 
@@ -36,6 +37,10 @@ class BahnhofElement(NamedTuple):
     Eine Bahnhofelementbezeichnung enthält den Typ und den Namen des Elements,
     die auch als Property im BahnsteigGraphNode vorkommen.
     Typ und Namen werden verwendet, weil Anschlussgleise und Bahnhofgleise den gleichen Namen tragen können.
+    
+    Attributes:
+        typ: Bahnhofelementtyp. Stringliteral aus `BAHNHOFELEMENT_TYPEN`.
+        name: Bahnhofelementname. Name des Elements gemäss Simulator.
     """
     typ: str
     name: str
@@ -51,8 +56,9 @@ class BahnhofElement(NamedTuple):
         """
         Bahnhofelement aus Stringdarstellung
 
-        :raises: ValueError bei fehlerhaftem Format oder unbekanntem Elementtyp.
-            Ueberprueft nicht, ob das Bahnhofelement in der Anlage existiert.
+        Raises: 
+            ValueError: Fehlerhaftes Format oder unbekannter Elementtyp.
+                Überprüft nicht, ob das Bahnhofelement in der Anlage existiert.
         """
 
         typ, name = s.split(" ", 1)
@@ -140,8 +146,8 @@ class BahnsteigGraph(nx.Graph):
         """
         Bahnsteiggraph aus Plugindaten erstellen.
 
-        :param bahnsteige: Iterable von stsobj.BahnsteigInfo vom PluginClient
-        :return: None
+        Args:
+            bahnsteige: Iterable von stsobj.BahnsteigInfo vom PluginClient
         """
 
         self.clear()
@@ -167,10 +173,8 @@ class BahnhofGraph(nx.DiGraph):
     Der Graph ist gerichtet, die Kanten zeigen von Bahnhöfen zu Gleisen.
     Die ungerichtete Variante ist der BahnsteigGraph.
 
-    Attribute
-    ---------
-
-    ziel_gleis: Ordnet jedem Gleisnamen und jeder Anschlussnummer das entsprechende Graphlabel zu.
+    Attributes:
+        ziel_gleis: Ordnet jedem Gleisnamen und jeder Anschlussnummer das entsprechende Graphlabel zu.
     """
 
     node_attr_dict_factory = BahnsteigGraphNode
@@ -190,7 +194,7 @@ class BahnhofGraph(nx.DiGraph):
     @staticmethod
     def label(typ: str, name: str) -> BahnhofLabelType:
         """
-        Das Label Besteht aus Typ und Name des BahnsteigGraphNode.
+        Das Label besteht aus Typ und Namen des BahnsteigGraphNode.
         """
         return BahnhofLabelType(typ, name)
 
@@ -200,7 +204,8 @@ class BahnhofGraph(nx.DiGraph):
 
         Der höchste Knoten ist das Stellwerk.
 
-        :return: Label ('Stw', Stellwerkname)
+        Returns:
+            Label `('Stw', Stellwerkname)`
         """
         for node in self.nodes():
             if node.typ == 'Stw':
@@ -210,12 +215,17 @@ class BahnhofGraph(nx.DiGraph):
 
     def find_superior(self, label: BahnhofLabelType, typen: Set[str]) -> BahnhofLabelType:
         """
-        Übergeordnetes Element suchen
+        Übergeordnetes Element suchen.
 
-        :param label: Label des Ausgangselements
-        :param typen: Set von Elementtypen, z.B. {'Anst', 'Bf'}
-        :return: Label des gefundenen Elements
-        :raise: KeyError, wenn nicht gefunden
+        Args:
+            label: Label des Ausgangselements.
+            typen: Set von Elementtypen, z.B. {'Anst', 'Bf'}.
+
+        Returns:
+            Label des gefundenen Elements.
+
+        Raises:
+            KeyError: Wenn nicht gefunden.
         """
 
         try:
@@ -229,11 +239,17 @@ class BahnhofGraph(nx.DiGraph):
 
     def list_parents(self, label: BahnhofLabelType) -> Generator[BahnhofLabelType, None, None]:
         """
-        Uebergeordnete Bahnhofelemente zu einem Gleis.
-        :param label: Gleislabel (typ, name)
-        :return: Generator von übergeordneten Elementen (typ, name) von unten nach oben.
+        Übergeordnete Bahnhofelemente zu einem Gleis.
+
+        Args:
+            label: Gleislabel (typ, name).
+
+        Returns:
+            Generator von übergeordneten Elementen (typ, name) von unten nach oben.
             Das Ausgangselement wird nicht geliefert.
-        :raise: KeyError, wenn das Gleis nicht existiert.
+
+        Raises:
+            KeyError: Wenn das Gleis nicht existiert.
         """
 
         if self.has_node(label):
@@ -244,14 +260,14 @@ class BahnhofGraph(nx.DiGraph):
 
     def gleis_parents(self) -> Dict[BahnhofLabelType, Dict[str, BahnhofLabelType]]:
         """
-        Summary: Generates a dictionary of parents for each Gl and Agl node in the graph.
+        Generates a dictionary of parents for each Gl and Agl node in the graph.
 
         This method traverses the graph in reverse breadth-first search (BFS) to find all parent nodes of each Gl and Agl node.
         It organizes these parent nodes into a nested dictionary where the keys are the Gl or Agl nodes,
         and the values are dictionaries mapping child node types to their corresponding child nodes.
 
         Returns:
-            Dict[BahnhofLabelType, Dict[str, BahnhofLabelType]]: A dictionary containing parent nodes for each Gl and Agl node.
+            A dictionary containing parent nodes for each Gl and Agl node.
         """
 
         result = {}
@@ -266,15 +282,20 @@ class BahnhofGraph(nx.DiGraph):
 
     def list_children(self, label: BahnhofLabelType, typen: Set[str]) -> Generator[BahnhofLabelType, None, None]:
         """
-        Listet die untergeordneten Elemente bestimmter Typen auf.
+            Listet die untergeordneten Elemente bestimmter Typen auf.
 
-        Die Suchreihenfolge ist Breadth First.
+            Die Suchreihenfolge ist Breadth First.
 
-        :param label: Label des Ausgangselements
-        :param typen: Set von Elementtypen, z.B. {'Anst', 'Bf'}
-        :return: Iterator über gefundene Elemente
-        :raise: KeyError, wenn label nicht gefunden wird
-        """
+            Args:
+                label: Label des Ausgangselements.
+                typen: Set von Elementtypen, z.B. {'Anst', 'Bf'}.
+
+            Returns:
+                Iterator über gefundene Elemente.
+
+            Raises:
+                KeyError: Wenn label nicht gefunden wird.
+            """
 
         try:
             for parent, child in nx.bfs_edges(self, label):
@@ -309,10 +330,13 @@ class BahnhofGraph(nx.DiGraph):
         Betriebsstelle nach Namen suchen.
 
         Wenn der Typ nicht bekannt ist.
-        Sucht zuerst in den Bahnhöfen und Anschlussstellen, dann in den weiteren Hierarchie.
+        Sucht zuerst in den Bahnhöfen und Anschlussstellen, dann in der weiteren Hierarchie.
 
-        :param name: Name der Betriebsstelle
-        :return: Label (Typ und Name) der Betriebsstelle oder None
+        Args:
+            name: Name der Betriebsstelle
+        
+        Returns:
+            Label (Typ und Name) der Betriebsstelle oder None
         """
 
         for u, v in nx.bfs_edges(self, ('Bst', 'Bf')):
@@ -327,15 +351,18 @@ class BahnhofGraph(nx.DiGraph):
 
     def find_gleis_enr(self, name_enr: Union[int, str]) -> Optional[BahnhofLabelType]:
         """
-        Gleis nach Name oder Anschlussgleis nach enr suchen.
+        Gleis nach Namen oder Anschlussgleis nach `enr` suchen.
 
-        Der Zielgraph enthält für Anschlussgleise die enr.
+        Der Zielgraph enthält für Anschlussgleise die `enr`.
         Mit dieser Methode kann sie in ein Label des Bahnhofgraphs überführt werden.
-        Die Gleise sind indiziert in self.ziel_gleis.
+        Die Gleise sind indiziert in `ziel_gleis`.
         Dieser Dictionary kann alternativ verwendet werden.
 
-        :param name_enr: Gleisname oder Elementnummer (enr) aus Signalgraph
-        :return: Gleislabel (typ, name) oder None, wenn nicht gefunden
+        Args:
+            name_enr: Gleisname oder Elementnummer (enr) aus Signalgraph
+
+        Returns:            
+            Gleislabel (typ, name) oder None, wenn nicht gefunden
         """
 
         try:
@@ -345,11 +372,12 @@ class BahnhofGraph(nx.DiGraph):
 
     def _find_parent_to_replace(self,
                                 gleis: BahnhofLabelType,
-                                level: str) -> Tuple[Optional[Sequence[BahnhofLabelType]], Optional[BahnhofLabelType], Optional[BahnsteigGraphNode]]:
+                                level: str,
+                                ) -> Tuple[Sequence[BahnhofLabelType], BahnhofLabelType | None, BahnsteigGraphNode | None]:
         """
         Sucht den Parent eines bestimmten Typs des angegebenen Gleises.
 
-        Untermethode von replace_parent und can_replace_parent
+        Untermethode von `replace_parent` und `can_replace_parent`.
         """
 
         old_path = [gleis] + [element for element in self.list_parents(gleis)]
@@ -375,24 +403,30 @@ class BahnhofGraph(nx.DiGraph):
 
         Dies ist nützlich, wenn ein Gleis von einem anderen Bahnhof übernommen wird.
         Der Elternknoten kann ein beliebiger übergeordneter Knoten des Gleises sein.
-
         Der Elternknoten kann existieren oder wird neu erstellt.
         Der alte Knoten wird gelöscht, wenn der Parameter `del_old_parent` auf True gesetzt ist und er keine Kinder mehr hat.
 
-        Hinweis: Es können leere Gruppen zurückbleiben.
-            Am Ende der Bearbeitung daher ggf. leere_gruppen_entfernen aufrufen!
+        Hinweis:
+            Es können leere Gruppen zurückbleiben. Am Ende der Bearbeitung daher ggf.
+            `leere_gruppen_entfernen` aufrufen!
 
-        :param gleis: Das Gleis, dessen Elternknoten ersetzt werden soll.
-            Kann auch ein Element einer höheren Ebene sein, so lange die Ebene tiefer ist als die von new_parent.
-        :param new_parent: Der neue Elternknoten des Gleises.
-            Gibt den Typ und Namen des neuen Elternknotens an.
-            Der Knoten kann existieren oder wird aus einer Kopie des alten neu erstellt.
-        :param new_data: Daten des neuen Elternknotens. Wenn None, werden die alten Daten verwendet.
-        :param del_old_parent: Alten Knoten löschen, wenn er keine Kinder hat. Standardmäßig False.
-        :param dry_run: True = prüfen, ob die Aktion möglich ist, Graph aber nicht verändern.
-            Bei einem Fehler wird ein ValueError gemeldet.
-        :return: True wenn erfolgreich
-        :raise: ValueError, wenn der Stammknoten nicht gefunden wird oder das Gleis bereits zum neuen Stamm gehört.
+        Args:
+            gleis: Das Gleis, dessen Elternknoten ersetzt werden soll. Kann auch ein Element
+                einer höheren Ebene sein, so lange die Ebene tiefer ist als die von `new_parent`.
+            new_parent: Der neue Elternknoten des Gleises. Gibt den Typ und Namen des neuen
+                Elternknotens an. Der Knoten kann existieren oder wird aus einer Kopie des alten
+                neu erstellt.
+            new_data: Daten des neuen Elternknotens. Wenn None, werden die alten Daten verwendet.
+            del_old_parent: Alten Knoten löschen, wenn er keine Kinder hat. Standardmäßig False.
+            dry_run: True = prüfen, ob die Aktion möglich ist, Graph aber nicht verändern.
+                Bei einem Fehler wird ein ValueError gemeldet.
+
+        Returns:
+            True, wenn erfolgreich.
+
+        Raises:
+            ValueError: Wenn der Stammknoten nicht gefunden wird oder das Gleis bereits zum neuen
+                Stamm gehört.
         """
 
         old_path, old_parent, old_data = self._find_parent_to_replace(gleis, new_parent.typ)
@@ -428,13 +462,18 @@ class BahnhofGraph(nx.DiGraph):
 
     def gleis_bahnsteig(self, gleis: str) -> str:
         """
-        Zu Gleis zugeordneten Bahnsteig nachschlagen
+        Zu Gleis zugeordneten Bahnsteig nachschlagen.
 
         Nur für Bahnhofgleise.
 
-        :param: gleis: Gleisname wie im STS
-        :return: Bahnsteigname
-        :raise: KeyError, wenn nicht gefunden
+        Args:
+            gleis: Gleisname wie im STS.
+
+        Returns:
+            Bahnsteigname.
+
+        Raises:
+            KeyError: Wenn nicht gefunden.
         """
 
         bs = self.find_superior(BahnhofLabelType('Gl', gleis), {'Bs'})
@@ -442,13 +481,18 @@ class BahnhofGraph(nx.DiGraph):
 
     def gleis_bahnhofteil(self, gleis: str) -> str:
         """
-        Zu Gleis zugeordneten Bahnhofteil nachschlagen
+        Zu Gleis zugeordneten Bahnhofteil nachschlagen.
 
         Nur für Bahnhofgleise.
 
-        :param: gleis: Gleisname wie im STS
-        :return: Bahnhofteilname
-        :raise: KeyError, wenn nicht gefunden
+        Args:
+            gleis: Gleisname wie im STS.
+
+        Returns:
+            Bahnhofteilname.
+
+        Raises:
+            KeyError: Wenn nicht gefunden.
         """
 
         bft = self.find_superior(BahnhofLabelType('Gl', gleis), {'Bft'})
@@ -456,13 +500,18 @@ class BahnhofGraph(nx.DiGraph):
 
     def gleis_bahnhof(self, gleis: str) -> str:
         """
-        Zu Gleis zugeordneten Bahnhof nachschlagen
+        Zu Gleis zugeordneten Bahnhof nachschlagen.
 
         Nur für Bahnhofgleise.
 
-        :param: gleis: Gleisname wie im STS
-        :return: Bahnhofname
-        :raise: KeyError, wenn nicht gefunden
+        Args:
+            gleis: Gleisname wie im STS.
+
+        Returns:
+            Bahnhofname.
+
+        Raises:
+            KeyError: Wenn nicht gefunden.
         """
 
         bf = self.find_superior(BahnhofLabelType('Gl', gleis), {'Bf'})
@@ -470,13 +519,18 @@ class BahnhofGraph(nx.DiGraph):
 
     def anschlussstelle(self, gleis: str) -> str:
         """
-        Zu Anschlussgleis zugeordnete Anschlussstelle nachschlagen
+        Zu Anschlussgleis zugeordnete Anschlussstelle nachschlagen.
 
         Nur für Anschlussgleise.
 
-        :param: gleis: Anschlussgleisname wie im STS
-        :return: Name der Anschlussstelle
-        :raise: KeyError, wenn nicht gefunden
+        Args:
+            gleis: Anschlussgleisname wie im STS.
+
+        Returns:
+            Name der Anschlussstelle.
+
+        Raises:
+            KeyError: Wenn nicht gefunden.
         """
 
         anst = self.find_superior(BahnhofLabelType('Agl', gleis), {'Anst'})
@@ -488,9 +542,14 @@ class BahnhofGraph(nx.DiGraph):
 
         Nur für Bahnhofgleise.
 
-        :param: bahnhof: Name des Bahnhofs
-        :return: Iterator von Gleisnamen
-        :raise: KeyError, wenn der Bahnhof nicht gefunden wird.
+        Args:
+            bahnhof: Name des Bahnhofs.
+
+        Returns:
+            Iterator von Gleisnamen.
+
+        Raises:
+            KeyError: Wenn der Bahnhof nicht gefunden wird.
         """
 
         try:
@@ -507,9 +566,14 @@ class BahnhofGraph(nx.DiGraph):
 
         Nur für Bahnhofgleise.
 
-        :param: bahnhofteil: Name des Bahnhofteils
-        :return: Iterator von Gleisnamen
-        :raise: KeyError, wenn der Bahnhofteil nicht gefunden wird.
+        Args:
+            bahnhofteil: Name des Bahnhofteils.
+
+        Returns:
+            Iterator von Gleisnamen.
+
+        Raises:
+            KeyError: Wenn der Bahnhofteil nicht gefunden wird.
         """
 
         try:
@@ -526,9 +590,14 @@ class BahnhofGraph(nx.DiGraph):
 
         Nur für Anschlussgleise.
 
-        :param: anst: Name der Anschlussstelle
-        :return: Iterator von Gleisnamen
-        :raise: KeyError, wenn die Anst nicht gefunden wird.
+        Args:
+            anst: Name der Anschlussstelle.
+
+        Returns:
+            Iterator von Gleisnamen.
+
+        Raises:
+            KeyError: Wenn die Anst nicht gefunden wird.
         """
 
         try:
@@ -543,7 +612,8 @@ class BahnhofGraph(nx.DiGraph):
         """
         Listet alle Bahnhöfe auf.
 
-        :return: Iterator von Bahnhofnamen
+        Returns:
+            Iterator von Bahnhofnamen
         """
 
         for node in self.list_children(BahnhofLabelType('Bst', 'Bf'), {'Bf'}):
@@ -553,7 +623,8 @@ class BahnhofGraph(nx.DiGraph):
         """
         Listet alle Anschlussstellen auf.
 
-        :return: Iterator von Anschlussstellennamen
+        Returns:
+            Iterator von Anschlussstellennamen
         """
 
         for node in self.list_children(BahnhofLabelType('Bst', 'Anst'), {'Anst'}):
@@ -563,18 +634,23 @@ class BahnhofGraph(nx.DiGraph):
         """
         Erstellt einen hierarchischen Sortierindex von Gleisen.
 
-        :param elements: Liste von Gleisen (Bahnhofelemente vom Typ Gl oder Agl)
-            Wenn leer oder None, werden alle Gleise und Anschlussgleise inkludiert.
+        Der Index ist ein Dictionary mit folgenden Eigenschaften:
 
-        :return Zuordnung Gleis -> Sortierschlüssel.
-            Die Schlüssel sind Tupel mit den Namen aller Elemente im Pfad vom Root-Element zum jeweiligen Gleis.
+        Die Schlüssel sind Tupel mit den Namen aller Elemente im Pfad vom Root-Element zum jeweiligen Gleis.
 
-            Namen, die numerische Elemente enthalten werden zusätzlich aufgespalten,
-            damit Gleisnummern numerisch sortiert werden.
-            Die Aufspaltung wird vom Gleisschema durchgeführt.
+        Namen, die numerische Elemente enthalten, werden zusätzlich aufgespalten,
+        damit Gleisnummern numerisch sortiert werden.
+        Die Aufspaltung wird vom Gleisschema durchgeführt.
 
-            Der Dictionary kann in der sorted-Funktion verwendet werden:
-            `gleise = sorted(result.keys(), key=result.get)`
+        Der Dictionary kann in der sorted-Funktion verwendet werden:
+        `gleise = sorted(result.keys(), key=result.get)`
+
+        Args:
+            elements: Liste von Gleisen (Bahnhofelemente vom Typ Gl oder Agl)
+                Wenn leer oder None, werden alle Gleise und Anschlussgleise inkludiert.
+
+        Returns:
+            Zuordnung Gleis zu Sortierschlüssel.
         """
 
         if not elements:
@@ -600,8 +676,9 @@ class BahnhofGraph(nx.DiGraph):
         anhand eines repräsentativen Gleises in ein Bahnhofelement des eigenen Graphen.
         Beide Graphen müssen dieselben Gleise enthalten.
 
-        :param original_element: BahnhofElement im anderen Graphen.
-        :param original_graph: anderer BahnhofGraph, der original_element enthält.
+        Args:
+            original_element: BahnhofElement im anderen Graphen.
+            original_graph: anderer BahnhofGraph, der original_element enthält.
         """
 
         if original_element.typ in {'Gl', 'Agl'}:
@@ -700,19 +777,17 @@ class BahnhofGraph(nx.DiGraph):
         """
         Konfiguration importieren
 
-        Strategie
-        ---------
-
-        1. Alle Knoten von bestehendem Graph importieren.
-           Kanten _nicht_ importieren, sondern Vorfahr im stamm-Attribut verzeichnen.
-        2. Knoten mit Attributen aus Elementen importieren, bestehende überschreiben.
-           Vorfahr im stamm-Attribut verzeichnen.
-           In der Anlage nicht vorkommende Gleise nicht übernehmen.
-        3. Kanten gem. stamm-Attribut schichtweise zur Vorfahrenebene konstruieren,
-           beginnend mit Gl und Agl.
-        4. Kantenlose Knoten entfernen:
-           Alle ohne eingehende Kanten, alle nicht-Gleise ohne ausgehende Kanten.
-           Gl und Agl haben keine ausgehenden Kanten und müssen beibehalten werden.
+        Strategie:
+            1. Alle Knoten von bestehendem Graph importieren.
+                Kanten _nicht_ importieren, sondern Vorfahr im `stamm`-Attribut verzeichnen.
+            2. Knoten mit Attributen aus Elementen importieren, bestehende überschreiben.
+                Vorfahr im `stamm`-Attribut verzeichnen.
+                In der Anlage nicht vorkommende Gleise nicht übernehmen.
+            3. Kanten gem. `stamm`-Attribut schichtweise zur Vorfahrebene konstruieren,
+                beginnend mit Gl und Agl.
+            4. Kantenlose Knoten entfernen:
+                Alle ohne eingehende Kanten, alle nicht-Gleise ohne ausgehende Kanten.
+                Gl und Agl haben keine ausgehenden Kanten und müssen beibehalten werden.
         """
 
         # Schritt 1: Default-Graph importieren
@@ -828,7 +903,7 @@ class BahnhofGraph(nx.DiGraph):
         Vollständigkeit des Bahnhofgraphen prüfen.
 
         - Hat jedes Gleis eine zugeordnete Bst?
-        - Hat jedes Element genau einen Stammelement?
+        - Hat jedes Element genau ein Stammelement?
         """
 
         logger.debug("Validating BahnhofGraph")
@@ -858,14 +933,15 @@ class BahnhofGraph(nx.DiGraph):
 
     def export_konfiguration(self) -> Sequence[Dict[str, Union[str, int, float, bool]]]:
         """
-        Bahnhofgraph exportieren fuer Konfigurationsdatei
+        Bahnhofgraph exportieren für Konfigurationsdatei
 
-        :return: Liste von Bahnhof-Elementen fuer das 'elemente'-Arrays gemaess config.schema3.json.
+        Returns:
+            Liste von Bahnhof-Elementen für das `elemente`-Array gemäss `config.schema3.json`.
         """
 
         elemente = {}
         for e1, e2 in self.edges():
-            # e1 ist der stammknoten
+            # e1 ist der Stammknoten
             if e1.typ == 'Stw':
                 continue
             data1: BahnsteigGraphNode = self.nodes[e1]

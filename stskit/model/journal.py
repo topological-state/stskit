@@ -32,11 +32,11 @@ class JournalEntry[G, N, D]:
     Der vorherige Zustand wird nicht gespeichert und kann nicht wiederhergestellt werden.
 
     Das Journal enthält zu jedem Knoten/jeder Kante maximal einen Lösch-, Einfügungs- und Änderungseintrag.
-    Die Einträge Einfügen und Löschen wirken auf den gesamten Knoten bzw. Kante inklusive allen Attributen.
+    Die Einträge Einfügen und Löschen wirken auf den gesamten Knoten bzw. Kante inklusive aller Attribute.
     Änderungen wirken auf einzelne Attribute. Die Änderungen werden gesammelt.
     
     Der generische Typ G ist die Graphklasse, N der Knotenlabeltyp und D der Knotendatentyp,
-    die in dem Eintrag verwendet werden koennen.
+    die in dem Eintrag verwendet werden können.
     """
 
     def __init__(self,
@@ -73,12 +73,12 @@ class JournalEntry[G, N, D]:
 
     def summary(self) -> dict[tuple[G, N], set[str]]:
         """
-        Zusammenfassung von Aenderungen
+        Zusammenfassung von Änderungen
 
-        Listet zu jedem betroffenen Knoten die gemachten Aenderungen.
-        Die Aenderungen werden als String in einem set wiedergegeben.
-        '.' steht fuer den Targetknoten, '+' fuer einen neuen Knoten, '-' fuer einen geloeschten Knoten
-        und '*' fuer einen geaenderten Knoten.
+        Listet zu jedem betroffenen Knoten die gemachten Änderungen.
+        Die Änderungen werden als String in einem Set wiedergegeben.
+        '.' steht für den Targetknoten, '+' für einen neuen Knoten, '-' für einen gelöschten Knoten
+        und '*' für einen geänderten Knoten.
         """
 
         target = defaultdict(set)
@@ -207,27 +207,25 @@ class JournalEntry[G, N, D]:
 
         Die Abspielreihenfolge ist:
 
-        1. Kanten löschen
+        1. Kanten löschen.
            Der Knoten muss existieren, ansonsten bleibt die Änderung wirkungslos.
-        2. Knoten löschen
+        2. Knoten löschen.
            Die Kante muss existieren, ansonsten bleibt die Änderung wirkungslos.
         3. Knoten hinzufügen.
            Wenn der Knoten existiert, werden die Attribute gelöscht und überschrieben.
-        4. Kanten hinzufügen
+        4. Kanten hinzufügen.
            Wenn die Kante existiert, werden die Attribute gelöscht und überschrieben.
-        5. Knoten ändern
+        5. Knoten ändern.
            Der Knoten muss existieren, ansonsten bleibt die Änderung wirkungslos.
            Im Änderungseintrag erfasste Attribute werden überschrieben, die übrigen bleiben bestehen.
-        6. Knoten ändern
+        6. Knoten ändern.
            Die Kante muss existieren, ansonsten bleibt die Änderung wirkungslos.
            Im Änderungseintrag erfasste Attribute werden überschrieben, die übrigen bleiben bestehen.
 
-        Return
-        ------
-
-        Dictionary mit Fehlermeldungen.
-        Moegliche Keys: 'remove_edge', 'add_edge', 'change_edge', 'remove_node', 'add_node', 'change_node'.
-        Values: set von edge oder node Labels.
+        Returns:
+            Dictionary mit Fehlermeldungen.
+            Mögliche Keys: 'remove_edge', 'add_edge', 'change_edge', 'remove_node', 'add_node', 'change_node'.
+            Values: set von edge oder node Labels.
         """
 
         fails = {}
@@ -332,12 +330,12 @@ class JournalEntryGroup:
 
     def summary(self) -> dict[tuple[Hashable, Hashable], set[str]]:
         """
-        Zusammenfassung von Aenderungen
+        Zusammenfassung von Änderungen
 
-        Listet zu jedem betroffenen Knoten die gemachten Aenderungen.
-        Die Aenderungen werden als String in einem set wiedergegeben.
-        '.' steht fuer den Targetknoten, '+' fuer einen neuen Knoten, '-' fuer einen geloeschten Knoten
-        und '*' fuer einen geaenderten Knoten.
+        Listet zu jedem betroffenen Knoten die gemachten Änderungen.
+        Die Änderungen werden als String in einem Set wiedergegeben.
+        '.' steht für den Targetknoten, '+' für einen neuen Knoten, '-' für einen geloeschten Knoten
+        und '*' für einen geänderten Knoten.
         """
 
         summary: dict[tuple[Hashable, Hashable], set[str]] = defaultdict(set)
@@ -368,10 +366,10 @@ class JournalIDType(NamedTuple):
 
 class Journal:
     """
-    Journal von Aenderungen an einem Graph
+    Journal von Änderungen an einem Graph
 
     Journal wird zum Erfassen von Fdl-Korrekturen an den Graphdaten verwendet.
-    Es erlaubt, Aenderungen an verschiedenen Graphen unter einer Korrektur-ID zusammenzufassen.
+    Es erlaubt, Änderungen an verschiedenen Graphen unter einer Korrektur-ID zusammenzufassen.
 
     Anhand der Korrektur-ID können Journals wiedergefunden und gelöscht werden.
     Es werden dann jeweils alle zu einem Ereignis gehörenden Korrekturen gelöscht.
@@ -395,7 +393,7 @@ class Journal:
         for entry in self.entries.values():
             entry.replay(graph_map=graph_map)
 
-    def add_entry(self, id_, entry: JournalEntry | JournalEntryGroup):
+    def add_entry(self, id_: Hashable, entry: JournalEntry | JournalEntryGroup):
         """
         Journaleintrag hinzufügen
 
@@ -413,7 +411,7 @@ class Journal:
             id_: ID, die in add_entry verwendet wurde.
 
         Raises:
-            KeyError wenn der Eintrag nicht existiert.
+            KeyError: Eintrag existiert nicht.
         """
         del self.entries[id_]
 

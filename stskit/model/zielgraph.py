@@ -353,7 +353,7 @@ class ZielGraph(nx.DiGraph):
             node: Label des Ursprungknotens
             ersatz_erlaubt: Neuen Zug nach Ersatz- oder Kuppelflags verfolgen.
 
-        Raisesé
+        Raises:
             ValueError: Keinen passenden Knoten gefunden.
         """
 

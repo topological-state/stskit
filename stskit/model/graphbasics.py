@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Callable, Dict, Iterable, Optional, Set, Tuple, TypeVar, Union
+from typing import TypeVar
 
 
 logger = logging.getLogger(__name__)
@@ -9,16 +9,22 @@ logger.addHandler(logging.NullHandler())
 T = TypeVar('T')
 
 
-def dict_property(name: str, T, docstring: str = None):
+def dict_property(
+        name: str,
+        type_: type[T],
+        docstring: str | None = None,
+    ) -> property:
     """
     Generic factory function for a property that corresponds to a dictionary value.
 
     The owning class must be a subclass of dict.
 
-    :param name: The name of the property.
-    :param T: The type of the property.
-    :param docstring: The docstring of the property.
+    Args:
+        name: The name of the property.
+        type_: The type of the property.
+        docstring: The docstring of the property.
     """
+
     def getter(self) -> T:
         try:
             return self[name]

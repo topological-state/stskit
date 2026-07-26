@@ -180,18 +180,22 @@ class LinienGraph(nx.Graph):
 
     def strecke(self, start: LinienLabelType, ziel: LinienLabelType) -> list[LinienLabelType]:
         """
-        Kürzeste Verbindung zwischen zwei Punkten bestimmen
+        Kürzeste Verbindung zwischen zwei Punkten bestimmen.
 
         Start und Ziel sind die Labels zweier beliebiger Knoten im Liniengraph.
         Die berechnete Strecke ist eine geordnete Liste von Labels.
 
-        Da die Streckenberechnung aufwändig sein kann, werden die Resultate im self._strecken_cache gespeichert.
-        Der Cache muss gelöscht werden, wenn der Graph verändert wird.
+        Da die Streckenberechnung aufwändig sein kann, werden die Resultate im
+        `_strecken_cache` gespeichert. Der Cache muss gelöscht werden, wenn der
+        Graph verändert wird.
 
-        :param start: bahnhof- oder anschlussname
-        :param ziel: bahnhof- oder anschlussname
-        :return: liste von befahrenen gleisgruppen vom start zum ziel.
-            die liste kann leer sein, wenn kein pfad gefunden wurde!
+        Args:
+            start: Bahnhof- oder Anschlussname.
+            ziel: Bahnhof- oder Anschlussname.
+
+        Returns:
+            Liste von befahrenen Gleisgruppen vom Start zum Ziel.
+            Die Liste kann leer sein, wenn kein Pfad gefunden wurde.
         """
 
         try:
@@ -217,15 +221,17 @@ class LinienGraph(nx.Graph):
         Eine Strecke besteht aus einer Liste von Bahnhöfen inklusive Einfahrt am Anfang und Ausfahrt am Ende.
         Die Elemente sind Knotenlabels des Liniengraphen.
 
-        :param: min_fahrten: Minimale Anzahl von Fahrten, die ein Anschluss aufweisen muss,
-            um in die Auswahl aufgenommen zu werden.
-            Per default (0), werden auch Strecken zwischen unbenutzten Anschlüssen erstellt.
+        Args:
+            min_fahrten: Minimale Anzahl von Fahrten, die ein Anschluss aufweisen muss,
+                um in die Auswahl aufgenommen zu werden.
+                Per default (0), werden auch Strecken zwischen unbenutzten Anschlüssen erstellt.
 
-        :param: min_laenge: Minimale Länge (Anzahl Wegpunkte) einer Strecke.
-            Kürzere Strecken werden ignoriert.
-            Die Defaultlänge 2 liefert auch direkte Strecken zwischen Einfahrt und Ausfahrt.
+            min_laenge: Minimale Länge (Anzahl Wegpunkte) einer Strecke.
+                Kürzere Strecken werden ignoriert.
+                Die Defaultlänge 2 liefert auch direkte Strecken zwischen Einfahrt und Ausfahrt.
 
-        :return: Liste von Listen von Liniengraphlabels
+        Returns:
+            Liste von Listen von Liniengraphlabels
         """
 
         anschluesse = [x for x, d in self.nodes(data=True) if d.get('typ', '?') == 'Anst']
@@ -275,9 +281,9 @@ class LinienGraph(nx.Graph):
 
     def distanz(self, u: BahnhofElement, v: BahnhofElement, metrik: str) -> Any:
         """
-        Distanz zwischen zwei Bahnh"ofen
+        Distanz zwischen zwei Bahnhöfen
 
-        Es muss eine direkte Kante zwischen den zwei Bahnh"ofen bestehen.
+        Es muss eine direkte Kante zwischen den zwei Bahnhöfen bestehen.
 
         Args:
             u: Erste Betriebsstelle (Bf oder Anst)
@@ -352,12 +358,12 @@ class Strecken:
     Verwaltet konfigurierte Verbindungen zwischen Bahnhöfen.
     Strecken werden aus dem Liniengraph automatisch erstellt oder aus der Konfiguration gelesen.
 
-    Attribute:
-        - liniengraph:
-        - strecken: Die Streckendefinition ist ein Dictionary Streckenname -> Liste von Stationen.
-        - ordnung: Die Streckenliste wird anhand dieses Index sortiert.
-        - auto: Strecke wurde automatisch generiert. False, wenn der Benutzer sie bearbeitet hat.
-        - hauptstrecke: Name der Hauptstrecke. Wird beim Oeffnen des Streckenfahrplans voreingestellt.
+    Attributes:
+        liniengraph: Zugeordneter Liniengraph
+        strecken: Die Streckendefinition ist ein Dictionary Streckenname zu Listen von Stationen.
+        ordnung: Die Streckenliste wird anhand dieses Index sortiert.
+        auto: Strecke wurde automatisch generiert. False, wenn der Benutzer sie bearbeitet hat.
+        hauptstrecke: Name der Hauptstrecke. Wird beim Öffnen des Streckenfahrplans voreingestellt.
     """
 
     def __init__(self):

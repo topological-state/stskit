@@ -510,7 +510,11 @@ class EreignisGraph(nx.DiGraph):
             else:
                 self.zugenden[node.zid] = node
 
-    def zielgraph_importieren(self, zg: ZielGraph, clean=False, quelle='sts'):
+    def zielgraph_importieren(self,
+                              zg: ZielGraph,
+                              clean: bool = False,
+                              quelle: str = 'sts',
+                              ) -> None:
         """
         Zielgraph importieren
 
@@ -543,6 +547,8 @@ class EreignisGraph(nx.DiGraph):
             clean: Ereignisgraph vollständig neu aufbauen (True)
                 oder nur neue Züge hinzufügen (False, default).
                 Bei True gehen Änderungen an den Attributen verloren, bei False werden sie beibehalten.
+            quelle: Name der Datenquelle oder des Autors.
+                Wird in die Ereignisnodes geschrieben.
         """
 
         if clean:
@@ -1205,7 +1211,11 @@ class EreignisGraph(nx.DiGraph):
                     # print(f"    edge(p,c): {self.edge_info(prev_label, cur_label)}")
                     # print(f"    edge(c,n): {self.edge_info(cur_label, next_label)}")
 
-    def zug_ereignis_suchen(self, zid = None, start: EreignisLabelType = None, **kwargs) -> EreignisLabelType:
+    def zug_ereignis_suchen(self,
+                            zid: int | None = None,
+                            start: EreignisLabelType | None = None,
+                            **kwargs,
+                            ) -> EreignisLabelType:
         """
         Ereignis mit gegebenen Attributen im Zugpfad suchen.
 
@@ -1215,16 +1225,16 @@ class EreignisGraph(nx.DiGraph):
         und endet am Knoten, der keine Nachfolger hat.
 
         Args:
-            zid (int, optional): Gesuchte Zug-ID.
+            zid: Gesuchte Zug-ID.
                 Das gesuchte Ereignis muss diese Zug-ID haben.
                 zid kann sich von start.zid unterscheiden,
                 muss dann aber ein Folgezug von start.zid bezeichnen.
                 Mindestens eines der Argumente zid und start muss angegeben werden.
-            start (EreignisLabelType, optional): Startnode.
+            start: Startnode.
                 Die Suche startet an diesem Knoten (inklusiv).
                 Wenn kein Start angegeben ist, beginnt die Suche am Zuganfang.
                 Mindestens eines der Argumente zid und start muss angegeben werden.
-            **kwargs: Gesuchte Attributwerte.
+            kwargs: Gesuchte Attributwerte.
                 Die Keys müssen Attributnamen von EreignisGraphNode entsprechen.
                 Bei float-Attributen gilt eine Toleranz von 0.0001.
 

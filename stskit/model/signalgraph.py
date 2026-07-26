@@ -51,15 +51,14 @@ class SignalGraph(nx.DiGraph):
 
     def wege_importieren(self, wege: Iterable[Knoten]):
         """
-        Signalgraph aus Knoten-Liste erstellen.
+        Signalgraph aus Knotenliste erstellen.
 
         Der Graph wird gelöscht und aus der Knotenliste neu aufgebaut.
         Die Knotenliste kommt von der Pluginschnittstelle.
 
-        :param wege: Iterable von stsobj.Knoten vom PluginClient
-        :return: None
+        Args:
+            wege: Iterable von `stsobj.Knoten` vom `PluginClient`.
         """
-
         self.clear()
 
         for knoten1 in wege:
@@ -101,12 +100,15 @@ class SignalGraphUngerichtet(nx.Graph):
 
 def graph_weichen_ersetzen(g: nx.Graph) -> nx.Graph:
     """
-    weichen durch kanten ersetzen
+    Weichen durch Kanten ersetzen.
 
-    vereinfacht die gleisanlage, indem weichen durch direkte kanten der nachbarknoten ersetzt werden.
+    Vereinfacht die Gleisanlage, indem Weichen durch direkte Kanten der Nachbarknoten ersetzt werden.
 
-    :param g: ungerichteter graph
-    :return: graph g mit ersetzten weichen
+    Args:
+        g: Ungerichteter Graph.
+
+    Returns:
+        Graph `g` mit ersetzten Weichen.
     """
     weichen = {n for n, _d in g.nodes.items()
                if _d.get('typ', None) in {Knoten.Typ.WEICHE_OBEN, Knoten.Typ.WEICHE_UNTEN}}
@@ -121,14 +123,17 @@ def graph_weichen_ersetzen(g: nx.Graph) -> nx.Graph:
 
 def graph_anschluesse_pruefen(g: nx.Graph) -> nx.Graph:
     """
-    kanten von anschlüssen prüfen und vereinfachen
+    Kanten von Anschlüssen prüfen und vereinfachen.
 
-    anschlüsse sollten wenn möglich mit signalen verbunden sein.
-    direkte verbindungen zu bahnsteigen werden entfernt,
-    ausser es liegen keine signale in der nachbarschaft.
+    Anschlüsse sollten wenn möglich mit Signalen verbunden sein.
+    Direkte Verbindungen zu Bahnsteigen werden entfernt,
+    außer es liegen keine Signale in der Nachbarschaft.
 
-    :param g: ungerichteter graph
-    :return: graph g mit geänderten anschlüssen
+    Args:
+        g: Ungerichteter Graph.
+
+    Returns:
+        Graph `g` mit geänderten Anschlüssen.
     """
     anschl = {n for n, _d in g.nodes.items()
               if _d.get('typ', None) in {Knoten.Typ.EINFAHRT, Knoten.Typ.AUSFAHRT}}
@@ -149,15 +154,18 @@ def graph_anschluesse_pruefen(g: nx.Graph) -> nx.Graph:
 
 def graph_bahnsteigsignale_ersetzen(g: nx.Graph) -> nx.Graph:
     """
-    bahnsteig-signal-kombinationen durch bahnsteige ersetzen
+    Bahnsteig-Signal-Kombinationen durch Bahnsteige ersetzen.
 
-    vereinfacht die gleisanlage, indem signale in der nachbarschaft von bahnsteigen und haltepunkten entfernt werden.
-    die von den betroffenen signalen ausgehenden kanten werden durch direkte kanten der jeweiligen partner ersetzt.
+    Vereinfacht die Gleisanlage, indem Signale in der Nachbarschaft von Bahnsteigen und Haltepunkten entfernt werden.
+    Die von den betroffenen Signalen ausgehenden Kanten werden durch direkte Kanten der jeweiligen Partner ersetzt.
 
-    die funktion hat zum zweck, dass in der vereinfachten gleisanlage pfade nicht an den bahnsteigen vorbeiführen.
+    Die Funktion hat zum Zweck, dass in der vereinfachten Gleisanlage Pfade nicht an den Bahnsteigen vorbeiführen.
 
-    :param g: ungerichteter graph
-    :return: graph g mit ersetzten weichen
+    Args:
+        g: Ungerichteter Graph.
+
+    Returns:
+        Graph `g` mit ersetzten Weichen.
     """
     bahnsteige = {n for n, _d in g.nodes.items() if _d.get('typ', None)
                   in {Knoten.Typ.BAHNSTEIG, Knoten.Typ.HALTEPUNKT}}
@@ -172,12 +180,15 @@ def graph_bahnsteigsignale_ersetzen(g: nx.Graph) -> nx.Graph:
 
 def graph_signalpaare_ersetzen(g: nx.Graph) -> nx.Graph:
     """
-    signalpaare kontrahieren
+    Signalpaare kontrahieren.
 
-    signale, die mit einem anderen signal verbunden sind, werden durch ein einzelnes ersetzt.
+    Signale, die mit einem anderen Signal verbunden sind, werden durch ein einzelnes ersetzt.
 
-    :param g: ungerichteter graph
-    :return: graph g mit ersetzten signalpaaren
+    Args:
+        g: Ungerichteter Graph.
+
+    Returns:
+        Graph `g` mit ersetzten Signalpaaren.
     """
     while True:
         signale = {n for n, _d in g.nodes.items()
@@ -199,10 +210,13 @@ def graph_signalpaare_ersetzen(g: nx.Graph) -> nx.Graph:
 
 def graph_zwischensignale_entfernen(g: nx.Graph) -> nx.Graph:
     """
-    einzelne signale zwischen bahnsteigen durch kanten ersetzen
+    Einzelne Signale zwischen Bahnsteigen durch Kanten ersetzen.
 
-    :param g: ungerichteter graph
-    :return: graph g mit entfernten signalen
+    Args:
+        g: Ungerichteter Graph.
+
+    Returns:
+        Graph `g` mit entfernten Signalen.
     """
     signale = {n for n, _d in g.nodes.items()
                if _d.get('typ', None) == Knoten.Typ.SIGNAL}
@@ -220,11 +234,14 @@ def graph_gleise_zuordnen(g: nx.Graph,
                           gleiszuordnung: dict[str, str],
                           ) -> nx.Graph:
     """
-    gleise in graph zu gruppen zusammenfassen
+    Gleise in Graph zu Gruppen zusammenfassen.
 
-    :param g: signal-graph, gleis-graph oder ähnlicher graph.
-    :param gleiszuordnung: mapping gleisname -> gruppenname
-    :return: graph g mit zugeordneten gleisen
+    Args:
+        g: Signalgraph, Gleisgraph oder ähnlicher Graph.
+        gleiszuordnung: Mapping Gleisname zu Gruppenname.
+
+    Returns:
+        Graph g mit zugeordneten Gleisen.
     """
     g = nx.relabel_nodes(g, gleiszuordnung, copy=False)
     g.remove_edges_from(nx.selfloop_edges(g))
@@ -263,15 +280,18 @@ def graph_mehrdeutige_strecken(g: nx.Graph,
                                max_knoten: int = 3,
                                ) -> list[set[str]]:
     """
-    findet mehrdeutige streckenabschnitte
+    Findet mehrdeutige Streckenabschnitte.
 
-    in mehrdeutigen streckenabschnitten ist die reihenfolge von stationen aus dem signalgraph unklar.
-    im graphen erscheinen sie als schleifen, meistens dreiecke.
+    In mehrdeutigen Streckenabschnitten ist die Reihenfolge von Stationen aus dem Signalgraph unklar.
+    Im Graphen erscheinen sie als Schleifen, meistens Dreiecke.
 
-    :param g: signal-graph, gleis-graph oder ähnlicher graph.
-    :param max_knoten: filtert abschnitte mit mehr als einer maximalen knotenzahl heraus,
-        wenn längere schleifen nicht gemeldet werden sollen.
-    :return: liste von mehrdeutigen kanten
+    Args:
+        g: Signal-Graph, Gleis-Graph oder ähnlicher Graph.
+        max_knoten: Filtert Abschnitte mit mehr als einer maximalen Knotenzahl heraus,
+            wenn längere Schleifen nicht gemeldet werden sollen.
+
+    Returns:
+        Liste von mehrdeutigen Kanten.
     """
     cycles = nx.cycle_basis(g)
     cycles = [c for c in cycles if len(c) <= max_knoten]
@@ -283,18 +303,21 @@ def graph_mehrdeutige_strecke_abgleichen(g: nx.Graph,
                                          routen: Sequence[Sequence[str]],
                                          ) -> nx.Graph:
     """
-    mehrdeutige strecke mit zugrouten abgleichen
+    Mehrdeutige Strecke mit Zugrouten abgleichen.
 
-    wenn die reihenfolge der stationen auf einer strecke nicht eindeutig bestimmt werden kann,
-    bleiben im gleis-graphen schleifen zurück.
-    diese funktion versucht die reihenfolge anhand von bekannten zugläufen zu bestimmen.
-    wenn ein zug alle stationen der strecke anfährt, werden diese kanten im graphen belassen
-    und alle unbedienten in der nachbarschaft entfernt.
+    Wenn die Reihenfolge der Stationen auf einer Strecke nicht eindeutig bestimmt werden kann,
+    bleiben im Gleisgraphen Schleifen zurück.
+    Diese Funktion versucht, die Reihenfolge anhand von bekannten Zugläufen zu bestimmen.
+    Wenn ein Zug alle Stationen der Strecke anfährt, werden diese Kanten im Graphen belassen
+    und alle unbedienten in der Nachbarschaft entfernt.
 
-    :param g: gleis-graph oder ähnlich
-    :param strecke: sequenz von stationen, deren reihenfolge abgeglichen werden soll
-    :param routen: liste von routen. jede route besteht aus einer sequenz von stationsnamen im graphen g.
-    :return: modifizierter graph g
+    Args:
+        g: Gleisgraph oder ähnlich.
+        strecke: Sequenz von Stationen, deren Reihenfolge abgeglichen werden soll.
+        routen: Liste von Routen. Jede Route besteht aus einer Sequenz von Stationsnamen im Graphen g.
+
+    Returns:
+        Modifizierter Graph g.
     """
     nachbarschaft = set([])
     for k in strecke:

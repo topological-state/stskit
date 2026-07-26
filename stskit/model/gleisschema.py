@@ -7,6 +7,7 @@ Es ist mittels Konfigurationsdateien einstellbar.
 
 """
 
+from __future__ import annotations
 import logging
 import re
 from typing import Any, Dict, Generator, Iterable, List, Mapping, Set, Tuple
@@ -74,15 +75,17 @@ def gemeinsamer_name(g: Iterable) -> str:
 
 def alpha_prefix(name: str) -> str:
     """
-    alphabetischen anfang eines namens extrahieren.
+    Alphabetischen Anfang eines Namens extrahieren.
 
-    anfang des namens bis zum ersten nicht-alphabetischen zeichen (ziffer, leerzeichen, sonderzeichen).
-    umlaute etc. werden als alphabetisch betrachtet.
-    leerer string, wenn keine alphabetischen zeichen gefunden wurden.
+    Anfang des Namens bis zum ersten nicht-alphabetischen Zeichen (Ziffer, Leerzeichen, Sonderzeichen).
+    Umlaute etc. werden als alphabetisch betrachtet.
+    Leerer String, wenn keine alphabetischen Zeichen gefunden wurden.
 
-    :param name: z.b. gleisname
-    :return: resultat
+    Args:
+        name: Z.B. Gleisname.
 
+    Returns:
+        Resultat.
     """
     return re.match(ALPHA_PREFIX_PATTERN, name).group(0)
 
@@ -91,26 +94,31 @@ class Gleisschema:
     REGISTRY = {}
 
     def __init__(self):
-        self.stellwerk = 'Hbf'
-        self.region = 'default'
-        self.schema = 'default'
+        self.stellwerk: str = 'Hbf'
+        self.region: str = 'default'
+        self.schema: str = 'default'
 
     @staticmethod
-    def regionsschema(stellwerk, region) -> 'Gleisschema':
+    def regionsschema(stellwerk: str,
+                      region: str,
+                      ) -> Gleisschema:
         """
-        Gleisschema anhand Region ermitteln und instanzieren.
+        Gleisschema anhand Region ermitteln und instanziieren.
 
         Der Name des Schemas wird zunächst anhand des ersten Wortes der Region ermittelt (REGIONEN_SCHEMA).
-        Anschließend wird das in Gleisschema.REGISTRY registrierte Schema instanziiert.
+        Anschliessend wird das in Gleisschema.REGISTRY registrierte Schema instanziiert.
         Wenn die Region nicht in der REGIONEN_SCHEMA-Liste enthalten ist, wird das Standardgleisschema verwendet.
 
-        :param stellwerk: Name des Stellwerks
-        :param region: z.b. 'Berlin Ostbahnhof'
-        :return: gleisschema
+        Args:
+            stellwerk: Name des Stellwerks
+            region: z.b. 'Berlin Ostbahnhof'
+
+        Returns:
+            Gleisschema
         """
 
         try:
-            schema = REGIONEN_SCHEMA[region.split()[0]].lower()
+            schema = REGIONEN_SCHEMA[region.split(maxsplit=1)[0]].lower()
         except (IndexError, KeyError):
             schema = 'default'
         cls = Gleisschema.REGISTRY.get(schema, Gleisschema)
@@ -130,7 +138,11 @@ class Gleisschema:
         Bahnsteigname bezieht sich auf die Verwendung im Bahnhofgraphen
         und nicht auf den Bahnsteig in der Plugin-Schnittstelle.
 
-        :param gleis: Gleisname (Bahnsteigname in der Plugin-Schnittstelle)
+        Args:
+            gleis: Gleisname (Bahnsteigname in der Plugin-Schnittstelle)
+
+        Returns:
+            Bahnsteigname
         """
         mo = re.match(BAHNSTEIG_VON_SEKTOR_REGEX, gleis)
         if mo:
@@ -157,6 +169,7 @@ class Gleisschema:
 
         Beispiele:
 
+        ```
         FSP503 -> FSP
         NAH423b -> NAH
         6 -> _Stellwerksname_
@@ -168,16 +181,22 @@ class Gleisschema:
         Muntelier-L. -> Muntelier-L.
         VU3-5 -> VU
         Isola della Scala 3G -> Isola della Scala
+        ```
 
         Beachte, dass Bahnhofs- und Gleisbezeichnungen Leerzeichen und Sonderzeichen enthalten können.
         In den folgenden Fällen (nicht abschliessend),
         liefert die Funktion nicht das gewünschte Ergebnis (in Klammern).
 
+        ```
         Brennero: R3 -> R (Hbf), N -> N (Hbf)
         Drautal: Lie A1 -> Lie (Lie A1), Ma Wende R -> Ma Wende R (Ma)
+        ```
 
-        :param gleis: gleis- bzw. bahnsteigname
-        :return: bahnhofname
+        Args:
+            gleis: Gleis- bzw. Bahnsteigname
+
+        Returns:
+            Bahnhofname
         """
 
         teile = gleis.split()
@@ -211,11 +230,15 @@ class Gleisschema:
         Das Resultat dieser Funktion ist nicht eindeutig und
         kann in der Programmlogik nicht als Gleisidentifikation verwendet werden.
 
-        :param gleis: Gleis- bzw. Bahnsteigname
-        :return: Gleisnummer (String), extrahiert aus Gleisnamen.
-            Wenn der Gleisname eine Ziffer enthält, ist das der Substring ab der Ziffer bis zum Ende oder nächsten Leerzeichen,
-            wenn der Gleisname keine Ziffer aber Leerzeichen enthält, der zweite Teilstring geliefert,
-            ansonsten der unveränderte Gleisname.
+
+        Args:
+            gleis: Gleis- bzw. Bahnsteigname
+
+        Returns:
+            Gleisnummer (String), extrahiert aus Gleisnamen.
+                Wenn der Gleisname eine Ziffer enthält, ist das der Substring ab der Ziffer bis zum Ende oder nächsten Leerzeichen,
+                wenn der Gleisname keine Ziffer aber Leerzeichen enthält, der zweite Teilstring geliefert,
+                ansonsten der unveränderte Gleisname.
         """
 
         mo = GLEISNUMMER_REGEX.match(gleis)
@@ -230,12 +253,15 @@ class Gleisschema:
 
     def ist_einzel_anschluss(self, gleis: str) -> bool:
         """
-        prüft anhand von schlüsselwörtern, ob das gleis ein einfacher anschluss ist.
+        Prüft anhand von Schlüsselwörtern, ob das Gleis ein einfacher Anschluss ist.
 
-        zeigt True, wenn eine zeichenfolge aus EINZEL_ANSCHLUESSE im gleisnamen vorkommt.
+        Zeigt True, wenn eine Zeichenfolge aus EINZEL_ANSCHLUESSE im Gleisnamen vorkommt.
 
-        :param gleis: name des anschlussgleises
-        :return:
+        Args:
+            gleis: Name des Anschlussgleises.
+
+        Returns:
+            True, wenn eine Zeichenfolge aus EINZEL_ANSCHLUESSE im Gleisnamen vorkommt.
         """
         for ea in EINZEL_ANSCHLUESSE:
             if gleis.find(ea) >= 0:
@@ -245,15 +271,18 @@ class Gleisschema:
 
     def anschlussname(self, gleis: str) -> str:
         """
-        anschlussname aus gleisnamen ableiten.
+        Anschlussname aus Gleisnamen ableiten.
 
-        es wird angenommen, dass der bahnhofname aus den alphabetischen zeichen am anfang des gleisnamens besteht.
+        Es wird angenommen, dass der Bahnhofname aus den alphabetischen Zeichen am Anfang des Gleisnamens besteht.
 
-        wenn der gleisname keine alphabetischen zeichen enthält
-        oder eine zeichenfolge aus EINZEL_ANSCHLUESSE im gleisnamen vorkommt, wird der gleisname unverändert zurückgegeben.
+        Wenn der Gleisname keine alphabetischen Zeichen enthält
+        oder eine Zeichenfolge aus EINZEL_ANSCHLUESSE im Gleisnamen vorkommt, wird der Gleisname unverändert zurückgegeben.
 
-        :param gleis: gleisname
-        :return: anschlussname
+        Args:
+            gleis: Gleisname.
+
+        Returns:
+            Anschlussname.
         """
 
         if self.ist_einzel_anschluss(gleis):
@@ -267,14 +296,17 @@ class Gleisschema:
 
     def gleisname_sortkey(self, gleis: str) -> Tuple[str, int, str]:
         """
-        gleisname in sortierschlüssel umwandeln
+        Gleisname in Sortierschlüssel umwandeln.
 
-        annahme: gleisname setzt sich aus präfix, nummer und suffix zusammen.
-        präfix und suffix bestehen aus buchstaben und leerzeichen oder fehlen ganz.
-        präfix und suffix können durch leerzeichen von der nummer abgetrennt sein, müssen aber nicht.
+        Annahme: Gleisname setzt sich aus Präfix, Nummer und Suffix zusammen.
+        Präfix und Suffix bestehen aus Buchstaben und Leerzeichen oder fehlen ganz.
+        Präfix und Suffix können durch Leerzeichen von der Nummer abgetrennt sein, müssen aber nicht.
 
-        :param gleis: gleisname, wie er im fahrplan der züge steht
-        :return: tupel (präfix, nummer, suffix). leerzeichen entfernt.
+        Args:
+            gleis: Gleisname, wie er im Fahrplan der Züge steht.
+
+        Returns:
+            Tupel (Präfix, Nummer, Suffix). Leerzeichen entfernt.
         """
 
         mo = re.match(GLEISNAME_REGEXP, gleis)
@@ -288,13 +320,16 @@ class Gleisschema:
 
     def gleis_sektor_sortkey(self, gleis_sektor: Tuple[str, str]) -> Tuple[str, int, str, str, int, str]:
         """
-        hauptgleis und sektorgleis in sortierschlüssel umwandeln
+        Hauptgleis und Sektorgleis in Sortierschlüssel umwandeln.
 
-        :param gleis_sektor: tupel aus hauptgleis und sektorgleis.
-            sektorgleis, wie es im fahrplan der züge steht,
-            hauptgleis, wie es in der anlagenkonfiguration steht.
-        :return: tupel aus präfix, nummer, suffix des hauptgleises
-            und darauf folgend präfix, nummer, suffix des sektorgleises,
+        Args:
+            gleis_sektor: Tupel aus Hauptgleis und Sektorgleis.
+                Sektorgleis, wie es im Fahrplan der Züge steht,
+                Hauptgleis, wie es in der Anlagenkonfiguration steht.
+
+        Returns:
+            Tupel aus Präfix, Nummer, Suffix des Hauptgleises
+            und darauf folgend Präfix, Nummer, Suffix des Sektorgleises,
             jeweils wie von gleisname_sortkey.
         """
 

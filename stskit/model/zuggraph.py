@@ -64,18 +64,16 @@ class ZugGraph(nx.DiGraph):
 
     Der Zuggraph ist gerichtet.
 
-    Attribute
-    =========
+    Attributes:
+        aenderungen: Dictionary Zug-ID zu ZugGraphNode.
+            Der ZugGraphNode enthält die alten Werte der Attribute, die bei der letzten Aktualisierung geändert worden sind.
+            Unveränderte Attribute sind nicht verzeichnet.
+            Wenn der Zug neu ist, ist der Wert None.
 
-    aenderungen: Dictionary Zug-ID -> ZugGraphNode.
-        Der ZugGraphNode enthält die alten Werte der Attribute, die bei der letzten Aktualisierung geändert worden sind.
-        Unveränderte Attribute sind nicht verzeichnet.
-        Wenn der Zug neu ist, ist der Wert None.
+            Der Besitzer darf Einträge des Dictionary löschen, z.B. via `reset_aenderungen`,
+            sollte aber die Objekte nicht verändern.
 
-        Der Besitzer darf Einträge des Dictionary löschen, z.B. via reset_aenderungen,
-        sollte aber die Objekte nicht verändern.
-
-        Die ZugGraphNode-Objekte sind unvollständig und sollten daher nicht direkt in den Graphen übernommen werden.
+            Die ZugGraphNode-Objekte sind unvollständig und sollten daher nicht direkt in den Graphen übernommen werden.
     """
 
     node_attr_dict_factory = ZugGraphNode
@@ -89,8 +87,7 @@ class ZugGraph(nx.DiGraph):
 
     def __init__(self, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
-        self.aenderungen: Dict[int, ZugGraphNode] = {}
-
+        self.aenderungen: Dict[int, ZugGraphNode | None] = {}
 
     def vollstaendige_zuege(self) -> 'ZugGraph':
         """
@@ -113,16 +110,18 @@ class ZugGraph(nx.DiGraph):
         """
         Einzelnen Zug im Zuggraph aktualisieren.
 
-        Wenn der Zugknoten existiert wird er aktualisiert, sonst neu erstellt.
+        Wenn der Zugknoten existiert, wird er aktualisiert, sonst neu erstellt.
 
-        Die Änderungen werden in self.aenderungen verzeichnet und als Resultat zurückgegeben.
+        Die Änderungen werden in `aenderungen` verzeichnet und als Resultat zurückgegeben.
 
-        :param zug: Zugdetails von der Pluginschnittstelle.
+        Args:
+            zug: Zugdetails von der Pluginschnittstelle.
 
-        :return: Wenn der Knoten bereits existiert hat, gibt die Methode ein ZugGraphNode-Objekt zurück,
+        Returns:
+            Wenn der Knoten bereits existiert hat, gibt die Methode ein ZugGraphNode-Objekt zurück,
             das nur die geänderten Attribute mit ihren vorherigen Werten enthält.
             Wenn der Knoten neu ist, wird None zurückgegeben.
-            Das Objekt wird ausserdem in das aenderungen-Dictionary übernommen.
+            Das Objekt wird ausserdem in das `aenderungen`-Dictionary übernommen.
         """
 
         changes = {}
