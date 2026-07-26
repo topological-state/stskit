@@ -117,9 +117,9 @@ class Config(UserDict):
                 return None
 
         def _find_bahnhofelement(_name: str) -> Optional[BahnhofElement]:
-            if (_be := BahnhofElement('Anst', _name)) in elemente:
+            if (_be := BahnhofElement(BahnhofElement.Typ.ANST, _name)) in elemente:
                 return _be
-            elif (_be := BahnhofElement('Bf', _name)) in elemente:
+            elif (_be := BahnhofElement(BahnhofElement.Typ.BF, _name)) in elemente:
                 return _be
 
         gleis_konfig = {}
@@ -159,15 +159,15 @@ class Config(UserDict):
             for bft, bft_dict in bf_dict.items():
                 for bs, bs_set in bft_dict.items():
                     for gl in bs_set:
-                        elemente[BahnhofElement('Bf', bf)] = {"name": bf, "typ": "Bf", "sichtbar": True, "flags": "", "auto": False}
-                        elemente[BahnhofElement('Bft', bft)] = {"name": bft, "typ": "Bft", "stamm": bf, "sichtbar": True, "flags": "", "auto": False}
-                        elemente[BahnhofElement('Bs', bs)] = {"name": bs, "typ": "Bs", "stamm": bft, "sichtbar": True, "flags": "", "auto": False}
-                        elemente[BahnhofElement('Gl', gl)] = {"name": gl, "typ": "Gl", "stamm": bs, "sichtbar": True, "flags": "", "auto": False}
+                        elemente[BahnhofElement(BahnhofElement.Typ.BF, bf)] = {"name": bf, "typ": BahnhofElement.Typ.BF, "sichtbar": True, "flags": "", "auto": False}
+                        elemente[BahnhofElement(BahnhofElement.Typ.BFT, bft)] = {"name": bft, "typ": BahnhofElement.Typ.BFT, "stamm": bf, "sichtbar": True, "flags": "", "auto": False}
+                        elemente[BahnhofElement(BahnhofElement.Typ.BS, bs)] = {"name": bs, "typ": BahnhofElement.Typ.BS, "stamm": bft, "sichtbar": True, "flags": "", "auto": False}
+                        elemente[BahnhofElement(BahnhofElement.Typ.GL, gl)] = {"name": gl, "typ": BahnhofElement.Typ.GL, "stamm": bs, "sichtbar": True, "flags": "", "auto": False}
 
         for anst, anst_set in anschluss_konfig.items():
             for agl in anst_set:
-                elemente[BahnhofElement("Anst", anst)] = {"name": anst, "typ": "Anst", "sichtbar": True, "flags": "", "auto": False}
-                elemente[BahnhofElement("Agl", agl)] = {"name": agl, "typ": "Agl", "stamm": anst, "sichtbar": True, "flags": "", "auto": False}
+                elemente[BahnhofElement(BahnhofElement.Typ.ANST, anst)] = {"name": anst, "typ": BahnhofElement.Typ.ANST, "sichtbar": True, "flags": "", "auto": False}
+                elemente[BahnhofElement(BahnhofElement.Typ.AGL, agl)] = {"name": agl, "typ": BahnhofElement.Typ.AGL, "stamm": anst, "sichtbar": True, "flags": "", "auto": False}
 
         self.data['elemente'] = elemente.values()
 

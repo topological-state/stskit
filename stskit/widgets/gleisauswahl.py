@@ -12,6 +12,7 @@ Die Ebenen sind in GleisauswahlItem.TYPEN deklariert.
 Alle Ebenen haben nur eine Spalte.
 """
 
+from __future__ import annotations
 import logging
 from typing import AbstractSet, Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple, Type, Union
 
@@ -34,9 +35,12 @@ class GleisauswahlItem:
     Wird intern von GleisauswahlModell verwendet.
     """
 
-    TYPEN = {"root", "Kat", "Anst", "Agl", "Bf", "Bft", "Bs", "Gl"}
+    TYPEN: set[BahnhofElement.Typ | str] = {"root", "Kat", BahnhofElement.Typ.ANST, BahnhofElement.Typ.AGL, BahnhofElement.Typ.BF, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BS, BahnhofElement.Typ.GL}
 
-    def __init__(self, modell: 'GleisauswahlModell', typ: str, name: str):
+    def __init__(self,
+                 modell: GleisauswahlModell,
+                 typ: BahnhofElement.Typ | str,
+                 name: str):
         super().__init__()
         assert typ in self.TYPEN, f"Unbekannter GleisauswahlItem-Typ {typ}"
         self.modell = modell
@@ -54,13 +58,13 @@ class GleisauswahlItem:
     def childCount(self) -> int:
         return len(self._children)
 
-    def child(self, row: int) -> Optional['GleisauswahlItem']:
+    def child(self, row: int) -> GleisauswahlItem | None:
         try:
             return self._children[row]
         except IndexError:
             return None
 
-    def children(self) -> Iterable['GleisauswahlItem']:
+    def children(self) -> Iterable[GleisauswahlItem]:
         for child in self._children:
             yield child
 
@@ -70,7 +74,7 @@ class GleisauswahlItem:
     def row(self):
         return self._row
 
-    def addChild(self, child: 'GleisauswahlItem'):
+    def addChild(self, child: GleisauswahlItem):
         child._parent = self
         child._row = len(self._children)
         self._children.append(child)
@@ -107,7 +111,7 @@ class GleisauswahlItem:
 
         if self.name:
             flags = flags | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable
-        if self.typ in {"Gl", "Agl"}:
+        if self.typ in {BahnhofElement.Typ.GL, BahnhofElement.Typ.AGL}:
             flags = flags | QtCore.Qt.ItemNeverHasChildren
         else:
             flags = flags | QtCore.Qt.ItemIsAutoTristate
@@ -288,28 +292,28 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
         items: Dict[Tuple[str, str], GleisauswahlItem] = {}
 
         if anschluesse:
-            alle_agl = (node for node in anlage.bahnhofgraph.nodes if node.typ == 'Agl')
+            alle_agl = (node for node in anlage.bahnhofgraph.nodes if node.typ is BahnhofElement.Typ.AGL)
             self.alle_gleise.update(alle_agl)
 
             anschluesse_item = GleisauswahlItem(self, "Kat", "Anschlüsse")
             self._root.addChild(anschluesse_item)
 
             for anst in anlage.bahnhofgraph.anschlussstellen():
-                anst_item = GleisauswahlItem(self, "Anst", anst)
+                anst_item = GleisauswahlItem(self, BahnhofElement.Typ.ANST, anst)
                 anschluesse_item.addChild(anst_item)
                 for agl in sorted(anlage.bahnhofgraph.anschlussgleise(anst)):
-                    agl_item = GleisauswahlItem(self, "Agl", agl)
+                    agl_item = GleisauswahlItem(self, BahnhofElement.Typ.AGL, agl)
                     anst_item.addChild(agl_item)
 
         if bahnsteige:
-            alle_gl = (node for node in anlage.bahnhofgraph.nodes if node.typ == 'Gl')
+            alle_gl = (node for node in anlage.bahnhofgraph.nodes if node.typ is BahnhofElement.Typ.GL)
             self.alle_gleise.update(alle_gl)
 
             bahnsteige_item = GleisauswahlItem(self, "Kat", "Bahnsteige")
             self._root.addChild(bahnsteige_item)
-            items[('Bst', 'Bf')] = bahnsteige_item
+            items[(BahnhofElement.Typ.BST, BahnhofElement.Typ.BF)] = bahnsteige_item
 
-            for node1, node2 in nx.dfs_edges(anlage.bahnhofgraph, source=('Bst', 'Bf')):
+            for node1, node2 in nx.dfs_edges(anlage.bahnhofgraph, source=(BahnhofElement.Typ.BST, BahnhofElement.Typ.BF)):
                 item = GleisauswahlItem(self, node2.typ, node2.name)
                 items[node2] = item
                 items[node1].addChild(item)

@@ -18,7 +18,7 @@ from stskit.dispo.config import Config
 from stskit.plugin.stsgraph import GraphClient
 from stskit.plugin.stsobj import Ereignis, AnlagenInfo, time_to_minutes
 from stskit.model.signalgraph import SignalGraph
-from stskit.model.bahnhofgraph import BahnhofGraph, BahnsteigGraph
+from stskit.model.bahnhofgraph import BahnhofGraph, BahnsteigGraph, BahnhofElement
 from stskit.model.liniengraph import LinienGraph, LinienGraphEdge, Strecken
 from stskit.model.zuggraph import ZugGraph
 from stskit.model.zielgraph import ZielGraph
@@ -282,8 +282,8 @@ class Anlage:
                 ziel1_data = self.zielgraph.nodes[node1]
                 ziel2_data = self.zielgraph.nodes[node2]
                 try:
-                    bst1 = self.bahnhofgraph.find_superior(ziel1_data.plan_bst, {'Bf', 'Anst'})
-                    bst2 = self.bahnhofgraph.find_superior(ziel2_data.plan_bst, {'Bf', 'Anst'})
+                    bst1 = self.bahnhofgraph.find_superior(ziel1_data.plan_bst, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST})
+                    bst2 = self.bahnhofgraph.find_superior(ziel2_data.plan_bst, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST})
                 except KeyError:
                     continue
                 if bst1 != bst2:
@@ -300,11 +300,11 @@ class Anlage:
         """
         mapping = {}
         for gleis, gleis_data in self.bahnhofgraph.nodes(data=True):
-            if gleis.typ in {'Gl', 'Agl'}:
-                bst = self.bahnhofgraph.find_superior(gleis, {'Bf', 'Anst'})
-                if gleis.typ == 'Gl':
+            if gleis.typ in {BahnhofElement.Typ.GL, BahnhofElement.Typ.AGL}:
+                bst = self.bahnhofgraph.find_superior(gleis, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST})
+                if gleis.typ is BahnhofElement.Typ.GL:
                     mapping[gleis_data.name] = bst
-                elif gleis.typ == 'Agl':
+                elif gleis.typ is BahnhofElement.Typ.AGL:
                     mapping[gleis_data.enr] = bst
         signalgraph_einfach = nx.relabel_nodes(self.signalgraph, mapping)
         signalgraph_einfach.remove_edges_from(nx.selfloop_edges(signalgraph_einfach))
@@ -322,7 +322,7 @@ class Anlage:
                 continue
 
             for zwischenziel in signal_strecke[1:-1]:
-                if isinstance(zwischenziel, collections.abc.Sequence) and zwischenziel.typ in {'Bf', 'Anst'}:
+                if isinstance(zwischenziel, collections.abc.Sequence) and zwischenziel.typ in {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST}:
                     neue_kante = LinienGraphEdge()
                     neue_kante.update(kante)
                     neue_kante.fahrzeit_max = kante.fahrzeit_max / 2

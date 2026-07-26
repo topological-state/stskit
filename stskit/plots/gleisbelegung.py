@@ -88,7 +88,9 @@ class Slot:
         self.fid = ziel_id
         self.zugstamm = set([])
         self.zieltyp = ziel_data.typ
-        self.gleis = BahnhofElement("Agl" if ziel_data.typ in {'A', 'E'} else "Gl", ziel_data.gleis)
+        self.gleis = BahnhofElement(BahnhofElement.Typ.AGL
+                                    if ziel_data.typ in {'A', 'E'}
+                                    else BahnhofElement.Typ.GL, ziel_data.gleis)
         self.zeit = 0
         self.dauer = 0
         self.abfahrt = 0
@@ -388,7 +390,7 @@ class Gleisbelegung:
         Darzustellende Gleise wählen.
 
         Params:
-            gleise: Darzustellende Gleise (vom Typ 'Gl' oder 'Agl').
+            gleise: Darzustellende Gleise (vom Typ BahnhofElement.Typ.GL oder BahnhofElement.Typ.AGL).
         """
 
         sortierung = self.anlage.bahnhofgraph.hierarchical_index(gleise)
@@ -432,7 +434,7 @@ class Gleisbelegung:
                 slot.verspaetung_ab = ziel_data.get('v_ab', 0)
                 slot.zeit = plan_an + slot.verspaetung_an
                 slot.abfahrt = plan_ab + slot.verspaetung_ab
-                if ziel_data.typ == 'D' or slot.gleis.typ == 'Agl':
+                if ziel_data.typ == 'D' or slot.gleis.typ is BahnhofElement.Typ.AGL:
                     slot.dauer = 1
                 else:
                     slot.dauer = max(1, slot.abfahrt - slot.zeit)
@@ -460,7 +462,7 @@ class Gleisbelegung:
         for gleis in self.gleise:
             self.gleis_slots[gleis] = {}
             try:
-                hauptgleis = self.anlage.bahnhofgraph.find_superior(gleis, {'Bs'})
+                hauptgleis = self.anlage.bahnhofgraph.find_superior(gleis, {BahnhofElement.Typ.BS})
                 self.hauptgleis_slots[hauptgleis] = {}
             except KeyError:
                 pass
@@ -472,7 +474,7 @@ class Gleisbelegung:
             self.belegte_gleise.add(gleis)
 
             try:
-                hauptgleis = self.anlage.bahnhofgraph.find_superior(gleis, {'Bs'})
+                hauptgleis = self.anlage.bahnhofgraph.find_superior(gleis, {BahnhofElement.Typ.BS})
             except KeyError:
                 pass
             else:
@@ -556,7 +558,7 @@ class Gleisbelegung:
 
         for gleis, slot_dict in self.gleis_slots.items():
             slots = slot_dict.values()
-            if gleis.typ == 'Agl':
+            if gleis.typ is BahnhofElement.Typ.AGL:
                 yield from self._zufahrtwarnungen(slots)
             else:
                 yield from self._gleiswarnungen(slots)

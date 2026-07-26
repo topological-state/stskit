@@ -761,7 +761,7 @@ class ZugFormatter:
         try:
             zuganfang = self._anlage.zielgraph.zuganfaenge[self._zug.zid]
             anfangsziel = self._anlage.zielgraph.nodes[zuganfang]
-            result = self._anlage.bahnhofgraph.find_superior(anfangsziel.gleis_bst, {"Anst", "Bf"}).name
+            result = self._anlage.bahnhofgraph.find_superior(anfangsziel.gleis_bst, {BahnhofElement.Typ.ANST, BahnhofElement.Typ.BF}).name
         except (AttributeError, KeyError):
             result = ""
 
@@ -778,7 +778,7 @@ class ZugFormatter:
         try:
             zugende = self._anlage.zielgraph.zugenden[self._zug.zid]
             endziel = self._anlage.zielgraph.nodes[zugende]
-            result = self._anlage.bahnhofgraph.find_superior(endziel.gleis_bst, {"Anst", "Bf"}).name
+            result = self._anlage.bahnhofgraph.find_superior(endziel.gleis_bst, {BahnhofElement.Typ.ANST, BahnhofElement.Typ.BF}).name
         except (AttributeError, KeyError):
             result = ""
 

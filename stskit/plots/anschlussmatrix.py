@@ -144,7 +144,7 @@ class Anschlussmatrix:
         if bahnhof != self.bahnhof:
             self.bahnhof = bahnhof
             try:
-                self.gleisnamen = {name for typ, name in self.zentrale.anlage.bahnhofgraph.list_children(bahnhof, {'Gl'})}
+                self.gleisnamen = {name for typ, name in self.zentrale.anlage.bahnhofgraph.list_children(bahnhof, {BahnhofElement.Typ.GL})}
             except KeyError:
                 self.gleisnamen = set()
             self.zid_ankuenfte_set = set()

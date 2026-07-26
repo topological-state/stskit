@@ -25,6 +25,7 @@ from PySide6.QtCore import Qt, QEvent, QObject, QTimer, Signal, Slot
 from PySide6.QtWidgets import QApplication, QMainWindow
 import trio
 
+from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.plugin.stsplugin import DEFAULT_HOST, DEFAULT_PORT
 from stskit.plugin.stsgraph import GraphClient
 from stskit.zentrale import DatenZentrale
@@ -281,7 +282,7 @@ class MainWindow(QMainWindow):
         self.windows.add(window)
 
     def einfahrten_clicked(self):
-        window = GleisbelegungWindow(self.runner.zentrale, "Agl")
+        window = GleisbelegungWindow(self.runner.zentrale, BahnhofElement.Typ.AGL)
         window.setWindowTitle("Einfahrten/Ausfahrten")
         window.vorlaufzeit = 25
         window.plan_update()
@@ -289,7 +290,7 @@ class MainWindow(QMainWindow):
         self.windows.add(window)
 
     def gleisbelegung_clicked(self):
-        window = GleisbelegungWindow(self.runner.zentrale, "Gl")
+        window = GleisbelegungWindow(self.runner.zentrale, BahnhofElement.Typ.GL)
         window.plan_update()
         window.show()
         self.windows.add(window)

@@ -19,7 +19,7 @@ from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import Slot
 
 from stskit.dispo.anlage import Anlage
-from stskit.model.bahnhofgraph import BahnhofGraph
+from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement
 from stskit.model.liniengraph import LinienGraph
 from stskit.model.signalgraph import (graph_weichen_ersetzen, graph_anschluesse_pruefen,
                                       graph_bahnsteigsignale_ersetzen, graph_signalpaare_ersetzen,
@@ -47,12 +47,12 @@ def graph_nachbarbahnsteige_vereinen(g: nx.DiGraph) -> nx.DiGraph:
     return g
 
 
-BAHNHOF_COLORMAP = {'Bf': "tab:red",
-                    'Bft': "tab:orange",
-                    'Bs': "tab:blue",
-                    'Gl': "tab:cyan",
-                    'Anst': "tab:purple",
-                    'Agl': "tab:pink"
+BAHNHOF_COLORMAP = {BahnhofElement.Typ.BF: "tab:red",
+                    BahnhofElement.Typ.BFT: "tab:orange",
+                    BahnhofElement.Typ.BS: "tab:blue",
+                    BahnhofElement.Typ.GL: "tab:cyan",
+                    BahnhofElement.Typ.ANST: "tab:purple",
+                    BahnhofElement.Typ.AGL: "tab:pink"
                     }
 
 SIGNAL_COLORMAP = {2: "tab:blue",  # Signal
@@ -215,12 +215,12 @@ class BahnhofDiagramm:
 
         edges_gen = nx.bfs_edges(graph, graph.root(), sort_neighbors=sorted)
 
-        y_pos = {'Bf': 0.8,
-                 'Bft': 0.7,
-                 'Bs': 0.6,
-                 'Gl': 0.5,
-                 'Anst': 0.3,
-                 'Agl': 0.2}
+        y_pos = {BahnhofElement.Typ.BF: 0.8,
+                 BahnhofElement.Typ.BFT: 0.7,
+                 BahnhofElement.Typ.BS: 0.6,
+                 BahnhofElement.Typ.GL: 0.5,
+                 BahnhofElement.Typ.ANST: 0.3,
+                 BahnhofElement.Typ.AGL: 0.2}
 
         graph = nx.subgraph_view(graph, filter_node=lambda node: node[0] in y_pos)
 
@@ -242,12 +242,12 @@ class BahnhofDiagramm:
                     partitions_dict[data.typ] = {key}
 
         partitions = {
-            'Bf': sorted(partitions_dict['Bf']),
-            'Bft': sorted(partitions_dict['Bft']),
-            'Bs': sorted(partitions_dict['Bs']),
-            'Gl': sorted(partitions_dict['Gl']),
-            'Anst': sorted(partitions_dict['Anst']),
-            'Agl': sorted(partitions_dict['Agl'])
+            BahnhofElement.Typ.BF: sorted(partitions_dict[BahnhofElement.Typ.BF]),
+            BahnhofElement.Typ.BFT: sorted(partitions_dict[BahnhofElement.Typ.BFT]),
+            BahnhofElement.Typ.BS: sorted(partitions_dict[BahnhofElement.Typ.BS]),
+            BahnhofElement.Typ.GL: sorted(partitions_dict[BahnhofElement.Typ.GL]),
+            BahnhofElement.Typ.ANST: sorted(partitions_dict[BahnhofElement.Typ.ANST]),
+            BahnhofElement.Typ.AGL: sorted(partitions_dict[BahnhofElement.Typ.AGL])
         }
 
         x_delta = {k: 1 / (len(partition) + 1) for k, partition in partitions.items()}

@@ -174,9 +174,9 @@ class ZielGraphNode(dict):
         Plangleis in Betriebsstellen-Notation.
         """
         if self.typ in {'E', 'A'}:
-            return BahnhofElement('Agl', self.plan)
+            return BahnhofElement(BahnhofElement.Typ.AGL, self.plan)
         else:
-            return BahnhofElement('Gl', self.plan)
+            return BahnhofElement(BahnhofElement.Typ.GL, self.plan)
 
     @property
     def gleis_bst(self) -> BahnhofElement:
@@ -184,9 +184,9 @@ class ZielGraphNode(dict):
         Effektives Gleis in Betriebsstellen-Notation.
         """
         if self.typ in {'E', 'A'}:
-            return BahnhofElement('Agl', self.gleis)
+            return BahnhofElement(BahnhofElement.Typ.AGL, self.gleis)
         else:
-            return BahnhofElement('Gl', self.gleis)
+            return BahnhofElement(BahnhofElement.Typ.GL, self.gleis)
 
     @classmethod
     def from_fahrplanzeile(cls: type, fahrplanzeile: FahrplanZeile) -> ZielGraphNode:
@@ -733,11 +733,11 @@ class ZielGraph(nx.DiGraph):
             ziel2_data: ZielGraphNode = self.nodes[fid2]
             if ziel1_data.typ == 'E' or ziel2_data.typ == 'A':
                 try:
-                    bst1 = bg.find_superior(ziel1_data.plan_bst, {'Anst', 'Bf'})
+                    bst1 = bg.find_superior(ziel1_data.plan_bst, {BahnhofElement.Typ.ANST, BahnhofElement.Typ.BF})
                 except KeyError:
                     bst1 = None
                 try:
-                    bst2 = bg.find_superior(ziel2_data.plan_bst, {'Anst', 'Bf'})
+                    bst2 = bg.find_superior(ziel2_data.plan_bst, {BahnhofElement.Typ.ANST, BahnhofElement.Typ.BF})
                 except KeyError:
                     bst2 = None
 
