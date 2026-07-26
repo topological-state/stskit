@@ -72,53 +72,71 @@ class BahnhofElement(NamedTuple):
 class BahnsteigGraphNode(dict):
     """
     Klasse der Knotenattribute von BahnsteigGraph und BahnhofGraph
+    
+    Attributes:
+        name: Name
+        enr: Elementnummer bei Anschlussgleisen. Nur für Agl definiert.
+        typ: Bahnhofelementtyp
+        
+            | Wert | Bedeutung |
+            |:---:|:---|
+            | Gl | Gleis- oder Haltepunktbezeichnung, wie sie in den Fahrplänen vorkommt. Vom Sim deklariert. | 
+            | Bs | Bahnsteigbezeichnung, fasst Gleissektoren bzw. Haltepunkte zusammen. |
+            | Bft | Bahnhofteil, fasst Bahnsteige zusammen, auf die ein Zug umdisponiert werden kann. |
+            | Bf | Bahnhof für grafische Darstellung und Fahrzeitauswertung. |
+            | Agl | Anschluss- oder Übergabegleis. Vom Sim deklariert. |
+            | Anst | Anschluss- oder Übergabestelle, fasst Anschlussgleise zusammen auf die ein Zug umdisponiert werden kann. | 
+            | Bst | Betriebsstelle. Entweder 'Bf' oder 'Anst'. |
+            | Stw | Stellwerk/Anlage. |
+
+        auto: True bei automatischer, False bei manueller Konfiguration.
+        stamm: Name des übergeordneten Knoten. 
+            Wird im Konfigurationsimport und -export verwendet und ist ansonsten undefiniert.
+            Der Typ erschliesst sich aus `BAHNHOFELEMENT_HIERARCHIE[typ]`.
+        ordnung: Sortierordnung innerhalb der Gruppe.
+            Bahnhofelemente innerhalb der Gruppe werden gemäss dem Tupel (ordnung, name) sortiert.
+        gleise: Anzahl Gleise mit dem gleichen Namen.
+            Normalerweise 1, ausser z.B. bei Haltestellen oder Anschlussgleisen ohne Gleisnummer.
+            In diesem Fall wird bei Mehrfachbelegung kein Konflikt angezeigt.  
+            Nur bei Gl, Bs und Agl.
+            Im Moment wird der Wert nur bei Agl automatisch aus dem Signalgraphen ausgewertet. 
+        einfahrt: True, wenn das Gleis eine Einfahrt ist. Nur für Agl definiert.
+        ausfahrt: True, wenn das Gleis eine Ausfahrt ist. Nur für Agl definiert.
+        sperrung: Gleissperrung
+        linienstil: Linienstil für die Darstellung der Station.
     """
-    name = dict_property("name", str, docstring="Name")
-    enr = dict_property("enr", int, docstring="Elementnummer bei Anschlussgleisen. Nur für Agl definiert.")
-    typ = dict_property("typ", str, docstring="""
-        'Gl': Gleis- oder Haltepunktbezeichnung, wie sie in den Fahrplänen vorkommt. Vom Sim deklariert. 
-        'Bs': Bahnsteigbezeichnung, fasst Gleissektoren bzw. Haltepunkte zusammen.
-        'Bft': Bahnhofteil, fasst Bahnsteige zusammen, auf die ein Zug umdisponiert werden kann.
-        'Bf': Bahnhof für grafische Darstellung und Fahrzeitauswertung.
-        'Agl': Anschluss- oder Übergabegleis. Vom Sim deklariert.
-        'Anst': Anschluss- oder Übergabestelle, fasst Anschlussgleise zusammen auf die ein Zug umdisponiert werden kann. 
-        'Bst': Betriebsstelle. Entweder 'Bf' oder 'Anst'.
-        'Stw': Stellwerk/Anlage.
-        """)
-    auto = dict_property("auto", bool, docstring="True bei automatischer, False bei manueller Konfiguration.")
-    stamm = dict_property("stamm", str, docstring="""
-        Name des übergeordneten Knoten. 
-        Wird im Konfigurationsimport und -export verwendet und ist ansonsten undefiniert.
-        Der Typ erschliesst sich aus `BAHNHOFELEMENT_HIERARCHIE[typ]`.
-        """)
-    ordnung = dict_property("ordnung", int, docstring=""" 
-        Sortierordnung innerhalb der Gruppe.
-        Bahnhofelemente innerhalb der Gruppe werden gemäss dem Tupel (ordnung, name) sortiert.
-        """)
-    gleise = dict_property("gleise", int, docstring="""
-        Anzahl Gleise mit dem gleichen Namen.
-        Normalerweise 1, ausser z.B. bei Haltestellen oder Anschlussgleisen ohne Gleisnummer.
-        In diesem Fall wird bei Mehrfachbelegung kein Konflikt angezeigt.  
-        Nur bei Gl, Bs und Agl.
-        Im Moment wird der Wert nur bei Agl automatisch aus dem Signalgraphen ausgewertet. 
-        """)
-    einfahrt = dict_property("einfahrt", bool, docstring="True, wenn das Gleis eine Einfahrt ist. Nur für Agl definiert.")
-    ausfahrt = dict_property("ausfahrt", bool, docstring="True, wenn das Gleis eine Ausfahrt ist. Nur für Agl definiert.")
-    sperrung = dict_property("sperrung", bool, docstring="Gleissperrung")
-    linienstil = dict_property("linienstil", str, docstring="Linienstil für die Darstellung der Station.")
+
+    name = dict_property("name", str,)
+    enr = dict_property("enr", int,)
+    typ = dict_property("typ", str,)
+    auto = dict_property("auto", bool,)
+    stamm = dict_property("stamm", str,)
+    ordnung = dict_property("ordnung", int,)
+    gleise = dict_property("gleise", int,)
+    einfahrt = dict_property("einfahrt", bool,)
+    ausfahrt = dict_property("ausfahrt", bool,)
+    sperrung = dict_property("sperrung", bool,)
+    linienstil = dict_property("linienstil", str,)
 
 
 class BahnsteigGraphEdge(dict):
     """
     Klasse der Kantenattribute von BahnsteigGraph und BahnhofGraph
+
+    Attributes:
+        typ: Beziehungstyp
+
+            | Wert | Bedeutung |
+            |:---:|:---|
+            | Nachbar | Nachbarbeziehung gemäss Simulator. |
+            | Hierarchie | Von StsDispo definierte Hierarchiebeziehung. |
+
+        distanz:
+            Länge (Anzahl Knoten) des kürzesten Pfades zwischen den Knoten.
     """
-    typ = dict_property("typ", str, docstring="""
-        'Nachbar': Nachbarbeziehung gemäss Simulator.
-        'Hierarchie': Von StsDispo definierte Hierarchiebeziehung.
-        """)
-    distanz = dict_property("distanz", int, docstring="""
-        Länge (Anzahl Knoten) des kürzesten Pfades zwischen den Knoten.
-        """)
+
+    typ = dict_property("typ", str,)
+    distanz = dict_property("distanz", int,)
 
 
 class BahnsteigGraph(nx.Graph):

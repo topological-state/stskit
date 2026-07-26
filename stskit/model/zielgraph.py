@@ -71,76 +71,70 @@ class ZielLabelType(NamedTuple):
 class ZielGraphNode(dict):
     """
     Attribute eines ZielGraph-Knotens.
+
+    Attributes:
+        obj: stsobj.FahrplanZeile-Objekt (fehlt bei Ein- und Ausfahrten).
+        fid: Fahrplanziel-ID bestehend aus Zug-ID, Ankunfts- oder Abfahrtszeit in Minuten, Plangleis.
+            Siehe stsobj.FahrplanZeile.fid.
+            Bei Ein- und Ausfahrten wird statt dem Gleiseintrag die Elementnummer (enr) eingesetzt,
+            und die Zeitkomponente ist MIN_MINUTES (Einfahrt) oder MAX_MINUTES (Ausfahrt).
+        zid: Zug-ID
+        typ: Zielpunkttyp:
+
+            | Wert | Bedeutung |
+            |:---:|:---|
+            | H | Planmässiger Halt |
+            | D | Durchfahrt |
+            | E | Einfahrt |
+            | A | Ausfahrt |
+            | B | Betriebshalt (vom Sim nicht verwendet) |
+            | S | Signalhalt (vom Sim nicht verwendet) |
+
+        plan: Gleis- oder Anschlussname nach Fahrplan.
+        gleis: Gleis- oder Anschlussname nach aktueller Disposition.
+        p_an: Planmässige Ankunftszeit in Minuten.
+            Bei Ein- und Ausfahrten wird die Ankunfts- und Abfahrtszeit geschätzt.
+        p_ab: Planmässige Abfahrtszeit in Minuten.
+            Bei Ein- und Ausfahrten wird die Ankunfts- und Abfahrtszeit geschätzt.
+        flags: Originalflags
+        lokwechsel: Lokwechselflag mit Nummern der Ein- und Ausfahrtsgleisen der Ersatzlok/Abstelllok.
+        lokumlauf: Lokumlaufflag.
+        mindestaufenthalt: Minimale Aufenthaltsdauer in Minuten.
+            Schätzung, wie lange sich der Zug mindestens an diesem Ziel aufhält,
+            auch wenn er laut Fahrplan früher abfahren müsste.
+
+            Die Mindestaufenthaltsdauer wird von der Simulatorschnittstelle nicht angegeben
+            und muss von uns geschätzt werden,
+            z.B. mittels konfigurierten Parametern durch mindestaufenthalt_setzen.
+        status: Status des Ziels. Bestimmt, ob die Ankunfts- und/oder Abfahrtszeit definitiv ist.
+
+            | Wert | Bedeutung |
+            |:---:|:---|
+            | '' | Ziel noch nicht erreicht |
+            | an | am Ziel angekommen |
+            | ab | vom Ziel abgefahren |
+
+        v_an: Ankunftsverspätung in Minuten
+        v_ab: Abfahrtsverspätung in Minuten
     """
-    obj = dict_property("obj", Any,
-                        docstring="""
-                            stsobj.FahrplanZeile-Objekt (fehlt bei Ein- und Ausfahrten).
-                            """)
-    fid = dict_property("fid", ZielLabelType,
-                        docstring="""
-                            Fahrplanziel-ID bestehend aus Zug-ID, Ankunfts- oder Abfahrtszeit in Minuten, Plangleis.
-                            Siehe stsobj.FahrplanZeile.fid.
-                            Bei Ein- und Ausfahrten wird statt dem Gleiseintrag die Elementnummer (enr) eingesetzt,
-                            und die Zeitkomponente ist MIN_MINUTES (Einfahrt) oder MAX_MINUTES (Ausfahrt).
-                            """)
-    zid = dict_property("zid", int, docstring="Zug-ID")
-    typ = dict_property("typ", str,
-                        docstring="""
-                            Zielpunkttyp:
-                                'H': Planmässiger Halt
-                                'D': Durchfahrt
-                                'E': Einfahrt
-                                'A': Ausfahrt
-                                'B': Betriebshalt (vom Sim nicht verwendet)
-                                'S': Signalhalt (vom Sim nicht verwendet)
-                            """)
-    plan = dict_property("plan", str,
-                         docstring="""
-                            Gleis- oder Anschlussname nach Fahrplan.
-                            """)
-    gleis = dict_property("gleis", str,
-                         docstring="""
-                            Gleis- oder Anschlussname nach aktueller Disposition.
-                            """)
-    p_an = dict_property("p_an", int | float,
-                       docstring="""
-                            Planmässige Ankunftszeit in Minuten.
-                            Bei Ein- und Ausfahrten wird die Ankunfts- und Abfahrtszeit geschätzt.
-                            """)
-    p_ab = dict_property("p_ab", int | float,
-                       docstring="""
-                            Planmässige Abfahrtszeit in Minuten.
-                            Bei Ein- und Ausfahrten wird die Ankunfts- und Abfahrtszeit geschätzt.
-                            """)
-    flags = dict_property("flags", str, docstring="Originalflags")
-    lokwechsel = dict_property("lokwechsel", tuple[int, int] | None,
-                               docstring="""
-                               Lokwechselflag mit Nummern der Ein- und Ausfahrtsgleisen der Ersatzlok/Abstelllok.
-                               """)
-    lokumlauf = dict_property("lokumlauf", bool,
-                              docstring="""
-                              Lokumlaufflag.
-                              """)
+
+    obj = dict_property("obj", Any,)
+    fid = dict_property("fid", ZielLabelType,)
+    zid = dict_property("zid", int,)
+    typ = dict_property("typ", str,)
+    plan = dict_property("plan", str,)
+    gleis = dict_property("gleis", str,)
+    p_an = dict_property("p_an", int | float,)
+    p_ab = dict_property("p_ab", int | float,)
+    flags = dict_property("flags", str,)
+    lokwechsel = dict_property("lokwechsel", tuple[int, int] | None,)
+    lokumlauf = dict_property("lokumlauf", bool,)
 
     # Die folgenden Properties werden nicht vom Simulator geliefert
-    mindestaufenthalt = dict_property("mindestaufenthalt", int | float,
-                                      docstring="""
-                                          Minimale Aufenthaltsdauer in Minuten.
-                                          Schätzung, wie lange sich der Zug mindestens an diesem Ziel aufhält,
-                                          auch wenn er laut Fahrplan früher abfahren müsste.
-                                          
-                                          Die Mindestaufenthaltsdauer wird von der Simulatorschnittstelle nicht angegeben
-                                          und muss von uns geschätzt werden, 
-                                          z.B. mittels konfigurierten Parametern durch mindestaufenthalt_setzen.
-                                          """)
-    status = dict_property("status", str, docstring="""
-                            Status des Ziels. Bestimmt, ob die Ankunfts- und/oder Abfahrtszeit definitiv ist. 
-                            '': noch nicht erreicht,  
-                            'an': angekommen,
-                            'ab': abgefahren.
-                            """)
-    v_an = dict_property("v_an", int | float, docstring="Ankunftsverspätung in Minuten")
-    v_ab = dict_property("v_ab", int | float, docstring="Abfahrtsverspätung in Minuten")
+    mindestaufenthalt = dict_property("mindestaufenthalt", int | float,)
+    status = dict_property("status", str,)
+    v_an = dict_property("v_an", int | float,)
+    v_ab = dict_property("v_ab", int | float,)
 
     @property
     def e_an(self) -> int | float:
@@ -269,6 +263,22 @@ class ZielGraphNode(dict):
 class ZielGraphEdge(dict):
     """
     Attribute einer ZielGraph-Kante
+    
+    Attributes:
+        typ: Verbindungstyp:
+        
+            | Wert | Bedeutung |
+            |:---:|:---|
+            | P | planmässige Fahrt |
+            | E | Ersatzzug |
+            | F | Flügelung |
+            | K | Kupplung |
+            | R | vom Fdl angeordnete Rangierfahrt, z.B. bei Lokwechsel |
+            | A | vom Fdl angeordnete Abhängigkeit |
+            | O | Hilfskante für Sortierordnung |
+
+        v: Verspätung auf dieser Verbindung in Minuten. 
+            Wird in der Prognose verwendet, ist daher nicht persistent.
     """
     typ = dict_property("typ", str,
                         docstring="""
