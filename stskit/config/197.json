@@ -1,0 +1,2222 @@
+{
+  "default": true,
+  "elemente": [
+    {
+      "name": "WRHI",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "E A",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "E A Berg",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WRS",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "E A Lalendorf",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "E A Toitenwinkel",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Event",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WBE",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WGE",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WGM",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WRV",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WGMM",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WGMS",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WMN",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WRD",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WRI",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WRKD",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WRVE",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "WRHI",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI"
+    },
+    {
+      "name": "WRS 132",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "E A 129",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 126",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRHI",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 128",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 124",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 141",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 122",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 133",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 121",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 125",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 134",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 127",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 123",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 132",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 132",
+      "gleise": 1
+    },
+    {
+      "name": "E A 129-131 Nord",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 129",
+      "gleise": 1
+    },
+    {
+      "name": "E A 129-131 Süd",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 129",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 126",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 126",
+      "gleise": 1
+    },
+    {
+      "name": "WRHI",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRHI",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 128",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 128",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 124",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 124",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 141",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 141",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 122",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 122",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 133",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 133",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 121",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 121",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 125",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 125",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 134",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 134",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 127",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 127",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 123",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 123",
+      "gleise": 1
+    },
+    {
+      "name": "E A 210",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A"
+    },
+    {
+      "name": "E A 213",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A"
+    },
+    {
+      "name": "E A 221",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A"
+    },
+    {
+      "name": "E A 266",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A"
+    },
+    {
+      "name": "E A 210",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 210",
+      "gleise": 1
+    },
+    {
+      "name": "E A 210",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 210",
+      "gleise": 1
+    },
+    {
+      "name": "E A 213",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 213",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 212",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 213",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 209",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 213",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 215",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 213",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 217",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 213",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 211",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 213",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 218",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 213",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 216",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 213",
+      "gleise": 1
+    },
+    {
+      "name": "E A 213",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 213",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 212",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 212",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 209",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 209",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 215",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 215",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 217",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 217",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 211",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 211",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 218",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 218",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 216",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 216",
+      "gleise": 1
+    },
+    {
+      "name": "E A 221",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 221",
+      "gleise": 1
+    },
+    {
+      "name": "E A 221",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 221",
+      "gleise": 1
+    },
+    {
+      "name": "E A 266",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 266",
+      "gleise": 1
+    },
+    {
+      "name": "E A 268",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 266",
+      "gleise": 1
+    },
+    {
+      "name": "E A 267",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 266",
+      "gleise": 1
+    },
+    {
+      "name": "E A 266",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 266",
+      "gleise": 1
+    },
+    {
+      "name": "E A 268",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 268",
+      "gleise": 1
+    },
+    {
+      "name": "E A 267",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A 267",
+      "gleise": 1
+    },
+    {
+      "name": "E A Berg 1",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Berg"
+    },
+    {
+      "name": "E A Berg 2",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Berg"
+    },
+    {
+      "name": "E A Berg 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Berg 1",
+      "gleise": 1
+    },
+    {
+      "name": "E A Berg 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Berg 1",
+      "gleise": 1
+    },
+    {
+      "name": "E A Berg 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Berg 2",
+      "gleise": 1
+    },
+    {
+      "name": "E A Berg 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Berg 2",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 138",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS"
+    },
+    {
+      "name": "E A Ladestr.",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 138",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 138",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 138",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 31",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 138",
+      "gleise": 1
+    },
+    {
+      "name": "E A Ladestr.",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Ladestr.",
+      "gleise": 1
+    },
+    {
+      "name": "WRS 138",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRS 138",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 31",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRSS 31",
+      "gleise": 1
+    },
+    {
+      "name": "E A Lalendorf",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Lalendorf"
+    },
+    {
+      "name": "E A Lalendorf",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Lalendorf",
+      "gleise": 1
+    },
+    {
+      "name": "E A Lalendorf",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Lalendorf",
+      "gleise": 1
+    },
+    {
+      "name": "E A Toitenwinkel",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Toitenwinkel"
+    },
+    {
+      "name": "E A Toitenwinkel",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Toitenwinkel",
+      "gleise": 1
+    },
+    {
+      "name": "E A Toitenwinkel",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E A Toitenwinkel",
+      "gleise": 1
+    },
+    {
+      "name": "Event 1",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event"
+    },
+    {
+      "name": "Event 2",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event"
+    },
+    {
+      "name": "Event 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event 1",
+      "gleise": 1
+    },
+    {
+      "name": "Event 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event 1",
+      "gleise": 1
+    },
+    {
+      "name": "Event 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event 2",
+      "gleise": 1
+    },
+    {
+      "name": "Event 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Event 2",
+      "gleise": 1
+    },
+    {
+      "name": "WBE 2",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBE"
+    },
+    {
+      "name": "WBE 4",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBE"
+    },
+    {
+      "name": "WBE 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBE 2",
+      "gleise": 1
+    },
+    {
+      "name": "WBE 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBE 2",
+      "gleise": 1
+    },
+    {
+      "name": "WBE 1a",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBE 1",
+      "gleise": 1
+    },
+    {
+      "name": "WBE 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBE 1",
+      "gleise": 1
+    },
+    {
+      "name": "WBE 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBE 2",
+      "gleise": 1
+    },
+    {
+      "name": "WBE 2a",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBE 2",
+      "gleise": 1
+    },
+    {
+      "name": "WBE 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBE 4",
+      "gleise": 1
+    },
+    {
+      "name": "WBE 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WBE 4",
+      "gleise": 1
+    },
+    {
+      "name": "WGE 1",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGE"
+    },
+    {
+      "name": "WGE 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGE 1",
+      "gleise": 1
+    },
+    {
+      "name": "WGE 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGE 1",
+      "gleise": 1
+    },
+    {
+      "name": "WGE 1G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGE 1",
+      "gleise": 1
+    },
+    {
+      "name": "WGE 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGE 1",
+      "gleise": 1
+    },
+    {
+      "name": "WGE 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGE 2",
+      "gleise": 1
+    },
+    {
+      "name": "WGE 2G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGE 2",
+      "gleise": 1
+    },
+    {
+      "name": "WGM",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGM"
+    },
+    {
+      "name": "WGM",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGM",
+      "gleise": 1
+    },
+    {
+      "name": "WGM",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGM",
+      "gleise": 1
+    },
+    {
+      "name": "WRV 2",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV"
+    },
+    {
+      "name": "WRV 3",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV"
+    },
+    {
+      "name": "WGM-Kurzwende",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV 2",
+      "gleise": 1
+    },
+    {
+      "name": "WRV 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV 2",
+      "gleise": 1
+    },
+    {
+      "name": "WRV 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV 2",
+      "gleise": 1
+    },
+    {
+      "name": "WGM-Kurzwende",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGM-Kurzwende",
+      "gleise": 1
+    },
+    {
+      "name": "WRV 2a",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV 2",
+      "gleise": 1
+    },
+    {
+      "name": "WRV 2G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV 2",
+      "gleise": 1
+    },
+    {
+      "name": "WRV 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV 2",
+      "gleise": 1
+    },
+    {
+      "name": "WRV 1a",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV 1",
+      "gleise": 1
+    },
+    {
+      "name": "WRV 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV 1",
+      "gleise": 1
+    },
+    {
+      "name": "WRV 1G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV 1",
+      "gleise": 1
+    },
+    {
+      "name": "WGMM",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGMM"
+    },
+    {
+      "name": "WGMM",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGMM",
+      "gleise": 1
+    },
+    {
+      "name": "WGMM",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGMM",
+      "gleise": 1
+    },
+    {
+      "name": "WGMS",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGMS"
+    },
+    {
+      "name": "WGMS",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGMS",
+      "gleise": 1
+    },
+    {
+      "name": "WGMS",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WGMS",
+      "gleise": 1
+    },
+    {
+      "name": "WMN",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WMN"
+    },
+    {
+      "name": "WMN",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WMN",
+      "gleise": 1
+    },
+    {
+      "name": "WMN",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WMN",
+      "gleise": 1
+    },
+    {
+      "name": "WRD",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD"
+    },
+    {
+      "name": "WRSS 36",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 43",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 40",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 41",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 37",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 42",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 34",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD",
+      "gleise": 1
+    },
+    {
+      "name": "WRD",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 39",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 35",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 38",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 36",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRSS 36",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 43",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRSS 43",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 40",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRSS 40",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 41",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRSS 41",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 37",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRSS 37",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 42",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRSS 42",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 34",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRSS 34",
+      "gleise": 1
+    },
+    {
+      "name": "WRD",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRD",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 39",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRSS 39",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 35",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRSS 35",
+      "gleise": 1
+    },
+    {
+      "name": "WRSS 38",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRSS 38",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 4",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI"
+    },
+    {
+      "name": "WRI 11",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI"
+    },
+    {
+      "name": "WRI 102",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI"
+    },
+    {
+      "name": "WRI 4",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 4",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 2",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 4",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 1",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 4",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 6",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 4",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 4",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 2",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 2G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 2",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 1",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 1G",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 1",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 6",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 6",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 11",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 11",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 11",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 11",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 102",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 102",
+      "gleise": 1
+    },
+    {
+      "name": "WRI 102",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRI 102",
+      "gleise": 1
+    },
+    {
+      "name": "WRKD",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRKD"
+    },
+    {
+      "name": "WRKD",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRKD",
+      "gleise": 1
+    },
+    {
+      "name": "WRKD",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRKD",
+      "gleise": 1
+    },
+    {
+      "name": "WRV 3",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV 3",
+      "gleise": 1
+    },
+    {
+      "name": "WRV 3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRV 3",
+      "gleise": 1
+    },
+    {
+      "name": "WRVE",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRVE"
+    },
+    {
+      "name": "WRVE",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRVE",
+      "gleise": 1
+    },
+    {
+      "name": "WRVE",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "WRVE",
+      "gleise": 1
+    },
+    {
+      "name": "Gl. 129-131 Nord",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gl. 129-131 Süd",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "210",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "213",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "221",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "266",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "267",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "268",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Lalendorf",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Toitenwinkel",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Berg",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Rostock",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Poppendorf",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Stralsund",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "50Hertz",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Ladestr.",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Schröder Gas",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "E-Lok Abstellung",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Gl. 129-131 Nord",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gl. 129-131 Nord",
+      "gleise": 1
+    },
+    {
+      "name": "Gl. 129-131 Süd",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Gl. 129-131 Süd",
+      "gleise": 1
+    },
+    {
+      "name": "210",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "210",
+      "gleise": 1
+    },
+    {
+      "name": "213",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "213",
+      "gleise": 1
+    },
+    {
+      "name": "221",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "221",
+      "gleise": 1
+    },
+    {
+      "name": "266",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "266",
+      "gleise": 1
+    },
+    {
+      "name": "267",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "267",
+      "gleise": 1
+    },
+    {
+      "name": "268",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "268",
+      "gleise": 1
+    },
+    {
+      "name": "Lalendorf",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Lalendorf",
+      "gleise": 1
+    },
+    {
+      "name": "Toitenwinkel",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Toitenwinkel",
+      "gleise": 1
+    },
+    {
+      "name": "Berg 1",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Berg",
+      "gleise": 1
+    },
+    {
+      "name": "Berg 2",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Berg",
+      "gleise": 1
+    },
+    {
+      "name": "Rostock",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Rostock",
+      "gleise": 2
+    },
+    {
+      "name": "Poppendorf",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Poppendorf",
+      "gleise": 1
+    },
+    {
+      "name": "Stralsund",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Stralsund",
+      "gleise": 1
+    },
+    {
+      "name": "50Hertz",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "50Hertz",
+      "gleise": 1
+    },
+    {
+      "name": "Ladestr.",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Ladestr.",
+      "gleise": 1
+    },
+    {
+      "name": "Schröder Gas",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Schröder Gas",
+      "gleise": 1
+    },
+    {
+      "name": "E-Lok Abstellung",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "E-Lok Abstellung",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Rostock-Stralsund",
+      "haupt": false,
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Rostock",
+        "Bf WRKD",
+        "Bf WBE",
+        "Bf WMN",
+        "Bf WRVE",
+        "Bf WRV",
+        "Bf WGE",
+        "Bf WRI",
+        "Anst Stralsund"
+      ]
+    }
+  ],
+  "streckenmarkierung": [],
+  "zugschema": "deutschland",
+  "_aid": 197,
+  "_build": 5851,
+  "_name": "Rövershagen",
+  "_region": "Mecklenburg",
+  "_version": 3
+}
