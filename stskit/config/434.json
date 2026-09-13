@@ -1,0 +1,1231 @@
+{
+  "default": true,
+  "elemente": [
+    {
+      "name": "HBKB",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HEST",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HFLL",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HHMS",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HKHN",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HLAD",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HLST",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HSHG",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HWDH",
+      "typ": "Bf",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "HBKB",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBKB"
+    },
+    {
+      "name": "HBKB3L",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBKB3",
+      "gleise": 1
+    },
+    {
+      "name": "HBKB3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBKB3",
+      "gleise": 1
+    },
+    {
+      "name": "HBKB4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBKB4",
+      "gleise": 1
+    },
+    {
+      "name": "HBKB1L",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBKB1",
+      "gleise": 1
+    },
+    {
+      "name": "HBKB1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBKB1",
+      "gleise": 1
+    },
+    {
+      "name": "HBKB2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBKB2",
+      "gleise": 1
+    },
+    {
+      "name": "HBKB2L",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBKB2",
+      "gleise": 1
+    },
+    {
+      "name": "HEST",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HEST"
+    },
+    {
+      "name": "HEST2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HEST2",
+      "gleise": 1
+    },
+    {
+      "name": "HEST1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HEST1",
+      "gleise": 1
+    },
+    {
+      "name": "HFLL",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HFLL"
+    },
+    {
+      "name": "HFLL2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HFLL2",
+      "gleise": 1
+    },
+    {
+      "name": "HFLL1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HFLL1",
+      "gleise": 1
+    },
+    {
+      "name": "HHMS",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHMS"
+    },
+    {
+      "name": "HHMS2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHMS2",
+      "gleise": 1
+    },
+    {
+      "name": "HHMS1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHMS1",
+      "gleise": 1
+    },
+    {
+      "name": "HKHN Überhol",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKHN"
+    },
+    {
+      "name": "HKHN Bstg",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKHN"
+    },
+    {
+      "name": "HKHN1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKHN1",
+      "gleise": 1
+    },
+    {
+      "name": "HKHN2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKHN2",
+      "gleise": 1
+    },
+    {
+      "name": "HKHN4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKHN4",
+      "gleise": 1
+    },
+    {
+      "name": "HKHN3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKHN3",
+      "gleise": 1
+    },
+    {
+      "name": "HLAD Gbf",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLAD"
+    },
+    {
+      "name": "HLAD Bstg",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLAD"
+    },
+    {
+      "name": "HLAD1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLAD1",
+      "gleise": 1
+    },
+    {
+      "name": "HLAD12",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLAD12",
+      "gleise": 1
+    },
+    {
+      "name": "HLAD10",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLAD10",
+      "gleise": 1
+    },
+    {
+      "name": "HLAD11",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLAD11",
+      "gleise": 1
+    },
+    {
+      "name": "HLST",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLST"
+    },
+    {
+      "name": "HLST1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLST1",
+      "gleise": 1
+    },
+    {
+      "name": "HLST2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLST2",
+      "gleise": 1
+    },
+    {
+      "name": "HLST2L",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLST2",
+      "gleise": 1
+    },
+    {
+      "name": "HLST3L",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLST3",
+      "gleise": 1
+    },
+    {
+      "name": "HLST3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLST3",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG12",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG"
+    },
+    {
+      "name": "HSHG81",
+      "typ": "Bft",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG"
+    },
+    {
+      "name": "HSHG",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG"
+    },
+    {
+      "name": "HSHG2L",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG2",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG2",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG3L",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG3",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG3",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG3",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG6",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG6",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG8",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG8",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG4",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG4",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG4L",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG4",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG1L",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG1",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG1",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG5",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG5",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG9",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG9",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG12",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG12",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG13",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG12",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG15",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG12",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG12",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG12",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG13",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG13",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG15",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG15",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG81",
+      "typ": "Bs",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG81",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG81",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG81",
+      "gleise": 1
+    },
+    {
+      "name": "HWDH",
+      "typ": "Bft",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWDH"
+    },
+    {
+      "name": "HWDH2",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWDH2",
+      "gleise": 1
+    },
+    {
+      "name": "HWDH1",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWDH1",
+      "gleise": 1
+    },
+    {
+      "name": "Kirchhorsten",
+      "typ": "Gl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kirchhorsten",
+      "gleise": 1
+    },
+    {
+      "name": "Minden",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Wunstorf",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "RStE",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Minden Natobahn",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Schäferhof Awanst",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Kraftwerk PL",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "NOGA",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Langendamm Awanst",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Nienburg (Weser)",
+      "typ": "Anst",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": ""
+    },
+    {
+      "name": "Minden",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Minden",
+      "gleise": 2
+    },
+    {
+      "name": "Wunstorf",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Wunstorf",
+      "gleise": 2
+    },
+    {
+      "name": "RStE",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "RStE",
+      "gleise": 1
+    },
+    {
+      "name": "Minden Natobahn",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Minden Natobahn",
+      "gleise": 1
+    },
+    {
+      "name": "Schäferhof Awanst",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Schäferhof Awanst",
+      "gleise": 1
+    },
+    {
+      "name": "Kraftwerk PL",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Kraftwerk PL",
+      "gleise": 1
+    },
+    {
+      "name": "NOGA",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "NOGA",
+      "gleise": 1
+    },
+    {
+      "name": "Langendamm Awanst",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Langendamm Awanst",
+      "gleise": 1
+    },
+    {
+      "name": "Nienburg (Weser)",
+      "typ": "Agl",
+      "auto": true,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "Nienburg (Weser)",
+      "gleise": 1
+    },
+    {
+      "name": "HBKB3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBKB",
+      "gleise": 1
+    },
+    {
+      "name": "HBKB4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBKB",
+      "gleise": 1
+    },
+    {
+      "name": "HBKB1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBKB",
+      "gleise": 1
+    },
+    {
+      "name": "HBKB2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HBKB",
+      "gleise": 1
+    },
+    {
+      "name": "HEST2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HEST",
+      "gleise": 1
+    },
+    {
+      "name": "HEST1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HEST",
+      "gleise": 1
+    },
+    {
+      "name": "HFLL2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HFLL",
+      "gleise": 1
+    },
+    {
+      "name": "HFLL1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HFLL",
+      "gleise": 1
+    },
+    {
+      "name": "HHMS2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHMS",
+      "gleise": 1
+    },
+    {
+      "name": "HHMS1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HHMS",
+      "gleise": 1
+    },
+    {
+      "name": "HKHN1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKHN Überhol",
+      "gleise": 1
+    },
+    {
+      "name": "HKHN2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKHN Überhol",
+      "gleise": 1
+    },
+    {
+      "name": "HKHN4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKHN Überhol",
+      "gleise": 1
+    },
+    {
+      "name": "HKHN3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKHN Überhol",
+      "gleise": 1
+    },
+    {
+      "name": "Kirchhorsten",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HKHN Bstg",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG6",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG8",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG4",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG5",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG",
+      "gleise": 1
+    },
+    {
+      "name": "HSHG9",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HSHG",
+      "gleise": 1
+    },
+    {
+      "name": "HLAD12",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLAD Gbf",
+      "gleise": 1
+    },
+    {
+      "name": "HLAD10",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLAD Gbf",
+      "gleise": 1
+    },
+    {
+      "name": "HLAD11",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLAD Gbf",
+      "gleise": 1
+    },
+    {
+      "name": "HLAD1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLAD Bstg",
+      "gleise": 1
+    },
+    {
+      "name": "HLST1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLST",
+      "gleise": 1
+    },
+    {
+      "name": "HLST2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLST",
+      "gleise": 1
+    },
+    {
+      "name": "HLST3",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HLST",
+      "gleise": 1
+    },
+    {
+      "name": "HWDH2",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWDH",
+      "gleise": 1
+    },
+    {
+      "name": "HWDH1",
+      "typ": "Bs",
+      "auto": false,
+      "ordnung": 0,
+      "sichtbar": true,
+      "flags": "",
+      "stamm": "HWDH",
+      "gleise": 1
+    }
+  ],
+  "strecken": [
+    {
+      "name": "Minden Natobahn-Nienburg (Weser)",
+      "haupt": false,
+      "ordnung": 1,
+      "auto": false,
+      "stationen": [
+        "Anst Minden Natobahn",
+        "Bf HFLL",
+        "Bf HLAD",
+        "Bf HWDH",
+        "Bf HHMS",
+        "Bf HLST",
+        "Bf HEST",
+        "Anst Nienburg (Weser)"
+      ]
+    },
+    {
+      "name": "Minden-Wunstorf",
+      "haupt": true,
+      "ordnung": 2,
+      "auto": false,
+      "stationen": [
+        "Anst Minden",
+        "Bf HBKB",
+        "Bf HKHN",
+        "Bf HSHG",
+        "Anst Wunstorf"
+      ]
+    },
+    {
+      "name": "Minden - Wunstorf + Minden - Nienburg",
+      "haupt": false,
+      "ordnung": 3,
+      "auto": false,
+      "stationen": [
+        "Anst Minden",
+        "Bf HBKB",
+        "Bf HKHN",
+        "Bf HSHG",
+        "Anst Wunstorf",
+        "Anst Minden Natobahn",
+        "Bf HFLL",
+        "Bf HLAD",
+        "Bf HWDH",
+        "Bf HHMS",
+        "Bf HLST",
+        "Bf HEST",
+        "Anst Nienburg (Weser)"
+      ]
+    }
+  ],
+  "streckenmarkierung": [
+    {
+      "fahrzeit": 1.2,
+      "station1": "Anst Minden Natobahn",
+      "station2": "Anst Wunstorf"
+    }
+  ],
+  "zugschema": "deutschland",
+  "_aid": 434,
+  "_build": 5851,
+  "_name": "Bückeburg-Stadthagen",
+  "_region": "Bremen-Niedersachsen",
+  "_version": 3
+}
