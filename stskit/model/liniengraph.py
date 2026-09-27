@@ -1,6 +1,5 @@
 from __future__ import annotations
-import functools
-from collections.abc import Iterable, Sequence, Callable
+from collections.abc import Iterable, Sequence
 import itertools
 import logging
 from typing import Any, TYPE_CHECKING
@@ -8,7 +7,7 @@ from typing import Any, TYPE_CHECKING
 import networkx as nx
 
 from stskit.model.graphbasics import dict_property
-from stskit.model.bahnhofgraph import BahnhofElement, BahnhofGraph, BahnsteigGraphNode, BahnhofLabelType
+from stskit.model.bahnhofgraph import BahnhofElement, BahnhofGraph, BahnsteigGraphNode
 
 if TYPE_CHECKING:
     from stskit.model.zielgraph import ZielGraphNode
@@ -43,7 +42,7 @@ class LinienGraphEdge(dict):
                                docstring="Markierungsflags: E = Eingleisig")
 
 
-LinienLabelType = BahnhofLabelType
+LinienLabelType = BahnhofElement
 
 
 class LinienGraph(nx.Graph):

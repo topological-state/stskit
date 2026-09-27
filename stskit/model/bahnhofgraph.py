@@ -1,7 +1,7 @@
+from __future__ import annotations
 from enum import StrEnum
 import logging
-import sys
-from typing import Any, Callable, Dict, Generator, Iterable, List, NamedTuple, Optional, Sequence, Set, Tuple, TypeVar, Union
+from typing import Any, Dict, Generator, Iterable, NamedTuple, Optional, Sequence, Set, Tuple, Union
 
 import networkx as nx
 
@@ -14,29 +14,19 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-BAHNHOFELEMENT_BESCHREIBUNG = {'Gl': 'Gleis',
-                               'Bs': 'Bahnsteig',
-                               'Bft': 'Bahnhofteil',
-                               'Bf': 'Bahnhof',
-                               'Agl': 'Anschlussgleis',
-                               'Anst': 'Anschlussstelle',
-                               'Bst': 'Betriebsstelle',
-                               'Stw': 'Stellwerk'}
-
-
 class BahnhofElement(NamedTuple):
     """
     Vollständige Bahnhofelementbezeichnung (Typ und Name)
 
-    Bahnhofelemente sind alle benannten Gleise, Bahnsteige, etc., die im Bahnhofgraph als Knoten vorkommen.
+    Bahnhofelemente sind alle benannten Gleise, Bahnsteige etc., die im Bahnhofgraph als Knoten vorkommen.
     Dazu gehören also in Erweiterung des üblichen Sprachgebrauchs ausdrücklich auch Anschlussgleise und Haltepunkte.
 
     Eine Bahnhofelementbezeichnung enthält den Typ und den Namen des Elements,
-    die auch als Property im BahnsteigGraphNode vorkommen.
+    die auch als Property im `BahnsteigGraphNode` vorkommen.
     Typ und Namen werden verwendet, weil Anschlussgleise und Bahnhofgleise den gleichen Namen tragen können.
     
     Attributes:
-        typ: Bahnhofelementtyp. Stringliteral aus `BAHNHOFELEMENT_TYPEN`.
+        typ: Bahnhofelementtyp aus dem Enum `BahnhofElement.Typ`.
         name: Bahnhofelementname. Name des Elements gemäss Simulator.
     """
     
@@ -50,30 +40,17 @@ class BahnhofElement(NamedTuple):
         BST = "Bst"
         STW = "Stw"
 
+        @property
+        def vollname(self) -> str:
+            return _bahnhofelement_vollname[self]
+
+        @property
+        def supertyp(self) -> Typ:
+            return _bahnhofelement_supertyp[self]
+
     typ: Typ
     name: str
 
-    hierarchie: dict[Typ, Typ] = {
-        Typ.GL: Typ.BS, 
-        Typ.BS: Typ.BFT, 
-        Typ.BFT: Typ.BF, 
-        Typ.BF: Typ.BST,
-        Typ.AGL: Typ.ANST, 
-        Typ.ANST: Typ.BST, 
-        Typ.BST: Typ.STW,
-    }
-
-    beschreibung: dict[Typ, str] = {
-        Typ.GL: "Gleis",
-        Typ.BS: "Bahnsteig",
-        Typ.BFT: "Bahnhofteil",
-        Typ.BF: "Bahnhof",
-        Typ.AGL: "Anschlussgleis",
-        Typ.ANST: "Anschlussstelle",
-        Typ.BST: "Betriebsstelle",
-        Typ.STW: "Stellwerk",
-    }
-    
     def __str__(self):
         """
         Benutzerfreundliche Bezeichnung, wird im UI verwendet.
@@ -81,23 +58,48 @@ class BahnhofElement(NamedTuple):
         return f"{self.typ} {self.name}"
 
     @classmethod
-    def from_string(cls, s: str) -> 'BahnhofElement':
+    def from_string(cls, typ_und_name: str) -> BahnhofElement:
         """
         Bahnhofelement aus Stringdarstellung
+
+        Args:
+            typ_und_name: Typ und Name des Bahnhofelements als String, getrennt durch Leerzeichen.
 
         Raises: 
             ValueError: Fehlerhaftes Format oder unbekannter Elementtyp.
                 Überprüft nicht, ob das Bahnhofelement in der Anlage existiert.
         """
 
-        typ, name = s.split(" ", 1)
+        typ, name = typ_und_name.split(" ", 1)
         try:
             typ_enum = cls.Typ(typ)
         except ValueError:
-            raise ValueError(f"Unbekannter Bahnhofelementtyp {typ} in {s}")
+            raise ValueError(f"Unbekannter Bahnhofelementtyp {typ} in {typ_und_name}")
         if not name:
-            raise ValueError(f"Undefinierter Bahnhofelementname {name} in {s}")
+            raise ValueError(f"Undefinierter Bahnhofelementname {name} in {typ_und_name}")
         return BahnhofElement(typ_enum, name)
+
+
+_bahnhofelement_vollname: dict[BahnhofElement.Typ, str] = {
+        BahnhofElement.Typ.GL: "Gleis",
+        BahnhofElement.Typ.BS: "Bahnsteig",
+        BahnhofElement.Typ.BFT: "Bahnhofteil",
+        BahnhofElement.Typ.BF: "Bahnhof",
+        BahnhofElement.Typ.AGL: "Anschlussgleis",
+        BahnhofElement.Typ.ANST: "Anschlussstelle",
+        BahnhofElement.Typ.BST: "Betriebsstelle",
+        BahnhofElement.Typ.STW: "Stellwerk",
+    }
+
+_bahnhofelement_supertyp: dict[BahnhofElement.Typ, BahnhofElement.Typ] = {
+        BahnhofElement.Typ.GL: BahnhofElement.Typ.BS,
+        BahnhofElement.Typ.BS: BahnhofElement.Typ.BFT,
+        BahnhofElement.Typ.BFT: BahnhofElement.Typ.BF,
+        BahnhofElement.Typ.BF: BahnhofElement.Typ.BST,
+        BahnhofElement.Typ.AGL: BahnhofElement.Typ.ANST,
+        BahnhofElement.Typ.ANST: BahnhofElement.Typ.BST,
+        BahnhofElement.Typ.BST: BahnhofElement.Typ.STW,
+    }
 
 
 class BahnsteigGraphNode(dict):
@@ -139,7 +141,7 @@ class BahnsteigGraphNode(dict):
 
     name = dict_property("name", str,)
     enr = dict_property("enr", int,)
-    typ = dict_property("typ", str,)
+    typ = dict_property("typ", BahnhofElement.Typ,)
     auto = dict_property("auto", bool,)
     stamm = dict_property("stamm", str,)
     ordnung = dict_property("ordnung", int,)
@@ -175,6 +177,11 @@ class BahnsteigGraph(nx.Graph):
     Bahnsteige
 
     Der _Bahnsteiggraph_ enthält alle Bahnsteige aus der Bahnsteigliste der Plugin-Schnittstelle als Knoten.
+
+    Die Labels der Knoten sind die Gleisbezeichnungen der Bahnsteige.
+    Von den Datenattributen werden nur `typ` und `name` verwendet,
+    wobei `typ` immer `BahnhofElement.Typ.GL` ist.
+
     Kanten werden entsprechend der Nachbarrelationen gesetzt.
     Der Graph ist ungerichtet, da die Nachbarbeziehung als reziprok aufgefasst wird.
 
@@ -202,12 +209,9 @@ class BahnsteigGraph(nx.Graph):
         self.clear()
 
         for bs1 in bahnsteige:
-            self.add_node(bs1.name, name=bs1.name, typ='Gl')
+            self.add_node(bs1.name, name=bs1.name, typ=BahnhofElement.Typ.GL)
             for bs2 in bs1.nachbarn.values():
                 self.add_edge(bs1.name, bs2.name, typ='Nachbar', distanz=0)
-
-
-BahnhofLabelType = BahnhofElement
 
 
 class BahnhofGraph(nx.DiGraph):
@@ -231,7 +235,7 @@ class BahnhofGraph(nx.DiGraph):
 
     def __init__(self, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
-        self.ziel_gleis: Dict[Union[int, str], BahnhofLabelType] = {}
+        self.ziel_gleis: Dict[Union[int, str], BahnhofElement] = {}
         self.gleisschema = Gleisschema()
 
     def to_directed_class(self):
@@ -241,13 +245,15 @@ class BahnhofGraph(nx.DiGraph):
         return BahnsteigGraph
 
     @staticmethod
-    def label(typ: str, name: str) -> BahnhofLabelType:
+    def label(typ: str, name: str) -> BahnhofElement:
         """
         Das Label besteht aus Typ und Namen des BahnsteigGraphNode.
         """
-        return BahnhofLabelType(typ, name)
 
-    def root(self) -> BahnhofLabelType:
+        typ = BahnhofElement.Typ(typ)
+        return BahnhofElement(typ, name)
+
+    def root(self) -> BahnhofElement:
         """
         Label des höchsten Knotens
 
@@ -257,7 +263,7 @@ class BahnhofGraph(nx.DiGraph):
             Label `('Stw', Stellwerkname)`
         """
         for node in self.nodes():
-            if node.typ == 'Stw':
+            if node.typ is BahnhofElement.Typ.STW:
                 return node
         else:
             raise KeyError('Bahnhofgraph enthält kein Anlagenelement.')
@@ -282,6 +288,7 @@ class BahnhofGraph(nx.DiGraph):
 
         try:
             for node in nx.ancestors(self, label):
+                assert isinstance(node, BahnhofElement)
                 if node.typ in typen:
                     return node
             else:
@@ -289,7 +296,7 @@ class BahnhofGraph(nx.DiGraph):
         except nx.NetworkXError:
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
-    def list_parents(self, label: BahnhofLabelType) -> Generator[BahnhofLabelType, None, None]:
+    def list_parents(self, label: BahnhofElement) -> Generator[BahnhofElement, None, None]:
         """
         Übergeordnete Bahnhofelemente zu einem Gleis.
 
@@ -310,7 +317,7 @@ class BahnhofGraph(nx.DiGraph):
         else:
             raise KeyError(f"Element {label} ist im Bahnhofgraph nicht verzeichnet.")
 
-    def gleis_parents(self) -> Dict[BahnhofLabelType, Dict[str, BahnhofLabelType]]:
+    def gleis_parents(self) -> Dict[BahnhofElement, Dict[str, BahnhofElement]]:
         """
         Generates a dictionary of parents for each Gl and Agl node in the graph.
 
@@ -323,8 +330,10 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         result = {}
-        for gl in self.list_by_type({'Gl', 'Agl'}):
+        typen = {BahnhofElement.Typ.GL, BahnhofElement.Typ.AGL}
+        for gl in self.list_by_type(typen):
             for parent, child in nx.bfs_edges(self, gl, reverse=True):
+                assert isinstance(child, BahnhofElement)
                 if gl in result:
                     result[gl][child.typ] = child
                 else:
@@ -332,7 +341,10 @@ class BahnhofGraph(nx.DiGraph):
 
         return result
 
-    def list_children(self, label: BahnhofLabelType, typen: Set[str]) -> Generator[BahnhofLabelType, None, None]:
+    def list_children(self,
+                      label: BahnhofElement,
+                      typen: Set[BahnhofElement.Typ],
+                      ) -> Generator[BahnhofElement, None, None]:
         """
             Listet die untergeordneten Elemente bestimmter Typen auf.
 
@@ -351,6 +363,7 @@ class BahnhofGraph(nx.DiGraph):
 
         try:
             for parent, child in nx.bfs_edges(self, label):
+                assert isinstance(child, BahnhofElement)
                 if child.typ in typen:
                     yield child
         except nx.NetworkXError as e:
@@ -367,19 +380,20 @@ class BahnhofGraph(nx.DiGraph):
         Das Originalelement ist enthalten.
         """
 
-        parent = self.find_superior(label, {BAHNHOFELEMENT_HIERARCHIE[label.typ]})
+        parent = self.find_superior(label, {label.typ.supertyp})
         yield from self.list_children(parent, {label.typ})
 
-    def list_by_type(self, typen: Set[str]) -> Generator[BahnhofLabelType, None, None]:
+    def list_by_type(self, typen: Set[BahnhofElement.Typ]) -> Generator[BahnhofElement, None, None]:
         """
         Listet die alle Elemente bestimmter Typen auf.
         """
 
         for label in self.nodes:
+            assert isinstance(label, BahnhofElement)
             if label.typ in typen:
                 yield label
 
-    def find_name(self, name: str) -> Optional[BahnhofLabelType]:
+    def find_name(self, name: str) -> Optional[BahnhofElement]:
         """
         Betriebsstelle nach Namen suchen.
 
@@ -393,17 +407,19 @@ class BahnhofGraph(nx.DiGraph):
             Label (Typ und Name) der Betriebsstelle oder None
         """
 
-        for u, v in nx.bfs_edges(self, ('Bst', 'Bf')):
+        for u, v in nx.bfs_edges(self, BahnhofElement(BahnhofElement.Typ.BST, 'Bf')):
+            assert isinstance(v, BahnhofElement)
             if v.name == name:
                 return v
 
-        for u, v in nx.bfs_edges(self, ('Bst', 'Anst')):
+        for u, v in nx.bfs_edges(self, BahnhofElement(BahnhofElement.Typ.BST, 'Anst')):
+            assert isinstance(v, BahnhofElement)
             if v.name == name:
                 return v
 
         return None
 
-    def find_gleis_enr(self, name_enr: Union[int, str]) -> Optional[BahnhofLabelType]:
+    def find_gleis_enr(self, name_enr: Union[int, str]) -> Optional[BahnhofElement]:
         """
         Gleis nach Namen oder Anschlussgleis nach `enr` suchen.
 
@@ -425,9 +441,9 @@ class BahnhofGraph(nx.DiGraph):
             return None
 
     def _find_parent_to_replace(self,
-                                gleis: BahnhofLabelType,
-                                level: str,
-                                ) -> Tuple[Sequence[BahnhofLabelType], BahnhofLabelType | None, BahnsteigGraphNode | None]:
+                                gleis: BahnhofElement,
+                                level: BahnhofElement.Typ,
+                                ) -> Tuple[Sequence[BahnhofElement], BahnhofElement | None, BahnsteigGraphNode | None]:
         """
         Sucht den Parent eines bestimmten Typs des angegebenen Gleises.
 
@@ -447,8 +463,8 @@ class BahnhofGraph(nx.DiGraph):
 
         return old_path, old_parent, old_data
 
-    def replace_parent(self, gleis: BahnhofLabelType,
-                       new_parent: BahnhofLabelType,
+    def replace_parent(self, gleis: BahnhofElement,
+                       new_parent: BahnhofElement,
                        new_data: Optional[BahnsteigGraphNode] = None,
                        del_old_parent: bool = False,
                        dry_run: bool = False) -> bool:
@@ -530,7 +546,7 @@ class BahnhofGraph(nx.DiGraph):
             KeyError: Wenn nicht gefunden.
         """
 
-        bs = self.find_superior(BahnhofLabelType('Gl', gleis), {'Bs'})
+        bs = self.find_superior(BahnhofElement(BahnhofElement.Typ.GL, gleis), {BahnhofElement.Typ.BS})
         return bs.name
 
     def gleis_bahnhofteil(self, gleis: str) -> str:
@@ -549,7 +565,7 @@ class BahnhofGraph(nx.DiGraph):
             KeyError: Wenn nicht gefunden.
         """
 
-        bft = self.find_superior(BahnhofLabelType('Gl', gleis), {'Bft'})
+        bft = self.find_superior(BahnhofElement(BahnhofElement.Typ.GL, gleis), {BahnhofElement.Typ.BFT})
         return bft.name
 
     def gleis_bahnhof(self, gleis: str) -> str:
@@ -568,7 +584,7 @@ class BahnhofGraph(nx.DiGraph):
             KeyError: Wenn nicht gefunden.
         """
 
-        bf = self.find_superior(BahnhofLabelType('Gl', gleis), {'Bf'})
+        bf = self.find_superior(BahnhofElement(BahnhofElement.Typ.GL, gleis), {BahnhofElement.Typ.BF})
         return bf.name
 
     def anschlussstelle(self, gleis: str) -> str:
@@ -587,7 +603,7 @@ class BahnhofGraph(nx.DiGraph):
             KeyError: Wenn nicht gefunden.
         """
 
-        anst = self.find_superior(BahnhofLabelType('Agl', gleis), {'Anst'})
+        anst = self.find_superior(BahnhofElement(BahnhofElement.Typ.AGL, gleis), {BahnhofElement.Typ.ANST})
         return anst.name
 
     def bahnhofgleise(self, bahnhof: str) -> Iterable[str]:
@@ -607,8 +623,9 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         try:
-            for parent, child in nx.dfs_edges(self, ('Bf', bahnhof)):
-                if child.typ == 'Gl':
+            for parent, child in nx.dfs_edges(self, BahnhofElement(BahnhofElement.Typ.BF, bahnhof)):
+                assert  isinstance(child, BahnhofElement)
+                if child.typ is BahnhofElement.Typ.GL:
                     yield child.name
         except nx.NetworkXError as e:
             logger.exception(e)
@@ -631,8 +648,9 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         try:
-            for parent, child in nx.dfs_edges(self, BahnhofLabelType('Bft', bahnhofteil)):
-                if child.typ == 'Gl':
+            for parent, child in nx.dfs_edges(self, BahnhofElement(BahnhofElement.Typ.BFT, bahnhofteil)):
+                assert  isinstance(child, BahnhofElement)
+                if child.typ is BahnhofElement.Typ.GL:
                     yield child.name
         except nx.NetworkXError as e:
             logger.exception(e)
@@ -655,8 +673,9 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         try:
-            for parent, child in nx.dfs_edges(self, BahnhofLabelType('Anst', anst)):
-                if child.typ == 'Agl':
+            for parent, child in nx.dfs_edges(self, BahnhofElement(BahnhofElement.Typ.ANST, anst)):
+                assert isinstance(child, BahnhofElement)
+                if child.typ is BahnhofElement.Typ.AGL:
                     yield child.name
         except nx.NetworkXError as e:
             logger.exception(e)
@@ -670,7 +689,8 @@ class BahnhofGraph(nx.DiGraph):
             Iterator von Bahnhofnamen
         """
 
-        for node in self.list_children(BahnhofLabelType('Bst', 'Bf'), {'Bf'}):
+        for node in self.list_children(BahnhofElement(BahnhofElement.Typ.BST, 'Bf'), {BahnhofElement.Typ.BF}):
+            assert isinstance(node, BahnhofElement)
             yield node.name
 
     def anschlussstellen(self) -> Iterable[str]:
@@ -681,7 +701,7 @@ class BahnhofGraph(nx.DiGraph):
             Iterator von Anschlussstellennamen
         """
 
-        for node in self.list_children(BahnhofLabelType('Bst', 'Anst'), {'Anst'}):
+        for node in self.list_children(BahnhofElement(BahnhofElement.Typ.BST, 'Anst'), {BahnhofElement.Typ.ANST}):
             yield node.name
 
     def hierarchical_index(self, elements: Iterable[BahnhofElement]) -> Dict[BahnhofElement, Tuple[Union[int, str], ...]]:
@@ -708,7 +728,7 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         if not elements:
-            elements = self.list_by_type({'Gl', 'Agl'})
+            elements = self.list_by_type({BahnhofElement.Typ.GL, BahnhofElement.Typ.AGL})
 
         sortierung = {}
         for be in elements:
@@ -739,7 +759,7 @@ class BahnhofGraph(nx.DiGraph):
             return original_element
         else:
             try:
-                gl = next(original_graph.list_children(original_element, {'Gl', 'Agl'}))
+                gl = next(original_graph.list_children(original_element, {BahnhofElement.Typ.GL, BahnhofElement.Typ.AGL}))
                 result = self.find_superior(gl, {original_element.typ})
                 return result
             except KeyError:
@@ -750,7 +770,7 @@ class BahnhofGraph(nx.DiGraph):
         Importiert die Anlageninformation in den Stellwerksknoten.
         """
 
-        anl_label = BahnhofLabelType('Stw', anlageninfo.name)
+        anl_label = BahnhofElement(BahnhofElement.Typ.STW, anlageninfo.name)
         self.add_node(anl_label, typ=anl_label.typ, name=anl_label.name, auto=True, aid=anlageninfo.aid,
                       region=anlageninfo.region, build=anlageninfo.build, online=anlageninfo.online)
         self.gleisschema = Gleisschema.regionsschema(anlageninfo.name, anlageninfo.region)
@@ -763,26 +783,26 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         anl_label = self.root()
-        bf_label = BahnhofLabelType('Bst', 'Bf')
+        bf_label = BahnhofElement(BahnhofElement.Typ.BST, 'Bf')
         self.add_node(bf_label, typ=bf_label.typ, name=bf_label.name, auto=True)
         self.add_edge(anl_label, bf_label, typ=anl_label.typ, auto=True)
 
         for comp in nx.connected_components(bahnsteiggraph):
-            gleis = min(comp, key=len)
+            gleis = str(min(comp, key=len))
             bft = gleisschema.bahnsteigname(gleis)
             bf = gleisschema.bahnhofname(bft)
-            self.add_node(BahnhofLabelType('Bf', bf), name=bf, typ='Bf', auto=True)
-            self.add_edge(bf_label, BahnhofLabelType('Bf', bf), typ=bf_label.typ, auto=True)
-            self.add_node(BahnhofLabelType('Bft', bft), name=bft, typ='Bft', auto=True)
-            self.add_edge(BahnhofLabelType('Bf', bf), BahnhofLabelType('Bft', bft), typ='Bf', auto=True)
+            self.add_node(BahnhofElement(BahnhofElement.Typ.BF, bf), name=bf, typ='Bf', auto=True)
+            self.add_edge(bf_label, BahnhofElement(BahnhofElement.Typ.BF, bf), typ=bf_label.typ, auto=True)
+            self.add_node(BahnhofElement(BahnhofElement.Typ.BFT, bft), name=bft, typ='Bft', auto=True)
+            self.add_edge(BahnhofElement(BahnhofElement.Typ.BF, bf), BahnhofElement(BahnhofElement.Typ.BFT, bft), typ='Bf', auto=True)
 
             for gleis in comp:
                 bs = gleisschema.bahnsteigname(gleis)
-                self.add_node(BahnhofLabelType('Bs', bs), name=bs, typ='Bs', gleise=1, auto=True)
-                self.add_node(BahnhofLabelType('Gl', gleis), name=gleis, typ='Gl', gleise=1, auto=True)
-                self.ziel_gleis[gleis] = BahnhofLabelType('Gl', gleis)
-                self.add_edge(BahnhofLabelType('Bft', bft), BahnhofLabelType('Bs', bs), typ='Bft', auto=True)
-                self.add_edge(BahnhofLabelType('Bs', bs), BahnhofLabelType('Gl', gleis), typ='Bs', auto=True)
+                self.add_node(BahnhofElement(BahnhofElement.Typ.BS, bs), name=bs, typ='Bs', gleise=1, auto=True)
+                self.add_node(BahnhofElement(BahnhofElement.Typ.GL, gleis), name=gleis, typ='Gl', gleise=1, auto=True)
+                self.ziel_gleis[gleis] = BahnhofElement(BahnhofElement.Typ.GL, gleis)
+                self.add_edge(BahnhofElement(BahnhofElement.Typ.BFT, bft), BahnhofElement(BahnhofElement.Typ.BS, bs), typ='Bft', auto=True)
+                self.add_edge(BahnhofElement(BahnhofElement.Typ.BS, bs), BahnhofElement(BahnhofElement.Typ.GL, gleis), typ='Bs', auto=True)
 
     def import_signalgraph(self,
                            signalgraph: SignalGraph,
@@ -792,7 +812,7 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         anl_label = self.root()
-        bst_label = BahnhofLabelType('Bst', 'Anst')
+        bst_label = BahnhofElement(BahnhofElement.Typ.BST, 'Anst')
         self.add_node(bst_label, typ=bst_label.typ, name=bst_label.name, auto=True)
         self.add_edge(anl_label, bst_label, typ=anl_label.typ, auto=True)
 
@@ -800,29 +820,29 @@ class BahnhofGraph(nx.DiGraph):
         for anschluss, data in signalgraph.nodes(data=True):
             if data.typ in {Knoten.Typ.EINFAHRT, Knoten.Typ.AUSFAHRT}:
                 agl = data.name
-                agl_label = BahnhofLabelType('Agl', agl)
+                agl_label = BahnhofElement(BahnhofElement.Typ.AGL, agl)
                 try:
                     agl_data = self.nodes[agl_label]
                 except KeyError:
-                    agl_data = BahnsteigGraphNode(name=agl, typ='Agl', enr=data.enr, gleise=0, auto=True)
+                    agl_data = BahnsteigGraphNode(name=agl, typ=BahnhofElement.Typ.AGL, enr=data.enr, gleise=0, auto=True)
                     agl_gleise[agl_label] = 0.
 
-                if data.typ == Knoten.Typ.EINFAHRT:
+                if data.typ is Knoten.Typ.EINFAHRT:
                     agl_data.einfahrt = True
                     if agl_label in agl_gleise:
                         agl_gleise[agl_label] += 0.5
-                if data.typ == Knoten.Typ.AUSFAHRT:
+                if data.typ is Knoten.Typ.AUSFAHRT:
                     agl_data.ausfahrt = True
                     if agl_label in agl_gleise:
                         agl_gleise[agl_label] += 0.5
 
                 anst = gleisschema.anschlussname(agl)
-                anst_label = BahnhofLabelType('Anst', anst)
+                anst_label = BahnhofElement(BahnhofElement.Typ.ANST, anst)
                 self.add_node(agl_label, **agl_data)
                 self.add_edge(bst_label, anst_label, typ=bst_label.typ, auto=True)
                 self.ziel_gleis[data.enr] = agl_label
-                self.add_node(anst_label, name=anst, typ='Anst', auto=True)
-                self.add_edge(anst_label, agl_label, typ='Anst', auto=True)
+                self.add_node(anst_label, name=anst, typ=BahnhofElement.Typ.ANST, auto=True)
+                self.add_edge(anst_label, agl_label, typ=BahnhofElement.Typ.ANST, auto=True)
 
         for agl_label, gleise in agl_gleise.items():
             self.nodes[agl_label]['gleise'] = int(gleise + 0.5)
@@ -849,8 +869,11 @@ class BahnhofGraph(nx.DiGraph):
         for node, data in self.nodes(data=True):
             data.auto = True
             try:
-                parent_node = next(self.list_parents(node), BahnhofLabelType(None, None))
-                data.stamm = parent_node.name
+                parent_node = next(self.list_parents(node), None)
+                if parent_node is not None:
+                    data.stamm = parent_node.name
+                else:
+                    data.stamm = None
             except KeyError:
                 continue
             new_graph.add_node(node, **data)
@@ -882,13 +905,14 @@ class BahnhofGraph(nx.DiGraph):
             # element einfuegen oder attribute aktualisieren
             konfig_graph.add_node(node, **data)
 
-        original_count = len(list(new_graph.list_by_type({'Gl', 'Agl'})))
-        konfig_count = len(list(konfig_graph.list_by_type({'Gl', 'Agl'})))
+        original_count = len(list(new_graph.list_by_type({BahnhofElement.Typ.GL, BahnhofElement.Typ.AGL})))
+        konfig_count = len(list(konfig_graph.list_by_type({BahnhofElement.Typ.GL, BahnhofElement.Typ.AGL})))
         logger.info(f"Konfiguration importieren. Original {original_count} Gleise, Konfiguration {konfig_count} Gleise")
 
         # Schritt 2.5: reine auto-Knoten filtern
         for node, data in konfig_graph.nodes(data=True):
-            parent_node = BahnhofElement(BAHNHOFELEMENT_HIERARCHIE[data['typ']], data['stamm'])
+            parent_typ = BahnhofElement.Typ(data['typ']).supertyp
+            parent_node = BahnhofElement(parent_typ, data['stamm'])
             parent_auto = not konfig_graph.has_node(parent_node) or konfig_graph.nodes[parent_node]['auto']
             if node not in new_graph or not data.auto or not parent_auto:
                 new_graph.add_node(node, **data)
@@ -896,17 +920,22 @@ class BahnhofGraph(nx.DiGraph):
                 logger.debug(f"BahnhofGraph.import_konfiguration: Ignoriere Auto-Element {node}.")
 
         # Schritt 3: Kanten erstellen gem. stamm-Attributen
-        TYPEN_FOLGE = ['Gl', 'Agl', 'Bs', 'Bft', 'Bf', 'Anst']
+        TYPEN_FOLGE = [BahnhofElement.Typ.GL,
+                       BahnhofElement.Typ.AGL,
+                       BahnhofElement.Typ.BS,
+                       BahnhofElement.Typ.BFT,
+                       BahnhofElement.Typ.BF,
+                       BahnhofElement.Typ.ANST]
         for typ in TYPEN_FOLGE:
             for node in new_graph.list_by_type({typ}):
                 data = new_graph.nodes[node]
                 try:
-                    if typ == "Bf":
-                        parent_node = BahnhofElement("Bst", "Bf")
-                    elif typ == "Anst":
-                        parent_node = BahnhofElement("Bst", "Anst")
+                    if typ is BahnhofElement.Typ.BF:
+                        parent_node = BahnhofElement(BahnhofElement.Typ.BST, str(typ))
+                    elif typ is BahnhofElement.Typ.ANST:
+                        parent_node = BahnhofElement(BahnhofElement.Typ.BST, str(typ))
                     else:
-                        parent_node = BahnhofElement(BAHNHOFELEMENT_HIERARCHIE[data['typ']], data['stamm'])
+                        parent_node = BahnhofElement(data['typ'].supertyp, data['stamm'])
                 except KeyError:
                     continue
                 if parent_node in new_graph:
@@ -914,8 +943,8 @@ class BahnhofGraph(nx.DiGraph):
                 else:
                     logger.warning(f"BahnhofGraph.import_konfiguration: Fehlendes Stammelement {parent_node} zu {node}.")
 
-        new_graph.add_edge(self.root(), BahnhofElement('Bst', 'Bf'))
-        new_graph.add_edge(self.root(), BahnhofElement('Bst', 'Anst'))
+        new_graph.add_edge(self.root(), BahnhofElement(BahnhofElement.Typ.BST, 'Bf'))
+        new_graph.add_edge(self.root(), BahnhofElement(BahnhofElement.Typ.BST, 'Anst'))
 
         # Schritt 4: kinder- und elternlose Knoten entfernen
         for typ in TYPEN_FOLGE:
@@ -947,7 +976,7 @@ class BahnhofGraph(nx.DiGraph):
         for typ in ['Bs', 'Bft', 'Bf', 'Anst']:
             entfernen = []
             for n in self.nodes():
-                if n.typ == typ and self.out_degree[n] == 0:
+                if n.typ is typ and self.out_degree[n] == 0:
                     entfernen.append(n)
             for n in entfernen:
                 self.remove_node(n)
@@ -961,13 +990,25 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         logger.debug("Validating BahnhofGraph")
-        for gl in self.list_by_type({'Gl', 'Agl'}):
-            if gl.typ == 'Gl':
-                check = {'Gl', 'Bs', 'Bft', 'Bf', 'Bst', 'Stw'}
-            elif gl.typ == 'Agl':
-                check = {'Agl', 'Anst', 'Bst', 'Stw'}
+        for gl in self.list_by_type({BahnhofElement.Typ.GL, BahnhofElement.Typ.AGL}):
+            if gl.typ is BahnhofElement.Typ.GL:
+                check = {
+                    BahnhofElement.Typ.GL, 
+                    BahnhofElement.Typ.BS, 
+                    BahnhofElement.Typ.BFT, 
+                    BahnhofElement.Typ.BF, 
+                    BahnhofElement.Typ.BST, 
+                    BahnhofElement.Typ.STW,
+                }
+            elif gl.typ is BahnhofElement.Typ.AGL:
+                check = {
+                    BahnhofElement.Typ.AGL,
+                    BahnhofElement.Typ.ANST,
+                    BahnhofElement.Typ.BST,
+                    BahnhofElement.Typ.STW,
+                }
             else:
-                raise ValueError(f"Ungueltiger Gleistyp {gl}")
+                raise ValueError(f"Ungültiger Gleistyp {gl}")
 
             try:
                 for be in self.list_parents(gl):
@@ -975,15 +1016,12 @@ class BahnhofGraph(nx.DiGraph):
                 if not check:
                     logger.error(f"{gl} hat fehlende Eltern {check}")
             except KeyError as e:
-                logger.exception(f"{gl} nicht im bahnhofgraph", exc_info=e)
+                logger.exception(f"{gl} nicht im Bahnhofgraph", exc_info=e)
 
         for node, data in self.nodes(data=True):
-            try:
-                if self.in_degree(node) > 1:
-                    path = [str(node) for node in nx.ancestors(self.graph, node)]
-                    logger.error(f"{node} hat mehrere Eltern. {path}")
-            except KeyError as e:
-                logger.exception(f"{gl} nicht im bahnhofgraph", exc_info=e)
+            if self.in_degree(node) > 1:
+                path = [str(node) for node in nx.ancestors(self, node)]
+                logger.error(f"{node} hat mehrere Eltern. {path}")
 
     def export_konfiguration(self) -> Sequence[Dict[str, Union[str, int, float, bool]]]:
         """
@@ -994,26 +1032,42 @@ class BahnhofGraph(nx.DiGraph):
         """
 
         elemente = {}
+        gleis_typen = {
+            str(be)
+            for be in [
+                BahnhofElement.Typ.GL,
+                BahnhofElement.Typ.BS,
+                BahnhofElement.Typ.AGL,
+            ]
+        }
+        bahnhof_typen = {
+            str(be)
+            for be in [
+                BahnhofElement.Typ.BF,
+                BahnhofElement.Typ.ANST,
+            ]
+        }
+
         for e1, e2 in self.edges():
             # e1 ist der Stammknoten
-            if e1.typ == 'Stw':
+            if e1.typ is BahnhofElement.Typ.STW:
                 continue
             data1: BahnsteigGraphNode = self.nodes[e1]
             data2: BahnsteigGraphNode = self.nodes[e2]
             element = {'name': e2.name,
-                       'typ': e2.typ,
+                       'typ': str(e2.typ),
                        'auto': data2.auto and data1.auto,
                        'ordnung': data2.get('ordnung', 0),
                        'sichtbar': True,
                        'flags': ''}
-            if e1.typ != 'Bst':
+            if e1.typ is not BahnhofElement.Typ.BST:
                 element['stamm'] = e1.name
             if data2.get('sperrung'):
                 element['flags'] = 'S'
                 element['auto'] = False
-            if element['typ'] in {'Gl', 'Bs', 'Agl'}:
+            if element['typ'] in gleis_typen:
                 element['gleise'] = data2.get('gleise', 1)
-            elif element['typ'] in {'Bf', 'Anst'}:
+            elif element['typ'] in bahnhof_typen:
                 if stil := data2.get('linienstil'):
                     element['linienstil'] = stil
             elemente[e2] = element

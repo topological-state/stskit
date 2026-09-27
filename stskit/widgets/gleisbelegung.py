@@ -8,7 +8,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from stskit.dispo.anlage import Anlage
-from stskit.model.bahnhofgraph import BAHNHOFELEMENT_TYPEN, BahnhofElement
+from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.plots.gleisbelegung import GleisbelegungPlot, Slot, SlotWarnung
 from stskit.qt.ui_gleisbelegung import Ui_GleisbelegungWindow
 from stskit.qt.icons import set_action_icons
@@ -139,7 +139,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         if level == 0:
             index = QModelIndex()
             self.collapsed_items = set()
-        elif level >= len(BAHNHOFELEMENT_TYPEN):
+        elif level >= len(BahnhofElement.Typ):
             return
 
         if index.isValid():
@@ -170,7 +170,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
             index = QModelIndex()
             view.setUpdatesEnabled(False)
             updates = True
-        elif level >= len(BAHNHOFELEMENT_TYPEN):
+        elif level >= len(BahnhofElement.Typ):
             return
 
         if index.isValid():

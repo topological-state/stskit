@@ -15,7 +15,7 @@ from PySide6.QtWidgets import QWidget, QAbstractItemView, QStyledItemDelegate, Q
 from PySide6.QtGui import QFont, QTextCharFormat, QColor
 
 from stskit.dispo.anlage import Anlage
-from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement, BAHNHOFELEMENT_BESCHREIBUNG
+from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.model.journal import JournalEntry, Journal, JournalEntryGroup
 from stskit.qt.ui_einstellungen import Ui_EinstellungenWindow
 
@@ -434,12 +434,12 @@ class StreckenEditorModel(QAbstractTableModel):
         elif role == QtCore.Qt.ToolTipRole:
             match col_key:
                 case 'Station':
-                    return f"{BAHNHOFELEMENT_BESCHREIBUNG[station.typ]} {station.name}"
+                    return f"{station.typ.vollname} {station.name}"
 
         elif role == QtCore.Qt.WhatsThisRole:
             match col_key:
                 case 'Station':
-                    return f"{BAHNHOFELEMENT_BESCHREIBUNG[station.typ]} {station.name}"
+                    return f"{station.typ.vollname} {station.name}"
 
         elif role == QtCore.Qt.EditRole:
             match col_key:

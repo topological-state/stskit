@@ -10,8 +10,7 @@ from PySide6.QtWidgets import QWidget, QAbstractItemView
 
 from stskit.utils.observer import Observable
 from stskit.dispo.anlage import Anlage
-from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement, BahnsteigGraphNode, BahnsteigGraphEdge, \
-    BAHNHOFELEMENT_TYPEN
+from stskit.model.bahnhofgraph import BahnhofGraph, BahnhofElement
 from stskit.qt.ui_einstellungen import Ui_EinstellungenWindow
 
 
@@ -510,7 +509,7 @@ class BahnhofEditor(QObject):
         Fully update the widgets based on the current state of self.bahnhofgraph.
         """
         if levels is None:
-            levels = set(BAHNHOFELEMENT_TYPEN)
+            levels = set(BahnhofElement.Typ)
 
         self.in_update = True
         self.update_lists(levels=levels)
@@ -544,7 +543,7 @@ class BahnhofEditor(QObject):
         """
 
         if levels is None:
-            levels = set(BAHNHOFELEMENT_TYPEN)
+            levels = set(BahnhofElement.Typ)
 
         if 'Gl' in levels:
             gl_filter = sorted(self._make_filter_list(self.bahnhofgraph.list_by_type({'Gl'})))
@@ -556,8 +555,8 @@ class BahnhofEditor(QObject):
 
         if levels.intersection(['Bs', 'Bft', 'Bf', 'Anst']):
             gl_sel = self.get_gl_selection()
-            parents = {typ: set() for typ in BAHNHOFELEMENT_TYPEN}
-            uncles = {typ: set() for typ in BAHNHOFELEMENT_TYPEN}
+            parents = {typ: set() for typ in BahnhofElement.Typ}
+            uncles = {typ: set() for typ in BahnhofElement.Typ}
             for gl in gl_sel:
                 for be in self.bahnhofgraph.list_parents(gl):
                     parents[be.typ].add(be)
