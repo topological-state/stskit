@@ -903,11 +903,16 @@ class BahnhofGraph(nx.DiGraph):
         # Schritt 2: Konfiguration importieren, wo auto==False
         konfig_graph = BahnhofGraph()
         for element in elemente:
-            node = BahnhofElement(element['typ'], element['name'])
+            node = BahnhofElement.from_strings(element['typ'], element['name'])
             auto = element.get('auto', True)
             stamm = element.get('stamm', None)
 
-            data = {"auto": auto, "typ": element['typ'], "name": element['name'], "stamm": stamm}
+            data = {
+                "auto": auto,
+                "typ": BahnhofElement.Typ(element['typ']),
+                "name": element['name'],
+                "stamm": stamm,
+            }
             if "sichtbar" in element:
                 data["sichtbar"] = element['sichtbar']
             if "ordnung" in element:

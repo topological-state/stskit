@@ -658,7 +658,7 @@ class BildfahrplanPlot:
                 't_plan': t_plan,
                 't_prog': t_prog,
                 's': s,
-                BahnhofElement.Typ.ANST: bahnhof,
+                'bst': bahnhof,
                 'marker': self.marker_style['S'],
                 'farbe': 'yellow',
                 'auswahl': auswahl_idx,

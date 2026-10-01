@@ -35,9 +35,12 @@ class GleisauswahlItem:
     Wird intern von GleisauswahlModell verwendet.
     """
 
-    TYPEN = {"root", "Kat", "Anst", "Agl", "Bf", "Bft", "Bs", "Gl"}
+    TYPEN: set[BahnhofElement.Typ | str] = {"root", "Kat", BahnhofElement.Typ.ANST, BahnhofElement.Typ.AGL, BahnhofElement.Typ.BF, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BS, BahnhofElement.Typ.GL}
 
-    def __init__(self, modell: GleisauswahlModell, typ: str, name: str):
+    def __init__(self,
+                 modell: GleisauswahlModell,
+                 typ: BahnhofElement.Typ | str,
+                 name: str):
         super().__init__()
         assert typ in self.TYPEN, f"Unbekannter GleisauswahlItem-Typ {typ}"
         self.modell = modell
@@ -308,9 +311,9 @@ class GleisauswahlModell(QtCore.QAbstractItemModel):
 
             bahnsteige_item = GleisauswahlItem(self, "Kat", "Bahnsteige")
             self._root.addChild(bahnsteige_item)
-            items[(BahnhofElement.Typ.ANST, BahnhofElement.Typ.BF)] = bahnsteige_item
+            items[(BahnhofElement.Typ.BST, BahnhofElement.Typ.BF)] = bahnsteige_item
 
-            for node1, node2 in nx.dfs_edges(anlage.bahnhofgraph, source=(BahnhofElement.Typ.ANST, BahnhofElement.Typ.BF)):
+            for node1, node2 in nx.dfs_edges(anlage.bahnhofgraph, source=(BahnhofElement.Typ.BST, BahnhofElement.Typ.BF)):
                 item = GleisauswahlItem(self, node2.typ, node2.name)
                 items[node2] = item
                 items[node1].addChild(item)
