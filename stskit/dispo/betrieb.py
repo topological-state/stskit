@@ -188,7 +188,7 @@ class Betrieb:
 
         wartend_label = pfad[-1]
         wartend_data = self.ereignisgraph.nodes[wartend_label]
-        bst = self.anlage.bahnhofgraph.find_superior(wartend_data.plan_bst, {'Bf', 'Anst'})
+        bst = self.anlage.bahnhofgraph.find_superior(wartend_data.plan_bst, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST})
 
         haltekante = self.ereignisgraph.get_edge_data(*pfad[-2:])
         if haltekante.typ == 'D':
@@ -259,7 +259,7 @@ class Betrieb:
         abfahrt_labels = [l[-1] for l in zugpfade]
 
         abfahrt_data = [self.ereignisgraph.nodes[l] for l in abfahrt_labels]
-        bst = {self.anlage.bahnhofgraph.find_superior(d.plan_bst, {'Bf', 'Anst'}) for d in abfahrt_data}
+        bst = {self.anlage.bahnhofgraph.find_superior(d.plan_bst, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST}) for d in abfahrt_data}
         if len(bst) != 1:
             raise ValueError("Kreuzung in verschiedenen Bahnhöfen nicht möglich")
 
@@ -441,7 +441,7 @@ class Betrieb:
 
         abfahrt = pfad[-1]
         abfahrt_data = self.ereignisgraph.nodes[abfahrt]
-        abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {'Bf', 'Anst'})
+        abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST})
         if not abfahrt_data.vorzeitig:
             raise ValueError("Vorzeitige Abfahrt nicht erlaubt.")
 
@@ -498,7 +498,7 @@ class Betrieb:
             kante = tuple(pfad[-2:])
         abfahrt = pfad[-1]
         abfahrt_data = self.ereignisgraph.nodes[abfahrt]
-        abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {'Bf', 'Anst'})
+        abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_data.plan_bst, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST})
 
         self._wartezeit_aendern(journal, abfahrt, kante, wartezeit, relativ=relativ)
         journal.valid = True
@@ -558,7 +558,7 @@ class Betrieb:
             raise ValueError(f"Ungültiger Zielknoten beim Reset: {target}")
         target_data = self.ereignisgraph.nodes[target_label]
         zid = target.zid
-        bst = self.anlage.bahnhofgraph.find_superior(target_data.plan_bst, {'Bf', 'Anst'})
+        bst = self.anlage.bahnhofgraph.find_superior(target_data.plan_bst, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST})
 
         loeschen = set()
         for jid, j in self.journal.entries.items():
@@ -566,7 +566,7 @@ class Betrieb:
                 try:
                     node_data = self.ereignisgraph.nodes[node]
                     node_zid = node_data.zid
-                    node_bst = self.anlage.bahnhofgraph.find_superior(node_data.plan_bst, {'Bf', 'Anst'})
+                    node_bst = self.anlage.bahnhofgraph.find_superior(node_data.plan_bst, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST})
                 except KeyError:
                     continue
                 else:
@@ -659,7 +659,7 @@ class Betrieb:
         Args:
             journal: Aenderungen an 'ereignisgraph' und 'zielgraph' als JournalEntry-Einträge.
             vorherige_abfahrt: Vorhergehendes Abfahrtsereignis im Ereignisgraph
-            gleis: Gleis für Betriebshalt in Betriebsstellen-Notation. Muss vom Typ 'Gl' sein.
+            gleis: Gleis für Betriebshalt in Betriebsstellen-Notation. Muss vom Typ BahnhofElement.Typ.GL sein.
             ankunftszeit: Ankunftszeit in Minuten.
             wartezeit: Voraussichtliche Wartezeit in Minuten
 
@@ -689,7 +689,7 @@ class Betrieb:
             raise ValueError(f"Ursprungsereignis {ab1_label} ist keine Abfahrt.")
         if an3_node.typ != 'An':
             raise ValueError(f"Folgeereignis {ab1_label} ist keine Ankunft.")
-        if gleis.typ != 'Gl':
+        if gleis.typ != BahnhofElement.Typ.GL:
             raise ValueError(f"Ungültige Gleisbezeichnung {gleis}.")
 
         try:
@@ -813,7 +813,7 @@ class Betrieb:
             neuer_halt: Ereignis oder Fahrziel, das zum Betriebshalt wird oder dem Betriebshalt vorangeht.
             kante: Fahrplanabschnitt (Abfahrt, Ankunft) im Ereignisgraph, in dem der Betriebshalt eingefügt wird.
                 Nicht nötig, wenn `neuer_halt` eine bestehende Durchfahrt bezeichnet.
-            gleis: Gleis für Betriebshalt in Betriebsstellen-Notation. Muss vom Typ 'Gl' sein.
+            gleis: Gleis für Betriebshalt in Betriebsstellen-Notation. Muss vom Typ BahnhofElement.Typ.GL sein.
                 Nicht nötig, wenn `neuer_halt` eine bestehende Durchfahrt bezeichnet.
             ankunftszeit: Ankunftszeit in Minuten.
                 Nicht nötig, wenn `neuer_halt` eine bestehende Durchfahrt bezeichnet.
@@ -845,8 +845,8 @@ class Betrieb:
             raise ValueError("Betriebshalt nicht möglich.")
 
         abfahrt_node = self.ereignisgraph.nodes[abfahrt_label]
-        abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_node.plan_bst, {'Bf', 'Anst'})
-        halt_bst = self.anlage.bahnhofgraph.find_superior(gleis, {'Bf', 'Anst'})
+        abfahrt_bst = self.anlage.bahnhofgraph.find_superior(abfahrt_node.plan_bst, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST})
+        halt_bst = self.anlage.bahnhofgraph.find_superior(gleis, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST})
 
         if abfahrt_bst == halt_bst:
             abfahrt_label = self._betriebshalt_statt_durchfahrt(journal, ankunft_label, wartezeit)
@@ -880,7 +880,7 @@ class Betrieb:
             raise ValueError(f"Ungültige Referenz {betriebshalt} für Betriebshalt")
         ankunft_label, abfahrt_label = pfad[0], pfad[-1]
         abfahrt_node = self.ereignisgraph.nodes[abfahrt_label]
-        bst = self.anlage.bahnhofgraph.find_superior(abfahrt_node.plan_bst, {'Bf', 'Anst'})
+        bst = self.anlage.bahnhofgraph.find_superior(abfahrt_node.plan_bst, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST})
         jid = JournalIDType(typ="Betriebshalt", zid=abfahrt_label.zid, bst=bst)
         self.journal.delete_entry(jid)
         logger.debug(f"Betriebshalt gelöscht: {jid}")

@@ -21,10 +21,10 @@ logger.addHandler(logging.NullHandler())
 
 class GleisbelegungWindow(QtWidgets.QMainWindow):
 
-    def __init__(self, zentrale: DatenZentrale, ansicht: str = "Gl"):
+    def __init__(self, zentrale: DatenZentrale, ansicht: str = BahnhofElement.Typ.GL):
         """
         :param zentrale: DatenZentrale
-        :param ansicht: "Gl" für Gleisbelegung von Bahnhöfen oder "Agl" für Ein- und Ausfahrten
+        :param ansicht: BahnhofElement.Typ.GL für Gleisbelegung von Bahnhöfen oder BahnhofElement.Typ.AGL für Ein- und Ausfahrten
         """
 
         super().__init__()
@@ -73,7 +73,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
 
         self.plot = GleisbelegungPlot(self.zentrale, self.display_canvas)
         self.plot.selection_changed.register(self.plot_selection_changed)
-        if ansicht == "Agl":
+        if ansicht is BahnhofElement.Typ.AGL:
             self.plot.vorlaufzeit = 15
 
         self.update_widgets()
@@ -206,7 +206,7 @@ class GleisbelegungWindow(QtWidgets.QMainWindow):
         auswahl = self.gleisauswahl.get_auswahl()
         self.save_expanded_state()
         self.gleisauswahl.gleise_definieren(self.anlage,
-                                            anschluesse=self.ansicht == "Agl", bahnsteige=self.ansicht != "Agl")
+                                            anschluesse=self.ansicht is BahnhofElement.Typ.AGL, bahnsteige=self.ansicht != BahnhofElement.Typ.AGL)
         self.restore_expanded_state()
         auswahl = auswahl & self.gleisauswahl.alle_gleise
         if not auswahl:

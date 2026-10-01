@@ -208,7 +208,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
         self.updating = True
 
         bg = self.anlage.bahnhofgraph
-        bst_liste = sorted(bg.list_children(bg.root(), {'Bf', 'Anst'}))
+        bst_liste = sorted(bg.list_children(bg.root(), {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST}))
         bst_liste = ["", *map(str, bst_liste)]
         strecken_liste = sorted(self.anlage.strecken.strecken.keys(), key=self.anlage.strecken.ordnung.get)  # ty:ignore[no-matching-overload]
 
@@ -642,7 +642,7 @@ class BildFahrplanWindow(QtWidgets.QMainWindow):
                 gleise = sorted(self.anlage.bahnhofgraph.bahnhofgleise(halt_data.bst.name))
                 dlg = GleiswahlDialog(gleise, parent=self)
                 if dlg.exec():
-                    gleis = BahnhofElement('Gl', dlg.auswahl)
+                    gleis = BahnhofElement(BahnhofElement.Typ.GL, dlg.auswahl)
                     zeit = halt_data.t_plan
                 else:
                     return

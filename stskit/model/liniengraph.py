@@ -233,7 +233,7 @@ class LinienGraph(nx.Graph):
             Liste von Listen von Liniengraphlabels
         """
 
-        anschluesse = [x for x, d in self.nodes(data=True) if d.get('typ', '?') == 'Anst']
+        anschluesse = [x for x, d in self.nodes(data=True) if d.get('typ', '?') is BahnhofElement.Typ.ANST]
         strecken = []
 
         for ein, aus in itertools.permutations(anschluesse, 2):

@@ -437,7 +437,7 @@ class Rangierplan:
                 rd = self._vorang_erstellen(zug, ziel, vorgang="Lokwechsel")
                 # anhand der enr herausfinden, welches die ersatzlok ist!
                 abstellgleise = {enr: self.anlage.bahnhofgraph.find_gleis_enr(enr) or
-                                      BahnhofElement("Agl", f"({enr})")
+                                      BahnhofElement(BahnhofElement.Typ.AGL, f"({enr})")
                                       for enr in enrs}
                 typen = {enr: self.anlage.signalgraph.nodes[enr]['typ']
                               if self.anlage.signalgraph.has_node(enr) else 999

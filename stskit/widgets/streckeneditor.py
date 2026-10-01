@@ -840,7 +840,7 @@ class StreckenEditor(QObject):
         Update anlage_bst and validate alle_strecken.
         """
 
-        self.anlage_bst = sorted(self.anlage.bahnhofgraph.list_by_type({'Bf', 'Anst'}))
+        self.anlage_bst = sorted(self.anlage.bahnhofgraph.list_by_type({BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST}))
 
         neue_strecken = {}
         changed = False
@@ -894,7 +894,7 @@ class StreckenEditor(QObject):
         Wählt auch eine Strecke aus.
         """
 
-        self.anlage_bst = sorted(self.anlage.bahnhofgraph.list_by_type({'Bf', 'Anst'}))
+        self.anlage_bst = sorted(self.anlage.bahnhofgraph.list_by_type({BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST}))
         self.anlage_strecken = {k: self.anlage.strecken.strecken[k] for k in self.anlage.strecken.strecken}
         self.auto_strecken = {k for k in self.anlage.strecken.strecken if self.anlage.strecken.auto.get(k, False)}
         self.alle_strecken = self.anlage_strecken.copy()
@@ -1214,15 +1214,15 @@ class StreckenEditor(QObject):
     @Slot()
     def strecken_ordnen_button_clicked(self):
         def _bst_to_signal(bst: BahnhofElement):
-            for gl in self.anlage.bahnhofgraph.list_children(bst, {"Gl", "Agl"}):
+            for gl in self.anlage.bahnhofgraph.list_children(bst, {BahnhofElement.Typ.GL, BahnhofElement.Typ.AGL}):
                 gl_node = self.anlage.bahnhofgraph.nodes[gl]
                 break
             else:
                 return None
 
-            if gl_node.typ == "Agl":
+            if gl_node.typ is BahnhofElement.Typ.AGL:
                 return gl_node.enr
-            elif gl_node.typ == "Gl":
+            elif gl_node.typ is BahnhofElement.Typ.GL:
                 return gl_node.name
             else:
                 return None

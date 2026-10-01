@@ -27,10 +27,10 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
     Attributes
     ==========
 
-    - _gleistyp : 'Gl' or 'Agl', depending on which tree is edited.
+    - _gleistyp : BahnhofElement.Typ.GL or BahnhofElement.Typ.AGL, depending on which tree is edited.
     - _columns : Column names displayed in the header row.
         Supported column names are:
-        'Gl', 'Bs´, 'Bft', 'Bf', 'Agl', 'Anst', 'Sperrung', 'Stil', 'Sichtbar', 'N'
+        BahnhofElement.Typ.GL, 'Bs´, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BF, BahnhofElement.Typ.AGL, BahnhofElement.Typ.ANST, 'Sperrung', 'Stil', 'Sichtbar', 'N'
     - bahnhofgraph : BahnhofGraph instance to be edited.
     - rows: List of Gl or Agl elements to be displayed in rows.
         This is a sorted list of the dictionary keys of row_data.
@@ -45,7 +45,7 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
         super().__init__(parent)
 
         self._columns: List[str] = []
-        self._gleistyp: str = ''
+        self._gleistyp: BahnhofElement.Typ = BahnhofElement.Typ.GL
         self.bahnhofgraph: BahnhofGraph = bahnhofgraph
         self.row_data: Dict[BahnhofElement, Any] = {}
         self.row_index: Dict[BahnhofElement, Tuple[Union[int, str], ...]] = {}
@@ -180,7 +180,7 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
         data = self.row_data[label]
 
         if role == QtCore.Qt.EditRole:
-            if col in {'Bs', 'Bft', 'Bf', 'Anst'}:
+            if col in {BahnhofElement.Typ.BS, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST}:
                 element = self.bahnhofgraph.find_superior(label, {col})
                 result = self.rename_element(col, element.name, value)
                 return result
@@ -202,11 +202,11 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
         col = self._columns[index.column()]
 
         result = QtCore.Qt.ItemIsEnabled
-        if col in {'Gl', 'Agl'}:
+        if col in {BahnhofElement.Typ.GL, BahnhofElement.Typ.AGL}:
             result |= QtCore.Qt.ItemIsSelectable
         elif col in {'Sperrung', 'Sichtbar'}:
             result |= QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsSelectable
-        elif col in {'Bs', 'Bft', 'Bf', 'Anst', 'Stil', 'N'}:
+        elif col in {BahnhofElement.Typ.BS, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST, 'Stil', 'N'}:
             result |= QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable
         else:
             result = QtCore.Qt.NoItemFlags
@@ -215,7 +215,7 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
 
     def group_elements(self,
                        gleise: Set[BahnhofElement],
-                       level: str,
+                       level: BahnhofElement.Typ,
                        element: Optional[str] = None) -> Set[BahnhofElement]:
         """
         Groups elements based on the given criteria.
@@ -237,6 +237,7 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
             if not elements:
                 return set()
             element, _ = Counter(elements).most_common(1)[0]
+            element = str(element)
 
         new_element = BahnhofElement(level, element)
         replacements = {gl: new_element for gl in gleise}
@@ -244,8 +245,10 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
 
         return set(replacements.keys())
 
-    def ungroup_elements(self, elements: Set[BahnhofElement],
-                        level: str) -> Set[BahnhofElement]:
+    def ungroup_elements(self, 
+                         elements: Set[BahnhofElement],
+                         level: BahnhofElement.Typ,
+                         ) -> Set[BahnhofElement]:
         """
         Ungroups elements based on a given level.
 
@@ -291,7 +294,11 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
             self._update()
             self.endResetModel()
 
-    def rename_element(self, level: str, old: str, new: str) -> bool:
+    def rename_element(self, 
+                       level: BahnhofElement.Typ, 
+                       old: str, 
+                       new: str,
+                       ) -> bool:
         """
         Renames an element in the graph and updates the model accordingly.
 
@@ -306,7 +313,7 @@ class AbstractBahnhofEditorModel(QAbstractTableModel):
             bool: True if the operation was successful. False otherwise.
         """
 
-        if level not in {'Bs', 'Bft', 'Bf', 'Anst'}:
+        if level not in {BahnhofElement.Typ.BS, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST}:
             return False   # Ungültiger Level
         if not new:
             return False   # Leerer String
@@ -353,13 +360,13 @@ class AnschlussEditorModel(AbstractBahnhofEditorModel):
 
     """
 
-    ALL_COLUMNS = ['Agl', 'Anst', 'Sperrung', 'Stil', 'Sichtbar', 'N']
+    ALL_COLUMNS = [BahnhofElement.Typ.AGL, BahnhofElement.Typ.ANST, 'Sperrung', 'Stil', 'Sichtbar', 'N']
 
     def __init__(self, bahnhofgraph: BahnhofGraph, parent=None):
         super().__init__(bahnhofgraph, parent)
 
-        self._columns: List[str] = ['Agl', 'Anst', 'Sperrung']
-        self._gleistyp: str = 'Agl'
+        self._columns: List[str] = [BahnhofElement.Typ.AGL, BahnhofElement.Typ.ANST, 'Sperrung']
+        self._gleistyp: str = BahnhofElement.Typ.AGL
 
 
 class BahnhofEditorModel(AbstractBahnhofEditorModel):
@@ -370,13 +377,13 @@ class BahnhofEditorModel(AbstractBahnhofEditorModel):
 
     """
 
-    ALL_COLUMNS = ['Gl', 'Bs', 'Bft', 'Bf', 'Sperrung', 'Stil', 'Sichtbar', 'N']
+    ALL_COLUMNS = [BahnhofElement.Typ.GL, BahnhofElement.Typ.BS, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BF, 'Sperrung', 'Stil', 'Sichtbar', 'N']
 
     def __init__(self, bahnhofgraph: BahnhofGraph, parent=None):
         super().__init__(bahnhofgraph, parent)
 
-        self._columns: List[str] = ['Gl', 'Bs', 'Bft', 'Bf', 'Sperrung']
-        self._gleistyp: str = 'Gl'
+        self._columns: List[str] = [BahnhofElement.Typ.GL, BahnhofElement.Typ.BS, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BF, 'Sperrung']
+        self._gleistyp: str = BahnhofElement.Typ.GL
 
 
 class BahnhofEditorFilterProxy(QSortFilterProxyModel):
@@ -428,7 +435,7 @@ class BahnhofEditor(QObject):
         self.ui.gl_table_view.setModel(self.gl_table_filter)
         self.ui.gl_table_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.ui.gl_table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.ui.gl_table_view.sortByColumn(self.gl_table_model._columns.index('Gl'), QtCore.Qt.AscendingOrder)
+        self.ui.gl_table_view.sortByColumn(self.gl_table_model._columns.index(BahnhofElement.Typ.GL), QtCore.Qt.AscendingOrder)
         self.ui.gl_table_view.setSortingEnabled(True)
         self.gl_last_selection = set()
 
@@ -467,7 +474,7 @@ class BahnhofEditor(QObject):
         self.ui.agl_table_view.setModel(self.agl_table_filter)
         self.ui.agl_table_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.ui.agl_table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.ui.agl_table_view.sortByColumn(self.agl_table_model._columns.index('Agl'), QtCore.Qt.AscendingOrder)
+        self.ui.agl_table_view.sortByColumn(self.agl_table_model._columns.index(BahnhofElement.Typ.AGL), QtCore.Qt.AscendingOrder)
         self.ui.agl_table_view.setSortingEnabled(True)
         self.agl_last_selection = set()
 
@@ -513,10 +520,10 @@ class BahnhofEditor(QObject):
 
         self.in_update = True
         self.update_lists(levels=levels)
-        if levels.intersection(['Gl', 'Bs', 'Bft', 'Bf']):
+        if levels.intersection([BahnhofElement.Typ.GL, BahnhofElement.Typ.BS, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BF]):
             self.update_gl_combo_index()
             self.update_gl_widget_states()
-        if levels.intersection(['Agl', 'Anst']):
+        if levels.intersection([BahnhofElement.Typ.AGL, BahnhofElement.Typ.ANST]):
             self.update_agl_combo_index()
             self.update_agl_widget_states()
         self.adjust_geometry()
@@ -531,29 +538,35 @@ class BahnhofEditor(QObject):
                 result.add(mo[0])
         return result
 
-    def update_lists(self, levels: Optional[Set[str]] = None) -> None:
+    def update_lists(self, 
+                     levels: Set[BahnhofElement.Typ] | None = None,
+                     ) -> None:
         """
-        Update the listes of the combo boxes according to the current selection..
+        Update the lists of the combo boxes according to the current selection..
 
-        Parameters
-        ----------
-        levels : Optional[Set[str]], optional
-            A set of levels of combo boxes to update. Defaults to all BAHNHOFELEMENT_TYPEN.
+        Args:
+            levels: A set of levels of combo boxes to update. Defaults to all of BahnhofElement.Typ.
 
         """
 
         if levels is None:
             levels = set(BahnhofElement.Typ)
 
-        if 'Gl' in levels:
-            gl_filter = sorted(self._make_filter_list(self.bahnhofgraph.list_by_type({'Gl'})))
+        if BahnhofElement.Typ.GL in levels:
+            gl_filter = sorted(self._make_filter_list(self.bahnhofgraph.list_by_type({BahnhofElement.Typ.GL})))
             self.gl_model.setStringList(gl_filter)
 
-        if 'Agl' in levels:
-            agl_filter = sorted(self._make_filter_list(self.bahnhofgraph.list_by_type({'Agl'})))
+        if BahnhofElement.Typ.AGL in levels:
+            agl_filter = sorted(self._make_filter_list(self.bahnhofgraph.list_by_type({BahnhofElement.Typ.AGL})))
             self.agl_model.setStringList(agl_filter)
 
-        if levels.intersection(['Bs', 'Bft', 'Bf', 'Anst']):
+        gruppen_typen: list[BahnhofElement.Typ] = [
+            BahnhofElement.Typ.BS,
+            BahnhofElement.Typ.BFT,
+            BahnhofElement.Typ.BF,
+            BahnhofElement.Typ.ANST,
+        ]
+        if levels.intersection(gruppen_typen):
             gl_sel = self.get_gl_selection()
             parents = {typ: set() for typ in BahnhofElement.Typ}
             uncles = {typ: set() for typ in BahnhofElement.Typ}
@@ -565,18 +578,18 @@ class BahnhofEditor(QObject):
                 for be in self.bahnhofgraph.list_parents(agl):
                     parents[be.typ].add(be)
 
-            for typ in ['Bs', 'Bft', 'Bf', 'Anst']:
+            for typ in gruppen_typen:
                 for parent in parents[typ]:
                     uncles[typ].update(self.bahnhofgraph.list_siblings(parent))
 
-            if 'Bs' in levels:
-                self.bs_model.setStringList(sorted((uncle.name for uncle in uncles['Bs'])))
-            if 'Bft' in levels:
-                self.bft_model.setStringList(sorted((uncle.name for uncle in uncles['Bft'])))
-            if 'Bf' in levels:
-                self.bf_model.setStringList(sorted((uncle.name for uncle in uncles['Bf'])))
-            if 'Anst' in levels:
-                self.anst_model.setStringList(sorted((uncle.name for uncle in uncles['Anst'])))
+            if BahnhofElement.Typ.BS in levels:
+                self.bs_model.setStringList(sorted((uncle.name for uncle in uncles[BahnhofElement.Typ.BS])))
+            if BahnhofElement.Typ.BFT in levels:
+                self.bft_model.setStringList(sorted((uncle.name for uncle in uncles[BahnhofElement.Typ.BFT])))
+            if BahnhofElement.Typ.BF in levels:
+                self.bf_model.setStringList(sorted((uncle.name for uncle in uncles[BahnhofElement.Typ.BF])))
+            if BahnhofElement.Typ.ANST in levels:
+                self.anst_model.setStringList(sorted((uncle.name for uncle in uncles[BahnhofElement.Typ.ANST])))
 
     def adjust_geometry(self):
         """
@@ -652,7 +665,7 @@ class BahnhofEditor(QObject):
 
         return selection
 
-    def get_combo_element(self, level: str, combo: QtWidgets.QComboBox):
+    def get_combo_element(self, level: BahnhofElement.Typ, combo: QtWidgets.QComboBox):
         """
         Bahnhofelement aus Combobox auslesen.
 
@@ -676,27 +689,20 @@ class BahnhofEditor(QObject):
         """
         Handles selection changes in the GL view and updates corresponding UI elements.
 
-        Parameters
-        ----------
-        selected : QItemSelection
-            The new items selected in the GL view.
-        deselected : QItemSelection
-            The items that have been deselected in the GL view.
-
-        Returns
-        -------
-        None
-
-        Details
-        ------
         This method is triggered when the user selects or deselects items in the GL view.
 
         1. Updates the lists of combo boxes.
         2. Tries to select the corresponding element of the combo boxes.
         3. Updates the widget states.
+
+        Args:
+            selected : QItemSelection
+                The new items selected in the GL view.
+            deselected : QItemSelection
+                The items that have been deselected in the GL view.
         """
 
-        self.update_lists(levels={'Bs', 'Bft', 'Bf'})
+        self.update_lists(levels={BahnhofElement.Typ.BS, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BF})
         self.update_gl_combo_index()
         self.update_gl_widget_states()
 
@@ -712,15 +718,15 @@ class BahnhofEditor(QObject):
             pass
         else:
             try:
-                self.ui.bf_combo.setCurrentIndex(self.bf_model.stringList().index(new_data['Bf']))
+                self.ui.bf_combo.setCurrentIndex(self.bf_model.stringList().index(new_data[BahnhofElement.Typ.BF]))
             except (KeyError, ValueError):
                 pass
             try:
-                self.ui.bft_combo.setCurrentIndex(self.bft_model.stringList().index(new_data['Bft']))
+                self.ui.bft_combo.setCurrentIndex(self.bft_model.stringList().index(new_data[BahnhofElement.Typ.BFT]))
             except (KeyError, ValueError):
                 pass
             try:
-                self.ui.bs_combo.setCurrentIndex(self.bs_model.stringList().index(new_data['Bs']))
+                self.ui.bs_combo.setCurrentIndex(self.bs_model.stringList().index(new_data[BahnhofElement.Typ.BS]))
             except (KeyError, ValueError):
                 pass
 
@@ -749,7 +755,7 @@ class BahnhofEditor(QObject):
         3. Updates the widget states.
         """
 
-        self.update_lists(levels={'Anst'})
+        self.update_lists(levels={BahnhofElement.Typ.ANST})
         self.update_agl_combo_index()
         self.update_agl_widget_states()
 
@@ -765,7 +771,7 @@ class BahnhofEditor(QObject):
             pass
         else:
             try:
-                self.ui.anst_combo.setCurrentIndex(self.bf_model.stringList().index(new_data['Anst']))
+                self.ui.anst_combo.setCurrentIndex(self.bf_model.stringList().index(new_data[BahnhofElement.Typ.ANST]))
             except (KeyError, ValueError):
                 pass
 
@@ -775,25 +781,25 @@ class BahnhofEditor(QObject):
         """
 
         selection = self.get_gl_selection()
-        bs_sel = {self.gl_table_model.row_data[gl]['Bs'] for gl in selection if 'Bs' in self.gl_table_model.row_data[gl]}
-        bft_sel = {self.gl_table_model.row_data[gl]['Bft'] for gl in selection if 'Bft' in self.gl_table_model.row_data[gl]}
-        bf_sel = {self.gl_table_model.row_data[gl]['Bf'] for gl in selection if 'Bf' in self.gl_table_model.row_data[gl]}
+        bs_sel = {self.gl_table_model.row_data[gl][BahnhofElement.Typ.BS] for gl in selection if BahnhofElement.Typ.BS in self.gl_table_model.row_data[gl]}
+        bft_sel = {self.gl_table_model.row_data[gl][BahnhofElement.Typ.BFT] for gl in selection if BahnhofElement.Typ.BFT in self.gl_table_model.row_data[gl]}
+        bf_sel = {self.gl_table_model.row_data[gl][BahnhofElement.Typ.BF] for gl in selection if BahnhofElement.Typ.BF in self.gl_table_model.row_data[gl]}
 
         # gleiswahl >= 1 , combo-text vorhanden und noch nicht vergeben
         # en = bool(selection)
         # if en:
         #     tx = self.ui.bf_combo.currentText()
-        #     be = BahnhofElement('Bf', tx)
+        #     be = BahnhofElement(BahnhofElement.Typ.BF, tx)
         #     en = bool(tx) and be in self.bahnhofgraph
-        en = len(bft_sel) == 1 and bool(tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) in self.bahnhofgraph)
+        en = len(bft_sel) == 1 and bool(tx := self.ui.bf_combo.currentText()) and (BahnhofElement(BahnhofElement.Typ.BF, tx) in self.bahnhofgraph)
         self.ui.bf_group_button.setEnabled(en)
 
         # gleiswahl >= 1 , combo-text vorhanden und noch nicht vergeben
-        en = len(bft_sel) == 1 and bool(tx := self.ui.bft_combo.currentText()) and (BahnhofElement('Bft', tx) in self.bahnhofgraph)
+        en = len(bft_sel) == 1 and bool(tx := self.ui.bft_combo.currentText()) and (BahnhofElement(BahnhofElement.Typ.BFT, tx) in self.bahnhofgraph)
         self.ui.bft_group_button.setEnabled(en)
 
         # gleiswahl >= 1 vom gleichen bft, combo-text vorhanden und noch nicht vergeben
-        en = len(bft_sel) == 1 and bool(tx := self.ui.bs_combo.currentText()) and (BahnhofElement('Bs', tx) in self.bahnhofgraph)
+        en = len(bft_sel) == 1 and bool(tx := self.ui.bs_combo.currentText()) and (BahnhofElement(BahnhofElement.Typ.BS, tx) in self.bahnhofgraph)
         self.ui.bs_group_button.setEnabled(en)
 
         # einzelner bf gewählt
@@ -809,15 +815,15 @@ class BahnhofEditor(QObject):
         self.ui.bs_ungroup_button.setEnabled(en)
 
         # einzelner bf gewählt, combo-text vorhanden und noch nicht vergeben
-        en = len(bf_sel) == 1 and bool(tx := self.ui.bf_combo.currentText()) and (BahnhofElement('Bf', tx) not in self.bahnhofgraph)
+        en = len(bf_sel) == 1 and bool(tx := self.ui.bf_combo.currentText()) and (BahnhofElement(BahnhofElement.Typ.BF, tx) not in self.bahnhofgraph)
         self.ui.bf_rename_button.setEnabled(en)
 
         # einzelner bft gewählt, combo-text vorhanden und noch nicht vergeben
-        en = len(bft_sel) == 1 and bool(tx := self.ui.bft_combo.currentText()) and (BahnhofElement('Bft', tx) not in self.bahnhofgraph)
+        en = len(bft_sel) == 1 and bool(tx := self.ui.bft_combo.currentText()) and (BahnhofElement(BahnhofElement.Typ.BFT, tx) not in self.bahnhofgraph)
         self.ui.bft_rename_button.setEnabled(en)
 
         # einzelner bs gewählt, combo-text vorhanden und noch nicht vergeben
-        en = len(bs_sel) == 1 and bool(tx := self.ui.bs_combo.currentText()) and (BahnhofElement('Bs', tx) not in self.bahnhofgraph)
+        en = len(bs_sel) == 1 and bool(tx := self.ui.bs_combo.currentText()) and (BahnhofElement(BahnhofElement.Typ.BS, tx) not in self.bahnhofgraph)
         self.ui.bs_rename_button.setEnabled(en)
 
     def update_agl_widget_states(self):
@@ -826,10 +832,10 @@ class BahnhofEditor(QObject):
         """
 
         selection = self.get_agl_selection()
-        anst_sel = {self.agl_table_model.row_data[gl]['Anst'] for gl in selection}
+        anst_sel = {self.agl_table_model.row_data[gl][BahnhofElement.Typ.ANST] for gl in selection}
 
         # gleiswahl >= 1 , combo-text vorhanden und noch nicht vergeben
-        en = len(selection) >= 1 and bool(tx := self.ui.anst_combo.currentText()) and (BahnhofElement('Anst', tx) in self.bahnhofgraph)
+        en = len(selection) >= 1 and bool(tx := self.ui.anst_combo.currentText()) and (BahnhofElement(BahnhofElement.Typ.ANST, tx) in self.bahnhofgraph)
         self.ui.anst_group_button.setEnabled(en)
 
         # einzelne anst gewählt
@@ -837,7 +843,7 @@ class BahnhofEditor(QObject):
         self.ui.anst_ungroup_button.setEnabled(en)
 
         # einzelner anst gewählt, combo-text vorhanden und noch nicht vergeben
-        en = len(anst_sel) == 1 and bool(tx := self.ui.anst_combo.currentText()) and (BahnhofElement('Anst', tx) not in self.bahnhofgraph)
+        en = len(anst_sel) == 1 and bool(tx := self.ui.anst_combo.currentText()) and (BahnhofElement(BahnhofElement.Typ.ANST, tx) not in self.bahnhofgraph)
         self.ui.anst_rename_button.setEnabled(en)
 
     def group_elements(self, level: str, element: Optional[str] = None):
@@ -845,10 +851,10 @@ class BahnhofEditor(QObject):
         Gruppiert die ausgewählten Elemente zu einer übergeordneten Gruppe.
         """
 
-        if level == 'Anst':
+        if level is BahnhofElement.Typ.ANST:
             gleise = self.get_agl_selection()
             table_model = self.agl_table_model
-        elif level in {'Bf', 'Bft', 'Bs'}:
+        elif level in {BahnhofElement.Typ.BF, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BS}:
             gleise = self.get_gl_selection()
             table_model = self.gl_table_model
         else:
@@ -859,10 +865,10 @@ class BahnhofEditor(QObject):
             # self.update_widgets()
 
     def ungroup_element(self, level: str):
-        if level == 'Anst':
+        if level is BahnhofElement.Typ.ANST:
             sel = self.get_agl_selection()
             table_model = self.agl_table_model
-        elif level in {'Bf', 'Bft', 'Bs'}:
+        elif level in {BahnhofElement.Typ.BF, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BS}:
             sel = self.get_gl_selection()
             table_model = self.gl_table_model
         else:
@@ -875,10 +881,10 @@ class BahnhofEditor(QObject):
         Renames an element in the graph and updates the model accordingly.
         """
 
-        if level == 'Anst':
+        if level is BahnhofElement.Typ.ANST:
             sel = self.get_agl_selection()
             table_model = self.agl_table_model
-        elif level in {'Bf', 'Bft', 'Bs'}:
+        elif level in {BahnhofElement.Typ.BF, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BS}:
             sel = self.get_gl_selection()
             table_model = self.gl_table_model
         else:
@@ -897,51 +903,51 @@ class BahnhofEditor(QObject):
     def gl_table_model_changed(self):
         if self.in_update:
             return
-        self.update_lists_and_states(levels={'Bf', 'Bft', 'Bs', 'Gl'})
+        self.update_lists_and_states(levels={BahnhofElement.Typ.BF, BahnhofElement.Typ.BFT, BahnhofElement.Typ.BS, BahnhofElement.Typ.GL})
         self.changed_Event.notify()
 
     @Slot()
     def agl_table_model_changed(self):
         if self.in_update:
             return
-        self.update_lists_and_states(levels={'Anst', 'Agl'})
+        self.update_lists_and_states(levels={BahnhofElement.Typ.ANST, BahnhofElement.Typ.AGL})
         self.changed_Event.notify()
 
     @Slot()
     def bf_group_button_clicked(self):
-        self.group_elements('Bf', self.ui.bf_combo.currentText())
+        self.group_elements(BahnhofElement.Typ.BF, self.ui.bf_combo.currentText())
 
     @Slot()
     def bft_group_button_clicked(self):
-        self.group_elements('Bft', self.ui.bft_combo.currentText())
+        self.group_elements(BahnhofElement.Typ.BFT, self.ui.bft_combo.currentText())
 
     @Slot()
     def bs_group_button_clicked(self):
-        self.group_elements('Bs', self.ui.bs_combo.currentText())
+        self.group_elements(BahnhofElement.Typ.BS, self.ui.bs_combo.currentText())
 
     @Slot()
     def bf_ungroup_button_clicked(self):
-        self.ungroup_element('Bf')
+        self.ungroup_element(BahnhofElement.Typ.BF)
 
     @Slot()
     def bft_ungroup_button_clicked(self):
-        self.ungroup_element('Bft')
+        self.ungroup_element(BahnhofElement.Typ.BFT)
 
     @Slot()
     def bs_ungroup_button_clicked(self):
-        self.ungroup_element('Bs')
+        self.ungroup_element(BahnhofElement.Typ.BS)
 
     @Slot()
     def bf_rename_button_clicked(self):
-        self.rename_element('Bf', self.ui.bf_combo)
+        self.rename_element(BahnhofElement.Typ.BF, self.ui.bf_combo)
 
     @Slot()
     def bft_rename_button_clicked(self):
-        self.rename_element('Bft', self.ui.bft_combo)
+        self.rename_element(BahnhofElement.Typ.BFT, self.ui.bft_combo)
 
     @Slot()
     def bs_rename_button_clicked(self):
-        self.rename_element('Bs', self.ui.bs_combo)
+        self.rename_element(BahnhofElement.Typ.BS, self.ui.bs_combo)
 
     @Slot()
     def bf_combo_index_changed(self):
@@ -982,15 +988,15 @@ class BahnhofEditor(QObject):
 
     @Slot()
     def anst_group_button_clicked(self):
-        self.group_elements('Anst', self.ui.anst_combo.currentText())
+        self.group_elements(BahnhofElement.Typ.ANST, self.ui.anst_combo.currentText())
 
     @Slot()
     def anst_ungroup_button_clicked(self):
-        self.ungroup_element('Anst')
+        self.ungroup_element(BahnhofElement.Typ.ANST)
 
     @Slot()
     def anst_rename_button_clicked(self):
-        self.rename_element('Anst', self.ui.anst_combo)
+        self.rename_element(BahnhofElement.Typ.ANST, self.ui.anst_combo)
 
     @Slot()
     def anst_combo_index_changed(self):

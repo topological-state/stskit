@@ -234,8 +234,8 @@ class BildfahrplanPlot:
                     bst = gl
                 else:
                     bst = self.anlage.bahnhofgraph.find_name(gl)
-                if bst.typ not in {'Bf', 'Anst'}:
-                    bst = self.anlage.bahnhofgraph.find_superior(bst, {'Bf', 'Anst'})
+                if bst.typ not in {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST}:
+                    bst = self.anlage.bahnhofgraph.find_superior(bst, {BahnhofElement.Typ.BF, BahnhofElement.Typ.ANST})
                 return bst
             except (AttributeError, IndexError, KeyError) as e:
                 logger.error(f"Error in bst_von_gleis: {gl} -> {bst}", exc_info=e)
@@ -250,7 +250,7 @@ class BildfahrplanPlot:
                 d = self.bildgraph.nodes[ereignis_label]
             else:
                 d = ereignis_data.copy()
-            d['bst'] = bst
+            d[BahnhofElement.Typ.ANST] = bst
             d['farbe'] = farbe
             markers = [self.marker_style.get(typ, ''),
                        self.marker_style.get(ereignis_data.typ, ''),
@@ -658,7 +658,7 @@ class BildfahrplanPlot:
                 't_plan': t_plan,
                 't_prog': t_prog,
                 's': s,
-                'bst': bahnhof,
+                BahnhofElement.Typ.ANST: bahnhof,
                 'marker': self.marker_style['S'],
                 'farbe': 'yellow',
                 'auswahl': auswahl_idx,

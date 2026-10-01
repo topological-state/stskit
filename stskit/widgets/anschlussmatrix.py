@@ -14,6 +14,7 @@ import numpy as np
 from PySide6 import QtWidgets
 from PySide6.QtCore import Slot
 
+from stskit.model.bahnhofgraph import BahnhofElement
 from stskit.plots.anschlussmatrix import Anschlussmatrix, \
     ANSCHLUSS_OK, ANSCHLUSS_ABWARTEN, ANSCHLUSS_WARNUNG, ANSCHLUSS_AUFGEBEN
 from stskit.model.zugschema import ZugschemaAuswahlModell
@@ -124,10 +125,10 @@ class AnschlussmatrixWindow(QtWidgets.QMainWindow):
 
         bahnhofgraph = self.zentrale.anlage.bahnhofgraph
         try:
-            bahnhoefe = list(bahnhofgraph.list_children(bahnhofgraph.root(), {"Bf"}))
+            bahnhoefe = list(bahnhofgraph.list_children(bahnhofgraph.root(), {BahnhofElement.Typ.BF}))
             bahnhoefe_nach_namen = sorted(bahnhoefe, key=lambda b: b.name)
             bahnhoefe_nach_groesse = sorted(bahnhoefe, key=lambda b:
-                                            len(list(bahnhofgraph.list_children(b, {'Gl'}))))
+                                            len(list(bahnhofgraph.list_children(b, {BahnhofElement.Typ.GL}))))
         except AttributeError:
             return
 
