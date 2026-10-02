@@ -245,12 +245,12 @@ class BildfahrplanPlot:
                       ereignis_data: EreignisGraphNode,
                       bst: BahnhofElement,
                       farbe: str,
-                      typ: str = None) -> None:
+                      typ: str | None = None) -> None:
             if self.bildgraph.has_node(ereignis_label):
                 d = self.bildgraph.nodes[ereignis_label]
             else:
                 d = ereignis_data.copy()
-            d[BahnhofElement.Typ.ANST] = bst
+            d['bst'] = bst
             d['farbe'] = farbe
             markers = [self.marker_style.get(typ, ''),
                        self.marker_style.get(ereignis_data.typ, ''),
